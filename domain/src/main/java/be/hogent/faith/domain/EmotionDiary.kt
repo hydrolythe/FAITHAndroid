@@ -2,5 +2,11 @@ package be.hogent.faith.domain
 
 class EmotionDiary {
 
-    val emotions = mutableListOf<Emotion>()
+    private val _emotions = mutableListOf<Emotion>()
+    val emotions: List<Emotion>
+        get() = _emotions
+
+    fun addEmotion(emotion: Emotion) {
+        _emotions += emotion
+    }
 }

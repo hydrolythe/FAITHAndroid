@@ -2,11 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 28
+    def globalConfig = rootProject.extensions.getByName("ext")
+    compileSdkVersion globalConfig["androidCompileSdkVersion"]
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 28
+        minSdkVersion globalConfig["androidMinSdkVersion"]
+        targetSdkVersion globalConfig["androidTargetSdkVersion"]
         versionCode 1
         versionName "1.0"
     }
@@ -27,7 +28,10 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     //Date/time library (see https://github.com/JakeWharton/ThreeTenABP)
-    api 'com.jakewharton.threetenabp:threetenabp:1.1.1'
+    api "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
+
+    // TESTING LIBRARIES
+    testImplementation "io.mockk:mockk:$mockk_version"
 }
 repositories {
     mavenCentral()

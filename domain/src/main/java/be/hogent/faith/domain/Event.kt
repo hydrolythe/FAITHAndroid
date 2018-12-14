@@ -8,5 +8,11 @@ class Event(
     val category: Category
 ) {
 
-    val details = mutableListOf<Detail>()
+    private val _details = mutableListOf<Detail>()
+    val details: List<Detail>
+        get() = _details
+
+    fun addDetail(detail: Detail) {
+        _details += detail
+    }
 }

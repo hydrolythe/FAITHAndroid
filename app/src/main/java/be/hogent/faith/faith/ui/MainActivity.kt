@@ -1,7 +1,7 @@
 package be.hogent.faith.faith.ui
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import be.hogent.faith.R
 import be.hogent.faith.domain.Emotion
