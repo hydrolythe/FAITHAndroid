@@ -1,4 +1,4 @@
-package be.hogent.faith.domain
+package be.hogent.faith.domain.models
 
 enum class DetailType {
     TEXT,

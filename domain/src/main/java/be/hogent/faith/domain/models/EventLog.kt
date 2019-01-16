@@ -1,6 +1,6 @@
-package be.hogent.faith.domain
+package be.hogent.faith.domain.models
 
-class Timeline {
+class EventLog {
 
     private val _events = mutableListOf<Event>()
     val events: List<Event>

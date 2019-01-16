@@ -1,8 +1,5 @@
-package be.hogent.faith.domain
+package be.hogent.faith.domain.models
 
 class User(
-    val actionPlan: ActionPlan = ActionPlan(),
-    val emotionDiary: EmotionDiary = EmotionDiary(),
-    val timeline: Timeline = Timeline(),
-    val treasureChest: TreasureChest = TreasureChest()
+    val eventLog: EventLog = EventLog()
 )

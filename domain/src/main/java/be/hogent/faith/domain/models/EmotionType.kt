@@ -1,8 +1,10 @@
-package be.hogent.faith.domain
+package be.hogent.faith.domain.models
 
 enum class EmotionType {
     HAPPY,
     ANGRY,
     AFRAID,
-    SAD
+    SAD,
+    CALM,
+    LOVE
 }

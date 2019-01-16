@@ -1,8 +1,20 @@
 package be.hogent.faith.database.models
 
-import org.threeten.bp.LocalDate
+import androidx.room.*
+import org.threeten.bp.LocalDateTime
+import java.util.*
 
-class Event(val date: LocalDate,
-            val description: String,
-            val category: Category,
-            val details: List<Detail>)
+@Entity(
+    tableName = "events",
+    indices = [(Index(value = ["uuid"], unique = true))]
+)
+data class EventEntity(
+    @PrimaryKey
+    val uuid: UUID = UUID.randomUUID(),
+    val date: LocalDateTime,
+    val description: String
+) {
+    //Can't be part of the constructor arguments or Room won't compile
+    @Ignore
+    val details: MutableList<DetailEntity> = mutableListOf()
+}

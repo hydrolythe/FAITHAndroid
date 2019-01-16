@@ -40,6 +40,12 @@ dependencies {
     androidTestImplementation "androidx.test:runner:$testrunner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
 
+    //Date/time library (see https://github.com/JakeWharton/ThreeTenABP)
+    api "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
+
+    // Android Architecture Components Core
+    androidTestImplementation "androidx.arch.core:core-testing:$aac_core_version"
+
     // Room components
     implementation "androidx.room:room-runtime:$room_runtime_version"
     kapt "androidx.room:room-compiler:$room_compiler_version"

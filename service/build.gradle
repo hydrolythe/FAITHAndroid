@@ -1,6 +1,8 @@
 apply plugin: 'kotlin'
 
 dependencies {
+    implementation project(':domain')
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -11,7 +13,4 @@ dependencies {
     // TESTING LIBRARIES
     testImplementation "junit:junit:$junit_version"
     testImplementation "io.mockk:mockk:$mockk_version"
-}
-repositories {
-    mavenCentral()
 }

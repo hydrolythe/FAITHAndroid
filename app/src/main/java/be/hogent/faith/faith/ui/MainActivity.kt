@@ -4,15 +4,15 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import be.hogent.faith.R
-import be.hogent.faith.domain.Emotion
-import be.hogent.faith.domain.EmotionType
+import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.EmotionType
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var emotion: Emotion
+    private lateinit var emotion: Event
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        emotion = Emotion(EmotionType.AFRAID)
+        emotion = Event(EmotionType.AFRAID)
     }
 
     override fun onStart() {

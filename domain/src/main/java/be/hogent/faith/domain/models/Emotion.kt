@@ -1,6 +1,6 @@
-package be.hogent.faith.domain
+package be.hogent.faith.domain.models
 
-class Emotion(val emotionType: EmotionType) {
+data class Emotion(val emotionType: EmotionType) {
 
     private val _details = mutableListOf<Detail>()
     val details: List<Detail>

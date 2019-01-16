@@ -1,5 +1,7 @@
 package be.hogent.faith.domain
 
+import be.hogent.faith.domain.models.Detail
+import be.hogent.faith.domain.models.Event
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -13,20 +15,18 @@ class EventTest {
 
     @Before
     fun setUp() {
-        event = Event(mockk(), "testDescription", mockk())
+        event = Event(mockk(), "testDescription")
     }
 
     @Test
     fun `Event constructor correctly sets attributes`() {
         val date = LocalDate.of(1991, Month.OCTOBER, 28)
         val description = "testDescription"
-        val category = Category.FRIENDS
 
-        val newEvent = Event(date, description, category)
+        val newEvent = Event(date, description)
 
         assertEquals(description, newEvent.description)
         assertEquals(date, newEvent.date)
-        assertEquals(category, newEvent.category)
     }
 
     @Test

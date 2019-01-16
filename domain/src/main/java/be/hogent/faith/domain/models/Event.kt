@@ -1,11 +1,10 @@
-package be.hogent.faith.domain
+package be.hogent.faith.domain.models
 
 import org.threeten.bp.LocalDate
 
 class Event(
     val date: LocalDate,
-    val description: String,
-    val category: Category
+    val description: String
 ) {
 
     private val _details = mutableListOf<Detail>()
