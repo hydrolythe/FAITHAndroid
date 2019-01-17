@@ -2,7 +2,6 @@ package be.hogent.faith.domain
 
 import be.hogent.faith.domain.models.Detail
 import be.hogent.faith.domain.models.Emotion
-import be.hogent.faith.domain.models.Event
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Before

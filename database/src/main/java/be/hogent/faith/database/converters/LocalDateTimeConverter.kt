@@ -4,8 +4,7 @@ import androidx.room.TypeConverter
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
-
-class LocalDateTimeConverter{
+class LocalDateTimeConverter {
 
         @TypeConverter
         fun toDate(value: String): LocalDateTime {

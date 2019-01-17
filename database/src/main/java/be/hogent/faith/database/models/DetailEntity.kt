@@ -1,9 +1,10 @@
 package be.hogent.faith.database.models
 
-import androidx.room.*
-import be.hogent.faith.database.converters.DetailTypeConverter
-import be.hogent.faith.database.converters.UuidConverter
-import java.util.*
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Index
+import androidx.room.PrimaryKey
+import java.util.UUID
 
 @Entity(
     tableName = "details",

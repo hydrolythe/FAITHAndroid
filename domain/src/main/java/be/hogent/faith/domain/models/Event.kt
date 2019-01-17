@@ -1,10 +1,12 @@
 package be.hogent.faith.domain.models
 
-import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import java.util.UUID
 
-class Event(
-    val date: LocalDate,
-    val description: String
+data class Event(
+    val date: LocalDateTime,
+    val description: String,
+    val uuid: UUID = UUID.randomUUID()
 ) {
 
     private val _details = mutableListOf<Detail>()

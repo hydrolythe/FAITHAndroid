@@ -11,7 +11,6 @@ import be.hogent.faith.database.converters.UuidConverter
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.models.DetailEntity
-import be.hogent.faith.database.models.DetailTypeEntity
 import be.hogent.faith.database.models.EventEntity
 
 @Database(

@@ -1,3 +1,9 @@
 package be.hogent.faith.domain.models
 
-data class Detail(val detailType: DetailType)
+import java.util.UUID
+
+data class Detail(
+    val detailType: DetailType,
+    val uuid: UUID = UUID.randomUUID()
+)
+

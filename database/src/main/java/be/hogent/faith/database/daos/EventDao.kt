@@ -1,10 +1,15 @@
 package be.hogent.faith.database.daos
 
-import androidx.lifecycle.LiveData
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Transaction
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
-import java.util.*
+import io.reactivex.Flowable
+import java.util.UUID
 
 @Dao
 interface EventDao {
@@ -13,12 +18,15 @@ interface EventDao {
 
     @Transaction
     @Query("SELECT * FROM events")
-    fun getAllEventsWithDetails(): LiveData<List<EventWithDetails>>
+    fun getAllEventsWithDetails(): Flowable<List<EventWithDetails>>
 
     @Transaction
     @Query("SELECT * FROM events WHERE uuid= :eventUuid")
-    fun getEventWithDetails(eventUuid:UUID): LiveData<EventWithDetails>
+    fun getEventWithDetails(eventUuid: UUID): Flowable<EventWithDetails>
 
     @Delete
     fun delete(eventEntity: EventEntity)
+
+    @Query("DELETE FROM events")
+    fun deleteAll()
 }

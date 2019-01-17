@@ -2,11 +2,10 @@ package be.hogent.faith.database.converters
 
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
-import java.util.*
+import java.util.UUID
 
-class UuidConverterTest{
+class UuidConverterTest {
     private val converter = UuidConverter()
-
 
     @Test
     fun `UuidConverter from string to uuid converts correctly`() {
@@ -20,5 +19,4 @@ class UuidConverterTest{
 
         assertEquals("d883853b-7b23-401f-816b-ed4231e6dd6a", converter.toString(uuid))
     }
-
 }

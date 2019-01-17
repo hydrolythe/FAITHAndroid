@@ -48,12 +48,9 @@ dependencies {
 
     // Room components
     implementation "androidx.room:room-runtime:$room_runtime_version"
+    implementation "android.arch.persistence.room:rxjava2:$room_rxjava_version"
     kapt "androidx.room:room-compiler:$room_compiler_version"
     androidTestImplementation "androidx.room:room-testing:$room_testing_version"
-
-    // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_extensions_version"
-    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_compiler_version"
 }
 repositories {
     mavenCentral()

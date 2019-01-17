@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
     compileSdkVersion globalConfig["androidCompileSdkVersion"]
@@ -21,17 +23,35 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
+
+    kapt {
+        generateStubs = true
+    }
 }
 
 dependencies {
     //Depends on domain module
     implementation project(':domain')
-    implementation project(':database')
+    implementation project(':service')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
+
+    // Dagger core
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
+    implementation "com.google.dagger:dagger:$dagger_version"
+
+    // Dagger Android
+    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    implementation "android.arch.lifecycle:extensions:$lifecycle_extensions_version"
 
     //Testing libraries
     testImplementation "junit:junit:$junit_version"
