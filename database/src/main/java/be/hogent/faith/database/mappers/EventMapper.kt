@@ -4,7 +4,7 @@ import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.domain.models.Event
 
 //TODO: write tests
-object EventMapper : Mapper<EventEntity, Event> {
+internal object EventMapper : Mapper<EventEntity, Event> {
 
     override fun mapFromEntity(entity: EventEntity): Event {
         val event = Event(entity.date, entity.description, entity.uuid)

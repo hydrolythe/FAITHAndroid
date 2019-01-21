@@ -4,7 +4,7 @@ import be.hogent.faith.database.models.DetailTypeEntity
 import be.hogent.faith.domain.models.DetailType
 
 //TODO: write tests
-object DetailTypeMapper : Mapper<DetailTypeEntity, DetailType> {
+internal object DetailTypeMapper : Mapper<DetailTypeEntity, DetailType> {
     override fun mapFromEntity(entity: DetailTypeEntity): DetailType =
         DetailType.valueOf(entity.toString())
 

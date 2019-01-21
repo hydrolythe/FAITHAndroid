@@ -10,6 +10,9 @@ import be.hogent.faith.domain.repository.Repository
 import io.reactivex.Flowable
 import java.util.UUID
 
+//TOOD: uitzoeken hoe hier met internal werken
+//Parameters (zoals Database mogen niet gekend zijn, maar moeten wel meegegeven worden)
+//Oplosbaar mbv Dagger?
 class EventRepository(
     private val database: EntityDatabase,
     private val eventMapper: EventMapper

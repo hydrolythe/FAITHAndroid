@@ -3,7 +3,7 @@ package be.hogent.faith.database.converters
 import androidx.room.TypeConverter
 import java.util.UUID
 
-class UuidConverter {
+internal class UuidConverter {
 
     @TypeConverter
     fun toString(uuid: UUID): String {

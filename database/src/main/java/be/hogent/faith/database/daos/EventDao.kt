@@ -12,7 +12,7 @@ import io.reactivex.Flowable
 import java.util.UUID
 
 @Dao
-interface EventDao {
+internal interface EventDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(eventEntity: EventEntity)
 

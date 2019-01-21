@@ -11,7 +11,7 @@ import java.util.UUID
     tableName = "events",
     indices = [(Index(value = ["uuid"], unique = true))]
 )
-data class EventEntity(
+internal data class EventEntity(
     @PrimaryKey
     val uuid: UUID = UUID.randomUUID(),
     val date: LocalDateTime,

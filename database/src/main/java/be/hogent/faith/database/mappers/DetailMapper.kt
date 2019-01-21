@@ -11,7 +11,7 @@ import be.hogent.faith.domain.models.Event
  * The event is required because we need its uuid to map the foreign key relationship.
  */
 //TODO: write tests
-class DetailMapper(private val event: Event) : Mapper<DetailEntity, Detail> {
+internal class DetailMapper(private val event: Event) : Mapper<DetailEntity, Detail> {
     override fun mapFromEntity(entity: DetailEntity): Detail {
         val type: DetailType = DetailTypeMapper.mapFromEntity(entity.type)
         return Detail(type, entity.uuid)

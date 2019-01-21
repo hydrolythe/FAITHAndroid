@@ -25,7 +25,7 @@ import be.hogent.faith.database.models.EventEntity
         LocalDateTimeConverter::class,
         UuidConverter::class]
 )
-abstract class EntityDatabase : RoomDatabase() {
+internal abstract class EntityDatabase : RoomDatabase() {
     abstract fun eventDao(): EventDao
     abstract fun detailDao(): DetailDao
 

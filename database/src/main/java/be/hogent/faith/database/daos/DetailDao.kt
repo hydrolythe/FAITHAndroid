@@ -10,7 +10,7 @@ import io.reactivex.Flowable
 import java.util.UUID
 
 @Dao
-interface DetailDao {
+internal interface DetailDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(detailEntity: DetailEntity)
 
