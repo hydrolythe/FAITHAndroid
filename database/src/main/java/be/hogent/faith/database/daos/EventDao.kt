@@ -8,13 +8,14 @@ import androidx.room.Query
 import androidx.room.Transaction
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import java.util.UUID
 
 @Dao
 internal interface EventDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(eventEntity: EventEntity)
+    fun insert(eventEntity: EventEntity) : Completable
 
     @Transaction
     @Query("SELECT * FROM events")

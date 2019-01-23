@@ -12,7 +12,7 @@ import java.util.UUID
 @Dao
 internal interface DetailDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(detailEntity: DetailEntity)
+    fun insert(detailEntity: DetailEntity):Completable
 
     @Query("SELECT * FROM details WHERE eventUuid= :eventUuid")
     fun getDetailsForEvent(eventUuid: UUID): Flowable<List<DetailEntity>>
