@@ -3,34 +3,22 @@ package be.hogent.faith.service.usecases.base
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.Executor
 
-abstract class SingleUseCase<T>(
+abstract class SingleUseCase<Result, in Params>(
     private val threadExecutor: Executor,
     private val scheduler: Scheduler
 ) {
     private val disposables = CompositeDisposable()
 
-    protected abstract fun buildUseCaseObservable(): Single<T>
+    protected abstract fun buildUseCaseObservable(params: Params): Single<Result>
 
-    open fun execute(singleObserver: DisposableSingleObserver<T>) {
-        val single = this.buildUseCaseObservable()
+    open fun execute(params: Params): Single<Result>{
+        return this.buildUseCaseObservable(params)
             .subscribeOn(Schedulers.from(threadExecutor))
-            .observeOn(scheduler) as Single<T>
-        addDisposable(single.subscribeWith(singleObserver))
+            .observeOn(scheduler) as Single<Result>
     }
 
-    fun dispose() {
-        if (!disposables.isDisposed) {
-            disposables.dispose()
-        }
-    }
-
-    private fun addDisposable(disposable: Disposable) {
-        disposables.add(disposable)
-    }
 
 }

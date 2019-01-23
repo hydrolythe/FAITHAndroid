@@ -7,6 +7,7 @@ import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.repository.Repository
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import java.util.UUID
 
@@ -31,20 +32,27 @@ class EventRepository(
 
     /**
      * Adds an item together as well as all its details
+     *
+     * @return a [Completable] that only succeeds when both the event and it details were inserted successfully.
      */
-    override fun add(item: Event) {
+    override fun insert(item: Event) : Completable {
         val eventEntity = eventMapper.mapToEntity(item)
-        eventDao.insert(eventEntity)
+        val eventCompletable = eventDao.insert(eventEntity)
 
         val detailMapper = DetailMapper(item)
-        item.details.forEach {
-            val detailEntity = detailMapper.mapToEntity(it)
-            detailDao.insert(detailEntity)
-        }
+        val detailsCompletable = detailDao.insertAll(item.details.map { detailMapper.mapToEntity(it)})
+        return Completable.merge(listOf(eventCompletable, detailsCompletable))
     }
 
-    override fun addAll(items: List<Event>) {
-        items.forEach { item -> add(item) }
+    /**
+     * Adds all items as well as their details
+     *
+     * @return A [Completable] that only succeeds when all events and their details were inserted successfully.
+     */
+    override fun insertAll(items: List<Event>) : Completable {
+        val allCompletables = mutableListOf<Completable>()
+        items.forEach { item -> allCompletables.add(insert(item)) }
+        return Completable.merge(allCompletables)
     }
 
     override fun get(uuid: UUID): Flowable<Event> {
@@ -57,6 +65,7 @@ class EventRepository(
 
     override fun getAll(): Flowable<List<Event>> {
         val eventsWithDetails = eventDao.getAllEventsWithDetails()
+        //TODO: test to see if this works
         return eventsWithDetails
             //TODO: learn more rxjava and find a way to not need combineList (map inside a map?)
             .map { it -> combineList(it) }

@@ -11,8 +11,8 @@ class GetEventsUseCase(
     private val eventRepository: Repository<Event>,
     threadExecutor: Executor,
     scheduler: Scheduler
-) : FlowableUseCase<List<Event>>(threadExecutor, scheduler) {
-    override fun buildUseCaseObservable(): Flowable<List<Event>> {
+) : FlowableUseCase<List<Event>, Void?>(threadExecutor, scheduler) {
+    override fun buildUseCaseObservable(params: Void?): Flowable<List<Event>> {
         return eventRepository.getAll()
     }
 }

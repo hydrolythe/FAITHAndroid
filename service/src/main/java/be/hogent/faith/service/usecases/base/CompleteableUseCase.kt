@@ -2,35 +2,36 @@ package be.hogent.faith.service.usecases.base
 
 import io.reactivex.Completable
 import io.reactivex.Scheduler
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.Disposables
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.Executor
 
-abstract class CompleteableUseCase(
+/**
+ * Base class for a use case that will return a [Completable].
+ *
+ * Use the [Params] to define the input for the Use Case.
+ * If there is more than one input for the Use Case, the subclass of this [CompleteableUseCase] should also define
+ * a class that has all the required inputs as public attributes, and define that as the [Params].
+ */
+abstract class CompleteableUseCase<in Params>(
     private val threadExecutor: Executor,
     private val scheduler: Scheduler
 ) {
-    private val disposables = CompositeDisposable()
+    private val disposable = Disposables.empty()
 
-    protected abstract fun buildUseCaseObservable(): Completable
+    protected abstract fun buildUseCaseObservable(params: Params? = null): Completable
 
-    open fun execute(singleObserver: DisposableCompletableObserver) {
-        val completable = this.buildUseCaseObservable()
+    open fun execute(params: Params?): Completable {
+        return this.buildUseCaseObservable(params)
             .subscribeOn(Schedulers.from(threadExecutor))
             .observeOn(scheduler)
-        addDisposable(completable.subscribeWith(singleObserver))
     }
 
     fun dispose() {
-        if (!disposables.isDisposed) {
-            disposables.dispose()
+        if (!disposable.isDisposed) {
+            disposable.dispose()
         }
-    }
-
-    private fun addDisposable(disposable: Disposable) {
-        disposables.add(disposable)
     }
 
 }
