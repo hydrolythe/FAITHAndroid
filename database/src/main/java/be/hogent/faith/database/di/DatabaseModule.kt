@@ -1,5 +1,7 @@
 package be.hogent.faith.database.di
 
+import be.hogent.faith.database.daos.DetailDao
+import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.repositories.EventRepositoryImpl
@@ -10,5 +12,15 @@ import org.koin.dsl.module.module
 val databaseModule = module {
     single { EventMapper() }
     single { EntityDatabase.getDatabase(androidContext()) }
-    single { EventRepositoryImpl(get(), get()) as EventRepository}
+    single { constructEventDao(get()) }
+    single { constructDetailDao(get()) }
+    single { EventRepositoryImpl(get(), get(), get()) as EventRepository }
+}
+
+fun constructEventDao(entityDatabase: EntityDatabase): EventDao {
+    return entityDatabase.eventDao()
+}
+
+fun constructDetailDao(entityDatabase: EntityDatabase): DetailDao {
+    return entityDatabase.detailDao()
 }

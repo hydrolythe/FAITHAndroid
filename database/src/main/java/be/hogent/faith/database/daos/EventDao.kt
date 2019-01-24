@@ -26,8 +26,5 @@ interface EventDao {
     fun getEventWithDetails(eventUuid: UUID): Flowable<EventWithDetails>
 
     @Delete
-    fun delete(eventEntity: EventEntity)
-
-    @Query("DELETE FROM events")
-    fun deleteAll()
+    fun delete(eventEntity: EventEntity): Completable
 }

@@ -5,7 +5,6 @@ import io.reactivex.Flowable
 import java.util.UUID
 
 interface Repository<T> {
-    fun deleteAll()
 
     fun delete(item: T)
 

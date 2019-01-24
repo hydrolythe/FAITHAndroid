@@ -41,20 +41,20 @@ class EntityDatabaseTest {
     fun entityDatabase_singleEntry_noDetails_isAdded() {
         val uuid = UUID.fromString("d883853b-7b23-401f-816b-ed4231e6dd6a")
         val date = LocalDateTime.of(2018, 10, 28, 7, 33)
-        val eventEntity = EventEntity(uuid, date, "testDescrption")
+        val eventEntity = EventEntity(date, "testDescription", uuid)
 
         eventDao.insert(eventEntity)
-
-        eventDao.getEventWithDetails(uuid)
+            .andThen(eventDao.getEventWithDetails(uuid))
             .test()
             .assertValue { it.eventEntity!!.equals(eventEntity) }
     }
 
     @Test
     fun entityDatabase_singleEntry_withDetails_isAdded() {
+        //Arrange
         val uuid = UUID.fromString("d883853b-7b23-401f-816b-ed4231e6dd6a")
         val date = LocalDateTime.of(2018, 10, 28, 7, 33)
-        val eventEntity = EventEntity(uuid, date, "testDescrption")
+        val eventEntity = EventEntity(date, "testDescription", uuid)
 
         val detail1 = DetailEntity(eventUuid = uuid, type = DetailTypeEntity.VIDEO)
         val detail2 = DetailEntity(eventUuid = uuid, type = DetailTypeEntity.AUDIO)
@@ -62,10 +62,11 @@ class EntityDatabaseTest {
         eventEntity.details.add(detail2)
 
         eventDao.insert(eventEntity)
-        detailDao.insert(detail1)
-        detailDao.insert(detail2)
-
-        eventDao.getEventWithDetails(uuid)
+            .andThen(detailDao.insert(detail1))
+            .andThen(detailDao.insert(detail2))
+            //Act
+            .andThen(eventDao.getEventWithDetails(uuid))
+            //Assert
             .test()
             .assertValue {
                 it.eventEntity!!.equals(eventEntity) && it.detailEntities.size == 2
@@ -74,28 +75,30 @@ class EntityDatabaseTest {
 
     @Test
     fun entityDatabase_deleteEntry_detailsAreAlsoDeleted() {
+        //Arrange
         val uuid = UUID.fromString("d883853b-7b23-401f-816b-ed4231e6dd6a")
         val date = LocalDateTime.of(2018, 10, 28, 7, 33)
-        val eventEntity = EventEntity(uuid, date, "testDescrption")
+        val eventEntity = EventEntity(date, "testDescrption", uuid)
 
         val detail1 = DetailEntity(eventUuid = uuid, type = DetailTypeEntity.VIDEO)
         val detail2 = DetailEntity(eventUuid = uuid, type = DetailTypeEntity.AUDIO)
         eventEntity.details.add(detail1)
         eventEntity.details.add(detail2)
 
-        eventDao.insert(eventEntity)
-        detailDao.insert(detail1)
-        detailDao.insert(detail2)
+        val arrangeCompletable = eventDao.insert(eventEntity)
+            .andThen(detailDao.insert(detail1))
+            .andThen(detailDao.insert(detail2))
 
-        // Act
-        eventDao.delete(eventEntity)
-
-        // Assert
-        eventDao.getEventWithDetails(uuid)
+        //Act
+        //Chaining two "andThen" calls isn't possible,
+        //so by saving the completable we can just subscribe twice
+        val actCompletable = arrangeCompletable.andThen(eventDao.delete(eventEntity))
+        //Assert
+        actCompletable.andThen(eventDao.getEventWithDetails(uuid))
             .doOnEach { Log.d("dbtest", "eventTest ${it.value}") }
             .test()
             .assertEmpty()
-        detailDao.getDetailsForEvent(uuid)
+        actCompletable.andThen(detailDao.getDetailsForEvent(uuid))
             .test()
             .assertValue { it.isEmpty() }
     }

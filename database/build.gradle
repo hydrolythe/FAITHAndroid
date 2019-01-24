@@ -36,6 +36,9 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
+
+    //Testing libraries
+    testImplementation "io.mockk:mockk:$mockk_version"
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test:runner:$testrunner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"

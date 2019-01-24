@@ -1,5 +1,7 @@
 package be.hogent.faith.database.repositories
 
+import be.hogent.faith.database.daos.DetailDao
+import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
@@ -13,16 +15,10 @@ import io.reactivex.Flowable
 import java.util.UUID
 
 open class EventRepositoryImpl(
-    private val database: EntityDatabase,
+    private val eventDao: EventDao,
+    private val detailDao: DetailDao,
     private val eventMapper: EventMapper
 ) : EventRepository {
-
-    private val eventDao = database.eventDao()
-    private val detailDao = database.detailDao()
-
-    override fun deleteAll() {
-        eventDao.deleteAll()
-    }
 
     override fun delete(item: Event) {
         eventDao.delete(eventMapper.mapToEntity(item))
