@@ -1,6 +1,5 @@
 package be.hogent.faith.database.database
 
-import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
@@ -69,7 +68,7 @@ class EntityDatabaseTest {
             // Assert
             .test()
             .assertValue {
-                it.eventEntity!!.equals(eventEntity) && it.detailEntities.size == 2
+                it.eventEntity!! == eventEntity && it.detailEntities.size == 2
             }
     }
 
@@ -78,7 +77,7 @@ class EntityDatabaseTest {
         // Arrange
         val uuid = UUID.fromString("d883853b-7b23-401f-816b-ed4231e6dd6a")
         val date = LocalDateTime.of(2018, 10, 28, 7, 33)
-        val eventEntity = EventEntity(date, "testDescrption", uuid)
+        val eventEntity = EventEntity(date, "testDescription", uuid)
 
         val detail1 = DetailEntity(eventUuid = uuid, type = DetailTypeEntity.VIDEO)
         val detail2 = DetailEntity(eventUuid = uuid, type = DetailTypeEntity.AUDIO)
@@ -95,7 +94,6 @@ class EntityDatabaseTest {
         val actCompletable = arrangeCompletable.andThen(eventDao.delete(eventEntity))
         // Assert
         actCompletable.andThen(eventDao.getEventWithDetails(uuid))
-            .doOnEach { Log.d("dbtest", "eventTest ${it.value}") }
             .test()
             .assertEmpty()
         actCompletable.andThen(detailDao.getDetailsForEvent(uuid))

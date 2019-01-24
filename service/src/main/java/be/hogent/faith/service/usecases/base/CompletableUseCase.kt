@@ -8,10 +8,10 @@ import io.reactivex.disposables.Disposables
  * Base class for a use case that will return a [Completable].
  *
  * Use the [Params] to define the input for the Use Case.
- * If there is more than one input for the Use Case, the subclass of this [CompleteableUseCase] should also define
+ * If there is more than one input for the Use Case, the subclass of this [CompletableUseCase] should also define
  * a class that has all the required inputs as public attributes, and define that as the [Params].
  */
-abstract class CompleteableUseCase<in Params>(
+abstract class CompletableUseCase<in Params>(
     private val subscribeScheduler: Scheduler,
     private val observeScheduler: Scheduler
 ) {

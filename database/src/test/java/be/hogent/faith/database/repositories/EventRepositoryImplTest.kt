@@ -31,7 +31,7 @@ class EventRepositoryImplTest {
         )
         eventRepository.get(eventUuid)
             .test()
-            .assertValue { it -> it.uuid.equals(eventUuid) }
+            .assertValue { it -> it.uuid == eventUuid }
     }
 
     @Test

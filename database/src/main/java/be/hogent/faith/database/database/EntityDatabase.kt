@@ -32,7 +32,7 @@ abstract class EntityDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var INSTANCE: EntityDatabase? = null
-        const val DATABASE_NAME = "ENTITY_DATABSE"
+        private const val DATABASE_NAME = "ENTITY_DATABASE"
 
         fun getDatabase(context: Context): EntityDatabase {
             val tempInstance = INSTANCE
