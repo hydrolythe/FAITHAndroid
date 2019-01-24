@@ -10,24 +10,25 @@ import io.reactivex.disposables.Disposables
  * Use the [Params] to define the input for the Use Case.
  * If there is more than one input for the Use Case, the subclass of this [CompletableUseCase] should also define
  * a class that has all the required inputs as public attributes, and define that as the [Params].
+ * An example can be found in [be.hogent.faith.service.usecases.CreateEventUseCase].
  */
 abstract class CompletableUseCase<in Params>(
     private val subscribeScheduler: Scheduler,
     private val observeScheduler: Scheduler
 ) {
-    private val disposable = Disposables.empty()
 
+    /**
+     * This should be overridden with the business logic for the use case.
+     */
     protected abstract fun buildUseCaseObservable(params: Params? = null): Completable
 
+    /**
+     * Executes the use case.
+     * It will run on the specified [subscribeScheduler] and can be observed on the given [observeScheduler].
+     */
     open fun execute(params: Params?): Completable {
         return this.buildUseCaseObservable(params)
             .subscribeOn(subscribeScheduler)
             .observeOn(observeScheduler)
-    }
-
-    fun dispose() {
-        if (!disposable.isDisposed) {
-            disposable.dispose()
-        }
     }
 }

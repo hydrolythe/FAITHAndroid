@@ -18,8 +18,8 @@ open class EventRepositoryImpl(
     private val eventMapper: EventMapper
 ) : EventRepository {
 
-    override fun delete(item: Event) {
-        eventDao.delete(eventMapper.mapToEntity(item))
+    override fun delete(item: Event) : Completable {
+        return eventDao.delete(eventMapper.mapToEntity(item))
     }
 
     /**
@@ -57,7 +57,6 @@ open class EventRepositoryImpl(
 
     override fun getAll(): Flowable<List<Event>> {
         val eventsWithDetails = eventDao.getAllEventsWithDetails()
-        // TODO: test to see if this works
         return eventsWithDetails
             // TODO: learn more rxjava and find a way to not need combineList (map inside a map?)
             .map { it -> combineList(it) }
@@ -66,7 +65,7 @@ open class EventRepositoryImpl(
 
     /**
      * Takes an EventWithDetailsObject (a Room relation) and
-     * puts it back together into a EventEntity with its details filled in
+     * puts it back together into a EventEntity with its details filled in.
      */
     private fun combine(eventWithDetails: EventWithDetails): EventEntity {
         val eventEntity = eventWithDetails.eventEntity!!

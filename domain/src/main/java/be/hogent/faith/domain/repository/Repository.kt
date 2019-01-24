@@ -6,7 +6,7 @@ import java.util.UUID
 
 interface Repository<T> {
 
-    fun delete(item: T)
+    fun delete(item: T): Completable
 
     fun insert(item: T): Completable
 
