@@ -3,7 +3,7 @@ package be.hogent.faith.database.converters
 import androidx.room.TypeConverter
 import be.hogent.faith.database.models.DetailTypeEntity
 
-internal class DetailTypeConverter {
+class DetailTypeConverter {
 
     @TypeConverter
     fun toDetailTypeEntity(id: Int): DetailTypeEntity {

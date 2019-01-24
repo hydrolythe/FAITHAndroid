@@ -6,4 +6,3 @@ data class Detail(
     val detailType: DetailType,
     val uuid: UUID = UUID.randomUUID()
 )
-

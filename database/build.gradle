@@ -46,6 +46,9 @@ dependencies {
     // Android Architecture Components Core
     androidTestImplementation "androidx.arch.core:core-testing:$aac_core_version"
 
+    // Koin Android (Dependency Injection)
+    implementation "org.koin:koin-android:$koin_version"
+
     // Room components
     implementation "androidx.room:room-runtime:$room_runtime_version"
     implementation "android.arch.persistence.room:rxjava2:$room_rxjava_version"

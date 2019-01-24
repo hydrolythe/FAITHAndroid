@@ -13,9 +13,9 @@ import io.reactivex.Flowable
 import java.util.UUID
 
 @Dao
-internal interface EventDao {
+interface EventDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(eventEntity: EventEntity) : Completable
+    fun insert(eventEntity: EventEntity): Completable
 
     @Transaction
     @Query("SELECT * FROM events")

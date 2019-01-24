@@ -16,12 +16,9 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     testImplementation "io.mockk:mockk:$mockk_version"
 
-    // Dagger core
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    implementation "com.google.dagger:dagger:$dagger_version"
-
-    //TODO: check if Dagger android is needed here, or at all
-    // Dagger Android
-    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
-    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    //Rxjava
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    
+    // Koin Android (Dependency Injection)
+    implementation "org.koin:koin-android:$koin_version"
 }

@@ -5,7 +5,7 @@ import androidx.room.Relation
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.EventEntity
 
-internal class EventWithDetails(
+class EventWithDetails(
     @Embedded
     var eventEntity: EventEntity? = null,
     @Relation(parentColumn = "uuid", entityColumn = "eventUuid", entity = DetailEntity::class)

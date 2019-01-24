@@ -17,7 +17,7 @@ import java.util.UUID
         onDelete = ForeignKey.CASCADE
     )]
 )
-internal data class DetailEntity(
+data class DetailEntity(
     @PrimaryKey
     val uuid: UUID = UUID.randomUUID(),
 

@@ -1,6 +1,5 @@
 package be.hogent.faith.faith
 
-
 /*
  *  Copyright 2017 Google Inc.
  *

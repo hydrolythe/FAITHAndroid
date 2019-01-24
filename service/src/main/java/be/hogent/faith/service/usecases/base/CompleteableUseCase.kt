@@ -3,9 +3,6 @@ package be.hogent.faith.service.usecases.base
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposables
-import io.reactivex.observers.DisposableCompletableObserver
-import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.Executor
 
 /**
  * Base class for a use case that will return a [Completable].
@@ -15,8 +12,8 @@ import java.util.concurrent.Executor
  * a class that has all the required inputs as public attributes, and define that as the [Params].
  */
 abstract class CompleteableUseCase<in Params>(
-    private val threadExecutor: Executor,
-    private val scheduler: Scheduler
+    private val subscribeScheduler: Scheduler,
+    private val observeScheduler: Scheduler
 ) {
     private val disposable = Disposables.empty()
 
@@ -24,8 +21,8 @@ abstract class CompleteableUseCase<in Params>(
 
     open fun execute(params: Params?): Completable {
         return this.buildUseCaseObservable(params)
-            .subscribeOn(Schedulers.from(threadExecutor))
-            .observeOn(scheduler)
+            .subscribeOn(subscribeScheduler)
+            .observeOn(observeScheduler)
     }
 
     fun dispose() {
@@ -33,5 +30,4 @@ abstract class CompleteableUseCase<in Params>(
             disposable.dispose()
         }
     }
-
 }

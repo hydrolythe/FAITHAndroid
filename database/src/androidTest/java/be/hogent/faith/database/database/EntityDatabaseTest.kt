@@ -48,8 +48,6 @@ class EntityDatabaseTest {
         eventDao.getEventWithDetails(uuid)
             .test()
             .assertValue { it.eventEntity!!.equals(eventEntity) }
-
-
     }
 
     @Test
@@ -94,7 +92,7 @@ class EntityDatabaseTest {
 
         // Assert
         eventDao.getEventWithDetails(uuid)
-            .doOnEach{ Log.d("dbtest", "eventTest ${it.value}")}
+            .doOnEach { Log.d("dbtest", "eventTest ${it.value}") }
             .test()
             .assertEmpty()
         detailDao.getDetailsForEvent(uuid)

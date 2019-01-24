@@ -1,6 +1,6 @@
 package be.hogent.faith.database.models
 
-internal enum class DetailTypeEntity(val id: Int) {
+enum class DetailTypeEntity(val id: Int) {
     TEXT(0),
     PICTURE(1),
     MUSIC(2),

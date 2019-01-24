@@ -9,9 +9,9 @@ interface Repository<T> {
 
     fun delete(item: T)
 
-    fun insert(item: T):Completable
+    fun insert(item: T): Completable
 
-    fun insertAll(items: List<T>) : Completable
+    fun insertAll(items: List<T>): Completable
 
     fun get(uuid: UUID): Flowable<T>
 

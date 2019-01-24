@@ -7,15 +7,11 @@ import be.hogent.faith.service.usecases.CreateEventUseCase
 import be.hogent.faith.service.usecases.GetEventsUseCase
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDateTime
-import javax.inject.Inject
 
-class CreateEventViewModel : ViewModel() {
-    @Inject
-    lateinit var getEvents: GetEventsUseCase
-
-    @Inject
-    lateinit var createEvent: CreateEventUseCase
-
+class CreateEventViewModel(
+    private val getEventsUseCase: GetEventsUseCase,
+    private val createEventUseCase: CreateEventUseCase
+) : ViewModel() {
 
     val eventDescription = MutableLiveData<String>()
 
@@ -27,16 +23,23 @@ class CreateEventViewModel : ViewModel() {
 
     init {
         val createEventParams = CreateEventUseCase.CreateEventParameters(LocalDateTime.now(), "test")
-        val createEventCompletable = createEvent.execute(createEventParams)
+        val createEventCompletable = createEventUseCase.execute(createEventParams)
             .subscribe({
-             Log.d(TAG, "Created event successfully")
-            },{
+                Log.d(TAG, "Created event successfully")
+            }, {
 
                 Log.d(TAG, "Failed to create event")
             })
-       disposables.add(createEventCompletable)
-    }
+        disposables.add(createEventCompletable)
 
+        val getEventsCompletable = getEventsUseCase.execute(null)
+            .subscribe({
+               eventDescription.value = it.first().description
+            },{
+
+            })
+        disposables.add(getEventsCompletable)
+    }
 
     override fun onCleared() {
         super.onCleared()

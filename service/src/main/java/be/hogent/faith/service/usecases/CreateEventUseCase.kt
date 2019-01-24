@@ -1,23 +1,19 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.repository.Repository
+import be.hogent.faith.domain.repository.EventRepository
 import be.hogent.faith.service.usecases.base.CompleteableUseCase
 import io.reactivex.Completable
 import io.reactivex.Scheduler
-import org.threeten.bp.DateTimeException
+import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.LocalDateTime
-import java.util.concurrent.Executor
 
 open class CreateEventUseCase(
-    private val dateTime: LocalDateTime,
-    private val description: String,
-    private val eventRepository: Repository<Event>,
-    threadExecutor: Executor,
-    scheduler: Scheduler
-) : CompleteableUseCase<CreateEventUseCase.CreateEventParameters>(threadExecutor, scheduler) {
+    private val eventRepository: EventRepository,
+    observeScheduler: Scheduler
+) : CompleteableUseCase<CreateEventUseCase.CreateEventParameters>(Schedulers.io(), observeScheduler) {
 
-    override fun buildUseCaseObservable(params : CreateEventUseCase.CreateEventParameters?): Completable {
+    override fun buildUseCaseObservable(params: CreateEventUseCase.CreateEventParameters?): Completable {
         val event = Event(params!!.dateTime, params.description)
         return eventRepository.insert(event)
     }

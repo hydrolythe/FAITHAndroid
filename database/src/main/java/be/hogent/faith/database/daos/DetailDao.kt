@@ -10,12 +10,12 @@ import io.reactivex.Flowable
 import java.util.UUID
 
 @Dao
-internal interface DetailDao {
+interface DetailDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(detailEntity: DetailEntity):Completable
+    fun insert(detailEntity: DetailEntity): Completable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(detailEntities: List<DetailEntity>):Completable
+    fun insertAll(detailEntities: List<DetailEntity>): Completable
 
     @Query("SELECT * FROM details WHERE eventUuid= :eventUuid")
     fun getDetailsForEvent(eventUuid: UUID): Flowable<List<DetailEntity>>

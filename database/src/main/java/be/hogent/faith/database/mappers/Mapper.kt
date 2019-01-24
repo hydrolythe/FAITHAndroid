@@ -1,9 +1,11 @@
 package be.hogent.faith.database.mappers
 
 /**
- * Interface for mappers that convert Entities of type E to Domain models of type D
+ * Interface for mappers that convert between [Entity]s and [DomainObject]s
  */
-internal interface Mapper<E, D> {
-    fun mapFromEntity(entity: E): D
-    fun mapToEntity(model: D): E
+interface Mapper<Entity, DomainObject> {
+    fun mapFromEntity(entity: Entity): DomainObject
+    fun mapToEntity(model: DomainObject): Entity
+    fun mapFromEntities(entities: List<Entity>): List<DomainObject>
+    fun mapToEntities(models: List<DomainObject>): List<Entity>
 }
