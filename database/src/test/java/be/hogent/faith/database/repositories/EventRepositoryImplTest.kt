@@ -24,7 +24,6 @@ class EventRepositoryImplTest {
     private val eventEntity = createEventEntity(eventUuid)
     private val detailEntities = createEventDetails(eventUuid)
 
-
     @Test
     fun eventRepository_existingEvent_succeeds() {
         every { eventDao.getEventWithDetails(eventUuid) } returns Flowable.just(
@@ -50,7 +49,7 @@ class EventRepositoryImplTest {
             EventWithDetails(eventEntity, detailEntities)
         )
 
-        //TODO: also test details themselves
+        // TODO: also test details themselves
         eventRepository.get(eventUuid)
             .test()
             .assertValue { event ->

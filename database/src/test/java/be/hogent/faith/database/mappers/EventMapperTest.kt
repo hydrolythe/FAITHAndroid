@@ -16,16 +16,16 @@ class EventMapperTest {
 
     @Test
     fun eventMapper_mapFromEntity_noDetails() {
-        //Arrange
+        // Arrange
         val uuid = UUID.randomUUID()
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
         val description = "description"
         val eventEntity = EventEntity(time, description, uuid)
 
-        //Act
+        // Act
         val resultingEvent = eventMapper.mapFromEntity(eventEntity)
 
-        //Assert
+        // Assert
         assertEquals(uuid, resultingEvent.uuid)
         assertEquals(time, resultingEvent.dateTime)
         assertEquals(description, resultingEvent.description)
@@ -34,37 +34,37 @@ class EventMapperTest {
 
     @Test
     fun eventMapper_mapFromEntity_withDetails() {
-        //Arrange EventEntity
+        // Arrange EventEntity
         val uuid = UUID.randomUUID()
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
         val description = "description"
         val eventEntity = EventEntity(time, description, uuid)
-        //Arrange DetailEntities
+        // Arrange DetailEntities
         val detailUUID = UUID.randomUUID()
         val detailType = DetailTypeEntity.AUDIO
         val detailEntity = DetailEntity(detailUUID, eventEntity.uuid, detailType)
         eventEntity.details.add(detailEntity)
 
-        //Act
+        // Act
         val resultingEvent = eventMapper.mapFromEntity(eventEntity)
 
-        //Assert
+        // Assert
         assertEquals(1, resultingEvent.details.size)
         // Checking if the details inside the event are the same is done in the DetailEntityMapperTest
     }
 
     @Test
     fun eventMapper_mapToEntity_noDetails() {
-        //Arrange
+        // Arrange
         val uuid = UUID.randomUUID()
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
         val description = "description"
         val event = Event(time, description, uuid)
 
-        //Act
+        // Act
         val resultingEventEntity = eventMapper.mapToEntity(event)
 
-        //Assert
+        // Assert
         assertEquals(uuid, resultingEventEntity.uuid)
         assertEquals(time, resultingEventEntity.dateTime)
         assertEquals(description, resultingEventEntity.description)
@@ -73,20 +73,20 @@ class EventMapperTest {
 
     @Test
     fun eventMapper_mapToEntity_withDetails() {
-        //Arrange Event
+        // Arrange Event
         val uuid = UUID.randomUUID()
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
         val description = "description"
         val event = Event(time, description, uuid)
-        //Arrange Detail
+        // Arrange Detail
         val detailType = DetailType.AUDIO
         val detail = Detail(detailType, event.uuid)
         event.addDetail(detail)
 
-        //Act
+        // Act
         val resultingEventEntity = eventMapper.mapToEntity(event)
 
-        //Assert
+        // Assert
         assertEquals(1, resultingEventEntity.details.size)
     }
 }

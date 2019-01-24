@@ -51,7 +51,7 @@ class EntityDatabaseTest {
 
     @Test
     fun entityDatabase_singleEntry_withDetails_isAdded() {
-        //Arrange
+        // Arrange
         val uuid = UUID.fromString("d883853b-7b23-401f-816b-ed4231e6dd6a")
         val date = LocalDateTime.of(2018, 10, 28, 7, 33)
         val eventEntity = EventEntity(date, "testDescription", uuid)
@@ -64,9 +64,9 @@ class EntityDatabaseTest {
         eventDao.insert(eventEntity)
             .andThen(detailDao.insert(detail1))
             .andThen(detailDao.insert(detail2))
-            //Act
+            // Act
             .andThen(eventDao.getEventWithDetails(uuid))
-            //Assert
+            // Assert
             .test()
             .assertValue {
                 it.eventEntity!!.equals(eventEntity) && it.detailEntities.size == 2
@@ -75,7 +75,7 @@ class EntityDatabaseTest {
 
     @Test
     fun entityDatabase_deleteEntry_detailsAreAlsoDeleted() {
-        //Arrange
+        // Arrange
         val uuid = UUID.fromString("d883853b-7b23-401f-816b-ed4231e6dd6a")
         val date = LocalDateTime.of(2018, 10, 28, 7, 33)
         val eventEntity = EventEntity(date, "testDescrption", uuid)
@@ -89,11 +89,11 @@ class EntityDatabaseTest {
             .andThen(detailDao.insert(detail1))
             .andThen(detailDao.insert(detail2))
 
-        //Act
-        //Chaining two "andThen" calls isn't possible,
-        //so by saving the completable we can just subscribe twice
+        // Act
+        // Chaining two "andThen" calls isn't possible,
+        // so by saving the completable we can just subscribe twice
         val actCompletable = arrangeCompletable.andThen(eventDao.delete(eventEntity))
-        //Assert
+        // Assert
         actCompletable.andThen(eventDao.getEventWithDetails(uuid))
             .doOnEach { Log.d("dbtest", "eventTest ${it.value}") }
             .test()

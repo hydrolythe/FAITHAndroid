@@ -2,10 +2,8 @@ package be.hogent.faith.database.repositories
 
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
-import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
-import be.hogent.faith.database.mappers.Mapper
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
 import be.hogent.faith.domain.models.Event

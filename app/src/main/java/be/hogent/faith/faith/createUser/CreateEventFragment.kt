@@ -18,7 +18,6 @@ class CreateEventFragment : Fragment() {
         })
     }
 
-
     companion object {
         const val TAG = "CreateEventFragment"
     }
