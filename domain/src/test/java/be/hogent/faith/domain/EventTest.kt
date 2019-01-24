@@ -26,7 +26,7 @@ class EventTest {
         val newEvent = Event(date, description)
 
         assertEquals(description, newEvent.description)
-        assertEquals(date, newEvent.date)
+        assertEquals(date, newEvent.dateTime)
     }
 
     @Test

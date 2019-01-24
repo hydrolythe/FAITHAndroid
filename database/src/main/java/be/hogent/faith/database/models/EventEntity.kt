@@ -12,10 +12,10 @@ import java.util.UUID
     indices = [(Index(value = ["uuid"], unique = true))]
 )
 data class EventEntity(
+    val dateTime: LocalDateTime,
+    val description: String,
     @PrimaryKey
-    val uuid: UUID = UUID.randomUUID(),
-    val date: LocalDateTime,
-    val description: String
+    val uuid: UUID = UUID.randomUUID()
 ) {
     // Can't be part of the constructor arguments or Room won't compile
     @Ignore

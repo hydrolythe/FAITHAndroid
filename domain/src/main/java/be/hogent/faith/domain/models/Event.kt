@@ -4,7 +4,7 @@ import org.threeten.bp.LocalDateTime
 import java.util.UUID
 
 data class Event(
-    val date: LocalDateTime,
+    val dateTime: LocalDateTime,
     val description: String,
     val uuid: UUID = UUID.randomUUID()
 ) {
