@@ -32,7 +32,7 @@ before_install:
  - yes | sdkmanager "platforms;android-28"
 
 script:
- - ./gradlew ktlintFormat
+ - ./gradlew ktlint
  - ./gradlew test
  - ./gradlew build assembleAndroidTest
  - echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI
