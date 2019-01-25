@@ -20,7 +20,7 @@ abstract class CompletableUseCase<in Params>(
     /**
      * This should be overridden with the business logic for the use case.
      */
-    protected abstract fun buildUseCaseObservable(params: Params? = null): Completable
+    abstract fun buildUseCaseObservable(params: Params? = null): Completable
 
     /**
      * Executes the use case.

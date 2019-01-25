@@ -19,7 +19,7 @@ abstract class FlowableUseCase<Result, in Params>(
     /**
      * This should be overridden with the business logic for the use case.
      */
-    protected abstract fun buildUseCaseObservable(params: Params? = null): Flowable<Result>
+    abstract fun buildUseCaseObservable(params: Params? = null): Flowable<Result>
 
     /**
      * Executes the use case.

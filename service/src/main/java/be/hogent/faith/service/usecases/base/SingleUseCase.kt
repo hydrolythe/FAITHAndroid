@@ -18,7 +18,7 @@ abstract class SingleUseCase<Result, in Params>(
     /**
      * This should be overridden with the business logic for the use case.
      */
-    protected abstract fun buildUseCaseObservable(params: Params): Single<Result>
+    abstract fun buildUseCaseObservable(params: Params): Single<Result>
 
     /**
      * Executes the use case.
