@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
     compileSdkVersion globalConfig["androidCompileSdkVersion"]
@@ -21,17 +23,39 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
+
+    kapt {
+        generateStubs = true
+    }
 }
 
 dependencies {
     //Depends on domain module
     implementation project(':domain')
+    implementation project(':service')
+    //TODO: find a way to move this to service module so app doesn't directly depend on database
     implementation project(':database')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
+
+    //Date/time library (see https://github.com/JakeWharton/ThreeTenABP)
+    api "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
+
+    // Koin Android (Dependency Injection)
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-android-viewmodel:$koin_version"
+
+    // Rxjava
+    implementation "io.reactivex.rxjava2:rxandroid:$rxjava_android_version"
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
 
     //Testing libraries
     testImplementation "junit:junit:$junit_version"

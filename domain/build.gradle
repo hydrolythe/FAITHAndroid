@@ -1,36 +1,19 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-
-android {
-    def globalConfig = rootProject.extensions.getByName("ext")
-    compileSdkVersion globalConfig["androidCompileSdkVersion"]
-
-    defaultConfig {
-        minSdkVersion globalConfig["androidMinSdkVersion"]
-        targetSdkVersion globalConfig["androidTargetSdkVersion"]
-        versionCode 1
-        versionName "1.0"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-}
+apply plugin: 'kotlin'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    testImplementation 'junit:junit:4.12'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     //Date/time library (see https://github.com/JakeWharton/ThreeTenABP)
     api "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
 
+    //RxJava
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxjava_android_version"
+    implementation "androidx.room:room-rxjava2:$room_rxjava_version"
     // TESTING LIBRARIES
+    testImplementation "junit:junit:$junit_version"
     testImplementation "io.mockk:mockk:$mockk_version"
 }
 repositories {

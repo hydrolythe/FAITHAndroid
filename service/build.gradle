@@ -1,0 +1,24 @@
+apply plugin: 'kotlin'
+
+apply plugin: 'kotlin-kapt'
+
+dependencies {
+    implementation project(':domain')
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    //Date/time library (see https://github.com/JakeWharton/ThreeTenABP)
+    implementation "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
+
+    // TESTING LIBRARIES
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "io.mockk:mockk:$mockk_version"
+
+    //Rxjava
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    
+    // Koin Android (Dependency Injection)
+    implementation "org.koin:koin-android:$koin_version"
+}

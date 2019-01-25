@@ -36,18 +36,27 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
+
+    //Testing libraries
+    testImplementation "io.mockk:mockk:$mockk_version"
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.test:runner:$testrunner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
 
+    //Date/time library (see https://github.com/JakeWharton/ThreeTenABP)
+    api "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
+
+    // Android Architecture Components Core
+    androidTestImplementation "androidx.arch.core:core-testing:$aac_core_version"
+
+    // Koin Android (Dependency Injection)
+    implementation "org.koin:koin-android:$koin_version"
+
     // Room components
     implementation "androidx.room:room-runtime:$room_runtime_version"
+    implementation "android.arch.persistence.room:rxjava2:$room_rxjava_version"
     kapt "androidx.room:room-compiler:$room_compiler_version"
     androidTestImplementation "androidx.room:room-testing:$room_testing_version"
-
-    // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_extensions_version"
-    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_compiler_version"
 }
 repositories {
     mavenCentral()
