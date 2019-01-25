@@ -18,7 +18,7 @@ open class EventRepositoryImpl(
     private val eventMapper: EventMapper
 ) : EventRepository {
 
-    override fun delete(item: Event) : Completable {
+    override fun delete(item: Event): Completable {
         return eventDao.delete(eventMapper.mapToEntity(item))
     }
 

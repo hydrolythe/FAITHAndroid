@@ -17,7 +17,6 @@ class GetEventsUseCaseTest {
     private lateinit var scheduler: Scheduler
     private lateinit var repository: EventRepository
 
-
     @Before
     fun setUp() {
         executor = mockk()
@@ -34,7 +33,7 @@ class GetEventsUseCaseTest {
 
     @Test
     fun getEventsUseCase_eventsPresent_returnsThem() {
-        //Simulate two events on the stream
+        // Simulate two events on the stream
         every { repository.getAll() } returns Flowable.just(
             listOf(createEvent(), createEvent()),
             listOf(createEvent(), createEvent()))
@@ -52,6 +51,4 @@ class GetEventsUseCaseTest {
     private fun createEvent(): Event {
         return Event(mockk(), "description", mockk())
     }
-
-
 }

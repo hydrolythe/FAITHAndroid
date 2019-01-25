@@ -2,7 +2,6 @@ package be.hogent.faith.service.usecases.base
 
 import io.reactivex.Completable
 import io.reactivex.Scheduler
-import io.reactivex.disposables.Disposables
 
 /**
  * Base class for a use case that will return a [Completable].

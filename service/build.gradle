@@ -10,7 +10,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     //Date/time library (see https://github.com/JakeWharton/ThreeTenABP)
-    api "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
+    implementation "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
 
     // TESTING LIBRARIES
     testImplementation "junit:junit:$junit_version"
