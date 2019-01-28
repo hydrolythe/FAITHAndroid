@@ -11,7 +11,6 @@ dependencies {
     //RxJava
     implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rxjava_android_version"
-    implementation "androidx.room:room-rxjava2:$room_rxjava_version"
     // TESTING LIBRARIES
     testImplementation "junit:junit:$junit_version"
     testImplementation "io.mockk:mockk:$mockk_version"
