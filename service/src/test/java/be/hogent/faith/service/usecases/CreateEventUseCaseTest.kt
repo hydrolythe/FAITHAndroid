@@ -25,8 +25,6 @@ class CreateEventUseCaseTest {
         scheduler = mockk()
         repository = mockk(relaxed = true)
         createEventUseCase = CreateEventUseCase(repository, scheduler)
-
-
     }
 
     @Test
@@ -34,7 +32,7 @@ class CreateEventUseCaseTest {
         // Arrange
         val eventArg = slot<Event>()
         every { repository.insert(capture(eventArg)) } returns Completable.complete()
-        val dateTime = LocalDateTime.of(2018, 10, 28, 8,22)
+        val dateTime = LocalDateTime.of(2018, 10, 28, 8, 22)
         val params = CreateEventUseCase.CreateEventParameters(dateTime, "description")
 
         // Act
