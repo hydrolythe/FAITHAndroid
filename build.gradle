@@ -36,6 +36,8 @@ buildscript {
         room_testing_version ='2.1.0-alpha03'
         room_rxjava_version = '2.1.0-alpha03'
 
+        recyclerview_version = '1.0.0'
+
         ktlint_version = '0.29.0'
 
         mockk_version = '1.8.13.kotlin13'

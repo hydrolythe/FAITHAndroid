@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FAITH</string>
+    <string name="event_details_title">Wat is er gebeurd?</string>
+    <string name="event_details_label_title">Geef de titel in:</string>
 </resources>
