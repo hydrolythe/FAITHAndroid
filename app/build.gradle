@@ -46,6 +46,9 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
 
+    //Recyclerview
+    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+
     //Date/time library (see https://github.com/JakeWharton/ThreeTenABP)
     api "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
 
