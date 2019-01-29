@@ -28,35 +28,38 @@ android {
 }
 
 dependencies {
-    //Depends on domain module
     implementation project(':domain')
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    def commonDependencies = rootProject.ext.commonDependencies
+    def injectionDependencies = rootProject.ext.injectionDependencies
+    def testDependencies = rootProject.ext.testDependencies
+    def androidTestDependencies = rootProject.ext.androidTestDependencies
+    def androidDependencies = rootProject.ext.androidDependencies
+    def databaseDependencies = rootProject.ext.databaseDependencies
 
-    //Testing libraries
-    testImplementation "io.mockk:mockk:$mockk_version"
-    testImplementation "junit:junit:$junit_version"
-    androidTestImplementation "androidx.test:runner:$testrunner_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
+    implementation commonDependencies.kotlin
+    implementation commonDependencies.threeTenABP
 
-    //Date/time library (see https://github.com/JakeWharton/ThreeTenABP)
-    api "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
+    implementation injectionDependencies.koin
+
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.mockk
+
+    implementation androidDependencies.appcompat
+
+    androidTestImplementation androidTestDependencies.testRunner
+    androidTestImplementation androidTestDependencies.espresso
 
     // Android Architecture Components Core
     androidTestImplementation "androidx.arch.core:core-testing:$aac_core_version"
 
-    // Koin Android (Dependency Injection)
-    implementation "org.koin:koin-android:$koin_version"
-
     // Room components
-    implementation "androidx.room:room-runtime:$room_runtime_version"
-    implementation "android.arch.persistence.room:rxjava2:$room_rxjava_version"
-    kapt "androidx.room:room-compiler:$room_compiler_version"
-    androidTestImplementation "androidx.room:room-testing:$room_testing_version"
+    implementation databaseDependencies.room
+    implementation databaseDependencies.room_rxjava
+    kapt databaseDependencies.room_compiler
+    androidTestImplementation databaseDependencies.room_testing
 }
 repositories {
     mavenCentral()
