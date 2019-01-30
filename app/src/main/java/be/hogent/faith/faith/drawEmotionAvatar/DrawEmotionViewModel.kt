@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.drawEmotionAvatar
 
+import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,8 +13,10 @@ class DrawEmotionViewModel : ViewModel() {
 
     val eraserSelected = MutableLiveData<Boolean>()
 
-    companion object {
-        const val TAG = "DrawEmotionViewModel"
+    init {
+        eraserSelected.value = false
+        selectedColor.value = Color.BLACK
+        selectedLineWidth.value = LineWidth.MEDIUM
     }
 
     fun pickColor(@ColorInt color: Int) {
@@ -33,5 +36,9 @@ class DrawEmotionViewModel : ViewModel() {
         THIN(8f),
         MEDIUM(12f),
         THICK(15f)
+    }
+
+    companion object {
+        const val TAG = "DrawEmotionViewModel"
     }
 }
