@@ -29,7 +29,6 @@ class DrawEmotionViewModel : ViewModel() {
 
     fun toggleEraser() {
         eraserSelected.value = eraserSelected.value?.not()
-
     }
 
     enum class LineWidth(val width: Float) {
