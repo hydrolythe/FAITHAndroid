@@ -9,6 +9,7 @@
                 type="be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel"/>
 
         <import type="android.graphics.Color"/>
+
         <import type="be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel.LineWidth"/>
 
     </data>
@@ -27,39 +28,39 @@
                 android:layout_height="wrap_content">
 
             <ImageButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:src="@drawable/circle_black"
                     android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.BLACK)}"
                     android:id="@+id/btn_draw_setColorBlack"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="50dp"/>
 
             <ImageButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:src="@drawable/circle_blue"
                     android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.BLUE)}"
                     android:id="@+id/btn_draw_setColorBlue"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="50dp"/>
 
             <ImageButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:src="@drawable/circle_red"
                     android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.RED)}"
                     android:id="@+id/btn_draw_setColorRed"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="50dp"/>
 
             <ImageButton
-                    android:layout_width="wrap_content"
+                    android:layout_width="50dp"
                     android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.YELLOW)}"
                     android:src="@drawable/circle_yellow"
                     android:id="@+id/btn_draw_setColorYellow"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="50dp"/>
 
             <ImageButton
-                    android:layout_width="wrap_content"
                     android:src="@drawable/circle_green"
+                    android:layout_width="50dp"
                     android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.GREEN)}"
                     android:id="@+id/btn_draw_setColorGreen"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="50dp"/>
 
             <Button
                     android:layout_width="wrap_content"
@@ -94,6 +95,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/container_draw_utilities"
+                android:id="@+id/draw_canvas"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"/>
 
