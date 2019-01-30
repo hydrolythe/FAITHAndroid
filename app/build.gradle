@@ -62,5 +62,6 @@ dependencies {
     implementation androidDependencies.appcompat
 
     implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
+    implementation 'com.github.divyanshub024:AndroidDraw:v0.1'
 
 }
