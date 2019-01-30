@@ -44,26 +44,34 @@ dependencies {
     def injectionDependencies = rootProject.ext.injectionDependencies
     def androidTestDependencies = rootProject.ext.androidTestDependencies
     def androidDependencies = rootProject.ext.androidDependencies
+    def uiDependencies = rootProject.ext.uiDependencies
 
     implementation commonDependencies.kotlin
     implementation commonDependencies.threeTenABP
     implementation commonDependencies.rxjava
     implementation commonDependencies.rxandroid
 
-    testImplementation testDependencies.junit
-    testImplementation testDependencies.mockk
 
     implementation injectionDependencies.koin
     implementation injectionDependencies.koin_viewModel
 
-    androidTestImplementation androidTestDependencies.testRunner
-    androidTestImplementation androidTestDependencies.espresso
 
     implementation androidDependencies.appcompat
 
-    implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
+    implementation uiDependencies.constraintLayout
+    implementation uiDependencies.fragment
+
     implementation 'com.github.divyanshub024:AndroidDraw:v0.1'
 
-    // Android Architecture Components Core
+    //TESTING
+    //Required to test fragments in isolation
+    debugImplementation 'androidx.test:monitor:1.1.1'
+    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha03'
+
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.mockk
     testImplementation "androidx.arch.core:core-testing:$aac_core_version"
+
+    androidTestImplementation androidTestDependencies.testRunner
+    androidTestImplementation androidTestDependencies.espresso
 }
