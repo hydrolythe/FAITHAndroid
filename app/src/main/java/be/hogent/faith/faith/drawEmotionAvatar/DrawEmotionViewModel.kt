@@ -32,9 +32,9 @@ class DrawEmotionViewModel : ViewModel() {
     }
 
     enum class LineWidth(val width: Float) {
-        THIN(8f),
-        MEDIUM(12f),
-        THICK(15f)
+        THIN(12f),
+        MEDIUM(30f),
+        THICK(55f)
     }
 
     companion object {
