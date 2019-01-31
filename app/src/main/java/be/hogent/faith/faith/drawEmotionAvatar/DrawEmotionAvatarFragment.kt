@@ -64,7 +64,6 @@ class DrawEmotionAvatarFragment : Fragment() {
         }
     }
 
-
     companion object {
         const val TAG = "DrawEmotionFragment"
         const val ARG_AVATAR_RES_ID = "avatarResId"
