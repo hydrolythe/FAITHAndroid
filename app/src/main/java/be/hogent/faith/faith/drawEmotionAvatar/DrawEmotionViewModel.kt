@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.faith.util.SingleLiveEvent
 
 class DrawEmotionViewModel : ViewModel() {
 
@@ -12,6 +13,8 @@ class DrawEmotionViewModel : ViewModel() {
     val selectedLineWidth = MutableLiveData<LineWidth>()
 
     val eraserSelected = MutableLiveData<Boolean>()
+
+    val undoClicked = SingleLiveEvent<Unit>()
 
     init {
         eraserSelected.value = false
@@ -27,8 +30,8 @@ class DrawEmotionViewModel : ViewModel() {
         selectedLineWidth.value = width
     }
 
-    fun toggleEraser() {
-        eraserSelected.value = eraserSelected.value?.not()
+    fun undo() {
+        undoClicked.call()
     }
 
     enum class LineWidth(val width: Float) {

@@ -30,16 +30,6 @@ class DrawEmotionViewModelTest {
         assertEquals(Color.GREEN, getValue(viewModel.selectedColor))
     }
 
-    @Test
-    fun drawEmotionVM_toggleEraser_toggles() {
-        val initialValue = getValue(viewModel.eraserSelected)
-
-        viewModel.toggleEraser()
-        assertEquals(initialValue.not(), getValue(viewModel.eraserSelected))
-
-        viewModel.toggleEraser()
-        assertEquals(initialValue, getValue(viewModel.eraserSelected))
-    }
 
     @Test
     fun drawEmotionVM_selectLineWidth_isSelected() {

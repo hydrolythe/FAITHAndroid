@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">FAITH</string>
+    <string name="choose_black">Kies zwart</string>
+    <string name="choose_blue">Kies blauw</string>
+    <string name="choose_red">Kies rood</string>
+    <string name="choose_yellow">Kies geel</string>
+    <string name="choose_green">Kies groen</string>
+    <string name="lineWidth_thin">dun</string>
+    <string name="lineWidth_medium">middel</string>
+    <string name="lineWidth_Thick">dik</string>
 </resources>

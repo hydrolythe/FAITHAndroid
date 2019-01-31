@@ -14,8 +14,7 @@ ext {
 
     aac_core_version = '2.0.0-rc01'
 
-    lifecycle_extensions_version = '2.0.0'
-    lifecycle_compiler_version = '2.0.0'
+    lifecycle_version = '2.0.0'
 
     appcompat_version = '1.0.2'
 
@@ -49,7 +48,9 @@ ext {
     ]
 
     androidDependencies = [
-            appcompat: "androidx.appcompat:appcompat:$appcompat_version"
+            appcompat: "androidx.appcompat:appcompat:$appcompat_version",
+            lifecycle: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+
     ]
 
     testDependencies = [
@@ -75,8 +76,8 @@ ext {
     ]
 
     uiDependencies = [
-            constraintLayout : "androidx.constraintlayout:constraintlayout:$constraint_layout_version",
-            fragment : "androidx.fragment:fragment:$fragment_version"
+            constraintLayout: "androidx.constraintlayout:constraintlayout:$constraint_layout_version",
+            fragment        : "androidx.fragment:fragment:$fragment_version"
     ]
 
 }
