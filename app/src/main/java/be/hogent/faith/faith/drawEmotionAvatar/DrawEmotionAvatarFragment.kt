@@ -64,11 +64,6 @@ class DrawEmotionAvatarFragment : Fragment() {
         }
     }
 
-    /**
-     * Sets the background for the DrawView.
-     * Just using the background attribute of a view doesn't work because that stretches the drawable.
-     * This means a workaround is required.
-     */
 
     companion object {
         const val TAG = "DrawEmotionFragment"
