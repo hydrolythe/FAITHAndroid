@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
 
         val fragment = DrawEmotionAvatarFragment.newInstance(R.drawable.outline)
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container,fragment)
+            .add(R.id.fragment_container, fragment)
             .commit()
     }
 }

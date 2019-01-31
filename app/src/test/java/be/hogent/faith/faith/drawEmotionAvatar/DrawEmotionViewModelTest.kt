@@ -30,7 +30,6 @@ class DrawEmotionViewModelTest {
         assertEquals(Color.GREEN, getValue(viewModel.selectedColor))
     }
 
-
     @Test
     fun drawEmotionVM_selectLineWidth_isSelected() {
         viewModel.setLineWidth(LineWidth.MEDIUM)
