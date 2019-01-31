@@ -32,31 +32,36 @@
                     android:src="@drawable/circle_black"
                     android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.BLACK)}"
                     android:id="@+id/btn_draw_setColorBlack"
-                    android:layout_height="50dp"/>
+                    android:layout_height="50dp"
+                    android:contentDescription="@string/choose_black"/>
 
             <ImageButton
                     android:layout_width="50dp"
                     android:src="@drawable/circle_blue"
                     android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.BLUE)}"
                     android:id="@+id/btn_draw_setColorBlue"
-                    android:layout_height="50dp"/>
+                    android:layout_height="50dp"
+                    android:contentDescription="@string/choose_blue"/>
 
             <ImageButton
                     android:layout_width="50dp"
                     android:src="@drawable/circle_red"
                     android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.RED)}"
+                    android:contentDescription="@string/choose_red"
                     android:id="@+id/btn_draw_setColorRed"
                     android:layout_height="50dp"/>
 
             <ImageButton
                     android:layout_width="50dp"
                     android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.YELLOW)}"
+                    android:contentDescription="@string/choose_yellow"
                     android:src="@drawable/circle_yellow"
                     android:id="@+id/btn_draw_setColorYellow"
                     android:layout_height="50dp"/>
 
             <ImageButton
                     android:src="@drawable/circle_green"
+                    android:contentDescription="@string/choose_green"
                     android:layout_width="50dp"
                     android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.GREEN)}"
                     android:id="@+id/btn_draw_setColorGreen"
@@ -64,7 +69,7 @@
 
             <Button
                     android:layout_width="wrap_content"
-                    android:text="dun"
+                    android:text="@string/lineWidth_thin"
                     android:onClick="@{() -> drawEmotionViewModel.setLineWidth(LineWidth.THIN)}"
                     android:id="@+id/btn_draw_setThinLineWidth"
                     android:layout_height="wrap_content"/>
@@ -73,20 +78,20 @@
                     android:layout_width="wrap_content"
                     android:id="@+id/btn_draw_setMediumLineWidth"
                     android:onClick="@{() -> drawEmotionViewModel.setLineWidth(LineWidth.MEDIUM)}"
-                    android:text="middel"
+                    android:text="@string/lineWidth_medium"
                     android:layout_height="wrap_content"/>
 
             <Button
                     android:layout_width="wrap_content"
                     android:id="@+id/btn_draw_setThickLineWidth"
-                    android:text="dik"
+                    android:text="@string/lineWidth_Thick"
                     android:onClick="@{() -> drawEmotionViewModel.setLineWidth(LineWidth.THICK)}"
                     android:layout_height="wrap_content"/>
 
             <ImageButton
-                    android:id="@+id/btn_draw_selectEraser"
-                    android:onClick="@{() -> drawEmotionViewModel.toggleEraser()}"
-                    android:src="@drawable/ic_eraser_black_24dp"
+                    android:id="@+id/btn_draw_undo"
+                    android:onClick="@{() -> drawEmotionViewModel.undo()}"
+                    android:src="@drawable/ic_undo_black_24dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
         </LinearLayout>
