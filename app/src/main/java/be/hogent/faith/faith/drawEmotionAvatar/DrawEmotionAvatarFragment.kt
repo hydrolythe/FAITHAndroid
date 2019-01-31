@@ -20,7 +20,7 @@ class DrawEmotionAvatarFragment : Fragment() {
     private var avatarOutlineResId: Int = -1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        savedInstanceState?.let {
+        arguments?.let {
             avatarOutlineResId = it.getInt(ARG_AVATAR_RES_ID)
         }
 

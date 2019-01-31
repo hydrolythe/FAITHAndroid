@@ -10,8 +10,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val fragment = DrawEmotionAvatarFragment.newInstance(R.drawable.outline)
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, DrawEmotionAvatarFragment())
+            .add(R.id.fragment_container,fragment)
             .commit()
     }
 }
