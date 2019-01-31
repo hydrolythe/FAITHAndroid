@@ -11,5 +11,5 @@ val appModule = module {
     single { AndroidSchedulers.mainThread() }
 
     // ViewModels
-    viewModel { CreateEventViewModel(get(), get()) }
+    //viewModel { CreateEventViewModel(get(), get()) }
 }

@@ -4,11 +4,16 @@ import android.app.Application
 import be.hogent.faith.database.di.databaseModule
 import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.service.usecases.di.serviceModule
+import com.bumptech.glide.annotation.GlideModule
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.koin.android.ext.android.startKoin
 import org.koin.android.logger.AndroidLogger
+import com.bumptech.glide.module.AppGlideModule
+
+
 
 class App : Application() {
+
 
     override fun onCreate() {
         super.onCreate()

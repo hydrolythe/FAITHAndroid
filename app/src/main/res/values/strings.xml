@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">FAITH</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="string_avatar_name">Name</string>
+
+    <string name="harm">https://avatars.dicebear.com/v2/male/harm.svg?options[mood][]=happy</string>
+    <string name="jens">https://avatars.dicebear.com/v2/male/jens.svg?options[mood][]=happy</string>
+    <string name="karine">https://avatars.dicebear.com/v2/female/karine.svg?options[mood][]=happy</string>
+    <string name="matthea">https://avatars.dicebear.com/v2/female/matthea.svg?options[mood][]=happy</string>
 </resources>
