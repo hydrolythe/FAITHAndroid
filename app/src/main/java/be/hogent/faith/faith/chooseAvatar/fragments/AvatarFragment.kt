@@ -2,23 +2,20 @@ package be.hogent.faith.faith.chooseAvatar.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import be.hogent.faith.R
 import be.hogent.faith.faith.util.getRotation
 import com.bumptech.glide.Glide
-import org.koin.android.viewmodel.ext.android.viewModel
+import kotlinx.android.synthetic.main.fragment_avatar.*
 
 
 /**
@@ -34,25 +31,34 @@ class AvatarFramgent : Fragment() {
     private lateinit var viewModel: ListViewModel
 
 
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel = ViewModelProviders.of(this).get(ListViewModel::class.java)
-        // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_avatar, container, false)
-        val rv = view.findViewById(R.id.avatar_rv_avatar) as RecyclerView
-        rv.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         val a = activity as AppCompatActivity
         val orientation = a.getRotation()
         when (orientation) {
-            R.integer.PORTRAIT -> rv.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-            R.integer.LANDSCAPE -> rv.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
+            R.integer.PORTRAIT -> {
+                avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+                avatar_rv_avatar.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            }
+            R.integer.LANDSCAPE -> {
+                avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
+                avatar_rv_avatar.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
+            }
         }
         val adapter = AvatarAdapter(viewModel, this, Glide.with(this))
-        rv.adapter = adapter
-        obserViewModel(rv)
-        return view;
+        avatar_rv_avatar.adapter = adapter
+        obserViewModel(avatar_rv_avatar)
+
+
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_avatar, container, false)
+
+        return view
     }
 
     private fun obserViewModel(rv: RecyclerView) {
