@@ -69,7 +69,7 @@ dependencies {
     //TESTING
     //Required to test fragments in isolation
     debugImplementation 'androidx.test:monitor:1.1.1'
-    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha03'
+    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha04'
 
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
