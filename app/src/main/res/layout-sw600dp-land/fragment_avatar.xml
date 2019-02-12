@@ -1,64 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <EditText
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="@string/string_avatar_name"
-            android:ems="10"
-            android:id="@+id/editText_avatar"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp"
-            tools:text="@tools:sample/full_names"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/avatar_textview_welcome"
-            app:layout_constraintEnd_toStartOf="@+id/editText_avatar"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
+            tools:layout_editor_absoluteX="16dp"
+            android:id="@+id/linearLayout2"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Welkom! Wat is jouw naam?"/>
+            android:layout_weight="1">
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/avatar_rv_avatar"
-            android:layout_width="819dp"
-            android:layout_height="243dp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            tools:listitem="@layout/avatar_rv_item"
-            app:layout_constraintHorizontal_bias="0.484"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/editText_avatar"/>
+        <TextView
+                android:text="@string/hoe_heet_je"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/avatar_textview_welcome"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                tools:text="Welkom! Wat is jouw naam?"
+                android:labelFor="@id/editText_avatar"
+                android:layout_weight="1"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="696dp"
-            android:layout_height="105dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/avatar_rv_avatar"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/editText_avatar"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                tools:text="@tools:sample/full_names"
+                android:layout_weight="1"
+                android:autofillHints="username"
+                />
+    </LinearLayout>
+
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
             android:layout_marginBottom="8dp"
+            android:layout_weight="1">
 
-            tools:listitem="@layout/avatar_rv_item"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:id="@+id/avatar_rv_backpack"
-            app:layout_constraintVertical_bias="0.931"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/avatar_rv_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                tools:listitem="@layout/avatar_rv_item"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1">
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                tools:listitem="@layout/avatar_rv_item"
+                android:id="@+id/avatar_rv_backpack"
+                android:layout_weight="1"/>
+    </LinearLayout>
+</LinearLayout>

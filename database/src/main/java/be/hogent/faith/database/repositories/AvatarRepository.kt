@@ -1,8 +1,7 @@
 package be.hogent.faith.database.repositories
 
 import androidx.lifecycle.MutableLiveData
-import be.hogent.faith.database.R
-import be.hogent.faith.domain.models.Avatar
+import be.hogent.faith.domain.models.AvatarItem
 
 class AvatarRepository {
 
@@ -12,14 +11,14 @@ class AvatarRepository {
     }
 
 
-    private val avatarList = ArrayList<Avatar>()
-    private val avatars : MutableLiveData<List<Avatar>> = MutableLiveData()
+    private val avatarList = ArrayList<AvatarItem>()
+    private val avatars: MutableLiveData<List<AvatarItem>> = MutableLiveData()
 
     init {
 
     }
 
-    fun getAvatars(): MutableLiveData<List<Avatar>>{
+    fun getAvatars(): MutableLiveData<List<AvatarItem>> {
         return avatars
     }
 

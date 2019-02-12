@@ -42,14 +42,15 @@
                 android:layout_marginEnd="8dp"
                 tools:text="@tools:sample/full_names"
                 app:layout_constraintStart_toEndOf="@+id/textView"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginStart="8dp"
+                android:autofillHints="username"/>
     </LinearLayout>
 
 
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="478dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
             app:layout_constraintVertical_bias="0.0"
@@ -61,17 +62,19 @@
             app:layout_constraintHorizontal_bias="1.0">
 
         <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="184dp"
-                android:layout_height="290dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:id="@+id/avatar_rv_avatar"
                 tools:listitem="@layout/avatar_rv_item"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"/>
 
         <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="176dp"
-                android:layout_height="343dp"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:id="@+id/avatar_rv_backpack"
-                tools:listitem="@layout/avatar_rv_item"/>
+                tools:listitem="@layout/avatar_rv_item"
+                android:layout_weight="1"/>
     </LinearLayout>
 
 
