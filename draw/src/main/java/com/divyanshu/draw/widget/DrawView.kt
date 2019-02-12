@@ -10,10 +10,15 @@ import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.annotation.WorkerThread
 import androidx.core.graphics.ColorUtils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var mPaths = LinkedHashMap<MyPath, PaintOptions>()
@@ -37,6 +42,8 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private var paintedBackground: Bitmap? = null
 
+    private val drawingListeners = mutableListOf<DrawViewListener>()
+
     var isEraserOn = false
         private set
 
@@ -48,6 +55,20 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             strokeCap = Paint.Cap.ROUND
             strokeWidth = mPaintOptions.strokeWidth
             isAntiAlias = true
+        }
+    }
+
+    fun addDrawViewListener(newListener: DrawViewListener) {
+        drawingListeners += newListener
+    }
+
+    private fun callDrawViewListeners() {
+        Log.i("DrawView", "Drawing was updated, calling ${drawingListeners.size} listeners")
+        GlobalScope.launch(Dispatchers.Main) {
+            val bitmap = getBitmap()
+            drawingListeners.forEach {
+                it.onDrawingChanged(bitmap)
+            }
         }
     }
 
@@ -69,6 +90,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             mUndonePaths[lastKey] = lastPath
         }
         invalidate()
+        callDrawViewListeners()
     }
 
     fun redo() {
@@ -80,6 +102,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         addPath(lastKey, mUndonePaths.values.last())
         mUndonePaths.remove(lastKey)
         invalidate()
+        callDrawViewListeners()
     }
 
     fun setColor(newColor: Int) {
@@ -104,7 +127,11 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         }
     }
 
-    fun getBitmap(): Bitmap {
+    /**
+     * Returns a bitmap of what is currently drawn.
+     */
+    @WorkerThread
+    suspend fun getBitmap(): Bitmap {
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
@@ -152,6 +179,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         mPath.reset()
         mPaths.clear()
         invalidate()
+        callDrawViewListeners()
     }
 
     private fun actionDown(x: Float, y: Float) {
@@ -185,6 +213,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             mPaintOptions.alpha,
             mPaintOptions.isEraserOn
         )
+        callDrawViewListeners()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -242,5 +271,13 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         isEraserOn = !isEraserOn
         mPaintOptions.isEraserOn = isEraserOn
         invalidate()
+    }
+
+    interface DrawViewListener {
+        /**
+         * Called every time after the user has performed an action on the drawing, changing it in the process.
+         * This includes drawing a dot, a line, undoing and redoing previous actions.
+         */
+        fun onDrawingChanged(bitmap: Bitmap)
     }
 }

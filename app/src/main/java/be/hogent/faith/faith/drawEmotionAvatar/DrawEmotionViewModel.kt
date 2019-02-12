@@ -2,45 +2,50 @@ package be.hogent.faith.faith.drawEmotionAvatar
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 
 class DrawEmotionViewModel : ViewModel() {
 
-    val selectedColor = MutableLiveData<@ColorInt Int>()
+    private val _selectedColor = MutableLiveData<@ColorInt Int>()
+    val selectedColor: LiveData<Int>
+        get() = _selectedColor
 
-    val selectedLineWidth = MutableLiveData<LineWidth>()
+    private val _selectedLineWidth = MutableLiveData<LineWidth>()
+    val selectedLineWidth: LiveData<LineWidth>
+        get() = _selectedLineWidth
 
-    val eraserSelected = MutableLiveData<Boolean>()
+    private val _eraserSelected = MutableLiveData<Boolean>()
+    val eraserSelected: LiveData<Boolean>
+        get() = _eraserSelected
 
-    val undoClicked = SingleLiveEvent<Unit>()
+    private val _undoClicked = SingleLiveEvent<Unit>()
+    val undoClicked: LiveData<Unit>
+        get() = _undoClicked
 
     init {
-        eraserSelected.value = false
-        selectedColor.value = Color.BLACK
-        selectedLineWidth.value = LineWidth.MEDIUM
+        _eraserSelected.value = false
+        _selectedColor.value = Color.BLACK
+        _selectedLineWidth.value = LineWidth.MEDIUM
     }
 
     fun pickColor(@ColorInt color: Int) {
-        selectedColor.value = color
+        _selectedColor.value = color
     }
 
     fun setLineWidth(width: LineWidth) {
-        selectedLineWidth.value = width
+        _selectedLineWidth.value = width
     }
 
     fun undo() {
-        undoClicked.call()
+        _undoClicked.call()
     }
 
     enum class LineWidth(val width: Float) {
         THIN(12f),
         MEDIUM(30f),
         THICK(55f)
-    }
-
-    companion object {
-        const val TAG = "DrawEmotionViewModel"
     }
 }
