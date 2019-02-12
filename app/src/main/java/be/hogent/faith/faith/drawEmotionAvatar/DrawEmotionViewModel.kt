@@ -7,6 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 
+/**
+ * ViewModel for the [DrawEmotionAvatarFragment].
+ */
 class DrawEmotionViewModel : ViewModel() {
 
     private val _selectedColor = MutableLiveData<@ColorInt Int>()

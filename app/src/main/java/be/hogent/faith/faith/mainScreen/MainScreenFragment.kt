@@ -16,6 +16,11 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentMainScreenBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
+/**
+ * Fragment displaying the starting screen of the application (the city landscape).
+ * This screen allows the user to click on several pre-defined areas.
+ * Upon clicking an area the corresponding screen will open.
+ */
 class MainScreenFragment : Fragment() {
 
     private val mainScreenViewModel: MainScreenViewModel by viewModel()
