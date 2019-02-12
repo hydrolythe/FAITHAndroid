@@ -4,6 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 
+/**
+ * ViewModel for the [MainScreenFragment].
+ */
 class MainScreenViewModel : ViewModel() {
 
     val firstLocation = SingleLiveEvent<Unit>()
