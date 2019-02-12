@@ -7,14 +7,17 @@ ext {
     kotlin_version = '1.3.11'
     gradle_version = '3.3.0'
 
-    constraint_layout_version = '1.1.3'
+    constraint_layout_version = '2.0.0-alpha3'
+    fragment_version = '1.1.0-alpha03'
+
+    coroutines_version = '1.0.0'
+    coroutines_android_version = '1.0.0'
 
     koin_version = '1.0.2'
 
     aac_core_version = '2.0.0-rc01'
 
-    lifecycle_extensions_version = '2.0.0'
-    lifecycle_compiler_version = '2.0.0'
+    lifecycle_version = '2.0.0'
 
     appcompat_version = '1.0.2'
 
@@ -39,16 +42,20 @@ ext {
     mockk_version = '1.8.13.kotlin13'
 
     commonDependencies = [
-            kotlin     : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
+            kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
 
-            rxjava     : "io.reactivex.rxjava2:rxjava:$rxjava_version",
-            rxandroid  : "io.reactivex.rxjava2:rxandroid:$rxjava_android_version",
+            rxjava            : "io.reactivex.rxjava2:rxjava:$rxjava_version",
+            rxandroid         : "io.reactivex.rxjava2:rxandroid:$rxjava_android_version",
 
-            threeTenABP: "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
+            threeTenABP       : "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version",
+
+            coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version",
+            coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android_version"
     ]
 
     androidDependencies = [
-            appcompat: "androidx.appcompat:appcompat:$appcompat_version"
+            appcompat: "androidx.appcompat:appcompat:$appcompat_version",
+            lifecycle: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     ]
 
     testDependencies = [
@@ -72,4 +79,10 @@ ext {
             room_compiler: "androidx.room:room-compiler:$room_compiler_version",
             room_testing : "androidx.room:room-testing:$room_testing_version"
     ]
+
+    uiDependencies = [
+            constraintLayout: "androidx.constraintlayout:constraintlayout:$constraint_layout_version",
+            fragment        : "androidx.fragment:fragment:$fragment_version"
+    ]
+
 }
