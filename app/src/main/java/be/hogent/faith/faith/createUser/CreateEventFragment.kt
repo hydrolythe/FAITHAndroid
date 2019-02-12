@@ -21,8 +21,4 @@ class CreateEventFragment : Fragment() {
         createEventBinding.setLifecycleOwner(this)
         return createEventBinding.root
     }
-
-    companion object {
-        const val TAG = "CreateEventFragment"
-    }
 }

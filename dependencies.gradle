@@ -10,6 +10,9 @@ ext {
     constraint_layout_version = '2.0.0-alpha3'
     fragment_version = '1.1.0-alpha03'
 
+    coroutines_version = '1.0.0'
+    coroutines_android_version = '1.0.0'
+
     koin_version = '1.0.2'
 
     aac_core_version = '2.0.0-rc01'
@@ -39,18 +42,20 @@ ext {
     mockk_version = '1.8.13.kotlin13'
 
     commonDependencies = [
-            kotlin     : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
+            kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
 
-            rxjava     : "io.reactivex.rxjava2:rxjava:$rxjava_version",
-            rxandroid  : "io.reactivex.rxjava2:rxandroid:$rxjava_android_version",
+            rxjava            : "io.reactivex.rxjava2:rxjava:$rxjava_version",
+            rxandroid         : "io.reactivex.rxjava2:rxandroid:$rxjava_android_version",
 
-            threeTenABP: "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
+            threeTenABP       : "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version",
+
+            coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version",
+            coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android_version"
     ]
 
     androidDependencies = [
             appcompat: "androidx.appcompat:appcompat:$appcompat_version",
             lifecycle: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
-
     ]
 
     testDependencies = [
