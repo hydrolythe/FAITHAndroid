@@ -1,3 +1,6 @@
 package be.hogent.faith.domain.models
 
-class Avatar(val imageUrl: Int)
+/**
+ * Model class for the AvatarItem.
+ */
+class Avatar(imageUrl: Int) : AvatarItem(imageUrl)
