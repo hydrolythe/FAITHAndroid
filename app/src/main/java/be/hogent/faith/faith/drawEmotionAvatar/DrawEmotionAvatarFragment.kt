@@ -17,7 +17,7 @@ class DrawEmotionAvatarFragment : Fragment() {
 
     private val drawEmotionViewModel: DrawEmotionViewModel by viewModel()
     private lateinit var drawAvatarBinding: FragmentDrawAvatarBinding
-    private var avatarOutlineResId: Int = -1
+    private var avatarOutlineResId: Int = NO_AVATAR
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         arguments?.let {
@@ -59,14 +59,15 @@ class DrawEmotionAvatarFragment : Fragment() {
     }
 
     private fun setDrawViewBackground() {
-        if (avatarOutlineResId != -1) {
+        if (avatarOutlineResId != NO_AVATAR) {
             drawAvatarBinding.drawCanvas.setPaintedBackground(resources.getDrawable(R.drawable.outline))
         }
     }
 
     companion object {
-        const val TAG = "DrawEmotionFragment"
-        const val ARG_AVATAR_RES_ID = "avatarResId"
+        private const val TAG = "DrawEmotionFragment"
+        private const val ARG_AVATAR_RES_ID = "avatarResId"
+        private const val NO_AVATAR = -1
 
         /**
          * Creates a new instances of this fragment, with the background of the drawView set to the given drawable.
