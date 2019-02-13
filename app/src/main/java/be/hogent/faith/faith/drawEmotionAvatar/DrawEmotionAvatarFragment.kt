@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.drawEmotionAvatar
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -46,7 +47,9 @@ class DrawEmotionAvatarFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
         updateUI()
+
         drawEmotionViewModel.selectedColor.observe(this, Observer { newColor ->
             Log.i(TAG, "Color set to $newColor")
             drawAvatarBinding.drawCanvas.setColor(newColor)
@@ -60,6 +63,11 @@ class DrawEmotionAvatarFragment : Fragment() {
         drawEmotionViewModel.undoClicked.observe(this, Observer {
             Log.i(TAG, "Last action undone")
             drawAvatarBinding.drawCanvas.undo()
+        })
+        drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
+            override fun onDrawingChanged(bitmap: Bitmap) {
+                FileWriter().writeBitMapToFile(bitmap, context)
+            }
         })
     }
 
@@ -79,7 +87,6 @@ class DrawEmotionAvatarFragment : Fragment() {
     }
 
     companion object {
-
         /**
          * Creates a new instances of this fragment, with the background of the drawView set to the given drawable.
          * @param avatarOutLineId The resource ID of the drawable that will be placed on the background.
