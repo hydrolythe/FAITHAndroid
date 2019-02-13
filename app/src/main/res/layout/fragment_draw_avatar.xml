@@ -90,7 +90,8 @@
 
             <ImageButton
                     android:id="@+id/btn_draw_undo"
-                    android:contentDescription="TODO" android:onClick="@{() -> drawEmotionViewModel.undo()}"
+                    android:contentDescription="@string/undo"
+                    android:onClick="@{() -> drawEmotionViewModel.undo()}"
                     android:src="@drawable/ic_undo_black_24dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>

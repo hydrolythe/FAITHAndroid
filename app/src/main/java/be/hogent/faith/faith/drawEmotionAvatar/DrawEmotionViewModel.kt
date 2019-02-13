@@ -21,8 +21,6 @@ class DrawEmotionViewModel : ViewModel() {
         get() = _selectedLineWidth
 
     private val _eraserSelected = MutableLiveData<Boolean>()
-    val eraserSelected: LiveData<Boolean>
-        get() = _eraserSelected
 
     private val _undoClicked = SingleLiveEvent<Unit>()
     val undoClicked: LiveData<Unit>

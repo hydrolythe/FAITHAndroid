@@ -30,7 +30,7 @@ class MainScreenFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mainScreenBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_screen, container, false)
         mainScreenBinding.mainScreenViewModel = mainScreenViewModel
-        mainScreenBinding.setLifecycleOwner(this)
+        mainScreenBinding.lifecycleOwner = this
         avatarView = mainScreenBinding.imageMainAvatar
         return mainScreenBinding.root
     }

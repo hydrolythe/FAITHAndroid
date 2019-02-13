@@ -40,7 +40,7 @@ class DrawEmotionAvatarFragment : Fragment() {
 
         drawAvatarBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_draw_avatar, container, false)
         drawAvatarBinding.drawEmotionViewModel = drawEmotionViewModel
-        drawAvatarBinding.setLifecycleOwner(this)
+        drawAvatarBinding.lifecycleOwner = this
         return drawAvatarBinding.root
     }
 

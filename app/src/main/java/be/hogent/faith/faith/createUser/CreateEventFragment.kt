@@ -18,7 +18,7 @@ class CreateEventFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         createEventBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_event, container, false)
         createEventBinding.createUserVM = createEventViewModel
-        createEventBinding.setLifecycleOwner(this)
+        createEventBinding.lifecycleOwner = this
         return createEventBinding.root
     }
 }

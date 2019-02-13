@@ -8,4 +8,7 @@
     <string name="lineWidth_thin">dun</string>
     <string name="lineWidth_medium">middel</string>
     <string name="lineWidth_Thick">dik</string>
+    <string name="undo">ongedaan maken</string>
+    <string name="city_plan">Stadsplan</string>
+    <string name="your_avatar">Je avatar</string>
 </resources>
