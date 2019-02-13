@@ -12,11 +12,11 @@ import be.hogent.faith.domain.models.Event
  */
 class DetailMapper(private val event: Event) : Mapper<DetailEntity, Detail> {
     override fun mapFromEntities(entities: List<DetailEntity>): List<Detail> {
-        return entities.map { it -> mapFromEntity(it) }
+        return entities.map { mapFromEntity(it) }
     }
 
     override fun mapToEntities(models: List<Detail>): List<DetailEntity> {
-        return models.map { it -> mapToEntity(it) }
+        return models.map { mapToEntity(it) }
     }
 
     override fun mapFromEntity(entity: DetailEntity): Detail {

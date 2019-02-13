@@ -6,11 +6,11 @@ import be.hogent.faith.domain.models.DetailType
 // TODO: write tests
 object DetailTypeMapper : Mapper<DetailTypeEntity, DetailType> {
     override fun mapFromEntities(entities: List<DetailTypeEntity>): List<DetailType> {
-        return entities.map { it -> mapFromEntity(it) }
+        return entities.map { mapFromEntity(it) }
     }
 
     override fun mapToEntities(models: List<DetailType>): List<DetailTypeEntity> {
-        return models.map { it -> mapToEntity(it) }
+        return models.map { mapToEntity(it) }
     }
 
     override fun mapFromEntity(entity: DetailTypeEntity): DetailType =

@@ -51,16 +51,16 @@ open class EventRepositoryImpl(
         val eventWithDetails = eventDao.getEventWithDetails(uuid)
 
         return eventWithDetails
-            .map { it -> combine(it) }
-            .map { it -> eventMapper.mapFromEntity(it) }
+            .map { combine(it) }
+            .map { eventMapper.mapFromEntity(it) }
     }
 
     override fun getAll(): Flowable<List<Event>> {
         val eventsWithDetails = eventDao.getAllEventsWithDetails()
         return eventsWithDetails
             // TODO: learn more rxjava and find a way to not need combineList (map inside a map?)
-            .map { it -> combineList(it) }
-            .map { it -> eventMapper.mapFromEntities(it) }
+            .map { combineList(it) }
+            .map { eventMapper.mapFromEntities(it) }
     }
 
     /**

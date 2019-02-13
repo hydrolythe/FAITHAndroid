@@ -18,13 +18,15 @@
         <ImageView
                 android:layout_width="match_parent"
                 android:background="@drawable/stad"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:contentDescription="@string/city_plan"/>
         <!--AVATAR -->
         <ImageView
                 android:layout_width="wrap_content"
                 android:id="@+id/image_main_avatar"
                 android:src="@drawable/meisje"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/your_avatar"/>
 
         <!-- KNOPPEN -->
         <!-- Invisibile to make it transaparent -->
