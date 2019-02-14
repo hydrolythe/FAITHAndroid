@@ -3,6 +3,7 @@ package be.hogent.faith.faith.createUser
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.service.usecases.CreateEventUseCase
 import be.hogent.faith.service.usecases.GetEventsUseCase
 import io.reactivex.disposables.CompositeDisposable
@@ -42,9 +43,5 @@ class CreateEventViewModel(
     override fun onCleared() {
         super.onCleared()
         disposables.clear()
-    }
-
-    companion object {
-        const val TAG = "CreateEventViewModel"
     }
 }

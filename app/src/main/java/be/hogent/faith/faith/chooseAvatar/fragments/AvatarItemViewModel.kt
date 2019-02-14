@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.chooseAvatar.fragments
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.AvatarItem
@@ -9,7 +10,18 @@ import be.hogent.faith.domain.models.AvatarItem
  */
 abstract class AvatarItemViewModel : ViewModel() {
 
-    var avatarItems = MutableLiveData<List<AvatarItem>>()
+    /**
+     * Private mutable live data object which keeps track of the AvatarItems.
+     */
+    protected var _avatarItems = MutableLiveData<List<AvatarItem>>()
+
+    /**
+     * Getter for the avatarItems, but only returns a [LiveData<AvatarItem>] type.
+     */
+    val avatarItems : LiveData<List<AvatarItem>>
+    get() = _avatarItems
+
+
 
     init {
         fetchItems()

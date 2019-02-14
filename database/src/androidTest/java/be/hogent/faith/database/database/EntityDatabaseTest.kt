@@ -45,7 +45,7 @@ class EntityDatabaseTest {
         eventDao.insert(eventEntity)
             .andThen(eventDao.getEventWithDetails(uuid))
             .test()
-            .assertValue { it.eventEntity!!.equals(eventEntity) }
+            .assertValue { it.eventEntity!! == eventEntity }
     }
 
     @Test

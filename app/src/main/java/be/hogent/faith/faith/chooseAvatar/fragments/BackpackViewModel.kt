@@ -25,6 +25,6 @@ class BackpackViewModel : AvatarItemViewModel() {
         avList.add(backpack3)
         avList.add(backpack4)
         avList.add(backpack5)
-        avatarItems.value = avList
+        _avatarItems.postValue(avList)
     }
 }

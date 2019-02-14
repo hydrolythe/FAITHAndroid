@@ -27,45 +27,64 @@ android {
     dataBinding {
         enabled = true
     }
-
+    testOptions {
+        animationsDisabled = true
+    }
     kapt {
         generateStubs = true
     }
 }
 
 dependencies {
-    //Depends on domain module
     implementation project(':domain')
     implementation project(':service')
-    //TODO: find a way to move this to service module so app doesn't directly depend on database
     implementation project(':database')
+    implementation project(':draw')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
-    implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
+    def commonDependencies = rootProject.ext.commonDependencies
+    def injectionDependencies = rootProject.ext.injectionDependencies
+    def androidTestDependencies = rootProject.ext.androidTestDependencies
+    def androidDependencies = rootProject.ext.androidDependencies
+    def uiDependencies = rootProject.ext.uiDependencies
 
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    implementation commonDependencies.kotlin
+    implementation commonDependencies.threeTenABP
+    implementation commonDependencies.rxjava
+    implementation commonDependencies.rxandroid
 
 
-    implementation "com.android.support:recyclerview-v7:$appcompat_version_new"
+    implementation injectionDependencies.koin
+    implementation injectionDependencies.koin_viewModel
+
+
+    implementation androidDependencies.appcompat
+    implementation androidDependencies.lifecycle
+
+
+
+    implementation uiDependencies.glide
+    kapt uiDependencies.glidecompiler
+    implementation uiDependencies.recyclerview
+
+
     //Date/time library (see https://github.com/JakeWharton/ThreeTenABP)
     api "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
 
-    // Koin Android (Dependency Injection)
-    implementation "org.koin:koin-android:$koin_version"
-    implementation "org.koin:koin-android-viewmodel:$koin_version"
+    implementation uiDependencies.constraintLayout
+    implementation uiDependencies.fragment
 
-    // Rxjava
-    implementation "io.reactivex.rxjava2:rxandroid:$rxjava_android_version"
-    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+    //TESTING
+    //Required to test fragments in isolation
+    debugImplementation 'androidx.test:monitor:1.1.1'
+    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha04'
 
-    //Testing libraries
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation "junit:junit:$junit_version"
-    androidTestImplementation "androidx.test:runner:$testrunner_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.mockk
+    testImplementation "androidx.arch.core:core-testing:$aac_core_version"
 
+    androidTestImplementation androidTestDependencies.testRunner
+    androidTestImplementation androidTestDependencies.espresso
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }

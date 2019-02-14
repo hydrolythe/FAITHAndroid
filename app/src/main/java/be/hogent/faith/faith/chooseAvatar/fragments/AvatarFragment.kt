@@ -38,12 +38,26 @@ class AvatarFragment : Fragment() {
     private lateinit var backpackViewModel: BackpackViewModel
 
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onStart() {
+        super.onStart()
+        registerAdapters()
+        observeViewModel(avatar_rv_avatar)
+        observeViewModel(avatar_rv_backpack)
+    }
+
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_avatar, container, false)
+    }
+
+    /**
+     * Registers the adapters for the RecyclerViews. Checks for the Orientation of the device and bases
+     * the LayoutManager for the Adapter based on this.
+     */
+    private fun registerAdapters(){
         avatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel::class.java)
         backpackViewModel = ViewModelProviders.of(this).get(BackpackViewModel::class.java)
-
-        val a = activity as AppCompatActivity
-        val orientation = a.getRotation()
+        val orientation = (activity as AppCompatActivity).getRotation()
         when (orientation) {
             R.integer.PORTRAIT -> {
                 avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
@@ -65,22 +79,17 @@ class AvatarFragment : Fragment() {
         val backpackAdapter = AvatarItemAdapter(backpackViewModel, this, Glide.with(this))
         avatar_rv_avatar.adapter = avatarAdapter
         avatar_rv_backpack.adapter = backpackAdapter
-        obserViewModel(avatar_rv_avatar)
-        obserViewModel(avatar_rv_backpack)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_avatar, container, false)
-        return view
-    }
 
     /**
-     * Allows this fragment to observer the Recyclerview.
+     * Allows this fragment to observe the item included in the adapter and sets the Visibility of the
+     * RecyclerView to [View.VISIBLE] is this was not already the case.
      */
-    private fun obserViewModel(rv: RecyclerView) {
+    private fun observeViewModel(recyclerView: RecyclerView) {
         avatarViewModel.avatarItems.observe(this, Observer {
             if (it != null) {
-                rv.visibility = View.VISIBLE
+                recyclerView.visibility = View.VISIBLE
             }
         })
     }
