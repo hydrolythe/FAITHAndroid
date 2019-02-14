@@ -4,8 +4,12 @@ import org.threeten.bp.LocalDateTime
 import java.util.UUID
 
 data class Event(
-    val dateTime: LocalDateTime,
-    val description: String,
+    val dateTime: LocalDateTime = LocalDateTime.now(),
+    /**
+     * The title doesn't have to be filled in immediately when recording it, but it _has_ to be filled in once the
+     * mentor fills in the overview.
+     */
+    var title: String? = null,
     val uuid: UUID = UUID.randomUUID()
 ) {
 

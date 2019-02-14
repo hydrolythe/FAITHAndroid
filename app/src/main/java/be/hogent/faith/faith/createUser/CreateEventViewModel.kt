@@ -35,7 +35,7 @@ class CreateEventViewModel(
 
         val getEventsCompletable = getEventsUseCase.execute(null)
             .subscribe {
-                eventDescription.postValue(it.first().description)
+                eventDescription.postValue(it.first().title)
             }
         disposables.add(getEventsCompletable)
     }

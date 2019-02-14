@@ -19,8 +19,8 @@ class EventMapperTest {
         // Arrange
         val uuid = UUID.randomUUID()
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
-        val description = "description"
-        val eventEntity = EventEntity(time, description, uuid)
+        val title = "title"
+        val eventEntity = EventEntity(time, title, uuid)
 
         // Act
         val resultingEvent = eventMapper.mapFromEntity(eventEntity)
@@ -28,7 +28,7 @@ class EventMapperTest {
         // Assert
         assertEquals(uuid, resultingEvent.uuid)
         assertEquals(time, resultingEvent.dateTime)
-        assertEquals(description, resultingEvent.description)
+        assertEquals(title, resultingEvent.title)
         assert(resultingEvent.details.isEmpty())
     }
 
@@ -37,8 +37,8 @@ class EventMapperTest {
         // Arrange EventEntity
         val uuid = UUID.randomUUID()
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
-        val description = "description"
-        val eventEntity = EventEntity(time, description, uuid)
+        val title = "title"
+        val eventEntity = EventEntity(time, title, uuid)
         // Arrange DetailEntities
         val detailUUID = UUID.randomUUID()
         val detailType = DetailTypeEntity.AUDIO
@@ -58,8 +58,8 @@ class EventMapperTest {
         // Arrange
         val uuid = UUID.randomUUID()
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
-        val description = "description"
-        val event = Event(time, description, uuid)
+        val title = "title"
+        val event = Event(time, title, uuid)
 
         // Act
         val resultingEventEntity = eventMapper.mapToEntity(event)
@@ -67,7 +67,7 @@ class EventMapperTest {
         // Assert
         assertEquals(uuid, resultingEventEntity.uuid)
         assertEquals(time, resultingEventEntity.dateTime)
-        assertEquals(description, resultingEventEntity.description)
+        assertEquals(title, resultingEventEntity.title)
         assert(resultingEventEntity.details.isEmpty())
     }
 
@@ -76,8 +76,8 @@ class EventMapperTest {
         // Arrange Event
         val uuid = UUID.randomUUID()
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
-        val description = "description"
-        val event = Event(time, description, uuid)
+        val title = "title"
+        val event = Event(time, title, uuid)
         // Arrange Detail
         val detailType = DetailType.AUDIO
         val detail = Detail(detailType, event.uuid)

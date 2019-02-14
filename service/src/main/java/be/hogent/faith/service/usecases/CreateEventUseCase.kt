@@ -14,12 +14,12 @@ open class CreateEventUseCase(
 ) : CompletableUseCase<CreateEventUseCase.CreateEventParameters>(Schedulers.io(), observeScheduler) {
 
     override fun buildUseCaseObservable(params: CreateEventUseCase.CreateEventParameters?): Completable {
-        val event = Event(params!!.dateTime, params.description)
+        val event = Event(params!!.dateTime, params.title)
         return eventRepository.insert(event)
     }
 
     class CreateEventParameters(
         val dateTime: LocalDateTime,
-        val description: String
+        val title: String
     )
 }
