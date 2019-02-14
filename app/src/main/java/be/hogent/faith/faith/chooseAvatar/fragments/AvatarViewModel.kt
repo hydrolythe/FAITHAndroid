@@ -26,5 +26,4 @@ class AvatarViewModel : AvatarItemViewModel() {
         avList.add(avatar5)
         _avatarItems.postValue(avList)
     }
-
 }

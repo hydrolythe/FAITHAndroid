@@ -27,7 +27,6 @@ private const val TAG = "AvatarFragment"
  */
 class AvatarFragment : Fragment() {
 
-
     /**
      * ViewModel used for the avatarItems.
      */
@@ -37,14 +36,12 @@ class AvatarFragment : Fragment() {
      */
     private lateinit var backpackViewModel: BackpackViewModel
 
-
     override fun onStart() {
         super.onStart()
         registerAdapters()
         observeViewModel(avatar_rv_avatar)
         observeViewModel(avatar_rv_backpack)
     }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_avatar, container, false)
@@ -54,7 +51,7 @@ class AvatarFragment : Fragment() {
      * Registers the adapters for the RecyclerViews. Checks for the Orientation of the device and bases
      * the LayoutManager for the Adapter based on this.
      */
-    private fun registerAdapters(){
+    private fun registerAdapters() {
         avatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel::class.java)
         backpackViewModel = ViewModelProviders.of(this).get(BackpackViewModel::class.java)
         val orientation = (activity as AppCompatActivity).getRotation()
@@ -81,7 +78,6 @@ class AvatarFragment : Fragment() {
         avatar_rv_backpack.adapter = backpackAdapter
     }
 
-
     /**
      * Allows this fragment to observe the item included in the adapter and sets the Visibility of the
      * RecyclerView to [View.VISIBLE] is this was not already the case.
@@ -94,7 +90,6 @@ class AvatarFragment : Fragment() {
         })
     }
 
-
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -103,6 +98,5 @@ class AvatarFragment : Fragment() {
          */
         fun newInstance() =
             AvatarFragment()
-
     }
 }
