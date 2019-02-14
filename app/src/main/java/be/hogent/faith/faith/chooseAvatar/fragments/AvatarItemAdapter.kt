@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.AvatarItem
 
-
 import com.bumptech.glide.RequestManager
 import kotlinx.android.synthetic.main.avatar_rv_item.view.*
 
@@ -29,18 +28,16 @@ class AvatarItemAdapter(
      */
     private var avatarItems: MutableList<AvatarItem> = mutableListOf()
 
-
     init {
         viewModel.avatarItems.observe(lifecycleOwner, Observer {
 
-            if(it != null){
+            if (it != null) {
                 avatarItems.clear()
                 avatarItems.addAll(it)
             }
             notifyDataSetChanged()
         })
     }
-
 
     /**
      * Creates the ViewHolder.
@@ -62,13 +59,11 @@ class AvatarItemAdapter(
         return avatarItems.size
     }
 
-
     /**
      * Binds the image view of the list item to the desired image.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(avatarItems[position])
-
     }
 
     /**
@@ -85,5 +80,4 @@ class AvatarItemAdapter(
             reqManager.load(avatarItem.imageUrl).into(image)
         }
     }
-
 }

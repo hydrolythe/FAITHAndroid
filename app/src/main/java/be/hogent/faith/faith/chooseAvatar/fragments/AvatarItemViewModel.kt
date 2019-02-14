@@ -18,10 +18,8 @@ abstract class AvatarItemViewModel : ViewModel() {
     /**
      * Getter for the avatarItems, but only returns a [LiveData<AvatarItem>] type.
      */
-    val avatarItems : LiveData<List<AvatarItem>>
+    val avatarItems: LiveData<List<AvatarItem>>
     get() = _avatarItems
-
-
 
     init {
         fetchItems()

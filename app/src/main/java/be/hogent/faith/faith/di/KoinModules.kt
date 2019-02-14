@@ -16,5 +16,4 @@ val appModule = module {
     viewModel { CreateEventViewModel(get(), get()) }
     viewModel { MainScreenViewModel() }
     viewModel { DrawEmotionViewModel() }
-
 }

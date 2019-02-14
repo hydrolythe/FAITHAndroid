@@ -9,7 +9,6 @@ import be.hogent.faith.domain.models.AvatarItem
  */
 class BackpackViewModel : AvatarItemViewModel() {
 
-
     /**
      * Fetches the backpacks.
      */
