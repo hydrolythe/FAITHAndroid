@@ -11,4 +11,6 @@
     <string name="undo">ongedaan maken</string>
     <string name="city_plan">Stadsplan</string>
     <string name="your_avatar">Je avatar</string>
+    <string name="event_details_title">Wat is er gebeurd?</string>
+    <string name="event_details_label_title">Geef de titel in:</string>
 </resources>
