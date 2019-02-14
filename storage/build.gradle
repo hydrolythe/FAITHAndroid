@@ -1,0 +1,48 @@
+apply plugin: 'com.android.library'
+
+apply plugin: 'kotlin-android'
+
+android {
+    def globalConfig = rootProject.extensions.getByName("ext")
+    compileSdkVersion globalConfig["androidCompileSdkVersion"]
+
+    defaultConfig {
+        minSdkVersion globalConfig["androidMinSdkVersion"]
+        targetSdkVersion globalConfig["androidTargetSdkVersion"]
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    def commonDependencies = rootProject.ext.commonDependencies
+    def injectionDependencies = rootProject.ext.injectionDependencies
+    def testDependencies = rootProject.ext.testDependencies
+    def androidTestDependencies = rootProject.ext.androidTestDependencies
+    def androidDependencies = rootProject.ext.androidDependencies
+
+    implementation commonDependencies.kotlin
+    implementation commonDependencies.threeTenABP
+
+    implementation injectionDependencies.koin
+
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.mockk
+
+    implementation androidDependencies.appcompat
+
+    androidTestImplementation androidTestDependencies.testRunner
+    androidTestImplementation androidTestDependencies.espresso
+
+}
