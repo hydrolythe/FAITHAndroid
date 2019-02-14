@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -23,6 +24,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
  */
 class MainScreenFragment : Fragment() {
 
+    private lateinit var navigation: MainScreenNavigationListener
     private val mainScreenViewModel: MainScreenViewModel by viewModel()
     private lateinit var mainScreenBinding: FragmentMainScreenBinding
     private lateinit var avatarView: View
@@ -43,6 +45,11 @@ class MainScreenFragment : Fragment() {
         mainScreenViewModel.secondLocation.observe(this, Observer {
             moveAvatarToLocationOf(mainScreenBinding.mainSecondLocation)
         })
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        navigation = context as MainScreenNavigationListener
     }
 
     /**
@@ -67,10 +74,14 @@ class MainScreenFragment : Fragment() {
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
-                    Log.i(TAG, "Animation finished, opening new Fragment")
+                    navigation.startEventDetailsFragment()
                 }
             })
         }
+    }
+
+    interface MainScreenNavigationListener {
+        fun startEventDetailsFragment()
     }
 
     companion object {

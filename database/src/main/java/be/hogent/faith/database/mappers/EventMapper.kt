@@ -6,7 +6,7 @@ import be.hogent.faith.domain.models.Event
 class EventMapper : Mapper<EventEntity, Event> {
 
     override fun mapFromEntity(entity: EventEntity): Event {
-        val event = Event(entity.dateTime, entity.description, entity.uuid)
+        val event = Event(entity.dateTime, entity.title, entity.uuid)
         val detailMapper = DetailMapper(event)
         entity.details.forEach {
             event.addDetail(detailMapper.mapFromEntity(it))
@@ -15,7 +15,8 @@ class EventMapper : Mapper<EventEntity, Event> {
     }
 
     override fun mapToEntity(model: Event): EventEntity {
-        val eventEntity = EventEntity(model.dateTime, model.description, model.uuid)
+        // From here on the title of the [Event] has to be filled in
+        val eventEntity = EventEntity(model.dateTime, model.title!!, model.uuid)
         val detailMapper = DetailMapper(model)
         model.details.forEach {
             eventEntity.details.add(detailMapper.mapToEntity(it))
