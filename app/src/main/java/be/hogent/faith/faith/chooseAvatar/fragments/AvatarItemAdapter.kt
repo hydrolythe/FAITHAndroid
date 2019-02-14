@@ -32,8 +32,9 @@ class AvatarItemAdapter(
 
     init {
         viewModel.avatarItems.observe(lifecycleOwner, Observer {
-            avatarItems.clear()
+
             if(it != null){
+                avatarItems.clear()
                 avatarItems.addAll(it)
             }
             notifyDataSetChanged()

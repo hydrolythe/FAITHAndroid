@@ -10,6 +10,7 @@ import io.reactivex.Scheduler
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.threeten.bp.LocalDateTime
 import java.util.concurrent.Executor
 
 class CreateEventUseCaseTest {
@@ -31,12 +32,14 @@ class CreateEventUseCaseTest {
         // Arrange
         val eventArg = slot<Event>()
         every { repository.insert(capture(eventArg)) } returns Completable.complete()
-        val params = CreateEventUseCase.CreateEventParameters(mockk(), "description")
+        val dateTime = LocalDateTime.of(2018, 10, 28, 8, 22)
+        val params = CreateEventUseCase.CreateEventParameters(dateTime, "description")
 
         // Act
         val result = createEventUseCase.buildUseCaseObservable(params)
 
         // Assert
         assertEquals(params.description, eventArg.captured.description)
+        assertEquals(params.dateTime, eventArg.captured.dateTime)
     }
 }

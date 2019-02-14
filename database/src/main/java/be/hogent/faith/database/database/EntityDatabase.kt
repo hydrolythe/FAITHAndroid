@@ -17,7 +17,8 @@ import be.hogent.faith.database.models.EventEntity
     entities = [
         EventEntity::class,
         DetailEntity::class],
-    version = 1
+    version = 1,
+    exportSchema = true
 )
 @TypeConverters(
     value = [

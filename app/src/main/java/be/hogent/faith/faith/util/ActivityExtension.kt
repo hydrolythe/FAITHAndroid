@@ -31,12 +31,12 @@ fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int) {
 fun AppCompatActivity.getRotation(): Int{
     val display = (baseContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
     val rotation = display.rotation
-    when(rotation){
-        Surface.ROTATION_90 -> return R.integer.LANDSCAPE
-        Surface.ROTATION_270 -> return R.integer.LANDSCAPE
-        Surface.ROTATION_180 -> return R.integer.PORTRAIT
-        Surface.ROTATION_0 -> return R.integer.PORTRAIT
+    return when(rotation){
+        Surface.ROTATION_90 ->  R.integer.LANDSCAPE
+        Surface.ROTATION_270 ->  R.integer.LANDSCAPE
+        Surface.ROTATION_180 ->  R.integer.PORTRAIT
+        Surface.ROTATION_0 ->  R.integer.PORTRAIT
         else ->
-            return R.integer.PORTRAIT
+             R.integer.PORTRAIT
     }
 }

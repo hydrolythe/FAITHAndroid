@@ -1,6 +1,6 @@
 package be.hogent.faith.domain.models
 
 /**
- * Class representing the back pack of the AvatarItem.
+ * Class representing the backpack of the Avatar.
  */
 class Backpack(imageUrl: Int) : AvatarItem(imageUrl)
