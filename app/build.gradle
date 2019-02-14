@@ -39,6 +39,7 @@ dependencies {
     implementation project(':domain')
     implementation project(':service')
     implementation project(':database')
+    implementation project(':storage')
     implementation project(':draw')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -66,8 +67,6 @@ dependencies {
     implementation uiDependencies.constraintLayout
     implementation uiDependencies.fragment
 
-//    implementation 'com.github.divyanshub024:AndroidDraw:v0.1'
-
     //TESTING
     //Required to test fragments in isolation
     debugImplementation 'androidx.test:monitor:1.1.1'
@@ -75,8 +74,8 @@ dependencies {
 
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
-    testImplementation "androidx.arch.core:core-testing:$aac_core_version"
 
     androidTestImplementation androidTestDependencies.testRunner
     androidTestImplementation androidTestDependencies.espresso
+    androidTestImplementation androidTestDependencies.aac_core
 }

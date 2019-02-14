@@ -11,9 +11,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.databinding.FragmentDrawAvatarBinding
+import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.TAG
+import be.hogent.faith.service.usecases.SaveBitmapUseCase
+import com.divyanshu.draw.widget.DrawView
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.threeten.bp.LocalDateTime
 
 /**
  * Key for this Fragment's [Bundle] to hold the resource ID pointing to the outline drawing of the avatar.
@@ -31,8 +35,10 @@ private const val NO_AVATAR = -1
 class DrawEmotionAvatarFragment : Fragment() {
 
     private val drawEmotionViewModel: DrawEmotionViewModel by viewModel()
-    private lateinit var drawAvatarBinding: FragmentDrawAvatarBinding
+    private lateinit var drawAvatarBinding: be.hogent.faith.databinding.FragmentDrawAvatarBinding
     private var avatarOutlineResId: Int = NO_AVATAR
+    private val saveBitmapUseCase: SaveBitmapUseCase by inject()
+    private val event = Event(LocalDateTime.now(), "TestDescription")
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         arguments?.let {
@@ -49,7 +55,10 @@ class DrawEmotionAvatarFragment : Fragment() {
         super.onStart()
 
         updateUI()
+        startObserving()
+    }
 
+    private fun startObserving() {
         drawEmotionViewModel.selectedColor.observe(this, Observer { newColor ->
             Log.i(TAG, "Color set to $newColor")
             drawAvatarBinding.drawCanvas.setColor(newColor)
@@ -66,17 +75,20 @@ class DrawEmotionAvatarFragment : Fragment() {
         })
         drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
             override fun onDrawingChanged(bitmap: Bitmap) {
-                FileWriter().writeBitMapToFile(bitmap, context)
+                saveBitmapUseCase.execute(
+                    SaveBitmapUseCase.SaveBitmapParams(bitmap, event)
+                )
+                //TODO observe respond to success/fail
             }
         })
     }
 
     private fun updateUI() {
         setDrawViewBackground()
-        setDrawingOpacity()
+        configureDrawCanvas()
     }
 
-    private fun setDrawingOpacity() {
+    private fun configureDrawCanvas() {
         drawAvatarBinding.drawCanvas.setAlpha(70)
     }
 
