@@ -1,15 +1,9 @@
-package be.hogent.faith.service.usecases.di
+package be.hogent.faith.storage.di
 
-import be.hogent.faith.service.usecases.CreateEventUseCase
-import be.hogent.faith.service.usecases.GetEventsUseCase
+import be.hogent.faith.storage.StorageRepositoryImpl
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module.module
 
-/**
- * Module containing all the use cases.
- * Don't forget to add any use  case that you write here so it can be injected in the app module.
- */
-val serviceModule = module {
-    // Use cases
-    factory { GetEventsUseCase(get(), get()) }
-    factory { CreateEventUseCase(get(), get()) }
+val storageModule = module {
+    factory { StorageRepositoryImpl(androidContext()) }
 }
