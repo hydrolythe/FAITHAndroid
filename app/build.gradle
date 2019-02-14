@@ -58,15 +58,12 @@ dependencies {
     implementation injectionDependencies.koin
     implementation injectionDependencies.koin_viewModel
 
-
     implementation androidDependencies.appcompat
     implementation androidDependencies.lifecycle
 
-
     implementation uiDependencies.constraintLayout
+    implementation uiDependencies.recyclerview
     implementation uiDependencies.fragment
-
-//    implementation 'com.github.divyanshub024:AndroidDraw:v0.1'
 
     //TESTING
     //Required to test fragments in isolation
