@@ -24,6 +24,8 @@ android {
 
 }
 dependencies {
+    implementation project(':domain')
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     def commonDependencies = rootProject.ext.commonDependencies
@@ -33,6 +35,7 @@ dependencies {
     def androidDependencies = rootProject.ext.androidDependencies
 
     implementation commonDependencies.kotlin
+    implementation commonDependencies.rxjava
     implementation commonDependencies.threeTenABP
 
     implementation injectionDependencies.koin
