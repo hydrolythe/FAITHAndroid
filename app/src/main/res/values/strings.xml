@@ -6,7 +6,7 @@
     <string name="jens">https://avatars.dicebear.com/v2/male/jens.svg?options[mood][]=happy</string>
     <string name="karine">https://avatars.dicebear.com/v2/female/karine.svg?options[mood][]=happy</string>
     <string name="matthea">https://avatars.dicebear.com/v2/female/matthea.svg?options[mood][]=happy</string>
-    <string name="hoe_heet_je">Hoe heet je?</string>
+    <string name="frag_avatar_lbl_name">Hoe heet je?</string>
     <string name="naam_hint">Hier kan je je naam zetten</string>
     <string name="choose_black">Kies zwart</string>
     <string name="choose_blue">Kies blauw</string>
@@ -19,4 +19,8 @@
     <string name="undo">ongedaan maken</string>
     <string name="city_plan">Stadsplan</string>
     <string name="your_avatar">Je avatar</string>
+    <string name="frag_avatar_title">Kies je avatar</string>
+    <string name="frag_avatar_pick_avatar">Kies een avatar</string>
+    <string name="frag_avatar_pick_backpack">Kies een rugzak</string>
+    <string name="frag_avatar_lbl_to_town">Ga naar de stad</string>
 </resources>

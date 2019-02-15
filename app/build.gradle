@@ -54,24 +54,15 @@ dependencies {
     implementation commonDependencies.rxjava
     implementation commonDependencies.rxandroid
 
-
     implementation injectionDependencies.koin
     implementation injectionDependencies.koin_viewModel
-
 
     implementation androidDependencies.appcompat
     implementation androidDependencies.lifecycle
 
-
-
     implementation uiDependencies.glide
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
-
-
-    //Date/time library (see https://github.com/JakeWharton/ThreeTenABP)
-    api "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version"
-
     implementation uiDependencies.constraintLayout
     implementation uiDependencies.fragment
 
@@ -86,5 +77,4 @@ dependencies {
 
     androidTestImplementation androidTestDependencies.testRunner
     androidTestImplementation androidTestDependencies.espresso
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }

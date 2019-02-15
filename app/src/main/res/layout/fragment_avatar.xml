@@ -13,7 +13,7 @@
             android:inputType="textPersonName"
             android:text="@string/string_avatar_name"
             android:ems="10"
-            android:id="@+id/editText_avatar"
+            android:id="@+id/avatar_txt_name"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -26,7 +26,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/textView"/>
 
     <TextView
-            android:text="@string/hoe_heet_je"
+            android:text="@string/frag_avatar_lbl_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView"
@@ -55,7 +55,7 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/editText_avatar">
+            app:layout_constraintTop_toBottomOf="@+id/avatar_txt_name">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -73,7 +73,7 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/editText_avatar"/>
+            app:layout_constraintTop_toBottomOf="@+id/avatar_txt_name"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
