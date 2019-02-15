@@ -16,8 +16,6 @@ import be.hogent.faith.faith.util.getRotation
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_avatar.*
 
-private const val TAG = "AvatarFragment"
-
 /**
  * A [Fragment] subclass which allows the user to choose an AvatarItem and a Backpack.
  *
