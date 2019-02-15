@@ -27,9 +27,7 @@ android {
     dataBinding {
         enabled = true
     }
-    testOptions {
-        animationsDisabled = true
-    }
+
     kapt {
         generateStubs = true
     }

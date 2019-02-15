@@ -80,7 +80,7 @@ class AvatarFragment : Fragment() {
 
     /**
      * Allows this fragment to observe the item included in the adapter and sets the Visibility of the
-     * RecyclerView to [View.VISIBLE] is this was not already the case.
+     * RecyclerView to [View.VISIBLE] if this was not already the case.
      */
     private fun observeViewModel(recyclerView: RecyclerView) {
         avatarViewModel.avatarItems.observe(this, Observer {
