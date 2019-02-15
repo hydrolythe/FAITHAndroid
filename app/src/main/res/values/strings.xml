@@ -2,10 +2,6 @@
     <string name="app_name">FAITH</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="string_avatar_name">Name</string>
-    <string name="harm">https://avatars.dicebear.com/v2/male/harm.svg?options[mood][]=happy</string>
-    <string name="jens">https://avatars.dicebear.com/v2/male/jens.svg?options[mood][]=happy</string>
-    <string name="karine">https://avatars.dicebear.com/v2/female/karine.svg?options[mood][]=happy</string>
-    <string name="matthea">https://avatars.dicebear.com/v2/female/matthea.svg?options[mood][]=happy</string>
     <string name="frag_avatar_lbl_name">Hoe heet je?</string>
     <string name="naam_hint">Hier kan je je naam zetten</string>
     <string name="choose_black">Kies zwart</string>
@@ -17,8 +13,8 @@
     <string name="lineWidth_medium">middel</string>
     <string name="lineWidth_Thick">dik</string>
     <string name="undo">ongedaan maken</string>
-    <string name="city_plan">Stadsplan</string>
-    <string name="your_avatar">Je avatar</string>
+    <string name="frag_main_descr_city_plan">Stadsplan</string>
+    <string name="frag_main_descr_your_avatar">Je avatar</string>
     <string name="frag_avatar_title">Kies je avatar</string>
     <string name="frag_avatar_pick_avatar">Kies een avatar</string>
     <string name="frag_avatar_pick_backpack">Kies een rugzak</string>
