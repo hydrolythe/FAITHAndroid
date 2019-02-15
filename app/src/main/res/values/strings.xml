@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">FAITH</string>
+    <string name="string_avatar_name">Name</string>
+    <string name="frag_avatar_lbl_name">Hoe heet je?</string>
+    <string name="naam_hint">Hier kan je je naam zetten</string>
     <string name="choose_black">Kies zwart</string>
     <string name="choose_blue">Kies blauw</string>
     <string name="choose_red">Kies rood</string>
@@ -9,6 +12,12 @@
     <string name="lineWidth_medium">middel</string>
     <string name="lineWidth_Thick">dik</string>
     <string name="undo">ongedaan maken</string>
+    <string name="frag_main_descr_city_plan">Stadsplan</string>
+    <string name="frag_main_descr_your_avatar">Je avatar</string>
+    <string name="frag_avatar_title">Kies je avatar</string>
+    <string name="frag_avatar_pick_avatar">Kies een avatar</string>
+    <string name="frag_avatar_pick_backpack">Kies een rugzak</string>
+    <string name="frag_avatar_lbl_to_town">Ga naar de stad</string>
     <string name="city_plan">Stadsplan</string>
     <string name="your_avatar">Je avatar</string>
     <string name="event_details_title">Wat is er gebeurd?</string>
