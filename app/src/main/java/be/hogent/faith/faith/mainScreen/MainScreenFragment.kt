@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentMainScreenBinding
+import be.hogent.faith.faith.util.TAG
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -24,7 +25,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
  */
 class MainScreenFragment : Fragment() {
 
-    private lateinit var navigation: MainScreenNavigationListener
+    private var navigation: MainScreenNavigationListener? = null
     private val mainScreenViewModel: MainScreenViewModel by viewModel()
     private lateinit var mainScreenBinding: FragmentMainScreenBinding
     private lateinit var avatarView: View
@@ -43,13 +44,15 @@ class MainScreenFragment : Fragment() {
             moveAvatarToLocationOf(mainScreenBinding.mainFirstLocation) {}
         })
         mainScreenViewModel.secondLocation.observe(this, Observer {
-            moveAvatarToLocationOf(mainScreenBinding.mainSecondLocation) { navigation.startEventDetailsFragment() }
+            moveAvatarToLocationOf(mainScreenBinding.mainSecondLocation) { navigation?.startEventDetailsFragment() }
         })
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        navigation = context as MainScreenNavigationListener
+        if (context is MainScreenNavigationListener) {
+            navigation = context
+        }
     }
 
     /**
@@ -83,9 +86,5 @@ class MainScreenFragment : Fragment() {
 
     interface MainScreenNavigationListener {
         fun startEventDetailsFragment()
-    }
-
-    companion object {
-        const val TAG = "MainScreenFragment"
     }
 }
