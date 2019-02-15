@@ -4,21 +4,27 @@ import android.content.Context
 import android.view.Surface
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import be.hogent.faith.R
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import be.hogent.faith.R
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
     beginTransaction().func().commit()
 }
 
 fun AppCompatActivity.addFragment(fragment: Fragment, frameId: Int) {
-    supportFragmentManager.inTransaction { add(frameId, fragment) }
+    supportFragmentManager.inTransaction {
+        add(frameId, fragment)
+        addToBackStack(null)
+    }
 }
 
 fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int) {
-    supportFragmentManager.inTransaction { replace(frameId, fragment) }
+    supportFragmentManager.inTransaction {
+        replace(frameId, fragment)
+        addToBackStack(null)
+    }
 }
 
 fun AppCompatActivity.getRotation(): Int {
