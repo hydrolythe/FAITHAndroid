@@ -1,14 +1,12 @@
 package be.hogent.faith.faith.util
 
 import android.content.Context
+import android.view.Surface
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import android.content.Context.WINDOW_SERVICE
-import androidx.core.content.ContextCompat.getSystemService
-import android.view.WindowManager
-import android.view.Surface
 import be.hogent.faith.R
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
@@ -32,6 +30,6 @@ fun AppCompatActivity.getRotation(): Int {
         Surface.ROTATION_180 -> R.integer.PORTRAIT
         Surface.ROTATION_0 -> R.integer.PORTRAIT
         else ->
-             R.integer.PORTRAIT
+            R.integer.PORTRAIT
     }
 }
