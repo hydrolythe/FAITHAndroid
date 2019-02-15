@@ -40,10 +40,10 @@ class MainScreenFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         mainScreenViewModel.firstLocation.observe(this, Observer {
-            moveAvatarToLocationOf(mainScreenBinding.mainFirstLocation)
+            moveAvatarToLocationOf(mainScreenBinding.mainFirstLocation) {}
         })
         mainScreenViewModel.secondLocation.observe(this, Observer {
-            moveAvatarToLocationOf(mainScreenBinding.mainSecondLocation)
+            moveAvatarToLocationOf(mainScreenBinding.mainSecondLocation) { navigation.startEventDetailsFragment() }
         })
     }
 
@@ -53,9 +53,10 @@ class MainScreenFragment : Fragment() {
     }
 
     /**
-     * Moves the avatar to the top-left corner of the given view.
+     * Moves the avatar View to the top-left corner of the given View.
+     * Once the animation is finished it calls the [onAnimationEndCall].
      */
-    private fun moveAvatarToLocationOf(view: View) {
+    private fun moveAvatarToLocationOf(view: View, onAnimationEndCall: () -> Unit) {
         // No need to animate if the avatar is already there
         if (avatarView.x == view.x && avatarView.y == view.y) {
             Log.i(TAG, "Not moving the avatar as we're already at the view's location")
@@ -74,7 +75,7 @@ class MainScreenFragment : Fragment() {
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
-                    navigation.startEventDetailsFragment()
+                    onAnimationEndCall()
                 }
             })
         }
