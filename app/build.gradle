@@ -27,9 +27,7 @@ android {
     dataBinding {
         enabled = true
     }
-    testOptions {
-        animationsDisabled = true
-    }
+
     kapt {
         generateStubs = true
     }
@@ -54,19 +52,17 @@ dependencies {
     implementation commonDependencies.rxjava
     implementation commonDependencies.rxandroid
 
-
     implementation injectionDependencies.koin
     implementation injectionDependencies.koin_viewModel
-
 
     implementation androidDependencies.appcompat
     implementation androidDependencies.lifecycle
 
-
+    implementation uiDependencies.glide
+    kapt uiDependencies.glidecompiler
+    implementation uiDependencies.recyclerview
     implementation uiDependencies.constraintLayout
     implementation uiDependencies.fragment
-
-//    implementation 'com.github.divyanshub024:AndroidDraw:v0.1'
 
     //TESTING
     //Required to test fragments in isolation
