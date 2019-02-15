@@ -14,7 +14,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class EventDetailsFragment : Fragment() {
 
-    private lateinit var navigation: EventDetailsNavigationListener
+    private var navigation: EventDetailsNavigationListener? = null
     private val eventDetailsViewModel: EventDetailsViewModel by viewModel()
     private lateinit var eventDetailsBinding: FragmentEnterEventDetailsBinding
 
@@ -27,7 +27,9 @@ class EventDetailsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        navigation = context as EventDetailsNavigationListener
+        if(context is EventDetailsNavigationListener) {
+            navigation = context
+        }
     }
 
     override fun onStart() {
@@ -42,7 +44,7 @@ class EventDetailsFragment : Fragment() {
             }
         })
         eventDetailsViewModel.emotionAvatarClicked.observe(this, Observer {
-            navigation.startDrawFragment()
+            navigation?.startDrawFragment()
         })
     }
 
