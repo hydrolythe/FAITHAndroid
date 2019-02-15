@@ -13,7 +13,7 @@ import java.util.UUID
 )
 data class EventEntity(
     val dateTime: LocalDateTime,
-    val description: String,
+    val title: String,
     @PrimaryKey
     val uuid: UUID = UUID.randomUUID()
 ) {
