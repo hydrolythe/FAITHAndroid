@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity(),
         // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
         // Using this we should only add a new fragment when savedInstanceState is null
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             val fragment = MainScreenFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)

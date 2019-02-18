@@ -27,7 +27,7 @@ class EventDetailsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if(context is EventDetailsNavigationListener) {
+        if (context is EventDetailsNavigationListener) {
             navigation = context
         }
     }
