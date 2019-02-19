@@ -63,7 +63,7 @@ class DrawEmotionAvatarFragment : Fragment() {
                 saveBitmapUseCase.execute(
                     SaveBitmapUseCase.SaveBitmapParams(bitmap, event)
                 )
-                //TODO observe respond to success/fail
+                // TODO observe respond to success/fail
             }
         })
     }

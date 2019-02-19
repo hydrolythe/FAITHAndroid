@@ -49,6 +49,6 @@ class GetEventsUseCaseTest {
     }
 
     private fun createEvent(): Event {
-        return Event(mockk(), "description", mockk())
+        return Event(mockk(), "title", mockk())
     }
 }
