@@ -11,13 +11,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.databinding.FragmentDrawAvatarBinding
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.TAG
-import org.koin.android.viewmodel.ext.android.sharedViewModel
 import be.hogent.faith.service.usecases.SaveBitmapUseCase
 import com.divyanshu.draw.widget.DrawView
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDateTime
 
 /**
