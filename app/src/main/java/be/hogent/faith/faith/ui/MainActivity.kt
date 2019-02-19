@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
+import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
+import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(),

@@ -240,7 +240,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         super.onSizeChanged(w, h, oldw, oldh)
         mCanvasHeight = h
         mCanvasWidth = w
-        //Can only resize background now because this requires the final width en height of the view.
+        // Can only resize background now because this requires the final width en height of the view.
         resizeBackground()
     }
 

@@ -1,5 +1,6 @@
 package be.hogent.faith.database.repositories
 
+import androidx.lifecycle.Transformations.map
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.mappers.DetailMapper

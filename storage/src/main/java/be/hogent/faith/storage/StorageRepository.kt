@@ -37,5 +37,4 @@ class StorageRepository(private val context: Context) {
         imageDirectory.mkdirs()
         return imageDirectory
     }
-
 }

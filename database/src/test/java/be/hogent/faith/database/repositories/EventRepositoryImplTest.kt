@@ -59,7 +59,7 @@ class EventRepositoryImplTest {
 
     private fun createEventEntity(uuid: UUID): EventEntity {
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
-        val description = "description"
+        val description = "title"
         return EventEntity(time, description, uuid)
     }
 
