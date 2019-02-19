@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.TAG
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import be.hogent.faith.service.usecases.SaveBitmapUseCase
 import com.divyanshu.draw.widget.DrawView
 import org.koin.android.ext.android.inject
@@ -34,8 +35,8 @@ private const val NO_AVATAR = -1
  */
 class DrawEmotionAvatarFragment : Fragment() {
 
-    private val drawEmotionViewModel: DrawEmotionViewModel by viewModel()
-    private lateinit var drawAvatarBinding: be.hogent.faith.databinding.FragmentDrawAvatarBinding
+    private val drawEmotionViewModel: DrawEmotionViewModel by sharedViewModel()
+    private lateinit var drawAvatarBinding: FragmentDrawAvatarBinding
     private var avatarOutlineResId: Int = NO_AVATAR
     private val saveBitmapUseCase: SaveBitmapUseCase by inject()
     private val event = Event(LocalDateTime.now(), "TestDescription")
@@ -55,10 +56,22 @@ class DrawEmotionAvatarFragment : Fragment() {
         super.onStart()
 
         updateUI()
-        startObserving()
+        listenToViewModelEvents()
+
+        drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
+            override fun onDrawingChanged(bitmap: Bitmap) {
+                saveBitmapUseCase.execute(
+                    SaveBitmapUseCase.SaveBitmapParams(bitmap, event)
+                )
+                //TODO observe respond to success/fail
+            }
+        })
     }
 
-    private fun startObserving() {
+    private fun listenToViewModelEvents() {
+        drawEmotionViewModel.drawnPaths.observe(this, Observer {
+            drawAvatarBinding.drawCanvas.setPaths(it)
+        })
         drawEmotionViewModel.selectedColor.observe(this, Observer { newColor ->
             Log.i(TAG, "Color set to $newColor")
             drawAvatarBinding.drawCanvas.setColor(newColor)
@@ -68,18 +81,9 @@ class DrawEmotionAvatarFragment : Fragment() {
             Log.i(TAG, "Line width set to $lineWidth")
             drawAvatarBinding.drawCanvas.setStrokeWidth(lineWidth.width)
         })
-
         drawEmotionViewModel.undoClicked.observe(this, Observer {
             Log.i(TAG, "Last action undone")
             drawAvatarBinding.drawCanvas.undo()
-        })
-        drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
-            override fun onDrawingChanged(bitmap: Bitmap) {
-                saveBitmapUseCase.execute(
-                    SaveBitmapUseCase.SaveBitmapParams(bitmap, event)
-                )
-                //TODO observe respond to success/fail
-            }
         })
     }
 

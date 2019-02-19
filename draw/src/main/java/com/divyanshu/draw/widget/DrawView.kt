@@ -131,7 +131,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
      * Returns a bitmap of what is currently drawn.
      */
     @WorkerThread
-    suspend fun getBitmap(): Bitmap {
+    fun getBitmap(): Bitmap {
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
@@ -280,5 +280,16 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
          * This includes drawing a dot, a line, undoing and redoing previous actions.
          */
         fun onDrawingChanged(bitmap: Bitmap)
+    }
+
+    /**
+     * Sets the paths to be drawn.
+     * This is used to save the state in a ViewModel and restore it when the View was destroyed.
+     * Not everything that's part of the UI state should be saved. The other maps containing baths are only
+     * there for the undo/redo and clearCanvas functionality which we *currently* don't fully use. (Only undo)
+     */
+    fun setPaths(newPaths: LinkedHashMap<MyPath, PaintOptions>) {
+        mPaths = newPaths
+        invalidate()
     }
 }
