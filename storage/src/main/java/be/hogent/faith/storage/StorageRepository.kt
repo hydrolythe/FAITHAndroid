@@ -2,7 +2,6 @@ package be.hogent.faith.storage
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
 import be.hogent.faith.domain.models.Event
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -21,11 +20,13 @@ class StorageRepository(private val context: Context) {
     fun storeBitmap(bitmap: Bitmap, event: Event): Single<File> {
         return try {
             val storedFile =
-                File(createEventImageFolder(event), event.dateTime.format(DateTimeFormatter.ofPattern("yMdHms")))
-            Log.i("StorageRepo", "Filename will be ${storedFile.absolutePath}")
+                File(
+                    createEventImageFolder(event),
+                    "${event.dateTime.format(DateTimeFormatter.ofPattern("yMdHms"))}.PNG"
+                )
             storedFile.outputStream().use {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-        }
+            }
             Single.fromObservable(Observable.just(storedFile))
         } catch (e: IOException) {
             Single.error(e)
