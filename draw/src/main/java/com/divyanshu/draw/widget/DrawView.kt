@@ -7,8 +7,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Point
+import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -19,6 +19,12 @@ import androidx.core.graphics.ColorUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+
+/**
+ * Defines how much of the View's height the background may use.
+ * This is used to provide a margin around the background.
+ */
+const val BACKGROUND_MAX_HEIGHT_USED = 0.8
 
 class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var mPaths = LinkedHashMap<MyPath, PaintOptions>()
@@ -39,6 +45,8 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private var mCanvasWidth: Int = 0
     private var mCanvasHeight: Int = 0
+
+    private var mOutlineRect: Rect? = null
 
     private var paintedBackground: Bitmap? = null
 
@@ -66,6 +74,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         Log.i("DrawView", "Drawing was updated, calling ${drawingListeners.size} listeners")
         GlobalScope.launch(Dispatchers.Main) {
             val bitmap = getBitmap()
+            Log.i("DrawView", "Bitmap size: ${bitmap.width}, ${bitmap.height}")
             drawingListeners.forEach {
                 it.onDrawingChanged(bitmap)
             }
@@ -132,6 +141,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
      */
     @WorkerThread
     fun getBitmap(): Bitmap {
+        Log.i("DrawView", "View size: $width, $height")
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
@@ -148,11 +158,12 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        paintedBackground?.let {
+        // Draw the background when one is set and the [Rect] in which it will be drawn has been calculated.
+        if (paintedBackground != null && mOutlineRect != null) {
             canvas.drawBitmap(
-                it,
-                (middleOfCanvas().x - (it.width) / 2).toFloat(),
-                (middleOfCanvas().y - (it.height) / 2).toFloat(),
+                paintedBackground!!,
+                null,
+                mOutlineRect!!,
                 null
             )
         }
@@ -163,10 +174,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
         changePaint(mPaintOptions)
         canvas.drawPath(mPath, mPaint)
-    }
-
-    private fun middleOfCanvas(): Point {
-        return Point(mCanvasWidth / 2, mCanvasHeight / 2)
     }
 
     fun changePaint(paintOptions: PaintOptions) {
@@ -236,21 +243,29 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         return true
     }
 
+    /**
+     * Listener for when the size of this View changes.
+     * When a View is initially constructed, its width and height are both 0.
+     * Once the View has been (re)measured, this method is called.
+     *
+     * Used here to save the actual width and height of the view and
+     * calculate the outline of the background accordingly.
+     */
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         mCanvasHeight = h
         mCanvasWidth = w
-        // Can only resize background now because this requires the final width en height of the view.
-        resizeBackground()
+        calculateOutlineRect()
     }
 
     /**
-     * First scales the image so it fits into the canvas, then places it in the middle
+     * Calculates the [Rect] in which the [paintedBackground] will be drawn.
+     * The middle of the [Rect] will be in the middle of the canvas.
+     * It will be scaled to fit this view when necessary.
      */
-    private fun resizeBackground() {
+    private fun calculateOutlineRect() {
         paintedBackground?.let {
-            // Only take up maximum 90% of height
-            val maxsize = (mCanvasHeight * 0.8).toInt()
+            val maxsize = (mCanvasHeight * BACKGROUND_MAX_HEIGHT_USED).toInt()
             val outWidth: Int
             val outHeight: Int
             if (it.width > it.height) {
@@ -260,12 +275,30 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 outHeight = maxsize
                 outWidth = it.width * maxsize / it.height
             }
-            paintedBackground = Bitmap.createScaledBitmap(paintedBackground, outWidth, outHeight, false)
+            mOutlineRect = Rect(
+                middleOfCanvas().x - (outWidth) / 2,
+                middleOfCanvas().y - (outHeight) / 2,
+                middleOfCanvas().x + (outWidth) / 2,
+                middleOfCanvas().y + (outHeight) / 2
+            )
         }
     }
 
-    fun setPaintedBackground(drawable: Drawable) {
-        paintedBackground = (drawable as BitmapDrawable).bitmap
+    private fun middleOfCanvas(): Point {
+        return Point(mCanvasWidth / 2, mCanvasHeight / 2)
+    }
+
+    /**
+     * Sets a drawable as the background of this View.
+     * It won't be the set as the normal [View.getBackground], but it will be painted as the bottommost layer on the
+     * View's canvas.
+     * This is done to make sure both the background and the actual drawing are saved together (and are aligned)
+     * when saving the drawing using [getBitmap].
+     *
+     * The background will be placed in the middle of the view, and possibly scaled to fit.
+     */
+    fun setPaintedBackground(bitmapDrawable: BitmapDrawable) {
+        paintedBackground = bitmapDrawable.bitmap
     }
 
     fun toggleEraser() {

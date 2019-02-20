@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.drawEmotionAvatar
 
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,8 +15,10 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.TAG
+import be.hogent.faith.faith.util.toast
 import be.hogent.faith.service.usecases.SaveBitmapUseCase
 import com.divyanshu.draw.widget.DrawView
+import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDateTime
@@ -37,9 +40,18 @@ class DrawEmotionAvatarFragment : Fragment() {
 
     private val drawEmotionViewModel: DrawEmotionViewModel by sharedViewModel()
     private lateinit var drawAvatarBinding: FragmentDrawAvatarBinding
+
+    /**
+     * The resource ID for the avatar's outline, which will be used as a background for the drawing.
+     */
     private var avatarOutlineResId: Int = NO_AVATAR
+
     private val saveBitmapUseCase: SaveBitmapUseCase by inject()
+
+    // TODO: replace with the actual Event once all fragments are tied together
     private val event = Event(LocalDateTime.now(), "TestDescription")
+
+    private val disposables = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         arguments?.let {
@@ -60,10 +72,14 @@ class DrawEmotionAvatarFragment : Fragment() {
 
         drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
             override fun onDrawingChanged(bitmap: Bitmap) {
-                saveBitmapUseCase.execute(
+                val saveRequest = saveBitmapUseCase.execute(
                     SaveBitmapUseCase.SaveBitmapParams(bitmap, event)
-                )
-                // TODO observe respond to success/fail
+                ).subscribe({
+                    Log.i(TAG, "Drawing was saved")
+                }, {
+                    context?.toast(getString(R.string.error_saving_drawing))
+                })
+                disposables.add(saveRequest)
             }
         })
     }
@@ -98,8 +114,13 @@ class DrawEmotionAvatarFragment : Fragment() {
 
     private fun setDrawViewBackground() {
         if (avatarOutlineResId != NO_AVATAR) {
-            drawAvatarBinding.drawCanvas.setPaintedBackground(resources.getDrawable(R.drawable.outline))
+            drawAvatarBinding.drawCanvas.setPaintedBackground(resources.getDrawable(R.drawable.outline) as BitmapDrawable)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        disposables.clear()
     }
 
     companion object {
