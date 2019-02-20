@@ -72,8 +72,8 @@ dependencies {
 
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
+    testImplementation androidTestDependencies.aac_core
 
     androidTestImplementation androidTestDependencies.testRunner
     androidTestImplementation androidTestDependencies.espresso
-    androidTestImplementation androidTestDependencies.aac_core
 }
