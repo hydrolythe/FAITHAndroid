@@ -8,13 +8,15 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Scheduler
 import io.reactivex.Single
+import junit.framework.Assert.assertNotNull
+import junit.framework.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import java.io.File
 import java.io.IOException
 
-class SaveBitmapUseCaseTest {
-    private lateinit var saveBitmapUseCase: SaveBitmapUseCase
+class SaveEmotionAvatarUseCaseTest {
+    private lateinit var saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase
     private lateinit var observer: Scheduler
     private lateinit var storageRepository: StorageRepository
     private var bitmap = mockk<Bitmap>()
@@ -24,32 +26,32 @@ class SaveBitmapUseCaseTest {
     fun setUp() {
         observer = mockk()
         storageRepository = mockk(relaxed = true)
-        saveBitmapUseCase = SaveBitmapUseCase(storageRepository, observer)
+        saveEmotionAvatarUseCase = SaveEmotionAvatarUseCase(storageRepository, observer)
     }
 
     @Test
     fun saveBitMapUC_execute_saves() {
-        every { storageRepository.storeBitmap(bitmap, event) } returns Single.just(mockk<File>())
+        every { storageRepository.storeBitmap(any(), any(), any()) } returns Single.just(mockk<File>())
 
-        saveBitmapUseCase.execute(SaveBitmapUseCase.SaveBitmapParams(bitmap, event))
+        saveEmotionAvatarUseCase.execute(SaveEmotionAvatarUseCase.SaveBitmapParams(bitmap, event))
             .test()
             .assertNoErrors()
 
         // The image should be stored in the repo
-        verify { storageRepository.storeBitmap(bitmap, event) }
+        verify { storageRepository.storeBitmap(bitmap, event, any()) }
         // The image should be added to the event
-        verify { event.addDetail(any()) }
+        assertNotNull(event.emotionAvatar )
     }
 
     @Test
     fun saveBitMapUC_execute_failsOnRepoError() {
-        every { storageRepository.storeBitmap(mockk(), mockk()) } returns Single.error(IOException())
+        every { storageRepository.storeBitmap(any(), any(), any()) } returns Single.error(IOException())
 
-        saveBitmapUseCase.execute(SaveBitmapUseCase.SaveBitmapParams(bitmap, event))
+        saveEmotionAvatarUseCase.execute(SaveEmotionAvatarUseCase.SaveBitmapParams(bitmap, event))
             .test()
             .assertError(IOException::class.java)
 
         // The image shouldn't be added to the event
-        verify(exactly = 0) { event.addDetail(any()) }
+        assertNull(event.emotionAvatar)
     }
 }

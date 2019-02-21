@@ -16,7 +16,7 @@ import be.hogent.faith.databinding.FragmentDrawAvatarBinding
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.toast
-import be.hogent.faith.service.usecases.SaveBitmapUseCase
+import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import com.divyanshu.draw.widget.DrawView
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.ext.android.inject
@@ -46,7 +46,7 @@ class DrawEmotionAvatarFragment : Fragment() {
      */
     private var avatarOutlineResId: Int = NO_AVATAR
 
-    private val saveBitmapUseCase: SaveBitmapUseCase by inject()
+    private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase by inject()
 
     // TODO: replace with the actual Event once all fragments are tied together
     private val event = Event(LocalDateTime.now(), "TestDescription")
@@ -72,8 +72,8 @@ class DrawEmotionAvatarFragment : Fragment() {
 
         drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
             override fun onDrawingChanged(bitmap: Bitmap) {
-                val saveRequest = saveBitmapUseCase.execute(
-                    SaveBitmapUseCase.SaveBitmapParams(bitmap, event)
+                val saveRequest = saveEmotionAvatarUseCase.execute(
+                    SaveEmotionAvatarUseCase.SaveBitmapParams(bitmap, event)
                 ).subscribe({
                     Log.i(TAG, "Drawing was saved")
                 }, {

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7d7065a3c5956e2ac6ba617a832c8264",
+    "identityHash": "5cfb6ccc69de7159f58a85d14fb36e22",
     "entities": [
       {
         "tableName": "events",
@@ -47,8 +47,20 @@
       },
       {
         "tableName": "details",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, `type` INTEGER NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`eventUuid`) REFERENCES `events`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`type` INTEGER NOT NULL, `file` TEXT NOT NULL, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`eventUuid`) REFERENCES `events`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "file",
+            "columnName": "file",
+            "affinity": "TEXT",
+            "notNull": true
+          },
           {
             "fieldPath": "uuid",
             "columnName": "uuid",
@@ -59,12 +71,6 @@
             "fieldPath": "eventUuid",
             "columnName": "eventUuid",
             "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "type",
-            "columnName": "type",
-            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -110,7 +116,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7d7065a3c5956e2ac6ba617a832c8264\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"5cfb6ccc69de7159f58a85d14fb36e22\")"
     ]
   }
 }

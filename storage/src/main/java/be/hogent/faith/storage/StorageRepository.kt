@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
 import io.reactivex.Observable
 import io.reactivex.Single
-import org.threeten.bp.format.DateTimeFormatter
 import java.io.File
 import java.io.IOException
 
@@ -17,12 +16,19 @@ import java.io.IOException
  */
 class StorageRepository(private val context: Context) {
 
-    fun storeBitmap(bitmap: Bitmap, event: Event): Single<File> {
+    /**
+     * Stores the bitmap on the device's storage.
+     * It will be put in the context.filesDir/event.uuid/images/ folder
+     *
+     * @param the fileName under which the bitmap will be saved
+     * @return a Single<File> with the path derived from the event's dateTime
+     */
+    fun storeBitmap(bitmap: Bitmap, event: Event, fileName: String): Single<File> {
         return try {
             val storedFile =
                 File(
                     createEventImageFolder(event),
-                    "${event.dateTime.format(DateTimeFormatter.ofPattern("yMdHms"))}.PNG"
+                    "$fileName.PNG"
                 )
             storedFile.outputStream().use {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
