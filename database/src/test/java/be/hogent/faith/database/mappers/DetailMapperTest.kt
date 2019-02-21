@@ -2,6 +2,7 @@ package be.hogent.faith.database.mappers
 
 class DetailMapperTest {
 
+    //TODO: test
 //    map
 
 //    override fun mapFromEntities(entities: List<DetailEntity>): List<Detail> {

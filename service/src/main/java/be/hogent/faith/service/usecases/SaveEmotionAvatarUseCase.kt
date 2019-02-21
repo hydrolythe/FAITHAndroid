@@ -1,8 +1,6 @@
 package be.hogent.faith.service.usecases
 
 import android.graphics.Bitmap
-import be.hogent.faith.domain.models.Detail
-import be.hogent.faith.domain.models.DetailType
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import be.hogent.faith.storage.StorageRepository
@@ -10,16 +8,26 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 
-class SaveBitmapUseCase(
+const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
+
+/**
+ * Stores the (colored) emotion avatar for an event on the device's storage.
+ * Will overwrite a previously stored avatar.
+ */
+class SaveEmotionAvatarUseCase(
     private val storageRepository: StorageRepository,
     observeScheduler: Scheduler
-) : CompletableUseCase<SaveBitmapUseCase.SaveBitmapParams>(
+) : CompletableUseCase<SaveEmotionAvatarUseCase.SaveBitmapParams>(
     Schedulers.io(),
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: SaveBitmapParams): Completable {
-        return storageRepository.storeBitmap(params.bitmap, params.event).doOnSuccess {
-            params.event.addDetail(Detail(DetailType.DRAWING, it))
+        return storageRepository.storeBitmap(
+            params.bitmap,
+            params.event,
+            EMOTION_AVATAR_FILENAME
+        ).doOnSuccess {
+            params.event.emotionAvatar = it
         }.ignoreElement()
     }
 
