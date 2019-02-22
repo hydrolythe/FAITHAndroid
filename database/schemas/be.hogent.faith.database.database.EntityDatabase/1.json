@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5cfb6ccc69de7159f58a85d14fb36e22",
+    "identityHash": "fac47d3c1344e7a3e93558ed1df5c7d5",
     "entities": [
       {
         "tableName": "events",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`dateTime` TEXT NOT NULL, `title` TEXT NOT NULL, `uuid` TEXT NOT NULL, PRIMARY KEY(`uuid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`dateTime` TEXT NOT NULL, `title` TEXT NOT NULL, `emotionAvatar` TEXT, `uuid` TEXT NOT NULL, PRIMARY KEY(`uuid`))",
         "fields": [
           {
             "fieldPath": "dateTime",
@@ -19,6 +19,12 @@
             "columnName": "title",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "emotionAvatar",
+            "columnName": "emotionAvatar",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "uuid",
@@ -116,7 +122,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"5cfb6ccc69de7159f58a85d14fb36e22\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"fac47d3c1344e7a3e93558ed1df5c7d5\")"
     ]
   }
 }

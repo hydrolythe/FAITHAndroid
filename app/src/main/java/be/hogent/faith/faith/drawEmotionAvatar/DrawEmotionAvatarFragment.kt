@@ -73,7 +73,7 @@ class DrawEmotionAvatarFragment : Fragment() {
         drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
             override fun onDrawingChanged(bitmap: Bitmap) {
                 val saveRequest = saveEmotionAvatarUseCase.execute(
-                    SaveEmotionAvatarUseCase.SaveBitmapParams(bitmap, event)
+                    SaveEmotionAvatarUseCase.Params(bitmap, event)
                 ).subscribe({
                     Log.i(TAG, "Drawing was saved")
                 }, {

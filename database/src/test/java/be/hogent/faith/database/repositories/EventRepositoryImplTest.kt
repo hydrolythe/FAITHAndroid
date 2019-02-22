@@ -12,6 +12,7 @@ import io.mockk.mockk
 import io.reactivex.Flowable
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
+import java.io.File
 import java.util.UUID
 
 class EventRepositoryImplTest {
@@ -60,13 +61,21 @@ class EventRepositoryImplTest {
     private fun createEventEntity(uuid: UUID): EventEntity {
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
         val description = "title"
-        return EventEntity(time, description, uuid)
+        val emotionAvatarFile = File("path/to/file")
+        return EventEntity(time, description, emotionAvatarFile, uuid)
     }
 
     private fun createEventDetails(eventUuid: UUID): List<DetailEntity> {
         val details = mutableListOf<DetailEntity>()
         for (i in 1..2) {
-            details.add(DetailEntity(UUID.randomUUID(), eventUuid, DetailTypeEntity.DRAWING))
+            details.add(
+                DetailEntity(
+                    DetailTypeEntity.DRAWING,
+                    File("/path/to/file$i"),
+                    UUID.randomUUID(),
+                    eventUuid
+                )
+            )
         }
         return details
     }

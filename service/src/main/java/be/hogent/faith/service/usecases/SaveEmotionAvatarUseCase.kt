@@ -17,19 +17,22 @@ const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
 class SaveEmotionAvatarUseCase(
     private val storageRepository: StorageRepository,
     observeScheduler: Scheduler
-) : CompletableUseCase<SaveEmotionAvatarUseCase.SaveBitmapParams>(
+) : CompletableUseCase<SaveEmotionAvatarUseCase.Params>(
     Schedulers.io(),
     observeScheduler
 ) {
-    override fun buildUseCaseObservable(params: SaveBitmapParams): Completable {
-        return storageRepository.storeBitmap(
-            params.bitmap,
-            params.event,
-            EMOTION_AVATAR_FILENAME
-        ).doOnSuccess {
-            params.event.emotionAvatar = it
-        }.ignoreElement()
+    override fun buildUseCaseObservable(params: Params): Completable {
+        return Completable.fromSingle(
+            storageRepository.storeBitmap(
+                params.bitmap,
+                params.event,
+                EMOTION_AVATAR_FILENAME
+            ).doOnSuccess {
+                System.out.println("Test SUCCESS")
+                params.event.emotionAvatar = it
+            }
+        )
     }
 
-    data class SaveBitmapParams(val bitmap: Bitmap, val event: Event)
+    data class Params(val bitmap: Bitmap, val event: Event)
 }
