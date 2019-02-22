@@ -5,6 +5,7 @@ import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import org.threeten.bp.LocalDateTime
+import java.io.File
 import java.util.UUID
 
 @Entity(
@@ -14,6 +15,7 @@ import java.util.UUID
 data class EventEntity(
     val dateTime: LocalDateTime,
     val title: String,
+    val emotionAvatar: File?,
     @PrimaryKey
     val uuid: UUID = UUID.randomUUID()
 ) {
