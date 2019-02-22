@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
 
         val fragment = AvatarFragment.newInstance()
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, fragment)
+            .replace(R.id.fragment_container, fragment)
             .commit()
     }
 }
