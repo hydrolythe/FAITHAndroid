@@ -33,11 +33,10 @@ class AvatarFragment : Fragment() {
     /**
      * ViewModel used for the avatarItems.
      */
-    private lateinit var avatarViewModel: AvatarViewModel
-    /**
-     * ViewModel used for the backpacks.
-     */
-    private lateinit var backpackViewModel: BackpackViewModel
+    private lateinit var avatarViewModel: AvatarItemViewModel
+
+
+
 
     override fun onStart() {
         super.onStart()
@@ -55,8 +54,8 @@ class AvatarFragment : Fragment() {
      * the LayoutManager for the Adapter based on this.
      */
     private fun registerAdapters() {
-        avatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel::class.java)
-        backpackViewModel = ViewModelProviders.of(this).get(BackpackViewModel::class.java)
+        avatarViewModel = ViewModelProviders.of(this).get(AvatarItemViewModel::class.java)
+
         val orientation = (activity as AppCompatActivity).getRotation()
         when (orientation) {
             R.integer.PORTRAIT -> {
@@ -76,12 +75,16 @@ class AvatarFragment : Fragment() {
         }
 
         val avatarAdapter = AvatarItemAdapter(avatarViewModel, this, Glide.with(this))
-        val backpackAdapter = AvatarItemAdapter(backpackViewModel, this, Glide.with(this))
+        val backpackAdapter = AvatarItemAdapter(avatarViewModel, this, Glide.with(this))
         avatar_rv_avatar.adapter = avatarAdapter
         avatar_rv_backpack.adapter = backpackAdapter
 
+
+
         LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
         LinearSnapHelper().attachToRecyclerView(avatar_rv_backpack)
+
+
     }
 
     /**
