@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StableIdKeyProvider
+import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +21,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_avatar.*
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.SnapHelper
-
+import be.hogent.faith.domain.models.Avatar
 
 
 
@@ -36,7 +40,8 @@ class AvatarFragment : Fragment() {
     private lateinit var avatarViewModel: AvatarItemViewModel
 
 
-
+    private var avatarTracker: SelectionTracker<Long>? = null
+    private var backPackTracker: SelectionTracker<Long>? = null
 
     override fun onStart() {
         super.onStart()
@@ -80,10 +85,33 @@ class AvatarFragment : Fragment() {
         avatar_rv_backpack.adapter = backpackAdapter
 
 
-
         LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
         LinearSnapHelper().attachToRecyclerView(avatar_rv_backpack)
 
+        avatarTracker = SelectionTracker.Builder<Long>(
+            "avatarSelection",
+            avatar_rv_avatar,
+            AvatarItemAdapter.KeyProvider(avatar_rv_avatar.adapter as AvatarItemAdapter),
+            AvatarItemAdapter.DetailsLookup(avatar_rv_avatar),
+            StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+            SelectionPredicates.createSelectSingleAnything()
+        ).build()
+
+        (avatar_rv_avatar.adapter as AvatarItemAdapter).tracker = avatarTracker
+
+
+        backPackTracker = SelectionTracker.Builder<Long>(
+            "backpackSelection",
+            avatar_rv_backpack,
+            AvatarItemAdapter.KeyProvider(avatar_rv_backpack.adapter as AvatarItemAdapter),
+            AvatarItemAdapter.DetailsLookup(avatar_rv_backpack),
+            StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+           SelectionPredicates.createSelectSingleAnything()
+        ).build()
+
+        (avatar_rv_backpack.adapter as AvatarItemAdapter).tracker = backPackTracker
 
     }
 

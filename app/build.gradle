@@ -75,7 +75,7 @@ android {
         implementation uiDependencies.recyclerview
         implementation uiDependencies.constraintLayout
         implementation uiDependencies.fragment
-
+        implementation uiDependencies.rv_selection
         //TESTING
 
 
