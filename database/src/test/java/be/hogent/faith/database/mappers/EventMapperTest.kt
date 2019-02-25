@@ -9,6 +9,7 @@ import be.hogent.faith.domain.models.Event
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
+import java.io.File
 import java.util.UUID
 
 class EventMapperTest {
@@ -20,7 +21,8 @@ class EventMapperTest {
         val uuid = UUID.randomUUID()
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
         val title = "title"
-        val eventEntity = EventEntity(time, title, uuid)
+        val emotionAvatarFile = File("path/to/file")
+        val eventEntity = EventEntity(time, title, emotionAvatarFile, uuid)
 
         // Act
         val resultingEvent = eventMapper.mapFromEntity(eventEntity)
@@ -29,6 +31,7 @@ class EventMapperTest {
         assertEquals(uuid, resultingEvent.uuid)
         assertEquals(time, resultingEvent.dateTime)
         assertEquals(title, resultingEvent.title)
+        assertEquals(emotionAvatarFile.path, resultingEvent.emotionAvatar!!.path)
         assert(resultingEvent.details.isEmpty())
     }
 
@@ -38,11 +41,13 @@ class EventMapperTest {
         val uuid = UUID.randomUUID()
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
         val title = "title"
-        val eventEntity = EventEntity(time, title, uuid)
+        val emotionAvatarFile = File("path/to/emotionAvatarFile")
+        val eventEntity = EventEntity(time, title, emotionAvatarFile, uuid)
         // Arrange DetailEntities
         val detailUUID = UUID.randomUUID()
         val detailType = DetailTypeEntity.AUDIO
-        val detailEntity = DetailEntity(detailUUID, eventEntity.uuid, detailType)
+        val detailFile = File("path/to/detailFile")
+        val detailEntity = DetailEntity(detailType, detailFile, detailUUID, eventEntity.uuid)
         eventEntity.details.add(detailEntity)
 
         // Act
@@ -59,7 +64,8 @@ class EventMapperTest {
         val uuid = UUID.randomUUID()
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
         val title = "title"
-        val event = Event(time, title, uuid)
+        val emotionAvatarFile = File("path/to/file")
+        val event = Event(time, title, emotionAvatarFile, uuid)
 
         // Act
         val resultingEventEntity = eventMapper.mapToEntity(event)
@@ -68,6 +74,7 @@ class EventMapperTest {
         assertEquals(uuid, resultingEventEntity.uuid)
         assertEquals(time, resultingEventEntity.dateTime)
         assertEquals(title, resultingEventEntity.title)
+        assertEquals(emotionAvatarFile.path, resultingEventEntity.emotionAvatar!!.path)
         assert(resultingEventEntity.details.isEmpty())
     }
 
@@ -77,10 +84,12 @@ class EventMapperTest {
         val uuid = UUID.randomUUID()
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
         val title = "title"
-        val event = Event(time, title, uuid)
+        val emotionAvatarFile = File("path/to/file")
+        val event = Event(time, title, emotionAvatarFile, uuid)
         // Arrange Detail
         val detailType = DetailType.AUDIO
-        val detail = Detail(detailType, event.uuid)
+        val detailFile = File("path/to/detailFile")
+        val detail = Detail(detailType, detailFile, event.uuid)
         event.addDetail(detail)
 
         // Act

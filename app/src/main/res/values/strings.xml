@@ -22,6 +22,7 @@
     <string name="your_avatar">Je avatar</string>
     <string name="event_details_title">Wat is er gebeurd?</string>
     <string name="event_details_label_title">Geef titel in:</string>
+    <string name="error_saving_drawing">Er gebeurde een fout tijdens het opslaan van je afbeelding.</string>
     <string name="permission_take_picture">Je moet je toestemming geven om foto\'s te nemen</string>
     <string name="frag_takePhoto_goToEmotionAvatar">Ga naar emotieavatar</string>
     <string name="frag_takePhoto_takePhoto">Neem foto</string>

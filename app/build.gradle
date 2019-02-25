@@ -37,6 +37,7 @@ dependencies {
     implementation project(':domain')
     implementation project(':service')
     implementation project(':database')
+    implementation project(':storage')
     implementation project(':draw')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -72,7 +73,7 @@ dependencies {
 
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
-    testImplementation "androidx.arch.core:core-testing:$aac_core_version"
+    testImplementation androidTestDependencies.aac_core
 
     androidTestImplementation androidTestDependencies.testRunner
     androidTestImplementation androidTestDependencies.espresso
