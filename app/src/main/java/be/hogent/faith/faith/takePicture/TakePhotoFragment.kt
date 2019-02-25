@@ -13,21 +13,41 @@ import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
 import be.hogent.faith.faith.util.TAG
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.logcat
+import io.fotoapparat.result.WhenDoneListener
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.io.File
 
+/**
+ * The requestcode that will be used to request camera permissions
+ */
 const val REQUESTCODE_CAMERA = 1
+
+/**
+ * Key for this Fragments saveFile argument
+ */
+const val ARG_SAVEFILE: String = "SAVEFILE_LOCATION"
 
 class TakePhotoFragment : Fragment() {
     private lateinit var navigation: TakePhotoNavigationListener
+
     private val takePhotoViewModel: TakePhotoViewModel by viewModel()
     private lateinit var takePhotoBinding: FragmentTakePhotoBinding
 
     private lateinit var fotoapparat: Fotoapparat
+
+    private lateinit var saveFile: File
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            saveFile = it.getSerializable(ARG_SAVEFILE) as File
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         takePhotoBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_take_photo, container, false)
@@ -50,6 +70,20 @@ class TakePhotoFragment : Fragment() {
         } else {
             requestPermissions(arrayOf(android.Manifest.permission.CAMERA), REQUESTCODE_CAMERA)
         }
+        startListeners()
+    }
+
+    private fun startListeners() {
+        takePhotoViewModel.emotionAvatarButtonClicked.observe(this, Observer {
+            navigation.startDrawEmotionAvatarFragment()
+        })
+        takePhotoViewModel.takePhotoButtonClicked.observe(this, Observer {
+            fotoapparat.takePicture().saveToFile(saveFile).whenDone(object : WhenDoneListener<Unit> {
+                override fun whenDone(it: Unit?) {
+                    Toast.makeText(this@TakePhotoFragment.context, "Foto werd opgeslagen", Toast.LENGTH_SHORT).show()
+                }
+            })
+        })
     }
 
     private fun hasCameraPermissions(): Boolean {
@@ -86,6 +120,20 @@ class TakePhotoFragment : Fragment() {
         super.onAttach(context)
         if (context is TakePhotoNavigationListener) {
             navigation = context
+        }
+    }
+
+    companion object {
+
+        /**
+         * Creates a new instance of this Fragment, providing the [File] where the photo will be saved.
+         */
+        fun newInstance(saveFile: File): TakePhotoFragment {
+            return TakePhotoFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_SAVEFILE, saveFile)
+                }
+            }
         }
     }
 
