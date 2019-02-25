@@ -25,7 +25,6 @@ class StorageRepository(private val context: Context) {
      */
     fun storeBitmap(bitmap: Bitmap, event: Event, fileName: String): Single<File> {
         return Single.fromCallable {
-            Log.d("StorageRepo", "Thread: ${Looper.myLooper()}")
             val storedFile = File(createEventImageFolder(event), "$fileName.PNG")
             storedFile.outputStream().use {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)

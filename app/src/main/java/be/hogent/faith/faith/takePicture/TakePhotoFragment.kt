@@ -16,11 +16,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
+import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.TAG
+import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.logcat
-import io.fotoapparat.result.WhenDoneListener
+import io.fotoapparat.result.BitmapPhoto
+import io.fotoapparat.result.PendingResult
+import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.threeten.bp.LocalDateTime
 import java.io.File
 
 /**
@@ -42,8 +47,17 @@ class TakePhotoFragment : Fragment() {
     private lateinit var fotoapparat: Fotoapparat
 
     private lateinit var saveFile: File
+    private var photoResult: PendingResult<BitmapPhoto>? = null
+
+    // TODO: replace with the actual Event once all fragments are tied together
+    private val event = Event(LocalDateTime.now(), "TestDescription")
+
+    private var saveEventPhotoUseCase: SaveEventPhotoUseCase = get()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //TODO: remove once all fragments are tied together
+        saveFile = File("testfoto")
         arguments?.let {
             saveFile = it.getSerializable(ARG_SAVEFILE) as File
         }
@@ -78,12 +92,27 @@ class TakePhotoFragment : Fragment() {
             navigation.startDrawEmotionAvatarFragment()
         })
         takePhotoViewModel.takePhotoButtonClicked.observe(this, Observer {
-            fotoapparat.takePicture().saveToFile(saveFile).whenDone(object : WhenDoneListener<Unit> {
-                override fun whenDone(it: Unit?) {
-                    Toast.makeText(this@TakePhotoFragment.context, "Foto werd opgeslagen", Toast.LENGTH_SHORT).show()
-                }
-            })
+            takeAndSavePicture()
         })
+    }
+
+    private fun takeAndSavePicture() {
+        fotoapparat.takePicture().toBitmap().whenAvailable { bitmapPhoto ->
+            saveEventPhotoUseCase.execute(
+                SaveEventPhotoUseCase.Params(
+                    bitmap = bitmapPhoto!!.bitmap,
+                    event = event,
+                    saveFile = saveFile
+                )
+            ).subscribe({
+                Toast.makeText(this@TakePhotoFragment.context, R.string.frag_takePhoto_saveSucces, Toast.LENGTH_SHORT)
+                    .show()
+            }, {
+                Toast.makeText(this@TakePhotoFragment.context, R.string.frag_takePhoto_saveFailed, Toast.LENGTH_SHORT)
+                    .show()
+                Log.e(TAG, "Couldn't save image: ${it.message}")
+            })
+        }
     }
 
     private fun hasCameraPermissions(): Boolean {
