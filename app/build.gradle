@@ -63,6 +63,7 @@ dependencies {
     implementation uiDependencies.recyclerview
     implementation uiDependencies.constraintLayout
     implementation uiDependencies.fragment
+    implementation uiDependencies.fotoApparat
 
     //TESTING
     //Required to test fragments in isolation
