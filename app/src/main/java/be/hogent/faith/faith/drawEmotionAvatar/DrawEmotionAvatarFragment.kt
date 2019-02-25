@@ -86,7 +86,7 @@ class DrawEmotionAvatarFragment : Fragment() {
 
     private fun listenToViewModelEvents() {
         drawEmotionViewModel.drawnPaths.observe(this, Observer {
-            //It's very important that the drawCanvas doesn't create its own paths but uses a paths object
+            // It's very important that the drawCanvas doesn't create its own paths but uses a paths object
             // that is saved in such a way that it survives configuration changes. See [DrawEmotionViewModel].
             drawAvatarBinding.drawCanvas.setPaths(it)
         })
