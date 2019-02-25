@@ -1,6 +1,5 @@
 package be.hogent.faith.database.database
 
-import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
@@ -60,27 +59,27 @@ class EntityDatabaseTest {
             .dispose()
     }
 
-    private fun compareEventEntities(eventEntity1: EventEntity, eventEntity2: EventEntity) {
-        //TODO: find out where things go wrong
-    }
-
     @Test
     fun entityDatabase_singleEntry_withDetails_isAdded() {
         // Arrange
-        val detail1 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.VIDEO, file = eventFile)
-        val detail2 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.AUDIO, file = eventFile)
+        val detail1 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.VIDEO, file = File("path/detail1"))
+        val detail2 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.AUDIO, file = File("path/detail2"))
         eventEntity.details.add(detail1)
         eventEntity.details.add(detail2)
 
-        val arrangeCompleteable = eventDao.insert(eventEntity)
+        val arrange = eventDao.insert(eventEntity)
             .andThen(detailDao.insert(detail1))
             .andThen(detailDao.insert(detail2))
-        val actCompletable = arrangeCompleteable.andThen(eventDao.getEventWithDetails(eventUuid))
+
+        val act = arrange.andThen(eventDao.getEventWithDetails(eventUuid))
 
         // Assert
-        actCompletable
+        act
             .test()
             .assertValue {
+                // Add details manually so equals check below can work normally
+                // This is usually the job of the repo
+                it.eventEntity!!.details += it.detailEntities
                 it.eventEntity!! == eventEntity && it.detailEntities.size == 2
             }
     }
@@ -95,19 +94,20 @@ class EntityDatabaseTest {
         eventEntity.details.add(detail1)
         eventEntity.details.add(detail2)
 
-        val arrangeCompletable = eventDao.insert(eventEntity)
+        val arrange = eventDao.insert(eventEntity)
             .andThen(detailDao.insert(detail1))
             .andThen(detailDao.insert(detail2))
 
         // Act
         // Chaining two "andThen" calls isn't possible,
         // so by saving the completable we can just subscribe twice
-        val actCompletable = arrangeCompletable.andThen(eventDao.delete(eventEntity))
+        val act = arrange.andThen(eventDao.delete(eventEntity))
         // Assert
-        actCompletable.andThen(eventDao.getEventWithDetails(eventUuid))
+
+        act.andThen(eventDao.getEventWithDetails(eventUuid))
             .test()
             .assertEmpty()
-        actCompletable.andThen(detailDao.getDetailsForEvent(eventUuid))
+        act.andThen(detailDao.getDetailsForEvent(eventUuid))
             .test()
             .assertValue { it.isEmpty() }
     }

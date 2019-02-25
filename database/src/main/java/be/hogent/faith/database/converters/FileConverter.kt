@@ -7,11 +7,11 @@ class FileConverter {
 
     @TypeConverter
     fun toString(file: File): String {
-        return file.absolutePath
+        return file.path
     }
 
     @TypeConverter
-    fun toFile(absolutePath: String): File {
-        return File(absolutePath)
+    fun toFile(path: String): File {
+        return File(path)
     }
 }

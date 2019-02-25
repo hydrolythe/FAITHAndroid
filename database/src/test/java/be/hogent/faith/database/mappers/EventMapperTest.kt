@@ -31,7 +31,7 @@ class EventMapperTest {
         assertEquals(uuid, resultingEvent.uuid)
         assertEquals(time, resultingEvent.dateTime)
         assertEquals(title, resultingEvent.title)
-        assertEquals(emotionAvatarFile.absolutePath, resultingEvent.emotionAvatar!!.absolutePath)
+        assertEquals(emotionAvatarFile.path, resultingEvent.emotionAvatar!!.path)
         assert(resultingEvent.details.isEmpty())
     }
 
@@ -74,7 +74,7 @@ class EventMapperTest {
         assertEquals(uuid, resultingEventEntity.uuid)
         assertEquals(time, resultingEventEntity.dateTime)
         assertEquals(title, resultingEventEntity.title)
-        assertEquals(emotionAvatarFile.absolutePath, resultingEventEntity.emotionAvatar!!.absolutePath)
+        assertEquals(emotionAvatarFile.path, resultingEventEntity.emotionAvatar!!.path)
         assert(resultingEventEntity.details.isEmpty())
     }
 

@@ -22,4 +22,28 @@ data class EventEntity(
     // Can't be part of the constructor arguments or Room won't compile
     @Ignore
     val details: MutableList<DetailEntity> = mutableListOf()
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as EventEntity
+
+        if (dateTime != other.dateTime) return false
+        if (title != other.title) return false
+        if (emotionAvatar != other.emotionAvatar) return false
+        if (uuid != other.uuid) return false
+        if (details != other.details) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = dateTime.hashCode()
+        result = 31 * result + title.hashCode()
+        result = 31 * result + (emotionAvatar?.hashCode() ?: 0)
+        result = 31 * result + uuid.hashCode()
+        result = 31 * result + details.hashCode()
+        return result
+    }
 }
