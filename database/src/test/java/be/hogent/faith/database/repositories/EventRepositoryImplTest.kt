@@ -13,7 +13,7 @@ import io.mockk.mockk
 import io.reactivex.Flowable
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 class EventRepositoryImplTest {
     private val detailDao = mockk<DetailDao>()

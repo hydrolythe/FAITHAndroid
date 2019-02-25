@@ -11,11 +11,11 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.repository.EventRepository
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import java.util.*
+import java.util.UUID
 
 open class EventRepositoryImpl(
-    //Passing the database is required to run transactions across multiple DAO's.
-    //This is required to insert an event together with all its details.
+    // Passing the database is required to run transactions across multiple DAO's.
+    // This is required to insert an event together with all its details.
     private val database: EntityDatabase,
     private val eventDao: EventDao,
     private val detailDao: DetailDao,
@@ -41,7 +41,6 @@ open class EventRepositoryImpl(
             Completable.complete()
         } catch (e: Exception) {
             Completable.error(e)
-
         }
     }
 
