@@ -6,11 +6,13 @@ import be.hogent.faith.R
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
+import be.hogent.faith.faith.takePicture.TakePhotoFragment
 import be.hogent.faith.faith.util.replaceFragment
 
 class MainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
-    MainScreenFragment.MainScreenNavigationListener {
+    MainScreenFragment.MainScreenNavigationListener,
+    TakePhotoFragment.TakePhotoNavigationListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +22,7 @@ class MainActivity : AppCompatActivity(),
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
         // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
+//            val fragment = TakePhotoFragment()
             val fragment = MainScreenFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
@@ -27,7 +30,7 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    override fun startDrawFragment() {
+    override fun startDrawEmotionAvatarFragment() {
         replaceFragment(DrawEmotionAvatarFragment.newInstance(R.drawable.outline), R.id.fragment_container)
     }
 

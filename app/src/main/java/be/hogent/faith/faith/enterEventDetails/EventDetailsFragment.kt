@@ -44,12 +44,12 @@ class EventDetailsFragment : Fragment() {
             }
         })
         eventDetailsViewModel.emotionAvatarClicked.observe(this, Observer {
-            navigation?.startDrawFragment()
+            navigation?.startDrawEmotionAvatarFragment()
         })
     }
 
     interface EventDetailsNavigationListener {
-        fun startDrawFragment()
+        fun startDrawEmotionAvatarFragment()
     }
 
     companion object {
