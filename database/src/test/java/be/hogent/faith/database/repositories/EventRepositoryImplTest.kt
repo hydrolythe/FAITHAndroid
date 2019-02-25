@@ -61,7 +61,7 @@ class EventRepositoryImplTest {
     private fun createEventEntity(uuid: UUID): EventEntity {
         val time = LocalDateTime.of(2019, 10, 28, 7, 33)
         val description = "title"
-        val emotionAvatarFile = File("path/to/file")
+        val emotionAvatarFile = File("path/to/event")
         return EventEntity(time, description, emotionAvatarFile, uuid)
     }
 
@@ -71,7 +71,7 @@ class EventRepositoryImplTest {
             details.add(
                 DetailEntity(
                     DetailTypeEntity.DRAWING,
-                    File("/path/to/file$i"),
+                    File("path/to/detail$i"),
                     UUID.randomUUID(),
                     eventUuid
                 )
