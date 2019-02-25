@@ -17,7 +17,7 @@ val databaseModule = module {
     // Just specifying the EventRepositoryImpl is nog enough.
     // In other modules some elements that require an EventRepository as constructor parameter.
     // Koin doesn't automatically see the Impl as an implementation of the interface.
-    single { EventRepositoryImpl(get(), get(), get()) as EventRepository }
+    single { EventRepositoryImpl(get(), get(), get(), get()) as EventRepository }
 }
 
 fun constructEventDao(entityDatabase: EntityDatabase): EventDao {

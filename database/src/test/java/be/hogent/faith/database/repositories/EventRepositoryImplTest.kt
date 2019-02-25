@@ -2,6 +2,7 @@ package be.hogent.faith.database.repositories
 
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
+import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.DetailTypeEntity
@@ -12,14 +13,15 @@ import io.mockk.mockk
 import io.reactivex.Flowable
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 class EventRepositoryImplTest {
     private val detailDao = mockk<DetailDao>()
     private val eventDao = mockk<EventDao>()
+    private val database = mockk<EntityDatabase>()
     private val eventMapper = EventMapper()
 
-    private val eventRepository = EventRepositoryImpl(eventDao, detailDao, eventMapper)
+    private val eventRepository = EventRepositoryImpl(database, eventDao, detailDao, eventMapper)
     private val eventUuid = UUID.randomUUID()
     private val eventEntity = createEventEntity(eventUuid)
     private val detailEntities = createEventDetails(eventUuid)
