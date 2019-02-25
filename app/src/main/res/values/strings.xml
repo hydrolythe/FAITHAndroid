@@ -26,4 +26,6 @@
     <string name="permission_take_picture">Je moet je toestemming geven om foto\'s te nemen</string>
     <string name="frag_takePhoto_goToEmotionAvatar">Ga naar emotieavatar</string>
     <string name="frag_takePhoto_takePhoto">Neem foto</string>
+    <string name="frag_takePhoto_saveSucces">Foto werd opgeslagen</string>
+    <string name="frag_takePhoto_saveFailed">Fout bij opslaan foto</string>
 </resources>
