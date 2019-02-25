@@ -43,6 +43,8 @@ ext {
 
     mockk_version = '1.8.13.kotlin13'
 
+    fotoApparat_version = '2.6.1'
+
     commonDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
 
@@ -87,7 +89,8 @@ ext {
             fragment        : "androidx.fragment:fragment:$fragment_version",
             glide           : "com.github.bumptech.glide:glide:$glide_version",
             glidecompiler   : "com.github.bumptech.glide:compiler:$glide_version",
-            recyclerview    : "com.android.support:recyclerview-v7:$recyclerview_version"
+            recyclerview    : "com.android.support:recyclerview-v7:$recyclerview_version",
+            fotoApparat     : "io.fotoapparat:fotoapparat:$fotoApparat_version"
     ]
 
 }
