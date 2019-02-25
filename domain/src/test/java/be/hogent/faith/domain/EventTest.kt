@@ -15,17 +15,17 @@ class EventTest {
 
     @Before
     fun setUp() {
-        event = Event(mockk(), "testDescription")
+        event = Event(mockk(), "testTitle")
     }
 
     @Test
     fun `Event constructor correctly sets attributes`() {
         val date = LocalDateTime.of(1991, Month.OCTOBER, 28, 8, 33)
-        val description = "testDescription"
+        val title = "title"
 
-        val newEvent = Event(date, description)
+        val newEvent = Event(date, title)
 
-        assertEquals(description, newEvent.description)
+        assertEquals(title, newEvent.title)
         assertEquals(date, newEvent.dateTime)
     }
 
