@@ -37,7 +37,6 @@ class TakePhotoFragment : Fragment() {
         fotoapparat = Fotoapparat(
             context = this.context!!,
             view = takePhotoBinding.cameraView,
-//            lensPosition = back(),
             logger = logcat(),
             cameraErrorCallback = { Log.e(TAG, it.message) }
         )
