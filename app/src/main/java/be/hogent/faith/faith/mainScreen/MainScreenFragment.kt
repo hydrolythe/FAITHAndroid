@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentMainScreenBinding
+import be.hogent.faith.faith.util.TAG
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -23,6 +25,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
  */
 class MainScreenFragment : Fragment() {
 
+    private var navigation: MainScreenNavigationListener? = null
     private val mainScreenViewModel: MainScreenViewModel by viewModel()
     private lateinit var mainScreenBinding: FragmentMainScreenBinding
     private lateinit var avatarView: View
@@ -38,17 +41,25 @@ class MainScreenFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         mainScreenViewModel.firstLocation.observe(this, Observer {
-            moveAvatarToLocationOf(mainScreenBinding.mainFirstLocation)
+            moveAvatarToLocationOf(mainScreenBinding.mainFirstLocation) {}
         })
         mainScreenViewModel.secondLocation.observe(this, Observer {
-            moveAvatarToLocationOf(mainScreenBinding.mainSecondLocation)
+            moveAvatarToLocationOf(mainScreenBinding.mainSecondLocation) { navigation?.startEventDetailsFragment() }
         })
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainScreenNavigationListener) {
+            navigation = context
+        }
+    }
+
     /**
-     * Moves the avatar to the top-left corner of the given view.
+     * Moves the avatar View to the top-left corner of the given View.
+     * Once the animation is finished it calls the [onAnimationEndCall].
      */
-    private fun moveAvatarToLocationOf(view: View) {
+    private fun moveAvatarToLocationOf(view: View, onAnimationEndCall: () -> Unit) {
         // No need to animate if the avatar is already there
         if (avatarView.x == view.x && avatarView.y == view.y) {
             Log.i(TAG, "Not moving the avatar as we're already at the view's location")
@@ -67,13 +78,13 @@ class MainScreenFragment : Fragment() {
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     super.onAnimationEnd(animation)
-                    Log.i(TAG, "Animation finished, opening new Fragment")
+                    onAnimationEndCall()
                 }
             })
         }
     }
 
-    companion object {
-        const val TAG = "MainScreenFragment"
+    interface MainScreenNavigationListener {
+        fun startEventDetailsFragment()
     }
 }
