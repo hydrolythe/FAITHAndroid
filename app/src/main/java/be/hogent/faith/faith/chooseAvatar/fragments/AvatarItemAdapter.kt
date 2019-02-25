@@ -29,6 +29,7 @@ class AvatarItemAdapter(
     private var avatarItems: MutableList<AvatarItem> = mutableListOf()
 
     init {
+        setHasStableIds(true)
         viewModel.avatarItems.observe(lifecycleOwner, Observer {
 
             if (it != null) {
