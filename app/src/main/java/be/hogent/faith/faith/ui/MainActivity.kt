@@ -3,6 +3,7 @@ package be.hogent.faith.faith.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
+import be.hogent.faith.faith.chooseAvatar.fragments.AvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
@@ -20,7 +21,7 @@ class MainActivity : AppCompatActivity(),
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
         // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
-            val fragment = MainScreenFragment()
+            val fragment = AvatarFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit()
