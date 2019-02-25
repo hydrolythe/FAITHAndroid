@@ -4,6 +4,7 @@ import be.hogent.faith.faith.createUser.CreateEventViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
+import be.hogent.faith.faith.takePicture.TakePhotoViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -18,4 +19,5 @@ val appModule = module {
     viewModel { MainScreenViewModel() }
     viewModel { EventDetailsViewModel() }
     viewModel { DrawEmotionViewModel() }
+    viewModel { TakePhotoViewModel() }
 }
