@@ -2,11 +2,11 @@ package be.hogent.faith.storage
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Looper
+import android.util.Log
 import be.hogent.faith.domain.models.Event
-import io.reactivex.Observable
 import io.reactivex.Single
 import java.io.File
-import java.io.IOException
 
 /**
  * Repository providing access to both the internal and external storage.
@@ -24,19 +24,15 @@ class StorageRepository(private val context: Context) {
      * @return a Single<File> with the path derived from the event's dateTime
      */
     fun storeBitmap(bitmap: Bitmap, event: Event, fileName: String): Single<File> {
-        return try {
-            val storedFile =
-                File(
-                    createEventImageFolder(event),
-                    "$fileName.PNG"
-                )
+        return Single.fromCallable {
+            Log.d("StorageRepo", "Thread: ${Looper.myLooper()}")
+            val storedFile = File(createEventImageFolder(event), "$fileName.PNG")
             storedFile.outputStream().use {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
             }
-            Single.fromObservable(Observable.just(storedFile))
-        } catch (e: IOException) {
-            Single.error(e)
+            storedFile
         }
+
     }
 
     private fun createEventImageFolder(event: Event): File {
