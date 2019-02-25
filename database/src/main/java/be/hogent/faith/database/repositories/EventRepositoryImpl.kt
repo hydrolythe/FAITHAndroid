@@ -1,8 +1,8 @@
 package be.hogent.faith.database.repositories
 
-import androidx.lifecycle.Transformations.map
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
+import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.models.EventEntity
@@ -11,9 +11,12 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.repository.EventRepository
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import java.util.UUID
+import java.util.*
 
 open class EventRepositoryImpl(
+    //Passing the database is required to run transactions across multiple DAO's.
+    //This is required to insert an event together with all its details.
+    private val database: EntityDatabase,
     private val eventDao: EventDao,
     private val detailDao: DetailDao,
     private val eventMapper: EventMapper
@@ -29,12 +32,17 @@ open class EventRepositoryImpl(
      * @return a [Completable] that only succeeds when both the event and it details were inserted successfully.
      */
     override fun insert(item: Event): Completable {
-        val eventEntity = eventMapper.mapToEntity(item)
-        val eventCompletable = eventDao.insert(eventEntity)
+        return try {
+            database.runInTransaction {
+                eventDao.insert(eventMapper.mapToEntity(item))
+                val detailMapper = DetailMapper(item)
+                detailDao.insertAll(item.details.map { detailMapper.mapToEntity(it) })
+            }
+            Completable.complete()
+        } catch (e: Exception) {
+            Completable.error(e)
 
-        val detailMapper = DetailMapper(item)
-        val detailsCompletable = detailDao.insertAll(item.details.map { detailMapper.mapToEntity(it) })
-        return Completable.merge(listOf(eventCompletable, detailsCompletable))
+        }
     }
 
     /**
@@ -43,22 +51,19 @@ open class EventRepositoryImpl(
      * @return A [Completable] that only succeeds when all events and their details were inserted successfully.
      */
     override fun insertAll(items: List<Event>): Completable {
-        val allCompletables = mutableListOf<Completable>()
-        items.forEach { item -> allCompletables.add(insert(item)) }
-        return Completable.merge(allCompletables)
+        return Completable.merge(
+            items.map { item -> insert(item) }
+        )
     }
 
     override fun get(uuid: UUID): Flowable<Event> {
-        val eventWithDetails = eventDao.getEventWithDetails(uuid)
-
-        return eventWithDetails
+        return eventDao.getEventWithDetails(uuid)
             .map { combine(it) }
             .map { eventMapper.mapFromEntity(it) }
     }
 
     override fun getAll(): Flowable<List<Event>> {
-        val eventsWithDetails = eventDao.getAllEventsWithDetails()
-        return eventsWithDetails
+        return eventDao.getAllEventsWithDetails()
             // TODO: learn more rxjava and find a way to not need combineList (map inside a map?)
             .map { combineList(it) }
             .map { eventMapper.mapFromEntities(it) }
