@@ -2,8 +2,6 @@ apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-kapt'
-
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
     compileSdkVersion globalConfig["androidCompileSdkVersion"]
@@ -15,16 +13,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas".toString())
-            }
-        }
-        sourceSets {
-            androidTest.assets.srcDirs +=
-                    files("$projectDir/schemas".toString())
-        }
     }
 
     buildTypes {
@@ -35,7 +23,6 @@ android {
     }
 
 }
-
 dependencies {
     implementation project(':domain')
 
@@ -46,9 +33,9 @@ dependencies {
     def testDependencies = rootProject.ext.testDependencies
     def androidTestDependencies = rootProject.ext.androidTestDependencies
     def androidDependencies = rootProject.ext.androidDependencies
-    def databaseDependencies = rootProject.ext.databaseDependencies
 
     implementation commonDependencies.kotlin
+    implementation commonDependencies.rxjava
     implementation commonDependencies.threeTenABP
 
     implementation injectionDependencies.koin
@@ -60,14 +47,5 @@ dependencies {
 
     androidTestImplementation androidTestDependencies.testRunner
     androidTestImplementation androidTestDependencies.espresso
-    androidTestImplementation androidTestDependencies.aac_core
 
-    // Room components
-    implementation databaseDependencies.room
-    implementation databaseDependencies.room_rxjava
-    kapt databaseDependencies.room_compiler
-    androidTestImplementation databaseDependencies.room_testing
-}
-repositories {
-    mavenCentral()
 }
