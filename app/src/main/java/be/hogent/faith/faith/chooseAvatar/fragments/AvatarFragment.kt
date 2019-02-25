@@ -15,6 +15,11 @@ import be.hogent.faith.R
 import be.hogent.faith.faith.util.getRotation
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_avatar.*
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.SnapHelper
+
+
+
 
 /**
  * A [Fragment] subclass which allows the user to choose an AvatarItem and a Backpack.
@@ -74,6 +79,9 @@ class AvatarFragment : Fragment() {
         val backpackAdapter = AvatarItemAdapter(backpackViewModel, this, Glide.with(this))
         avatar_rv_avatar.adapter = avatarAdapter
         avatar_rv_backpack.adapter = backpackAdapter
+
+        LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
+        LinearSnapHelper().attachToRecyclerView(avatar_rv_backpack)
     }
 
     /**
