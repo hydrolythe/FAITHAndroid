@@ -9,11 +9,11 @@ ext {
 
     constraint_layout_version = '2.0.0-alpha3'
     fragment_version = '1.1.0-alpha03'
-    recyclerview_version = '1.0.0'
-    glide_version = '4.8.0'
+    recyclerview_version='1.0.0'
+    glide_version = '4.9.0'
 
-    coroutines_version = '1.0.0'
-    coroutines_android_version = '1.0.0'
+    coroutines_version = '1.1.1'
+    coroutines_android_version = '1.1.1'
 
     koin_version = '1.0.2'
 
@@ -31,19 +31,21 @@ ext {
 
     junit_version = '4.12'
 
-    threeTenABP_version = '1.1.1'
+    threeTenABP_version = '1.1.2'
 
-    rxjava_version = '2.2.2'
-    rxjava_android_version = '2.1.0'
+    rxjava_version = '2.2.7'
+    rxjava_android_version = '2.1.1'
 
     room_runtime_version = '2.1.0-alpha04'
     room_compiler_version = '2.1.0-alpha03'
     room_testing_version = '2.1.0-alpha03'
     room_rxjava_version = '2.1.0-alpha03'
 
-    ktlint_version = '0.29.0'
+    ktlint_version = '0.30.0'
 
-    mockk_version = '1.9.1.kotlin12'
+    mockk_version = '1.9.1'
+
+    fragment_testing_version = '1.1.0-alpha04'
 
     fotoApparat_version = '2.6.1'
 
@@ -66,7 +68,8 @@ ext {
 
     testDependencies = [
             junit: "junit:junit:$junit_version",
-            mockk: "io.mockk:mockk:$mockk_version"
+            mockk: "io.mockk:mockk:$mockk_version",
+            coreTesting: "androidx.arch.core:core-testing:$aac_core_version"
     ]
 
     androidTestDependencies = [
@@ -75,7 +78,8 @@ ext {
             espresso       : "androidx.test.espresso:espresso-core:$espresso_core_version",
             aac_core       : "androidx.arch.core:core-testing:$aac_core_version",
             testRules      : "androidx.test:rules:$testrunner_version",
-            espressoContrib: "androidx.test.espresso:espresso-contrib:$espresso_contrib_version"
+            espressoContrib: "androidx.test.espresso:espresso-contrib:$espresso_contrib_version",
+            fragmentTesting: "androidx.fragment:fragment-testing:$fragment_testing_version"
     ]
 
     injectionDependencies = [

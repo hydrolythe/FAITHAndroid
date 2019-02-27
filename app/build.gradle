@@ -6,6 +6,24 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'composer'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+    dependencies {
+        classpath 'com.github.trevjonez.composer-gradle-plugin:plugin:0.10.0'
+        classpath 'com.android.tools.build:gradle:3.3.1'
+    }
+}
+
+
+composer {
+}
+
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
     compileSdkVersion globalConfig["androidCompileSdkVersion"]
@@ -67,13 +85,11 @@ dependencies {
     implementation uiDependencies.fotoApparat
 
     //TESTING
-    //Required to test fragments in isolation
-    debugImplementation 'androidx.test:monitor:1.1.1'
-    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha04'
+    debugImplementation androidTestDependencies.fragmentTesting
 
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
-    testImplementation androidTestDependencies.aac_core
+    testImplementation testDependencies.coreTesting
 
     androidTestImplementation androidTestDependencies.testCore
     androidTestImplementation androidTestDependencies.testRules
