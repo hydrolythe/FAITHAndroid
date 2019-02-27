@@ -57,19 +57,24 @@ android {
         implementation project(':database')
         implementation project(':draw')
         implementation fileTree(include: ['*.jar'], dir: 'libs')
+
         def commonDependencies = rootProject.ext.commonDependencies
         def injectionDependencies = rootProject.ext.injectionDependencies
         def androidTestDependencies = rootProject.ext.androidTestDependencies
         def androidDependencies = rootProject.ext.androidDependencies
         def uiDependencies = rootProject.ext.uiDependencies
+
         implementation commonDependencies.kotlin
         implementation commonDependencies.threeTenABP
         implementation commonDependencies.rxjava
         implementation commonDependencies.rxandroid
+
         implementation injectionDependencies.koin
         implementation injectionDependencies.koin_viewModel
+
         implementation androidDependencies.appcompat
         implementation androidDependencies.lifecycle
+
         implementation uiDependencies.glide
         kapt uiDependencies.glidecompiler
         implementation uiDependencies.recyclerview
@@ -77,13 +82,12 @@ android {
         implementation uiDependencies.fragment
 
         //TESTING
+        debugImplementation androidTestDependencies.fragmentTesting
 
-        //Required to test fragments in isolation
-        debugImplementation 'androidx.test:monitor:1.1.1'
-        debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha04'
         testImplementation testDependencies.junit
         testImplementation testDependencies.mockk
-        testImplementation "androidx.arch.core:core-testing:$aac_core_version"
+        testImplementation testDependencies.coreTesting
+
         androidTestImplementation androidTestDependencies.testRunner
         androidTestImplementation androidTestDependencies.espresso
     }
