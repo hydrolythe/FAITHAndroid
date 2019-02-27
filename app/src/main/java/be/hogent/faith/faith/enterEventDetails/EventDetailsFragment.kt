@@ -46,10 +46,14 @@ class EventDetailsFragment : Fragment() {
         eventDetailsViewModel.emotionAvatarClicked.observe(this, Observer {
             navigation?.startDrawEmotionAvatarFragment()
         })
+        eventDetailsViewModel.cameraButtonClicked.observe(this, Observer {
+            navigation?.startTakePhotoFragment()
+        })
     }
 
     interface EventDetailsNavigationListener {
         fun startDrawEmotionAvatarFragment()
+        fun startTakePhotoFragment()
     }
 
     companion object {

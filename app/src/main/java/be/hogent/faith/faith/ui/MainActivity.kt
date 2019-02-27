@@ -33,8 +33,7 @@ class MainActivity : AppCompatActivity(),
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
         // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
-            val fragment = TakePhotoFragment()
-//            val fragment = MainScreenFragment()
+            val fragment = MainScreenFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit()
@@ -43,6 +42,10 @@ class MainActivity : AppCompatActivity(),
 
     override fun startDrawEmotionAvatarFragment() {
         replaceFragment(DrawEmotionAvatarFragment.newInstance(R.drawable.outline), R.id.fragment_container)
+    }
+
+    override fun startTakePhotoFragment() {
+        replaceFragment(TakePhotoFragment.newInstance(), R.id.fragment_container)
     }
 
     override fun startEventDetailsFragment() {

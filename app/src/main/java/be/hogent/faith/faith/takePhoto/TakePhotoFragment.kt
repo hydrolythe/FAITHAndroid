@@ -153,15 +153,8 @@ class TakePhotoFragment : Fragment() {
 
     companion object {
 
-        /**
-         * Creates a new instance of this Fragment, providing the [File] where the photo will be saved.
-         */
-        fun newInstance(saveFile: File): TakePhotoFragment {
-            return TakePhotoFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(ARG_SAVEFILE, saveFile)
-                }
-            }
+        fun newInstance(): TakePhotoFragment {
+            return TakePhotoFragment()
         }
     }
 
