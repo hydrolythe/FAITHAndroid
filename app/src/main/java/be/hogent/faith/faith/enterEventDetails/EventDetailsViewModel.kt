@@ -16,7 +16,7 @@ class EventDetailsViewModel : ViewModel() {
     /**
      * The title of the event (optional when on the main entry screen.
      * We can't observe it here, so the Fragment observes it and changes the [event] when required.
-    */
+     */
     val eventTitle = MutableLiveData<String>()
 
     private val _cameraButtonClicked = SingleLiveEvent<Unit>()
@@ -45,6 +45,14 @@ class EventDetailsViewModel : ViewModel() {
 
     init {
         event.value = Event()
+    }
+
+    /**
+     * Helper method to be called when changing one of the properties of the [event].
+     * This is needed because just changing properties doesn't call all subscribers, only changing the actual value does.
+     */
+    fun updateEvent() {
+        event.value = event.value
     }
 
     fun onCameraButtonClicked() {

@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
-import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.toast
@@ -22,7 +21,6 @@ import com.divyanshu.draw.widget.DrawView
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.threeten.bp.LocalDateTime
 
 /**
  * Key for this Fragment's [Bundle] to hold the resource ID pointing to the outline drawing of the avatar.
@@ -76,6 +74,7 @@ class DrawEmotionAvatarFragment : Fragment() {
                     SaveEmotionAvatarUseCase.Params(bitmap, eventDetailsViewModel.event.value!!)
                 ).subscribe({
                     Log.i(TAG, "Drawing was saved")
+                    eventDetailsViewModel.updateEvent()
                 }, {
                     context?.toast(getString(R.string.error_saving_drawing))
                 })
