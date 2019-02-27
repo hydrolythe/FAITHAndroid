@@ -103,13 +103,12 @@ class TakePhotoFragment : Fragment() {
                     event = eventDetailsViewModel.event.value!!
                 )
             ).subscribe({
-                //TODO: this causes an error when saving the image is really slow and the user has already left the screen
+                // TODO: this causes an error when saving the image is really slow and the user has already left the screen
                 // before saving has finished. Once it has, this gets called but there is no context left to call resources from.
-//                Toast.makeText(this.activity, R.string.frag_takePhoto_saveSucces, Toast.LENGTH_SHORT)
-//                    .show()
-                eventDetailsViewModel.event.postValue(eventDetailsViewModel.event.value)
+                // Toast.makeText(this.activity, R.string.frag_takePhoto_saveSucces, Toast.LENGTH_SHORT).show()
+                eventDetailsViewModel.updateEvent()
             }, {
-//                Toast.makeText(this.activity, R.string.frag_takePhoto_saveFailed, Toast.LENGTH_SHORT) .show()
+                // Toast.makeText(this.activity, R.string.frag_takePhoto_saveFailed, Toast.LENGTH_SHORT).show()
                 Log.e(TAG, "Couldn't save image: ${it.message}")
             })
         }
