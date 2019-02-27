@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
-import be.hogent.faith.domain.models.Event
+import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
 import io.fotoapparat.Fotoapparat
@@ -24,8 +24,8 @@ import io.fotoapparat.log.logcat
 import io.fotoapparat.result.BitmapPhoto
 import io.fotoapparat.result.PendingResult
 import org.koin.android.ext.android.get
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import org.threeten.bp.LocalDateTime
 import java.io.File
 
 /**
@@ -42,15 +42,14 @@ class TakePhotoFragment : Fragment() {
     private lateinit var navigation: TakePhotoNavigationListener
 
     private val takePhotoViewModel: TakePhotoViewModel by viewModel()
+    private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
+
     private lateinit var takePhotoBinding: FragmentTakePhotoBinding
 
     private lateinit var fotoapparat: Fotoapparat
 
     private lateinit var saveFile: File
     private var photoResult: PendingResult<BitmapPhoto>? = null
-
-    // TODO: replace with the actual Event once all fragments are tied together
-    private val event = Event(LocalDateTime.now(), "TestDescription")
 
     private var saveEventPhotoUseCase: SaveEventPhotoUseCase = get()
 
@@ -101,14 +100,16 @@ class TakePhotoFragment : Fragment() {
             saveEventPhotoUseCase.execute(
                 SaveEventPhotoUseCase.Params(
                     bitmap = bitmapPhoto!!.bitmap,
-                    event = event
+                    event = eventDetailsViewModel.event.value!!
                 )
             ).subscribe({
-                Toast.makeText(this@TakePhotoFragment.context, R.string.frag_takePhoto_saveSucces, Toast.LENGTH_SHORT)
-                    .show()
+                //TODO: this causes an error when saving the image is really slow and the user has already left the screen
+                // before saving has finished. Once it has, this gets called but there is no context left to call resources from.
+//                Toast.makeText(this.activity, R.string.frag_takePhoto_saveSucces, Toast.LENGTH_SHORT)
+//                    .show()
+                eventDetailsViewModel.event.postValue(eventDetailsViewModel.event.value)
             }, {
-                Toast.makeText(this@TakePhotoFragment.context, R.string.frag_takePhoto_saveFailed, Toast.LENGTH_SHORT)
-                    .show()
+//                Toast.makeText(this.activity, R.string.frag_takePhoto_saveFailed, Toast.LENGTH_SHORT) .show()
                 Log.e(TAG, "Couldn't save image: ${it.message}")
             })
         }

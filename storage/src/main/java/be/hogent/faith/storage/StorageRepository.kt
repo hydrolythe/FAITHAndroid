@@ -18,7 +18,7 @@ class StorageRepository(private val context: Context) {
      * Stores the bitmap on the device's storage.
      * It will be put in the context.filesDir/event.uuid/images/ folder
      *
-     * @param the fileName under which the bitmap will be saved
+     * @param fileName under which the bitmap will be saved
      * @return a Single<File> with the path derived from the event's dateTime
      */
     fun storeBitmap(bitmap: Bitmap, event: Event, fileName: String): Single<File> {
