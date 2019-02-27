@@ -56,7 +56,7 @@ class TakePhotoFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //TODO: remove once all fragments are tied together
+        // TODO: remove once all fragments are tied together
         saveFile = File("testfoto")
         arguments?.let {
             saveFile = it.getSerializable(ARG_SAVEFILE) as File
@@ -101,8 +101,7 @@ class TakePhotoFragment : Fragment() {
             saveEventPhotoUseCase.execute(
                 SaveEventPhotoUseCase.Params(
                     bitmap = bitmapPhoto!!.bitmap,
-                    event = event,
-                    saveFile = saveFile
+                    event = event
                 )
             ).subscribe({
                 Toast.makeText(this@TakePhotoFragment.context, R.string.frag_takePhoto_saveSucces, Toast.LENGTH_SHORT)

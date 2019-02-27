@@ -2,8 +2,6 @@ package be.hogent.faith.storage
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.Looper
-import android.util.Log
 import be.hogent.faith.domain.models.Event
 import io.reactivex.Single
 import java.io.File
@@ -31,7 +29,6 @@ class StorageRepository(private val context: Context) {
             }
             storedFile
         }
-
     }
 
     private fun createEventImageFolder(event: Event): File {
