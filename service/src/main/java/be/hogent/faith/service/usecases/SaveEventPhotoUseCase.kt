@@ -9,7 +9,8 @@ import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
-import java.io.File
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 
 class SaveEventPhotoUseCase(
     private val storageRepository: StorageRepository,
@@ -19,16 +20,25 @@ class SaveEventPhotoUseCase(
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {
+        val saveFileName = createSaveFileName()
         return Completable.fromSingle(
             storageRepository.storeBitmap(
                 params.bitmap,
                 params.event,
-                params.saveFile.path
+                saveFileName
             ).doOnSuccess {
                 params.event.addDetail(Detail(DetailType.PICTURE, it))
             }
         )
     }
 
-    data class Params(val bitmap: Bitmap, val event: Event, val saveFile: File)
+    /**
+     * Returns a saveFile with the name in the following format:
+     * day_month_year_hour_minute_second_millis
+     */
+    private fun createSaveFileName(): String {
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("d_M_y_H_m_s_A"))
+    }
+
+    data class Params(val bitmap: Bitmap, val event: Event)
 }
