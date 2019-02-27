@@ -9,7 +9,7 @@ import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
-import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
 class SaveEventPhotoUseCase(
@@ -37,7 +37,7 @@ class SaveEventPhotoUseCase(
      * day_month_year_hour_minute_second_millis
      */
     private fun createSaveFileName(): String {
-        return LocalDate.now().format(DateTimeFormatter.ofPattern("d_M_y_H_m_s_A"))
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("d_M_y_Ka_m_s_A"))
     }
 
     data class Params(val bitmap: Bitmap, val event: Event)
