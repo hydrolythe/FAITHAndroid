@@ -28,4 +28,9 @@
     <string name="frag_takePhoto_takePhoto">Neem foto</string>
     <string name="frag_takePhoto_saveSucces">Foto werd opgeslagen</string>
     <string name="frag_takePhoto_saveFailed">Fout bij opslaan foto</string>
+    <string name="description_thumbnail">Miniatuur</string>
+    <string name="description_addText">Tekst toevoegen</string>
+    <string name="description_addPhoto">Foto toevoegen</string>
+    <string name="description_addAudio">Geluidsopname toevoegen</string>
+    <string name="description_addDrawing">Tekening toevoegen</string>
 </resources>

@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.toast
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
@@ -39,6 +40,8 @@ private const val NO_AVATAR = -1
 class DrawEmotionAvatarFragment : Fragment() {
 
     private val drawEmotionViewModel: DrawEmotionViewModel by sharedViewModel()
+    private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
+
     private lateinit var drawAvatarBinding: FragmentDrawAvatarBinding
 
     /**
@@ -47,9 +50,6 @@ class DrawEmotionAvatarFragment : Fragment() {
     private var avatarOutlineResId: Int = NO_AVATAR
 
     private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase by inject()
-
-    // TODO: replace with the actual Event once all fragments are tied together
-    private val event = Event(LocalDateTime.now(), "TestDescription")
 
     private val disposables = CompositeDisposable()
 
@@ -73,7 +73,7 @@ class DrawEmotionAvatarFragment : Fragment() {
         drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
             override fun onDrawingChanged(bitmap: Bitmap) {
                 val saveRequest = saveEmotionAvatarUseCase.execute(
-                    SaveEmotionAvatarUseCase.Params(bitmap, event)
+                    SaveEmotionAvatarUseCase.Params(bitmap, eventDetailsViewModel.event.value!!)
                 ).subscribe({
                     Log.i(TAG, "Drawing was saved")
                 }, {

@@ -6,6 +6,7 @@ import be.hogent.faith.R
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
+import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
 import be.hogent.faith.faith.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.util.replaceFragment
@@ -23,7 +24,14 @@ class MainActivity : AppCompatActivity(),
     // give every new [DrawEmotionAvatarFragment] that same ViewModel, resulting in the drawing being fully restored.
     // Saving the fragment as a property doesn't work because the property doesn't survive configuration changes.
     // Saving the fragment somewhere in the backstack might work, but would require complicated backstack management.
-    private val DrawEmotionViewModel by viewModel<DrawEmotionViewModel>()
+    private val drawEmotionViewModel by viewModel<DrawEmotionViewModel>()
+
+    // This VM is made here because it holds the event that is described in the EventDetailsFragment and
+    // the fragments that can be started from there.
+    // They all require the same event object so it has to be shared.
+    // This may cause issues when entering multiple events. A possible solution might be to have an Activity for each
+    // of the 4 main functions of the app.
+    private val eventDetailsViewModel by viewModel<EventDetailsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
