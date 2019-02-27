@@ -7,7 +7,7 @@ import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
-import be.hogent.faith.faith.takePicture.TakePhotoFragment
+import be.hogent.faith.faith.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.viewmodel.ext.android.viewModel
 

@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.takePicture
+package be.hogent.faith.faith.takePhoto
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel

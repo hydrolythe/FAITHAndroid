@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.takePicture
+package be.hogent.faith.faith.takePhoto
 
 import android.Manifest
 import android.content.Context

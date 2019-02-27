@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.takePicture
+package be.hogent.faith.faith.takePhoto
 
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.ext.junit.runners.AndroidJUnit4
