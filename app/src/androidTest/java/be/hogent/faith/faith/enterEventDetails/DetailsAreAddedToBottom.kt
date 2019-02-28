@@ -21,19 +21,18 @@ class DetailsAreAddedToBottom {
 
     @Test
     fun eventDetails_newPhotoIsAddedToBottomList() {
-        //go to event details screen
+        // go to event details screen
         onView(withId(R.id.main_second_location)).perform(click())
-        //open camera
+        // open camera
         onView(withId(R.id.btn_event_details_camera)).perform(click())
-        //take picture
+        // take picture
         onView(withId(R.id.btn_takePhoto_takePhoto)).perform(click())
-        //Required to let picture get saved correctly
-        //TODO: find a way around this. Possibly block the back button until everything was saved? -> Bad UX
+        // Required to let picture get saved correctly
+        // TODO: find a way around this. Possibly block the back button until everything was saved? -> Bad UX
         Thread.sleep(3000)
-        //back to overview
+        // back to overview
         pressBack()
-        //Check if thumbnail was added
+        // Check if thumbnail was added
         onView(withId(R.id.recyclerView_event_details_details)).check(RecyclerViewItemCountAssertion(1))
     }
-
 }

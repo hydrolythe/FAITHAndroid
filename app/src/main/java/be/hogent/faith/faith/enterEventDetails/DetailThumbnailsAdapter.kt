@@ -22,7 +22,6 @@ class DetailThumbnailsAdapter(private val context: Context, details: List<Detail
             false
         ) as ImageView
         return ThumbnailViewHolder(thumbnail)
-
     }
 
     override fun getItemCount(): Int {
@@ -43,7 +42,6 @@ class DetailThumbnailsAdapter(private val context: Context, details: List<Detail
         _details.addAll(newDetails)
         diffResult.dispatchUpdatesTo(this)
     }
-
 }
 
 class ThumbnailViewHolder(val imageView: ImageView) : RecyclerView.ViewHolder(imageView)
