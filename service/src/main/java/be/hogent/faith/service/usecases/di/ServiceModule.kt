@@ -3,7 +3,7 @@ package be.hogent.faith.service.usecases.di
 import be.hogent.faith.service.usecases.CreateEventUseCase
 import be.hogent.faith.service.usecases.GetEventsUseCase
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
-import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
+import be.hogent.faith.service.usecases.TakeEventPhotoUseCase
 import org.koin.dsl.module.module
 
 /**
@@ -15,5 +15,5 @@ val serviceModule = module {
     factory { GetEventsUseCase(get(), get()) }
     factory { CreateEventUseCase(get(), get()) }
     factory { SaveEmotionAvatarUseCase(get(), get()) }
-    factory { SaveEventPhotoUseCase(get(), get()) }
+    factory { TakeEventPhotoUseCase(get(), get()) }
 }

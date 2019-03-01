@@ -29,6 +29,7 @@ ext {
     espresso_core_version = '3.1.1'
     espresso_contrib_version = '3.1.1'
 
+    uiAutomator_version = '2.2.0'
     junit_version = '4.12'
 
     threeTenABP_version = '1.1.2'
@@ -79,7 +80,8 @@ ext {
             aac_core       : "androidx.arch.core:core-testing:$aac_core_version",
             testRules      : "androidx.test:rules:$testrunner_version",
             espressoContrib: "androidx.test.espresso:espresso-contrib:$espresso_contrib_version",
-            fragmentTesting: "androidx.fragment:fragment-testing:$fragment_testing_version"
+            fragmentTesting: "androidx.fragment:fragment-testing:$fragment_testing_version",
+            uiAutomator: "androidx.test.uiautomator:uiautomator:$uiAutomator_version"
     ]
 
     injectionDependencies = [
@@ -100,7 +102,8 @@ ext {
             glide           : "com.github.bumptech.glide:glide:$glide_version",
             glidecompiler   : "com.github.bumptech.glide:compiler:$glide_version",
             recyclerview    : "com.android.support:recyclerview-v7:$recyclerview_version",
-            fotoApparat     : "io.fotoapparat:fotoapparat:$fotoApparat_version"
+            fotoApparat     : "io.fotoapparat:fotoapparat:$fotoApparat_version",
+            fotoApparatAdapters     : "io.fotoapparat.fotoapparat:adapter-rxjava2:$fotoApparat_version"
     ]
 
 }

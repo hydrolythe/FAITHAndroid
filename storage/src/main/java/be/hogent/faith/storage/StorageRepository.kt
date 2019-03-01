@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
 import io.reactivex.Single
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import java.io.File
 
 /**
@@ -35,5 +37,17 @@ class StorageRepository(private val context: Context) {
         val imageDirectory = File(context.filesDir, "events/${event.uuid}/images")
         imageDirectory.mkdirs()
         return imageDirectory
+    }
+
+    fun createDetailSaveFile(event: Event): File {
+        return File(createEventImageFolder(event), "${createSaveFileName()}.png")
+    }
+
+    /**
+     * Returns a saveFile with the name in the following format:
+     * day_month_year_hour_minute_second_millis
+     */
+    private fun createSaveFileName(): String {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("d_M_y_Ka_m_s_A"))
     }
 }

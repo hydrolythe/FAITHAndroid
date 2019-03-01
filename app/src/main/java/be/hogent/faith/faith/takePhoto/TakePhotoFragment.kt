@@ -18,18 +18,17 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.util.TAG
-import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
+import be.hogent.faith.service.usecases.TakeEventPhotoUseCase
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.logcat
-import io.fotoapparat.result.BitmapPhoto
-import io.fotoapparat.result.PendingResult
+import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
 
 /**
- * The requestcode that will be used to request camera permissions
+ * The requestcode that will be used to request photoTaker permissions
  */
 const val REQUESTCODE_CAMERA = 1
 
@@ -49,9 +48,10 @@ class TakePhotoFragment : Fragment() {
     private lateinit var fotoapparat: Fotoapparat
 
     private lateinit var saveFile: File
-    private var photoResult: PendingResult<BitmapPhoto>? = null
 
-    private var saveEventPhotoUseCase: SaveEventPhotoUseCase = get()
+    private var takeEventPhotoUseCase: TakeEventPhotoUseCase = get()
+
+    private var disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,22 +96,20 @@ class TakePhotoFragment : Fragment() {
     }
 
     private fun takeAndSavePicture() {
-        fotoapparat.takePicture().toBitmap().whenAvailable { bitmapPhoto ->
-            saveEventPhotoUseCase.execute(
-                SaveEventPhotoUseCase.Params(
-                    bitmap = bitmapPhoto!!.bitmap,
-                    event = eventDetailsViewModel.event.value!!
-                )
-            ).subscribe({
-                // TODO: this causes an error when saving the image is really slow and the user has already left the screen
-                // before saving has finished. Once it has, this gets called but there is no context left to call resources from.
-                // Toast.makeText(this.activity, R.string.frag_takePhoto_saveSucces, Toast.LENGTH_SHORT).show()
+        val disposable = takeEventPhotoUseCase.execute(
+            TakeEventPhotoUseCase.Params(FotoApparatFacade(fotoapparat), eventDetailsViewModel.event.value!!)
+        ).subscribe({
+            if (this.activity != null) {
+                Toast.makeText(this.activity, R.string.frag_takePhoto_saveSucces, Toast.LENGTH_SHORT).show()
                 eventDetailsViewModel.updateEvent()
-            }, {
-                // Toast.makeText(this.activity, R.string.frag_takePhoto_saveFailed, Toast.LENGTH_SHORT).show()
+            }
+        }, {
+            if (this.activity != null) {
+                Toast.makeText(this.activity, R.string.frag_takePhoto_saveFailed, Toast.LENGTH_SHORT).show()
                 Log.e(TAG, "Couldn't save image: ${it.message}")
-            })
-        }
+            }
+        })
+        disposables.add(disposable)
     }
 
     private fun hasCameraPermissions(): Boolean {
@@ -139,7 +137,7 @@ class TakePhotoFragment : Fragment() {
         } catch (e: IllegalStateException) {
             Log.i(
                 TAG, "Stopped fotoApparat but wasn't even started. Probably because the permission to start" +
-                        "the camera wasn't given"
+                        "the photoTaker wasn't given"
             )
         }
     }
