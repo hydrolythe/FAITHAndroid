@@ -48,5 +48,4 @@ class DetailsAreAddedToBottom {
         // Check if thumbnail was added
         onView(withId(R.id.recyclerView_event_details_details)).check(RecyclerViewItemCountAssertion(1))
     }
-
 }
