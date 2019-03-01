@@ -6,6 +6,7 @@ import be.hogent.faith.R
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
+import be.hogent.faith.faith.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.util.replaceFragment
 
 class MainActivity : AppCompatActivity(),
@@ -33,5 +34,9 @@ class MainActivity : AppCompatActivity(),
 
     override fun startEventDetailsFragment() {
         replaceFragment(EventDetailsFragment.newInstance(), R.id.fragment_container)
+    }
+
+    override fun startRecordAudioFragment() {
+        replaceFragment(RecordAudioFragment.newInstance(), R.id.fragment_container)
     }
 }

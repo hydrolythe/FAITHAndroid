@@ -7,6 +7,10 @@
         <variable
                 name="recordAudioViewModel"
                 type="be.hogent.faith.faith.recordAudio.RecordAudioViewModel"/>
+
+        <import type="be.hogent.faith.faith.recordAudio.RecordAudioViewModel.RecordingStatus"/>
+
+        <import type="android.view.View"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,15 +18,50 @@
             android:layout_height="match_parent">
 
         <ImageButton
+                android:id="@+id/btn_recordAudio_record"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/audio_record"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:onClick="@{() -> recordAudioViewModel.onRecordButtonClicked()"
+                android:onClick="@{() -> recordAudioViewModel.onRecordButtonClicked()}"
                 android:layout_margin="8dp"
+                android:visibility="@{recordAudioViewModel.recordButtonVisible()? View.VISIBLE : View.GONE}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageButton
+                android:id="@+id/btn_recordAudio_stop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/audio_stop"
+                android:onClick="@{() -> recordAudioViewModel.onStopButtonClicked()}"
+                android:layout_margin="32dp"
+                android:visibility="@{recordAudioViewModel.stopButtonVisible ? View.VISIBLE : View.GONE}"
+                app:layout_constraintStart_toEndOf="@id/fragment_record_middle"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fragment_record_middle"
+                app:layout_constraintGuide_percent="0.5"
+                android:orientation="vertical"/>
+
+        <ImageButton
+                android:id="@+id/btn_recordAudio_pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/audio_pause"
+                app:layout_constraintEnd_toStartOf="@id/fragment_record_middle"
+                android:onClick="@{() -> recordAudioViewModel.onPauseButtonClicked()}"
+                android:layout_margin="32dp"
+                android:visibility="@{recordAudioViewModel.pauseButtonVisible? View.VISIBLE : View.GONE}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

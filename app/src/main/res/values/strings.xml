@@ -22,4 +22,5 @@
     <string name="your_avatar">Je avatar</string>
     <string name="event_details_title">Wat is er gebeurd?</string>
     <string name="event_details_label_title">Geef titel in:</string>
+    <string name="permission_record_audio">Je moet je toestemming geven om geluid op te nemen</string>
 </resources>

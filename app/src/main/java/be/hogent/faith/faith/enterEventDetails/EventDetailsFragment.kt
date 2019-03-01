@@ -46,10 +46,14 @@ class EventDetailsFragment : Fragment() {
         eventDetailsViewModel.emotionAvatarClicked.observe(this, Observer {
             navigation?.startDrawFragment()
         })
+        eventDetailsViewModel.audioButtonClicked.observe(this, Observer {
+            navigation?.startRecordAudioFragment()
+        })
     }
 
     interface EventDetailsNavigationListener {
         fun startDrawFragment()
+        fun startRecordAudioFragment()
     }
 
     companion object {
