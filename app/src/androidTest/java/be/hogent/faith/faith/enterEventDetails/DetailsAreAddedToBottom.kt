@@ -34,7 +34,7 @@ class DetailsAreAddedToBottom {
     fun eventDetails_newPhotoIsAddedToBottomList() {
         // go to event details screen
         onView(withId(R.id.main_second_location)).perform(click())
-        // open photoTaker
+        // open camera
         onView(withId(R.id.btn_event_details_camera)).perform(click())
         allowPermissionsIfNeeded(uiDevice)
         // take picture
@@ -48,4 +48,5 @@ class DetailsAreAddedToBottom {
         // Check if thumbnail was added
         onView(withId(R.id.recyclerView_event_details_details)).check(RecyclerViewItemCountAssertion(1))
     }
+
 }
