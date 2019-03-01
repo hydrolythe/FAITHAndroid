@@ -83,6 +83,7 @@ dependencies {
     implementation uiDependencies.constraintLayout
     implementation uiDependencies.fragment
     implementation uiDependencies.fotoApparat
+    implementation uiDependencies.fotoApparatAdapters
 
     //TESTING
     debugImplementation androidTestDependencies.fragmentTesting
@@ -96,4 +97,5 @@ dependencies {
     androidTestImplementation androidTestDependencies.testRunner
     androidTestImplementation androidTestDependencies.espresso
     androidTestImplementation androidTestDependencies.espressoContrib
+    androidTestImplementation androidTestDependencies.uiAutomator
 }

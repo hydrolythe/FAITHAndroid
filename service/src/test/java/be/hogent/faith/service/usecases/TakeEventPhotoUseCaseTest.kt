@@ -3,11 +3,12 @@ package be.hogent.faith.service.usecases
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.DetailType
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.service.usecases.interfaces.PhotoTaker
 import be.hogent.faith.storage.StorageRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
-import io.mockk.verify
+import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import org.junit.Assert.assertEquals
@@ -16,13 +17,13 @@ import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
 import java.io.File
-import java.io.IOException
 
-class SaveEventPhotoUseCaseTest {
-    private lateinit var saveEventPhotoUseCase: SaveEventPhotoUseCase
+class TakeEventPhotoUseCaseTest {
+    private lateinit var takeEventPhotoUseCase: TakeEventPhotoUseCase
     private lateinit var observer: Scheduler
     private lateinit var storageRepository: StorageRepository
     private var bitmap = mockk<Bitmap>()
+    private var photoTaker = mockk<PhotoTaker>()
     // Give own dateTime because AndroidThreeTen requires context to init timezones
     private var event = Event(
         dateTime = LocalDateTime.of(2019, 2, 19, 16, 58)
@@ -34,22 +35,21 @@ class SaveEventPhotoUseCaseTest {
         storageRepository = mockk(relaxed = true)
         // spyk used to mix mock and real object.
         // We need the mock to mock the private call to createSaveFileName
-        saveEventPhotoUseCase = spyk(SaveEventPhotoUseCase(storageRepository, observer), recordPrivateCalls = true)
+        takeEventPhotoUseCase = spyk(TakeEventPhotoUseCase(storageRepository, observer), recordPrivateCalls = true)
     }
 
     @Test
     fun saveEventPhoto_execute_saves() {
         every { storageRepository.storeBitmap(any(), any(), any()) } returns Single.just(mockk<File>())
         // ABP requires timezone date that we don't have when running unit tests
-        every { saveEventPhotoUseCase["createSaveFileName"]() } returns "27_2_2019_13_05_222"
+        every { photoTaker.takePhoto(any()) } returns Completable.complete()
+        every { storageRepository["createSaveFileName"]() } returns "saveFile"
 
-        saveEventPhotoUseCase.buildUseCaseObservable((SaveEventPhotoUseCase.Params(bitmap, event)))
+        takeEventPhotoUseCase.buildUseCaseObservable((TakeEventPhotoUseCase.Params(photoTaker, event)))
             .test()
             .assertNoErrors()
             .assertComplete()
 
-        // Must be stored in repo
-        verify { storageRepository.storeBitmap(bitmap, event, any()) }
         // Must be added to details
         assertEquals(1, event.details.size)
         // Detail must be correct type
@@ -59,13 +59,13 @@ class SaveEventPhotoUseCaseTest {
     }
 
     @Test
-    fun saveEventPhoto_execute_failsOnRepoError() {
-        every { storageRepository.storeBitmap(any(), any(), any()) } returns Single.error(IOException())
-        every { saveEventPhotoUseCase["createSaveFileName"]() } returns "27_2_2019_13_05_222"
+    fun saveEventPhoto_execute_failsOnCameraError() {
+        every { photoTaker.takePhoto(any()) } returns Completable.error(RuntimeException())
+        every { storageRepository["createSaveFileName"]() } returns "saveFileName"
 
-        saveEventPhotoUseCase.buildUseCaseObservable((SaveEventPhotoUseCase.Params(bitmap, event)))
+        takeEventPhotoUseCase.buildUseCaseObservable((TakeEventPhotoUseCase.Params(photoTaker, event)))
             .test()
-            .assertError(IOException::class.java)
+            .assertError(RuntimeException::class.java)
             .assertNotComplete()
 
         // Details must still be empty (nothing could be added)

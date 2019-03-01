@@ -25,5 +25,4 @@ class ThumbnailDiffCallback(
 
         return oldItem.uuid == newItem.uuid
     }
-
 }
