@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.chooseAvatar.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,19 +11,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StableIdKeyProvider
 import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
+import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.getRotation
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_avatar.*
-import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.SnapHelper
-import be.hogent.faith.domain.models.Avatar
-
 
 
 /**
@@ -99,6 +97,19 @@ class AvatarFragment : Fragment() {
         ).build()
 
         (avatar_rv_avatar.adapter as AvatarItemAdapter).tracker = avatarTracker
+
+        //We also need to observe selection changes in the RecyclerView.
+        avatarTracker?.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
+            override fun onSelectionChanged() {
+                Log.i(TAG, "gedrukt op " + avatarTracker?.selection)
+            }
+        }
+
+
+        )
+
+
+
 
 
         backPackTracker = SelectionTracker.Builder<Long>(
