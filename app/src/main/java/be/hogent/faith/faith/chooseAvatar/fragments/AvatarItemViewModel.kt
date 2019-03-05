@@ -18,6 +18,11 @@ class AvatarItemViewModel : ViewModel() {
     private var _avatarItems = MutableLiveData<List<AvatarItem>>()
 
     private var _selectedItem = MutableLiveData<Long>()
+
+
+    init{
+        _selectedItem.value = -1
+    }
     /**
      * Getter for the avatarItems, but only returns a [LiveData<AvatarItem>] type.
      */
@@ -31,6 +36,12 @@ class AvatarItemViewModel : ViewModel() {
     get() = _selectedItem
 
 
+    fun isSelected() : Boolean{
+        if(_selectedItem.value!!.toInt() == -1){
+            return false
+        }
+        return true
+    }
     /**
      * Sets the selected item (the selected avatars). In this case this is
      * still the position in the rv.
