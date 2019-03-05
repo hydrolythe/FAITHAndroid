@@ -6,6 +6,24 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'composer'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+    dependencies {
+        classpath 'com.github.trevjonez.composer-gradle-plugin:plugin:0.10.0'
+        classpath 'com.android.tools.build:gradle:3.3.1'
+    }
+}
+
+
+composer{
+}
+
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
     compileSdkVersion globalConfig["androidCompileSdkVersion"]
@@ -77,3 +95,4 @@ dependencies {
     androidTestImplementation androidTestDependencies.testRunner
     androidTestImplementation androidTestDependencies.espresso
 }
+
