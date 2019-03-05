@@ -35,45 +35,20 @@
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent"/>
 
-    <androidx.constraintlayout.widget.Guideline
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/guideline"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5"/>
-
     <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:id="@+id/avatar_rv_avatar"
             tools:listitem="@layout/avatar_rv_item"
             android:layout_weight="1"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/avatar_txt_name">
 
     </androidx.recyclerview.widget.RecyclerView>
-
-    <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:id="@+id/avatar_rv_backpack"
-            tools:listitem="@layout/avatar_rv_item"
-            android:layout_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintHorizontal_bias="0.0"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/avatar_txt_name"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
