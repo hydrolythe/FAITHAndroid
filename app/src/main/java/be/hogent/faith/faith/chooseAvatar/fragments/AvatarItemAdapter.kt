@@ -16,7 +16,6 @@ import be.hogent.faith.domain.models.AvatarItem
 import com.bumptech.glide.RequestManager
 import kotlinx.android.synthetic.main.avatar_rv_item.view.*
 
-
 /**
  * Adapter used by the Recyclerview which shows the Avatars in the [AvatarFragment].
  * The Recyclerview center their elements in the middle and snap the elements there.
@@ -77,9 +76,7 @@ class AvatarItemAdapter(
         tracker?.let {
             holder.bind(avatarItems[position], it.isSelected(position.toLong()))
         }
-
     }
-
 
     /**
      * ViewHolder class, containing one image
@@ -91,7 +88,7 @@ class AvatarItemAdapter(
          * Executes the binding of the data to the [ViewHolder]. Uses Glide] to load
          * the image.
          */
-        fun bind(avatarItem: AvatarItem, isActivated : Boolean) {
+        fun bind(avatarItem: AvatarItem, isActivated: Boolean) {
             reqManager.load(avatarItem.imageUrl).into(image)
             itemView.isActivated = isActivated
         }
@@ -101,7 +98,7 @@ class AvatarItemAdapter(
          * Required to use the [SelectionTracker].
          */
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> {
-            var d  = Details()
+            var d = Details()
             d.position = adapterPosition.toLong()
             return d
         }
@@ -122,7 +119,7 @@ class AvatarItemAdapter(
             return position.toLong()
         }
 
-        override fun inSelectionHotspot( e: MotionEvent): Boolean {
+        override fun inSelectionHotspot(e: MotionEvent): Boolean {
             return true
         }
     }
@@ -133,16 +130,14 @@ class AvatarItemAdapter(
      */
     internal class KeyProvider(adapter: RecyclerView.Adapter<*>) : ItemKeyProvider<Long>(ItemKeyProvider.SCOPE_MAPPED) {
 
-
         override fun getKey(position: Int): Long? {
             return position.toLong()
         }
 
-        override fun getPosition( key: Long): Int {
+        override fun getPosition(key: Long): Int {
             return key.toInt()
         }
     }
-
 
     /**
      * This class provides the selection library code necessary access
@@ -160,9 +155,4 @@ class AvatarItemAdapter(
             return null
         }
     }
-
-
-
-
-
 }

@@ -7,7 +7,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import be.hogent.faith.R
 import be.hogent.faith.faith.chooseAvatar.fragments.AvatarFragment
-import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -17,11 +16,11 @@ class NewAvatarTest {
     @Test
     fun newAvatar_launches() {
         launchFragmentInContainer<AvatarFragment>()
-        onView(withId(R.id.avatar_txt_name)).perform(typeText("Reinhard"));
+        onView(withId(R.id.avatar_txt_name)).perform(typeText("Reinhard"))
     }
 
     @Test
-    fun checkCanEnterName(){
-        onView(withId(R.id.avatar_txt_name)).perform(typeText("Reinhard"));
+    fun checkCanEnterName() {
+        onView(withId(R.id.avatar_txt_name)).perform(typeText("Reinhard"))
     }
 }

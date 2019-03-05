@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.chooseAvatar.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,14 +16,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.faith.mainScreen.MainScreenViewModel.Companion.TAG
 import be.hogent.faith.faith.util.getRotation
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_avatar.*
-
-
-
-
 
 /**
  * A [Fragment] subclass which allows the user to choose an AvatarItem and a Backpack.
@@ -40,7 +34,6 @@ class AvatarFragment : Fragment() {
      */
     private lateinit var avatarViewModel: AvatarItemViewModel
 
-
     private var avatarTracker: SelectionTracker<Long>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,24 +45,20 @@ class AvatarFragment : Fragment() {
         }
     }
 
-
     override fun onStart() {
         super.onStart()
         registerAdapters()
         observeViewModel(avatar_rv_avatar)
     }
 
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return  inflater.inflate(R.layout.fragment_avatar, container, false)
-
+        return inflater.inflate(R.layout.fragment_avatar, container, false)
     }
 
     /**
      * Changes the orientation of the recyclerviews, depending on the orientation of the device;
      */
-    private fun setOrientation(){
+    private fun setOrientation() {
         val orientation = (activity as AppCompatActivity).getRotation()
         when (orientation) {
             R.integer.PORTRAIT -> {
@@ -79,11 +68,9 @@ class AvatarFragment : Fragment() {
             R.integer.LANDSCAPE -> {
                 avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
                 avatar_rv_avatar.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
-
             }
         }
     }
-
 
     /**
      * Registers the adapters for the RecyclerViews. Checks for the orientation of the device and sets
@@ -91,7 +78,6 @@ class AvatarFragment : Fragment() {
      */
     private fun registerAdapters() {
         avatarViewModel = ViewModelProviders.of(this).get(AvatarItemViewModel::class.java)
-
 
             val avatarAdapter = AvatarItemAdapter(avatarViewModel, this, Glide.with(this))
             avatar_rv_avatar.adapter = avatarAdapter
@@ -111,25 +97,22 @@ class AvatarFragment : Fragment() {
             ).build()
 
             (avatar_rv_avatar.adapter as AvatarItemAdapter).tracker = avatarTracker
-            if(avatarViewModel.isSelected()){
+            if (avatarViewModel.isSelected()) {
                 avatarTracker?.select(avatarViewModel.selectedItem.value!!)
                 avatar_rv_avatar.smoothScrollToPosition(avatarViewModel.selectedItem.value!!.toInt())
                 avatarAdapter.notifyDataSetChanged()
             }
 
-
-            //We also need to observe selection changes in the RecyclerView.
+            // We also need to observe selection changes in the RecyclerView.
             avatarTracker?.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
                 override fun onSelectionChanged() {
                     val iterator = avatarTracker?.selection?.iterator()
                     if (iterator!!.hasNext()) {
-                        val itemPressed = iterator?.next()
+                        val itemPressed = iterator.next()
                         avatarViewModel.setSelectedItem(itemPressed)
                     }
                 }
             })
-
-
     }
 
     /**

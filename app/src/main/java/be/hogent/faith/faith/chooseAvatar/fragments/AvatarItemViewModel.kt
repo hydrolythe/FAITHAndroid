@@ -19,8 +19,7 @@ class AvatarItemViewModel : ViewModel() {
 
     private var _selectedItem = MutableLiveData<Long>()
 
-
-    init{
+    init {
         _selectedItem.value = -1
     }
     /**
@@ -35,9 +34,8 @@ class AvatarItemViewModel : ViewModel() {
     val selectedItem: LiveData<Long>
     get() = _selectedItem
 
-
-    fun isSelected() : Boolean{
-        if(_selectedItem.value!!.toInt() == -1){
+    fun isSelected(): Boolean {
+        if (_selectedItem.value!!.toInt() == -1) {
             return false
         }
         return true
@@ -46,10 +44,9 @@ class AvatarItemViewModel : ViewModel() {
      * Sets the selected item (the selected avatars). In this case this is
      * still the position in the rv.
      */
-    fun setSelectedItem(selectedItem : Long){
+    fun setSelectedItem(selectedItem: Long) {
         _selectedItem.postValue(selectedItem)
     }
-
 
     init {
         fetchItems()
@@ -68,8 +65,5 @@ class AvatarItemViewModel : ViewModel() {
         avList.add(avatar4)
         avList.add(avatar5)
         _avatarItems.postValue(avList)
-
     }
-
-
 }
