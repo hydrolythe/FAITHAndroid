@@ -1,24 +1,20 @@
 package be.hogent.faith.faith.chooseAvatar.fragments
 
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
-
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
+import be.hogent.faith.R
 import be.hogent.faith.domain.models.AvatarItem
-import be.hogent.faith.faith.util.TAG
-
 import com.bumptech.glide.RequestManager
 import kotlinx.android.synthetic.main.avatar_rv_item.view.*
-import android.view.MotionEvent
-import androidx.recyclerview.selection.ItemKeyProvider
-import be.hogent.faith.R
 
 
 /**
@@ -97,7 +93,6 @@ class AvatarItemAdapter(
          */
         fun bind(avatarItem: AvatarItem, isActivated : Boolean) {
             reqManager.load(avatarItem.imageUrl).into(image)
-            Log.i(TAG,"Selected")
             itemView.isActivated = isActivated
         }
 
@@ -117,7 +112,7 @@ class AvatarItemAdapter(
      */
     internal class Details : ItemDetailsLookup.ItemDetails<Long>() {
 
-         var position: Long = 0
+        var position: Long = 0
 
         override fun getPosition(): Int {
             return position.toInt()
@@ -159,7 +154,7 @@ class AvatarItemAdapter(
             if (view != null) {
                 val viewHolder = recyclerView.getChildViewHolder(view)
                 if (viewHolder is ViewHolder) {
-                    return (viewHolder as ViewHolder).getItemDetails()
+                    return viewHolder.getItemDetails()
                 }
             }
             return null
