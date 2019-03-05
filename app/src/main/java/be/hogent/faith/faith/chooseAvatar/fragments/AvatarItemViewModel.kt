@@ -17,9 +17,7 @@ class AvatarItemViewModel : ViewModel() {
      */
     private var _avatarItems = MutableLiveData<List<AvatarItem>>()
 
-
-    private var _backpackItems = MutableLiveData<List<AvatarItem>>()
-
+    private var _selectedItem = MutableLiveData<Long>()
     /**
      * Getter for the avatarItems, but only returns a [LiveData<AvatarItem>] type.
      */
@@ -27,10 +25,20 @@ class AvatarItemViewModel : ViewModel() {
     get() = _avatarItems
 
     /**
-     * Getter for the backpack items
+     * The item selected in the recyclerview as the avatar.
      */
-    val backpackItems : LiveData<List<AvatarItem>>
-    get() = _backpackItems
+    val selectedItem: LiveData<Long>
+    get() = _selectedItem
+
+
+    /**
+     * Sets the selected item (the selected avatars). In this case this is
+     * still the position in the rv.
+     */
+    fun setSelectedItem(selectedItem : Long){
+        _selectedItem.postValue(selectedItem)
+    }
+
 
     init {
         fetchItems()
@@ -50,18 +58,6 @@ class AvatarItemViewModel : ViewModel() {
         avList.add(avatar5)
         _avatarItems.postValue(avList)
 
-        val backpack1 = Avatar(R.drawable.avatar)
-        val backpack2 = Avatar(R.drawable.avatar2)
-        val backpack3 = Avatar(R.drawable.avatar3)
-        val backpack4 = Avatar(R.drawable.avatar4)
-        val backpack5 = Avatar(R.drawable.avatar5)
-        val bpList = ArrayList<AvatarItem>()
-        bpList.add(backpack1)
-        bpList.add(backpack2)
-        bpList.add(backpack3)
-        bpList.add(backpack4)
-        bpList.add(backpack5)
-        _backpackItems.postValue(bpList)
     }
 
 

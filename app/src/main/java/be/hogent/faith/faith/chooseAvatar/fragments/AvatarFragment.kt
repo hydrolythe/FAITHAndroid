@@ -39,13 +39,12 @@ class AvatarFragment : Fragment() {
 
 
     private var avatarTracker: SelectionTracker<Long>? = null
-    private var backPackTracker: SelectionTracker<Long>? = null
+
 
     override fun onStart() {
         super.onStart()
         registerAdapters()
         observeViewModel(avatar_rv_avatar)
-        observeViewModel(avatar_rv_backpack)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -64,27 +63,19 @@ class AvatarFragment : Fragment() {
             R.integer.PORTRAIT -> {
                 avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
                 avatar_rv_avatar.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-
-                avatar_rv_backpack.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-                avatar_rv_backpack.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             }
             R.integer.LANDSCAPE -> {
                 avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
                 avatar_rv_avatar.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
 
-                avatar_rv_backpack.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
-                avatar_rv_backpack.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
             }
         }
 
         val avatarAdapter = AvatarItemAdapter(avatarViewModel, this, Glide.with(this))
-        val backpackAdapter = AvatarItemAdapter(avatarViewModel, this, Glide.with(this))
         avatar_rv_avatar.adapter = avatarAdapter
-        avatar_rv_backpack.adapter = backpackAdapter
-
 
         LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
-        LinearSnapHelper().attachToRecyclerView(avatar_rv_backpack)
+
 
         avatarTracker = SelectionTracker.Builder<Long>(
             "avatarSelection",
@@ -101,28 +92,13 @@ class AvatarFragment : Fragment() {
         //We also need to observe selection changes in the RecyclerView.
         avatarTracker?.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
             override fun onSelectionChanged() {
-                Log.i(TAG, "gedrukt op " + avatarTracker?.selection)
+                val iterator = avatarTracker?.selection?.iterator()
+                if(iterator!!.hasNext()) {
+                    val itemPressed = iterator?.next()
+                    avatarViewModel.setSelectedItem(itemPressed)
+                }
             }
-        }
-
-
-        )
-
-
-
-
-
-        backPackTracker = SelectionTracker.Builder<Long>(
-            "backpackSelection",
-            avatar_rv_backpack,
-            AvatarItemAdapter.KeyProvider(avatar_rv_backpack.adapter as AvatarItemAdapter),
-            AvatarItemAdapter.DetailsLookup(avatar_rv_backpack),
-            StorageStrategy.createLongStorage()
-        ).withSelectionPredicate(
-           SelectionPredicates.createSelectSingleAnything()
-        ).build()
-
-        (avatar_rv_backpack.adapter as AvatarItemAdapter).tracker = backPackTracker
+        })
 
     }
 
