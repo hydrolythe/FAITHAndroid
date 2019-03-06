@@ -17,10 +17,13 @@ open class EventRepositoryImpl(
     // Passing the database is required to run transactions across multiple DAO's.
     // This is required to insert an event together with all its details.
     private val database: EntityDatabase,
-    private val eventDao: EventDao,
-    private val detailDao: DetailDao,
     private val eventMapper: EventMapper
 ) : EventRepository {
+    // Although the DAO's could be injected, that would mean we inject both the
+    // database and the DAO's, while the latter are made from the former, and are properties of it.
+    // It's cleaner to just inject the database and request the daos during construction.
+    private val eventDao: EventDao = database.eventDao()
+    private val detailDao: DetailDao = database.detailDao()
 
     override fun delete(item: Event): Completable {
         return eventDao.delete(eventMapper.mapToEntity(item))
