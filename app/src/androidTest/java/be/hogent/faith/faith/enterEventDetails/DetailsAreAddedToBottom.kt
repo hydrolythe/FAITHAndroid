@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.enterEventDetails
 
+import android.util.Log
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
@@ -34,8 +35,11 @@ class DetailsAreAddedToBottom {
     fun eventDetails_newPhotoIsAddedToBottomList() {
         // go to event details screen
         onView(withId(R.id.main_second_location)).perform(click())
+        Log.d("Details", "clicked to go to event details screen")
+        Thread.sleep(1500)
         // open camera
         onView(withId(R.id.btn_event_details_camera)).perform(click())
+        Log.d("Details", "Camera opened")
         allowPermissionsIfNeeded(uiDevice)
         // take picture
         onView(withId(R.id.btn_takePhoto_takePhoto)).perform(click())
