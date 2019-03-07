@@ -11,6 +11,7 @@ import be.hogent.faith.database.models.relations.EventWithDetails
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Flowable
+import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
 import java.util.UUID
@@ -21,10 +22,17 @@ class EventRepositoryImplTest {
     private val database = mockk<EntityDatabase>()
     private val eventMapper = EventMapper()
 
-    private val eventRepository = EventRepositoryImpl(database, eventMapper)
+    private lateinit var eventRepository: EventRepositoryImpl
     private val eventUuid = UUID.randomUUID()
     private val eventEntity = createEventEntity(eventUuid)
     private val detailEntities = createEventDetails(eventUuid)
+
+    @Before
+    fun setUp() {
+        every { database.eventDao() } returns eventDao
+        every { database.detailDao() } returns detailDao
+        eventRepository = EventRepositoryImpl(database, eventMapper)
+    }
 
     @Test
     fun eventRepository_existingEvent_succeeds() {
