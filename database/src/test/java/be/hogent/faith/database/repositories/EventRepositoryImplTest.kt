@@ -21,7 +21,7 @@ class EventRepositoryImplTest {
     private val database = mockk<EntityDatabase>()
     private val eventMapper = EventMapper()
 
-    private val eventRepository = EventRepositoryImpl(database, eventDao, detailDao, eventMapper)
+    private val eventRepository = EventRepositoryImpl(database, eventMapper)
     private val eventUuid = UUID.randomUUID()
     private val eventEntity = createEventEntity(eventUuid)
     private val detailEntities = createEventDetails(eventUuid)
