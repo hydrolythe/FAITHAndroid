@@ -38,12 +38,12 @@ script:
  - echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI
  - emulator -avd test -no-skin -no-audio -no-window &
  - android-wait-for-emulator
- - adb shell settings put global window_animation_scale 0 &
- - adb shell settings put global transition_animation_scale 0 &
- - adb shell settings put global animator_duration_scale 0 &
- - adb shell settings get global window_animation_scale 0 &
- - adb shell settings get global transition_animation_scale 0 &
- - adb shell settings get global animator_duration_scale 0 &
+ - adb shell settings put global window_animation_scale 0
+ - adb shell settings put global transition_animation_scale 0
+ - adb shell settings put global animator_duration_scale 0
+ - adb shell settings get global window_animation_scale 0
+ - adb shell settings get global transition_animation_scale 0
+ - adb shell settings get global animator_duration_scale 0
  - adb shell input keyevent 82 &
  - adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
  - ./gradlew connectedCheck
