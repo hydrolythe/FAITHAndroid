@@ -18,6 +18,6 @@ data class EventEntity(
     val uuid: UUID = UUID.randomUUID()
 ) {
     // Can't be part of the constructor arguments or Room won't compile
-    @Ignore
-    val details: MutableList<DetailEntity> = mutableListOf()
+  //  @Ignore
+  //  val details: MutableList<DetailEntity> = mutableListOf()
 }

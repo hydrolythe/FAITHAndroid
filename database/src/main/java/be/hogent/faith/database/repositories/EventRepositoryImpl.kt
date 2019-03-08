@@ -5,6 +5,7 @@ import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
+import be.hogent.faith.database.mappers.EventWithDetailsMapper
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
 import be.hogent.faith.domain.models.Event
@@ -16,7 +17,8 @@ import java.util.UUID
 open class EventRepositoryImpl(
     private val eventDao: EventDao,
     private val detailDao: DetailDao,
-    private val eventMapper: EventMapper
+    private val eventMapper: EventMapper,
+    private val eventWithDetailsMapper : EventWithDetailsMapper
 ) : EventRepository {
 
     override fun delete(item: Event): Completable {
@@ -52,34 +54,13 @@ open class EventRepositoryImpl(
         val eventWithDetails = eventDao.getEventWithDetails(uuid)
 
         return eventWithDetails
-            .map { combine(it) }
-            .map { eventMapper.mapFromEntity(it) }
+              .map { eventWithDetailsMapper.mapFromEntity(it) }
     }
 
     override fun getAll(): Flowable<List<Event>> {
         val eventsWithDetails = eventDao.getAllEventsWithDetails()
         return eventsWithDetails
-            // TODO: learn more rxjava and find a way to not need combineList (map inside a map?)
-            .map { combineList(it) }
-            .map { eventMapper.mapFromEntities(it) }
+              .map { eventWithDetailsMapper.mapFromEntities(it) }
     }
 
-    /**
-     * Takes an EventWithDetailsObject (a Room relation) and
-     * puts it back together into a EventEntity with its details filled in.
-     */
-    private fun combine(eventWithDetails: EventWithDetails): EventEntity {
-        val eventEntity = eventWithDetails.eventEntity!!
-        val detailEntities = eventWithDetails.detailEntities
-        eventEntity.details.addAll(detailEntities)
-        return eventEntity
-    }
-
-    private fun combineList(eventsWithDetails: List<EventWithDetails>): List<EventEntity> {
-        val result = mutableListOf<EventEntity>()
-        eventsWithDetails.forEach {
-            result.add(combine(it))
-        }
-        return result
-    }
 }
