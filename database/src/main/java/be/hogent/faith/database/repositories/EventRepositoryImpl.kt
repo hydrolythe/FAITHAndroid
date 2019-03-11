@@ -5,8 +5,7 @@ import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
-import be.hogent.faith.database.models.EventEntity
-import be.hogent.faith.database.models.relations.EventWithDetails
+import be.hogent.faith.database.mappers.EventWithDetailsMapper
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.repository.EventRepository
 import io.reactivex.Completable
@@ -17,7 +16,8 @@ open class EventRepositoryImpl(
     // Passing the database is required to run transactions across multiple DAO's.
     // This is required to insert an event together with all its details.
     private val database: EntityDatabase,
-    private val eventMapper: EventMapper
+    private val eventMapper: EventMapper,
+    private val eventWithDetailsMapper: EventWithDetailsMapper
 ) : EventRepository {
     // Although the DAO's could be injected, that would mean we inject both the
     // database and the DAO's, while the latter are made from the former, and are properties of it.
@@ -59,34 +59,15 @@ open class EventRepositoryImpl(
     }
 
     override fun get(uuid: UUID): Flowable<Event> {
-        return eventDao.getEventWithDetails(uuid)
-            .map { combine(it) }
-            .map { eventMapper.mapFromEntity(it) }
+        val eventWithDetails = eventDao.getEventWithDetails(uuid)
+
+        return eventWithDetails
+            .map { eventWithDetailsMapper.mapFromEntity(it) }
     }
 
     override fun getAll(): Flowable<List<Event>> {
-        return eventDao.getAllEventsWithDetails()
-            // TODO: learn more rxjava and find a way to not need combineList (map inside a map?)
-            .map { combineList(it) }
-            .map { eventMapper.mapFromEntities(it) }
-    }
-
-    /**
-     * Takes an EventWithDetailsObject (a Room relation) and
-     * puts it back together into a EventEntity with its details filled in.
-     */
-    private fun combine(eventWithDetails: EventWithDetails): EventEntity {
-        val eventEntity = eventWithDetails.eventEntity!!
-        val detailEntities = eventWithDetails.detailEntities
-        eventEntity.details.addAll(detailEntities)
-        return eventEntity
-    }
-
-    private fun combineList(eventsWithDetails: List<EventWithDetails>): List<EventEntity> {
-        val result = mutableListOf<EventEntity>()
-        eventsWithDetails.forEach {
-            result.add(combine(it))
-        }
-        return result
+        val eventsWithDetails = eventDao.getAllEventsWithDetails()
+        return eventsWithDetails
+            .map { eventWithDetailsMapper.mapFromEntities(it) }
     }
 }
