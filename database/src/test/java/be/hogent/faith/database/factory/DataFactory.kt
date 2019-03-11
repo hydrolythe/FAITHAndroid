@@ -1,10 +1,20 @@
 package be.hogent.faith.database.factory
 
 import org.threeten.bp.LocalDateTime
+import java.io.File
+import java.nio.charset.Charset
+import java.util.Random
 import java.util.UUID
 import java.util.concurrent.ThreadLocalRandom
 
 object DataFactory {
+
+    fun randomFile(): File {
+        val array = ByteArray(7) // length is bounded by 7
+        Random().nextBytes(array)
+        val generatedString = String(array, Charset.forName("UTF-8"))
+        return File("testDirectory/$generatedString")
+    }
 
     fun randomUID(): UUID {
         return UUID.randomUUID()

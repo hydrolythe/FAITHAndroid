@@ -1,6 +1,6 @@
 package be.hogent.faith.database.mappers
 
-import be.hogent.faith.database.factory.DataFactory
+import be.hogent.faith.database.factory.EventFactory
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.domain.models.Event
 import org.junit.Assert.assertEquals
@@ -12,7 +12,7 @@ class EventMapperTest {
     @Test
     fun eventMapper_mapFromEntity_noDetails() {
         // Arrange
-        val eventEntity = EventEntity(DataFactory.randomDateTime(), DataFactory.randomString(), DataFactory.randomUID())
+        val eventEntity = EventFactory.makeEventEntity()
         // Act
         val resultingEvent = eventMapper.mapFromEntity(eventEntity)
         // Assert
@@ -23,7 +23,7 @@ class EventMapperTest {
     @Test
     fun eventMapper_mapToEntity_noDetails() {
         // Arrange
-        val event = Event(DataFactory.randomDateTime(), DataFactory.randomString(), DataFactory.randomUID())
+        val event = EventFactory.makeEvent(0)
         // Act
         val resultingEventEntity = eventMapper.mapToEntity(event)
         // Assert
