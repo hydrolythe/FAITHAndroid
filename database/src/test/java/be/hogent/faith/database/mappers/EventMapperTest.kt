@@ -12,7 +12,7 @@ class EventMapperTest {
     @Test
     fun eventMapper_mapFromEntity_noDetails() {
         // Arrange
-       val eventEntity = EventEntity(DataFactory.randomDateTime(), DataFactory.randomString(), DataFactory.randomUID())
+        val eventEntity = EventEntity(DataFactory.randomDateTime(), DataFactory.randomString(), DataFactory.randomUID())
         // Act
         val resultingEvent = eventMapper.mapFromEntity(eventEntity)
         // Assert
@@ -29,7 +29,6 @@ class EventMapperTest {
         // Assert
         assertEqualData(resultingEventEntity, event)
     }
-
 
     private fun assertEqualData(
         entity: EventEntity,

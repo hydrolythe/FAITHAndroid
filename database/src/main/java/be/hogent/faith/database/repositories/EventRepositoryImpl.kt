@@ -1,13 +1,10 @@
 package be.hogent.faith.database.repositories
 
-import androidx.lifecycle.Transformations.map
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.EventWithDetailsMapper
-import be.hogent.faith.database.models.EventEntity
-import be.hogent.faith.database.models.relations.EventWithDetails
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.repository.EventRepository
 import io.reactivex.Completable
@@ -18,7 +15,7 @@ open class EventRepositoryImpl(
     private val eventDao: EventDao,
     private val detailDao: DetailDao,
     private val eventMapper: EventMapper,
-    private val eventWithDetailsMapper : EventWithDetailsMapper
+    private val eventWithDetailsMapper: EventWithDetailsMapper
 ) : EventRepository {
 
     override fun delete(item: Event): Completable {
@@ -54,13 +51,12 @@ open class EventRepositoryImpl(
         val eventWithDetails = eventDao.getEventWithDetails(uuid)
 
         return eventWithDetails
-              .map { eventWithDetailsMapper.mapFromEntity(it) }
+            .map { eventWithDetailsMapper.mapFromEntity(it) }
     }
 
     override fun getAll(): Flowable<List<Event>> {
         val eventsWithDetails = eventDao.getAllEventsWithDetails()
         return eventsWithDetails
-              .map { eventWithDetailsMapper.mapFromEntities(it) }
+            .map { eventWithDetailsMapper.mapFromEntities(it) }
     }
-
 }

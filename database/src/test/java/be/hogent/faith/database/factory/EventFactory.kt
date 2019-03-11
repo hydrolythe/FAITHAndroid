@@ -24,11 +24,10 @@ object EventFactory {
         )
     }
 
-    fun makeEventWithDetailsEntity(nbrOfDetails : Int = 5): EventWithDetails {
+    fun makeEventWithDetailsEntity(nbrOfDetails: Int = 5): EventWithDetails {
         return EventWithDetails().also {
             it.eventEntity = makeEventEntity()
             it.detailEntities = DetailFactory.makeDetailEntityList(nbrOfDetails, it.eventEntity.uuid)
         }
     }
-
 }

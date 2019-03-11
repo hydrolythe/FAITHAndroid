@@ -68,9 +68,7 @@ class EventRepositoryImplTest {
         every { eventWithDetailsMapper.mapFromEntities(entities) } returns models
     }
 
-
     private fun stubMapperToEntity(model: Event, entity: EventEntity) {
         every { eventMapper.mapToEntity(model) } returns entity
     }
-
 }

@@ -1,7 +1,6 @@
 package be.hogent.faith.database.models
 
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import org.threeten.bp.LocalDateTime
@@ -16,8 +15,4 @@ data class EventEntity(
     val title: String,
     @PrimaryKey
     val uuid: UUID = UUID.randomUUID()
-) {
-    // Can't be part of the constructor arguments or Room won't compile
-  //  @Ignore
-  //  val details: MutableList<DetailEntity> = mutableListOf()
-}
+)

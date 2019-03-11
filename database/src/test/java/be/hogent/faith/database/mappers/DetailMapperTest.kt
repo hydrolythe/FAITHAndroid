@@ -6,8 +6,7 @@ import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.domain.models.Detail
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.util.*
-
+import java.util.UUID
 
 class DetailMapperTest {
     private val event = EventFactory.makeEvent()
@@ -29,11 +28,11 @@ class DetailMapperTest {
 
     private fun assertEqualData(
         entity: DetailEntity,
-        model: Detail, entityUuid: UUID
+        model: Detail,
+        entityUuid: UUID
     ) {
         assertEquals(entity.uuid, model.uuid)
         assertEquals(entity.type.toString(), model.detailType.toString())
         assertEquals(entity.eventUuid, entityUuid)
     }
-
 }
