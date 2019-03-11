@@ -1,15 +1,10 @@
 package be.hogent.faith.database.mappers
 
-import be.hogent.faith.database.models.DetailEntity
-import be.hogent.faith.database.models.DetailTypeEntity
+import be.hogent.faith.database.factory.EventFactory
 import be.hogent.faith.database.models.EventEntity
-import be.hogent.faith.domain.models.Detail
-import be.hogent.faith.domain.models.DetailType
 import be.hogent.faith.domain.models.Event
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.threeten.bp.LocalDateTime
-import java.util.UUID
 
 class EventMapperTest {
     private val eventMapper = EventMapper()
@@ -17,76 +12,30 @@ class EventMapperTest {
     @Test
     fun eventMapper_mapFromEntity_noDetails() {
         // Arrange
-        val uuid = UUID.randomUUID()
-        val time = LocalDateTime.of(2019, 10, 28, 7, 33)
-        val title = "title"
-        val eventEntity = EventEntity(time, title, uuid)
-
+        val eventEntity = EventFactory.makeEventEntity()
         // Act
         val resultingEvent = eventMapper.mapFromEntity(eventEntity)
-
         // Assert
-        assertEquals(uuid, resultingEvent.uuid)
-        assertEquals(time, resultingEvent.dateTime)
-        assertEquals(title, resultingEvent.title)
+        assertEqualData(eventEntity, resultingEvent)
         assert(resultingEvent.details.isEmpty())
-    }
-
-    @Test
-    fun eventMapper_mapFromEntity_withDetails() {
-        // Arrange EventEntity
-        val uuid = UUID.randomUUID()
-        val time = LocalDateTime.of(2019, 10, 28, 7, 33)
-        val title = "title"
-        val eventEntity = EventEntity(time, title, uuid)
-        // Arrange DetailEntities
-        val detailUUID = UUID.randomUUID()
-        val detailType = DetailTypeEntity.AUDIO
-        val detailEntity = DetailEntity(detailUUID, eventEntity.uuid, detailType)
-        eventEntity.details.add(detailEntity)
-
-        // Act
-        val resultingEvent = eventMapper.mapFromEntity(eventEntity)
-
-        // Assert
-        assertEquals(1, resultingEvent.details.size)
-        // Checking if the details inside the event are the same is done in the DetailEntityMapperTest
     }
 
     @Test
     fun eventMapper_mapToEntity_noDetails() {
         // Arrange
-        val uuid = UUID.randomUUID()
-        val time = LocalDateTime.of(2019, 10, 28, 7, 33)
-        val title = "title"
-        val event = Event(time, title, uuid)
-
+        val event = EventFactory.makeEvent(0)
         // Act
         val resultingEventEntity = eventMapper.mapToEntity(event)
-
         // Assert
-        assertEquals(uuid, resultingEventEntity.uuid)
-        assertEquals(time, resultingEventEntity.dateTime)
-        assertEquals(title, resultingEventEntity.title)
-        assert(resultingEventEntity.details.isEmpty())
+        assertEqualData(resultingEventEntity, event)
     }
 
-    @Test
-    fun eventMapper_mapToEntity_withDetails() {
-        // Arrange Event
-        val uuid = UUID.randomUUID()
-        val time = LocalDateTime.of(2019, 10, 28, 7, 33)
-        val title = "title"
-        val event = Event(time, title, uuid)
-        // Arrange Detail
-        val detailType = DetailType.AUDIO
-        val detail = Detail(detailType, event.uuid)
-        event.addDetail(detail)
-
-        // Act
-        val resultingEventEntity = eventMapper.mapToEntity(event)
-
-        // Assert
-        assertEquals(1, resultingEventEntity.details.size)
+    private fun assertEqualData(
+        entity: EventEntity,
+        model: Event
+    ) {
+        assertEquals(entity.uuid, model.uuid)
+        assertEquals(entity.dateTime, model.dateTime)
+        assertEquals(entity.title, model.title)
     }
 }

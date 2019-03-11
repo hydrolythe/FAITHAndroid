@@ -33,7 +33,7 @@ class CreateEventUseCaseTest {
         val eventArg = slot<Event>()
         every { repository.insert(capture(eventArg)) } returns Completable.complete()
         val dateTime = LocalDateTime.of(2018, 10, 28, 8, 22)
-        val params = CreateEventUseCase.CreateEventParameters(dateTime, "title")
+        val params = CreateEventUseCase.Params(dateTime, "title")
 
         // Act
         val result = createEventUseCase.buildUseCaseObservable(params)
