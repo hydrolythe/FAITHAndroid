@@ -60,7 +60,9 @@ dependencies {
 
     androidTestImplementation androidTestDependencies.testRunner
     androidTestImplementation androidTestDependencies.espresso
-    androidTestImplementation androidTestDependencies.aac_core
+
+    // Android Architecture Components Core
+    androidTestImplementation "androidx.arch.core:core-testing:$aac_core_version"
 
     // Room components
     implementation databaseDependencies.room
