@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import be.hogent.faith.database.converters.DetailTypeConverter
-import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.converters.LocalDateTimeConverter
 import be.hogent.faith.database.converters.UuidConverter
 import be.hogent.faith.database.daos.DetailDao
@@ -25,7 +24,6 @@ import be.hogent.faith.database.models.EventEntity
     value = [
         DetailTypeConverter::class,
         LocalDateTimeConverter::class,
-        FileConverter::class,
         UuidConverter::class]
 )
 abstract class EntityDatabase : RoomDatabase() {

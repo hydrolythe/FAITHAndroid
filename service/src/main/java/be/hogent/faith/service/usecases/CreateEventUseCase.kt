@@ -11,14 +11,14 @@ import org.threeten.bp.LocalDateTime
 open class CreateEventUseCase(
     private val eventRepository: EventRepository,
     observeScheduler: Scheduler
-) : CompletableUseCase<CreateEventUseCase.Params>(Schedulers.io(), observeScheduler) {
+) : CompletableUseCase<CreateEventUseCase.CreateEventParameters>(Schedulers.io(), observeScheduler) {
 
-    override fun buildUseCaseObservable(params: CreateEventUseCase.Params): Completable {
-        val event = Event(params.dateTime, params.title)
+    override fun buildUseCaseObservable(params: CreateEventUseCase.CreateEventParameters?): Completable {
+        val event = Event(params!!.dateTime, params.title)
         return eventRepository.insert(event)
     }
 
-    class Params(
+    class CreateEventParameters(
         val dateTime: LocalDateTime,
         val title: String
     )

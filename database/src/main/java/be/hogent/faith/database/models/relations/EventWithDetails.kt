@@ -8,9 +8,9 @@ import be.hogent.faith.database.models.EventEntity
 /**
  * Relation class for the [EventEntity] and it's relation with [DetailEntity]s
  */
-class EventWithDetails {
+class EventWithDetails(
     @Embedded
-    lateinit var eventEntity: EventEntity
+    var eventEntity: EventEntity? = null,
     @Relation(parentColumn = "uuid", entityColumn = "eventUuid", entity = DetailEntity::class)
-    lateinit var detailEntities: List<DetailEntity>
-}
+    var detailEntities: List<DetailEntity> = mutableListOf()
+)

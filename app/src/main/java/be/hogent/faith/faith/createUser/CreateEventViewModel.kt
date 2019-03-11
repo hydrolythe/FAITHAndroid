@@ -23,7 +23,7 @@ class CreateEventViewModel(
     private val disposables = CompositeDisposable()
 
     init {
-        val createEventParams = CreateEventUseCase.Params(LocalDateTime.now(), "test")
+        val createEventParams = CreateEventUseCase.CreateEventParameters(LocalDateTime.now(), "test")
         val createEventCompletable = createEventUseCase.execute(createEventParams)
             .subscribe({
                 Log.d(TAG, "Created event successfully")
