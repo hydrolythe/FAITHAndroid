@@ -49,6 +49,14 @@
             app:layout_constraintTop_toBottomOf="@+id/avatar_txt_name">
 
     </androidx.recyclerview.widget.RecyclerView>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/frag_avatar_lbl_to_town"
+            android:id="@+id/avatar_btn_go_to_town"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

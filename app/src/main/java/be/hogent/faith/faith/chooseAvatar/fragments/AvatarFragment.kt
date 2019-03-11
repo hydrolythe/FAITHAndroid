@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.faith.util.getRotation
+import be.hogent.faith.faith.util.getViewModel
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_avatar.*
 
@@ -49,6 +50,16 @@ class AvatarFragment : Fragment() {
         super.onStart()
         registerAdapters()
         observeViewModel(avatar_rv_avatar)
+        avatar_btn_go_to_town.setOnClickListener{
+            avatarViewModel.nextButtonPressed()
+
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        avatar_btn_go_to_town.setOnClickListener(null)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -77,7 +88,8 @@ class AvatarFragment : Fragment() {
      * the LayoutManager for the Adapter based on this.
      */
     private fun registerAdapters() {
-        avatarViewModel = ViewModelProviders.of(this).get(AvatarItemViewModel::class.java)
+        avatarViewModel = getViewModel(AvatarItemViewModel::class.java)
+        //avatarViewModel = ViewModelProviders.of(this).get(AvatarItemViewModel::class.java)
 
             val avatarAdapter = AvatarItemAdapter(avatarViewModel, this, Glide.with(this))
             avatar_rv_avatar.adapter = avatarAdapter
