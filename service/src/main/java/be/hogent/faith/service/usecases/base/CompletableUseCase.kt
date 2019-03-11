@@ -19,13 +19,13 @@ abstract class CompletableUseCase<in Params>(
     /**
      * This should be overridden with the business logic for the use case.
      */
-    abstract fun buildUseCaseObservable(params: Params): Completable
+    abstract fun buildUseCaseObservable(params: Params? = null): Completable
 
     /**
      * Executes the use case.
      * It will run on the specified [subscribeScheduler] and can be observed on the given [observeScheduler].
      */
-    open fun execute(params: Params): Completable {
+    open fun execute(params: Params?): Completable {
         return this.buildUseCaseObservable(params)
             .subscribeOn(subscribeScheduler)
             .observeOn(observeScheduler)

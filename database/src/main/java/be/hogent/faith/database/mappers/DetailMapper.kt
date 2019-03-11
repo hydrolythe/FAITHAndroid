@@ -21,11 +21,11 @@ class DetailMapper(private val event: Event) : Mapper<DetailEntity, Detail> {
 
     override fun mapFromEntity(entity: DetailEntity): Detail {
         val type: DetailType = DetailTypeMapper.mapFromEntity(entity.type)
-        return Detail(type, entity.file, entity.uuid)
+        return Detail(type, entity.uuid)
     }
 
     override fun mapToEntity(model: Detail): DetailEntity {
         val entityType = DetailTypeMapper.mapToEntity(model.detailType)
-        return DetailEntity(entityType, model.file, model.uuid, event.uuid)
+        return DetailEntity(model.uuid, event.uuid, entityType)
     }
 }

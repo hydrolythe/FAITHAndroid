@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import java.io.File
 import java.util.UUID
 
 @Entity(
@@ -19,12 +18,10 @@ import java.util.UUID
     )]
 )
 data class DetailEntity(
-    val type: DetailTypeEntity,
-
-    val file: File,
-
     @PrimaryKey
     val uuid: UUID = UUID.randomUUID(),
 
-    val eventUuid: UUID
+    val eventUuid: UUID,
+
+    val type: DetailTypeEntity
 )
