@@ -1,11 +1,15 @@
 package be.hogent.faith.faith.chooseAvatar.fragments
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Avatar
 import be.hogent.faith.domain.models.AvatarItem
+import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.util.TAG
 
 /**
  * Abstract ViewModel class to represent the [AvatarItem] elements.
@@ -51,6 +55,18 @@ class AvatarItemViewModel : ViewModel() {
     init {
         fetchItems()
     }
+
+    fun nextButtonPressed() {
+        if(_selectedItem.value!!.toInt() > 0){
+            var user = User(avatar = _avatarItems?.value?.get(_selectedItem.value!!.toInt()) as Avatar)
+
+        }else {
+            //TODO: update the user that he has not yet selected an avatar
+        }
+
+        Log.i(TAG, "Pressed the button")
+    }
+
 
     private fun fetchItems() {
         val avatar1 = Avatar(R.drawable.avatar)

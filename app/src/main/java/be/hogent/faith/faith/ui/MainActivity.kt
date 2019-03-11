@@ -1,17 +1,23 @@
 package be.hogent.faith.faith.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.chooseAvatar.fragments.AvatarFragment
+import be.hogent.faith.faith.chooseAvatar.fragments.UserViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
+import be.hogent.faith.faith.util.getViewModel
 import be.hogent.faith.faith.util.replaceFragment
 
 class MainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
     MainScreenFragment.MainScreenNavigationListener {
+
+    private  lateinit var  _userViewModel : UserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +32,11 @@ class MainActivity : AppCompatActivity(),
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
+
+        _userViewModel = getViewModel(UserViewModel::class.java)
     }
+
+
 
     override fun startDrawFragment() {
         replaceFragment(DrawEmotionAvatarFragment.newInstance(R.drawable.outline), R.id.fragment_container)
