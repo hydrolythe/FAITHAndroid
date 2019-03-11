@@ -2,6 +2,7 @@ package be.hogent.faith.database.repositories
 
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
+import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.DetailTypeEntity
@@ -10,6 +11,7 @@ import be.hogent.faith.database.models.relations.EventWithDetails
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Flowable
+import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
 import java.io.File
@@ -18,12 +20,20 @@ import java.util.UUID
 class EventRepositoryImplTest {
     private val detailDao = mockk<DetailDao>()
     private val eventDao = mockk<EventDao>()
+    private val database = mockk<EntityDatabase>()
     private val eventMapper = EventMapper()
 
-    private val eventRepository = EventRepositoryImpl(eventDao, detailDao, eventMapper)
+    private lateinit var eventRepository: EventRepositoryImpl
     private val eventUuid = UUID.randomUUID()
     private val eventEntity = createEventEntity(eventUuid)
     private val detailEntities = createEventDetails(eventUuid)
+
+    @Before
+    fun setUp() {
+        every { database.eventDao() } returns eventDao
+        every { database.detailDao() } returns detailDao
+        eventRepository = EventRepositoryImpl(database, eventMapper)
+    }
 
     @Test
     fun eventRepository_existingEvent_succeeds() {
