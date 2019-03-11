@@ -3,45 +3,47 @@ package be.hogent.faith.database.repositories
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.database.EntityDatabase
+import be.hogent.faith.database.factory.EventFactory
 import be.hogent.faith.database.mappers.EventMapper
-import be.hogent.faith.database.models.DetailEntity
-import be.hogent.faith.database.models.DetailTypeEntity
+import be.hogent.faith.database.mappers.EventWithDetailsMapper
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
+import be.hogent.faith.domain.models.Event
 import io.mockk.every
 import io.mockk.mockk
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import org.junit.Before
 import org.junit.Test
-import org.threeten.bp.LocalDateTime
-import java.util.UUID
 
 class EventRepositoryImplTest {
     private val detailDao = mockk<DetailDao>()
     private val eventDao = mockk<EventDao>()
-    private val database = mockk<EntityDatabase>()
-    private val eventMapper = EventMapper()
+    private val database = mockk<EntityDatabase>(relaxed = true)
+    private val eventMapper = mockk<EventMapper>()
+    private val eventWithDetailsMapper = mockk<EventWithDetailsMapper>()
 
-    private lateinit var eventRepository: EventRepositoryImpl
-    private val eventUuid = UUID.randomUUID()
-    private val eventEntity = createEventEntity(eventUuid)
-    private val detailEntities = createEventDetails(eventUuid)
+    private val eventRepository = EventRepositoryImpl(database, eventMapper, eventWithDetailsMapper)
+
+    private val eventWithDetails = EventFactory.makeEventWithDetailsEntity(2)
+    private val eventUuid = eventWithDetails.eventEntity.uuid
+    private val event = EventFactory.makeEvent(2)
 
     @Before
     fun setUp() {
         every { database.eventDao() } returns eventDao
         every { database.detailDao() } returns detailDao
-        eventRepository = EventRepositoryImpl(database, eventMapper)
     }
 
     @Test
     fun eventRepository_existingEvent_succeeds() {
         every { eventDao.getEventWithDetails(eventUuid) } returns Flowable.just(
-            EventWithDetails(eventEntity, emptyList())
+            eventWithDetails
         )
+        stubMapperFromEntity(event, eventWithDetails)
         eventRepository.get(eventUuid)
             .test()
-            .assertValue { it.uuid == eventUuid }
+            .assertValue(event)
     }
 
     @Test
@@ -54,30 +56,28 @@ class EventRepositoryImplTest {
     }
 
     @Test
-    fun eventRepository_eventWithDetails_returnsWithDetails() {
-        every { eventDao.getEventWithDetails(eventUuid) } returns Flowable.just(
-            EventWithDetails(eventEntity, detailEntities)
-        )
-
-        // TODO: also test details themselves
-        eventRepository.get(eventUuid)
-            .test()
-            .assertValue { event ->
-                event.details.size == 2
-            }
+    fun deleteEventCompletes() {
+        every { eventDao.delete(eventWithDetails.eventEntity) } returns Completable.complete()
+        stubMapperToEntity(event, eventWithDetails.eventEntity)
+        eventRepository.delete(event).test().assertComplete()
     }
 
-    private fun createEventEntity(uuid: UUID): EventEntity {
-        val time = LocalDateTime.of(2019, 10, 28, 7, 33)
-        val description = "title"
-        return EventEntity(time, description, uuid)
+    @Test
+    fun getAll_succeeds() {
+        every { eventDao.getAllEventsWithDetails() } returns Flowable.just(listOf(eventWithDetails))
+        stubMapperFromEntities(listOf(event), listOf(eventWithDetails))
+        eventRepository.getAll().test().assertValue(listOf(event))
     }
 
-    private fun createEventDetails(eventUuid: UUID): List<DetailEntity> {
-        val details = mutableListOf<DetailEntity>()
-        for (i in 1..2) {
-            details.add(DetailEntity(UUID.randomUUID(), eventUuid, DetailTypeEntity.DRAWING))
-        }
-        return details
+    private fun stubMapperFromEntity(model: Event, entity: EventWithDetails) {
+        every { eventWithDetailsMapper.mapFromEntity(entity) } returns model
+    }
+
+    private fun stubMapperFromEntities(models: List<Event>, entities: List<EventWithDetails>) {
+        every { eventWithDetailsMapper.mapFromEntities(entities) } returns models
+    }
+
+    private fun stubMapperToEntity(model: Event, entity: EventEntity) {
+        every { eventMapper.mapToEntity(model) } returns entity
     }
 }
