@@ -57,8 +57,6 @@ class EntityDatabaseTest {
 
         val detail1 = DetailEntity(eventUuid = uuid, type = DetailTypeEntity.VIDEO)
         val detail2 = DetailEntity(eventUuid = uuid, type = DetailTypeEntity.AUDIO)
-        eventEntity.details.add(detail1)
-        eventEntity.details.add(detail2)
 
         eventDao.insert(eventEntity)
             .andThen(detailDao.insert(detail1))
@@ -81,8 +79,6 @@ class EntityDatabaseTest {
 
         val detail1 = DetailEntity(eventUuid = uuid, type = DetailTypeEntity.VIDEO)
         val detail2 = DetailEntity(eventUuid = uuid, type = DetailTypeEntity.AUDIO)
-        eventEntity.details.add(detail1)
-        eventEntity.details.add(detail2)
 
         val arrangeCompletable = eventDao.insert(eventEntity)
             .andThen(detailDao.insert(detail1))
