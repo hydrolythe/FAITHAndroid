@@ -9,7 +9,9 @@ object EventFactory {
     fun makeEvent(nbrOfDetails: Int = 5): Event {
         val event = Event(
             DataFactory.randomDateTime(),
-            DataFactory.randomString(), DataFactory.randomUID()
+            DataFactory.randomString(),
+            DataFactory.randomFile(),
+            DataFactory.randomUID()
         )
         repeat(nbrOfDetails) {
             event.addDetail(DetailFactory.makeDetail())
@@ -20,7 +22,9 @@ object EventFactory {
     fun makeEventEntity(): EventEntity {
         return EventEntity(
             DataFactory.randomDateTime(),
-            DataFactory.randomString(), DataFactory.randomUID()
+            DataFactory.randomString(),
+            DataFactory.randomFile(),
+            DataFactory.randomUID()
         )
     }
 

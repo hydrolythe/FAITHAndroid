@@ -8,12 +8,20 @@ import java.util.UUID
 
 object DetailFactory {
     fun makeDetailEntity(eventUuid: UUID): DetailEntity {
-        return DetailEntity(DataFactory.randomUID(),
-            eventUuid, DetailTypeEntity.DRAWING)
+        return DetailEntity(
+            DetailTypeEntity.DRAWING,
+            DataFactory.randomFile(),
+            DataFactory.randomUID(),
+            eventUuid
+        )
     }
 
     fun makeDetail(): Detail {
-        return Detail(DetailType.DRAWING, DataFactory.randomUID())
+        return Detail(
+            DetailType.DRAWING,
+            DataFactory.randomFile(),
+            DataFactory.randomUID()
+        )
     }
 
     fun makeDetailEntityList(count: Int, eventUuid: UUID): List<DetailEntity> {
