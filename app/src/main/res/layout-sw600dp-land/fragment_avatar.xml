@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/naam_hint"
                 android:inputType="textPersonName"
-                android:text="@{user.userName}"
+                android:text="@={user.userName}"
                 android:id="@+id/avatar_txt_name"
                 app:layout_constraintBaseline_toBaselineOf="@id/avatar_tv_name"
                 tools:text="@tools:sample/full_names"

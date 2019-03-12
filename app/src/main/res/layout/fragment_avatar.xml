@@ -17,7 +17,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/naam_hint"
                 android:inputType="textPersonName"
-                android:text="@{user.userName}"
+                android:text="@={user.userName}"
                 android:ems="10"
                 android:id="@+id/avatar_txt_name"
                 android:layout_marginTop="8dp"
