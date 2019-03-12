@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
@@ -10,14 +11,16 @@ import be.hogent.faith.faith.chooseAvatar.fragments.UserViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
+import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.getViewModel
 import be.hogent.faith.faith.util.replaceFragment
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
     MainScreenFragment.MainScreenNavigationListener {
 
-    private  lateinit var  _userViewModel : UserViewModel
+    private  val _userViewModel : UserViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +36,15 @@ class MainActivity : AppCompatActivity(),
                 .commit()
         }
 
-        _userViewModel = getViewModel(UserViewModel::class.java)
     }
 
+    /**
+     * Sets the [User] who is working with the application.
+     */
+    fun setUser(user : User){
+        _userViewModel.setUser(user)
+        Log.i(TAG,"Set the user which username ${user.username}")
+    }
 
 
     override fun startDrawFragment() {

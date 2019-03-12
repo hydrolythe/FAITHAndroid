@@ -13,7 +13,7 @@ class UserViewModel : ViewModel() {
     private var _user = MutableLiveData<User>()
 
     /**
-     * Returns a LiveData object for the user.
+     * Returns a LiveData object for the [User].
      */
     val user: LiveData<User>
         get() = _user

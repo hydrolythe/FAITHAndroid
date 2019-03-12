@@ -26,14 +26,14 @@ class ChooseAvatarItemViewModelTest {
 
     @Test
     fun avatarItemViewModel_setUserName() {
-        viewModel.setUserName(naam)
+        viewModel.userName.postValue(naam)
         Assert.assertEquals(naam,getValue(viewModel.userName))
     }
 
     @Test
     fun avatarItemViewModel_setSelectedItem(){
         viewModel.setSelectedItem(selection.toLong())
-        Assert.assertEquals(selection, getValue(viewModel.selectedItem))
+        Assert.assertEquals(selection, getValue(viewModel.selectedItem).toInt())
     }
 
 }

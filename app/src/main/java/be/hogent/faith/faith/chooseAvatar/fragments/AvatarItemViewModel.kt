@@ -2,6 +2,7 @@ package be.hogent.faith.faith.chooseAvatar.fragments
 
 import android.util.Log
 import android.widget.Toast
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,8 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Avatar
 import be.hogent.faith.domain.models.AvatarItem
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.ui.MainActivity
+import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TAG
 
 /**
@@ -23,30 +26,34 @@ class AvatarItemViewModel : ViewModel() {
 
     private var _selectedItem = MutableLiveData<Long>()
 
+    private val _nextButtonClicked = SingleLiveEvent<Unit>()
+
+
+    val nextButtonClicked: LiveData<Unit>
+        get() = _nextButtonClicked
+
     /**
      * User name of the user
      */
-    private var _userName = MutableLiveData<String>()
+    var userName = MutableLiveData<String>()
 
     init {
         //Set initially to -1 = no selection has been provided.
         _selectedItem.value = -1
     }
+
     /**
      * Getter for the avatarItems, but only returns a [LiveData<AvatarItem>] type.
      */
     val avatarItems: LiveData<List<AvatarItem>>
-    get() = _avatarItems
+        get() = _avatarItems
 
     /**
      * The item selected in the recyclerview as the avatar.
      */
     val selectedItem: LiveData<Long>
-    get() = _selectedItem
+        get() = _selectedItem
 
-
-    val userName : LiveData<String>
-    get() = _userName
 
     fun isSelected(): Boolean {
         if (_selectedItem.value!!.toInt() == -1) {
@@ -54,6 +61,7 @@ class AvatarItemViewModel : ViewModel() {
         }
         return true
     }
+
     /**
      * Sets the selected item (the selected avatars). In this case this is
      * still the position in the rv.
@@ -62,22 +70,26 @@ class AvatarItemViewModel : ViewModel() {
         _selectedItem.postValue(selectedItem)
     }
 
-    fun setUserName(userName : String){
-        _userName.postValue(userName)
-    }
 
     init {
         fetchItems()
     }
 
     fun nextButtonPressed() {
-        if(_selectedItem.value!!.toInt() > 0){
-            var user = User(avatar = _avatarItems?.value?.get(_selectedItem.value!!.toInt()) as Avatar)
 
-        }else {
+
+        if (_selectedItem.value!!.toInt() >= 0) {
+            var user = User(
+                avatar = _avatarItems.value?.get(_selectedItem.value!!.toInt()) as Avatar,
+                username = "test"
+            )
+            Log.i(TAG, "Found ${userName.value}")
+            Log.i(TAG,"Found item : ${selectedItem.value}")
+        } else {
             //TODO: update the user that he has not yet selected an avatar
         }
         Log.i(TAG, "Pressed the button")
+        _nextButtonClicked.call()
     }
 
 

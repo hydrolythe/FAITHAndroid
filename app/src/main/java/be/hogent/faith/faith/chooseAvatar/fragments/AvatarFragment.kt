@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.chooseAvatar.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.selection.SelectionPredicates
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.selection.StorageStrategy
@@ -17,11 +17,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.Avatar
+import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.ui.MainActivity
+import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.getRotation
-import be.hogent.faith.faith.util.getViewModel
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_avatar.*
 import org.koin.android.viewmodel.ext.android.viewModel
+
 
 /**
  * A [Fragment] subclass which allows the user to choose an AvatarItem and a Backpack.
@@ -55,13 +59,12 @@ class AvatarFragment : Fragment() {
         super.onStart()
         registerAdapters()
 
+        avatarViewModel.nextButtonClicked.observe(this,
+            Observer<Any> { generateNewUser() });
+
+
     }
 
-    override fun onPause() {
-        super.onPause()
-
-        avatar_btn_go_to_town.setOnClickListener(null)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: be.hogent.faith.databinding.FragmentAvatarBinding =
@@ -128,6 +131,10 @@ class AvatarFragment : Fragment() {
         })
     }
 
+
+    fun generateNewUser() {
+        Log.i(TAG,"Set the user")
+    }
 
     /**
      * We need to save the instance state of the tracker, otherwise
