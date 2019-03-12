@@ -2,9 +2,12 @@ package be.hogent.faith.storage
 
 import android.content.Context
 import android.graphics.Bitmap
+import be.hogent.faith.domain.models.Detail
 import be.hogent.faith.domain.models.Event
 import io.reactivex.Observable
 import io.reactivex.Single
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import java.io.File
 import java.io.IOException
 
@@ -20,7 +23,7 @@ class StorageRepository(private val context: Context) {
      * Stores the bitmap on the device's storage.
      * It will be put in the context.filesDir/event.uuid/images/ folder
      *
-     * @param the fileName under which the bitmap will be saved
+     * @param fileName fileName under which the bitmap will be saved
      * @return a Single<File> with the path derived from the event's dateTime
      */
     fun storeBitmap(bitmap: Bitmap, event: Event, fileName: String): Single<File> {
@@ -43,5 +46,34 @@ class StorageRepository(private val context: Context) {
         val imageDirectory = File(context.filesDir, "events/${event.uuid}/images")
         imageDirectory.mkdirs()
         return imageDirectory
+    }
+
+    private fun createEventAudioFolder(event: Event): File {
+        val imageDirectory = File(context.filesDir, "events/${event.uuid}/audio")
+        imageDirectory.mkdirs()
+        return imageDirectory
+    }
+
+    /**
+     * Returns a saveFile with the name in the following format:
+     * day_month_year_hour_minute_second_millis
+     */
+    private fun createSaveFileName(): String {
+        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("d_M_y_k_m_s_A"))
+    }
+
+    /**
+     * Stores a file (probably an [Event]'s [Detail] by moving it from a temporary file in the device's cache
+     * directory to permanent storage.
+     *
+     * @param tempStorageFile the (cache) file in which the recording is currently stored
+     */
+    fun storeAudioRecording(tempStorageFile: File, event: Event): Single<File> {
+        return Single.fromCallable {
+            val storedFile = File(createEventAudioFolder(event), createSaveFileName())
+            tempStorageFile.copyTo(target = storedFile, overwrite = true)
+            tempStorageFile.delete()
+            storedFile
+        }
     }
 }

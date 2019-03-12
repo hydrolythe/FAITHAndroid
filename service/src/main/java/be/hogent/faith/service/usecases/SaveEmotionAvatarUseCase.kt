@@ -28,7 +28,6 @@ class SaveEmotionAvatarUseCase(
                 params.event,
                 EMOTION_AVATAR_FILENAME
             ).doOnSuccess {
-                System.out.println("Test SUCCESS")
                 params.event.emotionAvatar = it
             }
         )
