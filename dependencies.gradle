@@ -32,6 +32,7 @@ ext {
     threeTenABP_version = '1.1.2'
 
     rxjava_version = '2.2.7'
+    rxkotlin_version = '2.3.0'
     rxjava_android_version = '2.1.1'
 
     room_runtime_version = '2.1.0-alpha04'
@@ -48,7 +49,7 @@ ext {
     commonDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
 
-            rxjava            : "io.reactivex.rxjava2:rxjava:$rxjava_version",
+            rxjava            : "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version",
             rxandroid         : "io.reactivex.rxjava2:rxandroid:$rxjava_android_version",
 
             threeTenABP       : "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version",
