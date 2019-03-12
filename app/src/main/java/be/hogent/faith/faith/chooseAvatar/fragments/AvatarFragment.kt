@@ -37,6 +37,9 @@ class AvatarFragment : Fragment() {
      */
     private val avatarViewModel: AvatarItemViewModel by viewModel()
 
+    /**
+     * Object used to track the selection on the Recyclerview
+     */
     private var avatarTracker: SelectionTracker<Long>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,11 +97,8 @@ class AvatarFragment : Fragment() {
 
         val avatarAdapter = AvatarItemAdapter(avatarViewModel, this, Glide.with(this))
         avatar_rv_avatar.adapter = avatarAdapter
-
         LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
-
         setOrientation()
-
         avatarTracker = SelectionTracker.Builder<Long>(
             "avatarSelection",
             avatar_rv_avatar,
