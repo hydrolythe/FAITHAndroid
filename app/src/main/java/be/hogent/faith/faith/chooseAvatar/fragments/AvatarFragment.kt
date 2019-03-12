@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -20,6 +21,7 @@ import be.hogent.faith.faith.util.getRotation
 import be.hogent.faith.faith.util.getViewModel
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_avatar.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * A [Fragment] subclass which allows the user to choose an AvatarItem and a Backpack.
@@ -33,7 +35,7 @@ class AvatarFragment : Fragment() {
     /**
      * ViewModel used for the avatarItems.
      */
-    private lateinit var avatarViewModel: AvatarItemViewModel
+    private val avatarViewModel: AvatarItemViewModel by viewModel()
 
     private var avatarTracker: SelectionTracker<Long>? = null
 
@@ -49,11 +51,7 @@ class AvatarFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         registerAdapters()
-        observeViewModel(avatar_rv_avatar)
-        avatar_btn_go_to_town.setOnClickListener{
-            avatarViewModel.nextButtonPressed()
 
-        }
     }
 
     override fun onPause() {
@@ -63,7 +61,10 @@ class AvatarFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_avatar, container, false)
+        val binding: be.hogent.faith.databinding.FragmentAvatarBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_avatar, container, false)
+        binding.user = avatarViewModel
+        return binding.root
     }
 
     /**
@@ -88,56 +89,45 @@ class AvatarFragment : Fragment() {
      * the LayoutManager for the Adapter based on this.
      */
     private fun registerAdapters() {
-        avatarViewModel = getViewModel(AvatarItemViewModel::class.java)
+
         //avatarViewModel = ViewModelProviders.of(this).get(AvatarItemViewModel::class.java)
 
-            val avatarAdapter = AvatarItemAdapter(avatarViewModel, this, Glide.with(this))
-            avatar_rv_avatar.adapter = avatarAdapter
+        val avatarAdapter = AvatarItemAdapter(avatarViewModel, this, Glide.with(this))
+        avatar_rv_avatar.adapter = avatarAdapter
 
-            LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
+        LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
 
         setOrientation()
 
-            avatarTracker = SelectionTracker.Builder<Long>(
-                "avatarSelection",
-                avatar_rv_avatar,
-                AvatarItemAdapter.KeyProvider(avatar_rv_avatar.adapter as AvatarItemAdapter),
-                AvatarItemAdapter.DetailsLookup(avatar_rv_avatar),
-                StorageStrategy.createLongStorage()
-            ).withSelectionPredicate(
-                SelectionPredicates.createSelectSingleAnything()
-            ).build()
+        avatarTracker = SelectionTracker.Builder<Long>(
+            "avatarSelection",
+            avatar_rv_avatar,
+            AvatarItemAdapter.KeyProvider(avatar_rv_avatar.adapter as AvatarItemAdapter),
+            AvatarItemAdapter.DetailsLookup(avatar_rv_avatar),
+            StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+            SelectionPredicates.createSelectSingleAnything()
+        ).build()
 
-            (avatar_rv_avatar.adapter as AvatarItemAdapter).tracker = avatarTracker
-            if (avatarViewModel.isSelected()) {
-                avatarTracker?.select(avatarViewModel.selectedItem.value!!)
-                avatar_rv_avatar.smoothScrollToPosition(avatarViewModel.selectedItem.value!!.toInt())
-                avatarAdapter.notifyDataSetChanged()
-            }
+        (avatar_rv_avatar.adapter as AvatarItemAdapter).tracker = avatarTracker
+        if (avatarViewModel.isSelected()) {
+            avatarTracker?.select(avatarViewModel.selectedItem.value!!)
+            avatar_rv_avatar.smoothScrollToPosition(avatarViewModel.selectedItem.value!!.toInt())
+            avatarAdapter.notifyDataSetChanged()
+        }
 
-            // We also need to observe selection changes in the RecyclerView.
-            avatarTracker?.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
-                override fun onSelectionChanged() {
-                    val iterator = avatarTracker?.selection?.iterator()
-                    if (iterator!!.hasNext()) {
-                        val itemPressed = iterator.next()
-                        avatarViewModel.setSelectedItem(itemPressed)
-                    }
+        // We also need to observe selection changes in the RecyclerView.
+        avatarTracker?.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
+            override fun onSelectionChanged() {
+                val iterator = avatarTracker?.selection?.iterator()
+                if (iterator!!.hasNext()) {
+                    val itemPressed = iterator.next()
+                    avatarViewModel.setSelectedItem(itemPressed)
                 }
-            })
-    }
-
-    /**
-     * Allows this fragment to observe the item included in the adapter and sets the Visibility of the
-     * RecyclerView to [View.VISIBLE] if this was not already the case.
-     */
-    private fun observeViewModel(recyclerView: RecyclerView) {
-        avatarViewModel.avatarItems.observe(this, Observer {
-            if (it != null) {
-                recyclerView.visibility = View.VISIBLE
             }
         })
     }
+
 
     /**
      * We need to save the instance state of the tracker, otherwise
