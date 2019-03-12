@@ -23,7 +23,13 @@ class AvatarItemViewModel : ViewModel() {
 
     private var _selectedItem = MutableLiveData<Long>()
 
+    /**
+     * User name of the user
+     */
+    private var _userName = MutableLiveData<String>()
+
     init {
+        //Set initially to -1 = no selection has been provided.
         _selectedItem.value = -1
     }
     /**
@@ -37,6 +43,10 @@ class AvatarItemViewModel : ViewModel() {
      */
     val selectedItem: LiveData<Long>
     get() = _selectedItem
+
+
+    val userName : LiveData<String>
+    get() = _userName
 
     fun isSelected(): Boolean {
         if (_selectedItem.value!!.toInt() == -1) {
@@ -52,6 +62,10 @@ class AvatarItemViewModel : ViewModel() {
         _selectedItem.postValue(selectedItem)
     }
 
+    fun setUserName(userName : String){
+        _userName.postValue(userName)
+    }
+
     init {
         fetchItems()
     }
@@ -63,7 +77,6 @@ class AvatarItemViewModel : ViewModel() {
         }else {
             //TODO: update the user that he has not yet selected an avatar
         }
-
         Log.i(TAG, "Pressed the button")
     }
 
