@@ -3,6 +3,7 @@ package be.hogent.faith.faith.recordAudio
 import android.Manifest
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,9 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentRecordAudioBinding
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
-import be.hogent.faith.faith.recordAudio.RecordAudioViewModel.RecordingStatus.*
+import be.hogent.faith.service.usecases.SaveAudioRecordingUseCase
+import io.reactivex.disposables.CompositeDisposable
+import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
@@ -32,15 +35,20 @@ class RecordAudioFragment : Fragment() {
 
     private var hasAudioRecordingPermission = false
 
-    private lateinit var saveFile: File
+    private lateinit var tempRecordingFile: File
 
     private lateinit var recorder: MediaRecorder
+
+    private var saveAudioUseCase: SaveAudioRecordingUseCase = get()
+
+    private var disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //TODO: change with filepath from UC
-        saveFile = File(context!!.filesDir, "testAudioSave")
+        // The recording is temporarily saved in the cache directory, and then moved to
+        // permanent storage. More info in the [SaveAudioRecordingUseCase].
+        tempRecordingFile = File(context!!.cacheDir, "TempAudioRecording.3gpp")
     }
 
     private fun initializeRecorder() {
@@ -51,7 +59,7 @@ class RecordAudioFragment : Fragment() {
             recorder.apply {
                 setAudioSource(MediaRecorder.AudioSource.MIC)
                 setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-                setOutputFile(saveFile.path)
+                setOutputFile(tempRecordingFile.path)
                 setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT)
                 prepare()
             }
@@ -70,6 +78,7 @@ class RecordAudioFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        initializeRecorder()
         startListeners()
     }
 
@@ -77,6 +86,7 @@ class RecordAudioFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         recorder.release()
+        disposables.clear()
     }
 
     private fun hasRecordingPermissions(): Boolean {
@@ -97,14 +107,39 @@ class RecordAudioFragment : Fragment() {
     }
 
     private fun startListeners() {
-        recordAudioViewModel.recordingStatus.observe(this, Observer { recordingStatus ->
-            when (recordingStatus) {
-                RECORDING -> startRecordingAudio()
-                PAUSED -> recorder.stop() //TODO: find fix for lower SDK: pause is supported from 24
-                STOPPED -> recorder.stop() //TODO: images dissapear when clicking (visibility conditions have to be checked)
-                INITIAL -> initializeRecorder()
+        recordAudioViewModel.recordButtonClicked.observe(this, Observer {
+            startRecordingAudio()
+        })
+        recordAudioViewModel.stopButtonClicked.observe(this, Observer {
+            stopAndSaveRecording()
+        })
+        recordAudioViewModel.pauseButtonClicked.observe(this, Observer {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                recorder.pause()
+            } else {
+                //TODO: move disabled state to ViewModel
+                Toast.makeText(context, "Pauzeren wordt door je apparaat niet ondersteund", Toast.LENGTH_SHORT).show()
             }
         })
+        recordAudioViewModel.restartButtonClicked.observe(this, Observer {
+            recorder.reset()
+        })
+    }
+
+    private fun stopAndSaveRecording() {
+        recorder.stop()
+        val disposable = saveAudioUseCase.execute(
+            SaveAudioRecordingUseCase.SaveAudioRecordingParams(
+                tempRecordingFile,
+                eventDetailsViewModel.event.value!!
+            )
+        ).subscribe({
+            Toast.makeText(context, "Opgeslagen!", Toast.LENGTH_SHORT).show()
+
+        }, {
+            Toast.makeText(context, "Fout bij opslaan! ${it.message}", Toast.LENGTH_SHORT).show()
+        })
+        disposables.add(disposable)
     }
 
     private fun startRecordingAudio() {
@@ -114,6 +149,7 @@ class RecordAudioFragment : Fragment() {
             recorder.start()
         }
     }
+
 
     companion object {
         fun newInstance(): RecordAudioFragment {
