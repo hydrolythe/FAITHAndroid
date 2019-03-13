@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentRecordAudioBinding
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
+import be.hogent.faith.faith.recordAudio.RecordAudioViewModel.RecordingStatus.PAUSED
 import be.hogent.faith.service.usecases.SaveAudioRecordingUseCase
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.ext.android.get
@@ -49,19 +50,20 @@ class RecordAudioFragment : Fragment() {
         // The recording is temporarily saved in the cache directory, and then moved to
         // permanent storage. More info in the [SaveAudioRecordingUseCase].
         tempRecordingFile = File(context!!.cacheDir, "TempAudioRecording.3gpp")
+
+        recordAudioViewModel.pauseSupported.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
     }
 
     private fun initializeRecorder() {
         if (!hasRecordingPermissions()) {
             requestPermissions(arrayOf(android.Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
         } else {
-            recorder = MediaRecorder()
-            recorder.apply {
-                setAudioSource(MediaRecorder.AudioSource.MIC)
-                setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-                setOutputFile(tempRecordingFile.path)
-                setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT)
-                prepare()
+            recorder = MediaRecorder().also {
+                it.setAudioSource(MediaRecorder.AudioSource.MIC)
+                it.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                it.setOutputFile(tempRecordingFile.path)
+                it.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT)
+                it.prepare()
             }
         }
     }
@@ -108,7 +110,16 @@ class RecordAudioFragment : Fragment() {
 
     private fun startListeners() {
         recordAudioViewModel.recordButtonClicked.observe(this, Observer {
-            startRecordingAudio()
+            if (recordAudioViewModel.recordingStatus == PAUSED) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    recorder.resume()
+                } else {
+                    Toast.makeText(context, "Pauzeren wordt door je apparaat niet ondersteund", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } else {
+                startRecordingAudio()
+            }
         })
         recordAudioViewModel.stopButtonClicked.observe(this, Observer {
             stopAndSaveRecording()
@@ -117,7 +128,7 @@ class RecordAudioFragment : Fragment() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 recorder.pause()
             } else {
-                //TODO: move disabled state to ViewModel
+                //TODO: pauzeerknop niet tonen bij te lage SKD?
                 Toast.makeText(context, "Pauzeren wordt door je apparaat niet ondersteund", Toast.LENGTH_SHORT).show()
             }
         })
