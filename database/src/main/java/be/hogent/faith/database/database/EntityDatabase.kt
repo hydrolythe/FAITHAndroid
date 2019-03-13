@@ -11,13 +11,16 @@ import be.hogent.faith.database.converters.LocalDateTimeConverter
 import be.hogent.faith.database.converters.UuidConverter
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
+import be.hogent.faith.database.daos.UserDao
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.EventEntity
+import be.hogent.faith.database.models.UserEntity
 
 @Database(
     entities = [
         EventEntity::class,
-        DetailEntity::class],
+        DetailEntity::class,
+        UserEntity::class],
     version = 1,
     exportSchema = true
 )
@@ -31,6 +34,7 @@ import be.hogent.faith.database.models.EventEntity
 abstract class EntityDatabase : RoomDatabase() {
     abstract fun eventDao(): EventDao
     abstract fun detailDao(): DetailDao
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile
