@@ -16,40 +16,46 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentRecordAudioBinding
+import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.recordAudio.RecordAudioViewModel.RecordingStatus.PAUSED
-import be.hogent.faith.service.usecases.SaveAudioRecordingUseCase
 import io.reactivex.disposables.CompositeDisposable
-import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.io.File
 
 const val REQUESTCODE_AUDIO = 12
 
 class RecordAudioFragment : Fragment() {
+    /**
+     * The recording is temporarily saved in the cache directory, and then moved to
+     * permanent storage. More info in the [SaveAudioRecordingUseCase].
+     */
+    private lateinit var tempRecordingFile: File
 
-    private val recordAudioViewModel: RecordAudioViewModel by viewModel()
+    private val recordAudioViewModel: RecordAudioViewModel by viewModel {
+        parametersOf(
+            //TODO: change to use current event. Use UUID or Event itself?
+            tempRecordingFile, Event()
+        )
+    }
     private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
 
     private lateinit var recordAudioBinding: FragmentRecordAudioBinding
 
     private var hasAudioRecordingPermission = false
 
-    private lateinit var tempRecordingFile: File
-
     private lateinit var recorder: MediaRecorder
 
-    private var saveAudioUseCase: SaveAudioRecordingUseCase = get()
 
     private var disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // The recording is temporarily saved in the cache directory, and then moved to
-        // permanent storage. More info in the [SaveAudioRecordingUseCase].
         tempRecordingFile = File(context!!.cacheDir, "TempAudioRecording.3gpp")
+
 
         recordAudioViewModel.pauseSupported.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
     }
@@ -114,8 +120,7 @@ class RecordAudioFragment : Fragment() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     recorder.resume()
                 } else {
-                    Toast.makeText(context, "Pauzeren wordt door je apparaat niet ondersteund", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(context, R.string.error_pause_not_supported, Toast.LENGTH_SHORT).show()
                 }
             } else {
                 startRecordingAudio()
@@ -129,7 +134,7 @@ class RecordAudioFragment : Fragment() {
                 recorder.pause()
             } else {
                 //TODO: pauzeerknop niet tonen bij te lage SKD?
-                Toast.makeText(context, "Pauzeren wordt door je apparaat niet ondersteund", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.error_pause_not_supported, Toast.LENGTH_SHORT).show()
             }
         })
         recordAudioViewModel.restartButtonClicked.observe(this, Observer {
@@ -139,18 +144,7 @@ class RecordAudioFragment : Fragment() {
 
     private fun stopAndSaveRecording() {
         recorder.stop()
-        val disposable = saveAudioUseCase.execute(
-            SaveAudioRecordingUseCase.SaveAudioRecordingParams(
-                tempRecordingFile,
-                eventDetailsViewModel.event.value!!
-            )
-        ).subscribe({
-            Toast.makeText(context, "Opgeslagen!", Toast.LENGTH_SHORT).show()
-
-        }, {
-            Toast.makeText(context, "Fout bij opslaan! ${it.message}", Toast.LENGTH_SHORT).show()
-        })
-        disposables.add(disposable)
+        SaveAudioRecordingDialogFragment.newInstance(tempRecordingFile).showNow(fragmentManager!!, null)
     }
 
     private fun startRecordingAudio() {
