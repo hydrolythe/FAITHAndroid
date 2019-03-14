@@ -47,15 +47,10 @@ class TakePhotoFragment : Fragment() {
 
     private lateinit var fotoapparat: Fotoapparat
 
-    private lateinit var saveFile: File
-
     private var takeEventPhotoUseCase: TakeEventPhotoUseCase = get()
 
     private var disposables = CompositeDisposable()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         takePhotoBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_take_photo, container, false)
