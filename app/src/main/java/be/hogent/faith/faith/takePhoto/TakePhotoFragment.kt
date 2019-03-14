@@ -55,11 +55,6 @@ class TakePhotoFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // TODO: remove once all fragments are tied together
-        saveFile = File("testfoto")
-        arguments?.let {
-            saveFile = it.getSerializable(ARG_SAVEFILE) as File
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
