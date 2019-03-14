@@ -36,7 +36,7 @@ class RecordAudioFragment : Fragment() {
 
     private val recordAudioViewModel: RecordAudioViewModel by viewModel {
         parametersOf(
-            //TODO: change to use current event. Use UUID or Event itself?
+            // TODO: change to use current event. Use UUID or Event itself?
             tempRecordingFile, Event()
         )
     }
@@ -48,14 +48,12 @@ class RecordAudioFragment : Fragment() {
 
     private lateinit var recorder: MediaRecorder
 
-
     private var disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         tempRecordingFile = File(context!!.cacheDir, "TempAudioRecording.3gpp")
-
 
         recordAudioViewModel.pauseSupported.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
     }
@@ -79,7 +77,6 @@ class RecordAudioFragment : Fragment() {
         recordAudioBinding.apply {
             recordAudioViewModel = this@RecordAudioFragment.recordAudioViewModel
             lifecycleOwner = this@RecordAudioFragment
-
         }
         return recordAudioBinding.root
     }
@@ -89,7 +86,6 @@ class RecordAudioFragment : Fragment() {
         initializeRecorder()
         startListeners()
     }
-
 
     override fun onStop() {
         super.onStop()
@@ -133,7 +129,7 @@ class RecordAudioFragment : Fragment() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 recorder.pause()
             } else {
-                //TODO: pauzeerknop niet tonen bij te lage SKD?
+                // TODO: pauzeerknop niet tonen bij te lage SKD?
                 Toast.makeText(context, R.string.error_pause_not_supported, Toast.LENGTH_SHORT).show()
             }
         })
@@ -154,7 +150,6 @@ class RecordAudioFragment : Fragment() {
             recorder.start()
         }
     }
-
 
     companion object {
         fun newInstance(): RecordAudioFragment {

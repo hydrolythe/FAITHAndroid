@@ -25,15 +25,13 @@ class SaveAudioRecordingDialogFragment : DialogFragment() {
 
     private lateinit var tempRecordingFile: File
 
-
     private val recordAudioViewModel: RecordAudioViewModel by viewModel {
         parametersOf(
-            //TODO: change to use current event. Use UUID or Event itself?
+            // TODO: change to use current event. Use UUID or Event itself?
             tempRecordingFile, Event()
         )
     }
     private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
-
 
     companion object {
         fun newInstance(tempRecordingFile: File): SaveAudioRecordingDialogFragment {
@@ -56,7 +54,6 @@ class SaveAudioRecordingDialogFragment : DialogFragment() {
         saveDialogBinding.apply {
             recordAudioViewModel = this@SaveAudioRecordingDialogFragment.recordAudioViewModel
             lifecycleOwner = this@SaveAudioRecordingDialogFragment
-
         }
         return saveDialogBinding.root
     }
