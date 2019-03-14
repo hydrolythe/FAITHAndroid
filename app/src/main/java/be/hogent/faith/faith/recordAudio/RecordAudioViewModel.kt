@@ -15,7 +15,6 @@ class RecordAudioViewModel(
     private val event: Event
 ) : ViewModel() {
 
-
     private val _recordingStatus = MutableLiveData<RecordingStatus>()
     val recordingStatus: LiveData<RecordingStatus>
         get() = _recordingStatus
@@ -67,7 +66,6 @@ class RecordAudioViewModel(
     val recordingSaveFailed: LiveData<String>
         get() = _recordingSaveFailed
 
-
     fun onRecordButtonClicked() {
         _recordingStatus.value = RecordingStatus.RECORDING
         _recordButtonClicked.call()
@@ -93,7 +91,7 @@ class RecordAudioViewModel(
     }
 
     fun onSaveButtonClicked() {
-        //TODO: check if name was entered, cannot be empty!
+        // TODO: check if name was entered, cannot be empty!
         val disposable = saveAudioUseCase.execute(
             SaveAudioRecordingUseCase.SaveAudioRecordingParams(
                 tempRecordingFile,

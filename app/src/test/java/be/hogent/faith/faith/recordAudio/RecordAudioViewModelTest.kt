@@ -15,11 +15,9 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.io.File
-import java.io.IOException
 
 class RecordAudioViewModelTest {
     private lateinit var viewModel: RecordAudioViewModel
-
 
     private val saveAudioRecordingUseCase = mockk<SaveAudioRecordingUseCase>()
     private val tempRecordingFile = mockk<File>()

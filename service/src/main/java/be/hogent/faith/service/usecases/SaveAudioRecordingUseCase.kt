@@ -19,7 +19,7 @@ class SaveAudioRecordingUseCase(
         return Completable.fromSingle(
             storageRepository.storeAudioRecording(params.tempStorageFile, params.event)
                 .doOnSuccess { storedFile ->
-                    //TODO: also save name once this property is added to Detail
+                    // TODO: also save name once this property is added to Detail
                     params.event.addDetail(Detail(DetailType.AUDIO, storedFile))
                 })
     }
