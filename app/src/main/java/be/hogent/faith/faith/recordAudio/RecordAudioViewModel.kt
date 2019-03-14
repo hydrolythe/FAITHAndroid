@@ -33,6 +33,7 @@ class RecordAudioViewModel(
     init {
         _recordingStatus.value = RecordingStatus.INITIAL
         pauseSupported.value = false
+        recordingName.value = ""
     }
 
     private val _recordButtonClicked = SingleLiveEvent<Unit>()
