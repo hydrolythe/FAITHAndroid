@@ -67,7 +67,7 @@ class TakeEventPhotoUseCaseTest {
 
         val resultingDetail = event.details.first()
         assertTrue(resultingDetail.detailType == DetailType.PICTURE)
-        //TODO: add check for name
+        // TODO: add check for name
     }
 
     @Test
