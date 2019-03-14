@@ -14,6 +14,8 @@ import java.io.File
  *
  * TODO: Currently only supports internal storage.
  */
+const val PICTURE_EXTENSION = "png"
+
 class StorageRepository(private val context: Context) {
 
     /**
@@ -25,7 +27,7 @@ class StorageRepository(private val context: Context) {
      */
     fun storeBitmap(bitmap: Bitmap, event: Event, fileName: String): Single<File> {
         return Single.fromCallable {
-            val storedFile = File(createEventImageFolder(event), "$fileName.PNG")
+            val storedFile = File(createEventImageFolder(event), "$fileName.$PICTURE_EXTENSION")
             storedFile.outputStream().use {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
             }
@@ -39,15 +41,31 @@ class StorageRepository(private val context: Context) {
         return imageDirectory
     }
 
-    fun createDetailSaveFile(event: Event): File {
-        return File(createEventImageFolder(event), "${createSaveFileName()}.png")
+    /**
+     * Returns a saveFile with the name in the following format:
+     * [name]-day_month_year_hour_minute_second_millis
+     *
+     * @param name An optional name that will be prepended to the timestamp
+     */
+    private fun createSaveFileName(name: String): String {
+        return name + LocalDateTime.now().format(DateTimeFormatter.ofPattern("M-y-k_m_s_A"))
     }
 
     /**
-     * Returns a saveFile with the name in the following format:
-     * day_month_year_hour_minute_second_millis
+     *  Moves a photo detail from an [event] from the [tempPhotoFile] where it is currently stored to
+     *  a permanent location on the device's storage.
+     *
+     * @param tempPhotoFile the [File] where the photo is now. Probably somewhere in the cache.
+     * @param event the [Event] this photo will be added to as a detail (not by this function).
+     *          Used to store the photo in a folder specific for the event.
+     * @param photoName an optional name for the photo. Will be used for the filename.
      */
-    private fun createSaveFileName(): String {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("d_M_y_Ka_m_s_A"))
+    fun movePhotoFromTempStorage(tempPhotoFile: File, event: Event, photoName: String = "photo"): Single<File> {
+        return Single.fromCallable {
+            val storedFile = File(createEventImageFolder(event), "${createSaveFileName(photoName)}.$PICTURE_EXTENSION")
+            tempPhotoFile.copyTo(target = storedFile, overwrite = true)
+            tempPhotoFile.delete()
+            storedFile
+        }
     }
 }
