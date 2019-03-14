@@ -28,4 +28,10 @@
     <string name="description_restart_recording">Herstart opname</string>
     <string name="description_stop_recording">Stop opname</string>
     <string name="description_pause_recording">Pauzeer opname</string>
+    <string name="lbl_detail_name">Naam:</string>
+    <string name="hint_audio_recording_name">Een naam voor deze opname</string>
+    <string name="save">Opslaan</string>
+    <string name="toast_saved_successfully">Je opname werd opgeslagen</string>
+    <string name="toast_save_failed">Er ging iets fout bij het opslaan van je opname</string>
+    <string name="error_pause_not_supported">Pauzeren wordt door je apparaat niet ondersteund</string>
 </resources>
