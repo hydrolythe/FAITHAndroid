@@ -113,4 +113,5 @@ class RecordAudioViewModelTest {
         verify { failedObserver.onChanged(errorMessage) }
         verify { successObserver wasNot Called }
     }
+    //TODO: add test that requires name to be filled in
 }

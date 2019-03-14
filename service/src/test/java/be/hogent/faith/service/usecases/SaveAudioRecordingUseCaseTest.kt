@@ -39,7 +39,7 @@ class SaveAudioRecordingUseCaseTest {
 
         // Act
         saveAudioRecordingUseCase.buildUseCaseObservable(
-            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event)
+            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event, eventName)
         ).test()
             .assertNoErrors()
             .assertComplete()
