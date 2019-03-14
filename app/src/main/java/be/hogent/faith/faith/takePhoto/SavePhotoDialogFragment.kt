@@ -26,7 +26,7 @@ class SavePhotoDialogFragment : DialogFragment() {
 
     private val takePhotoViewModel: TakePhotoViewModel by viewModel {
         parametersOf(
-            //TODO: change to use current event. Use UUID or Event itself?
+            // TODO: change to use current event. Use UUID or Event itself?
             tempRecordingFile, Event()
         )
     }
@@ -52,7 +52,6 @@ class SavePhotoDialogFragment : DialogFragment() {
         saveDialogBinding.apply {
             takePhotoViewModel = this@SavePhotoDialogFragment.takePhotoViewModel
             lifecycleOwner = this@SavePhotoDialogFragment
-
         }
         return saveDialogBinding.root
     }

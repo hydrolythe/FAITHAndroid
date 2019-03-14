@@ -33,42 +33,41 @@ class TakePhotoViewModelTest {
 
     @Test
     fun takePhotoVM_onTakePhotoButtonClicked_callsListeners() {
-        //Arrange
+        // Arrange
         val observer = mockk<Observer<Unit>>()
         every { observer.onChanged(any()) } returns Unit
         viewModel.takePhotoButtonClicked.observeForever(observer)
 
-        //Act
+        // Act
         viewModel.onTakePhotoButtonClicked()
 
-        //Assert
+        // Assert
         verify { observer.onChanged(any()) }
     }
 
     @Test
     fun takePhotoVM_onGoToEmotionAvatarButtonClicked_callsListeners() {
-        //Arrange
+        // Arrange
         val observer = mockk<Observer<Unit>>(relaxed = true)
         viewModel.emotionAvatarButtonClicked.observeForever(observer)
 
-        //Act
+        // Act
         viewModel.onGoToEmotionAvatarButtonClicked()
 
-        //Assert
+        // Assert
         verify { observer.onChanged(any()) }
     }
 
-
     @Test
     fun takePhotoVM_onCancelButtonClicked_callsListeners() {
-        //Arrange
+        // Arrange
         val observer = mockk<Observer<Unit>>(relaxed = true)
         viewModel.cancelButtonClicked.observeForever(observer)
 
-        //Act
+        // Act
         viewModel.onCancelButtonClicked()
 
-        //Assert
+        // Assert
         verify { observer.onChanged(any()) }
     }
 

@@ -21,7 +21,7 @@ class TakeEventPhotoUseCase(
         return Completable.fromSingle(
             storageRepository.movePhotoFromTempStorage(params.tempPhotoFile, params.event, params.photoName)
                 .doOnSuccess { storedFile ->
-                    //TODO: add name once this property is added to Detail
+                    // TODO: add name once this property is added to Detail
                     params.event.addDetail(Detail(DetailType.PICTURE, storedFile))
                 }
         )

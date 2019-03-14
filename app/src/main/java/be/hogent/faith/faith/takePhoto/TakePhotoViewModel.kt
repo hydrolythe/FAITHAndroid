@@ -15,7 +15,7 @@ class TakePhotoViewModel(
     private val event: Event
 ) : ViewModel() {
 
-   val photoName = MutableLiveData<String>()
+    val photoName = MutableLiveData<String>()
 
     private val _takePhotoButtonClicked = SingleLiveEvent<Unit>()
     val takePhotoButtonClicked: LiveData<Unit>
@@ -60,7 +60,7 @@ class TakePhotoViewModel(
         ).subscribe(
             {
                 _photoSavedSuccessFully.call()
-                //TOOD: main screen should listen to this event to update recyclerview
+                // TOOD: main screen should listen to this event to update recyclerview
             },
             {
                 _recordingSaveFailed.postValue(it.message)

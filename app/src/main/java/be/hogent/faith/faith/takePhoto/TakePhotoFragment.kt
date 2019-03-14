@@ -45,7 +45,6 @@ class TakePhotoFragment : Fragment() {
 
     private lateinit var tempPhotoSaveFile: File
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         takePhotoBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_take_photo, container, false)
         takePhotoBinding.photoViewModel = takePhotoViewModel
