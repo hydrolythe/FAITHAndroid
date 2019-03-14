@@ -21,6 +21,7 @@ class SaveAudioRecordingUseCaseTest {
     private val repository: StorageRepository = mockk(relaxed = true)
 
     private val tempStorageFile = File("cacheDir/tempAudioRecording.3gp")
+    private val eventName = "TestName"
     private lateinit var event: Event
 
     @Before
@@ -54,7 +55,7 @@ class SaveAudioRecordingUseCaseTest {
 
         // Act
         saveAudioRecordingUseCase.buildUseCaseObservable(
-            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event)
+            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event, eventName)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -64,6 +65,7 @@ class SaveAudioRecordingUseCaseTest {
 
         val resultingDetail = event.details.first()
         assertTrue(resultingDetail.detailType == DetailType.AUDIO)
+        // TODO: also check name once it is added to the Detail class
     }
 
     @Test
@@ -73,7 +75,7 @@ class SaveAudioRecordingUseCaseTest {
 
         // Act
         saveAudioRecordingUseCase.buildUseCaseObservable(
-            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event)
+            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event, eventName)
         ).test()
             .assertError(IOException::class.java)
 
