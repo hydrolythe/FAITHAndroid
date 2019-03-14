@@ -16,15 +16,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
+import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.util.TAG
-import be.hogent.faith.service.usecases.TakeEventPhotoUseCase
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.logcat
-import io.reactivex.disposables.CompositeDisposable
-import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.io.File
 
 /**
@@ -32,24 +31,19 @@ import java.io.File
  */
 const val REQUESTCODE_CAMERA = 1
 
-/**
- * Key for this Fragments saveFile argument
- */
-const val ARG_SAVEFILE: String = "SAVEFILE_LOCATION"
-
 class TakePhotoFragment : Fragment() {
     private lateinit var navigation: TakePhotoNavigationListener
 
-    private val takePhotoViewModel: TakePhotoViewModel by viewModel()
+    private val takePhotoViewModel: TakePhotoViewModel by viewModel {
+        parametersOf(tempPhotoSaveFile, Event())
+    }
     private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
 
     private lateinit var takePhotoBinding: FragmentTakePhotoBinding
 
-    private lateinit var fotoapparat: Fotoapparat
+    private lateinit var fotoApparat: Fotoapparat
 
-    private var takeEventPhotoUseCase: TakeEventPhotoUseCase = get()
-
-    private var disposables = CompositeDisposable()
+    private lateinit var tempPhotoSaveFile: File
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -57,7 +51,7 @@ class TakePhotoFragment : Fragment() {
         takePhotoBinding.photoViewModel = takePhotoViewModel
         takePhotoBinding.lifecycleOwner = this
 
-        fotoapparat = Fotoapparat(
+        fotoApparat = Fotoapparat(
             context = this.context!!,
             view = takePhotoBinding.cameraView,
             logger = logcat(),
@@ -66,10 +60,15 @@ class TakePhotoFragment : Fragment() {
         return takePhotoBinding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        tempPhotoSaveFile = File(requireContext().cacheDir, "tempPhoto.PNG")
+    }
+
     override fun onStart() {
         super.onStart()
         if (hasCameraPermissions()) {
-            fotoapparat.start()
+            fotoApparat.start()
         } else {
             requestPermissions(arrayOf(android.Manifest.permission.CAMERA), REQUESTCODE_CAMERA)
         }
@@ -86,20 +85,9 @@ class TakePhotoFragment : Fragment() {
     }
 
     private fun takeAndSavePicture() {
-        val disposable = takeEventPhotoUseCase.execute(
-            TakeEventPhotoUseCase.Params(FotoApparatFacade(fotoapparat), eventDetailsViewModel.event.value!!)
-        ).subscribe({
-            if (this.activity != null) {
-                Toast.makeText(this.activity, R.string.frag_takePhoto_saveSucces, Toast.LENGTH_SHORT).show()
-                eventDetailsViewModel.updateEvent()
-            }
-        }, {
-            if (this.activity != null) {
-                Toast.makeText(this.activity, R.string.frag_takePhoto_saveFailed, Toast.LENGTH_SHORT).show()
-                Log.e(TAG, "Couldn't save image: ${it.message}")
-            }
-        })
-        disposables.add(disposable)
+        fotoApparat.takePicture().saveToFile(tempPhotoSaveFile).whenAvailable {
+            SavePhotoDialogFragment.newInstance(tempPhotoSaveFile).showNow(fragmentManager!!, null)
+        }
     }
 
     private fun hasCameraPermissions(): Boolean {
@@ -113,7 +101,7 @@ class TakePhotoFragment : Fragment() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == REQUESTCODE_CAMERA) {
             if (grantResults[0] == PERMISSION_GRANTED) {
-                fotoapparat.start()
+                fotoApparat.start()
             } else {
                 Toast.makeText(this.context, R.string.permission_take_picture, Toast.LENGTH_LONG).show()
             }
@@ -123,7 +111,7 @@ class TakePhotoFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         try {
-            fotoapparat.stop()
+            fotoApparat.stop()
         } catch (e: IllegalStateException) {
             Log.i(
                 TAG, "Stopped fotoApparat but wasn't even started. Probably because the permission to start" +
@@ -140,7 +128,6 @@ class TakePhotoFragment : Fragment() {
     }
 
     companion object {
-
         fun newInstance(): TakePhotoFragment {
             return TakePhotoFragment()
         }

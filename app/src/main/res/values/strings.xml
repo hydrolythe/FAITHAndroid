@@ -33,4 +33,10 @@
     <string name="description_addPhoto">Foto toevoegen</string>
     <string name="description_addAudio">Geluidsopname toevoegen</string>
     <string name="description_addDrawing">Tekening toevoegen</string>
+    <string name="error_save_photo">Er ging iets mis bij het opslaan van je foto.</string>
+    <string name="hint_photo_name">een naam voor je foto</string>
+    <string name="lbl_name">Naam:</string>
+    <string name="lbl_save">Opslaan</string>
+    <string name="toast_foto_saved_success">Je foto werd opgeslagen!</string>
+    <string name="toast_save_photo_failed">Er ging iets fout bij het opslaan van je foto.</string>
 </resources>
