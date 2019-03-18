@@ -11,7 +11,6 @@ import io.reactivex.Single
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.io.IOException
 
@@ -26,7 +25,7 @@ class TakeEventPhotoUseCaseTest {
 
     @Before
     fun setUp() {
-        event = Event(dateTime = LocalDateTime.of(2019, 2, 19, 16, 58))
+        event = Event()
         takeEventPhotoUseCase = TakeEventPhotoUseCase(storageRepository, observer)
     }
 
