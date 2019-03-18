@@ -12,4 +12,8 @@ data class User(
     fun addEvent(event: Event) {
         _events += event
     }
+
+    fun getEvent(eventUUID: UUID): Event? {
+        return _events.find { it.uuid == eventUUID }
+    }
 }

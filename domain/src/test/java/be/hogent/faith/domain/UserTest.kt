@@ -6,6 +6,9 @@ import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import org.threeten.bp.LocalDateTime
+import java.io.File
+import java.util.UUID
 
 class UserTest {
     private lateinit var user: User
@@ -32,5 +35,22 @@ class UserTest {
         }
 
         Assert.assertEquals(10, user.events.size)
+    }
+
+    @Test
+    fun user_getEventReturnsEvent() {
+        val eventUUID = UUID.randomUUID()
+        val event = Event(mockk<LocalDateTime>(), "test", mockk<File>(), eventUUID)
+        user.addEvent(event)
+        val result = user.getEvent(eventUUID)
+        Assert.assertEquals(result, event)
+    }
+
+    @Test
+    fun user_getEventReturnsNullIfNotFound() {
+        val event = Event(mockk<LocalDateTime>(), "test", mockk<File>(), UUID.randomUUID())
+        user.addEvent(event)
+        val result = user.getEvent(UUID.randomUUID())
+        Assert.assertNull(result)
     }
 }
