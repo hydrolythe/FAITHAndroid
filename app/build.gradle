@@ -51,44 +51,51 @@ android {
     }
 }
 
-    dependencies {
-        implementation project(':domain')
-        implementation project(':service')
-        implementation project(':database')
-        implementation project(':draw')
-        implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-        def commonDependencies = rootProject.ext.commonDependencies
-        def injectionDependencies = rootProject.ext.injectionDependencies
-        def androidTestDependencies = rootProject.ext.androidTestDependencies
-        def androidDependencies = rootProject.ext.androidDependencies
-        def uiDependencies = rootProject.ext.uiDependencies
+dependencies {
+    implementation project(':domain')
+    implementation project(':service')
+    implementation project(':database')
+    implementation project(':storage')
+    implementation project(':draw')
 
-        implementation commonDependencies.kotlin
-        implementation commonDependencies.threeTenABP
-        implementation commonDependencies.rxjava
-        implementation commonDependencies.rxandroid
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-        implementation injectionDependencies.koin
-        implementation injectionDependencies.koin_viewModel
+    def commonDependencies = rootProject.ext.commonDependencies
+    def injectionDependencies = rootProject.ext.injectionDependencies
+    def androidTestDependencies = rootProject.ext.androidTestDependencies
+    def androidDependencies = rootProject.ext.androidDependencies
+    def uiDependencies = rootProject.ext.uiDependencies
 
-        implementation androidDependencies.appcompat
-        implementation androidDependencies.lifecycle
+    implementation commonDependencies.kotlin
+    implementation commonDependencies.threeTenABP
+    implementation commonDependencies.rxjava
+    implementation commonDependencies.rxandroid
 
-        implementation uiDependencies.glide
-        kapt uiDependencies.glidecompiler
-        implementation uiDependencies.recyclerview
-        implementation uiDependencies.constraintLayout
-        implementation uiDependencies.fragment
-        implementation uiDependencies.rv_selection
-        //TESTING
-        debugImplementation androidTestDependencies.fragmentTesting
+    implementation injectionDependencies.koin
+    implementation injectionDependencies.koin_viewModel
+    
+    implementation androidDependencies.appcompat
+    implementation androidDependencies.lifecycle
+
+    implementation uiDependencies.glide
+    kapt uiDependencies.glidecompiler
+    implementation uiDependencies.recyclerview
+    implementation uiDependencies.rv_selection
+    implementation uiDependencies.constraintLayout
+    implementation uiDependencies.fragment
+
+    //TESTING
+    //Required to test fragments in isolation
+    debugImplementation 'androidx.test:monitor:1.1.1'
+    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha04'
+
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.mockk
+    testImplementation androidTestDependencies.aac_core
+
+    androidTestImplementation androidTestDependencies.testRunner
+    androidTestImplementation androidTestDependencies.espresso
+}
 
 
-        testImplementation testDependencies.junit
-        testImplementation testDependencies.mockk
-        testImplementation testDependencies.coreTesting
-
-        androidTestImplementation androidTestDependencies.testRunner
-        androidTestImplementation androidTestDependencies.espresso
-    }

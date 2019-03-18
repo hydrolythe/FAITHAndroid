@@ -71,6 +71,7 @@ ext {
     androidTestDependencies = [
             testRunner: "androidx.test.ext:junit:$testrunner_version",
             espresso  : "androidx.test.espresso:espresso-core:$espresso_core_version",
+            aac_core  : "androidx.arch.core:core-testing:$aac_core_version",
             fragmentTesting: "androidx.fragment:fragment-testing:$fragment_testing_version"
     ]
 

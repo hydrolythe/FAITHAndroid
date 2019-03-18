@@ -6,9 +6,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
+import com.divyanshu.draw.widget.DrawView
+import com.divyanshu.draw.widget.MyPath
+import com.divyanshu.draw.widget.PaintOptions
 
 /**
  * ViewModel for the [DrawEmotionAvatarFragment].
+ * It mainly holds the state of the [DrawView].
  */
 class DrawEmotionViewModel : ViewModel() {
 
@@ -20,14 +24,26 @@ class DrawEmotionViewModel : ViewModel() {
     val selectedLineWidth: LiveData<LineWidth>
         get() = _selectedLineWidth
 
-    private val _eraserSelected = MutableLiveData<Boolean>()
-
     private val _undoClicked = SingleLiveEvent<Unit>()
     val undoClicked: LiveData<Unit>
         get() = _undoClicked
 
+    /**
+     * Contains all paths that have been drawn on the [DrawView].
+     * This belongs here because it's part of the UI state, just like how you would save text that's already been typed.
+     *
+     * There is no listener/observer construction required to maintain a two-way binding between the ViewModel and the
+     * View because we create the object here and it gets passed to the [DrawView]. All changes made when drawing on the
+     * View are done on that same object. When the [DrawView] gets recreated, the original object remains and is passed
+     * again to the new View.
+     * If we'd make the paths in the [DrawView] and then push them here, an observer pattern would have been required.
+     */
+    private val _drawnPaths = MutableLiveData<LinkedHashMap<MyPath, PaintOptions>>()
+    val drawnPaths: LiveData<LinkedHashMap<MyPath, PaintOptions>>
+        get() = _drawnPaths
+
     init {
-        _eraserSelected.value = false
+        _drawnPaths.value = LinkedHashMap()
         _selectedColor.value = Color.BLACK
         _selectedLineWidth.value = LineWidth.MEDIUM
     }
