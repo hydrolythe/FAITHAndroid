@@ -2,16 +2,22 @@ package be.hogent.faith.faith.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil.setContentView
 import be.hogent.faith.R
+import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
+import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.UUID
 
+private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
+    OverviewEventsFragment.OverviewEventsNavigationListener,
     MainScreenFragment.MainScreenNavigationListener {
 
     // This ViewModel is for the [DrawEmotionAvatarFragment], but has been defined here because it should
@@ -22,6 +28,7 @@ class MainActivity : AppCompatActivity(),
     // Saving the fragment as a property doesn't work because the property doesn't survive configuration changes.
     // Saving the fragment somewhere in the backstack might work, but would require complicated backstack management.
     private val DrawEmotionViewModel by viewModel<DrawEmotionViewModel>()
+    private val userViewModel by viewModel<UserViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +50,14 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun startEventDetailsFragment() {
-        replaceFragment(EventDetailsFragment.newInstance(), R.id.fragment_container)
+        replaceFragment(EventDetailsFragment.newInstance(null), R.id.fragment_container)
+    }
+
+    override fun startOverviewEventsFragment() {
+        replaceFragment(OverviewEventsFragment.newInstance(), R.id.fragment_container)
+    }
+
+    override fun startEventDetailsFragment(eventUuid: UUID) {
+        replaceFragment(EventDetailsFragment.newInstance(eventUuid), R.id.fragment_container)
     }
 }
