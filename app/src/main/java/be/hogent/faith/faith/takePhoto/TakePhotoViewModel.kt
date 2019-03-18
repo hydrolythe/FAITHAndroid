@@ -11,11 +11,16 @@ import java.io.File
 
 class TakePhotoViewModel(
     private val takeEventPhotoUseCase: TakeEventPhotoUseCase,
-    private val tempPhotoFile: File,
     private val event: Event
 ) : ViewModel() {
 
     val photoName = MutableLiveData<String>()
+
+    /**
+     * The file where the photo is temporarily saved.
+     * Will be filled in by the [TakePhotoFragment] once the picture was taken.
+     */
+    lateinit var tempPhotoFile: File
 
     private val _takePhotoButtonClicked = SingleLiveEvent<Unit>()
     val takePhotoButtonClicked: LiveData<Unit>
@@ -59,8 +64,9 @@ class TakePhotoViewModel(
             TakeEventPhotoUseCase.Params(tempPhotoFile, event, photoName.value!!)
         ).subscribe(
             {
-                _photoSavedSuccessFully.call()
-                // TOOD: main screen should listen to this event to update recyclerview
+                _photoSavedSuccessFully.value = Unit
+                // Name has to be cleared so future pictures start with an empty name
+                photoName.value = ""
             },
             {
                 _recordingSaveFailed.postValue(it.message)

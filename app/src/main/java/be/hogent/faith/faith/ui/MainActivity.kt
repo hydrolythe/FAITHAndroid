@@ -9,8 +9,11 @@ import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
 import be.hogent.faith.faith.takePhoto.TakePhotoFragment
+import be.hogent.faith.faith.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.util.replaceFragment
+import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class MainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
@@ -18,7 +21,7 @@ class MainActivity : AppCompatActivity(),
     TakePhotoFragment.TakePhotoNavigationListener {
 
     // This ViewModel is for the [DrawEmotionAvatarFragment], but has been defined here because it should
-    // survive the activitiy's lifecycle, not just its own.
+    // survive the activity's lifecycle, not just its own.
     // Reason: every time [startDrawFragment] is called, a new Fragment is created. In order to retain what has
     // already been painted, the paths are saved in the [DrawEmotionViewModel]. Because we save it here, we can
     // give every new [DrawEmotionAvatarFragment] that same ViewModel, resulting in the drawing being fully restored.
@@ -31,11 +34,18 @@ class MainActivity : AppCompatActivity(),
     // They all require the same event object so it has to be shared.
     // This may cause issues when entering multiple events. A possible solution might be to have an Activity for each
     // of the 4 main functions of the app.
-    private val eventDetailsViewModel by viewModel<EventDetailsViewModel>()
+    lateinit var eventDetailsViewModel: EventDetailsViewModel
+
+    lateinit var takePhotoViewModel: TakePhotoViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        eventDetailsViewModel = getViewModel()
+        takePhotoViewModel = getViewModel {
+            parametersOf(eventDetailsViewModel.event.value)
+        }
 
         // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
         // savedInstanceState is null when the activity is first created, and not null when being recreated.

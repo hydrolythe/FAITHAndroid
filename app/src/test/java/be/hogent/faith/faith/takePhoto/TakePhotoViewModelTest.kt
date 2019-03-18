@@ -28,7 +28,7 @@ class TakePhotoViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = TakePhotoViewModel(takeEventPhotoUseCase, tempPhotoFile, event)
+        viewModel = TakePhotoViewModel(takeEventPhotoUseCase, event)
     }
 
     @Test
@@ -73,13 +73,16 @@ class TakePhotoViewModelTest {
 
     @Test
     fun takePhotoVM_saveButtonClicked_callsUseCase() {
+        // Arrange
         val params = slot<TakeEventPhotoUseCase.Params>()
         every { takeEventPhotoUseCase.execute(capture(params)) } returns Completable.complete()
+        viewModel.tempPhotoFile = mockk()
+
         // Act
         viewModel.onSaveButtonClicked()
 
+        // Assert
         verify { takeEventPhotoUseCase.execute(any()) }
-
         assertEquals(event, params.captured.event)
     }
 
@@ -91,6 +94,7 @@ class TakePhotoViewModelTest {
         every { takeEventPhotoUseCase.execute(any()) } returns Completable.complete()
         viewModel.photoSavedSuccessFully.observeForever(successObserver)
         viewModel.recordingSaveFailed.observeForever(failedObserver)
+        viewModel.tempPhotoFile = mockk()
 
         // Act
         viewModel.onSaveButtonClicked()
@@ -106,6 +110,7 @@ class TakePhotoViewModelTest {
         val successObserver = mockk<Observer<Unit>>(relaxed = true)
         val failedObserver = mockk<Observer<String>>(relaxed = true)
         val errorMessage = "Something failed"
+        viewModel.tempPhotoFile = mockk()
 
         every { takeEventPhotoUseCase.execute(any()) } returns Completable.error(RuntimeException(errorMessage))
 
