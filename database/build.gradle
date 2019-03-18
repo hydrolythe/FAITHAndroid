@@ -50,22 +50,24 @@ dependencies {
 
     implementation commonDependencies.kotlin
     implementation commonDependencies.threeTenABP
-
-    implementation injectionDependencies.koin
-
-    testImplementation testDependencies.junit
-    testImplementation testDependencies.mockk
-
     implementation androidDependencies.appcompat
-
-    androidTestImplementation androidTestDependencies.testRunner
-    androidTestImplementation androidTestDependencies.espresso
-    androidTestImplementation androidTestDependencies.aac_core
+    implementation injectionDependencies.koin
 
     // Room components
     implementation databaseDependencies.room
     implementation databaseDependencies.room_rxjava
     kapt databaseDependencies.room_compiler
+
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.mockk
+    //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
+    testImplementation(testDependencies.threeTenBP) {
+        exclude group:'com.jakewharton.threetenabp', module:'threetenabp'
+    }
+
+    androidTestImplementation androidTestDependencies.testRunner
+    androidTestImplementation androidTestDependencies.espresso
+    androidTestImplementation androidTestDependencies.aac_core
     androidTestImplementation databaseDependencies.room_testing
 }
 repositories {
