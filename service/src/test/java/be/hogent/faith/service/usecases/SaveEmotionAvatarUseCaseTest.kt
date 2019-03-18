@@ -21,10 +21,7 @@ class SaveEmotionAvatarUseCaseTest {
     private lateinit var observer: Scheduler
     private lateinit var storageRepository: StorageRepository
     private var bitmap = mockk<Bitmap>()
-    // Give own dateTime because AndroidThreeTen requires context to init timezones
-    private var event = Event(
-        dateTime = LocalDateTime.of(2019, 2, 19, 16, 58)
-    )
+    private var event = Event()
 
     @Before
     fun setUp() {
