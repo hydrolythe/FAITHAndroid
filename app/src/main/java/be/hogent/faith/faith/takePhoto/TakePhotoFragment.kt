@@ -16,15 +16,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
-import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.util.TAG
+import be.hogent.faith.faith.util.TempFileProvider
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.logcat
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
-import java.io.File
 
 /**
  * The requestcode that will be used to request photoTaker permissions
@@ -34,16 +32,23 @@ const val REQUESTCODE_CAMERA = 1
 class TakePhotoFragment : Fragment() {
     private lateinit var navigation: TakePhotoNavigationListener
 
-    private val takePhotoViewModel: TakePhotoViewModel by viewModel {
-        parametersOf(tempPhotoSaveFile, Event())
-    }
     private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
+
+    private val takePhotoViewModel: TakePhotoViewModel by sharedViewModel()
 
     private lateinit var takePhotoBinding: FragmentTakePhotoBinding
 
     private lateinit var fotoApparat: Fotoapparat
 
-    private lateinit var tempPhotoSaveFile: File
+    private val tempFileProvider by inject<TempFileProvider>()
+
+    /**
+     * The Dialog that requests the user to enter a name.
+     * It is saved here so we can dismiss it once the cancel or save buttons are clicked.
+     * This should normally be done in the Dialog itself but SingleLiveEvent only supports a single Listener.
+     * We need one here to update the eventDetailsVM and one in the Dialog to close it.
+     */
+    private lateinit var saveDialog: SavePhotoDialogFragment
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         takePhotoBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_take_photo, container, false)
@@ -57,11 +62,6 @@ class TakePhotoFragment : Fragment() {
             cameraErrorCallback = { Log.e(TAG, it.message) }
         )
         return takePhotoBinding.root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        tempPhotoSaveFile = File(requireContext().cacheDir, "tempPhoto.PNG")
     }
 
     override fun onStart() {
@@ -79,13 +79,26 @@ class TakePhotoFragment : Fragment() {
             navigation.startDrawEmotionAvatarFragment()
         })
         takePhotoViewModel.takePhotoButtonClicked.observe(this, Observer {
-            takeAndSavePicture()
+            takeAndSavePictureToCache()
+        })
+        takePhotoViewModel.recordingSaveFailed.observe(this, Observer {
+            Log.e(TAG, it)
+            Toast.makeText(context, getString(R.string.toast_save_photo_failed), Toast.LENGTH_SHORT).show()
+            saveDialog.dismiss()
+        })
+        takePhotoViewModel.photoSavedSuccessFully.observe(this, Observer {
+            Toast.makeText(context, getString(R.string.toast_foto_saved_success), Toast.LENGTH_SHORT).show()
+            eventDetailsViewModel.updateEvent()
+            saveDialog.dismiss()
         })
     }
 
-    private fun takeAndSavePicture() {
-        fotoApparat.takePicture().saveToFile(tempPhotoSaveFile).whenAvailable {
-            SavePhotoDialogFragment.newInstance(tempPhotoSaveFile).showNow(fragmentManager!!, null)
+    private fun takeAndSavePictureToCache() {
+        val saveFile = tempFileProvider.tempPhotoFile
+        fotoApparat.takePicture().saveToFile(saveFile).whenAvailable {
+            takePhotoViewModel.tempPhotoFile = saveFile
+            saveDialog = SavePhotoDialogFragment.newInstance()
+            saveDialog.show(fragmentManager!!, null)
         }
     }
 
@@ -112,10 +125,7 @@ class TakePhotoFragment : Fragment() {
         try {
             fotoApparat.stop()
         } catch (e: IllegalStateException) {
-            Log.i(
-                TAG, "Stopped fotoApparat but wasn't even started. Probably because the permission to start" +
-                        "the photoTaker wasn't given"
-            )
+            Log.i(TAG, "Stopped fotoApparat but wasn't even started.")
         }
     }
 
