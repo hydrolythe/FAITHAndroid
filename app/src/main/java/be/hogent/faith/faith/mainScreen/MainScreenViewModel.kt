@@ -11,6 +11,7 @@ class MainScreenViewModel : ViewModel() {
 
     val firstLocation = SingleLiveEvent<Unit>()
     val secondLocation = SingleLiveEvent<Unit>()
+    val thirdLocation = SingleLiveEvent<Unit>()
 
     fun firstLocationClicked() {
         Log.i(TAG, "First location clicked")
@@ -19,6 +20,11 @@ class MainScreenViewModel : ViewModel() {
     fun secondLocationClicked() {
         Log.i(TAG, "Second location clicked")
         secondLocation.call()
+    }
+
+    fun thirdLocationClicked() {
+        Log.i(TAG, "third location clicked")
+        thirdLocation.call()
     }
 
     companion object {
