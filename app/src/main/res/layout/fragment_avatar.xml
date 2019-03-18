@@ -6,7 +6,7 @@
     <data>
         <variable
                 name="user"
-                type="be.hogent.faith.faith.chooseAvatar.fragments.AvatarItemViewModel"/>
+                type="be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

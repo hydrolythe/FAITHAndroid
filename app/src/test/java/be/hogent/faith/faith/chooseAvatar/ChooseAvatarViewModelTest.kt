@@ -1,23 +1,23 @@
-package be.hogent.faith.faith.drawEmotionAvatar
+package be.hogent.faith.faith.chooseAvatar
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import be.hogent.faith.faith.TestUtils.getValue
-import be.hogent.faith.faith.chooseAvatar.fragments.AvatarItemViewModel
+import be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class ChooseAvatarItemViewModelTest {
+class ChooseAvatarViewModelTest {
 
-    val naam: String = "Boaty McBoatface"
-    val selection : Int = 1
+    private val naam: String = "Boaty McBoatface"
+    private val selection : Int = 1
 
-    private lateinit var viewModel: AvatarItemViewModel
+    private lateinit var viewModel: AvatarViewModel
 
     @Before
     fun setUp() {
-        viewModel = AvatarItemViewModel()
+        viewModel = AvatarViewModel()
     }
 
     @get:Rule

@@ -1,6 +1,6 @@
 package be.hogent.faith.faith.di
 
-import be.hogent.faith.faith.chooseAvatar.fragments.AvatarItemViewModel
+import be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel
 import be.hogent.faith.faith.chooseAvatar.fragments.UserViewModel
 import be.hogent.faith.faith.createUser.CreateEventViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenViewModel
@@ -20,6 +20,6 @@ val appModule = module {
     viewModel { MainScreenViewModel() }
     viewModel { EventDetailsViewModel() }
     viewModel { DrawEmotionViewModel() }
-    viewModel { AvatarItemViewModel()}
+    viewModel { AvatarViewModel()}
     viewModel { UserViewModel()}
 }
