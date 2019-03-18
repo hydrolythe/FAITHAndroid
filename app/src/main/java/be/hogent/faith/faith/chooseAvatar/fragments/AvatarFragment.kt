@@ -18,8 +18,6 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Avatar
-import be.hogent.faith.domain.models.User
-import be.hogent.faith.faith.ui.MainActivity
 import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.getRotation
 import com.bumptech.glide.Glide
@@ -39,7 +37,7 @@ class AvatarFragment : Fragment() {
     /**
      * ViewModel used for the avatarItems.
      */
-    private val avatarViewModel: AvatarItemViewModel by viewModel()
+    private val avatarViewModel: AvatarViewModel by viewModel()
 
     /**
      * Object used to track the selection on the Recyclerview
@@ -96,9 +94,9 @@ class AvatarFragment : Fragment() {
      */
     private fun registerAdapters() {
 
-        //avatarViewModel = ViewModelProviders.of(this).get(AvatarItemViewModel::class.java)
+        //avatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel::class.java)
 
-        val avatarAdapter = AvatarItemAdapter(avatarViewModel, this, Glide.with(this))
+        val avatarAdapter = AvatarItemAdapter()
         avatar_rv_avatar.adapter = avatarAdapter
         LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
         setOrientation()
@@ -113,10 +111,12 @@ class AvatarFragment : Fragment() {
         ).build()
 
         (avatar_rv_avatar.adapter as AvatarItemAdapter).tracker = avatarTracker
+
+
+
         if (avatarViewModel.isSelected()) {
             avatarTracker?.select(avatarViewModel.selectedItem.value!!)
             avatar_rv_avatar.smoothScrollToPosition(avatarViewModel.selectedItem.value!!.toInt())
-            avatarAdapter.notifyDataSetChanged()
         }
 
         // We also need to observe selection changes in the RecyclerView.
@@ -129,6 +129,17 @@ class AvatarFragment : Fragment() {
                 }
             }
         })
+
+        //Observe the changes in the list of the avatars and update the adapter
+        avatarViewModel.avatarItems.observe(this,
+            Observer<List<Avatar>> {
+            it?.let {
+                avatarAdapter.avatarItems = it
+                avatarAdapter.notifyDataSetChanged()
+            }
+        })
+
+
     }
 
 
@@ -139,6 +150,7 @@ class AvatarFragment : Fragment() {
     /**
      * We need to save the instance state of the tracker, otherwise
      * the selected item will be lost.
+     * TODO: See if this is possible without the onSaveinstanceState but with an observer.
      */
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

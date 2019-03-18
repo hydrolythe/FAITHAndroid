@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.AvatarItem
+import be.hogent.faith.domain.models.Avatar
+import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import kotlinx.android.synthetic.main.avatar_rv_item.view.*
 
@@ -22,9 +22,6 @@ import kotlinx.android.synthetic.main.avatar_rv_item.view.*
  * The elements in the recyclerview are able to be selected.
  */
 class AvatarItemAdapter(
-    viewModel: AvatarItemViewModel,
-    lifecycleOwner: LifecycleOwner,
-    val reqManager: RequestManager
 ) : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
 
     /**
@@ -36,18 +33,9 @@ class AvatarItemAdapter(
     /**
      * The list of avatarItems which need to be displayed.
      */
-    private var avatarItems: MutableList<AvatarItem> = mutableListOf()
+    var avatarItems: List<Avatar> = emptyList()
 
-    init {
-        viewModel.avatarItems.observe(lifecycleOwner, Observer {
 
-            if (it != null) {
-                avatarItems.clear()
-                avatarItems.addAll(it)
-            }
-            notifyDataSetChanged()
-        })
-    }
 
     /**
      * Creates the ViewHolder.
@@ -76,21 +64,25 @@ class AvatarItemAdapter(
         tracker?.let {
             holder.bind(avatarItems[position], it.isSelected(position.toLong()))
         }
+
     }
 
     /**
      * ViewHolder class, containing one image
      */
-    inner class ViewHolder(view: View, private val image: ImageView = view.avatar_list_image) :
+    inner class ViewHolder(val view: View) :
         RecyclerView.ViewHolder(view) {
 
         /**
          * Executes the binding of the data to the [ViewHolder]. Uses Glide] to load
          * the image.
          */
-        fun bind(avatarItem: AvatarItem, isActivated: Boolean) {
-            reqManager.load(avatarItem.imageUrl).into(image)
+        fun bind(avatarItem: Avatar, isActivated: Boolean) {
+            Glide.with(this.itemView.context).load(avatarItem.imageUrl).into(view.avatar_list_image)
+            //This property is defined in res/drawable/item_background which in turn is used in the layout file
+            //itself.
             itemView.isActivated = isActivated
+
         }
 
         /**
