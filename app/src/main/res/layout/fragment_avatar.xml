@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-                name="user"
+                name="avatarViewModel"
                 type="be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +17,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/naam_hint"
                 android:inputType="textPersonName"
-                android:text="@={user.userName}"
+                android:text="@={avatarViewModel.userName}"
                 android:ems="10"
                 android:id="@+id/avatar_txt_name"
                 android:layout_marginTop="8dp"
@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/frag_avatar_lbl_to_town"
-                android:onClick="@{() -> user.nextButtonPressed()}"
+                android:onClick="@{() -> avatarViewModel.nextButtonPressed()}"
                 android:id="@+id/avatar_btn_go_to_town"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_margin="8dp"
