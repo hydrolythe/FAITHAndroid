@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.util
 
-
 import android.content.Context
 import android.view.Surface
 import android.view.WindowManager
@@ -12,7 +11,6 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> FragmentTransaction) {
     beginTransaction().func().commit()

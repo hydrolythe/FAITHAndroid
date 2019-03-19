@@ -24,7 +24,6 @@ class AvatarViewModel : ViewModel() {
 
     private val _nextButtonClicked = SingleLiveEvent<Unit>()
 
-
     val nextButtonClicked: LiveData<Unit>
         get() = _nextButtonClicked
 
@@ -34,7 +33,7 @@ class AvatarViewModel : ViewModel() {
     var userName = MutableLiveData<String>()
 
     init {
-        //Set initially to -1 = no selection has been provided.
+        // Set initially to -1 = no selection has been provided.
         _selectedItem.value = -1
 
         fetchItems()
@@ -52,7 +51,6 @@ class AvatarViewModel : ViewModel() {
     val selectedItem: LiveData<Long>
         get() = _selectedItem
 
-
     /**
      * Returns true if an Avatar has been selected, false if not.
      */
@@ -68,7 +66,6 @@ class AvatarViewModel : ViewModel() {
         _selectedItem.postValue(selectedItem)
     }
 
-
     fun nextButtonPressed() {
         if (isSelected() && userName.value != null) {
             var user = User(
@@ -78,12 +75,11 @@ class AvatarViewModel : ViewModel() {
             Log.i(TAG, "Found ${userName.value}")
             Log.i(TAG, "Found item : ${selectedItem.value}")
         } else {
-            //TODO: update the user that he has not yet selected an avatar
+            // TODO: update the user that he has not yet selected an avatar
         }
         Log.i(TAG, "Pressed the button")
         _nextButtonClicked.call()
     }
-
 
     /**
      * TODO: Needs to be adapted to the way Avatars will be provided (Network, DB, ...)
@@ -94,7 +90,7 @@ class AvatarViewModel : ViewModel() {
         val avatar3 = Avatar(R.drawable.avatar3)
         val avatar4 = Avatar(R.drawable.avatar4)
         val avatar5 = Avatar(R.drawable.avatar5)
-        val avList = listOf<Avatar>(avatar1,avatar2,avatar3, avatar4, avatar5)
+        val avList = listOf<Avatar>(avatar1, avatar2, avatar3, avatar4, avatar5)
         _avatarItems.postValue(avList)
     }
 }

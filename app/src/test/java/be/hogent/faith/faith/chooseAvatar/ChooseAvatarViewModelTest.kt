@@ -11,7 +11,7 @@ import org.junit.Test
 class ChooseAvatarViewModelTest {
 
     private val naam: String = "Boaty McBoatface"
-    private val selection : Int = 1
+    private val selection: Int = 1
 
     private lateinit var viewModel: AvatarViewModel
 
@@ -23,17 +23,15 @@ class ChooseAvatarViewModelTest {
     @get:Rule
     val testRule = InstantTaskExecutorRule()
 
-
     @Test
     fun avatarItemViewModel_setUserName() {
         viewModel.userName.postValue(naam)
-        Assert.assertEquals(naam,getValue(viewModel.userName))
+        Assert.assertEquals(naam, getValue(viewModel.userName))
     }
 
     @Test
-    fun avatarItemViewModel_setSelectedItem(){
+    fun avatarItemViewModel_setSelectedItem() {
         viewModel.setSelectedItem(selection.toLong())
         Assert.assertEquals(selection, getValue(viewModel.selectedItem).toInt())
     }
-
 }
