@@ -29,9 +29,6 @@ val appModule = module {
     viewModel { UserViewModel() }
     viewModel { (event: Event) -> RecordAudioViewModel(get(), event) }
     viewModel { (event: Event) -> TakePhotoViewModel(get(), event) }
-    viewModel { AvatarViewModel() }
-    viewModel { UserViewModel() }
-
 
     single { TempFileProvider(androidContext()) }
 }
