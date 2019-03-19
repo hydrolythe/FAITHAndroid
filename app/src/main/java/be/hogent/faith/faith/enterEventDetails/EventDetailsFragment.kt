@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
-import be.hogent.faith.domain.models.Detail
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class EventDetailsFragment : Fragment() {
