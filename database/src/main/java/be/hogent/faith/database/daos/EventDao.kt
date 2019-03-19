@@ -21,7 +21,7 @@ interface EventDao {
     fun insertAll(eventEntities: List<EventEntity>): Completable
 
     @Transaction
-    @Query("SELECT * FROM events WHERE userUuid= :userUuid")
+    @Query("SELECT * FROM events WHERE userUuid= :userUuid order by dateTime DESC")
     fun getAllEventsWithDetails(userUuid: UUID): Flowable<List<EventWithDetails>>
 
     @Transaction

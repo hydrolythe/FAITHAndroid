@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.TAG
+import org.threeten.bp.format.DateTimeFormatter
+
 
 class EventsAdapter() : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
 
@@ -35,15 +37,21 @@ class EventsAdapter() : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var avatarImage: ImageView
         var eventTitle: TextView
+        var eventDate:TextView
 
         init {
             avatarImage = view.findViewById(R.id.thumbnailAvatar)
             eventTitle = view.findViewById(R.id.eventTitle)
+            eventDate = view.findViewById(R.id.eventDate)
         }
 
         fun bind(event: Event) {
             Log.d(TAG, "binding ${event.title}")
             eventTitle.text = event.title
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            val eventDateString:String =formatter.format(event.dateTime)
+            Log.d(TAG, eventDateString)
+            eventDate.text = eventDateString
 
             // TODO when creation of files is done
             /*
