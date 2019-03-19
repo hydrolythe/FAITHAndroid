@@ -80,6 +80,7 @@ dependencies {
     implementation uiDependencies.glide
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
+    implementation uiDependencies.rv_selection
     implementation uiDependencies.constraintLayout
     implementation uiDependencies.fragment
     implementation uiDependencies.fotoApparat
