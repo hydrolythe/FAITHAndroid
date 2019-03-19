@@ -2,9 +2,9 @@ package be.hogent.faith.faith.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil.setContentView
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.chooseAvatar.fragments.AvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
@@ -14,7 +14,6 @@ import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.UUID
 
-private const val TAG = "MainActivity"
 class MainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
     OverviewEventsFragment.OverviewEventsNavigationListener,
@@ -38,12 +37,22 @@ class MainActivity : AppCompatActivity(),
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
         // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
+            //val fragment = AvatarFragment.newInstance()
             val fragment = MainScreenFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
     }
+
+    /**
+     * Sets the [User] who is working with the application.
+     */
+    //fun setUser(user : User){
+    //    _userViewModel.setUser(user)
+    //    Log.i(TAG,"Set the user which username ${user.username}")
+    //}
+
 
     override fun startDrawFragment() {
         replaceFragment(DrawEmotionAvatarFragment.newInstance(R.drawable.outline), R.id.fragment_container)

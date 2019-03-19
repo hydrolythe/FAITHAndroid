@@ -1,109 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<layout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+                name="user"
+                type="be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel"/>
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <TextView
+                android:text="@string/frag_avatar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/avatar_tv_title"
+                style="@style/Base.TextAppearance.AppCompat.Title"
+                android:layout_margin="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+                android:text="@string/frag_avatar_lbl_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/avatar_tv_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/avatar_tv_pick_avatar"
+                app:layout_constraintTop_toBottomOf="@+id/avatar_tv_title"
+                android:layout_margin="8dp"
+                />
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/naam_hint"
+                android:inputType="textPersonName"
+                android:text="@={user.userName}"
+                android:id="@+id/avatar_txt_name"
+                app:layout_constraintBaseline_toBaselineOf="@id/avatar_tv_name"
+                tools:text="@tools:sample/full_names"
+                android:layout_margin="8dp"
+                app:layout_constraintStart_toEndOf="@+id/avatar_tv_name"
+                android:autofillHints="username"/>
+        <TextView
+                android:text="@string/frag_avatar_pick_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/avatar_tv_pick_avatar"
+                style="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle"
+                android:layout_margin="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/avatar_tv_name"/>
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/avatar_rv_avatar"
+                tools:listitem="@layout/avatar_rv_item"
+                android:layout_weight="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/avatar_tv_pick_avatar">
+        </androidx.recyclerview.widget.RecyclerView>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/frag_avatar_lbl_to_town"
+                android:onClick="@{() -> user.nextButtonPressed()}"
+                android:id="@+id/avatar_btn_go_to_town"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-            android:text="@string/frag_avatar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/avatar_tv_title"
-            style="@style/Base.TextAppearance.AppCompat.Title"
-            android:layout_margin="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-            android:text="@string/frag_avatar_lbl_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/avatar_tv_name"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/avatar_tv_pick_avatar"
-            app:layout_constraintTop_toBottomOf="@+id/avatar_tv_title"
-            android:layout_margin="8dp"
-            />
-
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/naam_hint"
-            android:inputType="textPersonName"
-            android:text="@string/string_avatar_name"
-            android:id="@+id/avatar_txt_name"
-            app:layout_constraintBaseline_toBaselineOf="@id/avatar_tv_name"
-            tools:text="@tools:sample/full_names"
-            android:layout_margin="8dp"
-            app:layout_constraintStart_toEndOf="@+id/avatar_tv_name"
-            android:autofillHints="username"/>
-
-    <androidx.constraintlayout.widget.Guideline
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/avatar_guide_middle"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5"/>
-
-    <TextView
-            android:text="@string/frag_avatar_pick_avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/avatar_tv_pick_avatar"
-            style="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle"
-            android:layout_margin="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/avatar_tv_name"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:id="@+id/avatar_rv_avatar"
-            tools:listitem="@layout/avatar_rv_item"
-            android:layout_weight="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="8dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/avatar_guide_middle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/avatar_tv_pick_avatar">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-    <TextView
-            android:text="@string/frag_avatar_pick_backpack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:id="@+id/avatar_tv_pick_backpack"
-            style="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/avatar_guide_middle"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:id="@+id/avatar_rv_backpack"
-            tools:listitem="@layout/avatar_rv_item"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/avatar_btn_go_to_town"
-            android:layout_margin="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/avatar_tv_pick_backpack"/>
-
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/frag_avatar_lbl_to_town"
-            android:id="@+id/avatar_btn_go_to_town"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
-
+</layout>
