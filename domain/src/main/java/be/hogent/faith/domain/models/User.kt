@@ -4,8 +4,8 @@ import java.util.UUID
 
 data class User(
     val uuid: UUID = UUID.randomUUID(),
-    val avatar:Avatar?=null,
-    val username:String=""
+    val avatar: Avatar? = null,
+    val username: String = ""
 ) {
     private val _events = mutableListOf<Event>()
     val events: List<Event>

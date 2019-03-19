@@ -20,10 +20,8 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Avatar
 import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.getRotation
-import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_avatar.*
 import org.koin.android.viewmodel.ext.android.viewModel
-
 
 /**
  * A [Fragment] subclass which allows the user to choose an AvatarItem and a Backpack.
@@ -58,11 +56,8 @@ class AvatarFragment : Fragment() {
         registerAdapters()
 
         avatarViewModel.nextButtonClicked.observe(this,
-            Observer<Any> { generateNewUser() });
-
-
+            Observer<Any> { generateNewUser() })
     }
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: be.hogent.faith.databinding.FragmentAvatarBinding =
@@ -94,7 +89,7 @@ class AvatarFragment : Fragment() {
      */
     private fun registerAdapters() {
 
-        //avatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel::class.java)
+        // avatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel::class.java)
 
         val avatarAdapter = AvatarItemAdapter()
         avatar_rv_avatar.adapter = avatarAdapter
@@ -112,8 +107,6 @@ class AvatarFragment : Fragment() {
 
         (avatar_rv_avatar.adapter as AvatarItemAdapter).tracker = avatarTracker
 
-
-
         if (avatarViewModel.isSelected()) {
             avatarTracker?.select(avatarViewModel.selectedItem.value!!)
             avatar_rv_avatar.smoothScrollToPosition(avatarViewModel.selectedItem.value!!.toInt())
@@ -130,7 +123,7 @@ class AvatarFragment : Fragment() {
             }
         })
 
-        //Observe the changes in the list of the avatars and update the adapter
+        // Observe the changes in the list of the avatars and update the adapter
         avatarViewModel.avatarItems.observe(this,
             Observer<List<Avatar>> {
             it?.let {
@@ -138,13 +131,10 @@ class AvatarFragment : Fragment() {
                 avatarAdapter.notifyDataSetChanged()
             }
         })
-
-
     }
 
-
     fun generateNewUser() {
-        Log.i(TAG,"Set the user")
+        Log.i(TAG, "Set the user")
     }
 
     /**

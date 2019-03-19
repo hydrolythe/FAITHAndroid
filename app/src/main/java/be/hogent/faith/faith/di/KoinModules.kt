@@ -20,12 +20,11 @@ val appModule = module {
     single { AndroidSchedulers.mainThread() }
 
     // ViewModels
-    viewModel { CreateEventViewModel(get(), get()) }
     viewModel { MainScreenViewModel() }
     viewModel { CreateEventViewModel(get(), get()) }
     viewModel { (user: LiveData<User>, eventUuid: UUID?) -> EventDetailsViewModel(user, eventUuid) }
     viewModel { DrawEmotionViewModel() }
     viewModel { UserViewModel(get()) }
     viewModel { (user: LiveData<User>) -> OverviewEventsViewModel(user) }
-    viewModel { AvatarViewModel()}
+    viewModel { AvatarViewModel() }
 }

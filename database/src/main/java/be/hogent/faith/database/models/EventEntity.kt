@@ -10,7 +10,7 @@ import java.util.UUID
 
 @Entity(
     tableName = "events",
-    indices = [(Index(value = ["uuid"], unique = true))],
+    indices = [(Index(value = ["uuid"], unique = true)), (Index(value = ["userUuid"], unique = false))],
     foreignKeys = [ForeignKey(
         entity = UserEntity::class,
         parentColumns = ["uuid"],

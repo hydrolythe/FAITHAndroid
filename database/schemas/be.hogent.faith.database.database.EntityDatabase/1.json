@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "0dc0cd451724ed7420b3b2519c108808",
+    "identityHash": "5eaa63bb36b98a040f7b8abf2aab9081",
     "entities": [
       {
         "tableName": "events",
@@ -53,6 +53,14 @@
               "uuid"
             ],
             "createSql": "CREATE UNIQUE INDEX `index_events_uuid` ON `${TABLE_NAME}` (`uuid`)"
+          },
+          {
+            "name": "index_events_userUuid",
+            "unique": false,
+            "columnNames": [
+              "userUuid"
+            ],
+            "createSql": "CREATE  INDEX `index_events_userUuid` ON `${TABLE_NAME}` (`userUuid`)"
           }
         ],
         "foreignKeys": [
@@ -169,7 +177,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0dc0cd451724ed7420b3b2519c108808\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"5eaa63bb36b98a040f7b8abf2aab9081\")"
     ]
   }
 }
