@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Avatar
 import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.avatar_rv_item.view.avatar_list_image
 import kotlinx.android.synthetic.main.avatar_rv_item.view.*
 
 /**
@@ -18,13 +19,13 @@ import kotlinx.android.synthetic.main.avatar_rv_item.view.*
  * The Recyclerview center their elements in the middle and snap the elements there.
  * The elements in the recyclerview are able to be selected.
  */
-class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
+class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
 
     /**
      * This [SelectionTracker] provides support for managing a selection of the items in the
      * RecyclerView instance.
      */
-    var tracker: SelectionTracker<Long>? = null
+    var selectionTracker: SelectionTracker<Long>? = null
 
     /**
      * The list of avatarItems which need to be displayed.
@@ -55,7 +56,7 @@ class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>()
      * Binds the image view of the list item to the desired image.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        tracker?.let {
+        selectionTracker?.let {
             holder.bind(avatarItems[position], it.isSelected(position.toLong()))
         }
     }
@@ -63,12 +64,11 @@ class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>()
     /**
      * ViewHolder class, containing one image
      */
-    inner class ViewHolder(val view: View) :
-        RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         /**
-         * Executes the binding of the data to the [ViewHolder]. Uses Glide] to load
-         * the image.
+         * Executes the binding of the data to the [ViewHolder].
+         * Uses Glide to load the image.
          */
         fun bind(avatarItem: Avatar, isActivated: Boolean) {
             Glide.with(this.itemView.context).load(avatarItem.imageUrl).into(view.avatar_list_image)
@@ -78,13 +78,13 @@ class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>()
         }
 
         /**
-         * This function returns the details for the items in the recyclerview.
+         * This function returns the details for the items in the recyclerView.
          * Required to use the [SelectionTracker].
          */
         fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> {
-            var d = Details()
-            d.position = adapterPosition.toLong()
-            return d
+            return Details().apply {
+                this.position = adapterPosition.toLong()
+            }
         }
     }
 
@@ -100,7 +100,7 @@ class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>()
         }
 
         override fun getSelectionKey(): Long? {
-            return position.toLong()
+            return position
         }
 
         override fun inSelectionHotspot(e: MotionEvent): Boolean {

@@ -11,9 +11,14 @@ import java.io.File
 
 class RecordAudioViewModel(
     private val saveAudioUseCase: SaveAudioRecordingUseCase,
-    private val tempRecordingFile: File,
     private val event: Event
 ) : ViewModel() {
+
+    /**
+     * The file where the recording is temporarily saved.
+     * Will be filled in by the [RecordAudioFragment] once the picture was taken.
+     */
+    lateinit var tempRecordingFile: File
 
     private val _recordingStatus = MutableLiveData<RecordingStatus>()
     val recordingStatus: LiveData<RecordingStatus>
@@ -92,7 +97,6 @@ class RecordAudioViewModel(
     }
 
     fun onSaveButtonClicked() {
-        // TODO: check if name was entered, cannot be empty!
         val disposable = saveAudioUseCase.execute(
             SaveAudioRecordingUseCase.SaveAudioRecordingParams(
                 tempRecordingFile,
@@ -101,6 +105,8 @@ class RecordAudioViewModel(
             )
         ).subscribe({
             _recordingSavedSuccessFully.call()
+            // Name has to be cleared so future pictures start with an empty name
+            recordingName.value = ""
         }, {
             _recordingSaveFailed.postValue(it.message)
         })

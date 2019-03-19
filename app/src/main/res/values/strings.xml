@@ -31,7 +31,23 @@
     <string name="lbl_detail_name">Naam:</string>
     <string name="hint_audio_recording_name">Een naam voor deze opname</string>
     <string name="save">Opslaan</string>
-    <string name="toast_saved_successfully">Je opname werd opgeslagen</string>
-    <string name="toast_save_failed">Er ging iets fout bij het opslaan van je opname</string>
+    <string name="toast_save_audio_success">Je opname werd opgeslagen</string>
+    <string name="toast_save_audio_failed">Er ging iets fout bij het opslaan van je opname</string>
     <string name="error_pause_not_supported">Pauzeren wordt door je apparaat niet ondersteund</string>
+    <string name="permission_take_picture">Je moet je toestemming geven om foto\'s te nemen</string>
+    <string name="frag_takePhoto_goToEmotionAvatar">Ga naar emotieavatar</string>
+    <string name="frag_takePhoto_takePhoto">Neem foto</string>
+    <string name="frag_takePhoto_saveSucces">Foto werd opgeslagen</string>
+    <string name="frag_takePhoto_saveFailed">Fout bij opslaan foto</string>
+    <string name="description_thumbnail">Miniatuur</string>
+    <string name="description_addText">Tekst toevoegen</string>
+    <string name="description_addPhoto">Foto toevoegen</string>
+    <string name="description_addAudio">Geluidsopname toevoegen</string>
+    <string name="description_addDrawing">Tekening toevoegen</string>
+    <string name="error_save_photo">Er ging iets mis bij het opslaan van je foto.</string>
+    <string name="hint_photo_name">een naam voor je foto</string>
+    <string name="lbl_name">Naam:</string>
+    <string name="lbl_save">Opslaan</string>
+    <string name="toast_foto_saved_success">Je foto werd opgeslagen!</string>
+    <string name="toast_save_photo_failed">Er ging iets fout bij het opslaan van je foto.</string>
 </resources>

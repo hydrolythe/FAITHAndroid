@@ -20,7 +20,6 @@ class RecordAudioViewModelTest {
     private lateinit var viewModel: RecordAudioViewModel
 
     private val saveAudioRecordingUseCase = mockk<SaveAudioRecordingUseCase>()
-    private val tempRecordingFile = mockk<File>()
     private val event = mockk<Event>()
 
     @get:Rule
@@ -28,7 +27,7 @@ class RecordAudioViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = RecordAudioViewModel(saveAudioRecordingUseCase, tempRecordingFile, event)
+        viewModel = RecordAudioViewModel(saveAudioRecordingUseCase, event)
     }
 
     @Test
@@ -68,13 +67,14 @@ class RecordAudioViewModelTest {
         // Arrange
         val params = slot<SaveAudioRecordingUseCase.SaveAudioRecordingParams>()
         every { saveAudioRecordingUseCase.execute(capture(params)) } returns Completable.complete()
+        viewModel.tempRecordingFile = mockk()
+
         // Act
         viewModel.onSaveButtonClicked()
 
+        // Assert
         verify { saveAudioRecordingUseCase.execute(any()) }
-
         assertEquals(event, params.captured.event)
-        assertEquals(tempRecordingFile, params.captured.tempStorageFile)
     }
 
     @Test
@@ -85,11 +85,13 @@ class RecordAudioViewModelTest {
         every { saveAudioRecordingUseCase.execute(any()) } returns Completable.complete()
         viewModel.recordingSavedSuccessFully.observeForever(successObserver)
         viewModel.recordingSaveFailed.observeForever(failedObserver)
+        viewModel.tempRecordingFile = mockk()
 
         // Act
         viewModel.onSaveButtonClicked()
 
         // Assert
+        assertEquals("", viewModel.recordingName.value)
         verify { successObserver.onChanged(any()) }
         verify { failedObserver wasNot Called }
     }
@@ -100,6 +102,7 @@ class RecordAudioViewModelTest {
         val successObserver = mockk<Observer<Unit>>(relaxed = true)
         val failedObserver = mockk<Observer<String>>(relaxed = true)
         val errorMessage = "Something failed"
+        viewModel.tempRecordingFile = mockk()
 
         every { saveAudioRecordingUseCase.execute(any()) } returns Completable.error(RuntimeException(errorMessage))
 
@@ -113,5 +116,4 @@ class RecordAudioViewModelTest {
         verify { failedObserver.onChanged(errorMessage) }
         verify { successObserver wasNot Called }
     }
-    // TODO: add test that requires name to be filled in
 }

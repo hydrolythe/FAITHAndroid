@@ -8,10 +8,12 @@ import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenViewModel
 import be.hogent.faith.faith.recordAudio.RecordAudioViewModel
+import be.hogent.faith.faith.takePhoto.TakePhotoViewModel
+import be.hogent.faith.faith.util.TempFileProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
+import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
-import java.io.File
 
 val appModule = module {
 
@@ -25,7 +27,11 @@ val appModule = module {
     viewModel { DrawEmotionViewModel() }
     viewModel { AvatarViewModel() }
     viewModel { UserViewModel() }
-    viewModel { (tempRecordingFile: File, event: Event) ->
-        RecordAudioViewModel(get(), tempRecordingFile, event)
-    }
+    viewModel { (event: Event) -> RecordAudioViewModel(get(), event) }
+    viewModel { (event: Event) -> TakePhotoViewModel(get(), event) }
+    viewModel { AvatarViewModel() }
+    viewModel { UserViewModel() }
+
+
+    single { TempFileProvider(androidContext()) }
 }
