@@ -39,9 +39,9 @@ class EventsAdapter() : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
         var eventDate: TextView
 
         init {
-            avatarImage = view.findViewById(R.id.thumbnailAvatar)
-            eventTitle = view.findViewById(R.id.eventTitle)
-            eventDate = view.findViewById(R.id.eventDate)
+            avatarImage = view.findViewById(R.id.img_overviewevents_thumbnailAvatar)
+            eventTitle = view.findViewById(R.id.label_overviewevents_title)
+            eventDate = view.findViewById(R.id.label_overviewevent_eventDate)
         }
 
         fun bind(event: Event) {
