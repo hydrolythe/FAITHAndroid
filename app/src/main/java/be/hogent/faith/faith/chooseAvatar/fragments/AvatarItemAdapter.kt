@@ -4,8 +4,6 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionTracker
@@ -13,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Avatar
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
 import kotlinx.android.synthetic.main.avatar_rv_item.view.*
 
 /**
@@ -21,8 +18,7 @@ import kotlinx.android.synthetic.main.avatar_rv_item.view.*
  * The Recyclerview center their elements in the middle and snap the elements there.
  * The elements in the recyclerview are able to be selected.
  */
-class AvatarItemAdapter(
-) : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
+class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
 
     /**
      * This [SelectionTracker] provides support for managing a selection of the items in the
@@ -34,8 +30,6 @@ class AvatarItemAdapter(
      * The list of avatarItems which need to be displayed.
      */
     var avatarItems: List<Avatar> = emptyList()
-
-
 
     /**
      * Creates the ViewHolder.
@@ -64,7 +58,6 @@ class AvatarItemAdapter(
         tracker?.let {
             holder.bind(avatarItems[position], it.isSelected(position.toLong()))
         }
-
     }
 
     /**
@@ -79,10 +72,9 @@ class AvatarItemAdapter(
          */
         fun bind(avatarItem: Avatar, isActivated: Boolean) {
             Glide.with(this.itemView.context).load(avatarItem.imageUrl).into(view.avatar_list_image)
-            //This property is defined in res/drawable/item_background which in turn is used in the layout file
-            //itself.
+            // This property is defined in res/drawable/item_background which in turn is used in the layout file
+            // itself.
             itemView.isActivated = isActivated
-
         }
 
         /**

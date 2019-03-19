@@ -6,14 +6,11 @@ class User(
     /**
      * The [Avatar] used to represent the user.
      */
-    val avatar : Avatar,
+    val avatar: Avatar,
 
     /**
      * User name of the user.
      */
-    val username : String
-
-
-
+    val username: String
 
 )

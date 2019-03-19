@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity(),
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
-
     }
 
     /**
@@ -53,7 +52,6 @@ class MainActivity : AppCompatActivity(),
         _userViewModel.setUser(user)
         Log.i(TAG, "Set the user which username ${user.username}")
     }
-
 
     override fun startDrawFragment() {
         replaceFragment(DrawEmotionAvatarFragment.newInstance(R.drawable.outline), R.id.fragment_container)

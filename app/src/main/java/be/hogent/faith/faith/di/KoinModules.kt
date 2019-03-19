@@ -23,8 +23,8 @@ val appModule = module {
     viewModel { MainScreenViewModel() }
     viewModel { EventDetailsViewModel() }
     viewModel { DrawEmotionViewModel() }
-    viewModel { AvatarViewModel()}
-    viewModel { UserViewModel()}
+    viewModel { AvatarViewModel() }
+    viewModel { UserViewModel() }
     viewModel { (tempRecordingFile: File, event: Event) ->
         RecordAudioViewModel(get(), tempRecordingFile, event)
     }
