@@ -64,7 +64,7 @@ class AvatarFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: be.hogent.faith.databinding.FragmentAvatarBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_avatar, container, false)
-        binding.user = avatarViewModel
+        binding.avatarViewModel = avatarViewModel
         return binding.root
     }
 
