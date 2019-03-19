@@ -11,6 +11,7 @@ import be.hogent.faith.database.models.DetailTypeEntity
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
+import io.reactivex.Flowable
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Before
@@ -158,6 +159,34 @@ class EntityDatabaseTest {
                 it.uuid == userUuid
             }
     }
+
+    @Test
+    fun entityDatabase_getAllEventsWithDetailsForAUser_chronological() {
+        val eventEntityLater = EventEntity(eventDate.minusDays(10), "testDescription", eventFile, UUID.randomUUID(), userUuid)
+        val eventEntity = EventEntity(eventDate, "testDescription", eventFile, eventUuid, userUuid)
+
+        val detail1 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.VIDEO, file = eventFile)
+        val detail2 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.AUDIO, file = eventFile)
+
+        val arrange = userDao.insert(userEntity)
+            .andThen(eventDao.insert(eventEntity))
+            .andThen(detailDao.insert(detail1))
+            .andThen(detailDao.insert(detail2))
+            .andThen(eventDao.insert(eventEntityLater))
+
+
+        val act = arrange.andThen(eventDao.getAllEventsWithDetails(userUuid))
+
+        // Assert
+        act
+            .test()
+            .assertValue {
+                it.size ==2
+                it[0].eventEntity.uuid == eventEntity.uuid
+                it[1].eventEntity.uuid == eventEntityLater.uuid
+            }
+    }
+
 
     @After
     fun breakDown() {
