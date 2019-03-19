@@ -1,6 +1,8 @@
 package be.hogent.faith.faith.di
 
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel
+import be.hogent.faith.faith.chooseAvatar.fragments.UserViewModel
 import be.hogent.faith.faith.createUser.CreateEventViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
@@ -21,6 +23,8 @@ val appModule = module {
     viewModel { MainScreenViewModel() }
     viewModel { EventDetailsViewModel() }
     viewModel { DrawEmotionViewModel() }
+    viewModel { AvatarViewModel()}
+    viewModel { UserViewModel()}
     viewModel { (tempRecordingFile: File, event: Event) ->
         RecordAudioViewModel(get(), tempRecordingFile, event)
     }

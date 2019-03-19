@@ -51,6 +51,7 @@ android {
     }
 }
 
+
 dependencies {
     implementation project(':domain')
     implementation project(':service')
@@ -73,13 +74,14 @@ dependencies {
 
     implementation injectionDependencies.koin
     implementation injectionDependencies.koin_viewModel
-
+    
     implementation androidDependencies.appcompat
     implementation androidDependencies.lifecycle
 
     implementation uiDependencies.glide
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
+    implementation uiDependencies.rv_selection
     implementation uiDependencies.constraintLayout
     implementation uiDependencies.fragment
 
@@ -95,4 +97,5 @@ dependencies {
     androidTestImplementation androidTestDependencies.testRunner
     androidTestImplementation androidTestDependencies.espresso
 }
+
 
