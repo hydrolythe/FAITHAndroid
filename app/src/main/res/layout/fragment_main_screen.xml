@@ -84,6 +84,17 @@
                     app:layout_constraintBottom_toTopOf="@id/guide_loc1_bottom"
                     app:layout_constraintTop_toTopOf="@+id/guide_loc1_top"/>
 
+            <View
+                    android:layout_width="0dp"
+                    android:id="@+id/main_third_location"
+                    android:onClick="@{() -> mainScreenViewModel.thirdLocationClicked()}"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toStartOf="@+id/guide_loc2_right"
+                    app:layout_constraintBottom_toTopOf="@id/guide_loc1_bottom"
+                    app:layout_constraintTop_toTopOf="@+id/guide_loc1_top"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="8dp"/>
+
             <androidx.constraintlayout.widget.Guideline
                     android:layout_width="8dp"
                     android:layout_height="12dp"
