@@ -29,6 +29,8 @@ import org.koin.android.viewmodel.ext.android.viewModel
  * Use the [AvatarFragment.newInstance] factory method to create an instance of this fragment.
  *
  */
+const val SELECTION_ID = "avatarSelection"
+
 class AvatarFragment : Fragment() {
 
     /**
@@ -93,7 +95,7 @@ class AvatarFragment : Fragment() {
         LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
         setOrientation()
         avatarTracker = SelectionTracker.Builder<Long>(
-            "avatarSelection",
+            SELECTION_ID,
             avatar_rv_avatar,
             AvatarItemAdapter.KeyProvider(avatar_rv_avatar.adapter as AvatarItemAdapter),
             AvatarItemAdapter.DetailsLookup(avatar_rv_avatar),
