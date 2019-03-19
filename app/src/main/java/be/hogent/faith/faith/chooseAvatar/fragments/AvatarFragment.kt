@@ -104,7 +104,7 @@ class AvatarFragment : Fragment() {
             SelectionPredicates.createSelectSingleAnything()
         ).build()
 
-        (avatar_rv_avatar.adapter as AvatarItemAdapter).tracker = avatarTracker
+        (avatar_rv_avatar.adapter as AvatarItemAdapter).selectionTracker = avatarTracker
 
         if (avatarViewModel.avatarWasSelected()) {
             avatarTracker?.select(avatarViewModel.selectedItem.value!!)
@@ -137,7 +137,7 @@ class AvatarFragment : Fragment() {
     }
 
     /**
-     * We need to save the instance state of the tracker, otherwise
+     * We need to save the instance state of the selectionTracker, otherwise
      * the selected item will be lost.
      * TODO: See if this is possible without the onSaveinstanceState but with an observer.
      */

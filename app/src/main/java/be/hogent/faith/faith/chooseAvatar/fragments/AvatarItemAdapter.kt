@@ -24,7 +24,7 @@ class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>()
      * This [SelectionTracker] provides support for managing a selection of the items in the
      * RecyclerView instance.
      */
-    var tracker: SelectionTracker<Long>? = null
+    var selectionTracker: SelectionTracker<Long>? = null
 
     /**
      * The list of avatarItems which need to be displayed.
@@ -55,7 +55,7 @@ class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>()
      * Binds the image view of the list item to the desired image.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        tracker?.let {
+        selectionTracker?.let {
             holder.bind(avatarItems[position], it.isSelected(position.toLong()))
         }
     }
