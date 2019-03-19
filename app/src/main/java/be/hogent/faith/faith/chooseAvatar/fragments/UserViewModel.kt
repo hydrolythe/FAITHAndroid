@@ -24,6 +24,4 @@ class UserViewModel : ViewModel() {
     fun setUser(user: User) {
         _user.postValue(user)
     }
-
-
 }
