@@ -72,7 +72,7 @@ class AvatarFragment : Fragment() {
      * Changes the orientation of the recyclerviews, depending on the orientation of the device;
      */
     private fun setOrientation() {
-        //Check here so we can use FragmentScenario's to test
+        // Check here so we can use FragmentScenario to test
         val orientation = if (activity is AppCompatActivity) {
             (activity as AppCompatActivity).getRotation()
         } else {
