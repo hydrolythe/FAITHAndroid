@@ -14,7 +14,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.io.File
 
 class RecordAudioViewModelTest {
     private lateinit var viewModel: RecordAudioViewModel

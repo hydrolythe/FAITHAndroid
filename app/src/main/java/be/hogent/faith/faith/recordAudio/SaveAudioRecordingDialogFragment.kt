@@ -9,12 +9,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.DialogSaveAudioRecordingBinding
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
-import java.io.File
 
 class SaveAudioRecordingDialogFragment : DialogFragment() {
 

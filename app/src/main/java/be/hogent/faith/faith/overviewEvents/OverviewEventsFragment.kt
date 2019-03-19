@@ -27,7 +27,9 @@ class OverviewEventsFragment : Fragment() {
     private lateinit var userViewModel: UserViewModel
     private lateinit var eventsOverViewViewModel: OverviewEventsViewModel
 
-    private val eventsAdapter: EventsAdapter = EventsAdapter()
+    private lateinit var eventsAdapter: EventsAdapter
+
+    private lateinit var eventListener: EventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,13 +41,8 @@ class OverviewEventsFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return inflater.inflate(R.layout.fragments_overview_events, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        setUpRecycler()
     }
 
     override fun onAttach(context: Context) {
@@ -58,6 +55,7 @@ class OverviewEventsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         startListeners()
+        setUpRecyclerView()
     }
 
     private fun startListeners() {
@@ -71,8 +69,13 @@ class OverviewEventsFragment : Fragment() {
         })
     }
 
-    private fun setUpRecycler() {
-        eventsAdapter.eventListener = eventListener
+    private fun setUpRecyclerView() {
+        eventListener = object : EventListener {
+            override fun onEventClicked(eventUuid: UUID) {
+                navigation?.startEventDetailsFragment(eventUuid)
+            }
+        }
+        eventsAdapter = EventsAdapter(eventListener)
         rv_events.apply {
             layoutManager = LinearLayoutManager(activity)
             this.adapter = eventsAdapter
@@ -81,11 +84,5 @@ class OverviewEventsFragment : Fragment() {
 
     interface OverviewEventsNavigationListener {
         fun startEventDetailsFragment(eventUuid: UUID)
-    }
-
-    private val eventListener = object : EventListener {
-        override fun onEventClicked(eventUuid: UUID) {
-            navigation?.startEventDetailsFragment(eventUuid)
-        }
     }
 }

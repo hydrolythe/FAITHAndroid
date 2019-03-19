@@ -12,8 +12,8 @@ class GetEventsUseCase(
     private val eventRepository: EventRepository,
     observeScheduler: Scheduler
 ) : FlowableUseCase<List<Event>, GetEventsUseCase.Params>(Schedulers.io(), observeScheduler) {
-    override fun buildUseCaseObservable(params: GetEventsUseCase.Params?): Flowable<List<Event>> {
-        if (params == null) throw IllegalArgumentException("Params can't be null!")
+
+    override fun buildUseCaseObservable(params: GetEventsUseCase.Params): Flowable<List<Event>> {
         return eventRepository.getAll(params.user)
     }
 

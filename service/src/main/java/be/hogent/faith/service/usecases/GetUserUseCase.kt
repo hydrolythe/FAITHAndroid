@@ -12,8 +12,8 @@ class GetUserUseCase(
     private val userRepository: UserRepository,
     observeScheduler: Scheduler
 ) : FlowableUseCase<User, GetUserUseCase.Params>(Schedulers.io(), observeScheduler) {
-    override fun buildUseCaseObservable(params: GetUserUseCase.Params?): Flowable<User> {
-        if (params == null) throw IllegalArgumentException("Params can't be null!")
+
+    override fun buildUseCaseObservable(params: GetUserUseCase.Params): Flowable<User> {
         return userRepository.get(params.userUuid)
     }
 
