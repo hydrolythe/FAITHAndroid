@@ -11,15 +11,33 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
-import org.koin.android.viewmodel.ext.android.sharedViewModel
+import be.hogent.faith.faith.UserViewModel
+import org.koin.android.viewmodel.ext.android.getViewModel
+import org.koin.core.parameter.parametersOf
+import java.util.UUID
+
+private const val ARG_EVENTUUID = "eventUUID"
 
 class EventDetailsFragment : Fragment() {
 
     private var navigation: EventDetailsNavigationListener? = null
-    private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var eventDetailsViewModel: EventDetailsViewModel
     private lateinit var eventDetailsBinding: FragmentEnterEventDetailsBinding
 
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        userViewModel = getViewModel()
+        if (arguments?.getSerializable(ARG_EVENTUUID) != null) {
+            eventDetailsViewModel =
+                getViewModel { parametersOf(userViewModel.user, arguments?.getSerializable(ARG_EVENTUUID)) }
+        } else {
+            eventDetailsViewModel =
+                getViewModel { parametersOf(userViewModel.user) }
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         eventDetailsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_enter_event_details, container, false)
@@ -83,8 +101,14 @@ class EventDetailsFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): EventDetailsFragment {
-            return EventDetailsFragment()
+        fun newInstance(eventUuid: UUID? = null): EventDetailsFragment {
+            return EventDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    eventUuid?.let {
+                        putSerializable(ARG_EVENTUUID, it)
+                    }
+                }
+            }
         }
     }
 }
