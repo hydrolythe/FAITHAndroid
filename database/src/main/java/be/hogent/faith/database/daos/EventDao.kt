@@ -17,9 +17,12 @@ interface EventDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(eventEntity: EventEntity): Completable
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(eventEntities: List<EventEntity>): Completable
+
     @Transaction
-    @Query("SELECT * FROM events")
-    fun getAllEventsWithDetails(): Flowable<List<EventWithDetails>>
+    @Query("SELECT * FROM events WHERE userUuid= :userUuid order by dateTime DESC")
+    fun getAllEventsWithDetails(userUuid: UUID): Flowable<List<EventWithDetails>>
 
     @Transaction
     @Query("SELECT * FROM events WHERE uuid= :eventUuid")

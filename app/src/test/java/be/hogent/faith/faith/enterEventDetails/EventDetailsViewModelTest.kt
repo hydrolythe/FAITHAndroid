@@ -18,7 +18,7 @@ class EventDetailsViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = EventDetailsViewModel()
+        viewModel = EventDetailsViewModel(mockk())
     }
 
     @Test

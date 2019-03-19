@@ -1,16 +1,21 @@
 package be.hogent.faith.domain.models
 
-class User(
-    val eventLog: EventLog = EventLog(),
+import java.util.UUID
 
-    /**
-     * The [Avatar] used to represent the user.
-     */
-    val avatar: Avatar,
+data class User(
+    val uuid: UUID = UUID.randomUUID(),
+    val avatar: Avatar? = null,
+    val username: String = ""
+) {
+    private val _events = mutableListOf<Event>()
+    val events: List<Event>
+        get() = _events
 
-    /**
-     * User name of the user.
-     */
-    val username: String
+    fun addEvent(event: Event) {
+        _events += event
+    }
 
-)
+    fun getEvent(eventUUID: UUID): Event? {
+        return _events.find { it.uuid == eventUUID }
+    }
+}

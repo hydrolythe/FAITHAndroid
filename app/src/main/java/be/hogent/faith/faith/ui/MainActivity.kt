@@ -1,33 +1,30 @@
 package be.hogent.faith.faith.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.User
-import be.hogent.faith.faith.chooseAvatar.fragments.AvatarFragment
-import be.hogent.faith.faith.chooseAvatar.fragments.UserViewModel
+import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
+import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.takePhoto.TakePhotoViewModel
-import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.util.UUID
 
 class MainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
+    OverviewEventsFragment.OverviewEventsNavigationListener,
     MainScreenFragment.MainScreenNavigationListener,
     TakePhotoFragment.TakePhotoNavigationListener {
-
-    private val userViewModel: UserViewModel by viewModel()
 
     // This ViewModel is for the [DrawEmotionAvatarFragment], but has been defined here because it should
     // survive the activity's lifecycle, not just its own.
@@ -46,6 +43,7 @@ class MainActivity : AppCompatActivity(),
     lateinit var eventDetailsViewModel: EventDetailsViewModel
 
     lateinit var takePhotoViewModel: TakePhotoViewModel
+    private val userViewModel by viewModel<UserViewModel>()
 
     lateinit var recordAudioViewModel: RecordAudioViewModel
 
@@ -53,7 +51,9 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        eventDetailsViewModel = getViewModel()
+        eventDetailsViewModel = getViewModel {
+            parametersOf(userViewModel.user)
+        }
         takePhotoViewModel = getViewModel {
             parametersOf(eventDetailsViewModel.event.value)
         }
@@ -65,20 +65,21 @@ class MainActivity : AppCompatActivity(),
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
         // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
-            val fragment = AvatarFragment.newInstance()
+            // val fragment = AvatarFragment.newInstance()
+            val fragment = MainScreenFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
     }
 
-    /**
-     * Sets the [User] currently working with the application.
-     */
-    fun setUser(user: User) {
-        userViewModel.setUser(user)
-        Log.i(TAG, "Set the user whit username ${user.username}")
-    }
+//    /**
+//     * Sets the [User] currently working with the application.
+//     */
+//    fun setUser(user: User) {
+//        _userViewModel.setUser(user)
+//        Log.i(TAG, "Set the user which username ${user.username}")
+//    }
 
     override fun startDrawEmotionAvatarFragment() {
         replaceFragment(DrawEmotionAvatarFragment.newInstance(R.drawable.outline), R.id.fragment_container)
@@ -92,7 +93,15 @@ class MainActivity : AppCompatActivity(),
         replaceFragment(EventDetailsFragment.newInstance(), R.id.fragment_container)
     }
 
+    override fun startOverviewEventsFragment() {
+        replaceFragment(OverviewEventsFragment.newInstance(), R.id.fragment_container)
+    }
+
     override fun startRecordAudioFragment() {
         replaceFragment(RecordAudioFragment.newInstance(), R.id.fragment_container)
+    }
+
+    override fun startEventDetailsFragment(eventUuid: UUID) {
+        replaceFragment(EventDetailsFragment.newInstance(eventUuid), R.id.fragment_container)
     }
 }

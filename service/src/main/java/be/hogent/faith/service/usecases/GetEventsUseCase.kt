@@ -1,6 +1,7 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.EventRepository
 import be.hogent.faith.service.usecases.base.FlowableUseCase
 import io.reactivex.Flowable
@@ -10,8 +11,13 @@ import io.reactivex.schedulers.Schedulers
 class GetEventsUseCase(
     private val eventRepository: EventRepository,
     observeScheduler: Scheduler
-) : FlowableUseCase<List<Event>, Void?>(Schedulers.io(), observeScheduler) {
-    override fun buildUseCaseObservable(params: Void?): Flowable<List<Event>> {
-        return eventRepository.getAll()
+) : FlowableUseCase<List<Event>, GetEventsUseCase.Params>(Schedulers.io(), observeScheduler) {
+    override fun buildUseCaseObservable(params: GetEventsUseCase.Params?): Flowable<List<Event>> {
+        if (params == null) throw IllegalArgumentException("Params can't be null!")
+        return eventRepository.getAll(params.user)
     }
+
+    data class Params(
+        val user: User
+    )
 }

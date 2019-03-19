@@ -2,19 +2,20 @@ package be.hogent.faith.database.mappers
 
 import be.hogent.faith.database.models.relations.EventWithDetails
 import be.hogent.faith.domain.models.Event
+import java.util.UUID
 
-class EventWithDetailsMapper : Mapper<EventWithDetails, Event> {
+class EventWithDetailsMapper : MapperWithForeignKey<EventWithDetails, Event> {
 
     override fun mapFromEntity(entity: EventWithDetails): Event {
         val event = EventMapper().mapFromEntity(entity.eventEntity)
-        DetailMapper(event).mapFromEntities(entity.detailEntities).forEach { event.addDetail(it) }
+        DetailMapper().mapFromEntities(entity.detailEntities).forEach { event.addDetail(it) }
         return event
     }
 
-    override fun mapToEntity(model: Event): EventWithDetails {
+    override fun mapToEntity(model: Event, foreignKey: UUID): EventWithDetails {
         return EventWithDetails().also {
-            it.eventEntity = EventMapper().mapToEntity(model)
-            it.detailEntities = DetailMapper(model).mapToEntities(model.details)
+            it.eventEntity = EventMapper().mapToEntity(model, foreignKey)
+            it.detailEntities = DetailMapper().mapToEntities(model.details, it.eventEntity.uuid)
         }
     }
 
@@ -22,7 +23,7 @@ class EventWithDetailsMapper : Mapper<EventWithDetails, Event> {
         return entities.map(this::mapFromEntity)
     }
 
-    override fun mapToEntities(models: List<Event>): List<EventWithDetails> {
-        return models.map(this::mapToEntity)
+    override fun mapToEntities(models: List<Event>, foreignKey: UUID): List<EventWithDetails> {
+        return models.map { mapToEntity(it, foreignKey) }
     }
 }
