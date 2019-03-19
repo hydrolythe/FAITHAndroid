@@ -12,7 +12,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 import java.io.IOException
 
 class SaveEmotionAvatarUseCaseTest {
