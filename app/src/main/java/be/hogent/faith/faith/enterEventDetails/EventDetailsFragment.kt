@@ -8,15 +8,18 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class EventDetailsFragment : Fragment() {
 
     private var navigation: EventDetailsNavigationListener? = null
-    private val eventDetailsViewModel: EventDetailsViewModel by viewModel()
+    private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
     private lateinit var eventDetailsBinding: FragmentEnterEventDetailsBinding
+
+    private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         eventDetailsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_enter_event_details, container, false)
@@ -35,6 +38,17 @@ class EventDetailsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         startListeners()
+        updateUI()
+    }
+
+    private fun updateUI() {
+        eventDetailsBinding.recyclerViewEventDetailsDetails.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            // Start with empty list and then fill it in
+            adapter = DetailThumbnailsAdapter(context, emptyList())
+        }
+        detailThumbnailsAdapter = eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
     }
 
     private fun startListeners() {
@@ -44,15 +58,27 @@ class EventDetailsFragment : Fragment() {
             }
         })
         eventDetailsViewModel.emotionAvatarClicked.observe(this, Observer {
-            navigation?.startDrawFragment()
+            navigation?.startDrawEmotionAvatarFragment()
+        })
+        eventDetailsViewModel.cameraButtonClicked.observe(this, Observer {
+            navigation?.startTakePhotoFragment()
         })
         eventDetailsViewModel.audioButtonClicked.observe(this, Observer {
             navigation?.startRecordAudioFragment()
         })
+        eventDetailsViewModel.event.observe(this, Observer { event ->
+            detailThumbnailsAdapter?.updateDetailsList(event.details)
+        })
+    }
+
+    override fun onStop() {
+        super.onStop()
+        detailThumbnailsAdapter = null
     }
 
     interface EventDetailsNavigationListener {
-        fun startDrawFragment()
+        fun startDrawEmotionAvatarFragment()
+        fun startTakePhotoFragment()
         fun startRecordAudioFragment()
     }
 

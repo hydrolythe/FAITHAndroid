@@ -39,8 +39,14 @@ dependencies {
     implementation commonDependencies.threeTenABP
     implementation commonDependencies.rxjava
 
+    implementation injectionDependencies.koin
+
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
 
-    implementation injectionDependencies.koin
+    //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
+    testImplementation(testDependencies.threeTenBP) {
+        exclude group:'com.jakewharton.threetenabp', module:'threetenabp'
+    }
+
 }
