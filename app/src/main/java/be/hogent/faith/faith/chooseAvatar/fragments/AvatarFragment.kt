@@ -106,7 +106,7 @@ class AvatarFragment : Fragment() {
 
         (avatar_rv_avatar.adapter as AvatarItemAdapter).tracker = avatarTracker
 
-        if (avatarViewModel.isSelected()) {
+        if (avatarViewModel.avatarWasSelected()) {
             avatarTracker?.select(avatarViewModel.selectedItem.value!!)
             avatar_rv_avatar.smoothScrollToPosition(avatarViewModel.selectedItem.value!!.toInt())
         }
