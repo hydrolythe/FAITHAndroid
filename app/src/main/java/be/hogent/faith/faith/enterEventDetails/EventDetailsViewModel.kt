@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
+import java.util.UUID
 
-class EventDetailsViewModel : ViewModel() {
+class EventDetailsViewModel(val user: LiveData<User>, val eventUuid: UUID? = null) : ViewModel() {
 
     /**
      * The event that will be discussed and explained using audio, video, drawings,...
@@ -18,6 +20,14 @@ class EventDetailsViewModel : ViewModel() {
      * We can't observe it here, so the Fragment observes it and changes the [event] when required.
     */
     val eventTitle = MutableLiveData<String>()
+
+    init {
+        if (eventUuid != null) {
+            val result = user.value?.getEvent(eventUuid)
+            event.postValue(result)
+            eventTitle.postValue(result?.title)
+        }
+    }
 
     private val _cameraButtonClicked = SingleLiveEvent<Unit>()
     val cameraButtonClicked: LiveData<Unit>

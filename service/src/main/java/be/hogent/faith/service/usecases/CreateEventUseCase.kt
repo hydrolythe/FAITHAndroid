@@ -1,6 +1,7 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.EventRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import io.reactivex.Completable
@@ -15,11 +16,12 @@ open class CreateEventUseCase(
 
     override fun buildUseCaseObservable(params: CreateEventUseCase.Params): Completable {
         val event = Event(params.dateTime, params.title)
-        return eventRepository.insert(event)
+        return eventRepository.insert(event, params.user)
     }
 
-    class Params(
+    data class Params(
         val dateTime: LocalDateTime,
-        val title: String
+        val title: String,
+        val user: User
     )
 }

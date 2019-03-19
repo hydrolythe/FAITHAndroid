@@ -10,7 +10,7 @@ import java.util.UUID
 
 class DetailMapperTest {
     private val event = EventFactory.makeEvent()
-    private val mapper = DetailMapper(event)
+    private val mapper = DetailMapper()
 
     @Test
     fun `should map to Detail when DetailEntity is given`() {
@@ -22,7 +22,7 @@ class DetailMapperTest {
     @Test
     fun `should map to DetailEntity when Detail is given`() {
         val model = DetailFactory.makeDetail()
-        val entity = mapper.mapToEntity(model)
+        val entity = mapper.mapToEntity(model, event.uuid)
         assertEqualData(entity, model, event.uuid)
     }
 

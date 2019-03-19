@@ -10,14 +10,25 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
-import org.koin.android.viewmodel.ext.android.viewModel
+import be.hogent.faith.faith.UserViewModel
+import org.koin.android.viewmodel.ext.android.getViewModel
+import org.koin.core.parameter.parametersOf
+import java.util.UUID
+
+private const val ARG_EVENTUUID = "eventUUID"
 
 class EventDetailsFragment : Fragment() {
 
     private var navigation: EventDetailsNavigationListener? = null
-    private val eventDetailsViewModel: EventDetailsViewModel by viewModel()
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var eventDetailsViewModel: EventDetailsViewModel
     private lateinit var eventDetailsBinding: FragmentEnterEventDetailsBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        userViewModel = getViewModel<UserViewModel>()
+        eventDetailsViewModel = getViewModel { parametersOf(userViewModel.user, arguments?.getSerializable(ARG_EVENTUUID)) }
+    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         eventDetailsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_enter_event_details, container, false)
         eventDetailsBinding.eventDetailsVM = eventDetailsViewModel
@@ -53,8 +64,12 @@ class EventDetailsFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): EventDetailsFragment {
-            return EventDetailsFragment()
+        fun newInstance(eventUuid: UUID?): EventDetailsFragment {
+            return EventDetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_EVENTUUID, eventUuid)
+                }
+            }
         }
     }
 }
