@@ -23,7 +23,6 @@ class AvatarViewModel : ViewModel() {
     private var _selectedItem = MutableLiveData<Long>()
 
     private val _nextButtonClicked = SingleLiveEvent<Unit>()
-
     val nextButtonClicked: LiveData<Unit>
         get() = _nextButtonClicked
 
@@ -46,7 +45,7 @@ class AvatarViewModel : ViewModel() {
         get() = _avatarItems
 
     /**
-     * The item selected in the recyclerview as the avatar.
+     * The item selected in the recyclerView as the avatar.
      */
     val selectedItem: LiveData<Long>
         get() = _selectedItem
@@ -54,20 +53,20 @@ class AvatarViewModel : ViewModel() {
     /**
      * Returns true if an Avatar has been selected, false if not.
      */
-    fun isSelected(): Boolean {
+    fun avatarWasSelected(): Boolean {
         return _selectedItem.value!!.toInt() != -1
     }
 
     /**
      * Sets the selected item (the selected avatars). In this case this is
-     * still the position in the rv.
+     * still the position in the recyclerView.
      */
     fun setSelectedItem(selectedItem: Long) {
         _selectedItem.postValue(selectedItem)
     }
 
     fun nextButtonPressed() {
-        if (isSelected() && userName.value != null) {
+        if (avatarWasSelected() && userName.value != null) {
             var user = User(
                 avatar = _avatarItems.value?.get(_selectedItem.value!!.toInt()) as Avatar,
                 username = userName.value!!
