@@ -46,6 +46,9 @@ class MainScreenFragment : Fragment() {
         mainScreenViewModel.secondLocation.observe(this, Observer {
             moveAvatarToLocationOf(mainScreenBinding.mainSecondLocation) { navigation?.startEventDetailsFragment() }
         })
+        mainScreenViewModel.thirdLocation.observe(this, Observer {
+            moveAvatarToLocationOf(mainScreenBinding.mainThirdLocation) { navigation?.startOverviewEventsFragment() }
+        })
     }
 
     override fun onAttach(context: Context) {
@@ -86,5 +89,6 @@ class MainScreenFragment : Fragment() {
 
     interface MainScreenNavigationListener {
         fun startEventDetailsFragment()
+        fun startOverviewEventsFragment()
     }
 }

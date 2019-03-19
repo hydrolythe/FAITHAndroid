@@ -10,6 +10,7 @@ ext {
     constraint_layout_version = '2.0.0-alpha3'
     fragment_version = '1.1.0-alpha03'
     recyclerview_version='1.0.0'
+    cardview_version='1.0.0'
     glide_version = '4.9.0'
 
     coroutines_version = '1.1.1'
@@ -92,7 +93,8 @@ ext {
             fragment        : "androidx.fragment:fragment:$fragment_version",
             glide           : "com.github.bumptech.glide:glide:$glide_version",
             glidecompiler   : "com.github.bumptech.glide:compiler:$glide_version",
-            recyclerview    : "com.android.support:recyclerview-v7:$recyclerview_version",
+            recyclerview    : "androidx.recyclerview:recyclerview:$recyclerview_version",
+            cardView        : "androidx.cardview:cardview:$cardview_version",
             rv_selection    : "androidx.recyclerview:recyclerview-selection:$recyclerview_version"
     ]
 
