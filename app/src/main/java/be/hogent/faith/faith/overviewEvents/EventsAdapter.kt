@@ -14,10 +14,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import org.threeten.bp.format.DateTimeFormatter
 
-class EventsAdapter : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
+class EventsAdapter(private val eventListener: EventListener) : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
 
     var events: List<Event> = emptyList()
-    var eventListener: EventListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -55,7 +54,7 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
             }
 
             itemView.setOnClickListener {
-                eventListener?.onEventClicked(event.uuid)
+                eventListener.onEventClicked(event.uuid)
             }
         }
     }

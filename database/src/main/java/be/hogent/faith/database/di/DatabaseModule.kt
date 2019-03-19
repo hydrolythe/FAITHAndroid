@@ -25,7 +25,7 @@ val databaseModule = module {
     single { constructEventDao(get()) }
     single { constructDetailDao(get()) }
     single { constructUserDao(get()) }
-    // Just specifying the aventRepositoryImpl is not enough.
+    // Just specifying the eventRepositoryImpl is not enough.
     // In other modules some elements require an EventRepository as constructor parameter.
     // Koin doesn't automatically see the Impl as an implementation of the interface,
     // so we have to explicitly mention it.

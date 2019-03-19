@@ -19,13 +19,13 @@ abstract class FlowableUseCase<Result, in Params>(
     /**
      * This should be overridden with the business logic for the use case.
      */
-    abstract fun buildUseCaseObservable(params: Params? = null): Flowable<Result>
+    abstract fun buildUseCaseObservable(params: Params): Flowable<Result>
 
     /**
      * Executes the use case.
      * It will run on the specified [subscribeScheduler] and can be observed on the given [observeScheduler].
      */
-    open fun execute(params: Params?): Flowable<Result> {
+    open fun execute(params: Params): Flowable<Result> {
         return this.buildUseCaseObservable(params)
             .subscribeOn(subscribeScheduler)
             .observeOn(observeScheduler) as Flowable<Result>
