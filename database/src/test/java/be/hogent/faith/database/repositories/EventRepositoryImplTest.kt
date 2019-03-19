@@ -4,6 +4,8 @@ import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.factory.EventFactory
+import be.hogent.faith.database.factory.UserFactory
+import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.EventWithDetailsMapper
 import be.hogent.faith.database.models.EventEntity
@@ -20,12 +22,14 @@ class EventRepositoryImplTest {
     private val detailDao = mockk<DetailDao>()
     private val eventDao = mockk<EventDao>()
     private val database = mockk<EntityDatabase>(relaxed = true)
+    private val detailMapper = mockk<DetailMapper>()
     private val eventMapper = mockk<EventMapper>()
     private val eventWithDetailsMapper = mockk<EventWithDetailsMapper>()
 
-    private val eventRepository = EventRepositoryImpl(database, eventMapper, eventWithDetailsMapper)
+    private val eventRepository = EventRepositoryImpl(database, eventMapper, eventWithDetailsMapper, detailMapper)
 
-    private val eventWithDetails = EventFactory.makeEventWithDetailsEntity(2)
+    private val user = UserFactory.makeUser(0)
+    private val eventWithDetails = EventFactory.makeEventWithDetailsEntity(user.uuid, 2)
     private val eventUuid = eventWithDetails.eventEntity.uuid
     private val event = EventFactory.makeEvent(2)
 
@@ -56,17 +60,17 @@ class EventRepositoryImplTest {
     }
 
     @Test
-    fun deleteEventCompletes() {
+    fun eventRepository_deleteEventCompletes() {
         every { eventDao.delete(eventWithDetails.eventEntity) } returns Completable.complete()
         stubMapperToEntity(event, eventWithDetails.eventEntity)
-        eventRepository.delete(event).test().assertComplete()
+        eventRepository.delete(event, user).test().assertComplete()
     }
 
     @Test
-    fun getAll_succeeds() {
-        every { eventDao.getAllEventsWithDetails() } returns Flowable.just(listOf(eventWithDetails))
+    fun eventRepository_getAll_succeeds() {
+        every { eventDao.getAllEventsWithDetails(user.uuid) } returns Flowable.just(listOf(eventWithDetails))
         stubMapperFromEntities(listOf(event), listOf(eventWithDetails))
-        eventRepository.getAll().test().assertValue(listOf(event))
+        eventRepository.getAll(user).test().assertValue(listOf(event))
     }
 
     private fun stubMapperFromEntity(model: Event, entity: EventWithDetails) {
@@ -78,6 +82,6 @@ class EventRepositoryImplTest {
     }
 
     private fun stubMapperToEntity(model: Event, entity: EventEntity) {
-        every { eventMapper.mapToEntity(model) } returns entity
+        every { eventMapper.mapToEntity(model, user.uuid) } returns entity
     }
 }
