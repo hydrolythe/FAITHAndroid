@@ -1,5 +1,7 @@
 package be.hogent.faith.faith.di
 
+import be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel
+import be.hogent.faith.faith.chooseAvatar.fragments.UserViewModel
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.createUser.CreateEventViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
@@ -26,6 +28,9 @@ val appModule = module {
     viewModel { MainScreenViewModel() }
     viewModel { EventDetailsViewModel() }
     viewModel { DrawEmotionViewModel() }
+    viewModel { AvatarViewModel() }
+    viewModel { UserViewModel() }
+
     viewModel { (event: Event) -> TakePhotoViewModel(get(), event) }
 
     single { TempFileProvider(androidContext()) }

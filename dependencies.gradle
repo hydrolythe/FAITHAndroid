@@ -105,7 +105,8 @@ ext {
             glidecompiler      : "com.github.bumptech.glide:compiler:$glide_version",
             recyclerview       : "com.android.support:recyclerview-v7:$recyclerview_version",
             fotoApparat        : "io.fotoapparat:fotoapparat:$fotoApparat_version",
-            fotoApparatAdapters: "io.fotoapparat.fotoapparat:adapter-rxjava2:$fotoApparat_version"
+            fotoApparatAdapters: "io.fotoapparat.fotoapparat:adapter-rxjava2:$fotoApparat_version",
+            rv_selection    : "androidx.recyclerview:recyclerview-selection:$recyclerview_version"
     ]
 
 }
