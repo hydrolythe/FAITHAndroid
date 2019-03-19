@@ -28,7 +28,7 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 private const val ARG_AVATAR_RES_ID = "avatarResId"
 
 /**
- * Constant for [avatarOutlineResId] to indicate that no avatar was passed as an argument for this fragment.
+ * Constant for avatarOutlineResId to indicate that no avatar was passed as an argument for this fragment.
  */
 private const val NO_AVATAR = -1
 

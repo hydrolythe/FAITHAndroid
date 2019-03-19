@@ -34,7 +34,7 @@ class TakeEventPhotoUseCaseTest {
         // Arrange
         every {
             storageRepository.movePhotoFromTempStorage(tempRecordingFile, event, photoName)
-        } returns Single.just(mockk<File>())
+        } returns Single.just(mockk())
 
         // Act
         takeEventPhotoUseCase.buildUseCaseObservable(
@@ -52,7 +52,7 @@ class TakeEventPhotoUseCaseTest {
         // Arrange
         every {
             storageRepository.movePhotoFromTempStorage(tempRecordingFile, event, photoName)
-        } returns Single.just(mockk<File>())
+        } returns Single.just(mockk())
 
         // Act
         takeEventPhotoUseCase.buildUseCaseObservable(

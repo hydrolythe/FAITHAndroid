@@ -11,7 +11,7 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TAG
 
 /**
- * Abstract ViewModel class to represent the [AvatarItem] elements.
+ * ViewModel for the Avatar selection screen
  */
 class AvatarViewModel : ViewModel() {
 
@@ -89,7 +89,7 @@ class AvatarViewModel : ViewModel() {
         val avatar3 = Avatar(R.drawable.avatar3)
         val avatar4 = Avatar(R.drawable.avatar4)
         val avatar5 = Avatar(R.drawable.avatar5)
-        val avList = listOf<Avatar>(avatar1, avatar2, avatar3, avatar4, avatar5)
+        val avList = listOf(avatar1, avatar2, avatar3, avatar4, avatar5)
         _avatarItems.postValue(avList)
     }
 }

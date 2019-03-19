@@ -47,7 +47,7 @@ class EventDetailsFragment : Fragment() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             // Start with empty list and then fill it in
-            adapter = DetailThumbnailsAdapter(context, emptyList<Detail>())
+            adapter = DetailThumbnailsAdapter(context, emptyList())
         }
         detailThumbnailsAdapter = eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
     }
