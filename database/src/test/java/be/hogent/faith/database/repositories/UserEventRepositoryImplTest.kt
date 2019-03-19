@@ -59,23 +59,23 @@ class UserEventRepositoryImplTest {
             .assertNoValues()
     }
 
-    //TODO make test succeed
-  /*  @Test
-    fun userRepository_get_existingUser_succeeds() {
-        every { userDao.getUser(userWithoutEvents.uuid) } returns Flowable.just(
-            userEntity
-        )
-        every { eventDao.getAllEventsWithDetails(userEntity.uuid) } returns Flowable.just(
-            eventWithDetailsList
-        )
+    // TODO make test succeed
+    /*  @Test
+      fun userRepository_get_existingUser_succeeds() {
+          every { userDao.getUser(userWithoutEvents.uuid) } returns Flowable.just(
+              userEntity
+          )
+          every { eventDao.getAllEventsWithDetails(userEntity.uuid) } returns Flowable.just(
+              eventWithDetailsList
+          )
 
-        stubUserMapperFromEntity(userWithoutEvents, userEntity)
-        stubEventWithDetailsMapperFromEntity(eventList, eventWithDetailsList)
+          stubUserMapperFromEntity(userWithoutEvents, userEntity)
+          stubEventWithDetailsMapperFromEntity(eventList, eventWithDetailsList)
 
-        userRepository.get(userWithoutEvents.uuid)
-            .test()
-            .assertValue { it.uuid == userWithoutEvents.uuid && it.events.size == eventList.size }
-    }*/
+          userRepository.get(userWithoutEvents.uuid)
+              .test()
+              .assertValue { it.uuid == userWithoutEvents.uuid && it.events.size == eventList.size }
+      }*/
 
     private fun stubUserMapperFromEntity(model: User, entity: UserEntity) {
         every { userMapper.mapFromEntity(entity) } returns model

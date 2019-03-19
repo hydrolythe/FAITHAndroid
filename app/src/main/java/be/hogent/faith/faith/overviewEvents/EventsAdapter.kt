@@ -12,7 +12,6 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.TAG
 import org.threeten.bp.format.DateTimeFormatter
 
-
 class EventsAdapter() : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
 
     var events: List<Event> = emptyList()
@@ -37,7 +36,7 @@ class EventsAdapter() : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var avatarImage: ImageView
         var eventTitle: TextView
-        var eventDate:TextView
+        var eventDate: TextView
 
         init {
             avatarImage = view.findViewById(R.id.thumbnailAvatar)
@@ -49,7 +48,7 @@ class EventsAdapter() : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
             Log.d(TAG, "binding ${event.title}")
             eventTitle.text = event.title
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-            val eventDateString:String =formatter.format(event.dateTime)
+            val eventDateString: String = formatter.format(event.dateTime)
             Log.d(TAG, eventDateString)
             eventDate.text = eventDateString
 

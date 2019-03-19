@@ -11,7 +11,6 @@ import be.hogent.faith.database.models.DetailTypeEntity
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
-import io.reactivex.Flowable
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Before
@@ -174,19 +173,17 @@ class EntityDatabaseTest {
             .andThen(detailDao.insert(detail2))
             .andThen(eventDao.insert(eventEntityLater))
 
-
         val act = arrange.andThen(eventDao.getAllEventsWithDetails(userUuid))
 
         // Assert
         act
             .test()
             .assertValue {
-                it.size ==2
+                it.size == 2
                 it[0].eventEntity.uuid == eventEntity.uuid
                 it[1].eventEntity.uuid == eventEntityLater.uuid
             }
     }
-
 
     @After
     fun breakDown() {
