@@ -31,7 +31,7 @@ class SaveEmotionAvatarUseCaseTest {
 
     @Test
     fun saveBitMapUC_execute_saves() {
-        every { storageRepository.storeBitmap(any(), any(), any()) } returns Single.just(mockk<File>())
+        every { storageRepository.storeBitmap(any(), any(), any()) } returns Single.just(mockk())
 
         saveEmotionAvatarUseCase.buildUseCaseObservable(SaveEmotionAvatarUseCase.Params(bitmap, event))
             .test()

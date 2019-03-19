@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.avatar_rv_item.view.avatar_list_image
  * The Recyclerview center their elements in the middle and snap the elements there.
  * The elements in the recyclerview are able to be selected.
  */
-class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
+class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
 
     /**
      * This [SelectionTracker] provides support for managing a selection of the items in the
