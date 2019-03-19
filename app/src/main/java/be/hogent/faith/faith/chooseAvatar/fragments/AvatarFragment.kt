@@ -1,20 +1,29 @@
 package be.hogent.faith.faith.chooseAvatar.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.Avatar
+import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.getRotation
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_avatar.*
+import org.koin.android.viewmodel.ext.android.viewModel
+
 
 /**
  * A [Fragment] subclass which allows the user to choose an AvatarItem and a Backpack.
@@ -28,64 +37,124 @@ class AvatarFragment : Fragment() {
     /**
      * ViewModel used for the avatarItems.
      */
-    private lateinit var avatarViewModel: AvatarViewModel
+    private val avatarViewModel: AvatarViewModel by viewModel()
+
     /**
-     * ViewModel used for the backpacks.
+     * Object used to track the selection on the Recyclerview
      */
-    private lateinit var backpackViewModel: BackpackViewModel
+    private var avatarTracker: SelectionTracker<Long>? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            // Of the Fragment is still in memory restore the state
+            avatarTracker?.onRestoreInstanceState(savedInstanceState)
+        }
+    }
 
     override fun onStart() {
         super.onStart()
         registerAdapters()
-        observeViewModel(avatar_rv_avatar)
-        observeViewModel(avatar_rv_backpack)
+
+        avatarViewModel.nextButtonClicked.observe(this,
+            Observer<Any> { generateNewUser() });
+
+
     }
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_avatar, container, false)
+        val binding: be.hogent.faith.databinding.FragmentAvatarBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_avatar, container, false)
+        binding.user = avatarViewModel
+        return binding.root
     }
 
     /**
-     * Registers the adapters for the RecyclerViews. Checks for the Orientation of the device and bases
-     * the LayoutManager for the Adapter based on this.
+     * Changes the orientation of the recyclerviews, depending on the orientation of the device;
      */
-    private fun registerAdapters() {
-        avatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel::class.java)
-        backpackViewModel = ViewModelProviders.of(this).get(BackpackViewModel::class.java)
+    private fun setOrientation() {
         val orientation = (activity as AppCompatActivity).getRotation()
         when (orientation) {
             R.integer.PORTRAIT -> {
                 avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
                 avatar_rv_avatar.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-
-                avatar_rv_backpack.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-                avatar_rv_backpack.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             }
             R.integer.LANDSCAPE -> {
                 avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
                 avatar_rv_avatar.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
-
-                avatar_rv_backpack.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
-                avatar_rv_backpack.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
             }
         }
-
-        val avatarAdapter = AvatarItemAdapter(avatarViewModel, this, Glide.with(this))
-        val backpackAdapter = AvatarItemAdapter(backpackViewModel, this, Glide.with(this))
-        avatar_rv_avatar.adapter = avatarAdapter
-        avatar_rv_backpack.adapter = backpackAdapter
     }
 
     /**
-     * Allows this fragment to observe the item included in the adapter and sets the Visibility of the
-     * RecyclerView to [View.VISIBLE] if this was not already the case.
+     * Registers the adapters for the RecyclerViews. Checks for the orientation of the device and sets
+     * the LayoutManager for the Adapter based on this.
      */
-    private fun observeViewModel(recyclerView: RecyclerView) {
-        avatarViewModel.avatarItems.observe(this, Observer {
-            if (it != null) {
-                recyclerView.visibility = View.VISIBLE
+    private fun registerAdapters() {
+
+        //avatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel::class.java)
+
+        val avatarAdapter = AvatarItemAdapter()
+        avatar_rv_avatar.adapter = avatarAdapter
+        LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
+        setOrientation()
+        avatarTracker = SelectionTracker.Builder<Long>(
+            "avatarSelection",
+            avatar_rv_avatar,
+            AvatarItemAdapter.KeyProvider(avatar_rv_avatar.adapter as AvatarItemAdapter),
+            AvatarItemAdapter.DetailsLookup(avatar_rv_avatar),
+            StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+            SelectionPredicates.createSelectSingleAnything()
+        ).build()
+
+        (avatar_rv_avatar.adapter as AvatarItemAdapter).tracker = avatarTracker
+
+
+
+        if (avatarViewModel.isSelected()) {
+            avatarTracker?.select(avatarViewModel.selectedItem.value!!)
+            avatar_rv_avatar.smoothScrollToPosition(avatarViewModel.selectedItem.value!!.toInt())
+        }
+
+        // We also need to observe selection changes in the RecyclerView.
+        avatarTracker?.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
+            override fun onSelectionChanged() {
+                val iterator = avatarTracker?.selection?.iterator()
+                if (iterator!!.hasNext()) {
+                    val itemPressed = iterator.next()
+                    avatarViewModel.setSelectedItem(itemPressed)
+                }
             }
         })
+
+        //Observe the changes in the list of the avatars and update the adapter
+        avatarViewModel.avatarItems.observe(this,
+            Observer<List<Avatar>> {
+            it?.let {
+                avatarAdapter.avatarItems = it
+                avatarAdapter.notifyDataSetChanged()
+            }
+        })
+
+
+    }
+
+
+    fun generateNewUser() {
+        Log.i(TAG,"Set the user")
+    }
+
+    /**
+     * We need to save the instance state of the tracker, otherwise
+     * the selected item will be lost.
+     * TODO: See if this is possible without the onSaveinstanceState but with an observer.
+     */
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        avatarTracker!!.onSaveInstanceState(outState)
     }
 
     companion object {

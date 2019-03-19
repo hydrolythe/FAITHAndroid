@@ -15,11 +15,13 @@ class App : Application() {
         super.onCreate()
         AndroidThreeTen.init(this)
 
-        startKoin(this, listOf(
-            appModule,
-            databaseModule,
-            serviceModule,
-            storageModule
-        ), logger = AndroidLogger())
+        startKoin(
+            this, listOf(
+                appModule,
+                databaseModule,
+                serviceModule,
+                storageModule
+            ), logger = AndroidLogger()
+        )
     }
 }
