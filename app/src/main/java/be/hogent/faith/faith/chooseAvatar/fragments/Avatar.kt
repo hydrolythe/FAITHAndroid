@@ -1,4 +1,4 @@
-package be.hogent.faith.domain.models
+package be.hogent.faith.faith.chooseAvatar.fragments
 
 /**
  * Model class for the AvatarItem.

@@ -1,19 +1,20 @@
 package be.hogent.faith.faith.chooseAvatar.fragments
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.Avatar
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.App
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TAG
 
 /**
  * ViewModel for the Avatar selection screen
  */
-class AvatarViewModel : ViewModel() {
+class AvatarViewModel(application: Application) : AndroidViewModel(application) {
 
     /**
      * Private mutable live data object which keeps track of the AvatarItems.
@@ -68,7 +69,7 @@ class AvatarViewModel : ViewModel() {
     fun nextButtonPressed() {
         if (avatarWasSelected() && userName.value != null) {
             var user = User(
-                avatar = _avatarItems.value?.get(_selectedItem.value!!.toInt()) as Avatar,
+                avatar = getApplication<App>().getResources().getResourceEntryName(_avatarItems.value?.get(_selectedItem.value!!.toInt())!!.imageUrl),
                 username = userName.value!!
             )
             Log.i(TAG, "Found ${userName.value}")

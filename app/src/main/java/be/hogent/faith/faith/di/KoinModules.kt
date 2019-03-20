@@ -13,6 +13,7 @@ import be.hogent.faith.faith.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.util.TempFileProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -30,7 +31,7 @@ val appModule = module(override = true) {
     viewModel { DrawEmotionViewModel() }
     viewModel { UserViewModel(get()) }
     viewModel { (user: LiveData<User>) -> OverviewEventsViewModel(user) }
-    viewModel { AvatarViewModel() }
+    viewModel { AvatarViewModel(androidApplication()) }
     viewModel { (event: Event) -> RecordAudioViewModel(get(), event) }
     viewModel { (event: Event) -> TakePhotoViewModel(get(), event) }
 

@@ -32,7 +32,7 @@ class EntityDatabaseTest {
     private val eventUuid = UUID.fromString("d883853b-7b23-401f-816b-ed4231e6dd6a")
     private val eventDate = LocalDateTime.of(2018, 10, 28, 7, 33)!!
     private val eventFile = File("path/to/eventFile")
-    private val userEntity = UserEntity(userUuid)
+    private val userEntity = UserEntity(userUuid, "name", "avatar")
     private val eventEntity = EventEntity(eventDate, "testDescription", eventFile, eventUuid, userUuid)
 
     // Required to make sure Room executes all operations instantly
@@ -150,7 +150,7 @@ class EntityDatabaseTest {
     @Test
     fun entityDatabase_singleUser_withNoEvents_isAdded() {
         // Arrange
-        val user = UserEntity(uuid = userUuid)
+        val user = UserEntity(userUuid, "name", "avatar")
         val arrange = userDao.insert(user)
 
         // Act
