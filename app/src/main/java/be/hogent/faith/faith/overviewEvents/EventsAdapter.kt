@@ -46,7 +46,6 @@ class EventsAdapter(private val eventListener: EventListener) : RecyclerView.Ada
             Log.d(TAG, eventDateString)
             eventDate.text = eventDateString
 
-
             event.emotionAvatar?.let {
                 Glide.with(itemView.context)
                     .load(it)
