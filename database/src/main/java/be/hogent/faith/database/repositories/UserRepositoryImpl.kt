@@ -35,7 +35,7 @@ open class UserRepositoryImpl(
         return userDao.delete(userMapper.mapToEntity(item))
     }
 
-    // ik ga ervan uit dat een gebruiker bij creatie nog geen events heeft
+    // een gebruiker heeft bij creatie nog geen events
     override fun insert(item: User): Completable {
         return try {
             userDao.insert(userMapper.mapToEntity(item))
@@ -47,12 +47,10 @@ open class UserRepositoryImpl(
 
     override fun get(uuid: UUID): Flowable<User> {
         val user = userDao.getUser(uuid).map { userMapper.mapFromEntity(it) }
-            .doOnNext { Log.d(TAG, it.uuid.toString())
-                System.out.println(it.uuid) }
+            .doOnNext { Log.d(TAG, it.uuid.toString()) }
         val eventsWithDetails =
             eventDao.getAllEventsWithDetails(uuid).map { eventWithDetailsMapper.mapFromEntities(it) }
-                .doOnNext { Log.d(TAG, it.size.toString())
-                System.out.println(it.size) }
+                .doOnNext { Log.d(TAG, it.size.toString()) }
         return Flowable.combineLatest(user, eventsWithDetails, BiFunction { u, e -> addEventsToUser(u, e) })
     }
 

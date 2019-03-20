@@ -6,13 +6,12 @@ import be.hogent.faith.domain.models.User
 class UserMapper : Mapper<UserEntity, User> {
 
     override fun mapFromEntity(entity: UserEntity): User {
-        return User(entity.uuid)
+        return User(entity.username, entity.avatar, entity.uuid)
     }
 
     override fun mapToEntity(model: User): UserEntity {
-        return UserEntity(model.uuid)
+        return UserEntity(model.uuid, model.username, model.avatar)
     }
-
     override fun mapFromEntities(entities: List<UserEntity>): List<User> {
         return entities.map { mapFromEntity(it) }
     }

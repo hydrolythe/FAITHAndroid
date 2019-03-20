@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.Avatar
 import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.getRotation
 import kotlinx.android.synthetic.main.fragment_avatar.avatar_rv_avatar

@@ -34,7 +34,7 @@ class CreateEventUseCaseTest {
         // Arrange
         val eventArg = slot<Event>()
         val userArg = slot<User>()
-        val user = User(UUID.randomUUID())
+        val user = User("username", "avatar", UUID.randomUUID())
         every { repository.insert(capture(eventArg), capture(userArg)) } returns Completable.complete()
 
         val dateTime = LocalDateTime.of(2018, 10, 28, 8, 22)

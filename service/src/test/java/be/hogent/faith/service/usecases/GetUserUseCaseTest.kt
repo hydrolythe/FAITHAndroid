@@ -68,6 +68,6 @@ class GetUserUseCaseTest {
     }
 
     private fun createUser(): User {
-        return User(UUID.randomUUID())
+        return User("username", "avatar", UUID.randomUUID())
     }
 }
