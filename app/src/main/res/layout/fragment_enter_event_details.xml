@@ -32,6 +32,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/label_event_details_event_title"
                 app:layout_constraintBottom_toTopOf="@id/event_details_upperDivider"
+                android:labelFor="@id/editText_event_details_event_title"
                 android:text="@string/event_details_label_title"/>
 
         <EditText
@@ -63,7 +64,8 @@
                 android:id="@+id/btn_event_details_text"
                 android:onClick="@{() -> eventDetailsVM.onTextButtonClicked()}"
                 app:layout_constraintEnd_toStartOf="@id/event_details_middleDivider"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                android:contentDescription="@string/description_addText"/>
 
         <ImageButton
                 android:layout_width="0dp"
@@ -75,7 +77,8 @@
                 app:layout_constraintBottom_toTopOf="@id/btn_event_details_drawing"
                 android:src="@drawable/event_detail_camera"
                 android:id="@+id/btn_event_details_camera"
-                app:layout_constraintEnd_toEndOf="@id/event_details_sideDivider"/>
+                app:layout_constraintEnd_toEndOf="@id/event_details_sideDivider"
+                android:contentDescription="@string/description_addPhoto"/>
 
         <ImageButton
                 android:layout_width="0dp"
@@ -87,7 +90,8 @@
                 app:layout_constraintEnd_toStartOf="@id/event_details_middleDivider"
                 android:onClick="@{() -> eventDetailsVM.onAudioButtonClicked()}"
                 app:layout_constraintTop_toBottomOf="@id/btn_event_details_text"
-                android:id="@+id/btn_event_details_audio"/>
+                android:id="@+id/btn_event_details_audio"
+                android:contentDescription="@string/description_addAudio"/>
 
         <ImageButton
                 android:layout_width="0dp"
@@ -99,7 +103,8 @@
                 app:layout_constraintStart_toEndOf="@id/event_details_middleDivider"
                 app:layout_constraintTop_toBottomOf="@id/btn_event_details_camera"
                 app:layout_constraintBottom_toTopOf="@+id/event_details_lowerDivider"
-                app:layout_constraintEnd_toEndOf="@id/event_details_sideDivider"/>
+                app:layout_constraintEnd_toEndOf="@id/event_details_sideDivider"
+                android:contentDescription="@string/description_addDrawing"/>
 
         <androidx.constraintlayout.widget.Guideline
                 android:layout_width="wrap_content"

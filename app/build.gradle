@@ -16,12 +16,12 @@ buildscript {
     }
     dependencies {
         classpath 'com.github.trevjonez.composer-gradle-plugin:plugin:0.10.0'
-        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.android.tools.build:gradle:3.3.2'
     }
 }
 
 
-composer{
+composer {
 }
 
 android {
@@ -51,7 +51,6 @@ android {
     }
 }
 
-
 dependencies {
     implementation project(':domain')
     implementation project(':service')
@@ -74,7 +73,7 @@ dependencies {
 
     implementation injectionDependencies.koin
     implementation injectionDependencies.koin_viewModel
-    
+
     implementation androidDependencies.appcompat
     implementation androidDependencies.lifecycle
 
@@ -84,18 +83,25 @@ dependencies {
     implementation uiDependencies.rv_selection
     implementation uiDependencies.constraintLayout
     implementation uiDependencies.fragment
+    implementation uiDependencies.fotoApparat
+    implementation uiDependencies.fotoApparatAdapters
 
     //TESTING
-    //Required to test fragments in isolation
-    debugImplementation 'androidx.test:monitor:1.1.1'
-    debugImplementation 'androidx.fragment:fragment-testing:1.1.0-alpha04'
+    debugImplementation androidTestDependencies.fragmentTesting
+
+    //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
+    testImplementation(testDependencies.threeTenBP) {
+        exclude group:'com.jakewharton.threetenabp', module:'threetenabp'
+    }
 
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
-    testImplementation androidTestDependencies.aac_core
+    testImplementation testDependencies.coreTesting
 
+    androidTestImplementation androidTestDependencies.testCore
+    androidTestImplementation androidTestDependencies.testRules
     androidTestImplementation androidTestDependencies.testRunner
     androidTestImplementation androidTestDependencies.espresso
+    androidTestImplementation androidTestDependencies.espressoContrib
+    androidTestImplementation androidTestDependencies.uiAutomator
 }
-
-

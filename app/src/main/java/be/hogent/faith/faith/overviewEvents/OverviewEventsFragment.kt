@@ -25,27 +25,24 @@ class OverviewEventsFragment : Fragment() {
     private var navigation: OverviewEventsFragment.OverviewEventsNavigationListener? = null
 
     private lateinit var userViewModel: UserViewModel
-    private lateinit var viewModel: OverviewEventsViewModel
+    private lateinit var eventsOverViewViewModel: OverviewEventsViewModel
 
-    private val eventsAdapter: EventsAdapter = EventsAdapter()
+    private lateinit var eventsAdapter: EventsAdapter
+
+    private lateinit var eventListener: EventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userViewModel = getViewModel()
-        viewModel = getViewModel { parametersOf(userViewModel.user) }
+        eventsOverViewViewModel = getViewModel { parametersOf(userViewModel.user) }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         return inflater.inflate(R.layout.fragments_overview_events, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        setUpRecycler()
     }
 
     override fun onAttach(context: Context) {
@@ -58,22 +55,27 @@ class OverviewEventsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         startListeners()
+        setUpRecyclerView()
     }
 
     private fun startListeners() {
-        viewModel.user.observe(this,
-            Observer<User> {
-                it?.let {
-                    eventsAdapter.apply {
-                        events = it.events
-                        notifyDataSetChanged()
-                    }
+        eventsOverViewViewModel.user.observe(this, Observer<User> { user ->
+            user?.let {
+                eventsAdapter.apply {
+                    events = user.events
+                    notifyDataSetChanged()
                 }
-            })
+            }
+        })
     }
 
-    private fun setUpRecycler() {
-        eventsAdapter.eventListener = eventListener
+    private fun setUpRecyclerView() {
+        eventListener = object : EventListener {
+            override fun onEventClicked(eventUuid: UUID) {
+                navigation?.startEventDetailsFragment(eventUuid)
+            }
+        }
+        eventsAdapter = EventsAdapter(eventListener)
         rv_events.apply {
             layoutManager = LinearLayoutManager(activity)
             this.adapter = eventsAdapter
@@ -82,11 +84,5 @@ class OverviewEventsFragment : Fragment() {
 
     interface OverviewEventsNavigationListener {
         fun startEventDetailsFragment(eventUuid: UUID)
-    }
-
-    private val eventListener = object : EventListener {
-        override fun onEventClicked(eventUuid: UUID) {
-            navigation?.startEventDetailsFragment(eventUuid)
-        }
     }
 }

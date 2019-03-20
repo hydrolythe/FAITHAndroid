@@ -52,12 +52,16 @@ class EntityDatabaseTest {
 
     @Test
     fun entityDatabase_singleEvent_noDetails_isAdded() {
+        // Arrange
         val testSubscriber = TestSubscriber<EventWithDetails>()
+
+        // Act
         userDao.insert(userEntity)
             .andThen(eventDao.insert(eventEntity))
             .andThen(eventDao.getEventWithDetails(eventUuid))
             .subscribe(testSubscriber)
 
+        // Assert
         testSubscriber.assertValue {
             it.eventEntity == eventEntity
         }
@@ -75,6 +79,7 @@ class EntityDatabaseTest {
             .andThen(detailDao.insert(detail1))
             .andThen(detailDao.insert(detail2))
 
+        // Act
         val act = arrange.andThen(eventDao.getEventWithDetails(eventUuid))
 
         // Assert
@@ -102,8 +107,8 @@ class EntityDatabaseTest {
         // Chaining two "andThen" calls isn't possible,
         // so by saving the completable we can just subscribe twice
         val act = arrange.andThen(eventDao.delete(eventEntity))
-        // Assert
 
+        // Assert
         act.andThen(eventDao.getEventWithDetails(eventUuid))
             .test()
             .assertEmpty()
@@ -129,8 +134,8 @@ class EntityDatabaseTest {
         // Chaining two "andThen" calls isn't possible,
         // so by saving the completable we can just subscribe twice
         val act = arrange.andThen(userDao.delete(userEntity))
-        // Assert
 
+        // Assert
         act.andThen(userDao.getUser(userUuid))
             .test()
             .assertEmpty()
@@ -146,9 +151,9 @@ class EntityDatabaseTest {
     fun entityDatabase_singleUser_withNoEvents_isAdded() {
         // Arrange
         val user = UserEntity(uuid = userUuid)
-
         val arrange = userDao.insert(user)
 
+        // Act
         val act = arrange.andThen(userDao.getUser(userUuid))
 
         // Assert
@@ -161,7 +166,9 @@ class EntityDatabaseTest {
 
     @Test
     fun entityDatabase_getAllEventsWithDetailsForAUser_chronological() {
-        val eventEntityLater = EventEntity(eventDate.minusDays(10), "testDescription", eventFile, UUID.randomUUID(), userUuid)
+        // Arrange
+        val eventEntityLater =
+            EventEntity(eventDate.minusDays(10), "testDescription", eventFile, UUID.randomUUID(), userUuid)
         val eventEntity = EventEntity(eventDate, "testDescription", eventFile, eventUuid, userUuid)
 
         val detail1 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.VIDEO, file = eventFile)
@@ -173,6 +180,7 @@ class EntityDatabaseTest {
             .andThen(detailDao.insert(detail2))
             .andThen(eventDao.insert(eventEntityLater))
 
+        // Act
         val act = arrange.andThen(eventDao.getAllEventsWithDetails(userUuid))
 
         // Assert

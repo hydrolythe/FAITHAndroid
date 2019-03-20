@@ -2,6 +2,11 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="be.hogent.faith">
 
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-feature android:name="android.permission.CAMERA"/>
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <supports-screens
             android:resizeable="true"
             android:smallScreens="false"

@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
-import be.hogent.faith.domain.models.Event
+import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.toast
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
@@ -21,7 +21,6 @@ import com.divyanshu.draw.widget.DrawView
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.threeten.bp.LocalDateTime
 
 /**
  * Key for this Fragment's [Bundle] to hold the resource ID pointing to the outline drawing of the avatar.
@@ -29,7 +28,7 @@ import org.threeten.bp.LocalDateTime
 private const val ARG_AVATAR_RES_ID = "avatarResId"
 
 /**
- * Constant for [avatarOutlineResId] to indicate that no avatar was passed as an argument for this fragment.
+ * Constant for avatarOutlineResId to indicate that no avatar was passed as an argument for this fragment.
  */
 private const val NO_AVATAR = -1
 
@@ -39,6 +38,8 @@ private const val NO_AVATAR = -1
 class DrawEmotionAvatarFragment : Fragment() {
 
     private val drawEmotionViewModel: DrawEmotionViewModel by sharedViewModel()
+    private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
+
     private lateinit var drawAvatarBinding: FragmentDrawAvatarBinding
 
     /**
@@ -47,9 +48,6 @@ class DrawEmotionAvatarFragment : Fragment() {
     private var avatarOutlineResId: Int = NO_AVATAR
 
     private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase by inject()
-
-    // TODO: replace with the actual Event once all fragments are tied together
-    private val event = Event(LocalDateTime.now(), "TestDescription")
 
     private val disposables = CompositeDisposable()
 
@@ -73,9 +71,10 @@ class DrawEmotionAvatarFragment : Fragment() {
         drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
             override fun onDrawingChanged(bitmap: Bitmap) {
                 val saveRequest = saveEmotionAvatarUseCase.execute(
-                    SaveEmotionAvatarUseCase.Params(bitmap, event)
+                    SaveEmotionAvatarUseCase.Params(bitmap, eventDetailsViewModel.event.value!!)
                 ).subscribe({
                     Log.i(TAG, "Drawing was saved")
+                    eventDetailsViewModel.updateEvent()
                 }, {
                     context?.toast(getString(R.string.error_saving_drawing))
                 })
