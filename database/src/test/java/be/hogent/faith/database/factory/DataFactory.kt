@@ -24,8 +24,12 @@ object DataFactory {
         return UUID.randomUUID().toString()
     }
 
-    fun randomInt(): Int {
-        return ThreadLocalRandom.current().nextInt(0, 1000 + 1)
+    /**
+     * Returns a random integer between 2 given boundaries.
+     * Defaults to 0 and 1000
+     */
+    fun randomInt(from: Int = 0, to: Int = 1000): Int {
+        return ThreadLocalRandom.current().nextInt(from, to + 1)
     }
 
     fun randomLong(): Long {
@@ -36,10 +40,18 @@ object DataFactory {
         return Math.random() < 0.5
     }
 
+    fun randomHour(): Int {
+        return randomInt(0, 23)
+    }
+
+    fun randomMinute(): Int {
+        return randomInt(0, 59)
+    }
+
     fun randomDateTime(): LocalDateTime {
         val year = ThreadLocalRandom.current().nextInt(1990, 2020)
         val month = ThreadLocalRandom.current().nextInt(1, 13)
         val day = ThreadLocalRandom.current().nextInt(1, 29)
-        return LocalDateTime.of(year, month, day, 7, 33)
+        return LocalDateTime.of(year, month, day, randomHour(), randomMinute())
     }
 }

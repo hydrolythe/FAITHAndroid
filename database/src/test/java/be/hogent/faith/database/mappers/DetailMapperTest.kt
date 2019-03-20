@@ -2,27 +2,27 @@ package be.hogent.faith.database.mappers
 
 import be.hogent.faith.database.factory.DetailFactory
 import be.hogent.faith.database.factory.EventFactory
-import be.hogent.faith.database.models.DetailEntity
-import be.hogent.faith.domain.models.Detail
+import be.hogent.faith.database.models.detail.DetailEntity
+import be.hogent.faith.domain.models.detail.Detail
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.UUID
 
 class DetailMapperTest {
     private val event = EventFactory.makeEvent()
-    private val mapper = DetailMapper()
+    private val detailMapper = DetailMapper()
 
     @Test
     fun `should map to Detail when DetailEntity is given`() {
         val entity = DetailFactory.makeDetailEntity(event.uuid)
-        val model = mapper.mapFromEntity(entity)
+        val model = detailMapper.mapFromEntity(entity)
         assertEqualData(entity, model, event.uuid)
     }
 
     @Test
     fun `should map to DetailEntity when Detail is given`() {
         val model = DetailFactory.makeDetail()
-        val entity = mapper.mapToEntity(model, event.uuid)
+        val entity = detailMapper.mapToEntity(model, event.uuid)
         assertEqualData(entity, model, event.uuid)
     }
 
@@ -32,7 +32,7 @@ class DetailMapperTest {
         entityUuid: UUID
     ) {
         assertEquals(entity.uuid, model.uuid)
-        assertEquals(entity.type.toString(), model.detailType.toString())
+        assertEquals(entity.file, model.file)
         assertEquals(entity.eventUuid, entityUuid)
     }
 }

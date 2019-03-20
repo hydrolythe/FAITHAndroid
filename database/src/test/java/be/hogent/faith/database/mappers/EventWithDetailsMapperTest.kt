@@ -3,10 +3,10 @@ package be.hogent.faith.database.mappers
 import be.hogent.faith.database.factory.DataFactory
 import be.hogent.faith.database.factory.EventFactory
 import be.hogent.faith.database.factory.UserFactory
-import be.hogent.faith.database.models.DetailEntity
+import be.hogent.faith.database.models.detail.DetailEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
-import be.hogent.faith.domain.models.Detail
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.Detail
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.UUID
@@ -87,7 +87,7 @@ class EventWithDetailsMapperTest {
     ) {
         with(entity) {
             assertEquals(uuid, model.uuid)
-            assertEquals(type.toString(), model.detailType.toString())
+            assertEquals(file, model.file)
             assertEquals(eventUuid, entityUuid)
         }
     }

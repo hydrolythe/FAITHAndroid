@@ -1,6 +1,6 @@
 package be.hogent.faith.domain
 
-import be.hogent.faith.domain.models.Detail
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.Emotion
 import io.mockk.mockk
 import org.junit.Assert.assertEquals

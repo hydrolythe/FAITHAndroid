@@ -37,7 +37,7 @@ class RecordAudioFragment : Fragment() {
 
     private val tempFileProvider by inject<TempFileProvider>()
     /**
-     * The Dialog that requests the user to enter a name for the recording.
+     * The Dialog that requests the user to enter a recordingName for the recording.
      * It is saved here so we can dismiss it once the cancel or save buttons are clicked.
      * This should normally be done in the Dialog itself but SingleLiveEvent only supports a single Listener.
      * We need one here to update the eventDetailsVM and one in the Dialog to close it.
