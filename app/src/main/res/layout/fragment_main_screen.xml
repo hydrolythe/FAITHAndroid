@@ -29,7 +29,7 @@
                 android:contentDescription="@string/frag_main_descr_your_avatar"/>
 
         <!-- KNOPPEN -->
-        <!-- Invisibile to make it transparent -->
+        <!-- Invisible to make it transparent -->
         <androidx.constraintlayout.widget.ConstraintLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"

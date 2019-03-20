@@ -8,7 +8,7 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
 import java.util.UUID
 
-class EventDetailsViewModel(val user: LiveData<User>, val eventUuid: UUID? = null) : ViewModel() {
+class EventDetailsViewModel(val user: LiveData<User>, eventUuid: UUID? = null) : ViewModel() {
 
     /**
      * The event that will be discussed and explained using audio, video, drawings,...
@@ -18,11 +18,12 @@ class EventDetailsViewModel(val user: LiveData<User>, val eventUuid: UUID? = nul
     /**
      * The title of the event (optional when on the main entry screen.
      * We can't observe it here, so the Fragment observes it and changes the [event] when required.
-    */
+     */
     val eventTitle = MutableLiveData<String>()
 
     init {
         if (eventUuid != null) {
+            // Recreating an existing event
             val result = user.value?.getEvent(eventUuid)
             event.postValue(result)
             eventTitle.postValue(result?.title)
@@ -55,6 +56,14 @@ class EventDetailsViewModel(val user: LiveData<User>, val eventUuid: UUID? = nul
 
     init {
         event.value = Event()
+    }
+
+    /**
+     * Helper method to be called when changing one of the properties of the [event].
+     * This is needed because just changing properties doesn't call all subscribers, only changing the actual value does.
+     */
+    fun updateEvent() {
+        event.value = event.value
     }
 
     fun onCameraButtonClicked() {

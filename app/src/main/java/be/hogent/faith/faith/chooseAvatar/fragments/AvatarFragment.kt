@@ -20,16 +20,17 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Avatar
 import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.getRotation
-import kotlinx.android.synthetic.main.fragment_avatar.*
+import kotlinx.android.synthetic.main.fragment_avatar.avatar_rv_avatar
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * A [Fragment] subclass which allows the user to choose an AvatarItem and a Backpack.
  *
- * Use the [AvatarFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * Use the [AvatarFragment.newInstance] factory method to create an instance of this fragment.
  *
  */
+const val SELECTION_ID = "avatarSelection"
+
 class AvatarFragment : Fragment() {
 
     /**
@@ -55,14 +56,15 @@ class AvatarFragment : Fragment() {
         super.onStart()
         registerAdapters()
 
-        avatarViewModel.nextButtonClicked.observe(this,
-            Observer<Any> { generateNewUser() })
+        avatarViewModel.nextButtonClicked.observe(this, Observer<Any> {
+            generateNewUser()
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: be.hogent.faith.databinding.FragmentAvatarBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_avatar, container, false)
-        binding.user = avatarViewModel
+        binding.avatarViewModel = avatarViewModel
         return binding.root
     }
 
@@ -70,7 +72,12 @@ class AvatarFragment : Fragment() {
      * Changes the orientation of the recyclerviews, depending on the orientation of the device;
      */
     private fun setOrientation() {
-        val orientation = (activity as AppCompatActivity).getRotation()
+        // Check here so we can use FragmentScenario to test
+        val orientation = if (activity is AppCompatActivity) {
+            (activity as AppCompatActivity).getRotation()
+        } else {
+            R.integer.LANDSCAPE
+        }
         when (orientation) {
             R.integer.PORTRAIT -> {
                 avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
@@ -84,19 +91,16 @@ class AvatarFragment : Fragment() {
     }
 
     /**
-     * Registers the adapters for the RecyclerViews. Checks for the orientation of the device and sets
-     * the LayoutManager for the Adapter based on this.
+     * Registers the adapters for the RecyclerViews.
+     * Checks for the orientation of the device and sets the LayoutManager for the Adapter based on this.
      */
     private fun registerAdapters() {
-
-        // avatarViewModel = ViewModelProviders.of(this).get(AvatarViewModel::class.java)
-
         val avatarAdapter = AvatarItemAdapter()
         avatar_rv_avatar.adapter = avatarAdapter
         LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
         setOrientation()
         avatarTracker = SelectionTracker.Builder<Long>(
-            "avatarSelection",
+            SELECTION_ID,
             avatar_rv_avatar,
             AvatarItemAdapter.KeyProvider(avatar_rv_avatar.adapter as AvatarItemAdapter),
             AvatarItemAdapter.DetailsLookup(avatar_rv_avatar),
@@ -105,9 +109,9 @@ class AvatarFragment : Fragment() {
             SelectionPredicates.createSelectSingleAnything()
         ).build()
 
-        (avatar_rv_avatar.adapter as AvatarItemAdapter).tracker = avatarTracker
+        (avatar_rv_avatar.adapter as AvatarItemAdapter).selectionTracker = avatarTracker
 
-        if (avatarViewModel.isSelected()) {
+        if (avatarViewModel.avatarWasSelected()) {
             avatarTracker?.select(avatarViewModel.selectedItem.value!!)
             avatar_rv_avatar.smoothScrollToPosition(avatarViewModel.selectedItem.value!!.toInt())
         }
@@ -124,13 +128,12 @@ class AvatarFragment : Fragment() {
         })
 
         // Observe the changes in the list of the avatars and update the adapter
-        avatarViewModel.avatarItems.observe(this,
-            Observer<List<Avatar>> {
-            it?.let {
-                avatarAdapter.avatarItems = it
-                avatarAdapter.notifyDataSetChanged()
-            }
-        })
+        avatarViewModel.avatarItems.observe(this, Observer<List<Avatar>> {
+                it?.let {
+                    avatarAdapter.avatarItems = it
+                    avatarAdapter.notifyDataSetChanged()
+                }
+            })
     }
 
     fun generateNewUser() {
@@ -138,7 +141,7 @@ class AvatarFragment : Fragment() {
     }
 
     /**
-     * We need to save the instance state of the tracker, otherwise
+     * We need to save the instance state of the selectionTracker, otherwise
      * the selected item will be lost.
      * TODO: See if this is possible without the onSaveinstanceState but with an observer.
      */
