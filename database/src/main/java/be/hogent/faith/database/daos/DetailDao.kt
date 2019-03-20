@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import be.hogent.faith.database.models.DetailEntity
+import be.hogent.faith.database.models.detail.DetailEntity
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import java.util.UUID

@@ -1,9 +1,10 @@
-package be.hogent.faith.database.models
+package be.hogent.faith.database.models.detail
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import be.hogent.faith.database.models.EventEntity
 import java.io.File
 import java.util.UUID
 
@@ -18,9 +19,7 @@ import java.util.UUID
         onDelete = ForeignKey.CASCADE
     )]
 )
-data class DetailEntity(
-    val type: DetailTypeEntity,
-
+abstract class DetailEntity(
     val file: File,
 
     @PrimaryKey

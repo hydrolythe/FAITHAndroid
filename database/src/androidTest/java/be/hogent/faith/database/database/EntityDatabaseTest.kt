@@ -6,18 +6,18 @@ import androidx.test.platform.app.InstrumentationRegistry
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.daos.UserDao
-import be.hogent.faith.database.models.DetailEntity
-import be.hogent.faith.database.models.DetailTypeEntity
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
+import be.hogent.faith.database.models.detail.PictureDetailEntity
+import be.hogent.faith.database.models.detail.TextDetailEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.threeten.bp.LocalDateTime
 import java.io.File
+import java.time.LocalDateTime
 import java.util.UUID
 
 class EntityDatabaseTest {
@@ -64,15 +64,20 @@ class EntityDatabaseTest {
         // Assert
         testSubscriber.assertValue {
             it.eventEntity == eventEntity
-        }
-            .dispose()
+        }.dispose()
     }
 
     @Test
     fun entityDatabase_singleEvent_withDetails_isAdded() {
         // Arrange
-        val detail1 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.VIDEO, file = File("path/detail1"))
-        val detail2 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.AUDIO, file = File("path/detail2"))
+        val detail1 = PictureDetailEntity(
+            eventUuid = eventUuid,
+            file = File("path/detail1")
+        )
+        val detail2 = TextDetailEntity(
+            eventUuid = eventUuid,
+            file = File("path/detail2")
+        )
 
         val arrange = userDao.insert(userEntity)
             .andThen(eventDao.insert(eventEntity))
@@ -87,16 +92,23 @@ class EntityDatabaseTest {
             .test()
             .assertValue {
                 it.eventEntity == eventEntity && it.detailEntities.size == 2
-            }
+                it.detailEntities.any { detailEntity -> detailEntity is TextDetailEntity }
+                it.detailEntities.any { detailEntity -> detailEntity is PictureDetailEntity }
+            }.dispose()
     }
 
     @Test
     fun entityDatabase_deleteEvent_detailsAreAlsoDeleted() {
         // Arrange
         val eventEntity = EventEntity(eventDate, "testDescription", eventFile, eventUuid, userUuid)
-
-        val detail1 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.VIDEO, file = eventFile)
-        val detail2 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.AUDIO, file = eventFile)
+        val detail1 = PictureDetailEntity(
+            eventUuid = eventUuid,
+            file = File("path/detail1")
+        )
+        val detail2 = TextDetailEntity(
+            eventUuid = eventUuid,
+            file = File("path/detail2")
+        )
 
         val arrange = userDao.insert(userEntity)
             .andThen(eventDao.insert(eventEntity))
@@ -115,16 +127,22 @@ class EntityDatabaseTest {
         act.andThen(detailDao.getDetailsForEvent(eventUuid))
             .test()
             .assertValue { it.isEmpty() }
+            .dispose()
     }
 
     @Test
-    fun entityDatabase_deletUser_EventAndDetailsAreAlsoDeleted() {
+    fun entityDatabase_deleteUser_EventAndDetailsAreAlsoDeleted() {
         // Arrange
         val eventEntity = EventEntity(eventDate, "testDescription", eventFile, eventUuid, userUuid)
 
-        val detail1 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.VIDEO, file = eventFile)
-        val detail2 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.AUDIO, file = eventFile)
-
+        val detail1 = PictureDetailEntity(
+            eventUuid = eventUuid,
+            file = File("path/detail1")
+        )
+        val detail2 = TextDetailEntity(
+            eventUuid = eventUuid,
+            file = File("path/detail2")
+        )
         val arrange = userDao.insert(userEntity)
             .andThen(eventDao.insert(eventEntity))
             .andThen(detailDao.insert(detail1))
@@ -145,6 +163,7 @@ class EntityDatabaseTest {
         act.andThen(detailDao.getDetailsForEvent(eventUuid))
             .test()
             .assertValue { it.isEmpty() }
+            .dispose()
     }
 
     @Test
@@ -161,7 +180,7 @@ class EntityDatabaseTest {
             .test()
             .assertValue {
                 it.uuid == userUuid
-            }
+            }.dispose()
     }
 
     @Test
@@ -171,8 +190,14 @@ class EntityDatabaseTest {
             EventEntity(eventDate.minusDays(10), "testDescription", eventFile, UUID.randomUUID(), userUuid)
         val eventEntity = EventEntity(eventDate, "testDescription", eventFile, eventUuid, userUuid)
 
-        val detail1 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.VIDEO, file = eventFile)
-        val detail2 = DetailEntity(eventUuid = eventUuid, type = DetailTypeEntity.AUDIO, file = eventFile)
+        val detail1 = PictureDetailEntity(
+            eventUuid = eventUuid,
+            file = File("path/detail1")
+        )
+        val detail2 = TextDetailEntity(
+            eventUuid = eventUuid,
+            file = File("path/detail2")
+        )
 
         val arrange = userDao.insert(userEntity)
             .andThen(eventDao.insert(eventEntity))
@@ -190,7 +215,7 @@ class EntityDatabaseTest {
                 it.size == 2
                 it[0].eventEntity.uuid == eventEntity.uuid
                 it[1].eventEntity.uuid == eventEntityLater.uuid
-            }
+            }.dispose()
     }
 
     @After

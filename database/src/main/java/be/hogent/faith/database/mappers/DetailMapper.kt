@@ -1,8 +1,13 @@
 package be.hogent.faith.database.mappers
 
-import be.hogent.faith.database.models.DetailEntity
-import be.hogent.faith.domain.models.Detail
-import be.hogent.faith.domain.models.DetailType
+import be.hogent.faith.database.models.detail.AudioDetailEntity
+import be.hogent.faith.database.models.detail.DetailEntity
+import be.hogent.faith.database.models.detail.PictureDetailEntity
+import be.hogent.faith.database.models.detail.TextDetailEntity
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.PictureDetail
+import be.hogent.faith.domain.models.detail.TextDetail
 import java.util.UUID
 
 /**
@@ -20,12 +25,20 @@ class DetailMapper : MapperWithForeignKey<DetailEntity, Detail> {
     }
 
     override fun mapFromEntity(entity: DetailEntity): Detail {
-        val type: DetailType = DetailTypeMapper.mapFromEntity(entity.type)
-        return Detail(type, entity.file, entity.uuid)
+        return when (entity) {
+            is AudioDetailEntity -> AudioDetail(entity.file, entity.uuid)
+            is TextDetailEntity -> TextDetail(entity.file, entity.uuid)
+            is PictureDetailEntity -> PictureDetail(entity.file, entity.uuid)
+            else -> throw ClassCastException("Unknown DetailEntity subclass encountered")
+        }
     }
 
     override fun mapToEntity(model: Detail, foreignKey: UUID): DetailEntity {
-        val entityType = DetailTypeMapper.mapToEntity(model.detailType)
-        return DetailEntity(entityType, model.file, model.uuid, foreignKey)
+        return when (model) {
+            is AudioDetail -> AudioDetailEntity(model.file, model.uuid, foreignKey)
+            is TextDetail -> TextDetailEntity(model.file, model.uuid, foreignKey)
+            is PictureDetail -> PictureDetailEntity(model.file, model.uuid, foreignKey)
+            else -> throw ClassCastException("Unknown DetailEntity subclass encountered")
+        }
     }
 }

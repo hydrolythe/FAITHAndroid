@@ -2,7 +2,7 @@ package be.hogent.faith.database.models.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import be.hogent.faith.database.models.DetailEntity
+import be.hogent.faith.database.models.detail.DetailEntity
 import be.hogent.faith.database.models.EventEntity
 
 /**

@@ -105,7 +105,7 @@ class RecordAudioViewModel(
             )
         ).subscribe({
             _recordingSavedSuccessFully.call()
-            // Name has to be cleared so future pictures start with an empty name
+            // Name has to be cleared so future pictures start with an empty recordingName
             recordingName.value = ""
         }, {
             _recordingSaveFailed.postValue(it.message)
