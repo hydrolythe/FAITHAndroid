@@ -8,20 +8,9 @@ import be.hogent.faith.database.models.EventEntity
 import java.io.File
 import java.util.UUID
 
-@Entity(
-    tableName = "details",
-    indices = [(Index(value = ["uuid"], unique = true)),
-        (Index(value = ["eventUuid"], unique = false))],
-    foreignKeys = [ForeignKey(
-        entity = EventEntity::class,
-        parentColumns = ["uuid"],
-        childColumns = ["eventUuid"],
-        onDelete = ForeignKey.CASCADE
-    )]
-)
 abstract class DetailEntity(
     val file: File,
-
+    val name: String? = null,
     @PrimaryKey
     val uuid: UUID = UUID.randomUUID(),
 
