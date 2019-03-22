@@ -26,19 +26,19 @@ class DetailMapper : MapperWithForeignKey<DetailEntity, Detail> {
 
     override fun mapFromEntity(entity: DetailEntity): Detail {
         return when (entity) {
-            is AudioDetailEntity -> AudioDetail(entity.file, entity.uuid)
-            is TextDetailEntity -> TextDetail(entity.file, entity.uuid)
-            is PictureDetailEntity -> PictureDetail(entity.file, entity.uuid)
+            is AudioDetailEntity -> AudioDetail(entity.file, entity.name, entity.uuid)
+            is TextDetailEntity -> TextDetail(entity.file, entity.name, entity.uuid)
+            is PictureDetailEntity -> PictureDetail(entity.file, entity.name, entity.uuid)
             else -> throw ClassCastException("Unknown DetailEntity subclass encountered")
         }
     }
 
     override fun mapToEntity(model: Detail, foreignKey: UUID): DetailEntity {
         return when (model) {
-            is AudioDetail -> AudioDetailEntity(model.file, model.uuid, foreignKey)
-            is TextDetail -> TextDetailEntity(model.file, model.uuid, foreignKey)
-            is PictureDetail -> PictureDetailEntity(model.file, model.uuid, foreignKey)
-            else -> throw ClassCastException("Unknown DetailEntity subclass encountered")
+            is AudioDetail -> AudioDetailEntity(model.file, model.name, model.uuid, foreignKey)
+            is TextDetail -> TextDetailEntity(model.file, model.name, model.uuid, foreignKey)
+            is PictureDetail -> PictureDetailEntity(model.file, model.name, model.uuid, foreignKey)
+            else -> throw ClassCastException("Unknown Detail subclass encountered")
         }
     }
 }

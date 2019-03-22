@@ -16,8 +16,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.threeten.bp.LocalDateTime
 import java.io.File
-import java.time.LocalDateTime
 import java.util.UUID
 
 class EntityDatabaseTest {

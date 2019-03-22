@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5eaa63bb36b98a040f7b8abf2aab9081",
+    "identityHash": "a03746b00bb7d201fadf302145032a66",
     "entities": [
       {
         "tableName": "events",
@@ -78,20 +78,20 @@
         ]
       },
       {
-        "tableName": "details",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`type` INTEGER NOT NULL, `file` TEXT NOT NULL, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`eventUuid`) REFERENCES `events`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "tableName": "DetailEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `name` TEXT, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`))",
         "fields": [
-          {
-            "fieldPath": "type",
-            "columnName": "type",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "file",
             "columnName": "file",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "uuid",
@@ -112,37 +112,8 @@
           ],
           "autoGenerate": false
         },
-        "indices": [
-          {
-            "name": "index_details_uuid",
-            "unique": true,
-            "columnNames": [
-              "uuid"
-            ],
-            "createSql": "CREATE UNIQUE INDEX `index_details_uuid` ON `${TABLE_NAME}` (`uuid`)"
-          },
-          {
-            "name": "index_details_eventUuid",
-            "unique": false,
-            "columnNames": [
-              "eventUuid"
-            ],
-            "createSql": "CREATE  INDEX `index_details_eventUuid` ON `${TABLE_NAME}` (`eventUuid`)"
-          }
-        ],
-        "foreignKeys": [
-          {
-            "table": "events",
-            "onDelete": "CASCADE",
-            "onUpdate": "NO ACTION",
-            "columns": [
-              "eventUuid"
-            ],
-            "referencedColumns": [
-              "uuid"
-            ]
-          }
-        ]
+        "indices": [],
+        "foreignKeys": []
       },
       {
         "tableName": "users",
@@ -177,7 +148,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"5eaa63bb36b98a040f7b8abf2aab9081\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"a03746b00bb7d201fadf302145032a66\")"
     ]
   }
 }
