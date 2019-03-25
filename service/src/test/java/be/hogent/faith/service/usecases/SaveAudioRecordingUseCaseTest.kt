@@ -22,8 +22,8 @@ class SaveAudioRecordingUseCaseTest {
     private val repository: StorageRepository = mockk(relaxed = true)
 
     private val tempStorageFile = File("cacheDir/tempAudioRecording.3gp")
-    private val eventName = "TestName"
-    private val recordingName = "Recording"
+    private val eventName = "Event Name Test"
+    private val recordingName = "Recording Test"
     private lateinit var event: Event
 
     @Before
@@ -68,8 +68,7 @@ class SaveAudioRecordingUseCaseTest {
 
         val resultingDetail = event.details.first()
         assertTrue(resultingDetail is AudioDetail)
-        assertEquals(eventName, resultingDetail.name)
-        // TODO: also check recordingName once it is added to the Detail class
+        assertEquals(recordingName, resultingDetail.name)
     }
 
     @Test
