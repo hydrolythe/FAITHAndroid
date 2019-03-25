@@ -8,10 +8,10 @@
     <string name="choose_red">Kies rood</string>
     <string name="choose_yellow">Kies geel</string>
     <string name="choose_green">Kies groen</string>
-    <string name="lineWidth_thin">dun</string>
-    <string name="lineWidth_medium">middel</string>
-    <string name="lineWidth_Thick">dik</string>
-    <string name="undo">ongedaan maken</string>
+    <string name="lineWidth_thin">Dun</string>
+    <string name="lineWidth_medium">Middel</string>
+    <string name="lineWidth_Thick">Dik</string>
+    <string name="undo">Ongedaan maken</string>
     <string name="frag_main_descr_city_plan">Stadsplan</string>
     <string name="frag_main_descr_your_avatar">Je avatar</string>
     <string name="frag_avatar_title">Kies je avatar</string>
@@ -50,4 +50,8 @@
     <string name="lbl_save">Opslaan</string>
     <string name="toast_foto_saved_success">Je foto werd opgeslagen!</string>
     <string name="toast_save_photo_failed">Er ging iets fout bij het opslaan van je foto.</string>
+    <string name="lbl_save_event_notes">Notities</string>
+    <string name="lbl_save_event_date">Dag</string>
+    <string name="lbl_save_event_title">Titel</string>
+    <string name="lbl_back">Terug</string>
 </resources>
