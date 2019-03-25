@@ -48,7 +48,7 @@ class TakePhotoFragment : Fragment() {
      * This should normally be done in the Dialog itself but SingleLiveEvent only supports a single Listener.
      * We need one here to update the eventDetailsVM and one in the Dialog to close it.
      */
-    private lateinit var saveDialog: SavePhotoDialogFragment
+    private lateinit var saveDialog: SavePhotoDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         takePhotoBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_take_photo, container, false)
@@ -97,7 +97,7 @@ class TakePhotoFragment : Fragment() {
         val saveFile = tempFileProvider.tempPhotoFile
         fotoApparat.takePicture().saveToFile(saveFile).whenAvailable {
             takePhotoViewModel.tempPhotoFile = saveFile
-            saveDialog = SavePhotoDialogFragment.newInstance()
+            saveDialog = SavePhotoDialog.newInstance()
             saveDialog.show(fragmentManager!!, null)
         }
     }

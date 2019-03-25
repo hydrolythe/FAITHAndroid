@@ -14,9 +14,9 @@ import org.threeten.bp.LocalDateTime
 import java.util.UUID
 
 class EventDetailsViewModel(
+    private val saveEventUseCase: SaveEventUseCase,
     val user: LiveData<User>,
-    eventUuid: UUID? = null,
-    private val saveEventUseCase: SaveEventUseCase
+    eventUuid: UUID? = null
 ) : ViewModel() {
 
     /**
