@@ -2,6 +2,7 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.UserRepository
+import be.hogent.faith.util.factory.DataFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -30,7 +31,7 @@ class GetUserUseCaseTest {
 
     @Test
     fun getUserUC_execute_callsRepo() {
-        val params = GetUserUseCase.Params(UUID.randomUUID())
+        val params = GetUserUseCase.Params(DataFactory.randomUUID())
         getUserUC.buildUseCaseObservable(params)
         verify { repository.get(any()) }
     }
@@ -38,10 +39,10 @@ class GetUserUseCaseTest {
     @Test
     fun getUserUseCase_userUuidIsPassedToRepo() {
         val userUuidArg = slot<UUID>()
-        val userUuid = UUID.randomUUID()
+        val userUuid = DataFactory.randomUUID()
         val params = GetUserUseCase.Params(userUuid)
         every { repository.get(capture(userUuidArg)) } returns Flowable
-            .just(createUser())
+            .just(mockk())
         getUserUC.buildUseCaseObservable(params)
         Assert.assertEquals(params.userUuid, userUuidArg.captured)
     }
@@ -51,7 +52,7 @@ class GetUserUseCaseTest {
         val userUuidArg = slot<UUID>()
         val userUuid = UUID.randomUUID()
         val params = GetUserUseCase.Params(userUuid)
-        val user = createUser()
+        val user = mockk<User>()
         every { repository.get(capture(userUuidArg)) } returns Flowable
             .just(user)
         val result = getUserUC.buildUseCaseObservable(params)
@@ -60,14 +61,10 @@ class GetUserUseCaseTest {
 
     @Test
     fun getUserUseCase_noUserPresent_returnsNothing() {
-        val userUuid = UUID.randomUUID()
+        val userUuid = DataFactory.randomUUID()
         val params = GetUserUseCase.Params(userUuid)
         every { repository.get(any()) } returns Flowable.empty()
         val result = getUserUC.buildUseCaseObservable(params)
         result.test().assertNoValues()
-    }
-
-    private fun createUser(): User {
-        return User(UUID.randomUUID())
     }
 }
