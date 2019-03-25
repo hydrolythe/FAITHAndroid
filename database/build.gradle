@@ -50,6 +50,8 @@ dependencies {
 
     implementation commonDependencies.kotlin
     implementation commonDependencies.threeTenABP
+    implementation commonDependencies.rxjava
+    implementation commonDependencies.rxkotlin
     implementation androidDependencies.appcompat
     implementation injectionDependencies.koin
 

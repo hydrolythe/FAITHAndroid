@@ -11,6 +11,7 @@ import be.hogent.faith.domain.models.detail.PictureDetail
 import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.service.usecases.GetUserUseCase
 import io.reactivex.disposables.CompositeDisposable
+import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.util.UUID
 

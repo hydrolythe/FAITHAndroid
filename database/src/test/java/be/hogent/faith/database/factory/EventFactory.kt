@@ -33,7 +33,7 @@ object EventFactory {
     fun makeEventWithDetailsEntity(userUuid: UUID = DataFactory.randomUID(), nbrOfDetails: Int = 5): EventWithDetails {
         return EventWithDetails().also {
             it.eventEntity = makeEventEntity(userUuid)
-            it.detailEntities = DetailFactory.makeDetailEntityList(nbrOfDetails, it.eventEntity.uuid)
+            it.addDetailEntities(DetailFactory.makeDetailEntityList(nbrOfDetails, it.eventEntity.uuid))
         }
     }
 

@@ -8,6 +8,7 @@ import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.daos.UserDao
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
+import be.hogent.faith.database.models.detail.AudioDetailEntity
 import be.hogent.faith.database.models.detail.PictureDetailEntity
 import be.hogent.faith.database.models.detail.TextDetailEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
@@ -216,6 +217,61 @@ class EntityDatabaseTest {
                 it[0].eventEntity.uuid == eventEntity.uuid
                 it[1].eventEntity.uuid == eventEntityLater.uuid
             }.dispose()
+    }
+
+    @Test
+    fun getDetails_onlyOneType_receives() {
+        // Arrange
+        val detail1 = PictureDetailEntity(
+            eventUuid = eventUuid,
+            file = File("path/detail1")
+        )
+        val arrange = userDao.insert(userEntity)
+            .andThen(eventDao.insert(eventEntity))
+            .andThen(detailDao.insert(detail1))
+
+        // Act
+        val act = arrange.andThen(detailDao.getDetailsForEvent(eventUuid))
+
+        // Assert
+        act
+            .test()
+            .assertValue { result -> result.size == 1 }
+    }
+
+    @Test
+    fun getDetails_multipleTypes_receives() {
+        // Arrange
+        val detail1 = PictureDetailEntity(
+            eventUuid = eventUuid,
+            file = File("path/detail1")
+        )
+        val detail2 = TextDetailEntity(
+            eventUuid = eventUuid,
+            file = File("path/detail2")
+        )
+        val detail3 = AudioDetailEntity(
+            eventUuid = eventUuid,
+            file = File("path/detail3")
+        )
+        val arrange = userDao.insert(userEntity)
+            .andThen(eventDao.insert(eventEntity))
+            .andThen(detailDao.insert(detail1))
+            .andThen(detailDao.insert(detail2))
+            .andThen(detailDao.insert(detail3))
+
+        // Act
+        val act = arrange.andThen(detailDao.getDetailsForEvent(eventUuid))
+
+        // Assert
+        act
+            .test()
+            .assertValue { result ->
+                result.size == 3 &&
+                        result.any { it is AudioDetailEntity } &&
+                        result.any { it is PictureDetailEntity } &&
+                        result.any { it is TextDetailEntity }
+            }
     }
 
     @After

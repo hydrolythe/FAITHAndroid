@@ -10,7 +10,7 @@ import java.util.UUID
 
 class DetailMapperTest {
     private val event = EventFactory.makeEvent()
-    private val detailMapper = DetailMapper()
+    private val detailMapper = DetailMapper
 
     @Test
     fun `should map to Detail when DetailEntity is given`() {

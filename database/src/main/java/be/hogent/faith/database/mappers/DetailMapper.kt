@@ -15,7 +15,7 @@ import java.util.UUID
  *
  * The event is required because we need its uuid to map the foreign key relationship.
  */
-class DetailMapper : MapperWithForeignKey<DetailEntity, Detail> {
+object DetailMapper : MapperWithForeignKey<DetailEntity, Detail> {
     override fun mapFromEntities(entities: List<DetailEntity>): List<Detail> {
         return entities.map { mapFromEntity(it) }
     }
