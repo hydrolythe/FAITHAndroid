@@ -11,6 +11,8 @@ import java.util.UUID
 /**
  * Used in addition to the Factories included in the util package.
  */
+// We can't put these methods here because the util package doesn't know the database package.
+// Making it depend on the database module would introduce a circular dependency.
 object EntityFactory {
     fun makeDetailEntity(eventUuid: UUID): DetailEntity {
         return DetailEntity(
