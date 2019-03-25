@@ -14,6 +14,10 @@ import io.reactivex.Flowable
 import io.reactivex.functions.Function3
 import java.util.UUID
 
+// Needs to be an abstract class so we can add our own implementation for the get and insert functions.
+// We can't just use insert/get(DetailEntity) because Room can't instantiate the abstract DetailEntity.
+// It doesn't support remembering the types when inserting the details so we require separate tables for
+// each subtype. This result in separate insert/get queries that need to be manually combined.
 @Dao
 abstract class DetailDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)

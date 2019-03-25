@@ -5,6 +5,8 @@ import androidx.room.PrimaryKey
 import java.io.File
 import java.util.UUID
 
+// The relationships are defined separately in each subclass
+// The reason why we need separate tables for each subtype is explained in the [DetailDao].
 @Entity
 abstract class DetailEntity(
     val file: File,
