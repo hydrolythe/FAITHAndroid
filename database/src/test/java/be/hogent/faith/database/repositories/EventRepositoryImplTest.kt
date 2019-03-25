@@ -29,7 +29,7 @@ class EventRepositoryImplTest {
     private val eventRepository = EventRepositoryImpl(database, eventMapper, eventWithDetailsMapper, detailMapper)
 
     private val user = UserFactory.makeUser(0)
-    private val eventWithDetails = EventFactory.makeEventWithDetailsEntity(user.uuid, 2)
+    private val eventWithDetails = EventFactory.makeEventWithDetailsEntity(user.uuid)
     private val eventUuid = eventWithDetails.eventEntity.uuid
     private val event = EventFactory.makeEvent(2)
 

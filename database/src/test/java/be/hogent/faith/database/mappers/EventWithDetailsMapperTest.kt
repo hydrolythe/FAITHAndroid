@@ -24,7 +24,7 @@ class EventWithDetailsMapperTest {
         val resultingEvent = eventWithDetailsMapper.mapFromEntity(eventWithDetailsEntity)
 
         // Assert
-        assertEqualData(eventWithDetailsEntity, resultingEvent)
+        assertEqualEventData(eventWithDetailsEntity, resultingEvent)
     }
 
     @Test
@@ -36,7 +36,7 @@ class EventWithDetailsMapperTest {
         val resultingEvent = eventWithDetailsMapper.mapFromEntity(eventWithDetailsEntity)
 
         // Assert
-        assertEqualData(eventWithDetailsEntity, resultingEvent)
+        assertEqualEventData(eventWithDetailsEntity, resultingEvent)
     }
 
     @Test
@@ -48,7 +48,7 @@ class EventWithDetailsMapperTest {
         val resultingEventEntity = eventWithDetailsMapper.mapToEntity(event, user.uuid)
 
         // Assert
-        assertEqualData(resultingEventEntity, event)
+        assertEqualEventData(resultingEventEntity, event)
     }
 
     @Test
@@ -60,23 +60,22 @@ class EventWithDetailsMapperTest {
         val resultingEventEntity = eventWithDetailsMapper.mapToEntity(event, user.uuid)
 
         // Assert
-        assertEqualData(resultingEventEntity, event)
+        assertEqualEventData(resultingEventEntity, event)
     }
 
-    private fun assertEqualData(
+    private fun assertEqualEventData(
         entity: EventWithDetails,
         model: Event
     ) {
-        with(entity.eventEntity) {
-            assertEquals(uuid, model.uuid)
-            assertEquals(dateTime, model.dateTime)
-            assertEquals(title, model.title)
-            assertEquals(entity.detailEntities.size, model.details.size)
-            var i = 0
-            entity.detailEntities.forEach {
-                assertEqualDetailsData(it, model.details[i], uuid)
-                i++
-            }
+        assertEquals(entity.eventEntity.uuid, model.uuid)
+        assertEquals(entity.eventEntity.dateTime, model.dateTime)
+        assertEquals(entity.eventEntity.title, model.title)
+
+        assertEquals(entity.detailEntities.size, model.details.size)
+        // Can't just use index because detailsList is actually a mix of three separate lists in the EventWithDetail
+        entity.detailEntities.forEach { detailEntity ->
+            val correspondingDetail = model.details.find { detailModel -> detailModel.uuid == detailEntity.uuid }
+            assertEqualDetailsData(detailEntity, correspondingDetail!!, entity.eventEntity.uuid)
         }
     }
 
@@ -85,10 +84,8 @@ class EventWithDetailsMapperTest {
         model: Detail,
         entityUuid: UUID
     ) {
-        with(entity) {
-            assertEquals(uuid, model.uuid)
-            assertEquals(file, model.file)
-            assertEquals(eventUuid, entityUuid)
-        }
+        assertEquals(entity.uuid, model.uuid)
+        assertEquals(entity.file, model.file)
+        assertEquals(entity.eventUuid, entityUuid)
     }
 }

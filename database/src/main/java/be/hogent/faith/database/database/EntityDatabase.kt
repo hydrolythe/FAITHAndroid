@@ -13,12 +13,18 @@ import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.daos.UserDao
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
+import be.hogent.faith.database.models.detail.AudioDetailEntity
 import be.hogent.faith.database.models.detail.DetailEntity
+import be.hogent.faith.database.models.detail.PictureDetailEntity
+import be.hogent.faith.database.models.detail.TextDetailEntity
 
 @Database(
     entities = [
         EventEntity::class,
         DetailEntity::class,
+        AudioDetailEntity::class,
+        PictureDetailEntity::class,
+        TextDetailEntity::class,
         UserEntity::class],
     version = 1,
     exportSchema = true

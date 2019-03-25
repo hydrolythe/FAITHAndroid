@@ -4,7 +4,7 @@ import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.domain.models.Event
 import java.util.UUID
 
-class EventMapper : MapperWithForeignKey<EventEntity, Event> {
+object EventMapper : MapperWithForeignKey<EventEntity, Event> {
 
     override fun mapFromEntity(entity: EventEntity): Event {
         return Event(
