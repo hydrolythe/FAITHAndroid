@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentMainScreenBinding
+import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.util.TAG
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -24,6 +25,10 @@ import org.koin.android.viewmodel.ext.android.viewModel
  * Upon clicking an area the corresponding screen will open.
  */
 class MainScreenFragment : Fragment() {
+
+    companion object {
+        fun newInstance() = MainScreenFragment()
+    }
 
     private var navigation: MainScreenNavigationListener? = null
     private val mainScreenViewModel: MainScreenViewModel by viewModel()

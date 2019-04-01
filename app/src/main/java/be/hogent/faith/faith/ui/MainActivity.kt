@@ -1,11 +1,18 @@
 package be.hogent.faith.faith.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.DetailType
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
+import be.hogent.faith.faith.editDetail.EditDetailFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
@@ -15,6 +22,7 @@ import be.hogent.faith.faith.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.util.replaceFragment
+import com.google.android.material.navigation.NavigationView
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -40,9 +48,9 @@ class MainActivity : AppCompatActivity(),
     // They all require the same event object so it has to be shared.
     // This may cause issues when entering multiple events. A possible solution might be to have an Activity for each
     // of the 4 main functions of the app.
-    lateinit var eventDetailsViewModel: EventDetailsViewModel
+    private lateinit var eventDetailsViewModel: EventDetailsViewModel
 
-    lateinit var takePhotoViewModel: TakePhotoViewModel
+    private lateinit var takePhotoViewModel: TakePhotoViewModel
     private val userViewModel by viewModel<UserViewModel>()
 
     lateinit var recordAudioViewModel: RecordAudioViewModel
@@ -66,12 +74,60 @@ class MainActivity : AppCompatActivity(),
         // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
             // val fragment = AvatarFragment.newInstance()
-            val fragment = MainScreenFragment()
+            val fragment = MainScreenFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
+
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            // set item as selected to persist highlight
+            // menuItem.isChecked = true
+            // close drawer when item is tapped
+            drawerLayout.closeDrawers()
+
+            when (menuItem.itemId) {
+                R.id.nav_city -> {
+                    val fragment = getTopFragment()
+                    if (fragment != null && (fragment is BackToCityListener) && fragment.needConfirmation()) {
+                        val alertDialog: AlertDialog? = this?.let {
+                            val builder = AlertDialog.Builder(it).apply {
+                                setTitle((fragment as BackToCityListener).getConfirmationTitle())//.get(R.string.event_details_label_title)
+                                setMessage((fragment as BackToCityListener).getConfirmationMessage())
+                                setPositiveButton(R.string.ok,
+                                    DialogInterface.OnClickListener { dialog, id ->
+                                        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                                    })
+                                setNegativeButton(R.string.cancel,
+                                    DialogInterface.OnClickListener { dialog, id ->
+                                        dialog.cancel()
+                                    })
+
+                            }
+                            builder.create()
+                        }
+                        alertDialog?.show()
+                    }
+                    else
+                        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                }
+            }
+            true
+
+        }
     }
+
+    private fun getTopFragment(): Fragment? {
+        supportFragmentManager.run {
+            return when (fragments.size) { //(backStackEntryCount) {
+                0 -> null
+                else -> fragments[fragments.size - 1]
+            }
+        }
+    }
+
 
 //    /**
 //     * Sets the [User] currently working with the application.
@@ -103,5 +159,9 @@ class MainActivity : AppCompatActivity(),
 
     override fun startEventDetailsFragment(eventUuid: UUID) {
         replaceFragment(EventDetailsFragment.newInstance(eventUuid), R.id.fragment_container)
+    }
+
+    override fun startEventDetail(type: DetailType) {
+        replaceFragment(EditDetailFragment.newInstance(type), R.id.fragment_container)
     }
 }
