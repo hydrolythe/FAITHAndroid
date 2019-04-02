@@ -7,7 +7,7 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 
-open class CreateUserUseCase(
+class CreateUserUseCase(
     private val userRepository: UserRepository,
     observeScheduler: Scheduler
 ) : CompletableUseCase<CreateUserUseCase.Params>(Schedulers.io(), observeScheduler) {
