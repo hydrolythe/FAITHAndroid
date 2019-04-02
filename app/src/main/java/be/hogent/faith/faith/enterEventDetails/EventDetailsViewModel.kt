@@ -17,8 +17,7 @@ import java.util.UUID
 
 class EventDetailsViewModel(
     private val saveEventUseCase: SaveEventUseCase,
-    val user: LiveData<User>,
-    eventUuid: UUID? = null
+    val user: LiveData<User>
 ) : ViewModel() {
 
     /**
@@ -51,14 +50,27 @@ class EventDetailsViewModel(
 
     private val disposables = CompositeDisposable()
 
+    private val _eventSavedSuccessFully = SingleLiveEvent<Unit>()
+    val eventSavedSuccessFully: LiveData<Unit>
+        get() = _eventSavedSuccessFully
+
+    /**
+     * Will be updated with the latest error message when an error occurs when saving
+     */
+    private val _eventSaveFailed = MutableLiveData<String>()
+    val eventSaveFailed: LiveData<String>
+        get() = _eventSaveFailed
+
     init {
-        if (eventUuid != null) {
-            // Recreating an existing event
-            val result = user.value?.getEvent(eventUuid)
-            event.postValue(result)
-            eventTitle.postValue(result?.title)
-        }
         eventDate.value = LocalDateTime.now()
+    }
+
+    fun setEvent(eventUUID: UUID) {
+        user.value!!.getEvent(eventUUID)?.let {
+            event.postValue(it)
+            eventTitle.postValue(it.title)
+            eventNotes.postValue(it.notes)
+        }
     }
 
     private val _cameraButtonClicked = SingleLiveEvent<Unit>()
@@ -137,8 +149,10 @@ class EventDetailsViewModel(
         val params = SaveEventUseCase.Params(event.value!!, user.value!!)
         val disposable = saveEventUseCase.execute(params).subscribe({
             Log.i(TAG, "New event saved: ${event.value!!.title}")
+            _eventSavedSuccessFully.call()
         }, {
             Log.i(TAG, "Event failed to save because: ${it.message}")
+            _eventSaveFailed.postValue(it.localizedMessage)
         })
         disposables.add(disposable)
     }
