@@ -83,6 +83,11 @@ class EventDetailsFragment : Fragment() {
                 event.dateTime = newDate
             }
         })
+        eventDetailsViewModel.eventNotes.observe(this, Observer { newNotes ->
+            eventDetailsViewModel.event.value?.let { event ->
+                event.notes = newNotes
+            }
+        })
 
         // Listen to click events
         eventDetailsViewModel.emotionAvatarClicked.observe(this, Observer {

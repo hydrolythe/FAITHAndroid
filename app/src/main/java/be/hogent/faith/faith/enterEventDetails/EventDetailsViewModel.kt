@@ -136,9 +136,9 @@ class EventDetailsViewModel(
     fun onSaveButtonClicked() {
         val params = SaveEventUseCase.Params(event.value!!, user.value!!)
         val disposable = saveEventUseCase.execute(params).subscribe({
-            Log.i(TAG, "Event saved")
+            Log.i(TAG, "New event saved: ${event.value!!.title}")
         }, {
-            Log.i(TAG, "Event failed to save ${it.message}")
+            Log.i(TAG, "Event failed to save because: ${it.message}")
         })
         disposables.add(disposable)
     }
