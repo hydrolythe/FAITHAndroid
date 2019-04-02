@@ -21,6 +21,11 @@ data class Event(
      */
     var emotionAvatar: File? = null,
 
+    /**
+     * The notes that were added to this event.
+     */
+    var notes: String? = null,
+
     val uuid: UUID = UUID.randomUUID()
 ) {
 
