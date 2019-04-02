@@ -16,7 +16,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
-import java.util.UUID
 
 val appModule = module(override = true) {
 
@@ -25,7 +24,6 @@ val appModule = module(override = true) {
 
     // ViewModels
     viewModel { MainScreenViewModel() }
-    viewModel { (user: LiveData<User>, eventUuid: UUID?) -> EventDetailsViewModel(get(), user, eventUuid) }
     viewModel { (user: LiveData<User>) -> EventDetailsViewModel(get(), user) }
     viewModel { DrawEmotionViewModel() }
     viewModel { UserViewModel(get()) }

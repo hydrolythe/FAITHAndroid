@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
@@ -61,8 +62,22 @@ class EventDetailsViewModel(
     val eventSaveFailed: LiveData<String>
         get() = _eventSaveFailed
 
+
+    /**
+     * Holds potential error messages that will be displayed to the user when he/she tries to save the event but
+     * not enough information was given.
+     * Example: trying to save the event but no title was given.
+     *
+     * Values should be reference to string resources, not the strings themselves.
+     */
+    private val _inputErrorMessageID = MutableLiveData<Int>()
+    val inputErrorMessageID: LiveData<Int>
+        get() = _inputErrorMessageID
+
+
     init {
         eventDate.value = LocalDateTime.now()
+
     }
 
     fun setEvent(eventUUID: UUID) {
@@ -146,6 +161,11 @@ class EventDetailsViewModel(
     }
 
     fun onSaveButtonClicked() {
+        if (eventTitle.value!!.isEmpty()) {
+            _inputErrorMessageID.value = R.string.toast_event_no_title
+            return
+        }
+
         val params = SaveEventUseCase.Params(event.value!!, user.value!!)
         val disposable = saveEventUseCase.execute(params).subscribe({
             Log.i(TAG, "New event saved: ${event.value!!.title}")

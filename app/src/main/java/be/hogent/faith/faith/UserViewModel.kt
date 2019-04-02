@@ -49,8 +49,8 @@ class UserViewModel(private val getUserUseCase: GetUserUseCase) : ViewModel() {
 
         val user = User(userUuid)
 
-        val event1 = Event(eventDate, "testDescription1", file, UUID.randomUUID())
-        val event2 = Event(eventDate, "testDescription2", file, UUID.randomUUID())
+        val event1 = Event(eventDate, "testDescription1", file, "notities", UUID.randomUUID())
+        val event2 = Event(eventDate, "testDescription2", file, "nog notities", UUID.randomUUID())
 
         val detail1 = Detail(DetailType.VIDEO, file, UUID.randomUUID())
         val detail2 = Detail(DetailType.AUDIO, file, UUID.randomUUID())
