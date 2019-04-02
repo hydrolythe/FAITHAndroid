@@ -8,7 +8,7 @@ data class Event(
     /**
      * The time when this event occured.
      */
-    val dateTime: LocalDateTime = LocalDateTime.now(),
+    var dateTime: LocalDateTime = LocalDateTime.now(),
 
     /**
      * The title doesn't have to be filled in immediately when recording it, but it _has_ to be filled in once the

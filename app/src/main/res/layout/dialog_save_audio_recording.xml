@@ -4,60 +4,60 @@
     <data>
 
         <variable
-                name="recordAudioViewModel"
-                type="be.hogent.faith.faith.recordAudio.RecordAudioViewModel"/>
+            name="recordAudioViewModel"
+            type="be.hogent.faith.faith.recordAudio.RecordAudioViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                       xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                       android:layout_width="wrap_content"
-                                                       android:layout_height="wrap_content">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
 
         <TextView
-                android:text="@string/lbl_detail_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:id="@+id/lbl_save_audio_recording_name"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"/>
+            android:id="@+id/lbl_save_audio_recording_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/lbl_detail_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="@string/hint_audio_recording_name"
-                android:imeOptions="flagNoFullscreen"
-                android:text="@={recordAudioViewModel.recordingName}"
-                android:id="@+id/txt_save_audio_recording_name"
-                app:layout_constraintBaseline_toBaselineOf="@+id/lbl_save_audio_recording_name"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/lbl_save_audio_recording_name"
-                android:layout_marginStart="8dp"/>
+            android:id="@+id/txt_save_audio_recording_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/hint_audio_recording_name"
+            android:imeOptions="flagNoFullscreen"
+            android:inputType="textPersonName"
+            android:text="@={recordAudioViewModel.recordingName}"
+            app:layout_constraintBaseline_toBaselineOf="@+id/lbl_save_audio_recording_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lbl_save_audio_recording_name" />
 
         <Button
-                android:text="@android:string/cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_save_audio_recording_cancel"
-                android:onClick="@{() -> recordAudioViewModel.onCancelButtonClicked()}"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/txt_save_audio_recording_name"/>
+            android:id="@+id/btn_save_audio_recording_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:onClick="@{() -> recordAudioViewModel.onCancelButtonClicked()}"
+            android:text="@android:string/cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_save_audio_recording_name" />
 
         <Button
-                android:text="@string/save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_save_audio_recording_save"
-                android:layout_marginTop="8dp"
-                android:onClick="@{() -> recordAudioViewModel.onSaveButtonClicked()}"
-                app:layout_constraintTop_toBottomOf="@+id/txt_save_audio_recording_name"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp"/>
+            android:id="@+id/btn_save_audio_recording_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:onClick="@{() -> recordAudioViewModel.onSaveButtonClicked()}"
+            android:text="@string/save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_save_audio_recording_name" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
