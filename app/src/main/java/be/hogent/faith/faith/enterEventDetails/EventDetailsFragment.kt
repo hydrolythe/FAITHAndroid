@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -89,6 +90,10 @@ class EventDetailsFragment : Fragment() {
             }
         })
 
+        eventDetailsViewModel.inputErrorMessageID.observe(this, Observer { errorMessageID ->
+            Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
+        })
+
         // Update adapter when event changes
         eventDetailsViewModel.event.observe(this, Observer { event ->
             detailThumbnailsAdapter?.updateDetailsList(event.details)
@@ -107,6 +112,17 @@ class EventDetailsFragment : Fragment() {
         eventDetailsViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
             saveDialog.show(fragmentManager!!, null)
+        })
+        eventDetailsViewModel.eventSavedSuccessFully.observe(this, Observer {
+            Toast.makeText(context, R.string.toast_save_event_success, Toast.LENGTH_LONG).show()
+            saveDialog.dismiss()
+
+            // Go back to main screen
+            fragmentManager!!.popBackStack()
+        })
+        eventDetailsViewModel.eventSaveFailed.observe(this, Observer { errorMessage ->
+            Toast.makeText(context, R.string.toast_save_event_failed, Toast.LENGTH_LONG).show()
+            saveDialog.dismiss()
         })
     }
 
