@@ -21,9 +21,10 @@ private const val ARG_EVENTUUID = "eventUUID"
 class EventDetailsFragment : Fragment() {
 
     private var navigation: EventDetailsNavigationListener? = null
+
     private lateinit var userViewModel: UserViewModel
-    //    private lateinit var eventDetailsViewModel: EventDetailsViewModel
     private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
+
     private lateinit var eventDetailsBinding: FragmentEnterEventDetailsBinding
 
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
@@ -33,12 +34,11 @@ class EventDetailsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userViewModel = getViewModel()
-        // Can't really do it like this because we need the sharedViewModel!
-//        eventDetailsViewModel = if (arguments?.getSerializable(ARG_EVENTUUID) != null) {
-//            getViewModel { parametersOf(userViewModel.user, arguments?.getSerializable(ARG_EVENTUUID)) }
-//        } else {
-//            getViewModel { parametersOf(userViewModel.user) }
-//        }
+
+        // When an UUID is given the [eventDetailsViewModel] should be updated to show the given event's state.
+        arguments?.getSerializable(ARG_EVENTUUID)?.let {
+            eventDetailsViewModel.setEvent(it as UUID)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -89,6 +89,11 @@ class EventDetailsFragment : Fragment() {
             }
         })
 
+        // Update adapter when event changes
+        eventDetailsViewModel.event.observe(this, Observer { event ->
+            detailThumbnailsAdapter?.updateDetailsList(event.details)
+        })
+
         // Listen to click events
         eventDetailsViewModel.emotionAvatarClicked.observe(this, Observer {
             navigation?.startDrawEmotionAvatarFragment()
@@ -98,9 +103,6 @@ class EventDetailsFragment : Fragment() {
         })
         eventDetailsViewModel.audioButtonClicked.observe(this, Observer {
             navigation?.startRecordAudioFragment()
-        })
-        eventDetailsViewModel.event.observe(this, Observer { event ->
-            detailThumbnailsAdapter?.updateDetailsList(event.details)
         })
         eventDetailsViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
