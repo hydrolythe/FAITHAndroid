@@ -6,7 +6,7 @@
     <data>
 
         <variable
-                name="eventDetailsVM"
+                name="eventViewModel"
                 type="be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel"/>
     </data>
 
@@ -42,7 +42,7 @@
                 android:id="@+id/editText_event_details_event_title"
                 app:layout_constraintStart_toEndOf="@id/label_event_details_event_title"
                 app:layout_constraintEnd_toStartOf="@id/event_details_middleDivider"
-                android:text="@={eventDetailsVM.eventTitle}"
+                android:text="@={eventViewModel.eventTitle}"
                 tools:text="Titel van de gebeurtenis"
                 app:layout_constraintBaseline_toBaselineOf="@id/label_event_details_event_title"
                 />
@@ -62,7 +62,7 @@
                 app:layout_constraintBottom_toTopOf="@id/btn_event_details_audio"
                 android:src="@drawable/event_detail_text"
                 android:id="@+id/btn_event_details_text"
-                android:onClick="@{() -> eventDetailsVM.onTextButtonClicked()}"
+                android:onClick="@{() -> eventViewModel.onTextButtonClicked()}"
                 app:layout_constraintEnd_toStartOf="@id/event_details_middleDivider"
                 app:layout_constraintStart_toStartOf="parent"
                 android:contentDescription="@string/description_addText"/>
@@ -73,7 +73,7 @@
                 android:layout_margin="16dp"
                 app:layout_constraintTop_toTopOf="@id/event_details_upperDivider"
                 app:layout_constraintStart_toEndOf="@id/event_details_middleDivider"
-                android:onClick="@{() -> eventDetailsVM.onCameraButtonClicked()}"
+                android:onClick="@{() -> eventViewModel.onCameraButtonClicked()}"
                 app:layout_constraintBottom_toTopOf="@id/btn_event_details_drawing"
                 android:src="@drawable/event_detail_camera"
                 android:id="@+id/btn_event_details_camera"
@@ -88,7 +88,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/event_details_lowerDivider"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/event_details_middleDivider"
-                android:onClick="@{() -> eventDetailsVM.onAudioButtonClicked()}"
+                android:onClick="@{() -> eventViewModel.onAudioButtonClicked()}"
                 app:layout_constraintTop_toBottomOf="@id/btn_event_details_text"
                 android:id="@+id/btn_event_details_audio"
                 android:contentDescription="@string/description_addAudio"/>
@@ -97,7 +97,7 @@
                 android:layout_width="0dp"
                 android:layout_margin="16dp"
                 android:src="@drawable/event_detail_drawing"
-                android:onClick="@{() -> eventDetailsVM.onDrawingButtonClicked()}"
+                android:onClick="@{() -> eventViewModel.onDrawingButtonClicked()}"
                 android:layout_height="0dp"
                 android:id="@+id/btn_event_details_drawing"
                 app:layout_constraintStart_toEndOf="@id/event_details_middleDivider"
@@ -131,7 +131,7 @@
                 app:layout_constraintTop_toBottomOf="@id/event_details_lowerDivider"
                 android:src="@drawable/event_details_send"
                 android:layout_margin="16dp"
-                android:onClick="@{() -> eventDetailsVM.onSendButtonClicked()}"
+                android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/event_details_sideDivider"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -147,7 +147,7 @@
         <ImageButton
                 android:layout_height="wrap_content"
                 android:src="@drawable/event_detail_go_to_emotion"
-                android:onClick="@{() -> eventDetailsVM.onEmotionAvatarClicked()}"
+                android:onClick="@{() -> eventViewModel.onEmotionAvatarClicked()}"
                 android:id="@+id/btn_event_details_gotoEmotionAvatar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/event_details_sideDivider"

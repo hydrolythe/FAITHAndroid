@@ -13,7 +13,7 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
 import be.hogent.faith.faith.UserViewModel
 import org.koin.android.viewmodel.ext.android.getViewModel
-import org.koin.core.parameter.parametersOf
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import java.util.UUID
 
 private const val ARG_EVENTUUID = "eventUUID"
@@ -22,26 +22,28 @@ class EventDetailsFragment : Fragment() {
 
     private var navigation: EventDetailsNavigationListener? = null
     private lateinit var userViewModel: UserViewModel
-    private lateinit var eventDetailsViewModel: EventDetailsViewModel
+    //    private lateinit var eventDetailsViewModel: EventDetailsViewModel
+    private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
     private lateinit var eventDetailsBinding: FragmentEnterEventDetailsBinding
 
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
 
+    private lateinit var saveDialog: SaveEventDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userViewModel = getViewModel()
-        if (arguments?.getSerializable(ARG_EVENTUUID) != null) {
-            eventDetailsViewModel =
-                getViewModel { parametersOf(userViewModel.user, arguments?.getSerializable(ARG_EVENTUUID)) }
-        } else {
-            eventDetailsViewModel =
-                getViewModel { parametersOf(userViewModel.user) }
-        }
+        // Can't really do it like this because we need the sharedViewModel!
+//        eventDetailsViewModel = if (arguments?.getSerializable(ARG_EVENTUUID) != null) {
+//            getViewModel { parametersOf(userViewModel.user, arguments?.getSerializable(ARG_EVENTUUID)) }
+//        } else {
+//            getViewModel { parametersOf(userViewModel.user) }
+//        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         eventDetailsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_enter_event_details, container, false)
-        eventDetailsBinding.eventDetailsVM = eventDetailsViewModel
+        eventDetailsBinding.eventViewModel = eventDetailsViewModel
         eventDetailsBinding.lifecycleOwner = this
         return eventDetailsBinding.root
     }
@@ -70,11 +72,19 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun startListeners() {
+        // Update event on user input
         eventDetailsViewModel.eventTitle.observe(this, Observer { newTitle ->
             eventDetailsViewModel.event.value?.let { event ->
                 event.title = newTitle
             }
         })
+        eventDetailsViewModel.eventDate.observe(this, Observer { newDate ->
+            eventDetailsViewModel.event.value?.let { event ->
+                event.dateTime = newDate
+            }
+        })
+
+        // Listen to click events
         eventDetailsViewModel.emotionAvatarClicked.observe(this, Observer {
             navigation?.startDrawEmotionAvatarFragment()
         })
@@ -86,6 +96,10 @@ class EventDetailsFragment : Fragment() {
         })
         eventDetailsViewModel.event.observe(this, Observer { event ->
             detailThumbnailsAdapter?.updateDetailsList(event.details)
+        })
+        eventDetailsViewModel.sendButtonClicked.observe(this, Observer {
+            saveDialog = SaveEventDialog.newInstance()
+            saveDialog.show(fragmentManager!!, null)
         })
     }
 

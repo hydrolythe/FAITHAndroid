@@ -3,6 +3,7 @@ package be.hogent.faith.faith.enterEventDetails
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
@@ -11,6 +12,7 @@ import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.service.usecases.SaveEventUseCase
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import java.util.UUID
 
 class EventDetailsViewModel(
@@ -37,6 +39,10 @@ class EventDetailsViewModel(
      */
     val eventDate = MutableLiveData<LocalDateTime>()
 
+    val eventDateString: LiveData<String> = Transformations.map<LocalDateTime, String>(eventDate) { date ->
+        date.format(DateTimeFormatter.ISO_DATE)
+    }
+
     /**
      * The notes that are added when saving the event
      * We can't observe it here, so the Fragment observes it and changes the [event] when required.
@@ -52,6 +58,7 @@ class EventDetailsViewModel(
             event.postValue(result)
             eventTitle.postValue(result?.title)
         }
+        eventDate.value = LocalDateTime.now()
     }
 
     private val _cameraButtonClicked = SingleLiveEvent<Unit>()
@@ -131,7 +138,7 @@ class EventDetailsViewModel(
         val disposable = saveEventUseCase.execute(params).subscribe({
             Log.i(TAG, "Event saved")
         }, {
-            Log.i(TAG, "Event failed to save")
+            Log.i(TAG, "Event failed to save ${it.message}")
         })
         disposables.add(disposable)
     }
