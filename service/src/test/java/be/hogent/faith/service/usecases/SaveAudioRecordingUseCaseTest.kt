@@ -3,6 +3,8 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.util.factory.DataFactory
+import be.hogent.faith.util.factory.EventFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -12,7 +14,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.io.IOException
 
@@ -21,18 +22,15 @@ class SaveAudioRecordingUseCaseTest {
     private val scheduler: Scheduler = mockk()
     private val repository: StorageRepository = mockk(relaxed = true)
 
-    private val tempStorageFile = File("cacheDir/tempAudioRecording.3gp")
-    private val eventName = "Event Name Test"
-    private val recordingName = "Recording Test"
+    private val tempStorageFile = DataFactory.randomFile()
+    private val eventName = DataFactory.randomString()
+    private val recordingName = DataFactory.randomString()
     private lateinit var event: Event
 
     @Before
     fun setUp() {
         saveAudioRecordingUseCase = SaveAudioRecordingUseCase(repository, scheduler)
-        event = Event(
-            dateTime = LocalDateTime.of(2019, 2, 19, 16, 58),
-            title = eventName
-        )
+        event = EventFactory.makeEvent(nbrOfDetails = 0)
     }
 
     @Test

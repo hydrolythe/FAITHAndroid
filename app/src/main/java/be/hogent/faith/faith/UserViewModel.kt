@@ -8,8 +8,8 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.PictureDetail
-import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.service.usecases.GetUserUseCase
+import be.hogent.faith.util.TAG
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDateTime
 import java.io.File

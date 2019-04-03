@@ -1,12 +1,13 @@
 package be.hogent.faith.database.mappers
 
-import be.hogent.faith.database.factory.DataFactory
-import be.hogent.faith.database.factory.EventFactory
-import be.hogent.faith.database.factory.UserFactory
+import be.hogent.faith.database.factory.EntityFactory
 import be.hogent.faith.database.models.detail.DetailEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.util.factory.DataFactory
+import be.hogent.faith.util.factory.EventFactory
+import be.hogent.faith.util.factory.UserFactory
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.UUID
@@ -18,7 +19,7 @@ class EventWithDetailsMapperTest {
     @Test
     fun eventMapper_mapFromEntity_noDetails() {
         // Arrange
-        val eventWithDetailsEntity = EventFactory.makeEventWithDetailsEntity(DataFactory.randomUID(), 0)
+        val eventWithDetailsEntity = EntityFactory.makeEventWithDetailsEntity(DataFactory.randomUUID(), 0)
 
         // Act
         val resultingEvent = eventWithDetailsMapper.mapFromEntity(eventWithDetailsEntity)
@@ -30,7 +31,7 @@ class EventWithDetailsMapperTest {
     @Test
     fun eventMapper_mapFromEntity_withDetails() {
         // Arrange EventEntity
-        val eventWithDetailsEntity = EventFactory.makeEventWithDetailsEntity()
+        val eventWithDetailsEntity = EntityFactory.makeEventWithDetailsEntity()
 
         // Act
         val resultingEvent = eventWithDetailsMapper.mapFromEntity(eventWithDetailsEntity)

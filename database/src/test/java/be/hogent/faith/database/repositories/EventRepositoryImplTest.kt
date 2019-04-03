@@ -3,14 +3,15 @@ package be.hogent.faith.database.repositories
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.database.EntityDatabase
-import be.hogent.faith.database.factory.EventFactory
-import be.hogent.faith.database.factory.UserFactory
+import be.hogent.faith.database.factory.EntityFactory
 import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.EventWithDetailsMapper
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.util.factory.EventFactory
+import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
@@ -29,7 +30,7 @@ class EventRepositoryImplTest {
     private val eventRepository = EventRepositoryImpl(database, eventMapper, eventWithDetailsMapper, detailMapper)
 
     private val user = UserFactory.makeUser(0)
-    private val eventWithDetails = EventFactory.makeEventWithDetailsEntity(user.uuid)
+    private val eventWithDetails = EntityFactory.makeEventWithDetailsEntity(user.uuid, 2)
     private val eventUuid = eventWithDetails.eventEntity.uuid
     private val event = EventFactory.makeEvent(2)
 

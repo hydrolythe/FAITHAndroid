@@ -12,12 +12,12 @@ import be.hogent.faith.database.models.detail.AudioDetailEntity
 import be.hogent.faith.database.models.detail.PictureDetailEntity
 import be.hogent.faith.database.models.detail.TextDetailEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
+import be.hogent.faith.util.factory.DataFactory
 import io.reactivex.subscribers.TestSubscriber
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.util.UUID
 
@@ -29,10 +29,10 @@ class EntityDatabaseTest {
 
     private lateinit var db: EntityDatabase
 
-    private val userUuid = UUID.randomUUID()
-    private val eventUuid = UUID.fromString("d883853b-7b23-401f-816b-ed4231e6dd6a")
-    private val eventDate = LocalDateTime.of(2018, 10, 28, 7, 33)!!
-    private val eventFile = File("path/to/eventFile")
+    private val userUuid = DataFactory.randomUUID()
+    private val eventUuid = DataFactory.randomUUID()
+    private val eventDate = DataFactory.randomDateTime()
+    private val eventFile = DataFactory.randomFile()
     private val userEntity = UserEntity(userUuid)
     private val eventEntity = EventEntity(eventDate, "testDescription", eventFile, eventUuid, userUuid)
 
