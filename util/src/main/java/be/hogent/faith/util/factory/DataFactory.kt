@@ -1,11 +1,12 @@
-package be.hogent.faith.database.factory
+package be.hogent.faith.util.factory
 
+import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.LocalTime
 import java.io.File
 import java.nio.charset.Charset
 import java.util.Random
 import java.util.UUID
-import java.util.concurrent.ThreadLocalRandom
 
 object DataFactory {
 
@@ -16,7 +17,7 @@ object DataFactory {
         return File("testDirectory/$generatedString")
     }
 
-    fun randomUID(): UUID {
+    fun randomUUID(): UUID {
         return UUID.randomUUID()
     }
 
@@ -25,7 +26,7 @@ object DataFactory {
     }
 
     fun randomInt(): Int {
-        return ThreadLocalRandom.current().nextInt(0, 1000 + 1)
+        return (0 until 1000 + 1).random()
     }
 
     fun randomLong(): Long {
@@ -36,10 +37,21 @@ object DataFactory {
         return Math.random() < 0.5
     }
 
+    fun randomTime(): LocalTime {
+        val hour = (0 until 23).random()
+        val minutes = (0 until 59).random()
+        return LocalTime.of(hour, minutes)
+    }
+
+    fun randomDate(): LocalDate {
+        val year = (1990 until 2018).random()
+        val month = (1 until 12).random()
+        val day = (1 until 29).random()
+
+        return LocalDate.of(year, month, day)
+    }
+
     fun randomDateTime(): LocalDateTime {
-        val year = ThreadLocalRandom.current().nextInt(1990, 2020)
-        val month = ThreadLocalRandom.current().nextInt(1, 13)
-        val day = ThreadLocalRandom.current().nextInt(1, 29)
-        return LocalDateTime.of(year, month, day, 7, 33)
+        return LocalDateTime.of(randomDate(), randomTime())
     }
 }
