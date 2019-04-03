@@ -27,7 +27,7 @@ class AvatarViewModel : ViewModel() {
         get() = _nextButtonClicked
 
     /**
-     * User name of the user
+     * User recordingName of the user
      */
     var userName = MutableLiveData<String>()
 
