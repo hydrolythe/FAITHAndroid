@@ -3,6 +3,8 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.util.factory.DataFactory
+import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -11,8 +13,6 @@ import io.reactivex.Scheduler
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.threeten.bp.LocalDateTime
-import java.util.UUID
 import java.util.concurrent.Executor
 
 class CreateEventUseCaseTest {
@@ -34,14 +34,15 @@ class CreateEventUseCaseTest {
         // Arrange
         val eventArg = slot<Event>()
         val userArg = slot<User>()
-        val user = User(UUID.randomUUID())
+        val user = UserFactory.makeUser()
         every { repository.insert(capture(eventArg), capture(userArg)) } returns Completable.complete()
 
-        val dateTime = LocalDateTime.of(2018, 10, 28, 8, 22)
-        val params = CreateEventUseCase.Params(dateTime, "title", user)
+        val dateTime = DataFactory.randomDateTime()
+        val title = DataFactory.randomString()
+        val params = CreateEventUseCase.Params(dateTime, title, user)
 
         // Act
-        val result = createEventUseCase.buildUseCaseObservable(params)
+        createEventUseCase.buildUseCaseObservable(params)
 
         // Assert
         assertEquals(params.title, eventArg.captured.title)

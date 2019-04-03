@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,8 +15,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
-import be.hogent.faith.faith.util.TAG
-import be.hogent.faith.faith.util.toast
+import be.hogent.faith.util.TAG
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import com.divyanshu.draw.widget.DrawView
 import io.reactivex.disposables.CompositeDisposable
@@ -76,7 +76,7 @@ class DrawEmotionAvatarFragment : Fragment() {
                     Log.i(TAG, "Drawing was saved")
                     eventDetailsViewModel.updateEvent()
                 }, {
-                    context?.toast(getString(R.string.error_saving_drawing))
+                    Toast.makeText(context!!, R.string.error_saving_drawing, Toast.LENGTH_LONG).show()
                 })
                 disposables.add(saveRequest)
             }
