@@ -1,7 +1,7 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.models.DetailType
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.PictureDetail
 import be.hogent.faith.storage.StorageRepository
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
@@ -10,6 +10,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Scheduler
 import io.reactivex.Single
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -67,8 +68,9 @@ class TakeEventPhotoUseCaseTest {
         assertTrue(event.details.isNotEmpty())
 
         val resultingDetail = event.details.first()
-        assertTrue(resultingDetail.detailType == DetailType.PICTURE)
-        // TODO: add check for name
+        assertTrue(resultingDetail is PictureDetail)
+        assertEquals(resultingDetail.name, photoName)
+        // TODO: add check for recordingName
     }
 
     @Test

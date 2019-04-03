@@ -1,10 +1,10 @@
 package be.hogent.faith.database.mappers
 
 import be.hogent.faith.database.factory.EntityFactory
-import be.hogent.faith.database.models.DetailEntity
+import be.hogent.faith.database.models.detail.DetailEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
-import be.hogent.faith.domain.models.Detail
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory
@@ -25,7 +25,7 @@ class EventWithDetailsMapperTest {
         val resultingEvent = eventWithDetailsMapper.mapFromEntity(eventWithDetailsEntity)
 
         // Assert
-        assertEqualData(eventWithDetailsEntity, resultingEvent)
+        assertEqualEventData(eventWithDetailsEntity, resultingEvent)
     }
 
     @Test
@@ -37,7 +37,7 @@ class EventWithDetailsMapperTest {
         val resultingEvent = eventWithDetailsMapper.mapFromEntity(eventWithDetailsEntity)
 
         // Assert
-        assertEqualData(eventWithDetailsEntity, resultingEvent)
+        assertEqualEventData(eventWithDetailsEntity, resultingEvent)
     }
 
     @Test
@@ -49,7 +49,7 @@ class EventWithDetailsMapperTest {
         val resultingEventEntity = eventWithDetailsMapper.mapToEntity(event, user.uuid)
 
         // Assert
-        assertEqualData(resultingEventEntity, event)
+        assertEqualEventData(resultingEventEntity, event)
     }
 
     @Test
@@ -61,23 +61,22 @@ class EventWithDetailsMapperTest {
         val resultingEventEntity = eventWithDetailsMapper.mapToEntity(event, user.uuid)
 
         // Assert
-        assertEqualData(resultingEventEntity, event)
+        assertEqualEventData(resultingEventEntity, event)
     }
 
-    private fun assertEqualData(
+    private fun assertEqualEventData(
         entity: EventWithDetails,
         model: Event
     ) {
-        with(entity.eventEntity) {
-            assertEquals(uuid, model.uuid)
-            assertEquals(dateTime, model.dateTime)
-            assertEquals(title, model.title)
-            assertEquals(entity.detailEntities.size, model.details.size)
-            var i = 0
-            entity.detailEntities.forEach {
-                assertEqualDetailsData(it, model.details[i], uuid)
-                i++
-            }
+        assertEquals(entity.eventEntity.uuid, model.uuid)
+        assertEquals(entity.eventEntity.dateTime, model.dateTime)
+        assertEquals(entity.eventEntity.title, model.title)
+
+        assertEquals(entity.detailEntities.size, model.details.size)
+        // Can't just use index because detailsList is actually a mix of three separate lists in the EventWithDetail
+        entity.detailEntities.forEach { detailEntity ->
+            val correspondingDetail = model.details.find { detailModel -> detailModel.uuid == detailEntity.uuid }
+            assertEqualDetailsData(detailEntity, correspondingDetail!!, entity.eventEntity.uuid)
         }
     }
 
@@ -86,10 +85,8 @@ class EventWithDetailsMapperTest {
         model: Detail,
         entityUuid: UUID
     ) {
-        with(entity) {
-            assertEquals(uuid, model.uuid)
-            assertEquals(type.toString(), model.detailType.toString())
-            assertEquals(eventUuid, entityUuid)
-        }
+        assertEquals(entity.uuid, model.uuid)
+        assertEquals(entity.file, model.file)
+        assertEquals(entity.eventUuid, entityUuid)
     }
 }

@@ -10,7 +10,7 @@ import org.junit.Test
 import java.util.UUID
 
 class EventMapperTest {
-    private val eventMapper = EventMapper()
+    private val eventMapper = EventMapper
     private val user = UserFactory.makeUser()
 
     @Test

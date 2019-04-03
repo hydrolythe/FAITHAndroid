@@ -1,11 +1,14 @@
 package be.hogent.faith.database.factory
 
-import be.hogent.faith.database.models.DetailEntity
-import be.hogent.faith.database.models.DetailTypeEntity
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
+import be.hogent.faith.database.models.detail.AudioDetailEntity
+import be.hogent.faith.database.models.detail.DetailEntity
+import be.hogent.faith.database.models.detail.PictureDetailEntity
+import be.hogent.faith.database.models.detail.TextDetailEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
 import be.hogent.faith.util.factory.DataFactory
+import be.hogent.faith.util.factory.DataFactory.randomString
 import java.util.UUID
 
 /**
@@ -15,12 +18,18 @@ import java.util.UUID
 // Making it depend on the database module would introduce a circular dependency.
 object EntityFactory {
     fun makeDetailEntity(eventUuid: UUID): DetailEntity {
-        return DetailEntity(
-            DetailTypeEntity.DRAWING,
-            DataFactory.randomFile(),
-            DataFactory.randomUUID(),
-            eventUuid
-        )
+        val rand = Math.random()
+        return when {
+            rand < 0.33 -> TextDetailEntity(
+                DataFactory.randomFile(), randomString(), DataFactory.randomUUID(), eventUuid
+            )
+            rand < 0.66 -> PictureDetailEntity(
+                DataFactory.randomFile(), randomString(), DataFactory.randomUUID(), eventUuid
+            )
+            else -> AudioDetailEntity(
+                DataFactory.randomFile(), randomString(), DataFactory.randomUUID(), eventUuid
+            )
+        }
     }
 
     fun makeDetailEntityList(count: Int, eventUuid: UUID): List<DetailEntity> {
@@ -55,7 +64,7 @@ object EntityFactory {
     fun makeEventWithDetailsEntity(userUuid: UUID = DataFactory.randomUUID(), nbrOfDetails: Int = 5): EventWithDetails {
         return EventWithDetails().also {
             it.eventEntity = makeEventEntity(userUuid)
-            it.detailEntities = makeDetailEntityList(nbrOfDetails, it.eventEntity.uuid)
+            it.addDetailEntities(makeDetailEntityList(nbrOfDetails, it.eventEntity.uuid))
         }
     }
 
