@@ -17,7 +17,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
-import be.hogent.faith.faith.util.TAG
+import be.hogent.faith.util.TAG
 import be.hogent.faith.faith.util.TempFileProvider
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.logcat

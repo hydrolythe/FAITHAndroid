@@ -1,11 +1,12 @@
-package be.hogent.faith.database.factory
+package be.hogent.faith.util.factory
 
+import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
+import org.threeten.bp.LocalTime
 import java.io.File
 import java.nio.charset.Charset
 import java.util.Random
 import java.util.UUID
-import java.util.concurrent.ThreadLocalRandom
 
 object DataFactory {
 
@@ -16,7 +17,7 @@ object DataFactory {
         return File("testDirectory/$generatedString")
     }
 
-    fun randomUID(): UUID {
+    fun randomUUID(): UUID {
         return UUID.randomUUID()
     }
 
@@ -29,7 +30,7 @@ object DataFactory {
      * Defaults to 0 and 1000
      */
     fun randomInt(from: Int = 0, to: Int = 1000): Int {
-        return ThreadLocalRandom.current().nextInt(from, to + 1)
+        return (from until to).random()
     }
 
     fun randomLong(): Long {
@@ -38,6 +39,18 @@ object DataFactory {
 
     fun randomBoolean(): Boolean {
         return Math.random() < 0.5
+    }
+
+    fun randomTime(): LocalTime {
+        return LocalTime.of(randomHour(), randomMinute())
+    }
+
+    fun randomDate(): LocalDate {
+        val year = (1990 until 2018).random()
+        val month = (1 until 12).random()
+        val day = (1 until 29).random()
+
+        return LocalDate.of(year, month, day)
     }
 
     fun randomHour(): Int {
@@ -49,9 +62,6 @@ object DataFactory {
     }
 
     fun randomDateTime(): LocalDateTime {
-        val year = ThreadLocalRandom.current().nextInt(1990, 2020)
-        val month = ThreadLocalRandom.current().nextInt(1, 13)
-        val day = ThreadLocalRandom.current().nextInt(1, 29)
-        return LocalDateTime.of(year, month, day, randomHour(), randomMinute())
+        return LocalDateTime.of(randomDate(), randomTime())
     }
 }
