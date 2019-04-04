@@ -6,7 +6,6 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.service.usecases.SaveEventUseCase
 import be.hogent.faith.util.factory.EventFactory
-import io.mockk.CapturingSlot
 import io.mockk.Runs
 import io.mockk.called
 import io.mockk.every
@@ -43,9 +42,14 @@ class EventDetailsViewModelTest {
             user = mockk(relaxed = true)
         )
         every { viewModel.user.value } returns user
+
+        // We have to add an observer so event changes when title/notes/date are given a new value
+        viewModel.event.observeForever(mockk(relaxed = true))
+
         viewModel.eventTitle.value = eventTitle
         viewModel.eventNotes.value = eventNotes
         viewModel.eventDate.value = eventDateTime
+
     }
 
     @Test
@@ -144,7 +148,11 @@ class EventDetailsViewModelTest {
 
         // Assert
         verify { saveEventUseCase.execute(any()) }
-        assert(correctCapturedEvent(params))
+        with(params.captured.event) {
+            assertEquals(eventDateTime, dateTime)
+            assertEquals(eventTitle, title)
+            assertEquals(eventNotes, notes)
+        }
     }
 
     @Test
@@ -223,13 +231,5 @@ class EventDetailsViewModelTest {
         assertEquals(newEvent.dateTime, newDate.captured)
         assertEquals(newEvent.title, newTitle.captured)
         assertEquals(newEvent.notes, newNotes.captured)
-    }
-
-    private fun correctCapturedEvent(params: CapturingSlot<SaveEventUseCase.Params>): Boolean {
-        with(params.captured.event) {
-            return eventDateTime == dateTime &&
-                    eventTitle == title &&
-                    eventNotes == notes
-        }
     }
 }
