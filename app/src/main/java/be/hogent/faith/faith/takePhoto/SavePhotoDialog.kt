@@ -11,7 +11,7 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.DialogSavePhotoBinding
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-class SavePhotoDialog: DialogFragment() {
+class SavePhotoDialog : DialogFragment() {
 
     private lateinit var saveDialogBinding: DialogSavePhotoBinding
 

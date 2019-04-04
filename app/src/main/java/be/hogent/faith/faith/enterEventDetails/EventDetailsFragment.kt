@@ -73,23 +73,6 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun startListeners() {
-        // Update event on user input
-        eventDetailsViewModel.eventTitle.observe(this, Observer { newTitle ->
-            eventDetailsViewModel.event.value?.let { event ->
-                event.title = newTitle
-            }
-        })
-        eventDetailsViewModel.eventDate.observe(this, Observer { newDate ->
-            eventDetailsViewModel.event.value?.let { event ->
-                event.dateTime = newDate
-            }
-        })
-        eventDetailsViewModel.eventNotes.observe(this, Observer { newNotes ->
-            eventDetailsViewModel.event.value?.let { event ->
-                event.notes = newNotes
-            }
-        })
-
         eventDetailsViewModel.inputErrorMessageID.observe(this, Observer { errorMessageID ->
             Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
         })

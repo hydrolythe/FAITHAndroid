@@ -9,6 +9,7 @@ import io.mockk.slot
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
@@ -30,7 +31,7 @@ class SaveEventUseCaseTest {
     }
 
     @Test
-    fun execute_eventIsPassedToRepo() {
+    fun execute_normal_eventCorrectlyPassedToRepo() {
         // Arrange
         val eventArg = slot<Event>()
         val userArg = slot<User>()
@@ -47,5 +48,56 @@ class SaveEventUseCaseTest {
         assertEquals(params.title, eventArg.captured.title)
         assertEquals(params.dateTime, eventArg.captured.dateTime)
         assertEquals(params.user, userArg.captured)
+    }
+
+    @Test
+    fun execute_normal_useCaseCompletes() {
+        // Arrange
+        val user = User(UUID.randomUUID())
+        every { repository.insert(any(), any()) } returns Completable.complete()
+
+        val dateTime = LocalDateTime.of(2018, 10, 28, 8, 22)
+        val params = CreateEventUseCase.Params(dateTime, "title", user)
+
+        // Act
+        val result = createEventUseCase.buildUseCaseObservable(params)
+        result.test().assertComplete()
+    }
+
+    @Test
+    fun execute_normal_eventIsAddedToUser() {
+        // Arrange
+        val user = User(UUID.randomUUID())
+        every { repository.insert(any(), any()) } returns Completable.complete()
+
+        val dateTime = LocalDateTime.of(2018, 10, 28, 8, 22)
+        val params = CreateEventUseCase.Params(dateTime, "title", user)
+
+        // Act
+        val result = createEventUseCase.buildUseCaseObservable(params)
+        result.test()
+
+        // Assert
+        assertTrue(user.events.isNotEmpty())
+    }
+
+    @Test
+    fun execute_repoFails_notAddedToUser() {
+        // Arrange
+        every { repository.insert(any(), any()) } returns Completable.error(RuntimeException())
+
+        val user = User(UUID.randomUUID())
+        val dateTime = LocalDateTime.of(2018, 10, 28, 8, 22)
+        val params = CreateEventUseCase.Params(dateTime, "title", user)
+
+        // Act
+        val result = createEventUseCase.buildUseCaseObservable(params)
+
+        // Assert
+        result.test()
+            .assertError(RuntimeException::class.java)
+            .assertNoValues()
+
+        assertTrue(user.events.isEmpty())
     }
 }

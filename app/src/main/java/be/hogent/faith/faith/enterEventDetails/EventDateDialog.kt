@@ -29,7 +29,4 @@ class EventDateDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         eventDetailsViewModel.eventDate.postValue(LocalDate.of(year, month, dayOfMonth).atStartOfDay())
     }
-
-
 }
-
