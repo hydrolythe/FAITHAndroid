@@ -20,12 +20,12 @@ class NewAvatarTest {
 
     @Before
     fun goToScreen() {
-        //NOP: new Avatar is default screen
+        // NOP: new Avatar is default screen
     }
 
     @Test
     fun newAvatar_canClickAllButtons() {
-        //TODO: try all buttons
+        // TODO: try all buttons
     }
 
     @Test

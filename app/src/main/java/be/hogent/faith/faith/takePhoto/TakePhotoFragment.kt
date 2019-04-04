@@ -87,7 +87,7 @@ class TakePhotoFragment : Fragment() {
             saveDialog.dismiss()
         })
         takePhotoViewModel.photoSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, getString(R.string.toast_foto_saved_success), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.toast_save_photo_success), Toast.LENGTH_SHORT).show()
             eventDetailsViewModel.updateEvent()
             saveDialog.dismiss()
         })

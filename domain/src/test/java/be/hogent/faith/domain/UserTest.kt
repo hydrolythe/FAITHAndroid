@@ -40,7 +40,7 @@ class UserTest {
     @Test
     fun user_getEventReturnsEvent() {
         val eventUUID = UUID.randomUUID()
-        val event = Event(mockk<LocalDateTime>(), "test", mockk<File>(), eventUUID)
+        val event = Event(mockk<LocalDateTime>(), "test", mockk<File>(), "notes", eventUUID)
         user.addEvent(event)
         val result = user.getEvent(eventUUID)
         Assert.assertEquals(result, event)
@@ -48,7 +48,7 @@ class UserTest {
 
     @Test
     fun user_getEventReturnsNullIfNotFound() {
-        val event = Event(mockk<LocalDateTime>(), "test", mockk<File>(), UUID.randomUUID())
+        val event = Event(mockk<LocalDateTime>(), "test", mockk<File>(), "notes", UUID.randomUUID())
         user.addEvent(event)
         val result = user.getEvent(UUID.randomUUID())
         Assert.assertNull(result)

@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.takePhoto
 
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
@@ -11,6 +12,7 @@ import androidx.test.uiautomator.UiDevice
 import be.hogent.faith.R
 import be.hogent.faith.faith.ui.MainActivity
 import be.hogent.faith.faith.util.NavigationUtil
+import be.hogent.faith.faith.util.ToastMatcher
 import be.hogent.faith.faith.util.allowPermissionsIfNeeded
 import org.junit.Before
 import org.junit.Rule
@@ -24,7 +26,6 @@ class TakePhotoFragmentTest {
     @get:Rule
     var activityScenarioRule = ActivityScenarioRule<MainActivity>(MainActivity::class.java)
 
-
     @Before
     fun goToScreen() {
         uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -36,7 +37,8 @@ class TakePhotoFragmentTest {
     fun takePhotoFragment_takePhoto_enterName_OK() {
         onView(withId(R.id.btn_takePhoto_takePhoto)).perform(click())
         onView(withId(R.id.txt_save_photo_name)).perform(typeText("Photo name"))
+        closeSoftKeyboard()
         onView(withId(R.id.btn_save_photo_save)).perform(click())
+        ToastMatcher.isToastMessageDisplayed(R.string.toast_save_photo_success)
     }
-
 }
