@@ -38,6 +38,7 @@ android {
 
 dependencies {
     implementation project(':domain')
+    implementation project(':util')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -50,6 +51,8 @@ dependencies {
 
     implementation commonDependencies.kotlin
     implementation commonDependencies.threeTenABP
+    implementation commonDependencies.rxjava
+    implementation commonDependencies.rxkotlin
     implementation androidDependencies.appcompat
     implementation injectionDependencies.koin
 
