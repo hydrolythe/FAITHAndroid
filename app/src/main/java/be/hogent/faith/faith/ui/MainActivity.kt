@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.chooseAvatar.fragments.AvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
@@ -24,7 +25,8 @@ class MainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
     OverviewEventsFragment.OverviewEventsNavigationListener,
     MainScreenFragment.MainScreenNavigationListener,
-    TakePhotoFragment.TakePhotoNavigationListener {
+    TakePhotoFragment.TakePhotoNavigationListener,
+    AvatarFragment.AvatarFragmentNavigationListener {
 
     // This ViewModel is for the [DrawEmotionAvatarFragment], but has been defined here because it should
     // survive the activity's lifecycle, not just its own.
@@ -65,8 +67,8 @@ class MainActivity : AppCompatActivity(),
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
         // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
-            // val fragment = AvatarFragment.newInstance()
-            val fragment = MainScreenFragment()
+            val fragment = AvatarFragment.newInstance()
+//            val fragment = MainScreenFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit()
@@ -103,5 +105,9 @@ class MainActivity : AppCompatActivity(),
 
     override fun startEventDetailsFragment(eventUuid: UUID) {
         replaceFragment(EventDetailsFragment.newInstance(eventUuid), R.id.fragment_container)
+    }
+
+    override fun goToCityScreen() {
+        replaceFragment(MainScreenFragment(), R.id.fragment_container)
     }
 }
