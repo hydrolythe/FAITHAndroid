@@ -70,7 +70,7 @@
             tools:listitem="@layout/avatar_rv_item"/>
 
         <Button
-            android:id="@+id/avatar_btn_go_to_town"
+            android:id="@+id/btn_avatar_go_to_town"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
