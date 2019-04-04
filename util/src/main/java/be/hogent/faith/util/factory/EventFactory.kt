@@ -6,10 +6,11 @@ object EventFactory {
 
     fun makeEvent(nbrOfDetails: Int = 5, hasEmotionAvatar: Boolean = false): Event {
         val event = Event(
-            DataFactory.randomDateTime(),
-            DataFactory.randomString(),
-            if (hasEmotionAvatar) DataFactory.randomFile() else null,
-            DataFactory.randomUUID()
+            dateTime = DataFactory.randomDateTime(),
+            title = DataFactory.randomString(),
+            emotionAvatar = if (hasEmotionAvatar) DataFactory.randomFile() else null,
+            notes = DataFactory.randomString(),
+            uuid = DataFactory.randomUUID()
         )
         repeat(nbrOfDetails) {
             event.addDetail(DetailFactory.makeDetail())
