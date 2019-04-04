@@ -10,12 +10,11 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.service.usecases.SaveEventUseCase
+import be.hogent.faith.util.TAG
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
-import java.util.UUID
 
 class EventDetailsViewModel(
     private val saveEventUseCase: SaveEventUseCase,
@@ -79,16 +78,11 @@ class EventDetailsViewModel(
         event.addSource(eventNotes) { notes -> event.value?.notes = notes }
     }
 
-    fun setEvent(eventUUID: UUID) {
-        val foundEvent = user.value!!.getEvent(eventUUID)
-        if (foundEvent == null) {
-            throw IllegalArgumentException("Event with UUID $eventUUID not found.")
-        } else {
-            event.postValue(foundEvent)
-            eventTitle.postValue(foundEvent.title)
-            eventNotes.postValue(foundEvent.notes)
-            eventDate.postValue(foundEvent.dateTime)
-        }
+    fun setEvent(newEvent: Event) {
+        event.postValue(newEvent)
+        eventTitle.postValue(newEvent.title)
+        eventNotes.postValue(newEvent.notes)
+        eventDate.postValue(newEvent.dateTime)
     }
 
     private val _cameraButtonClicked = SingleLiveEvent<Unit>()

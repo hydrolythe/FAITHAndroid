@@ -38,12 +38,15 @@ class EventDetailsFragment : Fragment() {
 
         // When an UUID is given the [eventDetailsViewModel] should be updated to show the given event's state.
         arguments?.getSerializable(ARG_EVENTUUID)?.let {
-            eventDetailsViewModel.setEvent(it as UUID)
+            val foundEvent = userViewModel.user.value!!.getEvent(it as UUID)
+                ?: throw IllegalArgumentException("Couldn't find event with UUID $it for user ${userViewModel.user.value}")
+            eventDetailsViewModel.setEvent(foundEvent)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        eventDetailsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_enter_event_details, container, false)
+        eventDetailsBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_enter_event_details, container, false)
         eventDetailsBinding.eventViewModel = eventDetailsViewModel
         eventDetailsBinding.lifecycleOwner = this
         return eventDetailsBinding.root
@@ -69,7 +72,8 @@ class EventDetailsFragment : Fragment() {
             // Start with empty list and then fill it in
             adapter = DetailThumbnailsAdapter(context, emptyList())
         }
-        detailThumbnailsAdapter = eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
+        detailThumbnailsAdapter =
+            eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
     }
 
     private fun startListeners() {
