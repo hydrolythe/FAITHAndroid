@@ -31,8 +31,8 @@ package be.hogent.faith.faith.enterEventDetails
 //        // TODO: replace sleep with IdlingResource implementation
 //        // See https://developer.android.com/reference/androidx/test/espresso/idling/CountingIdlingResource.html
 //        Thread.sleep(3000)
-//        // Enter picture name
-//        onView(withId(R.id.txt_save_photo_name)).perform(typeText("Photo name"))
+//        // Enter picture recordingName
+//        onView(withId(R.id.txt_save_photo_name)).perform(typeText("Photo recordingName"))
 //        // Click Save
 //        onView(withId(R.id.btn_save_photo_save)).perform(click())
 //        // back to overview

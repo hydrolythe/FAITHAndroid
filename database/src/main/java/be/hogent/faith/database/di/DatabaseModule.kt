@@ -16,10 +16,10 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module.module
 
 val databaseModule = module {
-    single { EventMapper() }
+    single { EventMapper }
     single { EventWithDetailsMapper() }
-    single { UserMapper() }
-    single { DetailMapper() }
+    single { UserMapper }
+    single { DetailMapper }
 
     single { EntityDatabase.getDatabase(androidContext()) }
     single { constructEventDao(get()) }

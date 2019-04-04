@@ -1,8 +1,7 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.models.Detail
-import be.hogent.faith.domain.models.DetailType
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.PictureDetail
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
@@ -21,11 +20,14 @@ class TakeEventPhotoUseCase(
         return Completable.fromSingle(
             storageRepository.movePhotoFromTempStorage(params.tempPhotoFile, params.event, params.photoName)
                 .doOnSuccess { storedFile ->
-                    // TODO: add name once this property is added to Detail
-                    params.event.addDetail(Detail(DetailType.PICTURE, storedFile))
+                    params.event.addDetail(PictureDetail(storedFile, params.photoName))
                 }
         )
     }
 
-    data class Params(val tempPhotoFile: File, val event: Event, val photoName: String)
+    data class Params(
+        val tempPhotoFile: File,
+        val event: Event,
+        val photoName: String
+    )
 }

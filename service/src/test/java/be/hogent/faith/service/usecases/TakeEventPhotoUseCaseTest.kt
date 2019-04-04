@@ -1,13 +1,16 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.models.DetailType
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.PictureDetail
 import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.util.factory.DataFactory
+import be.hogent.faith.util.factory.EventFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Scheduler
 import io.reactivex.Single
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -17,7 +20,7 @@ import java.io.IOException
 class TakeEventPhotoUseCaseTest {
     private val observer = mockk<Scheduler>()
     private val tempRecordingFile = mockk<File>()
-    private val photoName = "TestName"
+    private val photoName = DataFactory.randomString()
     private val storageRepository = mockk<StorageRepository>(relaxed = true)
 
     private lateinit var event: Event
@@ -25,7 +28,7 @@ class TakeEventPhotoUseCaseTest {
 
     @Before
     fun setUp() {
-        event = Event()
+        event = EventFactory.makeEvent(nbrOfDetails = 0)
         takeEventPhotoUseCase = TakeEventPhotoUseCase(storageRepository, observer)
     }
 
@@ -65,8 +68,9 @@ class TakeEventPhotoUseCaseTest {
         assertTrue(event.details.isNotEmpty())
 
         val resultingDetail = event.details.first()
-        assertTrue(resultingDetail.detailType == DetailType.PICTURE)
-        // TODO: add check for name
+        assertTrue(resultingDetail is PictureDetail)
+        assertEquals(resultingDetail.name, photoName)
+        // TODO: add check for recordingName
     }
 
     @Test

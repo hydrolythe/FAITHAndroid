@@ -1,14 +1,14 @@
-package be.hogent.faith.database.models
+package be.hogent.faith.database.models.detail
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
-import androidx.room.PrimaryKey
+import be.hogent.faith.database.models.EventEntity
 import java.io.File
 import java.util.UUID
 
 @Entity(
-    tableName = "details",
+    tableName = "audioDetails",
     indices = [(Index(value = ["uuid"], unique = true)),
         (Index(value = ["eventUuid"], unique = false))],
     foreignKeys = [ForeignKey(
@@ -18,13 +18,9 @@ import java.util.UUID
         onDelete = ForeignKey.CASCADE
     )]
 )
-data class DetailEntity(
-    val type: DetailTypeEntity,
-
-    val file: File,
-
-    @PrimaryKey
-    val uuid: UUID = UUID.randomUUID(),
-
-    val eventUuid: UUID
-)
+class AudioDetailEntity(
+    file: File,
+    name: String? = null,
+    uuid: UUID = UUID.randomUUID(),
+    eventUuid: UUID
+) : DetailEntity(file, name, uuid, eventUuid)

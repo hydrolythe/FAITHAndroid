@@ -17,7 +17,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
-import be.hogent.faith.faith.util.TAG
+import be.hogent.faith.util.TAG
 import be.hogent.faith.faith.util.TempFileProvider
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.logcat
@@ -43,7 +43,7 @@ class TakePhotoFragment : Fragment() {
     private val tempFileProvider by inject<TempFileProvider>()
 
     /**
-     * The Dialog that requests the user to enter a name for the photograph.
+     * The Dialog that requests the user to enter a recordingName for the photograph.
      * It is saved here so we can dismiss it once the cancel or save buttons are clicked.
      * This should normally be done in the Dialog itself but SingleLiveEvent only supports a single Listener.
      * We need one here to update the eventDetailsVM and one in the Dialog to close it.
