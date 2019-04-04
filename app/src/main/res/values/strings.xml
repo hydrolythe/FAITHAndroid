@@ -50,7 +50,7 @@
     <string name="hint_photo_name">een naam voor je foto</string>
     <string name="lbl_name">Naam:</string>
     <string name="lbl_save">Opslaan</string>
-    <string name="toast_foto_saved_success">Je foto werd opgeslagen!</string>
+    <string name="toast_save_photo_success">Je foto werd opgeslagen!</string>
     <string name="toast_event_no_title">Je moet een titel geven aan je gebeurtenis voordat je ze kan opslaan!</string>
     <string name="toast_save_photo_failed">Er ging iets fout bij het opslaan van je foto.</string>
     <string name="lbl_save_event_notes">Notities</string>
