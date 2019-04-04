@@ -1,28 +1,68 @@
 package be.hogent.faith.faith.enterEventDetails
 
-import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.test.core.app.ActivityScenario
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.ActivityTestRule
+import androidx.test.uiautomator.UiDevice
+import be.hogent.faith.R
+import be.hogent.faith.faith.ui.MainActivity
+import be.hogent.faith.faith.util.NavigationUtil
+import be.hogent.faith.faith.util.allowPermissionsIfNeeded
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class EventDetailsFragmentTest {
 
-    @Test
-    fun eventDetailsFragment_launches() {
-        launchFragmentInContainer<EventDetailsFragment>()
+    @get:Rule
+    var activityScenarioRule = ActivityScenarioRule<MainActivity>(MainActivity::class.java)
+
+    private lateinit var uiDevice: UiDevice
+
+    @Before
+    fun goToScreen() {
+        NavigationUtil.goToNewEventScreen()
+        uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
     }
 
-//    @Test
-//    fun eventDetailSFragment_buttonsCanBeClicked() {
-//        launchFragmentInContainer<EventDetailsFragment>()
-//
-//        onView(withId(R.id.btn_event_details_audio)).perform(click())
-//        onView(withId(R.id.btn_event_details_camera)).perform(click())
-//        onView(withId(R.id.btn_event_details_drawing)).perform(click())
-//        onView(withId(R.id.btn_event_details_text)).perform(click())
-//
-//        onView(withId(R.id.btn_event_details_gotoEmotionAvatar)).perform(click())
-//        onView(withId(R.id.btn_event_details_send)).perform(click())
-//    }
+    @Test
+    fun eventDetailsFragment_buttonsOpenCorrectScreen() {
+        onView(withId(R.id.btn_event_details_audio)).perform(click())
+        allowPermissionsIfNeeded(uiDevice)
+        onView(withId(R.id.screen_record_audio)).check(matches(isDisplayed()))
+        pressBack()
+
+        onView(withId(R.id.btn_event_details_camera)).perform(click())
+        allowPermissionsIfNeeded(uiDevice)
+        onView(withId(R.id.screen_take_photo)).check(matches(isDisplayed()))
+        pressBack()
+
+        onView(withId(R.id.btn_event_details_drawing)).perform(click())
+        // Enable once drawing has been implemented
+//        pressBack()
+
+        onView(withId(R.id.btn_event_details_text)).perform(click())
+        // Enable once text has been implemented
+//        pressBack()
+
+        onView(withId(R.id.btn_event_details_gotoEmotionAvatar)).perform(click())
+        onView(withId(R.id.screen_draw_avatar)).check(matches(isDisplayed()))
+        pressBack()
+
+        onView(withId(R.id.btn_event_details_send)).perform(click())
+        onView(withId(R.id.screen_save_event)).check(matches(isDisplayed()))
+        pressBack()
+    }
+
 }
