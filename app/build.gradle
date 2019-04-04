@@ -16,12 +16,12 @@ buildscript {
     }
     dependencies {
         classpath 'com.github.trevjonez.composer-gradle-plugin:plugin:0.10.0'
-        classpath 'com.android.tools.build:gradle:3.3.1'
+        classpath 'com.android.tools.build:gradle:3.3.2'
     }
 }
 
 
-composer{
+composer {
 }
 
 android {
@@ -74,11 +74,13 @@ dependencies {
 
     implementation injectionDependencies.koin
     implementation injectionDependencies.koin_viewModel
-    
+
     implementation androidDependencies.appcompat
     implementation androidDependencies.lifecycle
 
     implementation uiDependencies.glide
+    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+    implementation 'com.google.android.material:material:1.0.0-beta01'
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
     implementation uiDependencies.rv_selection
@@ -97,5 +99,3 @@ dependencies {
     androidTestImplementation androidTestDependencies.testRunner
     androidTestImplementation androidTestDependencies.espresso
 }
-
-

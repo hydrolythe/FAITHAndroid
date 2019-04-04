@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Avatar
+import be.hogent.faith.faith.ui.MainActivity
 import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.getRotation
 import com.bumptech.glide.Glide
@@ -58,7 +59,10 @@ class AvatarFragment : Fragment() {
         registerAdapters()
 
         avatarViewModel.nextButtonClicked.observe(this,
-            Observer<Any> { generateNewUser() });
+            Observer<Any> {
+                generateNewUser()
+                (activity as MainActivity).startEventDetailsFragment()
+            });
 
 
     }
