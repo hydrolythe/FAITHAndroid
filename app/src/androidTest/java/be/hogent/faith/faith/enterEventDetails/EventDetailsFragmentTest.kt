@@ -67,7 +67,7 @@ class EventDetailsFragmentTest {
 
     @Test
     fun eventDetailsFragment_enterEventTitle() {
-        onView(withId(be.hogent.faith.R.id.txt_save_event_title)).perform(typeText("Titel van Event"))
+        onView(withId(R.id.txt_event_details_event_title)).perform(typeText("Titel van Event"))
     }
 
     @Test
