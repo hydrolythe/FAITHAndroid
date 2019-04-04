@@ -72,7 +72,9 @@ class EventDetailsViewModel(
     val event = MediatorLiveData<Event>()
 
     init {
+        event.value = Event()
         eventDate.value = LocalDateTime.now()
+
         event.addSource(eventTitle) { title -> event.value?.title = title }
         event.addSource(eventDate) { dateTime -> event.value?.dateTime = dateTime }
         event.addSource(eventNotes) { notes -> event.value?.notes = notes }
@@ -166,11 +168,23 @@ class EventDetailsViewModel(
         val disposable = saveEventUseCase.execute(params).subscribe({
             Log.i(TAG, "New event saved: ${event.value!!.title}")
             _eventSavedSuccessFully.call()
+            resetViewModel()
         }, {
             Log.i(TAG, "Event failed to save because: ${it.message}")
             _eventSaveFailed.postValue(it.localizedMessage)
         })
         disposables.add(disposable)
+    }
+
+    /**
+     * Used to reset the ViewModel once an Event is saved.
+     * This will allow the ViewModel to be reused for a new event.
+     */
+    fun resetViewModel() {
+        event.postValue(Event())
+        eventDate.postValue(LocalDateTime.now())
+        eventTitle.postValue(null)
+        eventNotes.postValue(null)
     }
 
     fun onEmotionAvatarClicked() {
