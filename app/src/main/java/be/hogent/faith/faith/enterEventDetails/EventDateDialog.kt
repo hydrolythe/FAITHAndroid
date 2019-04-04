@@ -23,7 +23,7 @@ class EventDateDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val now = LocalDateTime.now()
-        return DatePickerDialog(context, this@EventDateDialog, now.year, now.monthValue, now.dayOfMonth)
+        return DatePickerDialog(context!!, this@EventDateDialog, now.year, now.monthValue, now.dayOfMonth)
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {

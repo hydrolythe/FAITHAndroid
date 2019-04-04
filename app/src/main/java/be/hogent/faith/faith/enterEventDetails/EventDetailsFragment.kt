@@ -2,6 +2,7 @@ package be.hogent.faith.faith.enterEventDetails
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.util.TAG
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import java.util.UUID
@@ -108,6 +110,7 @@ class EventDetailsFragment : Fragment() {
             fragmentManager!!.popBackStack()
         })
         eventDetailsViewModel.eventSaveFailed.observe(this, Observer { errorMessage ->
+            Log.e(TAG, errorMessage)
             Toast.makeText(context, R.string.toast_save_event_failed, Toast.LENGTH_LONG).show()
             saveDialog.dismiss()
         })

@@ -15,12 +15,12 @@ class NewAvatarTest {
 
     @Test
     fun newAvatar_launches() {
-        launchFragmentInContainer<AvatarFragment>()
+        val scenario = launchFragmentInContainer<AvatarFragment>()
     }
 
     @Test
     fun checkCanEnterName() {
-        launchFragmentInContainer<AvatarFragment>()
+        val scenario = launchFragmentInContainer<AvatarFragment>()
         onView(withId(R.id.avatar_txt_name)).perform(typeText("Reinhard"))
     }
 }

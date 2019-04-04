@@ -51,7 +51,6 @@ class EventDetailsViewModelTest {
         viewModel.eventTitle.value = eventTitle
         viewModel.eventNotes.value = eventNotes
         viewModel.eventDate.value = eventDateTime
-
     }
 
     @Test
