@@ -16,7 +16,9 @@ open class CreateEventUseCase(
 
     override fun buildUseCaseObservable(params: CreateEventUseCase.Params): Completable {
         val event = Event(params.dateTime, params.title)
-        return eventRepository.insert(event, params.user)
+        return eventRepository.insert(event, params.user).doOnEvent {
+            params.user.addEvent(event)
+        }
     }
 
     data class Params(

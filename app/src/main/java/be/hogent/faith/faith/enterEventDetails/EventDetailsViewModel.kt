@@ -2,6 +2,7 @@ package be.hogent.faith.faith.enterEventDetails
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
@@ -22,20 +23,13 @@ class EventDetailsViewModel(
 ) : ViewModel() {
 
     /**
-     * The event that will be discussed and explained using audio, video, drawings,...
-     */
-    val event = MutableLiveData<Event>()
-
-    /**
      * The title of the event.
      * It's optional on the main event screen, but has to be filled in when saving the event.
-     * We can't observe it here, so the Fragment observes it and changes the [event] when required.
      */
     val eventTitle = MutableLiveData<String>()
 
     /**
      * The title of the event (optional when on the main entry screen.
-     * We can't observe it here, so the Fragment observes it and changes the [event] when required.
      */
     val eventDate = MutableLiveData<LocalDateTime>()
 
@@ -45,7 +39,6 @@ class EventDetailsViewModel(
 
     /**
      * The notes that are added when saving the event
-     * We can't observe it here, so the Fragment observes it and changes the [event] when required.
      */
     val eventNotes = MutableLiveData<String>()
 
@@ -62,7 +55,6 @@ class EventDetailsViewModel(
     val eventSaveFailed: LiveData<String>
         get() = _eventSaveFailed
 
-
     /**
      * Holds potential error messages that will be displayed to the user when he/she tries to save the event but
      * not enough information was given.
@@ -74,17 +66,28 @@ class EventDetailsViewModel(
     val inputErrorMessageID: LiveData<Int>
         get() = _inputErrorMessageID
 
+    /**
+     * The event that will be discussed and explained using audio, video, drawings,...
+     * Updates to the [eventTitle], [eventDate] and [eventNotes] are automatically applied to the event.
+     */
+    val event = MediatorLiveData<Event>()
 
     init {
         eventDate.value = LocalDateTime.now()
-
+        event.addSource(eventTitle) { title -> event.value?.title = title }
+        event.addSource(eventDate) { dateTime -> event.value?.dateTime = dateTime }
+        event.addSource(eventNotes) { notes -> event.value?.notes = notes }
     }
 
     fun setEvent(eventUUID: UUID) {
-        user.value!!.getEvent(eventUUID)?.let {
-            event.postValue(it)
-            eventTitle.postValue(it.title)
-            eventNotes.postValue(it.notes)
+        val foundEvent = user.value!!.getEvent(eventUUID)
+        if (foundEvent == null) {
+            throw IllegalArgumentException("Event with UUID $eventUUID not found.")
+        } else {
+            event.postValue(foundEvent)
+            eventTitle.postValue(foundEvent.title)
+            eventNotes.postValue(foundEvent.notes)
+            eventDate.postValue(foundEvent.dateTime)
         }
     }
 
@@ -161,11 +164,10 @@ class EventDetailsViewModel(
     }
 
     fun onSaveButtonClicked() {
-        if (eventTitle.value!!.isEmpty()) {
-            _inputErrorMessageID.value = R.string.toast_event_no_title
+        if (eventTitle.value.isNullOrEmpty()) {
+            _inputErrorMessageID.postValue(R.string.toast_event_no_title)
             return
         }
-
         val params = SaveEventUseCase.Params(event.value!!, user.value!!)
         val disposable = saveEventUseCase.execute(params).subscribe({
             Log.i(TAG, "New event saved: ${event.value!!.title}")

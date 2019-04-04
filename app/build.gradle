@@ -42,6 +42,10 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     dataBinding {
         enabled = true
     }
@@ -91,7 +95,7 @@ dependencies {
 
     //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
     testImplementation(testDependencies.threeTenBP) {
-        exclude group:'com.jakewharton.threetenabp', module:'threetenabp'
+        exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
     }
 
     testImplementation testDependencies.junit
