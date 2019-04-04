@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@string/lbl_save_event_title"
-            app:layout_constraintBaseline_toBaselineOf="@+id/txt_save_event_title"
+            app:layout_constraintBaseline_toBaselineOf="@id/txt_save_event_title"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@string/lbl_save_event_date"
-            app:layout_constraintBaseline_toBaselineOf="@+id/btn_save_event_open_datepicker"
+            app:layout_constraintBaseline_toBaselineOf="@id/btn_save_event_open_datepicker"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
@@ -41,7 +41,7 @@
             android:layout_marginStart="16dp"
             android:text="@string/lbl_save_event_notes"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/txt_save_event_notes" />
+            app:layout_constraintTop_toTopOf="@id/txt_save_event_notes" />
 
         <EditText
             android:id="@+id/txt_save_event_notes"
@@ -52,10 +52,10 @@
             android:layout_marginEnd="8dp"
             android:inputType=""
             android:text="@={eventViewModel.eventNotes}"
-            app:layout_constraintBottom_toTopOf="@+id/btn_save_event_save"
+            app:layout_constraintBottom_toTopOf="@id/btn_save_event_save"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guide_save_event"
-            app:layout_constraintTop_toBottomOf="@+id/btn_save_event_open_datepicker"
+            app:layout_constraintStart_toStartOf="@id/guide_save_event"
+            app:layout_constraintTop_toBottomOf="@id/btn_save_event_open_datepicker"
             tools:text="@tools:sample/lorem/random" />
 
         <EditText
@@ -67,7 +67,7 @@
             android:inputType=""
             android:text="@={eventViewModel.eventTitle}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guide_save_event"
+            app:layout_constraintStart_toStartOf="@id/guide_save_event"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Titel van event" />
 
@@ -78,9 +78,9 @@
             android:layout_margin="16dp"
             android:onClick="@{() -> eventViewModel.onDateButtonClicked()}"
             android:text="@{eventViewModel.eventDateString}"
-            app:layout_constraintBottom_toTopOf="@+id/txt_save_event_notes"
-            app:layout_constraintStart_toStartOf="@+id/guide_save_event"
-            app:layout_constraintTop_toBottomOf="@+id/txt_save_event_title"
+            app:layout_constraintBottom_toTopOf="@id/txt_save_event_notes"
+            app:layout_constraintStart_toStartOf="@id/guide_save_event"
+            app:layout_constraintTop_toBottomOf="@id/txt_save_event_title"
             tools:text="@tools:sample/date/ddmmyy" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -107,7 +107,7 @@
             android:layout_margin="16dp"
             android:onClick="@{() -> eventViewModel.onCancelButtonClicked()}"
             android:text="@string/lbl_back"
-            app:layout_constraintBaseline_toBaselineOf="@+id/btn_save_event_save"
+            app:layout_constraintBaseline_toBaselineOf="@id/btn_save_event_save"
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
