@@ -19,7 +19,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.io.File
-import java.util.UUID
 
 class EntityDatabaseTest {
 
@@ -33,8 +32,9 @@ class EntityDatabaseTest {
     private val eventUuid = DataFactory.randomUUID()
     private val eventDate = DataFactory.randomDateTime()
     private val eventFile = DataFactory.randomFile()
+    private val eventNotes = DataFactory.randomString()
     private val userEntity = UserEntity(userUuid)
-    private val eventEntity = EventEntity(eventDate, "testDescription", eventFile, eventUuid, userUuid)
+    private val eventEntity = EventEntity(eventDate, "testDescription", eventFile, eventNotes, eventUuid, userUuid)
 
     // Required to make sure Room executes all operations instantly
     @get:Rule
@@ -101,7 +101,6 @@ class EntityDatabaseTest {
     @Test
     fun entityDatabase_deleteEvent_detailsAreAlsoDeleted() {
         // Arrange
-        val eventEntity = EventEntity(eventDate, "testDescription", eventFile, eventUuid, userUuid)
         val detail1 = PictureDetailEntity(
             eventUuid = eventUuid,
             file = File("path/detail1")
@@ -134,8 +133,6 @@ class EntityDatabaseTest {
     @Test
     fun entityDatabase_deleteUser_EventAndDetailsAreAlsoDeleted() {
         // Arrange
-        val eventEntity = EventEntity(eventDate, "testDescription", eventFile, eventUuid, userUuid)
-
         val detail1 = PictureDetailEntity(
             eventUuid = eventUuid,
             file = File("path/detail1")
@@ -188,8 +185,16 @@ class EntityDatabaseTest {
     fun entityDatabase_getAllEventsWithDetailsForAUser_chronological() {
         // Arrange
         val eventEntityLater =
-            EventEntity(eventDate.minusDays(10), "testDescription", eventFile, UUID.randomUUID(), userUuid)
-        val eventEntity = EventEntity(eventDate, "testDescription", eventFile, eventUuid, userUuid)
+            EventEntity(
+                eventDate.minusDays(10),
+                "testDescription",
+                eventFile,
+                DataFactory.randomString(),
+                DataFactory.randomUUID(),
+                userUuid
+            )
+        val eventEntity =
+            EventEntity(eventDate, "testDescription", eventFile, DataFactory.randomString(), eventUuid, userUuid)
 
         val detail1 = PictureDetailEntity(
             eventUuid = eventUuid,

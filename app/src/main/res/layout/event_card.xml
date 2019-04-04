@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/avatar_placeholder"
             android:id="@+id/img_overviewevents_thumbnailAvatar"
-            android:scaleType="fitStart"
+            android:contentDescription="TODO" android:scaleType="fitStart"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="8dp"

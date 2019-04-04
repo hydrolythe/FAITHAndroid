@@ -48,6 +48,7 @@ object EntityFactory {
             DataFactory.randomDateTime(),
             DataFactory.randomString(),
             DataFactory.randomFile(),
+            DataFactory.randomString(),
             uuid,
             userUuid
         )

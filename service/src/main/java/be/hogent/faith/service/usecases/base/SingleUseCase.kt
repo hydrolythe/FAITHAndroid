@@ -27,6 +27,6 @@ abstract class SingleUseCase<Result, in Params>(
     open fun execute(params: Params): Single<Result> {
         return this.buildUseCaseObservable(params)
             .subscribeOn(subscribeScheduler)
-            .observeOn(observeScheduler) as Single<Result>
+            .observeOn(observeScheduler)
     }
 }

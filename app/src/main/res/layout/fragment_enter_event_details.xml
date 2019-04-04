@@ -131,7 +131,7 @@
                 app:layout_constraintTop_toBottomOf="@id/event_details_lowerDivider"
                 android:src="@drawable/event_details_send"
                 android:layout_margin="16dp"
-                android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
+                android:contentDescription="TODO" android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/event_details_sideDivider"
                 app:layout_constraintBottom_toBottomOf="parent"/>
@@ -147,7 +147,7 @@
         <ImageButton
                 android:layout_height="wrap_content"
                 android:src="@drawable/event_detail_go_to_emotion"
-                android:onClick="@{() -> eventViewModel.onEmotionAvatarClicked()}"
+                android:contentDescription="TODO" android:onClick="@{() -> eventViewModel.onEmotionAvatarClicked()}"
                 android:id="@+id/btn_event_details_gotoEmotionAvatar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/event_details_sideDivider"
