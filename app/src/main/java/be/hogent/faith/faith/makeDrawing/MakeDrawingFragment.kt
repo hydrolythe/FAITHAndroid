@@ -31,6 +31,11 @@ class MakeDrawingFragment : Fragment() {
         super.onStart()
 
         setUpRecyclerView()
+        setUpDrawView()
+    }
+
+    private fun setUpDrawView() {
+        drawBinding.drawCanvas.setOnDragListener(DragListener())
     }
 
     private fun setUpRecyclerView() {
