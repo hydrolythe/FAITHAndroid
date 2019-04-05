@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import com.bumptech.glide.Glide
 
 class ImagesAdapter(private val context: Context, private val imageDrawableIDs: List<Int>) :
     RecyclerView.Adapter<ImageViewHolder>() {
@@ -25,10 +24,10 @@ class ImagesAdapter(private val context: Context, private val imageDrawableIDs: 
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        Glide.with(context)
-            .load(imageDrawableIDs[position])
-            .into(holder.imageView)
-        holder.imageView.setOnTouchListener(DragOnTouchListener())
+        holder.imageView.setImageResource(imageDrawableIDs[position])
+        // ID must be converted to a String because it will be used as a [ClipData.Item]
+        holder.imageView.tag = imageDrawableIDs[position].toString()
+        holder.imageView.setOnLongClickListener(DragOnTouchListener())
     }
 }
 

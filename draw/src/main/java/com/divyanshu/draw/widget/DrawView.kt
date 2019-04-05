@@ -9,6 +9,7 @@ import android.graphics.Paint
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -65,6 +66,8 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             isAntiAlias = true
         }
     }
+
+    private val addedDrawables = mutableListOf<Drawable>()
 
     fun addDrawViewListener(newListener: DrawViewListener) {
         drawingListeners += newListener
@@ -159,6 +162,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         super.onDraw(canvas)
 
         // Draw the background when one is set and the [Rect] in which it will be drawn has been calculated.
+        Log.d("DrawView", "Painting background")
         if (paintedBackground != null && mOutlineRect != null) {
             canvas.drawBitmap(
                 paintedBackground!!,
@@ -167,9 +171,16 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 null
             )
         }
+        Log.d("DrawView", "Painting paths")
         for ((key, value) in mPaths) {
             changePaint(value)
             canvas.drawPath(key, mPaint)
+        }
+
+        Log.d("DrawView", "Painting drawables (size: ${addedDrawables.size}")
+        addedDrawables.forEach { drawable ->
+            Log.d("DrawView", "Drawing drawable $drawable on ${drawable.bounds.left}, ${drawable.bounds.top}")
+            drawable.draw(canvas)
         }
 
         changePaint(mPaintOptions)
@@ -299,6 +310,18 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
      */
     fun setPaintedBackground(bitmapDrawable: BitmapDrawable) {
         paintedBackground = bitmapDrawable.bitmap
+    }
+
+    fun addDrawable(drawableResourceID: Int, x: Int, y: Int) {
+        val drawable = context.resources.getDrawable(drawableResourceID)
+        drawable.bounds = Rect(
+            x - drawable.intrinsicWidth / 2,
+            y - drawable.intrinsicWidth / 2,
+            x + drawable.intrinsicWidth / 2,
+            y + drawable.intrinsicHeight / 2
+        )
+        addedDrawables += drawable
+        invalidate()
     }
 
     fun toggleEraser() {
