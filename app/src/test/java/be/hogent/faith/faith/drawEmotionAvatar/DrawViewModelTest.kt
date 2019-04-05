@@ -3,22 +3,22 @@ package be.hogent.faith.faith.drawEmotionAvatar
 import android.graphics.Color
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import be.hogent.faith.faith.TestUtils.getValue
-import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel.LineWidth
+import be.hogent.faith.faith.drawEmotionAvatar.DrawViewModel.LineWidth
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class DrawEmotionViewModelTest {
+class DrawViewModelTest {
 
-    private lateinit var viewModel: DrawEmotionViewModel
+    private lateinit var viewModel: DrawViewModel
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {
-        viewModel = DrawEmotionViewModel()
+        viewModel = DrawViewModel()
     }
 
     @Test

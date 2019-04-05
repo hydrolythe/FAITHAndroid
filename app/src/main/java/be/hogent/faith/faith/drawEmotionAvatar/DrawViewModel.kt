@@ -14,7 +14,7 @@ import com.divyanshu.draw.widget.PaintOptions
  * ViewModel for the [DrawEmotionAvatarFragment].
  * It mainly holds the state of the [DrawView].
  */
-class DrawEmotionViewModel : ViewModel() {
+class DrawViewModel : ViewModel() {
 
     private val _selectedColor = MutableLiveData<@ColorInt Int>()
     val selectedColor: LiveData<Int>

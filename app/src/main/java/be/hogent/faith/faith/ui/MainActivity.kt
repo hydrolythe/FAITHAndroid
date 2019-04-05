@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
-import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
+import be.hogent.faith.faith.drawEmotionAvatar.DrawViewModel
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
@@ -29,11 +29,11 @@ class MainActivity : AppCompatActivity(),
     // This ViewModel is for the [DrawEmotionAvatarFragment], but has been defined here because it should
     // survive the activity's lifecycle, not just its own.
     // Reason: every time [startDrawFragment] is called, a new Fragment is created. In order to retain what has
-    // already been painted, the paths are saved in the [DrawEmotionViewModel]. Because we save it here, we can
+    // already been painted, the paths are saved in the [DrawViewModel]. Because we save it here, we can
     // give every new [DrawEmotionAvatarFragment] that same ViewModel, resulting in the drawing being fully restored.
     // Saving the fragment as a property doesn't work because the property doesn't survive configuration changes.
     // Saving the fragment somewhere in the backstack might work, but would require complicated backstack management.
-    private val drawEmotionViewModel by viewModel<DrawEmotionViewModel>()
+    private val drawEmotionViewModel by viewModel<DrawViewModel>()
 
     // This VM is made here because it holds the event that is described in the EventDetailsFragment and
     // the fragments that can be started from there.

@@ -5,7 +5,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel
-import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
+import be.hogent.faith.faith.drawEmotionAvatar.DrawViewModel
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenViewModel
 import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
@@ -27,7 +27,7 @@ val appModule = module(override = true) {
     viewModel { MainScreenViewModel() }
     viewModel { (user: LiveData<User>, eventUuid: UUID?) -> EventDetailsViewModel(user, eventUuid) }
     viewModel { (user: LiveData<User>) -> EventDetailsViewModel(user) }
-    viewModel { DrawEmotionViewModel() }
+    viewModel { DrawViewModel() }
     viewModel { UserViewModel(get()) }
     viewModel { (user: LiveData<User>) -> OverviewEventsViewModel(user) }
     viewModel { AvatarViewModel() }
