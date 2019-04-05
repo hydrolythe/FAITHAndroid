@@ -3,7 +3,8 @@ package be.hogent.faith.faith.drawEmotionAvatar
 import android.graphics.Color
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import be.hogent.faith.faith.TestUtils.getValue
-import be.hogent.faith.faith.drawEmotionAvatar.DrawViewModel.LineWidth
+import be.hogent.faith.faith.makeDrawing.DrawViewModel
+import be.hogent.faith.faith.makeDrawing.DrawViewModel.LineWidth
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule

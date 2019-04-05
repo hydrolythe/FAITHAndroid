@@ -5,9 +5,11 @@
 
         <variable
             name="drawViewModel"
-            type="be.hogent.faith.faith.drawEmotionAvatar.DrawViewModel" />
+            type="be.hogent.faith.faith.makeDrawing.DrawViewModel" />
+
         <import type="android.graphics.Color" />
-        <import type="be.hogent.faith.faith.drawEmotionAvatar.DrawViewModel.LineWidth" />
+        <import type="be.hogent.faith.faith.makeDrawing.DrawViewModel.LineWidth"/>
+
     </data>
 
     <LinearLayout

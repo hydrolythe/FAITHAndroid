@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.drawEmotionAvatar
+package be.hogent.faith.faith.makeDrawing
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
