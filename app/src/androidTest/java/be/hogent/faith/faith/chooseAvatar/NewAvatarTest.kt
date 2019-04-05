@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.chooseAvatar
 
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -18,18 +19,11 @@ class NewAvatarTest {
     @get:Rule
     var activityScenarioRule = ActivityScenarioRule<MainActivity>(MainActivity::class.java)
 
-    @Before
-    fun goToScreen() {
-        // NOP: new Avatar is default screen
-    }
-
-    @Test
-    fun newAvatar_canClickAllButtons() {
-        // TODO: try all buttons
-    }
 
     @Test
     fun checkCanEnterName() {
+        closeSoftKeyboard()
         onView(withId(R.id.avatar_txt_name)).perform(typeText("Reinhard"))
+        closeSoftKeyboard()
     }
 }
