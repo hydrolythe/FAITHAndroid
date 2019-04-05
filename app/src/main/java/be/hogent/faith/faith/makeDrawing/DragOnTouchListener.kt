@@ -3,23 +3,17 @@
 package be.hogent.faith.faith.makeDrawing
 
 import android.content.ClipData
-import android.view.MotionEvent
 import android.view.View
 
-class DragOnTouchListener : View.OnTouchListener {
+const val DRAWABLE_RES = "drawable resource identifier"
 
-    override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-        when (motionEvent.action) {
-            MotionEvent.ACTION_DOWN -> {
-                val data = ClipData.newPlainText("", "")
-                val shadowBuilder = View.DragShadowBuilder(
-                    view
-                )
-                view.startDrag(data, shadowBuilder, view, 0)
-                return true
-            }
-            else ->
-                return false
-        }
+class DragOnTouchListener() : View.OnLongClickListener {
+    override fun onLongClick(view: View): Boolean {
+        val data = ClipData.newPlainText(DRAWABLE_RES, view.tag as String)
+        val shadowBuilder = View.DragShadowBuilder(
+            view
+        )
+        view.startDrag(data, shadowBuilder, view, 0)
+        return true
     }
 }
