@@ -37,7 +37,7 @@ private const val NO_AVATAR = -1
  */
 class DrawEmotionAvatarFragment : Fragment() {
 
-    private val drawEmotionViewModel: DrawEmotionViewModel by sharedViewModel()
+    private val drawViewModel: DrawViewModel by sharedViewModel()
     private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
 
     private lateinit var drawAvatarBinding: FragmentDrawAvatarBinding
@@ -57,7 +57,7 @@ class DrawEmotionAvatarFragment : Fragment() {
         }
 
         drawAvatarBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_draw_avatar, container, false)
-        drawAvatarBinding.drawEmotionViewModel = drawEmotionViewModel
+        drawAvatarBinding.drawViewModel = drawViewModel
         drawAvatarBinding.lifecycleOwner = this
         return drawAvatarBinding.root
     }
@@ -84,21 +84,21 @@ class DrawEmotionAvatarFragment : Fragment() {
     }
 
     private fun listenToViewModelEvents() {
-        drawEmotionViewModel.drawnPaths.observe(this, Observer {
+        drawViewModel.drawnPaths.observe(this, Observer {
             // It's very important that the drawCanvas doesn't create its own paths but uses a paths object
-            // that is saved in such a way that it survives configuration changes. See [DrawEmotionViewModel].
+            // that is saved in such a way that it survives configuration changes. See [DrawViewModel].
             drawAvatarBinding.drawCanvas.setPaths(it)
         })
-        drawEmotionViewModel.selectedColor.observe(this, Observer { newColor ->
+        drawViewModel.selectedColor.observe(this, Observer { newColor ->
             Log.i(TAG, "Color set to $newColor")
             drawAvatarBinding.drawCanvas.setColor(newColor)
         })
 
-        drawEmotionViewModel.selectedLineWidth.observe(this, Observer { lineWidth ->
+        drawViewModel.selectedLineWidth.observe(this, Observer { lineWidth ->
             Log.i(TAG, "Line width set to $lineWidth")
             drawAvatarBinding.drawCanvas.setStrokeWidth(lineWidth.width)
         })
-        drawEmotionViewModel.undoClicked.observe(this, Observer {
+        drawViewModel.undoClicked.observe(this, Observer {
             Log.i(TAG, "Last action undone")
             drawAvatarBinding.drawCanvas.undo()
         })
