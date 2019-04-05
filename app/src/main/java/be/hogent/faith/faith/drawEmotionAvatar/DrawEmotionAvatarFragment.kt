@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
+import be.hogent.faith.faith.makeDrawing.DrawViewModel
 import be.hogent.faith.util.TAG
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import com.divyanshu.draw.widget.DrawView
