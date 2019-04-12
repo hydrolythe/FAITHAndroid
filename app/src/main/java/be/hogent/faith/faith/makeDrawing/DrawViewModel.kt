@@ -7,8 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import com.divyanshu.draw.widget.DrawView
-import com.divyanshu.draw.widget.MyPath
-import com.divyanshu.draw.widget.PaintOptions
+import com.divyanshu.draw.widget.DrawingAction
 
 /**
  * ViewModel for the [DrawEmotionAvatarFragment].
@@ -38,12 +37,12 @@ class DrawViewModel : ViewModel() {
      * again to the new View.
      * If we'd make the paths in the [DrawView] and then push them here, an observer pattern would have been required.
      */
-    private val _drawnPaths = MutableLiveData<LinkedHashMap<MyPath, PaintOptions>>()
-    val drawnPaths: LiveData<LinkedHashMap<MyPath, PaintOptions>>
-        get() = _drawnPaths
+    private val _drawingActions = MutableLiveData<MutableList<DrawingAction>>()
+    val drawnPaths: LiveData<MutableList<DrawingAction>>
+        get() = _drawingActions
 
     init {
-        _drawnPaths.value = LinkedHashMap()
+        _drawingActions.value = mutableListOf()
         _selectedColor.value = Color.BLACK
         _selectedLineWidth.value = LineWidth.MEDIUM
     }

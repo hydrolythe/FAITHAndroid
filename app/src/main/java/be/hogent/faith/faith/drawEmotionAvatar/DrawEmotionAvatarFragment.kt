@@ -88,7 +88,7 @@ class DrawEmotionAvatarFragment : Fragment() {
         drawViewModel.drawnPaths.observe(this, Observer {
             // It's very important that the drawCanvas doesn't create its own paths but uses a paths object
             // that is saved in such a way that it survives configuration changes. See [DrawViewModel].
-            drawAvatarBinding.drawCanvas.setPaths(it)
+            drawAvatarBinding.drawCanvas.setActions(it)
         })
         drawViewModel.selectedColor.observe(this, Observer { newColor ->
             Log.i(TAG, "Color set to $newColor")
