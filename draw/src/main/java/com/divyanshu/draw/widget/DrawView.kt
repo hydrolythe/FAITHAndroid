@@ -314,12 +314,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     fun addDrawable(drawableResourceID: Int, x: Int, y: Int) {
         val drawable = context.resources.getDrawable(drawableResourceID)
-        drawable.bounds = Rect(
-            x - drawable.intrinsicWidth / 2,
-            y - drawable.intrinsicWidth / 2,
-            x + drawable.intrinsicWidth / 2,
-            y + drawable.intrinsicHeight / 2
-        )
+        drawable.bounds = Rect(0,0, drawable.intrinsicWidth, drawable.intrinsicHeight)
         addedDrawables += drawable
         invalidate()
     }
