@@ -70,15 +70,7 @@ class DrawEmotionAvatarFragment : Fragment() {
 
         drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
             override fun onDrawingChanged(bitmap: Bitmap) {
-                val saveRequest = saveEmotionAvatarUseCase.execute(
-                    SaveEmotionAvatarUseCase.Params(bitmap, eventDetailsViewModel.event.value!!)
-                ).subscribe({
-                    Log.i(TAG, "Drawing was saved")
-                    eventDetailsViewModel.updateEvent()
-                }, {
-                    context?.toast(getString(R.string.error_saving_drawing))
-                })
-                disposables.add(saveRequest)
+                drawEmotionViewModel.saveImage(bitmap)
             }
         })
     }
@@ -102,6 +94,12 @@ class DrawEmotionAvatarFragment : Fragment() {
             Log.i(TAG, "Last action undone")
             drawAvatarBinding.drawCanvas.undo()
         })
+        drawEmotionViewModel.errorMessage.observe(this, Observer {
+            context?.toast(getString(R.string.error_saving_drawing))
+        })
+        drawEmotionViewModel.avatarSavedSuccessFully.observe(this, Observer {
+            eventDetailsViewModel.updateEvent()
+        })
     }
 
     private fun updateUI() {
@@ -121,7 +119,6 @@ class DrawEmotionAvatarFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        disposables.clear()
     }
 
     companion object {

@@ -1,20 +1,37 @@
 package be.hogent.faith.faith.drawEmotionAvatar
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import com.divyanshu.draw.widget.DrawView
 import com.divyanshu.draw.widget.MyPath
 import com.divyanshu.draw.widget.PaintOptions
+import io.reactivex.disposables.CompositeDisposable
 
 /**
  * ViewModel for the [DrawEmotionAvatarFragment].
  * It mainly holds the state of the [DrawView].
  */
-class DrawEmotionViewModel : ViewModel() {
+class DrawEmotionViewModel (private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase, private val event: Event) : ViewModel() {
+
+    private val disposables = CompositeDisposable()
+
+    /**
+     * The errormessages
+     */
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
+
+    private val _avatarSavedSuccessFully = SingleLiveEvent<Unit>()
+    val avatarSavedSuccessFully: LiveData<Unit>
+        get() = _avatarSavedSuccessFully
 
     private val _selectedColor = MutableLiveData<@ColorInt Int>()
     val selectedColor: LiveData<Int>
@@ -43,9 +60,7 @@ class DrawEmotionViewModel : ViewModel() {
         get() = _drawnPaths
 
     init {
-        _drawnPaths.value = LinkedHashMap()
-        _selectedColor.value = Color.BLACK
-        _selectedLineWidth.value = LineWidth.MEDIUM
+        resetViewModel()
     }
 
     fun pickColor(@ColorInt color: Int) {
@@ -64,5 +79,31 @@ class DrawEmotionViewModel : ViewModel() {
         THIN(12f),
         MEDIUM(30f),
         THICK(55f)
+    }
+
+    fun resetViewModel() {
+        _drawnPaths.value = LinkedHashMap()
+        _selectedColor.value = Color.BLACK
+        _selectedLineWidth.value = LineWidth.MEDIUM
+    }
+
+    override fun onCleared() {
+        disposables.clear()
+        super.onCleared()
+    }
+
+    /**
+     * Save avatar bitmap. This updates the property emotionAvatar
+     */
+    fun saveImage(bitmap: Bitmap) {
+        val saveRequest = saveEmotionAvatarUseCase.execute(
+            SaveEmotionAvatarUseCase.Params(bitmap, event)
+        ).subscribe({
+            _avatarSavedSuccessFully.value = Unit
+        }, {
+            _errorMessage.postValue( it.message)
+        }
+        )
+        disposables.add(saveRequest)
     }
 }

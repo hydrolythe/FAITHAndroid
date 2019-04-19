@@ -45,18 +45,6 @@ class TakePhotoViewModelTest {
         verify { observer.onChanged(any()) }
     }
 
-    @Test
-    fun takePhotoVM_onGoToEmotionAvatarButtonClicked_callsListeners() {
-        // Arrange
-        val observer = mockk<Observer<Unit>>(relaxed = true)
-        viewModel.emotionAvatarButtonClicked.observeForever(observer)
-
-        // Act
-        viewModel.onGoToEmotionAvatarButtonClicked()
-
-        // Assert
-        verify { observer.onChanged(any()) }
-    }
 
     @Test
     fun takePhotoVM_onCancelButtonClicked_callsListeners() {

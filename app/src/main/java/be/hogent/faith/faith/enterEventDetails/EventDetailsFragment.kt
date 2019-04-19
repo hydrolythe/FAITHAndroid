@@ -1,12 +1,10 @@
 package be.hogent.faith.faith.enterEventDetails
 
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,14 +13,13 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
 import be.hogent.faith.domain.models.DetailType
 import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.ui.BackToCityListener
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
 import java.util.UUID
 
 private const val ARG_EVENTUUID = "eventUUID"
 
-class EventDetailsFragment : Fragment(), BackToCityListener {
+class EventDetailsFragment : Fragment() {
 
     private var navigation: EventDetailsNavigationListener? = null
     private lateinit var userViewModel: UserViewModel
@@ -30,18 +27,6 @@ class EventDetailsFragment : Fragment(), BackToCityListener {
     private lateinit var eventDetailsBinding: FragmentEnterEventDetailsBinding
 
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
-
-    override fun needConfirmation(): Boolean {
-        return true;
-    }
-
-    override fun getConfirmationTitle(): String {
-        return "Terug naar de stad"
-    }
-
-    override fun getConfirmationMessage(): String {
-        return "De gebeurtenis wordt niet bijgehouden. Ben je zeker? "
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,11 +80,11 @@ class EventDetailsFragment : Fragment(), BackToCityListener {
             navigation?.startDrawEmotionAvatarFragment()
         })
         eventDetailsViewModel.cameraButtonClicked.observe(this, Observer {
-            //navigation?.startTakePhotoFragment()
+            // navigation?.startTakePhotoFragment()
             navigation?.startEventDetail(DetailType.PICTURE)
         })
         eventDetailsViewModel.audioButtonClicked.observe(this, Observer {
-            //navigation?.startRecordAudioFragment()
+            // navigation?.startRecordAudioFragment()
             navigation?.startEventDetail(DetailType.AUDIO)
         })
         eventDetailsViewModel.event.observe(this, Observer { event ->

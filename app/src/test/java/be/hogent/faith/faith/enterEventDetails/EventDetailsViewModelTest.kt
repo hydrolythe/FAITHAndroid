@@ -10,7 +10,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class EventDetailsViewModelTest {
-
     private lateinit var viewModel: EventDetailsViewModel
 
     @get:Rule
@@ -22,7 +21,7 @@ class EventDetailsViewModelTest {
     }
 
     @Test
-    fun eventVM_updateEvent_callsListeners() {
+    fun eventDetailsVM_updateEvent_callsListeners() {
         // Arrange
         val observer = mockk<Observer<Event>>(relaxed = true)
         viewModel.event.observeForever(observer)

@@ -56,6 +56,8 @@
     <string name="navigation_terugNaarDeStad">Terug naar de stad</string>
     <string name="header_emotie_regulatie">Emotie regulatie</string>
     <string name="frag_viewEvent_notes">notes</string>
+    <string name="dialog_to_the_city_title">"Wil je teruggaan naar de stad</string>
+    <string name="dialog_to_the_city_message">Ben je zeker? Alle wijzigingen worden niet bijgehouden?</string>
     <string name="ok">ok</string>
     <string name="cancel">cancel</string>
 

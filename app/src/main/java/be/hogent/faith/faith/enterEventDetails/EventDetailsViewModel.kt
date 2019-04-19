@@ -27,7 +27,8 @@ class EventDetailsViewModel(val user: LiveData<User>, eventUuid: UUID? = null) :
             val result = user.value?.getEvent(eventUuid)
             event.postValue(result)
             eventTitle.postValue(result?.title)
-        }
+        } else
+            event.value = Event()
     }
 
     private val _cameraButtonClicked = SingleLiveEvent<Unit>()
@@ -53,10 +54,6 @@ class EventDetailsViewModel(val user: LiveData<User>, eventUuid: UUID? = null) :
     private val _emotionAvatarClicked = SingleLiveEvent<Unit>()
     val emotionAvatarClicked: LiveData<Unit>
         get() = _emotionAvatarClicked
-
-    init {
-        event.value = Event()
-    }
 
     /**
      * Helper method to be called when changing one of the properties of the [event].
@@ -88,5 +85,13 @@ class EventDetailsViewModel(val user: LiveData<User>, eventUuid: UUID? = null) :
 
     fun onEmotionAvatarClicked() {
         _emotionAvatarClicked.call()
+    }
+
+    /**
+     * Used to reset the ViewModel once an Event is saved.
+     * This will allow the ViewModel to be reused for a new event.
+     */
+    fun resetViewModel() {
+        event.postValue(Event())
     }
 }
