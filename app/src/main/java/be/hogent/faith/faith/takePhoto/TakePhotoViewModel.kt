@@ -26,10 +26,6 @@ class TakePhotoViewModel(
     val takePhotoButtonClicked: LiveData<Unit>
         get() = _takePhotoButtonClicked
 
-    private val _emotionAvatarButtonClicked = SingleLiveEvent<Unit>()
-    val emotionAvatarButtonClicked: LiveData<Unit>
-        get() = _emotionAvatarButtonClicked
-
     private val _cancelButtonClicked = SingleLiveEvent<Unit>()
     val cancelButtonClicked: LiveData<Unit>
         get() = _cancelButtonClicked
@@ -53,10 +49,6 @@ class TakePhotoViewModel(
 
     fun onTakePhotoButtonClicked() {
         _takePhotoButtonClicked.call()
-    }
-
-    fun onGoToEmotionAvatarButtonClicked() {
-        _emotionAvatarButtonClicked.call()
     }
 
     fun onSaveButtonClicked() {

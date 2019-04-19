@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.DetailType
@@ -32,7 +31,7 @@ class MainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
     OverviewEventsFragment.OverviewEventsNavigationListener,
     MainScreenFragment.MainScreenNavigationListener,
-    TakePhotoFragment.TakePhotoNavigationListener {
+    EditDetailFragment.EditDetailNavigationListener {
 
     // This ViewModel is for the [DrawEmotionAvatarFragment], but has been defined here because it should
     // survive the activity's lifecycle, not just its own.
@@ -41,7 +40,7 @@ class MainActivity : AppCompatActivity(),
     // give every new [DrawEmotionAvatarFragment] that same ViewModel, resulting in the drawing being fully restored.
     // Saving the fragment as a property doesn't work because the property doesn't survive configuration changes.
     // Saving the fragment somewhere in the backstack might work, but would require complicated backstack management.
-    private val drawEmotionViewModel by viewModel<DrawEmotionViewModel>()
+    //private val drawEmotionViewModel by viewModel<DrawEmotionViewModel>()
 
     // This VM is made here because it holds the event that is described in the EventDetailsFragment and
     // the fragments that can be started from there.
@@ -54,6 +53,7 @@ class MainActivity : AppCompatActivity(),
     private val userViewModel by viewModel<UserViewModel>()
 
     lateinit var recordAudioViewModel: RecordAudioViewModel
+    lateinit var drawEmotionViewModel: DrawEmotionViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +66,10 @@ class MainActivity : AppCompatActivity(),
             parametersOf(eventDetailsViewModel.event.value)
         }
         recordAudioViewModel = getViewModel {
+            parametersOf(eventDetailsViewModel.event.value)
+        }
+
+        drawEmotionViewModel = getViewModel {
             parametersOf(eventDetailsViewModel.event.value)
         }
 
@@ -83,51 +87,39 @@ class MainActivity : AppCompatActivity(),
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         navigationView.setNavigationItemSelectedListener { menuItem ->
-            // set item as selected to persist highlight
-            // menuItem.isChecked = true
             // close drawer when item is tapped
             drawerLayout.closeDrawers()
-
+            // perform action
             when (menuItem.itemId) {
                 R.id.nav_city -> {
-                    val fragment = getTopFragment()
-                    if (fragment != null && (fragment is BackToCityListener) && fragment.needConfirmation()) {
-                        val alertDialog: AlertDialog? = this?.let {
-                            val builder = AlertDialog.Builder(it).apply {
-                                setTitle((fragment as BackToCityListener).getConfirmationTitle())//.get(R.string.event_details_label_title)
-                                setMessage((fragment as BackToCityListener).getConfirmationMessage())
-                                setPositiveButton(R.string.ok,
-                                    DialogInterface.OnClickListener { dialog, id ->
-                                        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                                    })
-                                setNegativeButton(R.string.cancel,
-                                    DialogInterface.OnClickListener { dialog, id ->
-                                        dialog.cancel()
-                                    })
-
-                            }
-                            builder.create()
-                        }
-                        alertDialog?.show()
+                    val alertDialog: AlertDialog = this.run {
+                        val builder = AlertDialog.Builder(this).apply {
+                            setTitle(.R.string.dialog_to_the_city_title)
+                            setMessage(R.string.dialog_to_the_city_message)
+                            setPositiveButton(
+                                R.string.ok,
+                                DialogInterface.OnClickListener { dialog, _ ->
+                                    eventDetailsViewModel.resetViewModel()
+                                    drawEmotionViewModel.resetViewModel()
+                                    supportFragmentManager.popBackStack(
+                                        null,
+                                        FragmentManager.POP_BACK_STACK_INCLUSIVE
+                                    )
+                        })
+                        setNegativeButton(
+                            R.string.cancel,
+                            DialogInterface.OnClickListener { dialog, _ ->
+                                dialog.cancel()
+                            })
                     }
-                    else
-                        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    builder.create()
                 }
-            }
-            true
-
-        }
-    }
-
-    private fun getTopFragment(): Fragment? {
-        supportFragmentManager.run {
-            return when (fragments.size) { //(backStackEntryCount) {
-                0 -> null
-                else -> fragments[fragments.size - 1]
+                alertDialog.show()
             }
         }
+        true
     }
-
+}
 
 //    /**
 //     * Sets the [User] currently working with the application.
@@ -161,7 +153,10 @@ class MainActivity : AppCompatActivity(),
         replaceFragment(EventDetailsFragment.newInstance(eventUuid), R.id.fragment_container)
     }
 
-    override fun startEventDetail(type: DetailType) {
-        replaceFragment(EditDetailFragment.newInstance(type), R.id.fragment_container)
-    }
+override fun startEventDetail(type: DetailType) {
+    replaceFragment(
+        EditDetailFragment.newInstance(type, R.drawable.outline),
+        R.id.fragment_container
+    )
+}
 }

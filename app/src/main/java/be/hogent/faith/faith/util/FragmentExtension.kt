@@ -21,6 +21,5 @@ internal fun Fragment.replaceChildFragment(fragment: Fragment, frameId: Int) {
     val ft = getChildFragmentManager().beginTransaction()
     ft.replace(frameId, fragment)
     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-    ft.addToBackStack(null)
     ft.commit()
 }
