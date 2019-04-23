@@ -84,6 +84,9 @@ class EventDetailsFragment : Fragment() {
         eventDetailsViewModel.audioButtonClicked.observe(this, Observer {
             navigation?.startRecordAudioFragment()
         })
+        eventDetailsViewModel.drawingButtonClicked.observe(this, Observer {
+            navigation?.startMakeDrawingFragment()
+        })
         eventDetailsViewModel.event.observe(this, Observer { event ->
             detailThumbnailsAdapter?.updateDetailsList(event.details)
         })
@@ -98,6 +101,7 @@ class EventDetailsFragment : Fragment() {
         fun startDrawEmotionAvatarFragment()
         fun startTakePhotoFragment()
         fun startRecordAudioFragment()
+        fun startMakeDrawingFragment()
     }
 
     companion object {
