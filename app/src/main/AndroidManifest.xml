@@ -33,5 +33,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+                android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
+                android:label="@string/emotion_capture"
+                android:name=".faith.emotionCapture.ui.EmotionCaptureMainActivity">
+        </activity>
     </application>
 </manifest>
