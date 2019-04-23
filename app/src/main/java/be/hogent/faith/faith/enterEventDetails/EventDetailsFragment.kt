@@ -11,8 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
-import be.hogent.faith.domain.models.DetailType
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.editDetail.DetailType
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
 import java.util.UUID

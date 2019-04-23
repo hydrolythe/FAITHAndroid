@@ -21,7 +21,7 @@ import org.junit.Test
 class DrawEmotionViewModelTest {
 
     private lateinit var viewModel: DrawEmotionViewModel
-    private val saveEmotionAvatarUseCase= mockk<SaveEmotionAvatarUseCase>()
+    private val saveEmotionAvatarUseCase = mockk<SaveEmotionAvatarUseCase>()
     private val event = mockk<Event>()
 
     @get:Rule
@@ -29,7 +29,7 @@ class DrawEmotionViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = DrawEmotionViewModel(saveEmotionAvatarUseCase,event)
+        viewModel = DrawEmotionViewModel(saveEmotionAvatarUseCase, event)
     }
 
     @Test

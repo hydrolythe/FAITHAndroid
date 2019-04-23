@@ -45,7 +45,6 @@ class TakePhotoViewModelTest {
         verify { observer.onChanged(any()) }
     }
 
-
     @Test
     fun takePhotoVM_onCancelButtonClicked_callsListeners() {
         // Arrange

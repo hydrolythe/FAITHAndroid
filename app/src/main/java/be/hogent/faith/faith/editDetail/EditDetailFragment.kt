@@ -14,12 +14,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.DetailType
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.takePhoto.TakePhotoFragment
-import be.hogent.faith.faith.util.TAG
 import be.hogent.faith.faith.util.replaceChildFragment
+import be.hogent.faith.util.TAG
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_edit_detail.image_editdetail_avatar
@@ -38,6 +37,15 @@ private const val ARG_AVATAR_RES_ID = "avatarResId"
  * Constant for avatarOutlineResId to indicate that no avatar was passed as an argument for this fragment.
  */
 private const val NO_AVATAR = -1
+
+enum class DetailType {
+    TEXT,
+    PICTURE,
+    MUSIC,
+    AUDIO,
+    DRAWING,
+    VIDEO
+}
 
 class EditDetailFragment : Fragment() {
     private var detailType: DetailType? = null
@@ -75,6 +83,7 @@ class EditDetailFragment : Fragment() {
         val width = Resources.getSystem().displayMetrics.widthPixels
         val height = Resources.getSystem().displayMetrics.heightPixels
         eventDetailsViewModel.event.observe(this, Observer {
+            Log.d(TAG, "emotionavatar in details ${it.emotionAvatar?.name?: "no name"}")
             val image =
                 it.emotionAvatar ?: ContextCompat.getDrawable(this.context!!, avatarOutlineResId) as BitmapDrawable
             Glide.with(this)
