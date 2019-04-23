@@ -52,4 +52,10 @@ class MakeDrawingFragment : DrawFragment() {
             )
         }
     }
+
+    companion object {
+        fun newInstance(): MakeDrawingFragment {
+            return MakeDrawingFragment()
+        }
+    }
 }
