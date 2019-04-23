@@ -11,7 +11,7 @@ import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import io.reactivex.disposables.CompositeDisposable
 import java.util.UUID
 
-class EventDetailsViewModel(private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase, val user: LiveData<User>, eventUuid: UUID? = null) : ViewModel() {
+class EventDetailsViewModel(private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase, val user: User, eventUuid: UUID? = null) : ViewModel() {
 
     /**
      * The event that will be discussed and explained using audio, video, drawings,...
@@ -40,7 +40,7 @@ class EventDetailsViewModel(private val saveEmotionAvatarUseCase: SaveEmotionAva
     init {
         if (eventUuid != null) {
             // Recreating an existing event
-            val result = user.value?.getEvent(eventUuid)
+            val result = user.getEvent(eventUuid)
             event.postValue(result)
             eventTitle.postValue(result?.title)
         } else
