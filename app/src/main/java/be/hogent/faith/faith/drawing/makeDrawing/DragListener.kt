@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.makeDrawing
+package be.hogent.faith.faith.drawing.makeDrawing
 
 import android.util.Log
 import android.view.DragEvent

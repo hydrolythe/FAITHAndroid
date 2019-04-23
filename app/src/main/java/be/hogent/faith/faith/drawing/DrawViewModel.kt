@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.makeDrawing
+package be.hogent.faith.faith.drawing
 
 import android.graphics.Color
 import androidx.annotation.ColorInt

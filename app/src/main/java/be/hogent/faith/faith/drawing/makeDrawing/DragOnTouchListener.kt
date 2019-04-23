@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package be.hogent.faith.faith.makeDrawing
+package be.hogent.faith.faith.drawing.makeDrawing
 
 import android.content.ClipData
 import android.graphics.Canvas

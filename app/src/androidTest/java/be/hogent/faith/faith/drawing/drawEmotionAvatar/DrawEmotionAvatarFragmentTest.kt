@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.drawEmotionAvatar
+package be.hogent.faith.faith.drawing.drawEmotionAvatar
 
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
