@@ -26,9 +26,9 @@ val appModule = module(override = true) {
 
     // ViewModels
     viewModel { MainScreenViewModel() }
-    viewModel { (user: LiveData<User>, eventUuid: UUID?) -> EventDetailsViewModel(user, eventUuid) }
-    viewModel { (user: LiveData<User>) -> EventDetailsViewModel(user) }
-    viewModel { (event: Event) -> DrawEmotionViewModel(get(), event) }
+    viewModel { (user: LiveData<User>, eventUuid: UUID?) -> EventDetailsViewModel(get(), user, eventUuid) }
+    viewModel { (user: LiveData<User>) -> EventDetailsViewModel(get(), user) }
+    viewModel { DrawEmotionViewModel() }
     viewModel { EditDetailViewModel() }
     viewModel { UserViewModel(get()) }
     viewModel { (user: LiveData<User>) -> OverviewEventsViewModel(user) }
