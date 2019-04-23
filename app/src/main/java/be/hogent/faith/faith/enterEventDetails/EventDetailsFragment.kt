@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.editDetail.DetailType
 import org.koin.android.viewmodel.ext.android.getViewModel
@@ -33,10 +34,10 @@ class EventDetailsFragment : Fragment() {
         userViewModel = getViewModel()
         if (arguments?.getSerializable(ARG_EVENTUUID) != null) {
             eventDetailsViewModel =
-                getViewModel { parametersOf(userViewModel.user, arguments?.getSerializable(ARG_EVENTUUID)) }
+                getViewModel { parametersOf(userViewModel.user.value?: User(), arguments?.getSerializable(ARG_EVENTUUID)) }
         } else {
             eventDetailsViewModel =
-                getViewModel { parametersOf(userViewModel.user) }
+                getViewModel { parametersOf(userViewModel.user.value?:User()) }
         }
     }
 

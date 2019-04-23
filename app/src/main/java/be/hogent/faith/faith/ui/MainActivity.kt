@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         eventDetailsViewModel = getViewModel {
-            parametersOf(userViewModel.user)
+            parametersOf(userViewModel.user.value?: User())
         }
         takePhotoViewModel = getViewModel {
             parametersOf(eventDetailsViewModel.event.value)
