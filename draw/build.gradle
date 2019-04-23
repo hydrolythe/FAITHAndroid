@@ -21,6 +21,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 
 }
 
@@ -36,6 +39,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:design:28.0.0'
 
+    testImplementation testDependencies.mockk
 
     implementation commonDependencies.coroutines_core
     implementation commonDependencies.coroutines_android

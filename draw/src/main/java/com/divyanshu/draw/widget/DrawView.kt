@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
+import android.os.AsyncTask
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -15,9 +16,6 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
 import androidx.core.graphics.ColorUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 /**
  * Defines how much of the View's height the background may use.
@@ -29,7 +27,10 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     /**
      * Holds all [DrawingAction]s that will be drawn when calling [onDraw].
      */
-    private var drawingActions = mutableListOf<DrawingAction>()
+    private var _drawingActions = mutableListOf<DrawingAction>()
+    val drawingActions: List<DrawingAction>
+        get() = _drawingActions
+
 
     /**
      * Holds a copy of all actions that were done before [clear] was called.
@@ -71,30 +72,39 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     private fun callDrawViewListeners() {
-        Log.i("DrawView", "Drawing was updated, calling ${drawingListeners.size} listeners")
-        GlobalScope.launch(Dispatchers.Main) {
-            val bitmap = getBitmap()
-            drawingListeners.forEach {
-                it.onDrawingChanged(bitmap)
+        class SendBitMapToListeners : AsyncTask<Void?, Void?, Void?>() {
+            private lateinit var bitmap: Bitmap
+            override fun doInBackground(vararg params: Void?): Void? {
+                bitmap = getBitmap()
+                return null
             }
+
+            override fun onPostExecute(result: Void?) {
+                drawingListeners.forEach {
+                    it.onDrawingChanged(bitmap)
+                }
+            }
+
         }
+
+        SendBitMapToListeners().execute()
     }
 
     fun undo() {
-        if (drawingActions.isEmpty() && lastDrawingActions.isNotEmpty()) {
+        if (_drawingActions.isEmpty() && lastDrawingActions.isNotEmpty()) {
             // Last action was a call to [clearCanvas]
-            drawingActions = lastDrawingActions.toMutableList() // Copy
+            _drawingActions = lastDrawingActions.toMutableList() // Copy
             lastDrawingActions.clear()
             invalidate()
             return
         }
-        if (drawingActions.isEmpty()) {
+        if (_drawingActions.isEmpty()) {
             return
         }
-        val lastAction = drawingActions.lastOrNull()
+        val lastAction = _drawingActions.lastOrNull()
 
         // Remove last element
-        drawingActions.removeAt(drawingActions.size - 1)
+        _drawingActions.removeAt(_drawingActions.size - 1)
 
         if (lastAction != null) {
             undoneActions.add(lastAction)
@@ -153,8 +163,13 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         return bitmap
     }
 
+    /**
+     * Add a [DrawingAction] to the list.
+     * Invalidates the View, ensuring the new action gets painted.
+     */
     fun addDrawingAction(drawingAction: DrawingAction) {
-        drawingActions.add(drawingAction)
+        _drawingActions.add(drawingAction)
+        invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -169,7 +184,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 null
             )
         }
-        drawingActions.forEach { action ->
+        _drawingActions.forEach { action ->
             action.drawOn(canvas)
         }
 
@@ -182,9 +197,9 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     fun clearCanvas() {
-        lastDrawingActions = drawingActions.toMutableList() // copy
+        lastDrawingActions = _drawingActions.toMutableList() // copy
         currentPath?.reset()
-        drawingActions.clear()
+        _drawingActions.clear()
         invalidate()
         callDrawViewListeners()
     }
@@ -216,7 +231,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             }
 
             // Add finished path to actions
-            drawingActions.add(it)
+            _drawingActions.add(it)
 
             // Start a new Path. We have to do this here already so changing PaintOptions after drawing a line
             // doesn't change the options for that line, but sets up the new line.
@@ -320,7 +335,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     fun addDrawable(drawableResourceID: Int, x: Int, y: Int) {
         val drawable = context.resources.getDrawable(drawableResourceID)
         drawable.bounds = Rect(x, y, x + drawable.intrinsicWidth, y + drawable.intrinsicHeight)
-        drawingActions.add(MyDrawable(drawable))
+        addDrawingAction(MyDrawable(drawable))
         invalidate()
     }
 
@@ -338,13 +353,13 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     /**
-     * Sets the paths to be drawn.
+     * Sets the actions to be drawn.
      * This is used to save the state in a ViewModel and restore it when the View was destroyed.
-     * Not everything that's part of the UI state should be saved. The other maps containing baths are only
-     * there for the undo/redo and clearCanvas functionality which we *currently* don't fully use. (Only undo)
+     * Not everything that's part of the UI state should be saved. The other maps containing actions are only
+     * there for the undo/redo and clearCanvas functionality.
      */
     fun setActions(newPaths: MutableList<DrawingAction>) {
-        drawingActions = newPaths
+        _drawingActions = newPaths
         invalidate()
     }
 }
