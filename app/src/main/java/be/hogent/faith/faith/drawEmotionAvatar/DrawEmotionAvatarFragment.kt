@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,9 +15,8 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
-import be.hogent.faith.faith.util.TAG
-import be.hogent.faith.faith.util.toast
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
+import be.hogent.faith.util.TAG
 import com.divyanshu.draw.widget.DrawView
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.ext.android.inject
@@ -95,7 +95,7 @@ class DrawEmotionAvatarFragment : Fragment() {
             drawAvatarBinding.drawCanvas.undo()
         })
         drawEmotionViewModel.errorMessage.observe(this, Observer {
-            context?.toast(getString(R.string.error_saving_drawing))
+            Toast.makeText(context, getString(R.string.error_saving_drawing), Toast.LENGTH_SHORT).show()
         })
         drawEmotionViewModel.avatarSavedSuccessFully.observe(this, Observer {
             eventDetailsViewModel.updateEvent()

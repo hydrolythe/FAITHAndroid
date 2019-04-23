@@ -57,7 +57,7 @@ class TakePhotoViewModel(
         ).subscribe(
             {
                 _photoSavedSuccessFully.value = Unit
-                // Name has to be cleared so future pictures start with an empty name
+                // Name has to be cleared so future pictures start with an empty recordingName
                 photoName.value = ""
             },
             {

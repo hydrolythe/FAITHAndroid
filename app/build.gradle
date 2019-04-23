@@ -57,6 +57,7 @@ dependencies {
     implementation project(':database')
     implementation project(':storage')
     implementation project(':draw')
+    implementation project(':util')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

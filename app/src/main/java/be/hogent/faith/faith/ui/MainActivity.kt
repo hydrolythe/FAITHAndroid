@@ -7,10 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.DetailType
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
+import be.hogent.faith.faith.editDetail.DetailType
 import be.hogent.faith.faith.editDetail.EditDetailFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(),
     // give every new [DrawEmotionAvatarFragment] that same ViewModel, resulting in the drawing being fully restored.
     // Saving the fragment as a property doesn't work because the property doesn't survive configuration changes.
     // Saving the fragment somewhere in the backstack might work, but would require complicated backstack management.
-    //private val drawEmotionViewModel by viewModel<DrawEmotionViewModel>()
+    // private val drawEmotionViewModel by viewModel<DrawEmotionViewModel>()
 
     // This VM is made here because it holds the event that is described in the EventDetailsFragment and
     // the fragments that can be started from there.
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity(),
                 R.id.nav_city -> {
                     val alertDialog: AlertDialog = this.run {
                         val builder = AlertDialog.Builder(this).apply {
-                            setTitle(.R.string.dialog_to_the_city_title)
+                            setTitle(R.string.dialog_to_the_city_title)
                             setMessage(R.string.dialog_to_the_city_message)
                             setPositiveButton(
                                 R.string.ok,

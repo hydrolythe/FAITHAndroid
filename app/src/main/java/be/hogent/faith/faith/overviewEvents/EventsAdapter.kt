@@ -9,13 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.faith.util.TAG
+import be.hogent.faith.util.TAG
 import com.bumptech.glide.request.RequestOptions
 import org.threeten.bp.format.DateTimeFormatter
 import com.bumptech.glide.RequestManager
 
-
-class EventsAdapter(private val eventListener: EventListener, private val glide:RequestManager) : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
+class EventsAdapter(private val eventListener: EventListener, private val glide: RequestManager) : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
 
     var events: List<Event> = emptyList()
 

@@ -2,6 +2,7 @@ package be.hogent.faith.faith.drawEmotionAvatar
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
+import be.hogent.faith.util.TAG
 import com.divyanshu.draw.widget.DrawView
 import com.divyanshu.draw.widget.MyPath
 import com.divyanshu.draw.widget.PaintOptions
@@ -18,7 +20,7 @@ import io.reactivex.disposables.CompositeDisposable
  * ViewModel for the [DrawEmotionAvatarFragment].
  * It mainly holds the state of the [DrawView].
  */
-class DrawEmotionViewModel (private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase, private val event: Event) : ViewModel() {
+class DrawEmotionViewModel(private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase, private val event: Event) : ViewModel() {
 
     private val disposables = CompositeDisposable()
 
@@ -99,9 +101,10 @@ class DrawEmotionViewModel (private val saveEmotionAvatarUseCase: SaveEmotionAva
         val saveRequest = saveEmotionAvatarUseCase.execute(
             SaveEmotionAvatarUseCase.Params(bitmap, event)
         ).subscribe({
+            Log.d(TAG, "emotionavatar in viewmodel ${event.emotionAvatar?.name?: "no name"}")
             _avatarSavedSuccessFully.value = Unit
         }, {
-            _errorMessage.postValue( it.message)
+            _errorMessage.postValue(it.message)
         }
         )
         disposables.add(saveRequest)

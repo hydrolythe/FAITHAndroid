@@ -8,7 +8,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Avatar
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.faith.util.TAG
+import be.hogent.faith.util.TAG
 
 /**
  * ViewModel for the Avatar selection screen
@@ -27,7 +27,7 @@ class AvatarViewModel : ViewModel() {
         get() = _nextButtonClicked
 
     /**
-     * User name of the user
+     * User recordingName of the user
      */
     var userName = MutableLiveData<String>()
 

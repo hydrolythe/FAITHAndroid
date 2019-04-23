@@ -1,10 +1,7 @@
 package be.hogent.faith.storage
 
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
-import be.hogent.faith.domain.models.Detail
 import be.hogent.faith.domain.models.Event
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime
@@ -31,11 +28,9 @@ class StorageRepository(private val context: Context) {
     fun storeBitmap(bitmap: Bitmap, event: Event, fileName: String): Single<File> {
         return Single.fromCallable {
             val storedFile = File(createEventImageFolder(event), "$fileName.$PICTURE_EXTENSION")
-            Log.d(TAG, "filename $fileName.$PICTURE_EXTENSION")
             storedFile.outputStream().use {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
             }
-            Log.d(TAG, "storedFile ${storedFile.name} hashcode ${storedFile.hashCode()}")
             storedFile
         }
     }
