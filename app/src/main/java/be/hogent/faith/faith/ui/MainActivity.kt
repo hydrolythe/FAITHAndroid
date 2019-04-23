@@ -4,12 +4,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
-import be.hogent.faith.faith.makeDrawing.DrawViewModel
+import be.hogent.faith.faith.drawing.drawEmotionAvatar.DrawEmotionAvatarFragment
+import be.hogent.faith.faith.drawing.DrawViewModel
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
-import be.hogent.faith.faith.makeDrawing.MakeDrawingFragment
+import be.hogent.faith.faith.drawing.makeDrawing.MakeDrawingFragment
 import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.recordAudio.RecordAudioViewModel

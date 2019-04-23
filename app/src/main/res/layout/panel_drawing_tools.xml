@@ -5,10 +5,10 @@
 
         <variable
             name="drawViewModel"
-            type="be.hogent.faith.faith.makeDrawing.DrawViewModel" />
+            type="be.hogent.faith.faith.drawing.DrawViewModel" />
 
         <import type="android.graphics.Color" />
-        <import type="be.hogent.faith.faith.makeDrawing.DrawViewModel.LineWidth"/>
+        <import type="be.hogent.faith.faith.drawing.DrawViewModel.LineWidth"/>
 
     </data>
 

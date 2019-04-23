@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="drawViewModel"
-            type="be.hogent.faith.faith.makeDrawing.DrawViewModel" />
+            type="be.hogent.faith.faith.drawing.DrawViewModel" />
 
     </data>
 
@@ -22,14 +21,14 @@
             bind:drawViewModel="@{drawViewModel}" />
 
         <com.divyanshu.draw.widget.DrawView
-            android:id="@+id/draw_canvas"
+            android:id="@+id/drawView"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <include
             android:id="@+id/container_draw_images"
-            layout="@layout/panel_drawing_images"/>
+            layout="@layout/panel_drawing_images" />
 
     </LinearLayout>
 </layout>

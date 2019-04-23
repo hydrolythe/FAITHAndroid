@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.drawEmotionAvatar
+package be.hogent.faith.faith.drawing.drawEmotionAvatar
 
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -10,14 +10,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
+import be.hogent.faith.faith.drawing.DrawFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
-import be.hogent.faith.faith.makeDrawing.DrawViewModel
-import be.hogent.faith.util.TAG
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
+import be.hogent.faith.util.TAG
 import com.divyanshu.draw.widget.DrawView
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.ext.android.inject
@@ -36,9 +35,10 @@ private const val NO_AVATAR = -1
 /**
  * Fragment that allows the user to color in the outline of their avatar according to their emotional state.
  */
-class DrawEmotionAvatarFragment : Fragment() {
+class DrawEmotionAvatarFragment : DrawFragment() {
+    override val drawView: DrawView
+        get() = drawAvatarBinding.drawView
 
-    private val drawViewModel: DrawViewModel by sharedViewModel()
     private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
 
     private lateinit var drawAvatarBinding: FragmentDrawAvatarBinding
@@ -66,10 +66,28 @@ class DrawEmotionAvatarFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        updateUI()
+        configureDrawingCanvas()
         listenToViewModelEvents()
 
-        drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
+    }
+
+    private fun listenToViewModelEvents() {
+        drawViewModel.drawnPaths.observe(this, Observer {
+            // It's very important that the drawCanvas doesn't create its own paths but uses a paths object
+            // that is saved in such a way that it survives configuration changes. See [DrawViewModel].
+            drawView.setActions(it)
+        })
+    }
+
+    private fun configureDrawingCanvas() {
+        // Paint with semi-transparent paint so you can always see the background's outline
+        drawView.setAlpha(70)
+
+        if (avatarOutlineResId != NO_AVATAR) {
+            drawView.setPaintedBackground(resources.getDrawable(R.drawable.outline) as BitmapDrawable)
+        }
+
+        drawView.addDrawViewListener(object : DrawView.DrawViewListener {
             override fun onDrawingChanged(bitmap: Bitmap) {
                 val saveRequest = saveEmotionAvatarUseCase.execute(
                     SaveEmotionAvatarUseCase.Params(bitmap, eventDetailsViewModel.event.value!!)
@@ -82,42 +100,6 @@ class DrawEmotionAvatarFragment : Fragment() {
                 disposables.add(saveRequest)
             }
         })
-    }
-
-    private fun listenToViewModelEvents() {
-        drawViewModel.drawnPaths.observe(this, Observer {
-            // It's very important that the drawCanvas doesn't create its own paths but uses a paths object
-            // that is saved in such a way that it survives configuration changes. See [DrawViewModel].
-            drawAvatarBinding.drawCanvas.setActions(it)
-        })
-        drawViewModel.selectedColor.observe(this, Observer { newColor ->
-            Log.i(TAG, "Color set to $newColor")
-            drawAvatarBinding.drawCanvas.setColor(newColor)
-        })
-
-        drawViewModel.selectedLineWidth.observe(this, Observer { lineWidth ->
-            Log.i(TAG, "Line width set to $lineWidth")
-            drawAvatarBinding.drawCanvas.setStrokeWidth(lineWidth.width)
-        })
-        drawViewModel.undoClicked.observe(this, Observer {
-            Log.i(TAG, "Last action undone")
-            drawAvatarBinding.drawCanvas.undo()
-        })
-    }
-
-    private fun updateUI() {
-        setDrawViewBackground()
-        configureDrawCanvas()
-    }
-
-    private fun configureDrawCanvas() {
-        drawAvatarBinding.drawCanvas.setAlpha(70)
-    }
-
-    private fun setDrawViewBackground() {
-        if (avatarOutlineResId != NO_AVATAR) {
-            drawAvatarBinding.drawCanvas.setPaintedBackground(resources.getDrawable(R.drawable.outline) as BitmapDrawable)
-        }
     }
 
     override fun onStop() {

@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.makeDrawing
+package be.hogent.faith.faith.drawing.makeDrawing
 
 import android.content.Context
 import android.view.LayoutInflater

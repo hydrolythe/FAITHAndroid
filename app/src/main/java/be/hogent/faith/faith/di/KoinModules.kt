@@ -5,7 +5,9 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel
-import be.hogent.faith.faith.makeDrawing.DrawViewModel
+import be.hogent.faith.faith.drawing.DrawViewModel
+import be.hogent.faith.faith.drawing.makeDrawing.PremadeImagesProvider
+import be.hogent.faith.faith.drawing.makeDrawing.PremadeImagesProviderFromResources
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenViewModel
 import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
@@ -35,4 +37,6 @@ val appModule = module(override = true) {
     viewModel { (event: Event) -> TakePhotoViewModel(get(), event) }
 
     single { TempFileProvider(androidContext()) }
+
+    single { PremadeImagesProviderFromResources() as PremadeImagesProvider }
 }
