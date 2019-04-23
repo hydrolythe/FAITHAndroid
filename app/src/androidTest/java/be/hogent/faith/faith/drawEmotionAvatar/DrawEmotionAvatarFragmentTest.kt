@@ -1,18 +1,7 @@
 package be.hogent.faith.faith.drawEmotionAvatar
 
-import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import be.hogent.faith.R
-import be.hogent.faith.faith.fragmentTestModule
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.standalone.StandAloneContext
-
 
 @RunWith(AndroidJUnit4::class)
 class DrawEmotionAvatarFragmentTest {
@@ -42,5 +31,4 @@ fun drawEmotionFragment_canClickAllButtons() {
     onView(withId(R.id.btn_draw_undo)).perform(click())
 }
 */
-
 }

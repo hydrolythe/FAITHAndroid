@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(),
     // give every new [DrawEmotionAvatarFragment] that same ViewModel, resulting in the drawing being fully restored.
     // Saving the fragment as a property doesn't work because the property doesn't survive configuration changes.
     // Saving the fragment somewhere in the backstack might work, but would require complicated backstack management.
-    // private val drawEmotionViewModel by viewModel<DrawEmotionViewModel>()
+    private val drawEmotionViewModel by viewModel<DrawEmotionViewModel>()
 
     // This VM is made here because it holds the event that is described in the EventDetailsFragment and
     // the fragments that can be started from there.
@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity(),
     private val userViewModel by viewModel<UserViewModel>()
 
     lateinit var recordAudioViewModel: RecordAudioViewModel
-    lateinit var drawEmotionViewModel: DrawEmotionViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,10 +65,6 @@ class MainActivity : AppCompatActivity(),
             parametersOf(eventDetailsViewModel.event.value)
         }
         recordAudioViewModel = getViewModel {
-            parametersOf(eventDetailsViewModel.event.value)
-        }
-
-        drawEmotionViewModel = getViewModel {
             parametersOf(eventDetailsViewModel.event.value)
         }
 

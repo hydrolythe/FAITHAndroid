@@ -70,7 +70,7 @@ class DrawEmotionAvatarFragment : Fragment() {
 
         drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
             override fun onDrawingChanged(bitmap: Bitmap) {
-                drawEmotionViewModel.saveImage(bitmap)
+                eventDetailsViewModel.saveImage(bitmap)
             }
         })
     }
@@ -94,11 +94,10 @@ class DrawEmotionAvatarFragment : Fragment() {
             Log.i(TAG, "Last action undone")
             drawAvatarBinding.drawCanvas.undo()
         })
-        drawEmotionViewModel.errorMessage.observe(this, Observer {
+        eventDetailsViewModel.errorMessage.observe(this, Observer {
             Toast.makeText(context, getString(R.string.error_saving_drawing), Toast.LENGTH_SHORT).show()
         })
-        drawEmotionViewModel.avatarSavedSuccessFully.observe(this, Observer {
-            eventDetailsViewModel.updateEvent()
+        eventDetailsViewModel.avatarSavedSuccessFully.observe(this, Observer {
         })
     }
 

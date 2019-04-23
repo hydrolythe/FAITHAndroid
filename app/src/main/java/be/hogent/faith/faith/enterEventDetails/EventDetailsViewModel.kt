@@ -1,14 +1,17 @@
 package be.hogent.faith.faith.enterEventDetails
 
+import android.graphics.Bitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
+import io.reactivex.disposables.CompositeDisposable
 import java.util.UUID
 
-class EventDetailsViewModel(val user: LiveData<User>, eventUuid: UUID? = null) : ViewModel() {
+class EventDetailsViewModel(private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase, val user: LiveData<User>, eventUuid: UUID? = null) : ViewModel() {
 
     /**
      * The event that will be discussed and explained using audio, video, drawings,...
@@ -20,6 +23,19 @@ class EventDetailsViewModel(val user: LiveData<User>, eventUuid: UUID? = null) :
      * We can't observe it here, so the Fragment observes it and changes the [event] when required.
      */
     val eventTitle = MutableLiveData<String>()
+
+    /**
+     * The errormessages
+     */
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
+
+    private val _avatarSavedSuccessFully = SingleLiveEvent<Unit>()
+    val avatarSavedSuccessFully: LiveData<Unit>
+        get() = _avatarSavedSuccessFully
+
+    private val disposables = CompositeDisposable()
 
     init {
         if (eventUuid != null) {
@@ -93,5 +109,29 @@ class EventDetailsViewModel(val user: LiveData<User>, eventUuid: UUID? = null) :
      */
     fun resetViewModel() {
         event.postValue(Event())
+    }
+
+    override fun onCleared() {
+        disposables.clear()
+        super.onCleared()
+    }
+
+    /**
+     * Save avatar bitmap. This updates the property emotionAvatar. Must be done in this viewmodel
+     * because otherwise the event is not updated (if this code is in DrawEmotionViewModel, then the
+     * fragment needs to update the event in EventDetailsViewModel, but the fragment is already stopped before
+     * the use case to save the image is done
+     */
+    fun saveImage(bitmap: Bitmap) {
+        val saveRequest = saveEmotionAvatarUseCase.execute(
+            SaveEmotionAvatarUseCase.Params(bitmap, event.value!!)
+        ).subscribe({
+            updateEvent()
+            _avatarSavedSuccessFully.value = Unit
+        }, {
+            _errorMessage.postValue(it.message)
+        }
+        )
+        disposables.add(saveRequest)
     }
 }

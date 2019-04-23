@@ -83,7 +83,7 @@ class EditDetailFragment : Fragment() {
         val width = Resources.getSystem().displayMetrics.widthPixels
         val height = Resources.getSystem().displayMetrics.heightPixels
         eventDetailsViewModel.event.observe(this, Observer {
-            Log.d(TAG, "emotionavatar in details ${it.emotionAvatar?.name?: "no name"}")
+            Log.d(TAG, "emotionavatar in details ${it.emotionAvatar?.name ?: "no name"}")
             val image =
                 it.emotionAvatar ?: ContextCompat.getDrawable(this.context!!, avatarOutlineResId) as BitmapDrawable
             Glide.with(this)
