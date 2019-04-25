@@ -37,6 +37,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+            <View
+                    android:layout_width="0dp"
+                    android:id="@+id/main_start_location"
+                    android:layout_height="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
             <!--Every button is set by using two intersecting guidelines.
                 The top left corner of the button is located at the intersection.
                 It might be better to use four guidelines so that we get 2 points (top-left and bottom-right),

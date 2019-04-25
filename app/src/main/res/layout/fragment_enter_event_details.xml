@@ -7,12 +7,14 @@
 
         <variable
                 name="eventDetailsVM"
-                type="be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel"/>
+                type="be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_height="match_parent"
-            android:layout_width="match_parent">
+            android:layout_width="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
         <TextView
                 android:text="@string/event_details_title"
