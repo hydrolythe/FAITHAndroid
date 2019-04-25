@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -133,6 +134,15 @@ class AvatarFragment : Fragment() {
                     avatarAdapter.notifyDataSetChanged()
                 }
             })
+
+        avatarViewModel.userSaveFailed.observe(this, Observer { errorMessage ->
+            Log.e(TAG, errorMessage)
+            Toast.makeText(context, R.string.toast_save_user_failed, Toast.LENGTH_LONG).show()
+        })
+
+        avatarViewModel.inputErrorMessageID.observe(this, Observer { errorMessageID ->
+            Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
+        })
     }
 
     fun generateNewUser() {

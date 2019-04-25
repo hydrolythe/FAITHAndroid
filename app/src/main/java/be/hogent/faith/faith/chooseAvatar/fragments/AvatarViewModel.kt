@@ -1,20 +1,18 @@
 package be.hogent.faith.faith.chooseAvatar.fragments
 
-import android.app.Application
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.User
-import be.hogent.faith.faith.App
+import be.hogent.faith.faith.util.AvatarProvider
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.faith.util.TAG
+import be.hogent.faith.service.usecases.CreateUserUseCase
+import io.reactivex.disposables.CompositeDisposable
 
 /**
  * ViewModel for the Avatar selection screen
  */
-class AvatarViewModel(application: Application) : AndroidViewModel(application) {
+class AvatarViewModel(private val avatarRepository: AvatarProvider, private val createUserUseCase: CreateUserUseCase) : ViewModel() {
 
     /**
      * Private mutable live data object which keeps track of the AvatarItems.
@@ -23,9 +21,26 @@ class AvatarViewModel(application: Application) : AndroidViewModel(application) 
 
     private var _selectedItem = MutableLiveData<Long>()
 
+    private val disposables = CompositeDisposable()
+
     private val _nextButtonClicked = SingleLiveEvent<Unit>()
     val nextButtonClicked: LiveData<Unit>
         get() = _nextButtonClicked
+
+    private val _userSavedSuccessFully = SingleLiveEvent<Unit>()
+    val userSavedSuccessFully: LiveData<Unit>
+        get() = _userSavedSuccessFully
+
+    private val _inputErrorMessageID = MutableLiveData<Int>()
+    val inputErrorMessageID: LiveData<Int>
+        get() = _inputErrorMessageID
+
+    /**
+     * Will be updated with the latest error message when an error occurs when saving
+     */
+    private val _userSaveFailed = MutableLiveData<String>()
+    val userSaveFailed: LiveData<String>
+        get() = _userSaveFailed
 
     /**
      * User name of the user
@@ -35,7 +50,6 @@ class AvatarViewModel(application: Application) : AndroidViewModel(application) 
     init {
         // Set initially to -1 = no selection has been provided.
         _selectedItem.value = -1
-
         fetchItems()
     }
 
@@ -68,16 +82,17 @@ class AvatarViewModel(application: Application) : AndroidViewModel(application) 
 
     fun nextButtonPressed() {
         if (avatarWasSelected() && userName.value != null) {
-            var user = User(
-                avatar = getApplication<App>().getResources().getResourceEntryName(_avatarItems.value?.get(_selectedItem.value!!.toInt())!!.imageUrl),
-                username = userName.value!!
-            )
-            Log.i(TAG, "Found ${userName.value}")
-            Log.i(TAG, "Found item : ${selectedItem.value}")
+            val params = CreateUserUseCase.Params(userName.value!!, _avatarItems.value?.get(_selectedItem.value!!.toInt())!!.imageName)
+            val disposable = createUserUseCase.execute(params).subscribe({
+                _userSavedSuccessFully.call()
+            }, {
+                _userSaveFailed.postValue(it.localizedMessage)
+            })
+            disposables.add(disposable)
         } else {
-            // TODO: update the user that he has not yet selected an avatar
+            _inputErrorMessageID.postValue(R.string.avatarNotSet)
+            return
         }
-        Log.i(TAG, "Pressed the button")
         _nextButtonClicked.call()
     }
 
@@ -85,12 +100,6 @@ class AvatarViewModel(application: Application) : AndroidViewModel(application) 
      * TODO: Needs to be adapted to the way Avatars will be provided (Network, DB, ...)
      */
     private fun fetchItems() {
-        val avatar1 = Avatar(R.drawable.avatar)
-        val avatar2 = Avatar(R.drawable.avatar2)
-        val avatar3 = Avatar(R.drawable.avatar3)
-        val avatar4 = Avatar(R.drawable.avatar4)
-        val avatar5 = Avatar(R.drawable.avatar5)
-        val avList = listOf(avatar1, avatar2, avatar3, avatar4, avatar5)
-        _avatarItems.postValue(avList)
+        _avatarItems.postValue(avatarRepository.getAvatars())
     }
 }

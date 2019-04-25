@@ -50,4 +50,6 @@
     <string name="lbl_save">Opslaan</string>
     <string name="toast_foto_saved_success">Je foto werd opgeslagen!</string>
     <string name="toast_save_photo_failed">Er ging iets fout bij het opslaan van je foto.</string>
+    <string name="avatarNotSet">Vul naam in en selecteer een avatar</string>
+    <string name="toast_save_user_failed">Opslaan gebruiker faalt</string>
 </resources>

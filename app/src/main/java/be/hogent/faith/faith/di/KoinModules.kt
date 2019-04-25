@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.util.AvatarProvider
 import be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
@@ -13,7 +14,6 @@ import be.hogent.faith.faith.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.util.TempFileProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
-import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -31,9 +31,10 @@ val appModule = module(override = true) {
     viewModel { DrawEmotionViewModel() }
     viewModel { UserViewModel(get()) }
     viewModel { (user: LiveData<User>) -> OverviewEventsViewModel(user) }
-    viewModel { AvatarViewModel(androidApplication()) }
+    viewModel { AvatarViewModel(get(), get()) }
     viewModel { (event: Event) -> RecordAudioViewModel(get(), event) }
     viewModel { (event: Event) -> TakePhotoViewModel(get(), event) }
 
     single { TempFileProvider(androidContext()) }
+    single { AvatarProvider(androidContext()) }
 }
