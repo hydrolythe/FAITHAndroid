@@ -5,7 +5,7 @@
 
         <variable
                 name="editdetailViewModel"
-                type="be.hogent.faith.faith.editDetail.EditDetailViewModel"/>
+                type="be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel"/>
     </data>
 
     <androidx.constraintlayout.motion.widget.MotionLayout

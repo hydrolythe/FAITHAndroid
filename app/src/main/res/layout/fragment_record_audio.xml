@@ -8,9 +8,9 @@
 
         <variable
                 name="recordAudioViewModel"
-                type="be.hogent.faith.faith.recordAudio.RecordAudioViewModel"/>
+                type="be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel"/>
 
-        <import type="be.hogent.faith.faith.recordAudio.RecordAudioViewModel.RecordingStatus"/>
+        <import type="be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel.RecordingStatus"/>
 
         <import type="android.view.View"/>
     </data>

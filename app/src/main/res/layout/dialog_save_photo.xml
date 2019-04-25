@@ -5,7 +5,7 @@
 
         <variable
                 name="takePhotoViewModel"
-                type="be.hogent.faith.faith.takePhoto.TakePhotoViewModel"/>
+                type="be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

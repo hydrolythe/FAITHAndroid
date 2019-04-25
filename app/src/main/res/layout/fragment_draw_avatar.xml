@@ -6,11 +6,11 @@
 
         <variable
                 name="drawEmotionViewModel"
-                type="be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel"/>
+                type="be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionViewModel"/>
 
         <import type="android.graphics.Color"/>
 
-        <import type="be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel.LineWidth"/>
+        <import type="be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionViewModel.LineWidth"/>
 
     </data>
 

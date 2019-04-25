@@ -8,17 +8,17 @@ import androidx.drawerlayout.widget.DrawerLayout
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
-import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
-import be.hogent.faith.faith.editDetail.DetailType
-import be.hogent.faith.faith.editDetail.EditDetailFragment
-import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
-import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
+import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionAvatarFragment
+import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionViewModel
+import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
+import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailFragment
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
-import be.hogent.faith.faith.recordAudio.RecordAudioFragment
-import be.hogent.faith.faith.recordAudio.RecordAudioViewModel
-import be.hogent.faith.faith.takePhoto.TakePhotoFragment
-import be.hogent.faith.faith.takePhoto.TakePhotoViewModel
+import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
+import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
+import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
+import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.util.replaceFragment
 import com.google.android.material.navigation.NavigationView
 import org.koin.android.viewmodel.ext.android.getViewModel
@@ -92,8 +92,6 @@ EditDetailFragment.EditDetailNavigationListener {
                             setPositiveButton(
                                 R.string.ok,
                                 DialogInterface.OnClickListener { dialog, _ ->
-                                    eventDetailsViewModel.resetViewModel()
-                                    drawEmotionViewModel.resetViewModel()
                                     finish()
                                 })
                             setNegativeButton(

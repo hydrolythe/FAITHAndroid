@@ -3,16 +3,15 @@ package be.hogent.faith.faith
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel
-import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
-import be.hogent.faith.faith.recordAudio.RecordAudioViewModel
-import be.hogent.faith.faith.takePhoto.TakePhotoViewModel
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsViewModel
+import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
+import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
 import org.koin.android.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import be.hogent.faith.faith.chooseAvatar.fragments.UserViewModel
-import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
-import be.hogent.faith.faith.editDetail.EditDetailViewModel
+import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionViewModel
+import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenViewModel
-import java.util.UUID
 
 val fragmentTestModule = module(override = true) {
     viewModel { TakePhotoViewModel(get(), Event()) }
