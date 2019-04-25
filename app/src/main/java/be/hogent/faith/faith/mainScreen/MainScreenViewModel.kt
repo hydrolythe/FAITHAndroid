@@ -3,6 +3,7 @@ package be.hogent.faith.faith.mainScreen
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.util.TAG
 
 /**
  * ViewModel for the [MainScreenFragment].
@@ -17,6 +18,7 @@ class MainScreenViewModel : ViewModel() {
         Log.i(TAG, "First location clicked")
         firstLocation.call()
     }
+
     fun secondLocationClicked() {
         Log.i(TAG, "Second location clicked")
         secondLocation.call()
@@ -25,9 +27,5 @@ class MainScreenViewModel : ViewModel() {
     fun thirdLocationClicked() {
         Log.i(TAG, "third location clicked")
         thirdLocation.call()
-    }
-
-    companion object {
-        const val TAG = "MainScreenViewModel"
     }
 }

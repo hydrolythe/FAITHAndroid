@@ -3,7 +3,7 @@ package be.hogent.faith.database.mappers
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.domain.models.User
 
-class UserMapper : Mapper<UserEntity, User> {
+object UserMapper : Mapper<UserEntity, User> {
 
     override fun mapFromEntity(entity: UserEntity): User {
         return User(entity.username, entity.avatar, entity.uuid)

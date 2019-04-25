@@ -1,17 +1,19 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.models.DetailType
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.util.factory.DataFactory
+import be.hogent.faith.util.factory.EventFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Scheduler
 import io.reactivex.Single
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.io.IOException
 
@@ -20,16 +22,15 @@ class SaveAudioRecordingUseCaseTest {
     private val scheduler: Scheduler = mockk()
     private val repository: StorageRepository = mockk(relaxed = true)
 
-    private val tempStorageFile = File("cacheDir/tempAudioRecording.3gp")
-    private val eventName = "TestName"
+    private val tempStorageFile = DataFactory.randomFile()
+    private val eventName = DataFactory.randomString()
+    private val recordingName = DataFactory.randomString()
     private lateinit var event: Event
 
     @Before
     fun setUp() {
         saveAudioRecordingUseCase = SaveAudioRecordingUseCase(repository, scheduler)
-        event = Event(
-            dateTime = LocalDateTime.of(2019, 2, 19, 16, 58)
-        )
+        event = EventFactory.makeEvent(nbrOfDetails = 0)
     }
 
     @Test
@@ -39,7 +40,7 @@ class SaveAudioRecordingUseCaseTest {
 
         // Act
         saveAudioRecordingUseCase.buildUseCaseObservable(
-            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event, eventName)
+            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event, recordingName)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -55,7 +56,7 @@ class SaveAudioRecordingUseCaseTest {
 
         // Act
         saveAudioRecordingUseCase.buildUseCaseObservable(
-            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event, eventName)
+            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event, recordingName)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -64,8 +65,8 @@ class SaveAudioRecordingUseCaseTest {
         assertTrue(event.details.isNotEmpty())
 
         val resultingDetail = event.details.first()
-        assertTrue(resultingDetail.detailType == DetailType.AUDIO)
-        // TODO: also check name once it is added to the Detail class
+        assertTrue(resultingDetail is AudioDetail)
+        assertEquals(recordingName, resultingDetail.name)
     }
 
     @Test
@@ -75,7 +76,7 @@ class SaveAudioRecordingUseCaseTest {
 
         // Act
         saveAudioRecordingUseCase.buildUseCaseObservable(
-            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event, eventName)
+            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event, recordingName)
         ).test()
             .assertError(IOException::class.java)
 
