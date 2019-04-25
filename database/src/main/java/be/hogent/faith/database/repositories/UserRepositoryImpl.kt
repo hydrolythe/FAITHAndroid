@@ -47,10 +47,10 @@ open class UserRepositoryImpl(
 
     override fun get(uuid: UUID): Flowable<User> {
         val user = userDao.getUser(uuid).map { userMapper.mapFromEntity(it) }
-            .doOnNext { Log.d(TAG, it.uuid.toString()) }
+            .doOnNext { Log.d(TAG, "uuid of user fetched from database ${it.uuid.toString()}") }
         val eventsWithDetails =
             eventDao.getAllEventsWithDetails(uuid).map { eventWithDetailsMapper.mapFromEntities(it) }
-                .doOnNext { Log.d(TAG, it.size.toString()) }
+                .doOnNext { Log.d(TAG, "Nbr of events for user with ${uuid} fetched ${it.size.toString()}") }
         return Flowable.combineLatest(user, eventsWithDetails, BiFunction { u, e -> addEventsToUser(u, e) })
     }
 
