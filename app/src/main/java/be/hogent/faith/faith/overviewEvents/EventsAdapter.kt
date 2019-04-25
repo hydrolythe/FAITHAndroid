@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.faith.util.TAG
+import be.hogent.faith.util.TAG
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import org.threeten.bp.format.DateTimeFormatter

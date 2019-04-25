@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.util
 
 import android.content.Context
-import android.util.Log
 import be.hogent.faith.faith.chooseAvatar.fragments.Avatar
 
 class AvatarProvider(private val context: Context) {
@@ -17,12 +16,9 @@ class AvatarProvider(private val context: Context) {
 
     private fun getAvatarEntity(resourceName: String): Avatar {
         val resourceId = context.getResources().getIdentifier(resourceName, "drawable", context.getPackageName())
-        Log.d(TAG, "Avatar $resourceId")
-        val avatar = Avatar(
+        return Avatar(
             resourceId,
             resourceName
         )
-        Log.d(TAG, "Avatar ${avatar.imageName}")
-        return avatar
     }
 }

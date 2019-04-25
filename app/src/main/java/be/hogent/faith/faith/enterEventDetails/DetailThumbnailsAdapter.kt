@@ -7,7 +7,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.Detail
+import be.hogent.faith.domain.models.detail.Detail
 import com.bumptech.glide.Glide
 
 class DetailThumbnailsAdapter(private val context: Context, details: List<Detail>) :

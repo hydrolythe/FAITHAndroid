@@ -1,7 +1,7 @@
 package be.hogent.faith.faith.enterEventDetails
 
 import androidx.recyclerview.widget.DiffUtil
-import be.hogent.faith.domain.models.Detail
+import be.hogent.faith.domain.models.detail.Detail
 
 class ThumbnailDiffCallback(
     private val oldDetails: List<Detail>,

@@ -1,5 +1,6 @@
 package be.hogent.faith.domain.models
 
+import be.hogent.faith.domain.models.detail.Detail
 import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.util.UUID

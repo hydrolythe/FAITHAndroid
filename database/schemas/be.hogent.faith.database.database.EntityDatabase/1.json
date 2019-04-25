@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a74bba90a37a9250baeaa58f51cade5d",
+    "identityHash": "5f117cbcb4530550048da5b6277b9d43",
     "entities": [
       {
         "tableName": "events",
@@ -78,20 +78,58 @@
         ]
       },
       {
-        "tableName": "details",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`type` INTEGER NOT NULL, `file` TEXT NOT NULL, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`eventUuid`) REFERENCES `events`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "tableName": "DetailEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `name` TEXT, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`))",
         "fields": [
-          {
-            "fieldPath": "type",
-            "columnName": "type",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "file",
             "columnName": "file",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventUuid",
+            "columnName": "eventUuid",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uuid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "audioDetails",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `name` TEXT, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`eventUuid`) REFERENCES `events`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "file",
+            "columnName": "file",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
           },
           {
             "fieldPath": "uuid",
@@ -114,20 +152,154 @@
         },
         "indices": [
           {
-            "name": "index_details_uuid",
+            "name": "index_audioDetails_uuid",
             "unique": true,
             "columnNames": [
               "uuid"
             ],
-            "createSql": "CREATE UNIQUE INDEX `index_details_uuid` ON `${TABLE_NAME}` (`uuid`)"
+            "createSql": "CREATE UNIQUE INDEX `index_audioDetails_uuid` ON `${TABLE_NAME}` (`uuid`)"
           },
           {
-            "name": "index_details_eventUuid",
+            "name": "index_audioDetails_eventUuid",
             "unique": false,
             "columnNames": [
               "eventUuid"
             ],
-            "createSql": "CREATE  INDEX `index_details_eventUuid` ON `${TABLE_NAME}` (`eventUuid`)"
+            "createSql": "CREATE  INDEX `index_audioDetails_eventUuid` ON `${TABLE_NAME}` (`eventUuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "events",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "eventUuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "pictureDetails",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `name` TEXT, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`eventUuid`) REFERENCES `events`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "file",
+            "columnName": "file",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventUuid",
+            "columnName": "eventUuid",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uuid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_pictureDetails_uuid",
+            "unique": true,
+            "columnNames": [
+              "uuid"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_pictureDetails_uuid` ON `${TABLE_NAME}` (`uuid`)"
+          },
+          {
+            "name": "index_pictureDetails_eventUuid",
+            "unique": false,
+            "columnNames": [
+              "eventUuid"
+            ],
+            "createSql": "CREATE  INDEX `index_pictureDetails_eventUuid` ON `${TABLE_NAME}` (`eventUuid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "events",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "eventUuid"
+            ],
+            "referencedColumns": [
+              "uuid"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "textDetails",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `name` TEXT, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`eventUuid`) REFERENCES `events`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "file",
+            "columnName": "file",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "uuid",
+            "columnName": "uuid",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventUuid",
+            "columnName": "eventUuid",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uuid"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_textDetails_uuid",
+            "unique": true,
+            "columnNames": [
+              "uuid"
+            ],
+            "createSql": "CREATE UNIQUE INDEX `index_textDetails_uuid` ON `${TABLE_NAME}` (`uuid`)"
+          },
+          {
+            "name": "index_textDetails_eventUuid",
+            "unique": false,
+            "columnNames": [
+              "eventUuid"
+            ],
+            "createSql": "CREATE  INDEX `index_textDetails_eventUuid` ON `${TABLE_NAME}` (`eventUuid`)"
           }
         ],
         "foreignKeys": [
@@ -189,7 +361,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"a74bba90a37a9250baeaa58f51cade5d\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"5f117cbcb4530550048da5b6277b9d43\")"
     ]
   }
 }
