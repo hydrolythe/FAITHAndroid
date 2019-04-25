@@ -4,7 +4,6 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.drawerlayout.widget.DrawerLayout
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
@@ -20,7 +19,8 @@ import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.util.replaceFragment
-import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_drawer_layout
+import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_nav_view
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -77,11 +77,9 @@ EditDetailFragment.EditDetailNavigationListener {
                 .commit()
         }
 
-        val navigationView: NavigationView = findViewById(R.id.emotionCapture_nav_view)
-        val drawerLayout: DrawerLayout = findViewById(R.id.emotionCapture_drawer_layout)
-        navigationView.setNavigationItemSelectedListener { menuItem ->
+        emotionCapture_nav_view.setNavigationItemSelectedListener { menuItem ->
             // close drawer when item is tapped
-            drawerLayout.closeDrawers()
+            emotionCapture_drawer_layout.closeDrawers()
             // perform action
             when (menuItem.itemId) {
                 R.id.nav_city -> {
