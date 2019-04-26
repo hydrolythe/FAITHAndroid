@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         eventDetailsViewModel = getViewModel {
-            parametersOf(userViewModel.user.value?: User())
+            parametersOf(userViewModel.user.value ?: User())
         }
         takePhotoViewModel = getViewModel {
             parametersOf(eventDetailsViewModel.event.value)

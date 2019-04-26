@@ -12,18 +12,16 @@ import be.hogent.faith.faith.chooseAvatar.fragments.UserViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenViewModel
-import java.util.UUID
 
 val fragmentTestModule = module(override = true) {
     viewModel { TakePhotoViewModel(get(), Event()) }
     viewModel { RecordAudioViewModel(get(), Event()) }
 
-    viewModel { EventDetailsViewModel( get(), User(), null) }
+    viewModel { EventDetailsViewModel(get(), User(), null) }
 
-    viewModel {UserViewModel()}
-    viewModel {DrawEmotionViewModel()}
+    viewModel { UserViewModel() }
+    viewModel { DrawEmotionViewModel() }
     viewModel { EditDetailViewModel() }
     viewModel { AvatarViewModel() }
     viewModel { MainScreenViewModel() }
 }
-
