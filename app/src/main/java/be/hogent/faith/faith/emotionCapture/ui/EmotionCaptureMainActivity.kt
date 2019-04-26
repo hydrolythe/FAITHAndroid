@@ -26,7 +26,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.util.UUID
 
-class EmotionCaptureMainActivity :  AppCompatActivity(),
+class EmotionCaptureMainActivity : AppCompatActivity(),
 EventDetailsFragment.EventDetailsNavigationListener,
 OverviewEventsFragment.OverviewEventsNavigationListener,
 EditDetailFragment.EditDetailNavigationListener {
@@ -57,7 +57,7 @@ EditDetailFragment.EditDetailNavigationListener {
         setContentView(R.layout.activity_emotion_capture)
 
         eventDetailsViewModel = getViewModel {
-            parametersOf(userViewModel.user.value?: User())
+            parametersOf(userViewModel.user.value ?: User())
         }
         takePhotoViewModel = getViewModel {
             parametersOf(eventDetailsViewModel.event.value)

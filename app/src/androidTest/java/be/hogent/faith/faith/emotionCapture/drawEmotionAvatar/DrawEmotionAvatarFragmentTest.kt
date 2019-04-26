@@ -30,7 +30,6 @@ class DrawEmotionAvatarFragmentTest {
         launchFragmentInContainer<DrawEmotionAvatarFragment>()
     }
 
-
     @Test
     fun drawEmotionFragment_canClickAllButtons() {
         launchFragmentInContainer<DrawEmotionAvatarFragment>()
@@ -47,5 +46,4 @@ class DrawEmotionAvatarFragmentTest {
 
         onView(withId(R.id.btn_draw_undo)).perform(click())
     }
-
 }

@@ -53,13 +53,11 @@ class MainScreenFragment : Fragment() {
         mainScreenViewModel.thirdLocation.observe(this, Observer {
             moveAvatarToLocationOf(mainScreenBinding.mainThirdLocation) { navigation?.startOverviewEventsFragment() }
         })
-
     }
-
 
     override fun onResume() {
         super.onResume()
-        moveAvatarToLocationOf(mainScreenBinding.mainStartLocation){}
+        moveAvatarToLocationOf(mainScreenBinding.mainStartLocation) {}
     }
 
     override fun onAttach(context: Context) {
