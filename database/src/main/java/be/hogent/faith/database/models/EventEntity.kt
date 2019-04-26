@@ -22,6 +22,7 @@ data class EventEntity(
     val dateTime: LocalDateTime,
     val title: String,
     val emotionAvatar: File?,
+    val notes: String?,
 
     @PrimaryKey
     val uuid: UUID = UUID.randomUUID(),

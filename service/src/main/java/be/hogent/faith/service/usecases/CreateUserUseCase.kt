@@ -12,8 +12,10 @@ class CreateUserUseCase(
     observeScheduler: Scheduler
 ) : CompletableUseCase<CreateUserUseCase.Params>(Schedulers.io(), observeScheduler) {
 
-    override fun buildUseCaseObservable(params: CreateUserUseCase.Params): Completable {
-        val user = User(params.username, params.avatar)
+    override fun buildUseCaseObservable(params: Params): Completable {
+//        val user = User(params.username, params.avatar)
+        // TODO: add avatar again once available
+        val user = User(params.username)
         return userRepository.insert(user)
     }
 

@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentManager
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.chooseAvatar.fragments.AvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.editDetail.DetailType
@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
     OverviewEventsFragment.OverviewEventsNavigationListener,
     MainScreenFragment.MainScreenNavigationListener,
+    AvatarFragment.AvatarFragmentNavigationListener,
     EditDetailFragment.EditDetailNavigationListener {
 
     // This ViewModel is for the [DrawEmotionAvatarFragment], but has been defined here because it should
@@ -60,7 +61,8 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         eventDetailsViewModel = getViewModel {
-            parametersOf(userViewModel.user.value ?: User())
+            // TODO: karine had hier 2e arg User() bij gezet maar kan toch niet?
+            parametersOf(userViewModel.user)
         }
         takePhotoViewModel = getViewModel {
             parametersOf(eventDetailsViewModel.event.value)
@@ -73,13 +75,16 @@ class MainActivity : AppCompatActivity(),
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
         // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
-            // val fragment = AvatarFragment.newInstance()
-            val fragment = MainScreenFragment.newInstance()
+            val fragment = MainScreenFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
 
+        setUpNavigationDrawer()
+    }
+
+    private fun setUpNavigationDrawer() {
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         navigationView.setNavigationItemSelectedListener { menuItem ->
@@ -117,14 +122,6 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-//    /**
-//     * Sets the [User] currently working with the application.
-//     */
-//    fun setUser(user: User) {
-//        _userViewModel.setUser(user)
-//        Log.i(TAG, "Set the user which username ${user.username}")
-//    }
-
     override fun startDrawEmotionAvatarFragment() {
         replaceFragment(DrawEmotionAvatarFragment.newInstance(R.drawable.outline), R.id.fragment_container)
     }
@@ -154,5 +151,9 @@ class MainActivity : AppCompatActivity(),
             EditDetailFragment.newInstance(type, R.drawable.outline),
             R.id.fragment_container
         )
+    }
+
+    override fun goToCityScreen() {
+        replaceFragment(MainScreenFragment(), R.id.fragment_container)
     }
 }

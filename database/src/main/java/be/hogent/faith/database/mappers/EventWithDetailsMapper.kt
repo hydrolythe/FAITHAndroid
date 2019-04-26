@@ -11,9 +11,10 @@ class EventWithDetailsMapper : MapperWithForeignKey<EventWithDetails, Event> {
 
     override fun mapFromEntity(entity: EventWithDetails): Event {
         val event = EventMapper.mapFromEntity(entity.eventEntity)
-        DetailMapper.mapFromEntities(entity.audioDetailEntities).forEach { event.addDetail(it) }
-        DetailMapper.mapFromEntities(entity.textDetailEntities).forEach { event.addDetail(it) }
-        DetailMapper.mapFromEntities(entity.pictureDetailEntities).forEach { event.addDetail(it) }
+        DetailMapper.mapFromEntities(entity.audioDetailEntities).forEach { event.addNewAudioDetail(it.file, it.name!!) }
+        DetailMapper.mapFromEntities(entity.textDetailEntities).forEach { event.addNewTextDetail(it.file, it.name!!) }
+        DetailMapper.mapFromEntities(entity.pictureDetailEntities)
+            .forEach { event.addNewPictureDetail(it.file, it.name!!) }
         return event
     }
 

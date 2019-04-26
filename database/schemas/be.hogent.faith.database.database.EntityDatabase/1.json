@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "5f117cbcb4530550048da5b6277b9d43",
+    "identityHash": "241e90aa540f7c5920dbc625db97e89d",
     "entities": [
       {
         "tableName": "events",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`dateTime` TEXT NOT NULL, `title` TEXT NOT NULL, `emotionAvatar` TEXT, `uuid` TEXT NOT NULL, `userUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`userUuid`) REFERENCES `users`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`dateTime` TEXT NOT NULL, `title` TEXT NOT NULL, `emotionAvatar` TEXT, `notes` TEXT, `uuid` TEXT NOT NULL, `userUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`userUuid`) REFERENCES `users`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "dateTime",
@@ -23,6 +23,12 @@
           {
             "fieldPath": "emotionAvatar",
             "columnName": "emotionAvatar",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -318,7 +324,7 @@
       },
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `username` TEXT NOT NULL, `avatar` TEXT NOT NULL, PRIMARY KEY(`uuid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `username` TEXT NOT NULL, PRIMARY KEY(`uuid`))",
         "fields": [
           {
             "fieldPath": "uuid",
@@ -329,12 +335,6 @@
           {
             "fieldPath": "username",
             "columnName": "username",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "avatar",
-            "columnName": "avatar",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -361,7 +361,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"5f117cbcb4530550048da5b6277b9d43\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"241e90aa540f7c5920dbc625db97e89d\")"
     ]
   }
 }
