@@ -11,7 +11,7 @@
     <string name="lineWidth_thin">dun</string>
     <string name="lineWidth_medium">middel</string>
     <string name="lineWidth_Thick">dik</string>
-    <string name="undo">ongedaan maken</string>
+    <string name="undo">Ongedaan maken</string>
     <string name="frag_main_descr_city_plan">Stadsplan</string>
     <string name="frag_main_descr_your_avatar">Je avatar</string>
     <string name="frag_avatar_title">Kies je avatar</string>
@@ -51,5 +51,5 @@
     <string name="toast_foto_saved_success">Je foto werd opgeslagen!</string>
     <string name="toast_save_photo_failed">Er ging iets fout bij het opslaan van je foto.</string>
     <string name="avatarNotSet">Vul naam in en selecteer een avatar</string>
-    <string name="toast_save_user_failed">Opslaan gebruiker faalt</string>
+    <string name="toast_save_user_failed">Het opslaan van de nieuwe gebruiker is gefaald.</string>
 </resources>
