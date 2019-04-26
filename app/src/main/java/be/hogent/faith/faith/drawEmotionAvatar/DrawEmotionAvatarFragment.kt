@@ -15,8 +15,8 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
-import be.hogent.faith.util.TAG
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
+import be.hogent.faith.util.TAG
 import com.divyanshu.draw.widget.DrawView
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.ext.android.inject
@@ -70,15 +70,7 @@ class DrawEmotionAvatarFragment : Fragment() {
 
         drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
             override fun onDrawingChanged(bitmap: Bitmap) {
-                val saveRequest = saveEmotionAvatarUseCase.execute(
-                    SaveEmotionAvatarUseCase.Params(bitmap, eventDetailsViewModel.event.value!!)
-                ).subscribe({
-                    Log.i(TAG, "Drawing was saved")
-                    eventDetailsViewModel.updateEvent()
-                }, {
-                    Toast.makeText(context!!, R.string.error_saving_drawing, Toast.LENGTH_LONG).show()
-                })
-                disposables.add(saveRequest)
+                eventDetailsViewModel.saveImage(bitmap)
             }
         })
     }
@@ -102,6 +94,11 @@ class DrawEmotionAvatarFragment : Fragment() {
             Log.i(TAG, "Last action undone")
             drawAvatarBinding.drawCanvas.undo()
         })
+        eventDetailsViewModel.errorMessage.observe(this, Observer {
+            Toast.makeText(context, getString(R.string.error_saving_drawing), Toast.LENGTH_SHORT).show()
+        })
+        eventDetailsViewModel.avatarSavedSuccessFully.observe(this, Observer {
+        })
     }
 
     private fun updateUI() {
@@ -121,7 +118,6 @@ class DrawEmotionAvatarFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        disposables.clear()
     }
 
     companion object {

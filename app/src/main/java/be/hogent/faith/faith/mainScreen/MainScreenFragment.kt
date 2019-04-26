@@ -25,6 +25,10 @@ import org.koin.android.viewmodel.ext.android.viewModel
  */
 class MainScreenFragment : Fragment() {
 
+    companion object {
+        fun newInstance() = MainScreenFragment()
+    }
+
     private var navigation: MainScreenNavigationListener? = null
     private val mainScreenViewModel: MainScreenViewModel by viewModel()
     private lateinit var mainScreenBinding: FragmentMainScreenBinding

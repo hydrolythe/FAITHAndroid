@@ -61,7 +61,6 @@ open class UserRepositoryImpl(
 
     private fun addEventsToUser(user: User, events: List<Event>): User {
         events.forEach { user.addEvent(it) }
-        Log.d(TAG, user.events.size.toString())
         return user
     }
 }
