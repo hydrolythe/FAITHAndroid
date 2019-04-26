@@ -17,13 +17,12 @@ val fragmentTestModule = module(override = true) {
     viewModel { TakePhotoViewModel(get(), Event()) }
     viewModel { RecordAudioViewModel(get(), Event()) }
 
-    viewModel { EventDetailsViewModel( get(), User(), null) }
-    viewModel { EventDetailsViewModel( get(), User())}
+    viewModel { EventDetailsViewModel(get(), User(), null) }
+    viewModel { EventDetailsViewModel(get(), User()) }
 
-        viewModel {UserViewModel()}
-    viewModel {DrawEmotionViewModel()}
+        viewModel { UserViewModel() }
+    viewModel { DrawEmotionViewModel() }
     viewModel { EditDetailViewModel() }
     viewModel { AvatarViewModel() }
     viewModel { MainScreenViewModel() }
 }
-

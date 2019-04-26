@@ -12,10 +12,9 @@ import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(),
-    MainScreenFragment.MainScreenNavigationListener{
+    MainScreenFragment.MainScreenNavigationListener {
 
     private val userViewModel by viewModel<UserViewModel>()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +30,7 @@ class MainActivity : AppCompatActivity(),
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
-}
+    }
 
 //    /**
 //     * Sets the [User] currently working with the application.
@@ -41,18 +40,14 @@ class MainActivity : AppCompatActivity(),
 //        Log.i(TAG, "Set the user which username ${user.username}")
 //    }
 
-
-
     override fun startEventDetailsFragment() {
         val intent = Intent(this, EmotionCaptureMainActivity::class.java)
-       // intent.putExtra(EXTRA_MESSAGE, message)
+        // intent.putExtra(EXTRA_MESSAGE, message)
         startActivity(intent)
-       // replaceFragment(EventDetailsFragment.newInstance(), R.id.fragment_container)
+        // replaceFragment(EventDetailsFragment.newInstance(), R.id.fragment_container)
     }
 
     override fun startOverviewEventsFragment() {
         replaceFragment(OverviewEventsFragment.newInstance(), R.id.fragment_container)
     }
-
-
 }

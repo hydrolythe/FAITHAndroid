@@ -14,7 +14,6 @@ import be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
-import kotlinx.android.synthetic.main.fragment_enter_event_details.editText_event_details_event_title
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
 import java.util.UUID
@@ -35,10 +34,10 @@ class EventDetailsFragment : Fragment() {
         userViewModel = getViewModel()
         if (arguments?.getSerializable(ARG_EVENTUUID) != null) {
             eventDetailsViewModel =
-                getViewModel { parametersOf(userViewModel.user.value?: User(), arguments?.getSerializable(ARG_EVENTUUID)) }
+                getViewModel { parametersOf(userViewModel.user.value ?: User(), arguments?.getSerializable(ARG_EVENTUUID)) }
         } else {
             eventDetailsViewModel =
-                getViewModel { parametersOf(userViewModel.user.value?:User()) }
+                getViewModel { parametersOf(userViewModel.user.value ?: User()) }
         }
     }
 
