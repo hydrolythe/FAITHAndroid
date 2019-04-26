@@ -10,5 +10,5 @@ import org.koin.dsl.module.module
 
 val fragmentTestModule = module(override = true) {
     viewModel { TakePhotoViewModel(get(), Event()) }
-    viewModel { EventDetailsViewModel(get(), MutableLiveData<User>()) }
+    viewModel { EventDetailsViewModel(get(), get(), MutableLiveData<User>()) }
 }

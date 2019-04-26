@@ -5,6 +5,7 @@ import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.daos.UserDao
 import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.factory.EntityFactory
+import be.hogent.faith.database.factory.UserFactory
 import be.hogent.faith.database.mappers.EventWithDetailsMapper
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.models.UserEntity
@@ -12,7 +13,6 @@ import be.hogent.faith.database.models.relations.EventWithDetails
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.util.factory.EventFactory
-import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
@@ -35,6 +35,8 @@ class UserEventRepositoryImplTest {
     private val userWithoutEvents = UserFactory.makeUser(0)
     private val userEntity = EntityFactory.makeUserEntity()
     private val eventWithDetailsList = EntityFactory.makeEventWithDetailsList(5, userWithoutEvents.uuid)
+    private val userWithoutEvents2 = UserFactory.makeUser(0)
+    private val userEntity2 = EntityFactory.makeUserEntity()
     private val eventList = EventFactory.makeEventList(5)
 
     @Before
@@ -60,6 +62,19 @@ class UserEventRepositoryImplTest {
             .assertNoValues()
     }
 
+    @Test
+    fun userRepository_getAll_returnsFlowable() {
+        every { userDao.getAllUsers() } returns Flowable.just(
+            listOf(userEntity, userEntity2)
+        )
+        stubUsersMapperFromEntity(listOf(userWithoutEvents, userWithoutEvents2), listOf(userEntity, userEntity2))
+        userRepository.getAll()
+            .test()
+            .assertValue {
+                it.size == 2
+            }
+    }
+
     // TODO make test succeed
     /*  @Test
       fun userRepository_get_existingUser_succeeds() {
@@ -82,11 +97,15 @@ class UserEventRepositoryImplTest {
         every { userMapper.mapFromEntity(entity) } returns model
     }
 
+    private fun stubUsersMapperFromEntity(models: List<User>, entities: List<UserEntity>) {
+        every { userMapper.mapFromEntities(entities) } returns models
+    }
+
     private fun stubUserMapperToEntity(model: User, entity: UserEntity) {
         every { userMapper.mapToEntity(model) } returns entity
     }
 
-    private fun stubEventWithDetailsMapperFromEntity(models: List<Event>, entities: List<EventWithDetails>) {
+    private fun stubEventWithDetailsListMapperFromEntity(models: List<Event>, entities: List<EventWithDetails>) {
         every { eventWithDetailsMapper.mapFromEntities(entities) } returns models
     }
 }

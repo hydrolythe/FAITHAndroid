@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.enterEventDetails
 
+import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -10,6 +11,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.disposables.CompositeDisposable
@@ -19,7 +21,9 @@ import java.util.UUID
 
 class EventDetailsViewModel(
     private val saveEventUseCase: SaveEventUseCase,
-    val user: LiveData<User>
+    private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase,
+    val user: LiveData<User>,
+    eventUuid: UUID? = null
 ) : ViewModel() {
 
     /**
@@ -27,7 +31,6 @@ class EventDetailsViewModel(
      * It's optional on the main event screen, but has to be filled in when saving the event.
      */
     val eventTitle = MutableLiveData<String>()
-
     /**
      * The title of the event (optional when on the main entry screen.
      */
@@ -42,18 +45,9 @@ class EventDetailsViewModel(
      */
     val eventNotes = MutableLiveData<String>()
 
-    private val disposables = CompositeDisposable()
-
     private val _eventSavedSuccessFully = SingleLiveEvent<Unit>()
     val eventSavedSuccessFully: LiveData<Unit>
         get() = _eventSavedSuccessFully
-
-    /**
-     * Will be updated with the latest error message when an error occurs when saving
-     */
-    private val _eventSaveFailed = MutableLiveData<String>()
-    val eventSaveFailed: LiveData<String>
-        get() = _eventSaveFailed
 
     /**
      * Holds potential error messages that will be displayed to the user when he/she tries to save the event but
@@ -72,8 +66,25 @@ class EventDetailsViewModel(
      */
     val event = MediatorLiveData<Event>()
 
+    /**
+     * Will be updated with the latest error message when an error occurs when saving
+     */
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
+
+    private val _avatarSavedSuccessFully = SingleLiveEvent<Unit>()
+    val avatarSavedSuccessFully: LiveData<Unit>
+        get() = _avatarSavedSuccessFully
+
+    private val disposables = CompositeDisposable()
+
     init {
-        event.value = Event()
+        if (eventUuid != null) {
+            setEvent(getEventFromUser(eventUuid))
+        } else {
+            setEvent(Event())
+        }
         eventDate.value = LocalDateTime.now()
 
         event.addSource(eventTitle) { title -> event.value?.title = title }
@@ -81,13 +92,22 @@ class EventDetailsViewModel(
         event.addSource(eventNotes) { notes -> event.value?.notes = notes }
     }
 
-    fun setEvent(newEventUUID: UUID) {
-        val newEvent = user.value!!.getEvent(newEventUUID)
-            ?: throw IllegalArgumentException("Couldn't find event with UUID $newEventUUID for user ${user.value}")
-        event.postValue(newEvent)
+    private fun getEventFromUser(eventUuid: UUID): Event {
+        return user.value!!.getEvent(eventUuid)
+            ?: throw IllegalArgumentException("Couldn't find event with UUID $eventUuid for user ${user.value}")
+    }
+
+    fun setEvent(newEvent: Event) {
+        event.value = newEvent
+        // We have to manually update the related streams for the event MediatorLiveData.
+        // Updating the event value won't update the incoming streams, it only works one way.
         eventTitle.postValue(newEvent.title)
         eventNotes.postValue(newEvent.notes)
         eventDate.postValue(newEvent.dateTime)
+    }
+
+    fun setEvent(eventUuid: UUID) {
+        setEvent(getEventFromUser(eventUuid))
     }
 
     private val _cameraButtonClicked = SingleLiveEvent<Unit>()
@@ -171,7 +191,7 @@ class EventDetailsViewModel(
             resetViewModel()
         }, {
             Log.i(TAG, "Event failed to save because: ${it.message}")
-            _eventSaveFailed.postValue(it.localizedMessage)
+            _errorMessage.postValue(it.localizedMessage)
         })
         disposables.add(disposable)
     }
@@ -192,7 +212,25 @@ class EventDetailsViewModel(
     }
 
     override fun onCleared() {
-        super.onCleared()
         disposables.clear()
+        super.onCleared()
+    }
+
+    /**
+     * Save avatar bitmap. This updates the property emotionAvatar. Must be done in this viewmodel
+     * because otherwise the event is not updated (if this code is in DrawEmotionViewModel, then the
+     * fragment needs to update the event in EventDetailsViewModel, but the fragment is already stopped before
+     * the use case to save the image is done
+     */
+    fun saveImage(bitmap: Bitmap) {
+        val saveRequest = saveEmotionAvatarUseCase.execute(
+            SaveEmotionAvatarUseCase.Params(bitmap, event.value!!)
+        ).subscribe({
+            updateEvent()
+            _avatarSavedSuccessFully.value = Unit
+        }, {
+            _errorMessage.postValue(it.localizedMessage)
+        })
+        disposables.add(saveRequest)
     }
 }

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7b5d2dfa9f8ae38a33fe0ed26b188f9d",
+    "identityHash": "241e90aa540f7c5920dbc625db97e89d",
     "entities": [
       {
         "tableName": "events",
@@ -324,7 +324,7 @@
       },
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `userName` TEXT NOT NULL, `avatar` TEXT NOT NULL, PRIMARY KEY(`uuid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uuid` TEXT NOT NULL, `username` TEXT NOT NULL, PRIMARY KEY(`uuid`))",
         "fields": [
           {
             "fieldPath": "uuid",
@@ -333,14 +333,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "userName",
-            "columnName": "userName",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "avatar",
-            "columnName": "avatar",
+            "fieldPath": "username",
+            "columnName": "username",
             "affinity": "TEXT",
             "notNull": true
           }
@@ -367,7 +361,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"7b5d2dfa9f8ae38a33fe0ed26b188f9d\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"241e90aa540f7c5920dbc625db97e89d\")"
     ]
   }
 }
