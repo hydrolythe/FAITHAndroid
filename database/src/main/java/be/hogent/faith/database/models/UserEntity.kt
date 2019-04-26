@@ -11,5 +11,7 @@ import java.util.UUID
 )
 data class UserEntity(
     @PrimaryKey
-    val uuid: UUID = UUID.randomUUID()
+    val uuid: UUID = UUID.randomUUID(),
+    val userName: String,
+    val avatar: String
 )

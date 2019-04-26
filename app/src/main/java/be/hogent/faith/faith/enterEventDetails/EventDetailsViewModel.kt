@@ -15,6 +15,7 @@ import be.hogent.faith.util.TAG
 import io.reactivex.disposables.CompositeDisposable
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import java.util.UUID
 
 class EventDetailsViewModel(
     private val saveEventUseCase: SaveEventUseCase,
@@ -80,7 +81,9 @@ class EventDetailsViewModel(
         event.addSource(eventNotes) { notes -> event.value?.notes = notes }
     }
 
-    fun setEvent(newEvent: Event) {
+    fun setEvent(newEventUUID: UUID) {
+        val newEvent = user.value!!.getEvent(newEventUUID)
+            ?: throw IllegalArgumentException("Couldn't find event with UUID $newEventUUID for user ${user.value}")
         event.postValue(newEvent)
         eventTitle.postValue(newEvent.title)
         eventNotes.postValue(newEvent.notes)
@@ -118,10 +121,6 @@ class EventDetailsViewModel(
     private val _dateButtonClicked = SingleLiveEvent<Unit>()
     val dateButtonClicked: LiveData<Unit>
         get() = _dateButtonClicked
-
-    init {
-        event.value = Event()
-    }
 
     /**
      * Helper method to be called when changing one of the properties of the [Event].
@@ -165,6 +164,7 @@ class EventDetailsViewModel(
             return
         }
         val params = SaveEventUseCase.Params(event.value!!, user.value!!)
+        // TODO: checken of user livedata ook geupdated wordt als een van zijn events aangepast wordt.
         val disposable = saveEventUseCase.execute(params).subscribe({
             Log.i(TAG, "New event saved: ${event.value!!.title}")
             _eventSavedSuccessFully.call()

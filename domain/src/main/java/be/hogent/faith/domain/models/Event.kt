@@ -1,6 +1,9 @@
 package be.hogent.faith.domain.models
 
+import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.PictureDetail
+import be.hogent.faith.domain.models.detail.TextDetail
 import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.util.UUID
@@ -34,7 +37,19 @@ data class Event(
     val details: List<Detail>
         get() = _details
 
-    fun addDetail(detail: Detail) {
+    private fun addDetail(detail: Detail) {
         _details += detail
+    }
+
+    fun addNewPictureDetail(saveFile: File, photoName: String) {
+        addDetail(PictureDetail(saveFile, photoName))
+    }
+
+    fun addNewAudioDetail(saveFile: File, audioRecordingName: String) {
+        addDetail(AudioDetail(saveFile, audioRecordingName))
+    }
+
+    fun addNewTextDetail(saveFile: File, textDetailName: String) {
+        addDetail(TextDetail(saveFile, textDetailName))
     }
 }

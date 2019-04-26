@@ -1,6 +1,9 @@
 package be.hogent.faith.util.factory
 
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.PictureDetail
+import be.hogent.faith.domain.models.detail.TextDetail
 
 object EventFactory {
 
@@ -13,7 +16,13 @@ object EventFactory {
             uuid = DataFactory.randomUUID()
         )
         repeat(nbrOfDetails) {
-            event.addDetail(DetailFactory.makeDetail())
+            DetailFactory.makeRandomDetail().let { detail ->
+                when (detail) {
+                    is AudioDetail -> event.addNewAudioDetail(detail.file, detail.name!!)
+                    is PictureDetail -> event.addNewPictureDetail(detail.file, detail.name!!)
+                    is TextDetail -> event.addNewTextDetail(detail.file, detail.name!!)
+                }
+            }
         }
         return event
     }
