@@ -14,7 +14,7 @@ import com.divyanshu.draw.widget.PaintOptions
  * ViewModel for the [DrawEmotionAvatarFragment].
  * It mainly holds the state of the [DrawView].
  */
-class DrawEmotionViewModel : ViewModel() {
+class DrawEmotionViewModel() : ViewModel() {
 
     private val _selectedColor = MutableLiveData<@ColorInt Int>()
     val selectedColor: LiveData<Int>
@@ -43,9 +43,7 @@ class DrawEmotionViewModel : ViewModel() {
         get() = _drawnPaths
 
     init {
-        _drawnPaths.value = LinkedHashMap()
-        _selectedColor.value = Color.BLACK
-        _selectedLineWidth.value = LineWidth.MEDIUM
+        resetViewModel()
     }
 
     fun pickColor(@ColorInt color: Int) {
@@ -64,5 +62,11 @@ class DrawEmotionViewModel : ViewModel() {
         THIN(12f),
         MEDIUM(30f),
         THICK(55f)
+    }
+
+    fun resetViewModel() {
+        _drawnPaths.value = LinkedHashMap()
+        _selectedColor.value = Color.BLACK
+        _selectedLineWidth.value = LineWidth.MEDIUM
     }
 }

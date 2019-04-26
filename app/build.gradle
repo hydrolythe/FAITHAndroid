@@ -86,6 +86,7 @@ dependencies {
     implementation uiDependencies.fragment
     implementation uiDependencies.fotoApparat
     implementation uiDependencies.fotoApparatAdapters
+    implementation uiDependencies.navigation
 
     //TESTING
     debugImplementation androidTestDependencies.fragmentTesting
