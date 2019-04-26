@@ -13,8 +13,16 @@ open class SaveEventUseCase(
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEventUseCase.Params>(Schedulers.io(), observeScheduler) {
 
-    override fun buildUseCaseObservable(params: SaveEventUseCase.Params): Completable {
-        return eventRepository.insert(params.event, params.user)
+    override fun buildUseCaseObservable(params: Params): Completable {
+        return Completable.fromCallable {
+            // First add in domain so we can do business logic
+            // If this fails the event won't get added to the Repo.
+            params.user.addEvent(params.event)
+            println("Added ${params.event} to ${params.user}")
+        }.andThen {
+            eventRepository.insert(params.event, params.user)
+            println("Added ${params.event} to repo")
+        }
     }
 
     data class Params(

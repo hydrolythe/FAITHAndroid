@@ -42,7 +42,7 @@ class EventDetailsFragment : Fragment() {
         arguments?.getSerializable(ARG_EVENTUUID)?.let {
             val foundEvent = userViewModel.user.value!!.getEvent(it as UUID)
                 ?: throw IllegalArgumentException("Couldn't find event with UUID $it for user ${userViewModel.user.value}")
-            eventDetailsViewModel.setEvent(foundEvent)
+            eventDetailsViewModel.setEvent(it as UUID)
         }
     }
 
