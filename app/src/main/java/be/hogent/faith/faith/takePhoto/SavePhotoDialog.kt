@@ -11,15 +11,15 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.DialogSavePhotoBinding
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-class SavePhotoDialogFragment : DialogFragment() {
+class SavePhotoDialog : DialogFragment() {
 
     private lateinit var saveDialogBinding: DialogSavePhotoBinding
 
     private val takePhotoViewModel: TakePhotoViewModel by sharedViewModel()
 
     companion object {
-        fun newInstance(): SavePhotoDialogFragment {
-            return SavePhotoDialogFragment()
+        fun newInstance(): SavePhotoDialog {
+            return SavePhotoDialog()
         }
     }
 
@@ -27,8 +27,8 @@ class SavePhotoDialogFragment : DialogFragment() {
         saveDialogBinding =
             DataBindingUtil.inflate(inflater, R.layout.dialog_save_photo, container, false)
         saveDialogBinding.apply {
-            takePhotoViewModel = this@SavePhotoDialogFragment.takePhotoViewModel
-            lifecycleOwner = this@SavePhotoDialogFragment
+            takePhotoViewModel = this@SavePhotoDialog.takePhotoViewModel
+            lifecycleOwner = this@SavePhotoDialog
         }
         return saveDialogBinding.root
     }

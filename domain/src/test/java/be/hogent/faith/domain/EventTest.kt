@@ -1,7 +1,7 @@
 package be.hogent.faith.domain
 
-import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.AudioDetail
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -31,18 +31,17 @@ class EventTest {
 
     @Test
     fun `Event addDetail correctly adds the detail`() {
-        val detail = mockk<Detail>()
-
-        event.addDetail(detail)
+        event.addNewAudioDetail(mockk(), "test")
 
         assertEquals(1, event.details.size)
-        assertEquals(detail, event.details.first())
+        assertEquals(AudioDetail::class, event.details.first().javaClass)
+        assertEquals("test", event.details.first().name)
     }
 
     @Test
     fun `Event getDetails returns all details`() {
         for (i in 1..10) {
-            event.addDetail(mockk())
+            event.addNewTextDetail(mockk(), "name_$i")
         }
 
         assertEquals(10, event.details.size)

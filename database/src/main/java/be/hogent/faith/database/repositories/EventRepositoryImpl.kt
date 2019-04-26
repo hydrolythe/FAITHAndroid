@@ -1,5 +1,6 @@
 package be.hogent.faith.database.repositories
 
+import android.provider.SyncStateContract.Helpers.insert
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.database.EntityDatabase
@@ -37,14 +38,11 @@ open class EventRepositoryImpl(
      * @return a [Completable] that only succeeds when both the event and it details were inserted successfully.
      */
     override fun insert(item: Event, user: User): Completable {
-        return try {
+        return Completable.fromCallable {
             database.runInTransaction {
                 eventDao.insert(eventMapper.mapToEntity(item, user.uuid))
                 detailDao.insertAll(item.details.map { detailMapper.mapToEntity(it, item.uuid) })
             }
-            Completable.complete()
-        } catch (e: Exception) {
-            Completable.error(e)
         }
     }
 

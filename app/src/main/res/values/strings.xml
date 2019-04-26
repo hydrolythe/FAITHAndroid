@@ -8,9 +8,9 @@
     <string name="choose_red">Kies rood</string>
     <string name="choose_yellow">Kies geel</string>
     <string name="choose_green">Kies groen</string>
-    <string name="lineWidth_thin">dun</string>
-    <string name="lineWidth_medium">middel</string>
-    <string name="lineWidth_Thick">dik</string>
+    <string name="lineWidth_thin">Dun</string>
+    <string name="lineWidth_medium">Middel</string>
+    <string name="lineWidth_Thick">Dik</string>
     <string name="undo">Ongedaan maken</string>
     <string name="frag_main_descr_city_plan">Stadsplan</string>
     <string name="frag_main_descr_your_avatar">Je avatar</string>
@@ -32,7 +32,9 @@
     <string name="hint_audio_recording_name">Een naam voor deze opname</string>
     <string name="save">Opslaan</string>
     <string name="toast_save_audio_success">Je opname werd opgeslagen</string>
+    <string name="toast_save_event_success">Je gebeurtenis werd opgeslagen</string>
     <string name="toast_save_audio_failed">Er ging iets fout bij het opslaan van je opname</string>
+    <string name="toast_save_event_failed">Er ging iets fout bij het opslaan van je gebeurtenis</string>
     <string name="error_pause_not_supported">Pauzeren wordt door je apparaat niet ondersteund</string>
     <string name="permission_take_picture">Je moet je toestemming geven om foto\'s te nemen</string>
     <string name="frag_takePhoto_goToEmotionAvatar">Ga naar emotieavatar</string>
@@ -48,7 +50,8 @@
     <string name="hint_photo_name">een naam voor je foto</string>
     <string name="lbl_name">Naam:</string>
     <string name="lbl_save">Opslaan</string>
-    <string name="toast_foto_saved_success">Je foto werd opgeslagen!</string>
+    <string name="toast_save_photo_success">Je foto werd opgeslagen!</string>
+    <string name="DateTime_no_title">Je moet een titel geven aan je gebeurtenis voordat je ze kan opslaan!</string>
     <string name="toast_save_photo_failed">Er ging iets fout bij het opslaan van je foto.</string>
     <string name="terug_naar_de_stad">Terug naar de stad</string>
     <string name="nav_emotieregulatie">Emotieregulatie</string>
@@ -62,4 +65,9 @@
     <string name="cancel">@android:string/cancel</string>
     <string name="avatarNotSet">Vul naam in en selecteer een avatar</string>
     <string name="toast_save_user_failed">Het opslaan van de nieuwe gebruiker is gefaald.</string>
+    <string name="toast_event_no_title">Je moet een titel geven aan je gebeurtenis.</string>
+    <string name="lbl_save_event_notes">Notities</string>
+    <string name="lbl_save_event_date">Dag</string>
+    <string name="lbl_save_event_title">Titel</string>
+    <string name="lbl_back">Terug</string>
 </resources>

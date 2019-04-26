@@ -9,7 +9,7 @@ import io.reactivex.Scheduler
  * Use the [Params] to define the input for the Use Case.
  * If there is more than one input for the Use Case, the subclass of this [CompletableUseCase] should also define
  * a class that has all the required inputs as public attributes, and define that as the [Params].
- * An example can be found in [be.hogent.faith.service.usecases.CreateEventUseCase].
+ * An example can be found in [be.hogent.faith.service.usecases.SaveEventUseCase].
  */
 abstract class CompletableUseCase<in Params>(
     private val subscribeScheduler: Scheduler,

@@ -8,20 +8,22 @@ object EventMapper : MapperWithForeignKey<EventEntity, Event> {
 
     override fun mapFromEntity(entity: EventEntity): Event {
         return Event(
-            entity.dateTime,
-            entity.title,
-            entity.emotionAvatar,
-            entity.uuid
+            dateTime = entity.dateTime,
+            title = entity.title,
+            notes = entity.notes,
+            emotionAvatar = entity.emotionAvatar,
+            uuid = entity.uuid
         )
     }
 
     override fun mapToEntity(model: Event, foreignKey: UUID): EventEntity {
         return EventEntity(
-            model.dateTime,
-            model.title!!,
-            model.emotionAvatar,
-            model.uuid,
-            foreignKey
+            dateTime = model.dateTime,
+            title = model.title!!,
+            notes = model.notes,
+            emotionAvatar = model.emotionAvatar,
+            uuid = model.uuid,
+            userUuid = foreignKey
         )
     }
 

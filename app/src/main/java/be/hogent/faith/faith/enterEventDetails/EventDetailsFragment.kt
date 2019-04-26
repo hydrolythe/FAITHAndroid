@@ -2,20 +2,22 @@ package be.hogent.faith.faith.enterEventDetails
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.editDetail.DetailType
+import be.hogent.faith.util.TAG
 import org.koin.android.viewmodel.ext.android.getViewModel
-import org.koin.core.parameter.parametersOf
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import java.util.UUID
 
 private const val ARG_EVENTUUID = "eventUUID"
@@ -23,27 +25,30 @@ private const val ARG_EVENTUUID = "eventUUID"
 class EventDetailsFragment : Fragment() {
 
     private var navigation: EventDetailsNavigationListener? = null
+
     private lateinit var userViewModel: UserViewModel
-    private lateinit var eventDetailsViewModel: EventDetailsViewModel
+    private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
+
     private lateinit var eventDetailsBinding: FragmentEnterEventDetailsBinding
 
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
 
+    private lateinit var saveDialog: SaveEventDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userViewModel = getViewModel()
-        if (arguments?.getSerializable(ARG_EVENTUUID) != null) {
-            eventDetailsViewModel =
-                getViewModel { parametersOf(userViewModel.user.value ?: User(), arguments?.getSerializable(ARG_EVENTUUID)) }
-        } else {
-            eventDetailsViewModel =
-                getViewModel { parametersOf(userViewModel.user.value ?: User()) }
+
+        // When an UUID is given the [eventDetailsViewModel] should be updated to show the given event's state.
+        arguments?.getSerializable(ARG_EVENTUUID)?.let {
+            eventDetailsViewModel.setEvent(it as UUID)
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        eventDetailsBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_enter_event_details, container, false)
-        eventDetailsBinding.eventDetailsVM = eventDetailsViewModel
+        eventDetailsBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_enter_event_details, container, false)
+        eventDetailsBinding.eventViewModel = eventDetailsViewModel
         eventDetailsBinding.lifecycleOwner = this
         return eventDetailsBinding.root
     }
@@ -68,15 +73,21 @@ class EventDetailsFragment : Fragment() {
             // Start with empty list and then fill it in
             adapter = DetailThumbnailsAdapter(context, emptyList())
         }
-        detailThumbnailsAdapter = eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
+        detailThumbnailsAdapter =
+            eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
     }
 
     private fun startListeners() {
-        eventDetailsViewModel.eventTitle.observe(this, Observer { newTitle ->
-            eventDetailsViewModel.event.value?.let { event ->
-                event.title = newTitle
-            }
+        eventDetailsViewModel.inputErrorMessageID.observe(this, Observer { errorMessageID ->
+            Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
         })
+
+        // Update adapter when event changes
+        eventDetailsViewModel.event.observe(this, Observer { event ->
+            detailThumbnailsAdapter?.updateDetailsList(event.details)
+        })
+
+        // Listen to click events
         eventDetailsViewModel.emotionAvatarClicked.observe(this, Observer {
             navigation?.startDrawEmotionAvatarFragment()
         })
@@ -88,8 +99,22 @@ class EventDetailsFragment : Fragment() {
             // navigation?.startRecordAudioFragment()
             navigation?.startEventDetail(DetailType.AUDIO)
         })
-        eventDetailsViewModel.event.observe(this, Observer { event ->
-            detailThumbnailsAdapter?.updateDetailsList(event.details)
+        eventDetailsViewModel.sendButtonClicked.observe(this, Observer {
+            saveDialog = SaveEventDialog.newInstance()
+            saveDialog.show(fragmentManager!!, null)
+        })
+        eventDetailsViewModel.eventSavedSuccessFully.observe(this, Observer {
+            Toast.makeText(context, R.string.toast_save_event_success, Toast.LENGTH_LONG).show()
+            saveDialog.dismiss()
+
+            // Go back to main screen
+            fragmentManager!!.popBackStack()
+        })
+        eventDetailsViewModel.errorMessage.observe(this, Observer { errorMessage ->
+            Log.e(TAG, errorMessage)
+            // TODO: let others provide resource strings, not strings when showing error messages
+            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+            saveDialog.dismiss()
         })
     }
 
