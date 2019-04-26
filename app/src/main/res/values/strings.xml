@@ -11,7 +11,7 @@
     <string name="lineWidth_thin">dun</string>
     <string name="lineWidth_medium">middel</string>
     <string name="lineWidth_Thick">dik</string>
-    <string name="undo">ongedaan maken</string>
+    <string name="undo">Ongedaan maken</string>
     <string name="frag_main_descr_city_plan">Stadsplan</string>
     <string name="frag_main_descr_your_avatar">Je avatar</string>
     <string name="frag_avatar_title">Kies je avatar</string>
@@ -58,9 +58,8 @@
     <string name="frag_viewEvent_notes">notes</string>
     <string name="dialog_to_the_city_title">"Wil je teruggaan naar de stad</string>
     <string name="dialog_to_the_city_message">Ben je zeker? Alle wijzigingen worden niet bijgehouden?</string>
-    <string name="ok">ok</string>
-    <string name="cancel">cancel</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ok">@android:string/ok</string>
+    <string name="cancel">@android:string/cancel</string>
+    <string name="avatarNotSet">Vul naam in en selecteer een avatar</string>
+    <string name="toast_save_user_failed">Het opslaan van de nieuwe gebruiker is gefaald.</string>
 </resources>
