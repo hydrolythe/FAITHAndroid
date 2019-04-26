@@ -43,11 +43,10 @@ class UserViewModel(private val getUserUseCase: GetUserUseCase) : ViewModel() {
     }
 
     private fun createUser(): User {
-        val userUuid = UUID.randomUUID()
         val eventDate = LocalDateTime.of(2019, 10, 28, 7, 33)!!
         val file = File("path/to/eventFile")
 
-        val user = User(userUuid)
+        val user = User("username", "avatar")
 
         val event1 = Event(eventDate, "testDescription1", file, UUID.randomUUID())
         val event2 = Event(eventDate, "testDescription2", file, UUID.randomUUID())

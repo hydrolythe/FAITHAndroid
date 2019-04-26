@@ -5,6 +5,7 @@ import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.daos.UserDao
 import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.factory.EntityFactory
+import be.hogent.faith.database.factory.UserFactory
 import be.hogent.faith.database.mappers.EventWithDetailsMapper
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.models.UserEntity
@@ -12,7 +13,6 @@ import be.hogent.faith.database.models.relations.EventWithDetails
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.util.factory.EventFactory
-import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable

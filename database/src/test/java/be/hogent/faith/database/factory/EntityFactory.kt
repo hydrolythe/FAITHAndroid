@@ -70,7 +70,7 @@ object EntityFactory {
 
     fun makeUserEntity(): UserEntity {
         return UserEntity(
-            DataFactory.randomUUID()
+            DataFactory.randomUUID(), DataFactory.randomString(), DataFactory.randomString()
         )
     }
 }

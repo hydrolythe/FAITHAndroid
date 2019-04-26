@@ -1,10 +1,10 @@
 package be.hogent.faith.service.usecases
 
+import be.hogent.faith.database.factory.UserFactory
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.EventRepository
 import be.hogent.faith.util.factory.DataFactory
-import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot

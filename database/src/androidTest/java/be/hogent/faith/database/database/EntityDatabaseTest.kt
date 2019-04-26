@@ -33,7 +33,7 @@ class EntityDatabaseTest {
     private val eventUuid = DataFactory.randomUUID()
     private val eventDate = DataFactory.randomDateTime()
     private val eventFile = DataFactory.randomFile()
-    private val userEntity = UserEntity(userUuid)
+    private val userEntity = UserEntity(userUuid, "name", "avatar")
     private val eventEntity = EventEntity(eventDate, "testDescription", eventFile, eventUuid, userUuid)
 
     // Required to make sure Room executes all operations instantly
@@ -170,7 +170,7 @@ class EntityDatabaseTest {
     @Test
     fun entityDatabase_singleUser_withNoEvents_isAdded() {
         // Arrange
-        val user = UserEntity(uuid = userUuid)
+        val user = UserEntity(userUuid, "name", "avatar")
         val arrange = userDao.insert(user)
 
         // Act

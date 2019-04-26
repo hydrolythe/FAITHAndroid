@@ -101,21 +101,21 @@ class MainActivity : AppCompatActivity(),
                                         null,
                                         FragmentManager.POP_BACK_STACK_INCLUSIVE
                                     )
-                        })
-                        setNegativeButton(
-                            R.string.cancel,
-                            DialogInterface.OnClickListener { dialog, _ ->
+                                })
+                            setNegativeButton(
+                                R.string.cancel
+                            ) { dialog, _ ->
                                 dialog.cancel()
-                            })
+                            }
+                        }
+                        builder.create()
                     }
-                    builder.create()
+                    alertDialog.show()
                 }
-                alertDialog.show()
             }
+            true
         }
-        true
     }
-}
 
 //    /**
 //     * Sets the [User] currently working with the application.
@@ -149,10 +149,10 @@ class MainActivity : AppCompatActivity(),
         replaceFragment(EventDetailsFragment.newInstance(eventUuid), R.id.fragment_container)
     }
 
-override fun startEventDetail(type: DetailType) {
-    replaceFragment(
-        EditDetailFragment.newInstance(type, R.drawable.outline),
-        R.id.fragment_container
-    )
-}
+    override fun startEventDetail(type: DetailType) {
+        replaceFragment(
+            EditDetailFragment.newInstance(type, R.drawable.outline),
+            R.id.fragment_container
+        )
+    }
 }

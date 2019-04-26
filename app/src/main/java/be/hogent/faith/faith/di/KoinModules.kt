@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.util.AvatarProvider
 import be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.editDetail.EditDetailViewModel
@@ -32,9 +33,10 @@ val appModule = module(override = true) {
     viewModel { EditDetailViewModel() }
     viewModel { UserViewModel(get()) }
     viewModel { (user: LiveData<User>) -> OverviewEventsViewModel(user) }
-    viewModel { AvatarViewModel() }
+    viewModel { AvatarViewModel(get(), get()) }
     viewModel { (event: Event) -> RecordAudioViewModel(get(), event) }
     viewModel { (event: Event) -> TakePhotoViewModel(get(), event) }
 
     single { TempFileProvider(androidContext()) }
+    single { AvatarProvider(androidContext()) }
 }
