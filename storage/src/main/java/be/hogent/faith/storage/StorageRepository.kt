@@ -2,7 +2,6 @@ package be.hogent.faith.storage
 
 import android.content.Context
 import android.graphics.Bitmap
-import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.Event
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime

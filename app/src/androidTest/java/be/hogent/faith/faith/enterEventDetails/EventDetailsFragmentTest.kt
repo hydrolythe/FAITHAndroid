@@ -49,11 +49,11 @@ class EventDetailsFragmentTest {
         pressBack()
 
         onView(withId(be.hogent.faith.R.id.btn_event_details_drawing)).perform(click())
-        // Enable once drawing has been implemented
+        // TODO: Enable once drawing has been implemented
 //        pressBack()
 
         onView(withId(be.hogent.faith.R.id.btn_event_details_text)).perform(click())
-        // Enable once text has been implemented
+        // TODO: Enable once text has been implemented
 //        pressBack()
 
         onView(withId(be.hogent.faith.R.id.btn_event_details_gotoEmotionAvatar)).perform(click())

@@ -1,12 +1,18 @@
 package be.hogent.faith.faith.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentManager
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.chooseAvatar.fragments.AvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.drawEmotionAvatar.DrawEmotionViewModel
+import be.hogent.faith.faith.editDetail.DetailType
+import be.hogent.faith.faith.editDetail.EditDetailFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.enterEventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.mainScreen.MainScreenFragment
@@ -16,6 +22,7 @@ import be.hogent.faith.faith.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.util.replaceFragment
+import com.google.android.material.navigation.NavigationView
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -25,8 +32,8 @@ class MainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
     OverviewEventsFragment.OverviewEventsNavigationListener,
     MainScreenFragment.MainScreenNavigationListener,
-    TakePhotoFragment.TakePhotoNavigationListener,
-    AvatarFragment.AvatarFragmentNavigationListener {
+    AvatarFragment.AvatarFragmentNavigationListener,
+    EditDetailFragment.EditDetailNavigationListener {
 
     // This ViewModel is for the [DrawEmotionAvatarFragment], but has been defined here because it should
     // survive the activity's lifecycle, not just its own.
@@ -42,9 +49,9 @@ class MainActivity : AppCompatActivity(),
     // They all require the same event object so it has to be shared.
     // This may cause issues when entering multiple events. A possible solution might be to have an Activity for each
     // of the 4 main functions of the app.
-    lateinit var eventDetailsViewModel: EventDetailsViewModel
+    private lateinit var eventDetailsViewModel: EventDetailsViewModel
 
-    lateinit var takePhotoViewModel: TakePhotoViewModel
+    private lateinit var takePhotoViewModel: TakePhotoViewModel
     private val userViewModel by viewModel<UserViewModel>()
 
     lateinit var recordAudioViewModel: RecordAudioViewModel
@@ -54,6 +61,7 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         eventDetailsViewModel = getViewModel {
+            // TODO: karine had hier 2e arg User() bij gezet maar kan toch niet?
             parametersOf(userViewModel.user)
         }
         takePhotoViewModel = getViewModel {
@@ -67,21 +75,52 @@ class MainActivity : AppCompatActivity(),
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
         // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
-            val fragment = AvatarFragment.newInstance()
-//            val fragment = MainScreenFragment()
+            val fragment = MainScreenFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
+
+        setUpNavigationDrawer()
     }
 
-//    /**
-//     * Sets the [User] currently working with the application.
-//     */
-//    fun setUser(user: User) {
-//        _userViewModel.setUser(user)
-//        Log.i(TAG, "Set the user which username ${user.username}")
-//    }
+    private fun setUpNavigationDrawer() {
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            // close drawer when item is tapped
+            drawerLayout.closeDrawers()
+            // perform action
+            when (menuItem.itemId) {
+                R.id.nav_city -> {
+                    val alertDialog: AlertDialog = this.run {
+                        val builder = AlertDialog.Builder(this).apply {
+                            setTitle(R.string.dialog_to_the_city_title)
+                            setMessage(R.string.dialog_to_the_city_message)
+                            setPositiveButton(
+                                R.string.ok,
+                                DialogInterface.OnClickListener { dialog, _ ->
+                                    eventDetailsViewModel.resetViewModel()
+                                    drawEmotionViewModel.resetViewModel()
+                                    supportFragmentManager.popBackStack(
+                                        null,
+                                        FragmentManager.POP_BACK_STACK_INCLUSIVE
+                                    )
+                                })
+                            setNegativeButton(
+                                R.string.cancel
+                            ) { dialog, _ ->
+                                dialog.cancel()
+                            }
+                        }
+                        builder.create()
+                    }
+                    alertDialog.show()
+                }
+            }
+            true
+        }
+    }
 
     override fun startDrawEmotionAvatarFragment() {
         replaceFragment(DrawEmotionAvatarFragment.newInstance(R.drawable.outline), R.id.fragment_container)
@@ -105,6 +144,13 @@ class MainActivity : AppCompatActivity(),
 
     override fun startEventDetailsFragment(eventUuid: UUID) {
         replaceFragment(EventDetailsFragment.newInstance(eventUuid), R.id.fragment_container)
+    }
+
+    override fun startEventDetail(type: DetailType) {
+        replaceFragment(
+            EditDetailFragment.newInstance(type, R.drawable.outline),
+            R.id.fragment_container
+        )
     }
 
     override fun goToCityScreen() {

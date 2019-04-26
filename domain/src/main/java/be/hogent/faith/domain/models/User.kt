@@ -3,9 +3,11 @@ package be.hogent.faith.domain.models
 import java.util.UUID
 
 data class User(
-    val uuid: UUID = UUID.randomUUID(),
-    val avatar: Avatar? = null,
-    val username: String
+    val username: String,
+    // the resource entry name
+    // TODO: find out how to work with avatar, especially persisting it in DB
+//    val avatar: Avatar?,
+    val uuid: UUID = UUID.randomUUID()
 ) {
     private val _events = HashMap<UUID, Event>()
     val events: List<Event>

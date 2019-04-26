@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.takePhoto
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -30,7 +29,6 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 const val REQUESTCODE_CAMERA = 1
 
 class TakePhotoFragment : Fragment() {
-    private lateinit var navigation: TakePhotoNavigationListener
 
     private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
 
@@ -75,9 +73,6 @@ class TakePhotoFragment : Fragment() {
     }
 
     private fun startListeners() {
-        takePhotoViewModel.emotionAvatarButtonClicked.observe(this, Observer {
-            navigation.startDrawEmotionAvatarFragment()
-        })
         takePhotoViewModel.takePhotoButtonClicked.observe(this, Observer {
             takeAndSavePictureToCache()
         })
@@ -90,6 +85,7 @@ class TakePhotoFragment : Fragment() {
             Toast.makeText(context, getString(R.string.toast_save_photo_success), Toast.LENGTH_SHORT).show()
             eventDetailsViewModel.updateEvent()
             saveDialog.dismiss()
+            // TODO: check fragment should be closed afterwards? Or go back to overview?
         })
     }
 
@@ -129,20 +125,9 @@ class TakePhotoFragment : Fragment() {
         }
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is TakePhotoNavigationListener) {
-            navigation = context
-        }
-    }
-
     companion object {
         fun newInstance(): TakePhotoFragment {
             return TakePhotoFragment()
         }
-    }
-
-    interface TakePhotoNavigationListener {
-        fun startDrawEmotionAvatarFragment()
     }
 }

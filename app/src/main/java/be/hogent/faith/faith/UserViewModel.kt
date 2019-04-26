@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import be.hogent.faith.domain.models.Avatar
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.service.usecases.GetUserUseCase
@@ -46,7 +45,9 @@ class UserViewModel(private val getUserUseCase: GetUserUseCase) : ViewModel() {
         val eventDate = LocalDateTime.of(2019, 10, 28, 7, 33)!!
         val file = File("path/to/eventFile")
 
-        val user = User(uuid = userUuid, username = "dikke guy", avatar = Avatar(-1))
+        val user = User(uuid = userUuid, username = "dikke guy")
+        // TODO: add avatar again once it's done
+//        val user = User(uuid = userUuid, username = "dikke guy", avatar = Avatar(-1, "url"))
 
         val event1 = Event(eventDate, "testDescription1", file, "notities", UUID.randomUUID())
         val event2 = Event(eventDate, "testDescription2", file, "nog notities", UUID.randomUUID())

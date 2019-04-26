@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.editDetail.DetailType
 import be.hogent.faith.util.TAG
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -40,8 +41,6 @@ class EventDetailsFragment : Fragment() {
 
         // When an UUID is given the [eventDetailsViewModel] should be updated to show the given event's state.
         arguments?.getSerializable(ARG_EVENTUUID)?.let {
-            val foundEvent = userViewModel.user.value!!.getEvent(it as UUID)
-                ?: throw IllegalArgumentException("Couldn't find event with UUID $it for user ${userViewModel.user.value}")
             eventDetailsViewModel.setEvent(it as UUID)
         }
     }
@@ -93,10 +92,12 @@ class EventDetailsFragment : Fragment() {
             navigation?.startDrawEmotionAvatarFragment()
         })
         eventDetailsViewModel.cameraButtonClicked.observe(this, Observer {
-            navigation?.startTakePhotoFragment()
+            // navigation?.startTakePhotoFragment()
+            navigation?.startEventDetail(DetailType.PICTURE)
         })
         eventDetailsViewModel.audioButtonClicked.observe(this, Observer {
-            navigation?.startRecordAudioFragment()
+            // navigation?.startRecordAudioFragment()
+            navigation?.startEventDetail(DetailType.AUDIO)
         })
         eventDetailsViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
@@ -109,9 +110,10 @@ class EventDetailsFragment : Fragment() {
             // Go back to main screen
             fragmentManager!!.popBackStack()
         })
-        eventDetailsViewModel.eventSaveFailed.observe(this, Observer { errorMessage ->
+        eventDetailsViewModel.errorMessage.observe(this, Observer { errorMessage ->
             Log.e(TAG, errorMessage)
-            Toast.makeText(context, R.string.toast_save_event_failed, Toast.LENGTH_LONG).show()
+            // TODO: let others provide resource strings, not strings when showing error messages
+            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
             saveDialog.dismiss()
         })
     }
@@ -125,6 +127,7 @@ class EventDetailsFragment : Fragment() {
         fun startDrawEmotionAvatarFragment()
         fun startTakePhotoFragment()
         fun startRecordAudioFragment()
+        fun startEventDetail(type: DetailType)
     }
 
     companion object {

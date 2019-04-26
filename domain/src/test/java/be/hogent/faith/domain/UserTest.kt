@@ -15,7 +15,7 @@ class UserTest {
 
     @Before
     fun setUp() {
-        user = User(mockk())
+        user = User("username", "R.drawable.avatar")
     }
 
     @Test
