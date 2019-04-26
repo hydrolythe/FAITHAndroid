@@ -34,10 +34,10 @@ class EventDetailsFragment : Fragment() {
         userViewModel = getViewModel()
         if (arguments?.getSerializable(ARG_EVENTUUID) != null) {
             eventDetailsViewModel =
-                getViewModel { parametersOf(userViewModel.user.value?: User(), arguments?.getSerializable(ARG_EVENTUUID)) }
+                getViewModel { parametersOf(userViewModel.user.value ?: User(), arguments?.getSerializable(ARG_EVENTUUID)) }
         } else {
             eventDetailsViewModel =
-                getViewModel { parametersOf(userViewModel.user.value?:User()) }
+                getViewModel { parametersOf(userViewModel.user.value ?: User()) }
         }
     }
 
