@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragments_overview_events.rv_events
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
@@ -75,7 +76,7 @@ class OverviewEventsFragment : Fragment() {
                 navigation?.startEventDetailsFragment(eventUuid)
             }
         }
-        eventsAdapter = EventsAdapter(eventListener)
+        eventsAdapter = EventsAdapter(eventListener, Glide.with(this))
         rv_events.apply {
             layoutManager = LinearLayoutManager(activity)
             this.adapter = eventsAdapter
