@@ -1,110 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
-                name="drawEmotionViewModel"
-                type="be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionViewModel"/>
+            name="drawEmotionViewModel"
+            type="be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionViewModel" />
 
-        <import type="android.graphics.Color"/>
+        <import type="android.graphics.Color" />
 
-        <import type="be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionViewModel.LineWidth"/>
+        <import type="be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionViewModel.LineWidth" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        android:id="@+id/screen_draw_avatar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-                android:id="@+id/container_draw_utilities"
+            android:id="@+id/container_draw_utilities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/btn_draw_setColorBlack"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/choose_black"
+                android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.BLACK)}"
+                android:src="@drawable/circle_black" />
+
+            <ImageButton
+                android:id="@+id/btn_draw_setColorBlue"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/choose_blue"
+                android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.BLUE)}"
+                android:src="@drawable/circle_blue" />
+
+            <ImageButton
+                android:id="@+id/btn_draw_setColorRed"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/choose_red"
+                android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.RED)}"
+                android:src="@drawable/circle_red" />
+
+            <ImageButton
+                android:id="@+id/btn_draw_setColorYellow"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/choose_yellow"
+                android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.YELLOW)}"
+                android:src="@drawable/circle_yellow" />
+
+            <ImageButton
+                android:id="@+id/btn_draw_setColorGreen"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="@string/choose_green"
+                android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.GREEN)}"
+                android:src="@drawable/circle_green" />
+
+            <Button
+                android:id="@+id/btn_draw_setThinLineWidth"
                 android:layout_width="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
-
-            <ImageButton
-                    android:layout_width="50dp"
-                    android:src="@drawable/circle_black"
-                    android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.BLACK)}"
-                    android:id="@+id/btn_draw_setColorBlack"
-                    android:layout_height="50dp"
-                    android:contentDescription="@string/choose_black"/>
-
-            <ImageButton
-                    android:layout_width="50dp"
-                    android:src="@drawable/circle_blue"
-                    android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.BLUE)}"
-                    android:id="@+id/btn_draw_setColorBlue"
-                    android:layout_height="50dp"
-                    android:contentDescription="@string/choose_blue"/>
-
-            <ImageButton
-                    android:layout_width="50dp"
-                    android:src="@drawable/circle_red"
-                    android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.RED)}"
-                    android:contentDescription="@string/choose_red"
-                    android:id="@+id/btn_draw_setColorRed"
-                    android:layout_height="50dp"/>
-
-            <ImageButton
-                    android:layout_width="50dp"
-                    android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.YELLOW)}"
-                    android:contentDescription="@string/choose_yellow"
-                    android:src="@drawable/circle_yellow"
-                    android:id="@+id/btn_draw_setColorYellow"
-                    android:layout_height="50dp"/>
-
-            <ImageButton
-                    android:src="@drawable/circle_green"
-                    android:contentDescription="@string/choose_green"
-                    android:layout_width="50dp"
-                    android:onClick="@{() -> drawEmotionViewModel.pickColor(Color.GREEN)}"
-                    android:id="@+id/btn_draw_setColorGreen"
-                    android:layout_height="50dp"/>
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> drawEmotionViewModel.setLineWidth(LineWidth.THIN)}"
+                android:text="@string/lineWidth_thin" />
 
             <Button
-                    android:layout_width="wrap_content"
-                    android:text="@string/lineWidth_thin"
-                    android:onClick="@{() -> drawEmotionViewModel.setLineWidth(LineWidth.THIN)}"
-                    android:id="@+id/btn_draw_setThinLineWidth"
-                    android:layout_height="wrap_content"/>
+                android:id="@+id/btn_draw_setMediumLineWidth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> drawEmotionViewModel.setLineWidth(LineWidth.MEDIUM)}"
+                android:text="@string/lineWidth_medium" />
 
             <Button
-                    android:layout_width="wrap_content"
-                    android:id="@+id/btn_draw_setMediumLineWidth"
-                    android:onClick="@{() -> drawEmotionViewModel.setLineWidth(LineWidth.MEDIUM)}"
-                    android:text="@string/lineWidth_medium"
-                    android:layout_height="wrap_content"/>
-
-            <Button
-                    android:layout_width="wrap_content"
-                    android:id="@+id/btn_draw_setThickLineWidth"
-                    android:text="@string/lineWidth_Thick"
-                    android:onClick="@{() -> drawEmotionViewModel.setLineWidth(LineWidth.THICK)}"
-                    android:layout_height="wrap_content"/>
+                android:id="@+id/btn_draw_setThickLineWidth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> drawEmotionViewModel.setLineWidth(LineWidth.THICK)}"
+                android:text="@string/lineWidth_Thick" />
 
             <ImageButton
-                    android:id="@+id/btn_draw_undo"
-                    android:contentDescription="@string/undo"
-                    android:onClick="@{() -> drawEmotionViewModel.undo()}"
-                    android:src="@drawable/ic_undo_black_24dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                android:id="@+id/btn_draw_undo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/undo"
+                android:onClick="@{() -> drawEmotionViewModel.undo()}"
+                android:src="@drawable/ic_undo_black_24dp" />
         </LinearLayout>
 
         <com.divyanshu.draw.widget.DrawView
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/container_draw_utilities"
-                android:id="@+id/draw_canvas"
-                android:layout_width="0dp"
-                android:layout_height="0dp"/>
+            android:id="@+id/draw_canvas"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/container_draw_utilities"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

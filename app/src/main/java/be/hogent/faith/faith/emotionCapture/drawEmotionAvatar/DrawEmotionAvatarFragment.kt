@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsViewModel
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.util.TAG
 import com.divyanshu.draw.widget.DrawView
@@ -38,7 +38,7 @@ private const val NO_AVATAR = -1
 class DrawEmotionAvatarFragment : Fragment() {
 
     private val drawEmotionViewModel: DrawEmotionViewModel by sharedViewModel()
-    private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
+    private val eventViewModel: EventViewModel by sharedViewModel()
 
     private lateinit var drawAvatarBinding: FragmentDrawAvatarBinding
 
@@ -70,7 +70,7 @@ class DrawEmotionAvatarFragment : Fragment() {
 
         drawAvatarBinding.drawCanvas.addDrawViewListener(object : DrawView.DrawViewListener {
             override fun onDrawingChanged(bitmap: Bitmap) {
-                eventDetailsViewModel.saveImage(bitmap)
+                eventViewModel.saveImage(bitmap)
             }
         })
     }
@@ -94,10 +94,10 @@ class DrawEmotionAvatarFragment : Fragment() {
             Log.i(TAG, "Last action undone")
             drawAvatarBinding.drawCanvas.undo()
         })
-        eventDetailsViewModel.errorMessage.observe(this, Observer {
+        eventViewModel.errorMessage.observe(this, Observer {
             Toast.makeText(context, getString(R.string.error_saving_drawing), Toast.LENGTH_SHORT).show()
         })
-        eventDetailsViewModel.avatarSavedSuccessFully.observe(this, Observer {
+        eventViewModel.avatarSavedSuccessFully.observe(this, Observer {
         })
     }
 

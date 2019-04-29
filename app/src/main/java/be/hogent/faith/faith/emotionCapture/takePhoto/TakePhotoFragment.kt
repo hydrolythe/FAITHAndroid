@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsViewModel
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.util.TAG
 import be.hogent.faith.faith.util.TempFileProvider
 import io.fotoapparat.Fotoapparat
@@ -30,7 +30,7 @@ const val REQUESTCODE_CAMERA = 1
 
 class TakePhotoFragment : Fragment() {
 
-    private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
+    private val eventViewModel: EventViewModel by sharedViewModel()
 
     private val takePhotoViewModel: TakePhotoViewModel by sharedViewModel()
 
@@ -46,7 +46,7 @@ class TakePhotoFragment : Fragment() {
      * This should normally be done in the Dialog itself but SingleLiveEvent only supports a single Listener.
      * We need one here to update the eventDetailsVM and one in the Dialog to close it.
      */
-    private lateinit var saveDialog: SavePhotoDialogFragment
+    private lateinit var saveDialog: SavePhotoDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         takePhotoBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_take_photo, container, false)
@@ -82,9 +82,10 @@ class TakePhotoFragment : Fragment() {
             saveDialog.dismiss()
         })
         takePhotoViewModel.photoSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, getString(R.string.toast_foto_saved_success), Toast.LENGTH_SHORT).show()
-            eventDetailsViewModel.updateEvent()
+            Toast.makeText(context, getString(R.string.toast_save_photo_success), Toast.LENGTH_SHORT).show()
+            eventViewModel.updateEvent()
             saveDialog.dismiss()
+            // TODO: check fragment should be closed afterwards? Or go back to overview?
         })
     }
 
@@ -92,7 +93,7 @@ class TakePhotoFragment : Fragment() {
         val saveFile = tempFileProvider.tempPhotoFile
         fotoApparat.takePicture().saveToFile(saveFile).whenAvailable {
             takePhotoViewModel.tempPhotoFile = saveFile
-            saveDialog = SavePhotoDialogFragment.newInstance()
+            saveDialog = SavePhotoDialog.newInstance()
             saveDialog.show(fragmentManager!!, null)
         }
     }

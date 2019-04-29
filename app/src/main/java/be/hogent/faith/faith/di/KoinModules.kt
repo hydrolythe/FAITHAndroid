@@ -7,11 +7,12 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel
 import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsViewModel
-import be.hogent.faith.faith.mainScreen.MainScreenViewModel
-import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
+import be.hogent.faith.faith.mainScreen.MainScreenViewModel
+import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
+import be.hogent.faith.faith.util.AvatarProvider
 import be.hogent.faith.faith.util.TempFileProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.koin.androidContext
@@ -26,15 +27,16 @@ val appModule = module(override = true) {
 
     // ViewModels
     viewModel { MainScreenViewModel() }
-    viewModel { (user: User, eventUuid: UUID?) -> EventDetailsViewModel(get(), user, eventUuid) }
-    viewModel { (user: User) -> EventDetailsViewModel(get(), user) }
+    viewModel { (user: LiveData<User>, eventUuid: UUID?) -> EventViewModel(get(), get(), user, eventUuid) }
+    viewModel { (user: LiveData<User>) -> EventViewModel(get(), get(), user) }
     viewModel { DrawEmotionViewModel() }
     viewModel { EditDetailViewModel() }
     viewModel { UserViewModel(get()) }
     viewModel { (user: LiveData<User>) -> OverviewEventsViewModel(user) }
-    viewModel { AvatarViewModel() }
+    viewModel { AvatarViewModel(get(), get()) }
     viewModel { (event: Event) -> RecordAudioViewModel(get(), event) }
     viewModel { (event: Event) -> TakePhotoViewModel(get(), event) }
 
     single { TempFileProvider(androidContext()) }
+    single { AvatarProvider(androidContext()) }
 }
