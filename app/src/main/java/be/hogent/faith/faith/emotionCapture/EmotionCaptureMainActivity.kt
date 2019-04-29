@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
-import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
@@ -20,7 +19,6 @@ import be.hogent.faith.faith.registerAvatar.UserViewModel
 import be.hogent.faith.faith.util.replaceFragment
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_drawer_layout
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_nav_view
-import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
