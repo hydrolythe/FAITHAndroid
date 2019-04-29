@@ -35,7 +35,7 @@
         </activity>
         <activity
                 android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
-                android:label="@string/emotion_capture"
+                android:label="@string/emotionCaptation"
                 android:name=".faith.emotionCapture.ui.EmotionCaptureMainActivity">
         </activity>
     </application>

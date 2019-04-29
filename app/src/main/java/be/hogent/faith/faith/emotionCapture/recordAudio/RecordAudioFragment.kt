@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentRecordAudioBinding
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsViewModel
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel.RecordingStatus.PAUSED
 import be.hogent.faith.faith.util.TempFileProvider
 import org.koin.android.ext.android.inject
@@ -25,7 +25,7 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 const val REQUESTCODE_AUDIO = 12
 
 class RecordAudioFragment : Fragment() {
-    private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
+    private val eventViewModel: EventViewModel by sharedViewModel()
 
     private val recordAudioViewModel: RecordAudioViewModel by sharedViewModel()
 
@@ -129,7 +129,7 @@ class RecordAudioFragment : Fragment() {
         })
         recordAudioViewModel.recordingSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.toast_save_audio_success, Toast.LENGTH_SHORT).show()
-            eventDetailsViewModel.updateEvent()
+            eventViewModel.updateEvent()
             saveDialog.dismiss()
         })
         recordAudioViewModel.recordingSaveFailed.observe(this, Observer {

@@ -1,23 +1,21 @@
 package be.hogent.faith.faith.emotionCapture.ui
 
-import android.content.DialogInterface
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsViewModel
-import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
+import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.util.replaceFragment
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_drawer_layout
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_nav_view
@@ -27,9 +25,9 @@ import org.koin.core.parameter.parametersOf
 import java.util.UUID
 
 class EmotionCaptureMainActivity : AppCompatActivity(),
-EventDetailsFragment.EventDetailsNavigationListener,
-OverviewEventsFragment.OverviewEventsNavigationListener,
-EditDetailFragment.EditDetailNavigationListener {
+    EventDetailsFragment.EventDetailsNavigationListener,
+    OverviewEventsFragment.OverviewEventsNavigationListener,
+    EditDetailFragment.EditDetailNavigationListener {
 
     // This ViewModel is for the [DrawEmotionAvatarFragment], but has been defined here because it should
     // survive the activity's lifecycle, not just its own.
@@ -45,7 +43,7 @@ EditDetailFragment.EditDetailNavigationListener {
     // They all require the same event object so it has to be shared.
     // This may cause issues when entering multiple events. A possible solution might be to have an Activity for each
     // of the 4 main functions of the app.
-    private lateinit var eventDetailsViewModel: EventDetailsViewModel
+    private lateinit var eventViewModel: EventViewModel
 
     private lateinit var takePhotoViewModel: TakePhotoViewModel
     private val userViewModel by viewModel<UserViewModel>()
@@ -56,14 +54,17 @@ EditDetailFragment.EditDetailNavigationListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_emotion_capture)
 
-        eventDetailsViewModel = getViewModel {
-            parametersOf(userViewModel.user.value ?: User())
+        eventViewModel = getViewModel {
+            parametersOf(
+                userViewModel.user.value
+                    ?: throw IllegalStateException("Kan geen gebeurtenis aanmaken als er geen gebruiker is aangemeld!")
+            )
         }
         takePhotoViewModel = getViewModel {
-            parametersOf(eventDetailsViewModel.event.value)
+            parametersOf(eventViewModel.event.value)
         }
         recordAudioViewModel = getViewModel {
-            parametersOf(eventDetailsViewModel.event.value)
+            parametersOf(eventViewModel.event.value)
         }
 
         // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
@@ -87,16 +88,12 @@ EditDetailFragment.EditDetailNavigationListener {
                         val builder = AlertDialog.Builder(this).apply {
                             setTitle(R.string.dialog_to_the_city_title)
                             setMessage(R.string.dialog_to_the_city_message)
-                            setPositiveButton(
-                                R.string.ok,
-                                DialogInterface.OnClickListener { dialog, _ ->
-                                    finish()
-                                })
-                            setNegativeButton(
-                                R.string.cancel,
-                                DialogInterface.OnClickListener { dialog, _ ->
-                                    dialog.cancel()
-                                })
+                            setPositiveButton(R.string.ok) { _, _ ->
+                                finish()
+                            }
+                            setNegativeButton(R.string.cancel) { dialog, _ ->
+                                dialog.cancel()
+                            }
                         }
                         builder.create()
                     }
@@ -107,16 +104,10 @@ EditDetailFragment.EditDetailNavigationListener {
         }
     }
 
-//    /**
-//     * Sets the [User] currently working with the application.
-//     */
-//    fun setUser(user: User) {
-//        _userViewModel.setUser(user)
-//        Log.i(TAG, "Set the user which username ${user.username}")
-//    }
-
     override fun startDrawEmotionAvatarFragment() {
-        replaceFragment(DrawEmotionAvatarFragment.newInstance(R.drawable.outline), R.id.emotionCapture_fragment_container)
+        replaceFragment(
+            DrawEmotionAvatarFragment.newInstance(R.drawable.outline), R.id.emotionCapture_fragment_container
+        )
     }
 
     override fun startTakePhotoFragment() {

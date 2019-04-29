@@ -22,7 +22,7 @@ class DetailMapperTest {
 
     @Test
     fun `should map to DetailEntity when Detail is given`() {
-        val model = DetailFactory.makeDetail()
+        val model = DetailFactory.makeRandomDetail()
         val entity = detailMapper.mapToEntity(model, event.uuid)
         assertEqualData(entity, model, event.uuid)
     }

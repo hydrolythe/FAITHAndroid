@@ -1,10 +1,12 @@
 package be.hogent.faith.faith.chooseAvatar.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -17,9 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.Avatar
-import be.hogent.faith.util.TAG
 import be.hogent.faith.faith.util.getRotation
+import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_avatar.avatar_rv_avatar
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -32,6 +33,8 @@ import org.koin.android.viewmodel.ext.android.viewModel
 const val SELECTION_ID = "avatarSelection"
 
 class AvatarFragment : Fragment() {
+
+    private var navigation: AvatarFragmentNavigationListener? = null
 
     /**
      * ViewModel used for the avatarItems.
@@ -58,7 +61,15 @@ class AvatarFragment : Fragment() {
 
         avatarViewModel.nextButtonClicked.observe(this, Observer<Any> {
             generateNewUser()
+            navigation!!.goToCityScreen()
         })
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is AvatarFragmentNavigationListener) {
+            navigation = context
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -129,11 +140,20 @@ class AvatarFragment : Fragment() {
 
         // Observe the changes in the list of the avatars and update the adapter
         avatarViewModel.avatarItems.observe(this, Observer<List<Avatar>> {
-                it?.let {
-                    avatarAdapter.avatarItems = it
-                    avatarAdapter.notifyDataSetChanged()
-                }
-            })
+            it?.let {
+                avatarAdapter.avatarItems = it
+                avatarAdapter.notifyDataSetChanged()
+            }
+        })
+
+        avatarViewModel.userSaveFailed.observe(this, Observer { errorMessage ->
+            Log.e(TAG, errorMessage)
+            Toast.makeText(context, R.string.toast_save_user_failed, Toast.LENGTH_LONG).show()
+        })
+
+        avatarViewModel.inputErrorMessageID.observe(this, Observer { errorMessageID ->
+            Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
+        })
     }
 
     fun generateNewUser() {
@@ -148,6 +168,10 @@ class AvatarFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         avatarTracker!!.onSaveInstanceState(outState)
+    }
+
+    interface AvatarFragmentNavigationListener {
+        fun goToCityScreen()
     }
 
     companion object {

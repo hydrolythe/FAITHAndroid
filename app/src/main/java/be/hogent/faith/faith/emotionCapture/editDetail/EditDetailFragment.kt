@@ -14,7 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsViewModel
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.util.replaceChildFragment
@@ -50,7 +50,7 @@ enum class DetailType {
 class EditDetailFragment : Fragment() {
     private var detailType: DetailType? = null
     private var navigation: EditDetailNavigationListener? = null
-    private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
+    private val eventViewModel: EventViewModel by sharedViewModel()
     private val editDetailViewModel: EditDetailViewModel by viewModel()
     private lateinit var editdetailBinding: be.hogent.faith.databinding.FragmentEditDetailBinding
     private var avatarOutlineResId: Int = NO_AVATAR
@@ -82,7 +82,7 @@ class EditDetailFragment : Fragment() {
         super.onStart()
         val width = Resources.getSystem().displayMetrics.widthPixels
         val height = Resources.getSystem().displayMetrics.heightPixels
-        eventDetailsViewModel.event.observe(this, Observer {
+        eventViewModel.event.observe(this, Observer {
             val image =
                 it.emotionAvatar ?: ContextCompat.getDrawable(this.context!!, avatarOutlineResId) as BitmapDrawable
             Glide.with(this)
@@ -98,7 +98,7 @@ class EditDetailFragment : Fragment() {
         editDetailViewModel.emotionAvatarButtonClicked.observe(this, Observer {
             navigation?.startDrawEmotionAvatarFragment()
         })
-        eventDetailsViewModel.updateEvent()
+        eventViewModel.updateEvent()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

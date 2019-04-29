@@ -11,7 +11,6 @@ import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
@@ -34,10 +33,8 @@ class UserEventRepositoryImplTest {
 
     private val userWithoutEvents = UserFactory.makeUser(0)
     private val userEntity = EntityFactory.makeUserEntity()
-    private val eventWithDetailsList = EntityFactory.makeEventWithDetailsList(5, userWithoutEvents.uuid)
     private val userWithoutEvents2 = UserFactory.makeUser(0)
     private val userEntity2 = EntityFactory.makeUserEntity()
-    private val eventList = EventFactory.makeEventList(5)
 
     @Before
     fun setUp() {
