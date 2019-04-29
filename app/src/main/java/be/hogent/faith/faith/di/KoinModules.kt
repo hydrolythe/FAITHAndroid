@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel
+import be.hogent.faith.faith.registerAvatar.AvatarViewModel
 import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
-import be.hogent.faith.faith.mainScreen.MainScreenViewModel
+import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
 import be.hogent.faith.faith.util.AvatarProvider
 import be.hogent.faith.faith.util.TempFileProvider
@@ -26,7 +26,7 @@ val appModule = module(override = true) {
     single { AndroidSchedulers.mainThread() }
 
     // ViewModels
-    viewModel { MainScreenViewModel() }
+    viewModel { CityScreenViewModel() }
     viewModel { (user: LiveData<User>, eventUuid: UUID?) -> EventViewModel(get(), get(), user, eventUuid) }
     viewModel { (user: LiveData<User>) -> EventViewModel(get(), get(), user) }
     viewModel { DrawEmotionViewModel() }

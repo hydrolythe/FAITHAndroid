@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.mainScreen
+package be.hogent.faith.faith.cityScreen
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -6,9 +6,9 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.util.TAG
 
 /**
- * ViewModel for the [MainScreenFragment].
+ * ViewModel for the [CityScreenFragment].
  */
-class MainScreenViewModel : ViewModel() {
+class CityScreenViewModel : ViewModel() {
 
     val firstLocation = SingleLiveEvent<Unit>()
     val secondLocation = SingleLiveEvent<Unit>()

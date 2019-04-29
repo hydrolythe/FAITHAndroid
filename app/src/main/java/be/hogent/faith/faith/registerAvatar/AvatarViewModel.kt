@@ -1,9 +1,10 @@
-package be.hogent.faith.faith.chooseAvatar.fragments
+package be.hogent.faith.faith.registerAvatar
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.AvatarProvider
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.CreateUserUseCase
@@ -12,7 +13,8 @@ import io.reactivex.disposables.CompositeDisposable
 /**
  * ViewModel for the Avatar selection screen
  */
-class AvatarViewModel(private val avatarRepository: AvatarProvider, private val createUserUseCase: CreateUserUseCase) : ViewModel() {
+class AvatarViewModel(private val avatarRepository: AvatarProvider, private val createUserUseCase: CreateUserUseCase) :
+    ViewModel() {
 
     /**
      * Private mutable live data object which keeps track of the AvatarItems.
@@ -27,8 +29,11 @@ class AvatarViewModel(private val avatarRepository: AvatarProvider, private val 
     val nextButtonClicked: LiveData<Unit>
         get() = _nextButtonClicked
 
-    private val _userSavedSuccessFully = SingleLiveEvent<Unit>()
-    val userSavedSuccessFully: LiveData<Unit>
+    /**
+     * Updates with the new User when it was saved successfully.
+     */
+    private val _userSavedSuccessFully = SingleLiveEvent<User>()
+    val userSavedSuccessFully: LiveData<User>
         get() = _userSavedSuccessFully
 
     private val _inputErrorMessageID = MutableLiveData<Int>()
@@ -83,9 +88,12 @@ class AvatarViewModel(private val avatarRepository: AvatarProvider, private val 
 
     fun nextButtonPressed() {
         if (avatarWasSelected() && userName.value != null) {
-            val params = CreateUserUseCase.Params(userName.value!!, _avatarItems.value?.get(_selectedItem.value!!.toInt())!!.imageName)
-            val disposable = createUserUseCase.execute(params).subscribe({
-                _userSavedSuccessFully.call()
+            val params = CreateUserUseCase.Params(
+                userName.value!!,
+                _avatarItems.value?.get(_selectedItem.value!!.toInt())!!.imageName
+            )
+            val disposable = createUserUseCase.execute(params).subscribe({ newUser ->
+                _userSavedSuccessFully.postValue(newUser)
             }, {
                 _userSaveFailed.postValue(it.localizedMessage)
             })

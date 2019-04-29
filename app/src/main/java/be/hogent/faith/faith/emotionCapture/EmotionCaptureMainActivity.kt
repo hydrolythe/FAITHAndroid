@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.ui
+package be.hogent.faith.faith.emotionCapture
 
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
@@ -71,7 +71,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
         // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
-            // val fragment = AvatarFragment.newInstance()
+            // val fragment = RegisterAvatarFragment.newInstance()
             val fragment = EventDetailsFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .add(R.id.emotionCapture_fragment_container, fragment)

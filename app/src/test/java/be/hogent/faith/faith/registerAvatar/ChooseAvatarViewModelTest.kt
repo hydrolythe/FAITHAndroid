@@ -1,10 +1,8 @@
-package be.hogent.faith.faith.chooseAvatar
+package be.hogent.faith.faith.registerAvatar
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.faith.TestUtils.getValue
-import be.hogent.faith.faith.chooseAvatar.fragments.Avatar
-import be.hogent.faith.faith.chooseAvatar.fragments.AvatarViewModel
 import be.hogent.faith.faith.util.AvatarProvider
 import be.hogent.faith.service.usecases.CreateUserUseCase
 import io.mockk.called

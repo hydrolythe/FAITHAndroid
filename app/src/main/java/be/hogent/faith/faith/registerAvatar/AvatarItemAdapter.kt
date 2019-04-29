@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.chooseAvatar.fragments
+package be.hogent.faith.faith.registerAvatar
 
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -11,10 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.avatar_rv_item.view.avatar_list_image
-import kotlinx.android.synthetic.main.avatar_rv_item.view.*
 
 /**
- * Adapter used by the Recyclerview which shows the Avatars in the [AvatarFragment].
+ * Adapter used by the Recyclerview which shows the Avatars in the [RegisterAvatarFragment].
  * The Recyclerview center their elements in the middle and snap the elements there.
  * The elements in the recyclerview are able to be selected.
  */

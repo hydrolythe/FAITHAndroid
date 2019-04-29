@@ -27,7 +27,30 @@ class CreateUserUseCaseTest {
     }
 
     @Test
-    fun createUserUC_userIsPassedToRepo() {
+    fun createUserUC_normal_newUserReturned() {
+        // Arrange
+        val userArg = slot<User>()
+        every { repository.insert(capture(userArg)) } returns Completable.complete()
+
+        val params = CreateUserUseCase.Params("username", "avatar")
+
+        // Act
+        val result = createUserUseCase.buildUseCaseObservable(params)
+
+        // Assert
+        result.test()
+            .assertNoErrors()
+            .assertValue { newUser ->
+                newUser.username == "username"
+            }
+
+        Assert.assertEquals(params.username, userArg.captured.username)
+        // TODO: add Avatar test
+//        Assert.assertEquals(params.avatar, userArg.captured.avatar)
+    }
+
+    @Test
+    fun createUserUC_normal_userIsPassedToRepo() {
         // Arrange
         val userArg = slot<User>()
         every { repository.insert(capture(userArg)) } returns Completable.complete()

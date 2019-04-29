@@ -63,12 +63,13 @@
     <string name="dialog_to_the_city_message">Ben je zeker? Alle wijzigingen worden niet bijgehouden?</string>
     <string name="ok">@android:string/ok</string>
     <string name="cancel">@android:string/cancel</string>
-    <string name="avatarNotSet">Vul naam in en selecteer een avatar</string>
+    <string name="avatarNotSet">Vul je naam in en selecteer een avatar</string>
     <string name="toast_save_user_failed">Het opslaan van de nieuwe gebruiker is gefaald.</string>
     <string name="toast_event_no_title">Je moet een titel geven aan je gebeurtenis.</string>
     <string name="lbl_save_event_notes">Notities</string>
     <string name="lbl_save_event_date">Dag</string>
     <string name="lbl_save_event_title">Titel</string>
     <string name="lbl_back">Terug</string>
-    <string name="emotionCaptation">Emotiecaptatie</string>
+    <string name="lbl_activity_emotionCapture">Emotiecaptatie</string>
+    <string name="lbl_activity_city">De Stad</string>
 </resources>
