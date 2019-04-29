@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
-import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionViewModel
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
@@ -16,9 +16,12 @@ import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
+import be.hogent.faith.faith.registerAvatar.UserViewModel
 import be.hogent.faith.faith.util.replaceFragment
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_drawer_layout
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_nav_view
+import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -46,7 +49,8 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     private lateinit var eventViewModel: EventViewModel
 
     private lateinit var takePhotoViewModel: TakePhotoViewModel
-    private val userViewModel by viewModel<UserViewModel>()
+
+    private val userViewModel by inject<UserViewModel>(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
 
     lateinit var recordAudioViewModel: RecordAudioViewModel
 
@@ -55,11 +59,9 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_emotion_capture)
 
         eventViewModel = getViewModel {
-            parametersOf(
-                userViewModel.user.value
-                    ?: throw IllegalStateException("Kan geen gebeurtenis aanmaken als er geen gebruiker is aangemeld!")
-            )
+            parametersOf(userViewModel.user)
         }
+
         takePhotoViewModel = getViewModel {
             parametersOf(eventViewModel.event.value)
         }

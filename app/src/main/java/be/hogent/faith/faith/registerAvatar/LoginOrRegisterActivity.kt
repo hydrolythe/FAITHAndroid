@@ -4,18 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
-import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenActivity
-import org.koin.android.viewmodel.ext.android.viewModel
+import be.hogent.faith.faith.di.KoinModules
+import org.koin.android.ext.android.getKoin
 
 class LoginOrRegisterActivity : AppCompatActivity(),
     RegisterAvatarFragment.AvatarFragmentNavigationListener {
 
-    private val userViewModel by viewModel<UserViewModel>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Must happen before creating the RegisterFragment because it uses the scope
+        createScopedUserViewModel()
 
         // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
@@ -26,6 +27,11 @@ class LoginOrRegisterActivity : AppCompatActivity(),
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
+
+    }
+
+    private fun createScopedUserViewModel() {
+        getKoin().createScope(KoinModules.USER_SCOPE_ID)
     }
 
     override fun goToCityScreen() {
@@ -33,4 +39,3 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         startActivity(intent)
     }
 }
-
