@@ -50,7 +50,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
 
     private lateinit var takePhotoViewModel: TakePhotoViewModel
 
-    private val userViewModel by inject<UserViewModel>(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val userViewModel by inject<UserViewModel>()
 
     lateinit var recordAudioViewModel: RecordAudioViewModel
 

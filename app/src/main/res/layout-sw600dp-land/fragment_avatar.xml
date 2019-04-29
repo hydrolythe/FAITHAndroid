@@ -35,7 +35,7 @@
             app:layout_constraintTop_toBottomOf="@+id/avatar_tv_title" />
 
         <EditText
-            android:id="@+id/avatar_txt_name"
+            android:id="@+id/txt_avatar_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"

@@ -99,7 +99,7 @@ class AvatarViewModel(private val avatarRepository: AvatarProvider, private val 
             })
             disposables.add(disposable)
         } else {
-            _inputErrorMessageID.postValue(R.string.avatarNotSet)
+            _inputErrorMessageID.postValue(R.string.txt_error_userNameOrAvatarNotSet)
             return
         }
         _nextButtonClicked.call()
