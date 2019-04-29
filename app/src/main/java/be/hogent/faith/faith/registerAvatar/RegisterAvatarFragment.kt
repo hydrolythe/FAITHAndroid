@@ -19,10 +19,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
+import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.util.getRotation
 import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_avatar.avatar_rv_avatar
-import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -42,7 +44,7 @@ class RegisterAvatarFragment : Fragment() {
      */
     private val avatarViewModel: AvatarViewModel by viewModel()
 
-    private val userViewModel: UserViewModel by sharedViewModel()
+    private val userViewModel by inject<UserViewModel>(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
 
     /**
      * Object used to track the selection on the Recyclerview
@@ -63,7 +65,6 @@ class RegisterAvatarFragment : Fragment() {
         configureRecyclerViewAdapter()
 
         registerListeners()
-
     }
 
     private fun registerListeners() {
@@ -164,7 +165,6 @@ class RegisterAvatarFragment : Fragment() {
                 avatarAdapter.notifyDataSetChanged()
             }
         })
-
     }
 
     /**

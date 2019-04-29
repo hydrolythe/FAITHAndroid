@@ -13,6 +13,7 @@ class CityScreenViewModel : ViewModel() {
     val firstLocation = SingleLiveEvent<Unit>()
     val secondLocation = SingleLiveEvent<Unit>()
     val thirdLocation = SingleLiveEvent<Unit>()
+    val logOutClicked = SingleLiveEvent<Unit>()
 
     fun firstLocationClicked() {
         Log.i(TAG, "First location clicked")
@@ -27,5 +28,10 @@ class CityScreenViewModel : ViewModel() {
     fun thirdLocationClicked() {
         Log.i(TAG, "third location clicked")
         thirdLocation.call()
+    }
+
+    //TODO: link to button
+    fun onLogOutClicked() {
+        logOutClicked.call()
     }
 }

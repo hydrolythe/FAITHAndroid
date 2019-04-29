@@ -2,6 +2,7 @@ package be.hogent.faith.faith.registerAvatar
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.TestUtils.getValue
 import be.hogent.faith.faith.util.AvatarProvider
 import be.hogent.faith.service.usecases.CreateUserUseCase
@@ -10,7 +11,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.Completable
+import io.reactivex.Single
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -60,7 +61,7 @@ class ChooseAvatarViewModelTest {
         val params = slot<CreateUserUseCase.Params>()
         viewModel.setSelectedItem(selection.toLong())
         viewModel.userName.postValue(name)
-        every { createUserUseCase.execute(capture(params)) } returns Completable.complete()
+        every { createUserUseCase.execute(capture(params)) } returns Single.just(mockk())
 
         // Act
         viewModel.nextButtonPressed()
@@ -79,10 +80,10 @@ class ChooseAvatarViewModelTest {
         val params = slot<CreateUserUseCase.Params>()
         viewModel.setSelectedItem(selection.toLong())
         viewModel.userName.postValue(name)
-        every { createUserUseCase.execute(capture(params)) } returns Completable.complete()
+        every { createUserUseCase.execute(capture(params)) } returns Single.just(mockk())
 
         val failObserver = mockk<Observer<String>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
+        val successObserver = mockk<Observer<User>>(relaxed = true)
         viewModel.userSaveFailed.observeForever(failObserver)
         viewModel.userSavedSuccessFully.observeForever(successObserver)
 
@@ -100,10 +101,10 @@ class ChooseAvatarViewModelTest {
         val params = slot<CreateUserUseCase.Params>()
         viewModel.setSelectedItem(selection.toLong())
         viewModel.userName.postValue(name)
-        every { createUserUseCase.execute(capture(params)) } returns Completable.error(IOException())
+        every { createUserUseCase.execute(capture(params)) } returns Single.error(IOException())
 
         val failObserver = mockk<Observer<String>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
+        val successObserver = mockk<Observer<User>>(relaxed = true)
         viewModel.userSaveFailed.observeForever(failObserver)
         viewModel.userSavedSuccessFully.observeForever(successObserver)
 

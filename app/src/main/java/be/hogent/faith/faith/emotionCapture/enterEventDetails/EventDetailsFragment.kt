@@ -12,10 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
-import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
 import be.hogent.faith.util.TAG
-import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import java.util.UUID
 
@@ -25,7 +23,7 @@ class EventDetailsFragment : Fragment() {
 
     private var navigation: EventDetailsNavigationListener? = null
 
-    private lateinit var userViewModel: UserViewModel
+
     private val eventViewModel: EventViewModel by sharedViewModel()
 
     private lateinit var eventDetailsBinding: be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
@@ -36,7 +34,6 @@ class EventDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userViewModel = getViewModel()
 
         // When an UUID is given the [eventViewModel] should be updated to show the given event's state.
         arguments?.getSerializable(ARG_EVENTUUID)?.let {

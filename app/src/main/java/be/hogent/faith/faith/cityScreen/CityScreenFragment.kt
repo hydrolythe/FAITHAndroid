@@ -14,8 +14,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.databinding.FragmentMainScreenBinding
+import be.hogent.faith.databinding.FragmentCityScreenBinding
+import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.util.TAG
+import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -31,12 +33,12 @@ class CityScreenFragment : Fragment() {
 
     private var navigation: CityScreenNavigationListener? = null
     private val cityScreenViewModel: CityScreenViewModel by viewModel()
-    private lateinit var mainScreenBinding: FragmentMainScreenBinding
+    private lateinit var mainScreenBinding: FragmentCityScreenBinding
     private lateinit var avatarView: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mainScreenBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_city_screen, container, false)
-        mainScreenBinding.mainScreenViewModel = cityScreenViewModel
+        mainScreenBinding.cityScreenViewModel = cityScreenViewModel
         mainScreenBinding.lifecycleOwner = this
         avatarView = mainScreenBinding.imageMainAvatar
         return mainScreenBinding.root
@@ -44,6 +46,10 @@ class CityScreenFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        registerListeners()
+    }
+
+    private fun registerListeners() {
         cityScreenViewModel.firstLocation.observe(this, Observer {
             moveAvatarToLocationOf(mainScreenBinding.mainFirstLocation) {}
         })
@@ -52,6 +58,12 @@ class CityScreenFragment : Fragment() {
         })
         cityScreenViewModel.thirdLocation.observe(this, Observer {
             moveAvatarToLocationOf(mainScreenBinding.mainThirdLocation) { navigation?.startOverviewEventsFragment() }
+        })
+
+        cityScreenViewModel.logOutClicked.observe(this, Observer {
+            // Close the user scope so a new one is created when logging in with another user
+            getKoin().getScope(KoinModules.USER_SCOPE_ID).close()
+            // TODO: go back to login Screen
         })
     }
 

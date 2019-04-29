@@ -2,8 +2,6 @@ package be.hogent.faith.domain
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import io.mockk.every
-import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
