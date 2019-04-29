@@ -7,6 +7,7 @@ import be.hogent.faith.domain.models.User
 
 /**
  * Represents the [ViewModel] for the [User] throughout the the application.
+ * It should be injected only using the scope specified in the KoinModules file.
  */
 class UserViewModel : ViewModel() {
 

@@ -41,7 +41,7 @@ val appModule = module(override = true) {
     viewModel { (event: Event) -> RecordAudioViewModel(get(), event) }
     viewModel { (event: Event) -> TakePhotoViewModel(get(), event) }
 
-    // UserViewModel is scoped because it is used over multiple activities.
+    // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.
     scope(USER_SCOPE_ID) {
         UserViewModel()
