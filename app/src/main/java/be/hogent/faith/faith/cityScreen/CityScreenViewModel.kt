@@ -30,7 +30,7 @@ class CityScreenViewModel : ViewModel() {
         thirdLocation.call()
     }
 
-    //TODO: link to button
+    // TODO: link to button
     fun onLogOutClicked() {
         logOutClicked.call()
     }

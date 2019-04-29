@@ -19,11 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.util.getRotation
 import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_avatar.avatar_rv_avatar
-import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 

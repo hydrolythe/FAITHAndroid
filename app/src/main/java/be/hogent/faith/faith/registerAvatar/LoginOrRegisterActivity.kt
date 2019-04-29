@@ -27,7 +27,6 @@ class LoginOrRegisterActivity : AppCompatActivity(),
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
-
     }
 
     private fun createScopedUserViewModel() {

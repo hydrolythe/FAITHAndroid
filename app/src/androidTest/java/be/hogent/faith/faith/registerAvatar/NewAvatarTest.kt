@@ -19,14 +19,12 @@ class NewAvatarTest {
     @get:Rule
     var activityScenarioRule = ActivityScenarioRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java)
 
-
     @Test
     fun checkCanEnterName() {
         closeSoftKeyboard()
         onView(withId(R.id.txt_avatar_name)).perform(typeText("Reinhard"))
         closeSoftKeyboard()
     }
-
 
     @Test
     fun registerAvatarFragment_noNameEntered_showsErrorWhenGoingToCity() {
