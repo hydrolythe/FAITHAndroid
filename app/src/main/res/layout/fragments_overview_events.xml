@@ -19,7 +19,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/avatar_txt_name"
+        app:layout_constraintTop_toBottomOf="@+id/txt_avatar_name"
         tools:listitem="@layout/avatar_rv_item" />
 
 

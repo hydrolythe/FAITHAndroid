@@ -34,6 +34,11 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         getKoin().createScope(KoinModules.USER_SCOPE_ID)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        getKoin().getScope(KoinModules.USER_SCOPE_ID).close()
+    }
+
     override fun goToCityScreen() {
         val intent = Intent(this, CityScreenActivity::class.java)
         startActivity(intent)

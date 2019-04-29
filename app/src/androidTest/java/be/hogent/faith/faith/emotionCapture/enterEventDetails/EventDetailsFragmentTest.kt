@@ -1,4 +1,4 @@
-package faith.emotionCapture.enterEventDetails
+package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
@@ -67,7 +67,7 @@ class EventDetailsFragmentTest {
 
     @Test
     fun eventDetailsFragment_enterEventTitle() {
-        onView(withId(R.id.txt_save_event_title)).perform(typeText("Titel van Event"))
+        onView(withId(R.id.txt_event_details_title)).perform(typeText("Titel van Event"))
     }
 
     @Test

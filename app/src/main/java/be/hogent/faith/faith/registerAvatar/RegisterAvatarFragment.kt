@@ -44,7 +44,7 @@ class RegisterAvatarFragment : Fragment() {
      */
     private val avatarViewModel: AvatarViewModel by viewModel()
 
-    private val userViewModel by inject<UserViewModel>(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val userViewModel by inject<UserViewModel>()
 
     /**
      * Object used to track the selection on the Recyclerview
