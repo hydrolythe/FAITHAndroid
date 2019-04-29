@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.mainScreen
+package be.hogent.faith.faith.cityScreen
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -23,20 +23,20 @@ import org.koin.android.viewmodel.ext.android.viewModel
  * This screen allows the user to click on several pre-defined areas.
  * Upon clicking an area the corresponding screen will open.
  */
-class MainScreenFragment : Fragment() {
+class CityScreenFragment : Fragment() {
 
     companion object {
-        fun newInstance() = MainScreenFragment()
+        fun newInstance() = CityScreenFragment()
     }
 
-    private var navigation: MainScreenNavigationListener? = null
-    private val mainScreenViewModel: MainScreenViewModel by viewModel()
+    private var navigation: CityScreenNavigationListener? = null
+    private val cityScreenViewModel: CityScreenViewModel by viewModel()
     private lateinit var mainScreenBinding: FragmentMainScreenBinding
     private lateinit var avatarView: View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mainScreenBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_main_screen, container, false)
-        mainScreenBinding.mainScreenViewModel = mainScreenViewModel
+        mainScreenBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_city_screen, container, false)
+        mainScreenBinding.mainScreenViewModel = cityScreenViewModel
         mainScreenBinding.lifecycleOwner = this
         avatarView = mainScreenBinding.imageMainAvatar
         return mainScreenBinding.root
@@ -44,13 +44,13 @@ class MainScreenFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        mainScreenViewModel.firstLocation.observe(this, Observer {
+        cityScreenViewModel.firstLocation.observe(this, Observer {
             moveAvatarToLocationOf(mainScreenBinding.mainFirstLocation) {}
         })
-        mainScreenViewModel.secondLocation.observe(this, Observer {
-            moveAvatarToLocationOf(mainScreenBinding.mainSecondLocation) { navigation?.startEventDetailsFragment() }
+        cityScreenViewModel.secondLocation.observe(this, Observer {
+            moveAvatarToLocationOf(mainScreenBinding.mainSecondLocation) { navigation?.startEmotionCapture() }
         })
-        mainScreenViewModel.thirdLocation.observe(this, Observer {
+        cityScreenViewModel.thirdLocation.observe(this, Observer {
             moveAvatarToLocationOf(mainScreenBinding.mainThirdLocation) { navigation?.startOverviewEventsFragment() }
         })
     }
@@ -62,7 +62,7 @@ class MainScreenFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is MainScreenNavigationListener) {
+        if (context is CityScreenNavigationListener) {
             navigation = context
         }
     }
@@ -96,8 +96,8 @@ class MainScreenFragment : Fragment() {
         }
     }
 
-    interface MainScreenNavigationListener {
-        fun startEventDetailsFragment()
+    interface CityScreenNavigationListener {
+        fun startEmotionCapture()
         fun startOverviewEventsFragment()
     }
 }

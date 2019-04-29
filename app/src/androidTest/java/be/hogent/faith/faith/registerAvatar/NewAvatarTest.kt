@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.chooseAvatar
+package be.hogent.faith.faith.registerAvatar
 
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
@@ -7,7 +7,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import be.hogent.faith.R
-import be.hogent.faith.faith.ui.MainActivity
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,7 +15,7 @@ import org.junit.runner.RunWith
 class NewAvatarTest {
 
     @get:Rule
-    var activityScenarioRule = ActivityScenarioRule<MainActivity>(MainActivity::class.java)
+    var activityScenarioRule = ActivityScenarioRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java)
 
     @Test
     fun checkCanEnterName() {

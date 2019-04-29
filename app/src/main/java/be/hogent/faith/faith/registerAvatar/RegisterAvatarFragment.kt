@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.chooseAvatar.fragments
+package be.hogent.faith.faith.registerAvatar
 
 import android.content.Context
 import android.os.Bundle
@@ -22,17 +22,18 @@ import be.hogent.faith.R
 import be.hogent.faith.faith.util.getRotation
 import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_avatar.avatar_rv_avatar
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
- * A [Fragment] subclass which allows the user to choose an AvatarItem and a Backpack.
+ * A [Fragment] subclass which allows the user to register a new Avatar.
  *
- * Use the [AvatarFragment.newInstance] factory method to create an instance of this fragment.
+ * Use the [RegisterAvatarFragment.newInstance] factory method to create an instance of this fragment.
  *
  */
 const val SELECTION_ID = "avatarSelection"
 
-class AvatarFragment : Fragment() {
+class RegisterAvatarFragment : Fragment() {
 
     private var navigation: AvatarFragmentNavigationListener? = null
 
@@ -40,6 +41,8 @@ class AvatarFragment : Fragment() {
      * ViewModel used for the avatarItems.
      */
     private val avatarViewModel: AvatarViewModel by viewModel()
+
+    private val userViewModel: UserViewModel by sharedViewModel()
 
     /**
      * Object used to track the selection on the Recyclerview
@@ -50,18 +53,35 @@ class AvatarFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState != null) {
-            // Of the Fragment is still in memory restore the state
+            // If the Fragment is still in memory restore the state
             avatarTracker?.onRestoreInstanceState(savedInstanceState)
         }
     }
 
     override fun onStart() {
         super.onStart()
-        registerAdapters()
+        configureRecyclerViewAdapter()
 
+        registerListeners()
+
+    }
+
+    private fun registerListeners() {
         avatarViewModel.nextButtonClicked.observe(this, Observer<Any> {
-            generateNewUser()
             navigation!!.goToCityScreen()
+        })
+
+        avatarViewModel.userSaveFailed.observe(this, Observer { errorMessage ->
+            Log.e(TAG, errorMessage)
+            Toast.makeText(context, R.string.toast_save_user_failed, Toast.LENGTH_LONG).show()
+        })
+
+        avatarViewModel.userSavedSuccessFully.observe(this, Observer { newUser ->
+            userViewModel.setUser(newUser)
+        })
+
+        avatarViewModel.inputErrorMessageID.observe(this, Observer { errorMessageID ->
+            Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
         })
     }
 
@@ -79,10 +99,7 @@ class AvatarFragment : Fragment() {
         return binding.root
     }
 
-    /**
-     * Changes the orientation of the recyclerviews, depending on the orientation of the device;
-     */
-    private fun setOrientation() {
+    private fun setRecyclerViewOrientation() {
         // Check here so we can use FragmentScenario to test
         val orientation = if (activity is AppCompatActivity) {
             (activity as AppCompatActivity).getRotation()
@@ -101,15 +118,17 @@ class AvatarFragment : Fragment() {
         }
     }
 
-    /**
-     * Registers the adapters for the RecyclerViews.
+    /*
      * Checks for the orientation of the device and sets the LayoutManager for the Adapter based on this.
      */
-    private fun registerAdapters() {
+    private fun configureRecyclerViewAdapter() {
         val avatarAdapter = AvatarItemAdapter()
         avatar_rv_avatar.adapter = avatarAdapter
+
         LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
-        setOrientation()
+
+        setRecyclerViewOrientation()
+
         avatarTracker = SelectionTracker.Builder<Long>(
             SELECTION_ID,
             avatar_rv_avatar,
@@ -146,18 +165,6 @@ class AvatarFragment : Fragment() {
             }
         })
 
-        avatarViewModel.userSaveFailed.observe(this, Observer { errorMessage ->
-            Log.e(TAG, errorMessage)
-            Toast.makeText(context, R.string.toast_save_user_failed, Toast.LENGTH_LONG).show()
-        })
-
-        avatarViewModel.inputErrorMessageID.observe(this, Observer { errorMessageID ->
-            Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
-        })
-    }
-
-    fun generateNewUser() {
-        Log.i(TAG, "Set the user")
     }
 
     /**
@@ -180,7 +187,8 @@ class AvatarFragment : Fragment() {
          * this fragment using the provided parameters.
          *
          */
-        fun newInstance() =
-            AvatarFragment()
+        fun newInstance(): RegisterAvatarFragment {
+            return RegisterAvatarFragment()
+        }
     }
 }

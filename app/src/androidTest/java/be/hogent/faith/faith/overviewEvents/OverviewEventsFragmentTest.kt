@@ -9,7 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import be.hogent.faith.R
-import be.hogent.faith.faith.ui.MainActivity
+import be.hogent.faith.faith.registerAvatar.LoginOrRegisterActivity
 import be.hogent.faith.faith.util.NavigationUtil
 import org.junit.Before
 import org.junit.Rule
@@ -22,7 +22,7 @@ class OverviewEventsFragmentTest {
     private lateinit var uiDevice: UiDevice
 
     @get:Rule
-    var activityScenarioRule = ActivityScenarioRule<MainActivity>(MainActivity::class.java)
+    var activityScenarioRule = ActivityScenarioRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java)
 
     @Before
     fun goToScreen() {

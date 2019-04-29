@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.chooseAvatar.fragments
+package be.hogent.faith.faith.registerAvatar
 
 /**
  * Model class for the AvatarItem.

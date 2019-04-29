@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.enterEventDetails
+package faith.emotionCapture.enterEventDetails
 
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
@@ -13,7 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import be.hogent.faith.R
-import be.hogent.faith.faith.ui.MainActivity
+import be.hogent.faith.faith.registerAvatar.LoginOrRegisterActivity
 import be.hogent.faith.faith.util.NavigationUtil
 import be.hogent.faith.faith.util.ToastMatcher
 import be.hogent.faith.faith.util.allowPermissionsIfNeeded
@@ -26,7 +26,7 @@ import org.junit.runner.RunWith
 class EventDetailsFragmentTest {
 
     @get:Rule
-    var activityScenarioRule = ActivityScenarioRule<MainActivity>(MainActivity::class.java)
+    var activityScenarioRule = ActivityScenarioRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java)
 
     private lateinit var uiDevice: UiDevice
 
@@ -38,52 +38,52 @@ class EventDetailsFragmentTest {
 
     @Test
     fun eventDetailsFragment_buttonsOpenCorrectScreen() {
-        onView(withId(be.hogent.faith.R.id.btn_event_details_audio)).perform(click())
+        onView(withId(R.id.btn_event_details_audio)).perform(click())
         allowPermissionsIfNeeded(uiDevice)
-        onView(withId(be.hogent.faith.R.id.screen_record_audio)).check(matches(isDisplayed()))
+        onView(withId(R.id.screen_record_audio)).check(matches(isDisplayed()))
         pressBack()
 
-        onView(withId(be.hogent.faith.R.id.btn_event_details_camera)).perform(click())
+        onView(withId(R.id.btn_event_details_camera)).perform(click())
         allowPermissionsIfNeeded(uiDevice)
-        onView(withId(be.hogent.faith.R.id.screen_take_photo)).check(matches(isDisplayed()))
+        onView(withId(R.id.screen_take_photo)).check(matches(isDisplayed()))
         pressBack()
 
-        onView(withId(be.hogent.faith.R.id.btn_event_details_drawing)).perform(click())
+        onView(withId(R.id.btn_event_details_drawing)).perform(click())
         // TODO: Enable once drawing has been implemented
 //        pressBack()
 
-        onView(withId(be.hogent.faith.R.id.btn_event_details_text)).perform(click())
+        onView(withId(R.id.btn_event_details_text)).perform(click())
         // TODO: Enable once text has been implemented
 //        pressBack()
 
-        onView(withId(be.hogent.faith.R.id.btn_event_details_gotoEmotionAvatar)).perform(click())
-        onView(withId(be.hogent.faith.R.id.screen_draw_avatar)).check(matches(isDisplayed()))
+        onView(withId(R.id.btn_event_details_gotoEmotionAvatar)).perform(click())
+        onView(withId(R.id.screen_draw_avatar)).check(matches(isDisplayed()))
         pressBack()
 
-        onView(withId(be.hogent.faith.R.id.btn_event_details_send)).perform(click())
-        onView(withId(be.hogent.faith.R.id.screen_save_event)).check(matches(isDisplayed()))
+        onView(withId(R.id.btn_event_details_send)).perform(click())
+        onView(withId(R.id.screen_save_event)).check(matches(isDisplayed()))
         pressBack()
     }
 
     @Test
     fun eventDetailsFragment_enterEventTitle() {
-        onView(withId(R.id.txt_event_details_event_title)).perform(typeText("Titel van Event"))
+        onView(withId(R.id.txt_save_event_title)).perform(typeText("Titel van Event"))
     }
 
     @Test
     fun eventDetailsFragment_saveEventWithoutTitleEntered_errorMessage() {
-        onView(withId(be.hogent.faith.R.id.btn_event_details_send)).perform(click())
-        onView(withId(be.hogent.faith.R.id.btn_save_event_save)).perform(click())
+        onView(withId(R.id.btn_event_details_send)).perform(click())
+        onView(withId(R.id.btn_save_event_save)).perform(click())
         ToastMatcher.isToastMessageDisplayed(R.string.toast_event_no_title)
     }
 
     @Test
     fun eventDetailsFragment_saveEvent_showsSuccess() {
-        onView(withId(be.hogent.faith.R.id.btn_event_details_send)).perform(click())
-        onView(withId(be.hogent.faith.R.id.txt_save_event_title)).perform(typeText("Titel van Event"))
-        onView(withId(be.hogent.faith.R.id.txt_save_event_notes)).perform(typeText("Notities notities notities"))
+        onView(withId(R.id.btn_event_details_send)).perform(click())
+        onView(withId(R.id.txt_save_event_title)).perform(typeText("Titel van Event"))
+        onView(withId(R.id.txt_save_event_notes)).perform(typeText("Notities notities notities"))
         closeSoftKeyboard()
-        onView(withId(be.hogent.faith.R.id.btn_save_event_save)).perform(click())
+        onView(withId(R.id.btn_save_event_save)).perform(click())
         ToastMatcher.isToastMessageDisplayed(R.string.toast_save_event_success)
     }
 }

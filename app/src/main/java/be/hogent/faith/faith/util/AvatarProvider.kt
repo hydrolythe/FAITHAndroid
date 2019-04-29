@@ -1,7 +1,7 @@
 package be.hogent.faith.faith.util
 
 import android.content.Context
-import be.hogent.faith.faith.chooseAvatar.fragments.Avatar
+import be.hogent.faith.faith.registerAvatar.Avatar
 
 class AvatarProvider(private val context: Context) {
 
