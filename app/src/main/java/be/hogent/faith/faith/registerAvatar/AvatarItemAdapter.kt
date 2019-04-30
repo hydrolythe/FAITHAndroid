@@ -112,8 +112,8 @@ class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
     }
 
     /**
-     * Class which return the keys for a certain element in the Recyclerview. In this case
-     * we are still using the position in the RV. TODO: update to a Uri implementation.
+     * Class which return the keys for a certain element in the Recyclerview.
+     * In this case we are still using the position in the RV.
      */
     internal class KeyProvider(adapter: RecyclerView.Adapter<*>) : ItemKeyProvider<Long>(ItemKeyProvider.SCOPE_MAPPED) {
 

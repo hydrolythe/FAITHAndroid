@@ -6,7 +6,6 @@ object UserFactory {
     fun makeUser(numberOfEvents: Int = 5): User {
         val user = User(
             username = DataFactory.randomString(),
-            // TODO: add avatar
             avatarName = DataFactory.randomString(),
             uuid = DataFactory.randomUUID()
         )

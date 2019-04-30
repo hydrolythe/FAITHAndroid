@@ -72,7 +72,7 @@ class RegisterAvatarFragment : Fragment() {
 
         avatarViewModel.userSaveFailed.observe(this, Observer { errorMessage ->
             Log.e(TAG, errorMessage)
-            Toast.makeText(context, R.string.toast_save_user_failed, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, R.string.error_save_user_failed, Toast.LENGTH_LONG).show()
         })
 
         avatarViewModel.userSavedSuccessFully.observe(this, Observer { newUser ->

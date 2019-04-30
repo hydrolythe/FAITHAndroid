@@ -70,7 +70,6 @@ class TakeEventPhotoUseCaseTest {
         val resultingDetail = event.details.first()
         assertTrue(resultingDetail is PictureDetail)
         assertEquals(resultingDetail.name, photoName)
-        // TODO: add check for recordingName
     }
 
     @Test
