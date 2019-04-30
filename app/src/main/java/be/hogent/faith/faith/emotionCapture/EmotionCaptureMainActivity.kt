@@ -124,7 +124,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     }
 
     override fun startMakeDrawingFragment() {
-        replaceFragment(MakeDrawingFragment.newInstance(), R.id.fragment_container)
+        replaceFragment(MakeDrawingFragment.newInstance(), R.id.emotionCapture_fragment_container)
     }
 
     override fun startEventDetail(type: DetailType) {
