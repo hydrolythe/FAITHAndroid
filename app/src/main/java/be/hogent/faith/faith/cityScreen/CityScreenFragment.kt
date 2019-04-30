@@ -51,13 +51,13 @@ class CityScreenFragment : Fragment() {
 
     private fun registerListeners() {
         cityScreenViewModel.firstLocation.observe(this, Observer {
-            moveAvatarToLocationOf(mainScreenBinding.mainFirstLocation) {}
+            moveAvatarToLocationOf(mainScreenBinding.cityFirstLocation) {}
         })
         cityScreenViewModel.secondLocation.observe(this, Observer {
-            moveAvatarToLocationOf(mainScreenBinding.mainSecondLocation) { navigation?.startEmotionCapture() }
+            moveAvatarToLocationOf(mainScreenBinding.citySecondLocation) { navigation?.startEmotionCapture() }
         })
         cityScreenViewModel.thirdLocation.observe(this, Observer {
-            moveAvatarToLocationOf(mainScreenBinding.mainThirdLocation) { navigation?.startOverviewEventsFragment() }
+            moveAvatarToLocationOf(mainScreenBinding.cityThirdLocation) { navigation?.startOverviewEventsFragment() }
         })
 
         cityScreenViewModel.logOutClicked.observe(this, Observer {

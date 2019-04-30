@@ -80,7 +80,7 @@
                 app:layout_constraintGuide_percent="0.57" />
 
             <View
-                android:id="@+id/main_first_location"
+                android:id="@+id/city_first_location"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:onClick="@{() -> cityScreenViewModel.firstLocationClicked()}"
@@ -90,7 +90,7 @@
                 app:layout_constraintTop_toTopOf="@+id/guide_loc1_top" />
 
             <View
-                android:id="@+id/main_third_location"
+                android:id="@+id/city_third_location"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginEnd="8dp"
@@ -129,7 +129,7 @@
                 app:layout_constraintGuide_percent="0.85" />
 
             <View
-                android:id="@+id/main_second_location"
+                android:id="@+id/city_second_location"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="#00000000"
