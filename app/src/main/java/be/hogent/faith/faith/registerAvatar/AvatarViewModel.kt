@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.registerAvatar
 
-import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
