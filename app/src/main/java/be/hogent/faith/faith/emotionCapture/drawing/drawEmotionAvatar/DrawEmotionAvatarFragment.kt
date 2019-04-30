@@ -19,17 +19,17 @@ import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 /**
- * Key for this Fragment's [Bundle] to hold the resource ID pointing to the outline drawing of the avatar.
+ * Key for this Fragment's [Bundle] to hold the resource ID pointing to the outline drawing of the avatarName.
  */
 private const val ARG_AVATAR_RES_ID = "avatarResId"
 
 /**
- * Constant for avatarOutlineResId to indicate that no avatar was passed as an argument for this fragment.
+ * Constant for avatarOutlineResId to indicate that no avatarName was passed as an argument for this fragment.
  */
 private const val NO_AVATAR = -1
 
 /**
- * Fragment that allows the user to color in the outline of their avatar according to their emotional state.
+ * Fragment that allows the user to color in the outline of their avatarName according to their emotional state.
  */
 class DrawEmotionAvatarFragment : DrawFragment() {
     override val drawView: DrawView
@@ -40,7 +40,7 @@ class DrawEmotionAvatarFragment : DrawFragment() {
     private lateinit var drawAvatarBinding: FragmentDrawAvatarBinding
 
     /**
-     * The resource ID for the avatar's outline, which will be used as a background for the drawing.
+     * The resource ID for the avatarName's outline, which will be used as a background for the drawing.
      */
     private var avatarOutlineResId: Int = NO_AVATAR
 

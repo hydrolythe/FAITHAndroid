@@ -32,7 +32,7 @@ class CreateUserUseCaseTest {
         val userArg = slot<User>()
         every { repository.insert(capture(userArg)) } returns Completable.complete()
 
-        val params = CreateUserUseCase.Params("username", "avatar")
+        val params = CreateUserUseCase.Params("username", "avatarName")
 
         // Act
         val result = createUserUseCase.buildUseCaseObservable(params)
@@ -46,7 +46,7 @@ class CreateUserUseCaseTest {
 
         Assert.assertEquals(params.username, userArg.captured.username)
         // TODO: add Avatar test
-//        Assert.assertEquals(params.avatar, userArg.captured.avatar)
+//        Assert.assertEquals(params.avatarName, userArg.captured.avatarName)
     }
 
     @Test
@@ -55,7 +55,7 @@ class CreateUserUseCaseTest {
         val userArg = slot<User>()
         every { repository.insert(capture(userArg)) } returns Completable.complete()
 
-        val params = CreateUserUseCase.Params("username", "avatar")
+        val params = CreateUserUseCase.Params("username", "avatarName")
 
         // Act
         val result = createUserUseCase.buildUseCaseObservable(params)
@@ -63,6 +63,6 @@ class CreateUserUseCaseTest {
         // Assert
         Assert.assertEquals(params.username, userArg.captured.username)
         // TODO: add Avatar test
-//        Assert.assertEquals(params.avatar, userArg.captured.avatar)
+//        Assert.assertEquals(params.avatarName, userArg.captured.avatarName)
     }
 }

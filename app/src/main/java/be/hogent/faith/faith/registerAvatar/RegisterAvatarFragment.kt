@@ -38,7 +38,7 @@ class RegisterAvatarFragment : Fragment() {
     private var navigation: AvatarFragmentNavigationListener? = null
 
     /**
-     * ViewModel used for the avatarItems.
+     * ViewModel used for the avatars.
      */
     private val avatarViewModel: AvatarViewModel by viewModel()
 
@@ -157,9 +157,9 @@ class RegisterAvatarFragment : Fragment() {
         })
 
         // Observe the changes in the list of the avatars and update the adapter
-        avatarViewModel.avatarItems.observe(this, Observer<List<Avatar>> {
+        avatarViewModel.avatars.observe(this, Observer<List<Avatar>> {
             it?.let {
-                avatarAdapter.avatarItems = it
+                avatarAdapter.avatars = it
                 avatarAdapter.notifyDataSetChanged()
             }
         })

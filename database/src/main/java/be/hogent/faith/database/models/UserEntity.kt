@@ -13,7 +13,6 @@ import java.util.UUID
 data class UserEntity(
     @PrimaryKey
     val uuid: UUID = UUID.randomUUID(),
-    val username: String
-    // TODO: add avatar again once it is available
-//    val avatar: String
+    val username: String,
+    val avatarName: String
 )

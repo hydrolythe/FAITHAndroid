@@ -8,17 +8,16 @@ object UserMapper : Mapper<UserEntity, User> {
     override fun mapFromEntity(entity: UserEntity): User {
         return User(
             uuid = entity.uuid,
-            username = entity.username
-//            avatar = Avatar(Integer.parseInt(entity.avatar))
+            username = entity.username,
+            avatarName = entity.avatarName
         )
     }
 
     override fun mapToEntity(model: User): UserEntity {
         return UserEntity(
             uuid = model.uuid,
-            username = model.username
-            // TODO: avatarmapper gebruiken?
-//            avatar = model.avatar!!.imageUrl.toString()
+            username = model.username,
+            avatarName = model.avatarName
         )
     }
 

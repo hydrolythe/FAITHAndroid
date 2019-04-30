@@ -217,7 +217,7 @@ class EventViewModel(
     }
 
     /**
-     * Save avatar bitmap. This updates the property emotionAvatar. Must be done in this viewmodel
+     * Save avatarName bitmap. This updates the property emotionAvatar. Must be done in this viewmodel
      * because otherwise the event is not updated (if this code is in DrawEmotionViewModel, then the
      * fragment needs to update the event in EventViewModel, but the fragment is already stopped before
      * the use case to save the image is done

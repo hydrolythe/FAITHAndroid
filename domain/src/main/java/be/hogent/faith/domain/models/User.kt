@@ -4,9 +4,11 @@ import java.util.UUID
 
 data class User(
     val username: String,
-    // the resource entry name
-    // TODO: find out how to work with avatar, especially persisting it in DB
-//    val avatar: Avatar?,
+    /**
+     * The name of the avatar this user chose.
+     * This should be unique, and will be used to request the image corresponding to the chosen avatar.
+     */
+    val avatarName: String,
     val uuid: UUID = UUID.randomUUID()
 ) {
     private val _events = HashMap<UUID, Event>()

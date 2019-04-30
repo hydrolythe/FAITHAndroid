@@ -9,6 +9,7 @@ import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
+import be.hogent.faith.faith.util.ResourceAvatarProvider
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.avatar_rv_item.view.avatar_list_image
 
@@ -26,9 +27,9 @@ class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
     var selectionTracker: SelectionTracker<Long>? = null
 
     /**
-     * The list of avatarItems which need to be displayed.
+     * The list of avatars which need to be displayed.
      */
-    var avatarItems: List<Avatar> = emptyList()
+    var avatars: List<Avatar> = emptyList()
 
     /**
      * Creates the ViewHolder.
@@ -44,10 +45,10 @@ class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
     }
 
     /**
-     * Return the number of items (avatarItems) in the list of this adapter.
+     * Return the number of items (avatars) in the list of this adapter.
      */
     override fun getItemCount(): Int {
-        return avatarItems.size
+        return avatars.size
     }
 
     /**
@@ -55,7 +56,7 @@ class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         selectionTracker?.let {
-            holder.bind(avatarItems[position], it.isSelected(position.toLong()))
+            holder.bind(avatars[position], it.isSelected(position.toLong()))
         }
     }
 
@@ -64,12 +65,16 @@ class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
      */
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
+        // TODO: inject
+        private val avatarProvider = ResourceAvatarProvider(view.context)
+
         /**
          * Executes the binding of the data to the [ViewHolder].
          * Uses Glide to load the image.
          */
         fun bind(avatarItem: Avatar, isActivated: Boolean) {
-            Glide.with(this.itemView.context).load(avatarItem.imageUrl).into(view.avatar_list_image)
+            val avatarDrawable = avatarProvider.getAvatarDrawable(avatarItem.avatarName)
+            Glide.with(this.itemView.context).load(avatarDrawable).into(view.avatar_list_image)
             // This property is defined in res/drawable/item_background which in turn is used in the layout file
             // itself.
             itemView.isActivated = isActivated
