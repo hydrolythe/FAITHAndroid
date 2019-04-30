@@ -57,7 +57,6 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_emotion_capture)
 
-
         eventViewModel = getViewModel {
             val userSessionScope = getKoin().getScope(KoinModules.USER_SCOPE_ID)
             parametersOf(get<UserViewModel>(scope = userSessionScope).user)
