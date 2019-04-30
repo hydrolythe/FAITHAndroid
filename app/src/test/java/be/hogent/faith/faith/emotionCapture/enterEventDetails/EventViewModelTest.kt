@@ -19,7 +19,6 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.Completable
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
@@ -282,7 +281,7 @@ class EventViewModelTest {
 
         // Assert
         verify { saveEmotionAvatarUseCase.execute(any()) }
-        Assert.assertEquals(viewModel.event.value, params.captured.event)
+        assertEquals(viewModel.event.value, params.captured.event)
     }
 
     @Test

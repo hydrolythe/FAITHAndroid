@@ -1,6 +1,5 @@
 package be.hogent.faith.database.repositories
 
-import android.provider.SyncStateContract.Helpers.insert
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.database.EntityDatabase

@@ -14,7 +14,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 import java.io.IOException
 
 class SaveAudioRecordingUseCaseTest {
@@ -36,7 +35,7 @@ class SaveAudioRecordingUseCaseTest {
     @Test
     fun saveAudioUC_saveAudioNormal_savedToStorage() {
         // Arrange
-        every { repository.storeAudioRecording(tempStorageFile, event) } returns Single.just(mockk<File>())
+        every { repository.storeAudioRecording(tempStorageFile, event) } returns Single.just(mockk())
 
         // Act
         saveAudioRecordingUseCase.buildUseCaseObservable(
@@ -52,7 +51,7 @@ class SaveAudioRecordingUseCaseTest {
     @Test
     fun saveAudioUC_saveAudioNormal_addedToEvent() {
         // Arrange
-        every { repository.storeAudioRecording(tempStorageFile, event) } returns Single.just(mockk<File>())
+        every { repository.storeAudioRecording(tempStorageFile, event) } returns Single.just(mockk())
 
         // Act
         saveAudioRecordingUseCase.buildUseCaseObservable(

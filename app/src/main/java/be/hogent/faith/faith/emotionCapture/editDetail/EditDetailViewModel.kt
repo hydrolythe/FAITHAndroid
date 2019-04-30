@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 
-class EditDetailViewModel() : ViewModel() {
+class EditDetailViewModel : ViewModel() {
 
     private val _emotionAvatarButtonClicked = SingleLiveEvent<Unit>()
     val emotionAvatarButtonClicked: LiveData<Unit>

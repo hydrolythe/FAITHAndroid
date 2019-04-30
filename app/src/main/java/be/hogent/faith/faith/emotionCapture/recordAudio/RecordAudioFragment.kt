@@ -52,7 +52,7 @@ class RecordAudioFragment : Fragment() {
 
     private fun initializeRecorder() {
         if (!hasRecordingPermissions()) {
-            requestPermissions(arrayOf(android.Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
+            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
         } else {
             recorder = MediaRecorder().also {
                 it.setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -103,7 +103,7 @@ class RecordAudioFragment : Fragment() {
 
     private fun startListeners() {
         recordAudioViewModel.recordButtonClicked.observe(this, Observer {
-            if (recordAudioViewModel.recordingStatus == PAUSED) {
+            if (recordAudioViewModel.recordingStatus.value == PAUSED) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     recorder.resume()
                 } else {
@@ -147,7 +147,7 @@ class RecordAudioFragment : Fragment() {
 
     private fun startRecordingAudio() {
         if (!hasRecordingPermissions()) {
-            requestPermissions(arrayOf(android.Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
+            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
         } else {
             recorder.start()
         }

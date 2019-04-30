@@ -18,7 +18,7 @@ internal fun <T : ViewModel> Fragment.getViewModel(modelClass: Class<T>, viewMod
  * replace a child fragment
  */
 internal fun Fragment.replaceChildFragment(fragment: Fragment, frameId: Int) {
-    val ft = getChildFragmentManager().beginTransaction()
+    val ft = childFragmentManager.beginTransaction()
     ft.replace(frameId, fragment)
     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
     ft.commit()

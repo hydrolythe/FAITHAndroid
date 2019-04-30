@@ -13,7 +13,6 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.Single
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -42,18 +41,18 @@ class ChooseAvatarViewModelTest {
     @Test
     fun avatarItemViewModel_setUserName() {
         viewModel.userName.postValue(name)
-        Assert.assertEquals(name, getValue(viewModel.userName))
+        assertEquals(name, getValue(viewModel.userName))
     }
 
     @Test
     fun avatarItemViewModel_setSelectedItem() {
         viewModel.setSelectedItem(selection.toLong())
-        Assert.assertEquals(selection, getValue(viewModel.selectedItem).toInt())
+        assertEquals(selection, getValue(viewModel.selectedItem).toInt())
     }
 
     @Test
     fun avatarItemViewModel_fetchesAvatarOnConstruction() {
-        Assert.assertEquals(listOfAvatars, viewModel.avatars.value)
+        assertEquals(listOfAvatars, viewModel.avatars.value)
     }
 
     @Test

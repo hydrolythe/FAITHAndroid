@@ -21,7 +21,7 @@ import be.hogent.faith.faith.util.replaceChildFragment
 import be.hogent.faith.util.TAG
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import kotlinx.android.synthetic.main.fragment_edit_detail.image_editdetail_avatar
+import kotlinx.android.synthetic.main.fragment_edit_detail.image_editDetail_avatar
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -52,12 +52,12 @@ class EditDetailFragment : Fragment() {
     private var navigation: EditDetailNavigationListener? = null
     private val eventViewModel: EventViewModel by sharedViewModel()
     private val editDetailViewModel: EditDetailViewModel by viewModel()
-    private lateinit var editdetailBinding: be.hogent.faith.databinding.FragmentEditDetailBinding
+    private lateinit var editDetailBinding: be.hogent.faith.databinding.FragmentEditDetailBinding
     private var avatarOutlineResId: Int = NO_AVATAR
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is EditDetailFragment.EditDetailNavigationListener) {
+        if (context is EditDetailNavigationListener) {
             navigation = context
         }
     }
@@ -71,11 +71,11 @@ class EditDetailFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        editdetailBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_detail, container, false)
-        editdetailBinding.editdetailViewModel = editDetailViewModel
-        editdetailBinding.lifecycleOwner = this
+        editDetailBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_detail, container, false)
+        editDetailBinding.editdetailViewModel = editDetailViewModel
+        editDetailBinding.lifecycleOwner = this
 
-        return editdetailBinding.root
+        return editDetailBinding.root
     }
 
     override fun onStart() {
@@ -93,7 +93,7 @@ class EditDetailFragment : Fragment() {
                 // scaling, otherwise picture is blurry
                 .override((width * 0.3).toInt(), height)
                 .fitCenter()
-                .into(image_editdetail_avatar)
+                .into(image_editDetail_avatar)
         })
         editDetailViewModel.emotionAvatarButtonClicked.observe(this, Observer {
             navigation?.startDrawEmotionAvatarFragment()
@@ -106,11 +106,11 @@ class EditDetailFragment : Fragment() {
         when (detailType) {
             DetailType.PICTURE -> replaceChildFragment(
                 TakePhotoFragment.newInstance(),
-                be.hogent.faith.R.id.fragment_container_editdetail
+                R.id.fragment_container_editDetail
             )
             DetailType.AUDIO -> replaceChildFragment(
                 RecordAudioFragment.newInstance(),
-                be.hogent.faith.R.id.fragment_container_editdetail
+                R.id.fragment_container_editDetail
             )
             else -> Log.e(TAG, "type not defined")
         }

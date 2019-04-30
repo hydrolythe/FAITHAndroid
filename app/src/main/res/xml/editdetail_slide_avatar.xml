@@ -32,7 +32,7 @@
                     app:customFloatValue="1"/>
         </Constraint>
         <Constraint
-                android:id="@id/image_editdetail_avatar"
+                android:id="@id/image_editDetail_avatar"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintStart_toEndOf="@id/gl_editDetail_vertical"

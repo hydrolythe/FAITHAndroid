@@ -37,6 +37,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/avatar_placeholder" />
+        app:srcCompat="@drawable/avatar_placeholder"
+        android:contentDescription="@string/description_event_avatar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

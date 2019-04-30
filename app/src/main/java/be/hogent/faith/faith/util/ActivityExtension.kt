@@ -29,8 +29,7 @@ fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int) {
 
 fun AppCompatActivity.getRotation(): Int {
     val display = (baseContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
-    val rotation = display.rotation
-    return when (rotation) {
+    return when (display.rotation) {
         Surface.ROTATION_90 -> R.integer.LANDSCAPE
         Surface.ROTATION_270 -> R.integer.LANDSCAPE
         Surface.ROTATION_180 -> R.integer.PORTRAIT
