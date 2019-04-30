@@ -33,7 +33,7 @@ class SaveEventUseCaseTest {
         executor = mockk()
         scheduler = mockk()
         event = EventFactory.makeEvent(nbrOfDetails = 0)
-        user = spyk(User(username = DataFactory.randomString()))
+        user = spyk(User(DataFactory.randomString(), DataFactory.randomString()))
         repository = mockk(relaxed = true)
         saveEventUseCase = SaveEventUseCase(repository, scheduler)
     }
