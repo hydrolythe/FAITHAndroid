@@ -31,7 +31,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     val drawingActions: List<DrawingAction>
         get() = _drawingActions
 
-
     /**
      * Holds a copy of all actions that were done before [clear] was called.
      * Used to restore them when calling [undo] after a call to [clear].
@@ -84,7 +83,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                     it.onDrawingChanged(bitmap)
                 }
             }
-
         }
 
         SendBitMapToListeners().execute()

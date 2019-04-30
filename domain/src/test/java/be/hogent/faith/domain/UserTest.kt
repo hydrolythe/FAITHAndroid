@@ -2,26 +2,26 @@ package be.hogent.faith.domain
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.threeten.bp.LocalDateTime
-import java.io.File
 import java.util.UUID
 
 class UserTest {
     private lateinit var user: User
+    private val eventTitle = "Ingevulde titel"
+    private val eventUuid = UUID.randomUUID()
+    private lateinit var event: Event
 
     @Before
     fun setUp() {
-        user = User(mockk())
+        user = User("username")
+//        user = User("username", "R.drawable.avatar")
+        event = Event(title = eventTitle, uuid = eventUuid)
     }
 
     @Test
     fun user_addsEvent() {
-        val event = mockk<Event>()
-
         user.addEvent(event)
 
         Assert.assertEquals(1, user.events.size)
@@ -31,7 +31,8 @@ class UserTest {
     @Test
     fun user_returnsAllDetails() {
         for (i in 1..10) {
-            user.addEvent(mockk())
+            val event = Event(title = "Event $i")
+            user.addEvent(event)
         }
 
         Assert.assertEquals(10, user.events.size)
@@ -39,16 +40,13 @@ class UserTest {
 
     @Test
     fun user_getEventReturnsEvent() {
-        val eventUUID = UUID.randomUUID()
-        val event = Event(mockk<LocalDateTime>(), "test", mockk<File>(), eventUUID)
         user.addEvent(event)
-        val result = user.getEvent(eventUUID)
+        val result = user.getEvent(eventUuid)
         Assert.assertEquals(result, event)
     }
 
     @Test
     fun user_getEventReturnsNullIfNotFound() {
-        val event = Event(mockk<LocalDateTime>(), "test", mockk<File>(), UUID.randomUUID())
         user.addEvent(event)
         val result = user.getEvent(UUID.randomUUID())
         Assert.assertNull(result)

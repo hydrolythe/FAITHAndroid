@@ -48,6 +48,7 @@ object EntityFactory {
             DataFactory.randomDateTime(),
             DataFactory.randomString(),
             DataFactory.randomFile(),
+            DataFactory.randomString(),
             uuid,
             userUuid
         )
@@ -70,7 +71,7 @@ object EntityFactory {
 
     fun makeUserEntity(): UserEntity {
         return UserEntity(
-            DataFactory.randomUUID()
+            DataFactory.randomUUID(), DataFactory.randomString()
         )
     }
 }

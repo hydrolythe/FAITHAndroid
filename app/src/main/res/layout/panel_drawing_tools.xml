@@ -5,10 +5,10 @@
 
         <variable
             name="drawViewModel"
-            type="be.hogent.faith.faith.drawing.DrawViewModel" />
+            type="be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel" />
 
         <import type="android.graphics.Color" />
-        <import type="be.hogent.faith.faith.drawing.DrawViewModel.LineWidth"/>
+        <import type="be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel.LineWidth"/>
 
     </data>
 
