@@ -49,8 +49,8 @@ class EventDetailsFragmentTest {
         pressBack()
 
         onView(withId(R.id.btn_event_details_drawing)).perform(click())
-        // TODO: Enable once drawing has been implemented
-//        pressBack()
+        onView(withId(R.id.screen_draw)).check(matches(isDisplayed()))
+        pressBack()
 
         onView(withId(R.id.btn_event_details_text)).perform(click())
         // TODO: Enable once text has been implemented

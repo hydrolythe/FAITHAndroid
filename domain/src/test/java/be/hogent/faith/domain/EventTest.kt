@@ -34,7 +34,7 @@ class EventTest {
         event.addNewAudioDetail(mockk(), "test")
 
         assertEquals(1, event.details.size)
-        assertEquals(AudioDetail::class, event.details.first().javaClass)
+        assertEquals(AudioDetail::class.java, event.details.first().javaClass)
         assertEquals("test", event.details.first().name)
     }
 
