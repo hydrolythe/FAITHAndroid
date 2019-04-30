@@ -167,7 +167,6 @@ class EntityDatabaseTest {
     fun entityDatabase_singleUser_withNoEvents_isAdded() {
         // Arrange
         val user = UserEntity(userUuid, "name", "avatar")
-        // TODO: add avatar again
         val arrange = userDao.insert(user)
 
         // Act

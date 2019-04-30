@@ -45,8 +45,7 @@ class CreateUserUseCaseTest {
             }
 
         Assert.assertEquals(params.username, userArg.captured.username)
-        // TODO: add Avatar test
-//        Assert.assertEquals(params.avatarName, userArg.captured.avatarName)
+        Assert.assertEquals(params.avatarName, userArg.captured.avatarName)
     }
 
     @Test

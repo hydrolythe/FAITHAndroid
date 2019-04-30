@@ -2,6 +2,7 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import android.graphics.Bitmap
 import android.util.Log
+import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -50,17 +51,6 @@ class EventViewModel(
         get() = _eventSavedSuccessFully
 
     /**
-     * Holds potential error messages that will be displayed to the user when he/she tries to save the event but
-     * not enough information was given.
-     * Example: trying to save the event but no title was given.
-     *
-     * Values should be reference to string resources, not the strings themselves.
-     */
-    private val _inputErrorMessageID = MutableLiveData<Int>()
-    val inputErrorMessageID: LiveData<Int>
-        get() = _inputErrorMessageID
-
-    /**
      * The event that will be discussed and explained using audio, video, drawings,...
      * Updates to the [eventTitle], [eventDate] and [eventNotes] are automatically applied to the event.
      */
@@ -69,8 +59,8 @@ class EventViewModel(
     /**
      * Will be updated with the latest error message when an error occurs when saving
      */
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String>
+    private val _errorMessage = MutableLiveData<@IdRes Int>()
+    val errorMessage: LiveData<Int>
         get() = _errorMessage
 
     private val _avatarSavedSuccessFully = SingleLiveEvent<Unit>()
@@ -180,7 +170,7 @@ class EventViewModel(
 
     fun onSaveButtonClicked() {
         if (eventTitle.value.isNullOrEmpty()) {
-            _inputErrorMessageID.postValue(R.string.toast_event_no_title)
+            _errorMessage.postValue(R.string.error_event_no_title)
             return
         }
         val params = SaveEventUseCase.Params(event.value!!, user.value!!)
@@ -191,7 +181,7 @@ class EventViewModel(
             resetViewModel()
         }, {
             Log.i(TAG, "Event failed to save because: ${it.message}")
-            _errorMessage.postValue(it.localizedMessage)
+            _errorMessage.postValue(R.string.error_save_event_failed)
         })
         disposables.add(disposable)
     }
@@ -229,7 +219,8 @@ class EventViewModel(
             updateEvent()
             _avatarSavedSuccessFully.value = Unit
         }, {
-            _errorMessage.postValue(it.localizedMessage)
+            Log.e(TAG, it.localizedMessage)
+            _errorMessage.postValue(R.string.error_save_avatar_failed)
         })
         disposables.add(saveRequest)
     }

@@ -39,6 +39,6 @@ class TakePhotoFragmentTest {
         onView(withId(R.id.txt_save_photo_name)).perform(typeText("Photo name"))
         closeSoftKeyboard()
         onView(withId(R.id.btn_save_photo_save)).perform(click())
-        ToastMatcher.isToastMessageDisplayed(R.string.toast_save_photo_success)
+        ToastMatcher.isToastMessageDisplayed(R.string.save_photo_success)
     }
 }

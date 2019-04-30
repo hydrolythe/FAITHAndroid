@@ -74,7 +74,7 @@ class EventDetailsFragmentTest {
     fun eventDetailsFragment_saveEventWithoutTitleEntered_errorMessage() {
         onView(withId(R.id.btn_event_details_send)).perform(click())
         onView(withId(R.id.btn_save_event_save)).perform(click())
-        ToastMatcher.isToastMessageDisplayed(R.string.toast_event_no_title)
+        ToastMatcher.isToastMessageDisplayed(R.string.error_event_no_title)
     }
 
     @Test
@@ -84,6 +84,6 @@ class EventDetailsFragmentTest {
         onView(withId(R.id.txt_save_event_notes)).perform(typeText("Notities notities notities"))
         closeSoftKeyboard()
         onView(withId(R.id.btn_save_event_save)).perform(click())
-        ToastMatcher.isToastMessageDisplayed(R.string.toast_save_event_success)
+        ToastMatcher.isToastMessageDisplayed(R.string.error_save_event_success)
     }
 }

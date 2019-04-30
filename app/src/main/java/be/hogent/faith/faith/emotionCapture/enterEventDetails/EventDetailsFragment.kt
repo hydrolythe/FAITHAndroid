@@ -73,10 +73,6 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun startListeners() {
-        eventViewModel.inputErrorMessageID.observe(this, Observer { errorMessageID ->
-            Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
-        })
-
         // Update adapter when event changes
         eventViewModel.event.observe(this, Observer { event ->
             detailThumbnailsAdapter?.updateDetailsList(event.details)
@@ -104,7 +100,7 @@ class EventDetailsFragment : Fragment() {
         })
 
         eventViewModel.eventSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, R.string.toast_save_event_success, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, R.string.error_save_event_success, Toast.LENGTH_LONG).show()
             saveDialog.dismiss()
 
             // Go back to main screen
@@ -112,10 +108,7 @@ class EventDetailsFragment : Fragment() {
         })
 
         eventViewModel.errorMessage.observe(this, Observer { errorMessage ->
-            Log.e(TAG, errorMessage)
-            // TODO: let others provide resource strings, not strings when showing error messages
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-            saveDialog.dismiss()
         })
     }
 

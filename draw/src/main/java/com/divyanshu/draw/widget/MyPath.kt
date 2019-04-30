@@ -12,7 +12,7 @@ import java.util.LinkedList
 // TODO: remove redundant paintOptions
 class MyPath(val paintOptions: PaintOptions = PaintOptions()) : Path(), Serializable, DrawingAction {
 
-    val paint = Paint().also {
+    private val paint = Paint().also {
         // Same for every path
         it.style = Paint.Style.STROKE
         it.strokeJoin = Paint.Join.ROUND
@@ -21,7 +21,6 @@ class MyPath(val paintOptions: PaintOptions = PaintOptions()) : Path(), Serializ
     private val actions = LinkedList<Action>()
 
     override fun drawOn(canvas: Canvas) {
-        Log.d("DrawView", "Drawing path")
         val paint = paint.also {
             it.color = if (paintOptions.isEraserOn) Color.WHITE else paintOptions.color
             it.strokeWidth = paintOptions.strokeWidth
