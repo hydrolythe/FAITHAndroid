@@ -64,7 +64,6 @@ class DrawViewTest {
         }
     }
 
-
     @Test
     fun drawView_undo_removesLastAction() {
         // Arrange
@@ -202,5 +201,4 @@ class DrawViewTest {
         every { resources.getDrawable(any()) } returns mockk(relaxed = true)
         every { context.resources } returns resources
     }
-
 }

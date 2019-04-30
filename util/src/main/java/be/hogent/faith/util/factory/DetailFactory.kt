@@ -8,18 +8,21 @@ import be.hogent.faith.util.factory.DataFactory.randomString
 
 object DetailFactory {
 
-    fun makeDetail(): Detail {
+    fun makeRandomDetail(): Detail {
         val rand = Math.random()
         return when {
-            rand < 0.33 -> TextDetail(
-                DataFactory.randomFile(), randomString(), DataFactory.randomUUID()
-            )
-            rand < 0.66 -> PictureDetail(
-                DataFactory.randomFile(), randomString(), DataFactory.randomUUID()
-            )
-            else -> AudioDetail(
-                DataFactory.randomFile(), randomString(), DataFactory.randomUUID()
-            )
+            rand < 0.33 -> makeTextDetail()
+            rand < 0.66 -> makePictureDetail()
+            else -> makeAudioDetail()
         }
     }
+
+    fun makeTextDetail(): TextDetail =
+        TextDetail(DataFactory.randomFile(), randomString(), DataFactory.randomUUID())
+
+    fun makePictureDetail(): PictureDetail =
+        PictureDetail(DataFactory.randomFile(), randomString(), DataFactory.randomUUID())
+
+    fun makeAudioDetail(): AudioDetail =
+        AudioDetail(DataFactory.randomFile(), randomString(), DataFactory.randomUUID())
 }

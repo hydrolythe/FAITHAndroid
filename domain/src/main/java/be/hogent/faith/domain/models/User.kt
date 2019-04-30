@@ -3,19 +3,24 @@ package be.hogent.faith.domain.models
 import java.util.UUID
 
 data class User(
-    val uuid: UUID = UUID.randomUUID(),
-    val avatar: Avatar? = null,
-    val username: String = ""
+    val username: String,
+    // the resource entry name
+    // TODO: find out how to work with avatar, especially persisting it in DB
+//    val avatar: Avatar?,
+    val uuid: UUID = UUID.randomUUID()
 ) {
-    private val _events = mutableListOf<Event>()
+    private val _events = HashMap<UUID, Event>()
     val events: List<Event>
-        get() = _events
+        get() = _events.values.toList()
 
     fun addEvent(event: Event) {
-        _events += event
+        if (event.title.isNullOrBlank()) {
+            throw IllegalArgumentException("Een gebeurtenis moet een ingevulde titel hebben.")
+        }
+        _events[event.uuid] = event
     }
 
     fun getEvent(eventUUID: UUID): Event? {
-        return _events.find { it.uuid == eventUUID }
+        return _events[eventUUID]
     }
 }

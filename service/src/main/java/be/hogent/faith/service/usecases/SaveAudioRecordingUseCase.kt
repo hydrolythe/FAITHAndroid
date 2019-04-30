@@ -1,7 +1,6 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
@@ -18,7 +17,7 @@ class SaveAudioRecordingUseCase(
         return Completable.fromSingle(
             storageRepository.storeAudioRecording(params.tempStorageFile, params.event)
                 .doOnSuccess { storedFile ->
-                    params.event.addDetail(AudioDetail(storedFile, params.recordingName))
+                    params.event.addNewAudioDetail(storedFile, params.recordingName)
                 })
     }
 

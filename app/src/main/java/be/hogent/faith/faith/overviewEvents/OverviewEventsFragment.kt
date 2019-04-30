@@ -10,8 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.registerAvatar.UserViewModel
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragments_overview_events.rv_events
+import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
 import java.util.UUID
@@ -22,9 +24,8 @@ class OverviewEventsFragment : Fragment() {
         fun newInstance() = OverviewEventsFragment()
     }
 
-    private var navigation: OverviewEventsFragment.OverviewEventsNavigationListener? = null
+    private var navigation: OverviewEventsNavigationListener? = null
 
-    private lateinit var userViewModel: UserViewModel
     private lateinit var eventsOverViewViewModel: OverviewEventsViewModel
 
     private lateinit var eventsAdapter: EventsAdapter
@@ -33,8 +34,9 @@ class OverviewEventsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userViewModel = getViewModel()
-        eventsOverViewViewModel = getViewModel { parametersOf(userViewModel.user) }
+        get<UserViewModel>().let {
+            eventsOverViewViewModel = getViewModel { parametersOf(it.user) }
+        }
     }
 
     override fun onCreateView(
@@ -47,7 +49,7 @@ class OverviewEventsFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OverviewEventsFragment.OverviewEventsNavigationListener) {
+        if (context is OverviewEventsNavigationListener) {
             navigation = context
         }
     }
@@ -75,7 +77,7 @@ class OverviewEventsFragment : Fragment() {
                 navigation?.startEventDetailsFragment(eventUuid)
             }
         }
-        eventsAdapter = EventsAdapter(eventListener)
+        eventsAdapter = EventsAdapter(eventListener, Glide.with(this))
         rv_events.apply {
             layoutManager = LinearLayoutManager(activity)
             this.adapter = eventsAdapter
