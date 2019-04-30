@@ -13,14 +13,12 @@ class CreateUserUseCase(
 ) : SingleUseCase<User, CreateUserUseCase.Params>(Schedulers.io(), observeScheduler) {
 
     override fun buildUseCaseObservable(params: Params): Single<User> {
-//        val user = User(params.username, params.avatar)
-        // TODO: add avatar again once available
-        val user = User(params.username)
+        val user = User(params.username, params.avatarName)
         return userRepository.insert(user).andThen(Single.just(user))
     }
 
     data class Params(
         val username: String,
-        val avatar: String
+        val avatarName: String
     )
 }

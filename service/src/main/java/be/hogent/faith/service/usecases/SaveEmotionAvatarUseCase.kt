@@ -11,8 +11,8 @@ import io.reactivex.schedulers.Schedulers
 const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
 
 /**
- * Stores the (colored) emotion avatar for an event on the device's storage.
- * Will overwrite a previously stored avatar.
+ * Stores the (colored) emotion avatarName for an event on the device's storage.
+ * Will overwrite a previously stored avatarName.
  */
 class SaveEmotionAvatarUseCase(
     private val storageRepository: StorageRepository,

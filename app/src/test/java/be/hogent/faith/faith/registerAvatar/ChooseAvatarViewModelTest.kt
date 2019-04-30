@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.TestUtils.getValue
-import be.hogent.faith.faith.util.AvatarProvider
+import be.hogent.faith.faith.util.ResourceAvatarProvider
 import be.hogent.faith.service.usecases.CreateUserUseCase
 import io.mockk.called
 import io.mockk.every
@@ -23,7 +23,7 @@ class ChooseAvatarViewModelTest {
 
     private val name: String = "Boaty McBoatface"
     private val selection: Int = 0
-    private val avatarProvider = mockk<AvatarProvider>()
+    private val avatarProvider = mockk<ResourceAvatarProvider>()
     private val listOfAvatars = listOf(Avatar(1, "Avatar"))
     private var createUserUseCase = mockk<CreateUserUseCase>()
 
@@ -52,7 +52,7 @@ class ChooseAvatarViewModelTest {
 
     @Test
     fun avatarItemViewModel_fetchesAvatarOnConstruction() {
-        Assert.assertEquals(listOfAvatars, viewModel.avatarItems.value)
+        Assert.assertEquals(listOfAvatars, viewModel.avatars.value)
     }
 
     @Test
@@ -70,7 +70,7 @@ class ChooseAvatarViewModelTest {
         verify { createUserUseCase.execute(any()) }
         with(params.captured) {
             assertEquals(username, name)
-            assertEquals(avatar, listOfAvatars[selection].imageName)
+            assertEquals(avatarName, listOfAvatars[selection].imageName)
         }
     }
 

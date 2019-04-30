@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.faith.util.AvatarProvider
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.CreateUserUseCase
 import io.reactivex.disposables.CompositeDisposable
@@ -13,13 +12,15 @@ import io.reactivex.disposables.CompositeDisposable
 /**
  * ViewModel for the Avatar selection screen
  */
-class AvatarViewModel(private val avatarRepository: AvatarProvider, private val createUserUseCase: CreateUserUseCase) :
+class AvatarViewModel(
+    private val avatarProvider: AvatarProvider,
+    private val createUserUseCase: CreateUserUseCase
+) :
     ViewModel() {
 
-    /**
-     * Private mutable live data object which keeps track of the AvatarItems.
-     */
-    private var _avatarItems = MutableLiveData<List<Avatar>>()
+    private var _avatars = MutableLiveData<List<Avatar>>()
+    val avatars: LiveData<List<Avatar>>
+        get() = _avatars
 
     private var _selectedItem = MutableLiveData<Long>()
 
@@ -47,26 +48,17 @@ class AvatarViewModel(private val avatarRepository: AvatarProvider, private val 
     val userSaveFailed: LiveData<String>
         get() = _userSaveFailed
 
-    /**
-     * User name of the user
-     */
     var userName = MutableLiveData<String>()
 
     init {
         // Set initially to -1 = no selection has been provided.
         _selectedItem.value = -1
 
-        fetchItems()
+        fetchAvatarImages()
     }
 
     /**
-     * Getter for the avatarItems, but only returns a [LiveData<AvatarItem>] type.
-     */
-    val avatarItems: LiveData<List<Avatar>>
-        get() = _avatarItems
-
-    /**
-     * The item selected in the recyclerView as the avatar.
+     * The item selected in the recyclerView as the avatarName.
      */
     val selectedItem: LiveData<Long>
         get() = _selectedItem
@@ -90,7 +82,7 @@ class AvatarViewModel(private val avatarRepository: AvatarProvider, private val 
         if (avatarWasSelected() && userName.value != null) {
             val params = CreateUserUseCase.Params(
                 userName.value!!,
-                _avatarItems.value?.get(_selectedItem.value!!.toInt())!!.imageName
+                _avatars.value!![_selectedItem.value!!.toInt()].avatarName
             )
             val disposable = createUserUseCase.execute(params).subscribe({ newUser ->
                 _userSavedSuccessFully.postValue(newUser)
@@ -105,10 +97,7 @@ class AvatarViewModel(private val avatarRepository: AvatarProvider, private val 
         _nextButtonClicked.call()
     }
 
-    /**
-     * TODO: Needs to be adapted to the way Avatars will be provided (Network, DB, ...)
-     */
-    private fun fetchItems() {
-        _avatarItems.postValue(avatarRepository.getAvatars())
+    private fun fetchAvatarImages() {
+        _avatars.postValue(avatarProvider.getAvatars())
     }
 }

@@ -30,11 +30,11 @@ import org.koin.android.viewmodel.ext.android.viewModel
  */
 const val ARG_DETAILTYPE = "detailType"
 /**
- * Key for this Fragment's [Bundle] to hold the resource ID pointing to the outline drawing of the avatar.
+ * Key for this Fragment's [Bundle] to hold the resource ID pointing to the outline drawing of the avatarName.
  */
 private const val ARG_AVATAR_RES_ID = "avatarResId"
 /**
- * Constant for avatarOutlineResId to indicate that no avatar was passed as an argument for this fragment.
+ * Constant for avatarOutlineResId to indicate that no avatarName was passed as an argument for this fragment.
  */
 private const val NO_AVATAR = -1
 

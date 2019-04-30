@@ -13,9 +13,10 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
+import be.hogent.faith.faith.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.registerAvatar.AvatarViewModel
 import be.hogent.faith.faith.registerAvatar.UserViewModel
-import be.hogent.faith.faith.util.AvatarProvider
+import be.hogent.faith.faith.util.ResourceAvatarProvider
 import be.hogent.faith.faith.util.TempFileProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.koin.androidContext
@@ -50,7 +51,7 @@ val appModule = module(override = true) {
     }
 
     single { TempFileProvider(androidContext()) }
-    single { AvatarProvider(androidContext()) }
+    single { ResourceAvatarProvider(androidContext()) as AvatarProvider }
 
     single { PremadeImagesProviderFromResources() as PremadeImagesProvider }
 }

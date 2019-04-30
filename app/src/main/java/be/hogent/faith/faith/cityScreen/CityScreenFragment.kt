@@ -80,13 +80,13 @@ class CityScreenFragment : Fragment() {
     }
 
     /**
-     * Moves the avatar View to the top-left corner of the given View.
+     * Moves the avatarName View to the top-left corner of the given View.
      * Once the animation is finished it calls the [onAnimationEndCall].
      */
     private fun moveAvatarToLocationOf(view: View, onAnimationEndCall: () -> Unit) {
-        // No need to animate if the avatar is already there
+        // No need to animate if the avatarName is already there
         if (avatarView.x == view.x && avatarView.y == view.y) {
-            Log.i(TAG, "Not moving the avatar as we're already at the view's location")
+            Log.i(TAG, "Not moving the avatarName as we're already at the view's location")
             return
         }
         val xTranslation = ObjectAnimator.ofFloat(avatarView, "x", view.x).apply {
