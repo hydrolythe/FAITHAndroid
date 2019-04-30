@@ -29,14 +29,14 @@ object NavigationUtil {
 
     fun goToEventsOverviewScreen() {
         goToCityScreen()
-        onView(withId(R.id.main_third_location)).perform(click())
+        onView(withId(R.id.city_third_location)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }
 
     fun goToNewEventScreen() {
         goToCityScreen()
-        onView(withId(R.id.main_second_location)).perform(click())
+        onView(withId(R.id.city_second_location)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }

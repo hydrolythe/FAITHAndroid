@@ -130,7 +130,7 @@
             android:id="@+id/btn_event_details_send"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="16dp"
+            android:minWidth="24dp"
             android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
             android:src="@drawable/event_details_send"
             app:layout_constraintBottom_toBottomOf="parent"

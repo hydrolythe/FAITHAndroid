@@ -13,8 +13,8 @@
         android:id="@+id/screen_save_event"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:minWidth="400dp"
-        android:minHeight="400dp">
+        android:minWidth="300dp"
+        android:minHeight="300dp">
 
         <TextView
             android:id="@+id/lbl_save_event_title"
@@ -64,7 +64,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:layout_marginEnd="8dp"
-            android:inputType=""
+            android:maxLines="1"
+            android:lines="1"
+            android:singleLine="true"
             android:text="@={eventViewModel.eventTitle}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/guide_save_event"
