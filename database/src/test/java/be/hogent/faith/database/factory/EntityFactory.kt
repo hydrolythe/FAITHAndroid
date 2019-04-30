@@ -71,7 +71,7 @@ object EntityFactory {
 
     fun makeUserEntity(): UserEntity {
         return UserEntity(
-            DataFactory.randomUUID(), DataFactory.randomString()
+            DataFactory.randomUUID(), DataFactory.randomString(), DataFactory.randomString()
         )
     }
 }

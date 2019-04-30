@@ -2,7 +2,6 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
-import be.hogent.faith.util.TAG
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import java.util.UUID
 

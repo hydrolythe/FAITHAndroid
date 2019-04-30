@@ -6,6 +6,7 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.TestUtils.getValue
 import be.hogent.faith.faith.util.ResourceAvatarProvider
 import be.hogent.faith.service.usecases.CreateUserUseCase
+import be.hogent.faith.util.factory.DataFactory
 import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk
@@ -24,7 +25,7 @@ class ChooseAvatarViewModelTest {
     private val name: String = "Boaty McBoatface"
     private val selection: Int = 0
     private val avatarProvider = mockk<ResourceAvatarProvider>()
-    private val listOfAvatars = listOf(Avatar(1, "Avatar"))
+    private val listOfAvatars = listOf(Avatar(DataFactory.randomString()))
     private var createUserUseCase = mockk<CreateUserUseCase>()
 
     private lateinit var viewModel: AvatarViewModel
@@ -70,7 +71,7 @@ class ChooseAvatarViewModelTest {
         verify { createUserUseCase.execute(any()) }
         with(params.captured) {
             assertEquals(username, name)
-            assertEquals(avatarName, listOfAvatars[selection].imageName)
+            assertEquals(avatarName, listOfAvatars[selection].avatarName)
         }
     }
 
