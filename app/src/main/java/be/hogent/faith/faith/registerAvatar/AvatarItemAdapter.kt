@@ -9,7 +9,6 @@ import androidx.recyclerview.selection.ItemKeyProvider
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.faith.util.ResourceAvatarProvider
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.avatar_rv_item.view.avatar_list_image
 

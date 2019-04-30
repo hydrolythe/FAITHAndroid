@@ -16,7 +16,7 @@ import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
 import be.hogent.faith.faith.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.registerAvatar.AvatarViewModel
 import be.hogent.faith.faith.registerAvatar.UserViewModel
-import be.hogent.faith.faith.util.ResourceAvatarProvider
+import be.hogent.faith.faith.registerAvatar.ResourceAvatarProvider
 import be.hogent.faith.faith.util.TempFileProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.koin.androidContext
