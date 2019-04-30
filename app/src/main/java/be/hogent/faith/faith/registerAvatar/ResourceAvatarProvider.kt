@@ -1,9 +1,8 @@
-package be.hogent.faith.faith.util
+package be.hogent.faith.faith.registerAvatar
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import be.hogent.faith.faith.registerAvatar.Avatar
-import be.hogent.faith.faith.registerAvatar.AvatarProvider
+import androidx.core.content.ContextCompat
 
 class ResourceAvatarProvider(private val context: Context) : AvatarProvider {
 
@@ -15,7 +14,6 @@ class ResourceAvatarProvider(private val context: Context) : AvatarProvider {
 
     override fun getAvatarDrawable(avatarName: String): Drawable {
         val resourceId = context.resources.getIdentifier(avatarName, "drawable", context.packageName)
-        return context.resources.getDrawable(resourceId)
-//        return ContextCompat.getDrawable(context, resourceId)!!
+        return ContextCompat.getDrawable(context, resourceId)!!
     }
 }

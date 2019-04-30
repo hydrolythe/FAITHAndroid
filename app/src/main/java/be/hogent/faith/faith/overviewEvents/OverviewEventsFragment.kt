@@ -10,10 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.registerAvatar.UserViewModel
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragments_overview_events.rv_events
 import org.koin.android.ext.android.get
+import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
 import java.util.UUID
@@ -34,7 +36,8 @@ class OverviewEventsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        get<UserViewModel>().let {
+        val userSessionScope = getKoin().getScope(KoinModules.USER_SCOPE_ID)
+        get<UserViewModel>(scope = userSessionScope).let {
             eventsOverViewViewModel = getViewModel { parametersOf(it.user) }
         }
     }

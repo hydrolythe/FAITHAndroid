@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.TestUtils.getValue
-import be.hogent.faith.faith.util.ResourceAvatarProvider
 import be.hogent.faith.service.usecases.CreateUserUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.called
