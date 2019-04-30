@@ -67,7 +67,7 @@ class TakePhotoFragment : Fragment() {
         if (hasCameraPermissions()) {
             fotoApparat.start()
         } else {
-            requestPermissions(arrayOf(android.Manifest.permission.CAMERA), REQUESTCODE_CAMERA)
+            requestPermissions(arrayOf(Manifest.permission.CAMERA), REQUESTCODE_CAMERA)
         }
         startListeners()
     }

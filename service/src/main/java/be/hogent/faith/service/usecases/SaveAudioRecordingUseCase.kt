@@ -13,7 +13,7 @@ class SaveAudioRecordingUseCase(
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveAudioRecordingUseCase.SaveAudioRecordingParams>(Schedulers.io(), observeScheduler) {
 
-    override fun buildUseCaseObservable(params: SaveAudioRecordingUseCase.SaveAudioRecordingParams): Completable {
+    override fun buildUseCaseObservable(params: SaveAudioRecordingParams): Completable {
         return Completable.fromSingle(
             storageRepository.storeAudioRecording(params.tempStorageFile, params.event)
                 .doOnSuccess { storedFile ->

@@ -1,8 +1,8 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">FAITH</string>
     <string name="string_avatar_name">Name</string>
     <string name="frag_avatar_lbl_name">Hoe heet je?</string>
-    <string name="naam_hint">Hier kan je je naam zetten</string>
+    <string name="naam_hint" tools:ignore="Typos">Hier kan je je naam zetten</string>
     <string name="choose_black">Kies zwart</string>
     <string name="choose_blue">Kies blauw</string>
     <string name="choose_red">Kies rood</string>
@@ -73,4 +73,5 @@
     <string name="lbl_back">Terug</string>
     <string name="lbl_activity_emotionCapture">Emotiecaptatie</string>
     <string name="lbl_activity_city">De Stad</string>
+    <string name="description_event_avatar">Getekende avatar voor de gebeurtenis</string>
 </resources>

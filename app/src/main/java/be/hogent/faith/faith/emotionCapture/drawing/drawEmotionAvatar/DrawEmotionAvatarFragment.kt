@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
@@ -81,7 +82,7 @@ class DrawEmotionAvatarFragment : DrawFragment() {
         drawView.setAlpha(70)
 
         if (avatarOutlineResId != NO_AVATAR) {
-            drawView.setPaintedBackground(resources.getDrawable(R.drawable.outline) as BitmapDrawable)
+            drawView.setPaintedBackground(ContextCompat.getDrawable(context!!, R.drawable.outline) as BitmapDrawable)
         }
 
         drawView.addDrawViewListener(object : DrawView.DrawViewListener {

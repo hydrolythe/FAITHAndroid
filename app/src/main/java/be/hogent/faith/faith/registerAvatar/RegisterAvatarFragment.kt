@@ -131,7 +131,7 @@ class RegisterAvatarFragment : Fragment() {
         avatarTracker = SelectionTracker.Builder<Long>(
             SELECTION_ID,
             avatar_rv_avatar,
-            AvatarItemAdapter.KeyProvider(avatar_rv_avatar.adapter as AvatarItemAdapter),
+            AvatarItemAdapter.KeyProvider(),
             AvatarItemAdapter.DetailsLookup(avatar_rv_avatar),
             StorageStrategy.createLongStorage()
         ).withSelectionPredicate(
@@ -157,9 +157,9 @@ class RegisterAvatarFragment : Fragment() {
         })
 
         // Observe the changes in the list of the avatars and update the adapter
-        avatarViewModel.avatars.observe(this, Observer<List<Avatar>> {
-            it?.let {
-                avatarAdapter.avatars = it
+        avatarViewModel.avatars.observe(this, Observer<List<Avatar>> { avatarList ->
+            avatarList?.let {
+                avatarAdapter.avatars = avatarList
                 avatarAdapter.notifyDataSetChanged()
             }
         })

@@ -1,7 +1,6 @@
 package be.hogent.faith.database.repositories
 
 import android.util.Log
-import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.daos.UserDao
 import be.hogent.faith.database.database.EntityDatabase
@@ -29,7 +28,6 @@ open class UserRepositoryImpl(
     // It's cleaner to just inject the database and request the daos during construction.
     private val userDao: UserDao = database.userDao()
     private val eventDao: EventDao = database.eventDao()
-    private val detailDao: DetailDao = database.detailDao()
 
     override fun delete(item: User): Completable {
         return userDao.delete(userMapper.mapToEntity(item))

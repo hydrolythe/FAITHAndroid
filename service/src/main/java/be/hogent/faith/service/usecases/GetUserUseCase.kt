@@ -13,7 +13,7 @@ class GetUserUseCase(
     observeScheduler: Scheduler
 ) : FlowableUseCase<User, GetUserUseCase.Params>(Schedulers.io(), observeScheduler) {
 
-    override fun buildUseCaseObservable(params: GetUserUseCase.Params): Flowable<User> {
+    override fun buildUseCaseObservable(params: Params): Flowable<User> {
         return userRepository.get(params.userUuid)
     }
 

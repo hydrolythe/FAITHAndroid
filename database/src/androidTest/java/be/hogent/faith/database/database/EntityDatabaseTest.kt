@@ -217,8 +217,8 @@ class EntityDatabaseTest {
         act
             .test()
             .assertValue {
-                it.size == 2
-                it[0].eventEntity.uuid == eventEntity.uuid
+                it.size == 2 &&
+                it[0].eventEntity.uuid == eventEntity.uuid &&
                 it[1].eventEntity.uuid == eventEntityLater.uuid
             }.dispose()
     }
