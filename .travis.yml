@@ -35,7 +35,7 @@ script:
  - ./gradlew ktlint || travis_terminate 1
  - ./gradlew test || travis_terminate 1
  - ./gradlew build assembleAndroidTest || travis_terminate 1
- - echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI -s 800-1280
+ - echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI -s WXGA800
  - emulator -avd test -no-skin -no-audio -no-window &
  - android-wait-for-emulator
  - adb shell settings put global window_animation_scale 0
