@@ -5,18 +5,20 @@
     <data>
 
         <variable
-                name="recordAudioViewModel"
-                type="be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel"/>
+            name="recordAudioViewModel"
+            type="be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel" />
 
-        <import type="be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel.RecordingStatus"/>
+        <import type="be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel.RecordingStatus" />
 
         <import type="android.view.View" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/screen_record_audio"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:gravity="center"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/btn_recordAudio_pause"
@@ -26,12 +28,7 @@
             android:contentDescription="@string/description_pause_recording"
             android:onClick="@{() -> recordAudioViewModel.onPauseButtonClicked()}"
             android:src="@drawable/audio_pause"
-            android:visibility="@{recordAudioViewModel.recordingStatus != RecordingStatus.PAUSED? View.VISIBLE : View.INVISIBLE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_recordAudio_restart"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btn_recordAudio_stop"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:visibility="@{recordAudioViewModel.recordingStatus != RecordingStatus.PAUSED? View.VISIBLE : View.INVISIBLE}"/>
 
         <ImageButton
             android:id="@+id/btn_recordAudio_record"
@@ -41,12 +38,7 @@
             android:contentDescription="@string/description_start_recording"
             android:onClick="@{() -> recordAudioViewModel.onRecordButtonClicked()}"
             android:src="@drawable/audio_record"
-            android:visibility="@{recordAudioViewModel.recordingStatus != RecordingStatus.RECORDING? View.VISIBLE : View.INVISIBLE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_recordAudio_restart"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btn_recordAudio_stop"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:visibility="@{recordAudioViewModel.recordingStatus != RecordingStatus.RECORDING? View.VISIBLE : View.INVISIBLE}"/>
 
         <ImageButton
             android:id="@+id/btn_recordAudio_restart"
@@ -55,12 +47,7 @@
             android:layout_margin="32dp"
             android:contentDescription="@string/description_restart_recording"
             android:onClick="@{() -> recordAudioViewModel.onRestartButtonClicked()}"
-            android:src="@drawable/audio_restart"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btn_recordAudio_record"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/audio_restart"/>
 
         <ImageButton
             android:id="@+id/btn_recordAudio_stop"
@@ -69,13 +56,8 @@
             android:layout_margin="32dp"
             android:contentDescription="@string/description_stop_recording"
             android:onClick="@{() -> recordAudioViewModel.onStopButtonClicked()}"
-            android:src="@drawable/audio_stop"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_recordAudio_record"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/audio_stop"/>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>
