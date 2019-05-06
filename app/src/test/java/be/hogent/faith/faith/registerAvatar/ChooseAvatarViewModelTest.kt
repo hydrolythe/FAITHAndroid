@@ -11,12 +11,10 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.Single
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.io.IOException
 
 class ChooseAvatarViewModelTest {
 
@@ -60,13 +58,13 @@ class ChooseAvatarViewModelTest {
         val params = slot<CreateUserUseCase.Params>()
         viewModel.setSelectedItem(selection.toLong())
         viewModel.userName.postValue(name)
-        every { createUserUseCase.execute(capture(params)) } returns Single.just(mockk())
+        every { createUserUseCase.execute(any(), capture(params)) }
 
         // Act
         viewModel.nextButtonPressed()
 
         // Assert
-        verify { createUserUseCase.execute(any()) }
+        verify { createUserUseCase.execute(any(), any()) }
         with(params.captured) {
             assertEquals(username, name)
             assertEquals(avatarName, listOfAvatars[selection].avatarName)
@@ -79,7 +77,7 @@ class ChooseAvatarViewModelTest {
         val params = slot<CreateUserUseCase.Params>()
         viewModel.setSelectedItem(selection.toLong())
         viewModel.userName.postValue(name)
-        every { createUserUseCase.execute(capture(params)) } returns Single.just(mockk())
+        every { createUserUseCase.execute(any(), capture(params)) }
 
         val failObserver = mockk<Observer<String>>(relaxed = true)
         val successObserver = mockk<Observer<User>>(relaxed = true)
@@ -100,7 +98,7 @@ class ChooseAvatarViewModelTest {
         val params = slot<CreateUserUseCase.Params>()
         viewModel.setSelectedItem(selection.toLong())
         viewModel.userName.postValue(name)
-        every { createUserUseCase.execute(capture(params)) } returns Single.error(IOException())
+        every { createUserUseCase.execute(any(), capture(params)) }
 
         val failObserver = mockk<Observer<String>>(relaxed = true)
         val successObserver = mockk<Observer<User>>(relaxed = true)

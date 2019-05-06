@@ -2,6 +2,10 @@ package be.hogent.faith.service.usecases.base
 
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subscribers.DisposableSubscriber
 
 /**
  * Base class for a use case that will return a [Flowable].
@@ -12,9 +16,10 @@ import io.reactivex.Scheduler
  * An example can be found in [be.hogent.faith.service.usecases.SaveEventUseCase].
  */
 abstract class FlowableUseCase<Result, in Params>(
-    private val subscribeScheduler: Scheduler,
-    private val observeScheduler: Scheduler
+    private val observer: Scheduler
 ) {
+
+    private val disposables = CompositeDisposable()
 
     /**
      * This should be overridden with the business logic for the use case.
@@ -25,9 +30,18 @@ abstract class FlowableUseCase<Result, in Params>(
      * Executes the use case.
      * It will run on the specified [subscribeScheduler] and can be observed on the given [observeScheduler].
      */
-    open fun execute(params: Params): Flowable<Result> {
-        return this.buildUseCaseObservable(params)
-            .subscribeOn(subscribeScheduler)
-            .observeOn(observeScheduler) as Flowable<Result>
+    open fun execute(flowableObserver: DisposableSubscriber<Result>, params: Params) {
+        val flowable = this.buildUseCaseObservable(params)
+            .subscribeOn(Schedulers.io())
+            .observeOn(observer)
+        addDisposable(flowable.subscribeWith(flowableObserver))
+    }
+
+    private fun addDisposable(disposable: Disposable) {
+        disposables.add(disposable)
+    }
+
+    fun dispose() {
+        if (!disposables.isDisposed) disposables.dispose()
     }
 }

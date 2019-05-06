@@ -18,7 +18,6 @@ class SaveEmotionAvatarUseCase(
     private val storageRepository: StorageRepository,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEmotionAvatarUseCase.Params>(
-    Schedulers.io(),
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {

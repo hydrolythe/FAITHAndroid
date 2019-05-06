@@ -25,8 +25,6 @@ class AvatarViewModel(
 
     private var _selectedItem = MutableLiveData<Long>()
 
-    private val disposables = CompositeDisposable()
-
     private val _nextButtonClicked = SingleLiveEvent<Unit>()
     val nextButtonClicked: LiveData<Unit>
         get() = _nextButtonClicked
@@ -85,7 +83,15 @@ class AvatarViewModel(
                 userName.value!!,
                 _avatars.value!![_selectedItem.value!!.toInt()].avatarName
             )
-            createUserUseCase.execute(CreateUserHandler(), params)
+            createUserUseCase.execute(object : DisposableSingleObserver<User>() {
+                override fun onSuccess(newUser: User) {
+                    _userSavedSuccessFully.postValue(newUser)
+                }
+
+                override fun onError(e: Throwable) {
+                    _userSaveFailed.postValue(e.localizedMessage)
+                }
+            }, params)
         } else {
             _inputErrorMessageID.postValue(R.string.txt_error_userNameOrAvatarNotSet)
             return
@@ -95,16 +101,6 @@ class AvatarViewModel(
 
     private fun fetchAvatarImages() {
         _avatars.postValue(avatarProvider.getAvatars())
-    }
-
-    private inner class CreateUserHandler : DisposableSingleObserver<User>() {
-        override fun onSuccess(newUser: User) {
-            _userSavedSuccessFully.postValue(newUser)
-        }
-
-        override fun onError(e: Throwable) {
-            _userSaveFailed.postValue(e.localizedMessage)
-        }
     }
 
     override fun onCleared() {
