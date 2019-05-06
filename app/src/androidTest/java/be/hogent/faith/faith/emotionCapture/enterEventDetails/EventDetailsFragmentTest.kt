@@ -8,9 +8,9 @@ import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.ActivityTestRule
 import androidx.test.uiautomator.UiDevice
 import be.hogent.faith.R
 import be.hogent.faith.faith.registerAvatar.LoginOrRegisterActivity
@@ -26,7 +26,8 @@ import org.junit.runner.RunWith
 class EventDetailsFragmentTest {
 
     @get:Rule
-    var activityScenarioRule = ActivityScenarioRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java)
+    var activityScenarioRule =
+        ActivityTestRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java, true, true)
 
     private lateinit var uiDevice: UiDevice
 

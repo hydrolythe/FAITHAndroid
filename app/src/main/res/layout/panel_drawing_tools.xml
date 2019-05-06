@@ -8,19 +8,22 @@
             type="be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel" />
 
         <import type="android.graphics.Color" />
-        <import type="be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel.LineWidth"/>
+
+        <import type="be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel.LineWidth" />
 
     </data>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
         android:orientation="vertical">
 
         <ImageButton
             android:id="@+id/btn_draw_setColorBlack"
             android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:contentDescription="@string/choose_black"
             android:onClick="@{() -> drawViewModel.pickColor(Color.BLACK)}"
             android:src="@drawable/circle_black" />
@@ -28,7 +31,8 @@
         <ImageButton
             android:id="@+id/btn_draw_setColorBlue"
             android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:contentDescription="@string/choose_blue"
             android:onClick="@{() -> drawViewModel.pickColor(Color.BLUE)}"
             android:src="@drawable/circle_blue" />
@@ -36,7 +40,8 @@
         <ImageButton
             android:id="@+id/btn_draw_setColorRed"
             android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:contentDescription="@string/choose_red"
             android:onClick="@{() -> drawViewModel.pickColor(Color.RED)}"
             android:src="@drawable/circle_red" />
@@ -44,7 +49,8 @@
         <ImageButton
             android:id="@+id/btn_draw_setColorYellow"
             android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:contentDescription="@string/choose_yellow"
             android:onClick="@{() -> drawViewModel.pickColor(Color.YELLOW)}"
             android:src="@drawable/circle_yellow" />
@@ -52,7 +58,8 @@
         <ImageButton
             android:id="@+id/btn_draw_setColorGreen"
             android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:contentDescription="@string/choose_green"
             android:onClick="@{() -> drawViewModel.pickColor(Color.GREEN)}"
             android:src="@drawable/circle_green" />
@@ -61,6 +68,7 @@
             android:id="@+id/btn_draw_setThinLineWidth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THIN)}"
             android:text="@string/lineWidth_thin" />
 
@@ -68,6 +76,7 @@
             android:id="@+id/btn_draw_setMediumLineWidth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.MEDIUM)}"
             android:text="@string/lineWidth_medium" />
 
@@ -75,6 +84,7 @@
             android:id="@+id/btn_draw_setThickLineWidth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THICK)}"
             android:text="@string/lineWidth_Thick" />
 
@@ -82,6 +92,7 @@
             android:id="@+id/btn_draw_undo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:contentDescription="@string/undo"
             android:onClick="@{() -> drawViewModel.undo()}"
             android:src="@drawable/ic_undo_black_24dp" />

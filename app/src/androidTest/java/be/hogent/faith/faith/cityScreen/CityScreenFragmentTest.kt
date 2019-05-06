@@ -6,8 +6,8 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.rule.ActivityTestRule
 import be.hogent.faith.R
 import be.hogent.faith.faith.registerAvatar.LoginOrRegisterActivity
 import be.hogent.faith.faith.util.NavigationUtil
@@ -20,7 +20,8 @@ import org.junit.runner.RunWith
 class CityScreenFragmentTest {
 
     @get:Rule
-    var activityScenarioRule = ActivityScenarioRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java)
+    var activityScenarioRule =
+        ActivityTestRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java, true, true)
 
     @Before
     fun goToScreen() {

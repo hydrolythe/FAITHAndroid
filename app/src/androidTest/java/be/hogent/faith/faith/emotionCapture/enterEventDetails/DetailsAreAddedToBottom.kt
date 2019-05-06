@@ -5,9 +5,9 @@ import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.rule.ActivityTestRule
 import androidx.test.uiautomator.UiDevice
 import be.hogent.faith.R
 import be.hogent.faith.faith.registerAvatar.LoginOrRegisterActivity
@@ -25,7 +25,7 @@ class DetailsAreAddedToBottom {
     private lateinit var uiDevice: UiDevice
 
     @get:Rule
-    var activityScenarioRule = ActivityScenarioRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java)
+    var activityScenarioRule = ActivityTestRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java, true, true)
 
     @Before
     fun setUp() {
