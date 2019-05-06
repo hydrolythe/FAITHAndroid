@@ -8,6 +8,7 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.CreateUserUseCase
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
 
 /**
  * ViewModel for the Avatar selection screen
@@ -84,12 +85,7 @@ class AvatarViewModel(
                 userName.value!!,
                 _avatars.value!![_selectedItem.value!!.toInt()].avatarName
             )
-            val disposable = createUserUseCase.execute(params).subscribe({ newUser ->
-                _userSavedSuccessFully.postValue(newUser)
-            }, {
-                _userSaveFailed.postValue(it.localizedMessage)
-            })
-            disposables.add(disposable)
+            createUserUseCase.execute(CreateUserHandler(), params)
         } else {
             _inputErrorMessageID.postValue(R.string.txt_error_userNameOrAvatarNotSet)
             return
@@ -99,5 +95,20 @@ class AvatarViewModel(
 
     private fun fetchAvatarImages() {
         _avatars.postValue(avatarProvider.getAvatars())
+    }
+
+    private inner class CreateUserHandler : DisposableSingleObserver<User>() {
+        override fun onSuccess(newUser: User) {
+            _userSavedSuccessFully.postValue(newUser)
+        }
+
+        override fun onError(e: Throwable) {
+            _userSaveFailed.postValue(e.localizedMessage)
+        }
+    }
+
+    override fun onCleared() {
+        createUserUseCase.dispose()
+        super.onCleared()
     }
 }
