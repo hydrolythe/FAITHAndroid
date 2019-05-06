@@ -23,7 +23,6 @@ abstract class SingleUseCase<Result, in Params>(
     protected abstract fun buildUseCaseSingle(params: Params): Single<Result>
 
     open fun execute(singleObserver: DisposableSingleObserver<Result>, params: Params) {
-        //TODO: verschil subscribe/observe/subscribeWith
         val single = this.buildUseCaseSingle(params)
             .subscribeOn(Schedulers.io())
             .observeOn(observer)
