@@ -9,6 +9,7 @@
             type="be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel" />
 
         <import type="android.graphics.Color" />
+        <import type="be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel.FontSize" />
 
     </data>
 
@@ -16,18 +17,18 @@
         android:id="@+id/screen_enter_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/btn_enter_text_setColorBlack"
                 android:layout_width="50dp"
-                android:layout_height="0dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
                 android:contentDescription="@string/choose_black"
                 android:onClick="@{() -> enterTextViewModel.pickTextColor(Color.BLACK)}"
@@ -35,7 +36,7 @@
             <ImageButton
                 android:id="@+id/btn_enter_text_setColorBlue"
                 android:layout_width="50dp"
-                android:layout_height="0dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
                 android:contentDescription="@string/choose_blue"
                 android:onClick="@{() -> enterTextViewModel.pickTextColor(Color.BLUE)}"
@@ -44,7 +45,7 @@
             <ImageButton
                 android:id="@+id/btn_draw_setColorRed"
                 android:layout_width="50dp"
-                android:layout_height="0dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
                 android:contentDescription="@string/choose_red"
                 android:onClick="@{() -> enterTextViewModel.pickTextColor(Color.RED)}"
@@ -53,7 +54,7 @@
             <ImageButton
                 android:id="@+id/btn_enter_text_setColorYellow"
                 android:layout_width="50dp"
-                android:layout_height="0dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
                 android:contentDescription="@string/choose_yellow"
                 android:onClick="@{() -> enterTextViewModel.pickTextColor(Color.YELLOW)}"
@@ -62,7 +63,7 @@
             <ImageButton
                 android:id="@+id/btn_draw_setColorGreen"
                 android:layout_width="50dp"
-                android:layout_height="0dp"
+                android:layout_height="50dp"
                 android:layout_weight="1"
                 android:contentDescription="@string/choose_green"
                 android:onClick="@{() -> enterTextViewModel.pickTextColor(Color.GREEN)}"
@@ -92,15 +93,39 @@
                 android:onClick="@{() -> enterTextViewModel.onUnderlineClicked()}"
                 android:text="U" />
 
+            <Button
+                android:id="@+id/btn_enter_text_setFontSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{() -> enterTextViewModel.pickFontSize(FontSize.SMALL)}"
+                android:text="@string/klein" />
+            <Button
+                android:id="@+id/btn_enter_text_setFontNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{() -> enterTextViewModel.pickFontSize(FontSize.NORMAL)}"
+                android:text="@string/normaal" />
+            <Button
+                android:id="@+id/btn_enter_text_setFontLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="@{() -> enterTextViewModel.pickFontSize(FontSize.LARGE)}"
+                android:text="@string/groot" />
+
 
 
         </LinearLayout>
 
         <jp.wasabeef.richeditor.RichEditor
             android:id="@+id/editor"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin ="20dp"
+            android:textSize="12sp"
+        />
 
 
     </LinearLayout>
