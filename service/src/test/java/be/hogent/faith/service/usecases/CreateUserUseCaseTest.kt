@@ -35,7 +35,7 @@ class CreateUserUseCaseTest {
         val params = CreateUserUseCase.Params("username", "avatarName")
 
         // Act
-        val result = createUserUseCase.buildUseCaseObservable(params)
+        val result = createUserUseCase.buildUseCaseSingle(params)
 
         // Assert
         result.test()
@@ -57,7 +57,7 @@ class CreateUserUseCaseTest {
         val params = CreateUserUseCase.Params("username", "avatarName")
 
         // Act
-        val result = createUserUseCase.buildUseCaseObservable(params)
+        val result = createUserUseCase.buildUseCaseSingle(params)
 
         // Assert
         Assert.assertEquals(params.username, userArg.captured.username)
