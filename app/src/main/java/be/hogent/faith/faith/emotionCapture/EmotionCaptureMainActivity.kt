@@ -12,6 +12,7 @@ import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
+import be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
@@ -53,6 +54,8 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
 
     lateinit var recordAudioViewModel: RecordAudioViewModel
 
+    lateinit var enterTextViewModel: EnterTextViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_emotion_capture)
@@ -66,6 +69,10 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
             parametersOf(eventViewModel.event.value)
         }
         recordAudioViewModel = getViewModel {
+            parametersOf(eventViewModel.event.value)
+        }
+
+        enterTextViewModel = getViewModel {
             parametersOf(eventViewModel.event.value)
         }
 
