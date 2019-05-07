@@ -30,7 +30,7 @@ abstract class FlowableUseCase<Result, in Params>(
      * Executes the use case.
      * It will run on the specified [subscribeScheduler] and can be observed on the given [observeScheduler].
      */
-    open fun execute(flowableObserver: DisposableSubscriber<Result>, params: Params) {
+    open fun execute(params: Params, flowableObserver: DisposableSubscriber<Result>) {
         val flowable = this.buildUseCaseObservable(params)
             .subscribeOn(Schedulers.io())
             .observeOn(observer)

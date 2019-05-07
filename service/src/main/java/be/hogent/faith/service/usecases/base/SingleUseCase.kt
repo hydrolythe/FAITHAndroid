@@ -22,7 +22,7 @@ abstract class SingleUseCase<Result, in Params>(
 
     protected abstract fun buildUseCaseSingle(params: Params): Single<Result>
 
-    open fun execute(singleObserver: DisposableSingleObserver<Result>, params: Params) {
+    open fun execute(params: Params, singleObserver: DisposableSingleObserver<Result>) {
         val single = this.buildUseCaseSingle(params)
             .subscribeOn(Schedulers.io())
             .observeOn(observer)
@@ -36,5 +36,4 @@ abstract class SingleUseCase<Result, in Params>(
     fun dispose() {
         if (!disposables.isDisposed) disposables.dispose()
     }
-
 }

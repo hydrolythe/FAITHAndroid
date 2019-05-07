@@ -5,11 +5,10 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.service.usecases.SaveAudioRecordingUseCase
 import io.mockk.Called
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.Completable
+import io.reactivex.observers.DisposableCompletableObserver
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -18,7 +17,7 @@ import org.junit.Test
 class RecordAudioViewModelTest {
     private lateinit var viewModel: RecordAudioViewModel
 
-    private val saveAudioRecordingUseCase = mockk<SaveAudioRecordingUseCase>()
+    private val saveAudioRecordingUseCase = mockk<SaveAudioRecordingUseCase>(relaxed = true)
     private val event = mockk<Event>()
 
     @get:Rule
@@ -65,14 +64,16 @@ class RecordAudioViewModelTest {
     fun recordAudioVM_saveButtonClicked_callsUseCase() {
         // Arrange
         val params = slot<SaveAudioRecordingUseCase.SaveAudioRecordingParams>()
-        every { saveAudioRecordingUseCase.execute(capture(params)) } returns Completable.complete()
+        val observer = slot<DisposableCompletableObserver>()
         viewModel.tempRecordingFile = mockk()
 
         // Act
         viewModel.onSaveButtonClicked()
+        verify { saveAudioRecordingUseCase.execute(capture(params), capture(observer)) }
+        // Make the UC-handler call the success handler
+        observer.captured.onComplete()
 
         // Assert
-        verify { saveAudioRecordingUseCase.execute(any()) }
         assertEquals(event, params.captured.event)
     }
 
@@ -81,13 +82,17 @@ class RecordAudioViewModelTest {
         // Arrange
         val successObserver = mockk<Observer<Unit>>(relaxed = true)
         val failedObserver = mockk<Observer<String>>(relaxed = true)
-        every { saveAudioRecordingUseCase.execute(any()) } returns Completable.complete()
+        val observer = slot<DisposableCompletableObserver>()
+
         viewModel.recordingSavedSuccessFully.observeForever(successObserver)
         viewModel.recordingSaveFailed.observeForever(failedObserver)
         viewModel.tempRecordingFile = mockk()
 
         // Act
         viewModel.onSaveButtonClicked()
+        verify { saveAudioRecordingUseCase.execute(any(), capture(observer)) }
+        // Make the UC-handler call the success handler
+        observer.captured.onComplete()
 
         // Assert
         assertEquals("", viewModel.recordingName.value)
@@ -100,19 +105,21 @@ class RecordAudioViewModelTest {
         // Arrange
         val successObserver = mockk<Observer<Unit>>(relaxed = true)
         val failedObserver = mockk<Observer<String>>(relaxed = true)
-        val errorMessage = "Something failed"
-        viewModel.tempRecordingFile = mockk()
+        val observer = slot<DisposableCompletableObserver>()
 
-        every { saveAudioRecordingUseCase.execute(any()) } returns Completable.error(RuntimeException(errorMessage))
+        viewModel.tempRecordingFile = mockk()
 
         viewModel.recordingSavedSuccessFully.observeForever(successObserver)
         viewModel.recordingSaveFailed.observeForever(failedObserver)
 
         // Act
         viewModel.onSaveButtonClicked()
+        verify { saveAudioRecordingUseCase.execute(any(), capture(observer)) }
+        // Make the UC-handler call the success handler
+        observer.captured.onError(mockk(relaxed = true))
 
         // Assert
-        verify { failedObserver.onChanged(errorMessage) }
+        verify { failedObserver.onChanged(any()) }
         verify { successObserver wasNot Called }
     }
 }

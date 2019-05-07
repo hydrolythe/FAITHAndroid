@@ -15,7 +15,7 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventUseCase
 import be.hogent.faith.util.TAG
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableCompletableObserver
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.UUID
@@ -66,8 +66,6 @@ class EventViewModel(
     private val _avatarSavedSuccessFully = SingleLiveEvent<Unit>()
     val avatarSavedSuccessFully: LiveData<Unit>
         get() = _avatarSavedSuccessFully
-
-    private val disposables = CompositeDisposable()
 
     init {
         if (eventUuid != null) {
@@ -175,15 +173,7 @@ class EventViewModel(
         }
         val params = SaveEventUseCase.Params(event.value!!, user.value!!)
         // TODO: checken of user livedata ook geupdated wordt als een van zijn events aangepast wordt.
-        val disposable = saveEventUseCase.execute(params).subscribe({
-            Log.i(TAG, "New event saved: ${event.value!!.title}")
-            _eventSavedSuccessFully.call()
-            resetViewModel()
-        }, {
-            Log.i(TAG, "Event failed to save because: ${it.message}")
-            _errorMessage.postValue(R.string.error_save_event_failed)
-        })
-        disposables.add(disposable)
+        saveEventUseCase.execute(params, SaveEventUseCaseHandler())
     }
 
     /**
@@ -202,7 +192,8 @@ class EventViewModel(
     }
 
     override fun onCleared() {
-        disposables.clear()
+        saveEventUseCase.dispose()
+        saveEmotionAvatarUseCase.dispose()
         super.onCleared()
     }
 
@@ -213,15 +204,32 @@ class EventViewModel(
      * the use case to save the image is done
      */
     fun saveEmotionAvatarImage(bitmap: Bitmap) {
-        val saveRequest = saveEmotionAvatarUseCase.execute(
-            SaveEmotionAvatarUseCase.Params(bitmap, event.value!!)
-        ).subscribe({
+        val params = SaveEmotionAvatarUseCase.Params(bitmap, event.value!!)
+        saveEmotionAvatarUseCase.execute(params, SaveEmotionAvatarUseCaseHandler())
+    }
+
+    private inner class SaveEmotionAvatarUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
             updateEvent()
             _avatarSavedSuccessFully.value = Unit
-        }, {
-            Log.e(TAG, it.localizedMessage)
+        }
+
+        override fun onError(e: Throwable) {
+            Log.e(TAG, e.localizedMessage)
             _errorMessage.postValue(R.string.error_save_avatar_failed)
-        })
-        disposables.add(saveRequest)
+        }
+    }
+
+    private inner class SaveEventUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            Log.i(TAG, "New event saved: ${event.value!!.title}")
+            _eventSavedSuccessFully.call()
+            resetViewModel()
+        }
+
+        override fun onError(e: Throwable) {
+            Log.i(TAG, "Event failed to save because: ${e.message}")
+            _errorMessage.postValue(R.string.error_save_event_failed)
+        }
     }
 }
