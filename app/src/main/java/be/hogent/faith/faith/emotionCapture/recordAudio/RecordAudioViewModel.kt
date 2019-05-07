@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.SaveAudioRecordingUseCase
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableCompletableObserver
 import java.io.File
 
 class RecordAudioViewModel(
@@ -25,8 +25,6 @@ class RecordAudioViewModel(
         get() = _recordingStatus
 
     val recordingName = MutableLiveData<String>()
-
-    private val disposables = CompositeDisposable()
 
     /**
      * True when pausing an audio recording is supported.
@@ -97,25 +95,29 @@ class RecordAudioViewModel(
     }
 
     fun onSaveButtonClicked() {
-        val disposable = saveAudioUseCase.execute(
-            SaveAudioRecordingUseCase.SaveAudioRecordingParams(
-                tempRecordingFile,
-                event,
-                recordingName.value!!
-            )
-        ).subscribe({
+        val params = SaveAudioRecordingUseCase.SaveAudioRecordingParams(
+            tempRecordingFile,
+            event,
+            recordingName.value!!
+        )
+        saveAudioUseCase.execute(params, SaveAudioUseCaseHandler())
+    }
+
+    private inner class SaveAudioUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
             _recordingSavedSuccessFully.call()
             // Name has to be cleared so future pictures start with an empty recordingName
             recordingName.value = ""
-        }, {
-            _recordingSaveFailed.postValue(it.message)
-        })
-        disposables.add(disposable)
+        }
+
+        override fun onError(e: Throwable) {
+            _recordingSaveFailed.postValue(e.message)
+        }
     }
 
     override fun onCleared() {
         super.onCleared()
-        disposables.clear()
+        saveAudioUseCase.dispose()
     }
 
     enum class RecordingStatus {

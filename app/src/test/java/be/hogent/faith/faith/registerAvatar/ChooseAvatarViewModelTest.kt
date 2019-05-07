@@ -23,7 +23,7 @@ class ChooseAvatarViewModelTest {
     private val selection: Int = 0
     private val avatarProvider = mockk<ResourceAvatarProvider>()
     private val listOfAvatars = listOf(Avatar(DataFactory.randomString()))
-    private var createUserUseCase = mockk<CreateUserUseCase>()
+    private var createUserUseCase = mockk<CreateUserUseCase>(relaxed = true)
 
     private lateinit var viewModel: AvatarViewModel
 
@@ -37,24 +37,24 @@ class ChooseAvatarViewModelTest {
     val testRule = InstantTaskExecutorRule()
 
     @Test
-    fun avatarItemViewModel_setUserName() {
+    fun avatarViewModel_setUserName() {
         viewModel.userName.postValue(name)
         assertEquals(name, getValue(viewModel.userName))
     }
 
     @Test
-    fun avatarItemViewModel_setSelectedItem() {
+    fun avatarViewModel_setSelectedItem() {
         viewModel.setSelectedItem(selection.toLong())
         assertEquals(selection, getValue(viewModel.selectedItem).toInt())
     }
 
     @Test
-    fun avatarItemViewModel_fetchesAvatarOnConstruction() {
+    fun avatarViewModel_fetchesAvatarOnConstruction() {
         assertEquals(listOfAvatars, viewModel.avatars.value)
     }
 
     @Test
-    fun eventVM_saveButtonClicked__CallUseCaseWithCorrectParams() {
+    fun avatarViewModel_saveButtonClicked__CallUseCaseWithCorrectParams() {
         // Arrange
         val params = slot<CreateUserUseCase.Params>()
         viewModel.setSelectedItem(selection.toLong())
@@ -64,7 +64,7 @@ class ChooseAvatarViewModelTest {
         viewModel.nextButtonPressed()
 
         // Assert
-        verify { createUserUseCase.execute(any(), capture(params)) }
+        verify { createUserUseCase.execute(capture(params), any()) }
         with(params.captured) {
             assertEquals(username, name)
             assertEquals(avatarName, listOfAvatars[selection].avatarName)
@@ -72,13 +72,13 @@ class ChooseAvatarViewModelTest {
     }
 
     @Test
-    fun avatarItemViewModel_nextButtonClicked_callUseCaseAndNotifiesSuccess() {
+    fun avatarViewModel_inputOK_callUseCaseAndNotifiesSuccess() {
         // Arrange
         val params = slot<CreateUserUseCase.Params>()
         val observer = slot<DisposableSingleObserver<User>>()
+
         viewModel.setSelectedItem(selection.toLong())
         viewModel.userName.postValue(name)
-        every { createUserUseCase.execute(any(), capture(params)) }
 
         val failObserver = mockk<Observer<String>>(relaxed = true)
         val successObserver = mockk<Observer<User>>(relaxed = true)
@@ -87,21 +87,23 @@ class ChooseAvatarViewModelTest {
 
         // Act
         viewModel.nextButtonPressed()
+        verify { createUserUseCase.execute(capture(params), capture(observer)) }
+        // Make the UC-handler call the success handler
+        observer.captured.onSuccess(mockk())
 
         // Assert
-        verify { createUserUseCase.execute(capture(observer), capture(params)) }
-        observer.captured.onSuccess(mockk())
         verify { successObserver.onChanged(any()) }
         verify { failObserver wasNot called }
     }
 
     @Test
-    fun eventVM_saveButtonClicked_callUseCaseAndNotifiesFailure() {
+    fun eventViewModel_UseCaseFails_notifiesFailure() {
         // Arrange
         val params = slot<CreateUserUseCase.Params>()
+        val observer = slot<DisposableSingleObserver<User>>()
+
         viewModel.setSelectedItem(selection.toLong())
         viewModel.userName.postValue(name)
-        every { createUserUseCase.execute(any(), capture(params)) }
 
         val failObserver = mockk<Observer<String>>(relaxed = true)
         val successObserver = mockk<Observer<User>>(relaxed = true)
@@ -110,9 +112,44 @@ class ChooseAvatarViewModelTest {
 
         // Act
         viewModel.nextButtonPressed()
+        verify { createUserUseCase.execute(capture(params), capture(observer)) }
+        // Make the UC-handler call the error handler
+        observer.captured.onError(mockk(relaxed = true))
 
         // Assert
         verify { failObserver.onChanged(any()) }
         verify { successObserver wasNot called }
+    }
+
+    @Test
+    fun eventViewModel_noAvatarChosen_notifiesAndNoUseCaseCalled() {
+        // Arrange
+        viewModel.userName.postValue(name)
+
+        val errorObserver = mockk<Observer<Int>>(relaxed = true)
+        viewModel.inputErrorMessageID.observeForever(errorObserver)
+
+        // Act
+        viewModel.nextButtonPressed()
+
+        // Assert
+        verify { createUserUseCase wasNot called }
+        verify { errorObserver.onChanged(any()) }
+    }
+
+    @Test
+    fun eventViewModel_noNameGiven_notifiesAndNoUseCaseCalled() {
+        // Arrange
+        viewModel.setSelectedItem(selection.toLong())
+
+        val errorObserver = mockk<Observer<Int>>(relaxed = true)
+        viewModel.inputErrorMessageID.observeForever(errorObserver)
+
+        // Act
+        viewModel.nextButtonPressed()
+
+        // Assert
+        verify { createUserUseCase wasNot called }
+        verify { errorObserver.onChanged(any()) }
     }
 }

@@ -30,7 +30,7 @@ abstract class CompletableUseCase<in Params>(
      * Executes the use case.
      * It will run on the specified [subscribeScheduler] and can be observed on the given [observer].
      */
-    open fun execute(completableObserver: DisposableCompletableObserver, params: Params) {
+    open fun execute(params: Params, completableObserver: DisposableCompletableObserver) {
         val completable = this.buildUseCaseObservable(params)
             .subscribeOn(Schedulers.io())
             .observeOn(observer)

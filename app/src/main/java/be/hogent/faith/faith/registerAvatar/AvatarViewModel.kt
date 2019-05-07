@@ -7,7 +7,6 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.CreateUserUseCase
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 
 /**
@@ -16,8 +15,7 @@ import io.reactivex.observers.DisposableSingleObserver
 class AvatarViewModel(
     private val avatarProvider: AvatarProvider,
     private val createUserUseCase: CreateUserUseCase
-) :
-    ViewModel() {
+) : ViewModel() {
 
     private var _avatars = MutableLiveData<List<Avatar>>()
     val avatars: LiveData<List<Avatar>>
@@ -78,25 +76,27 @@ class AvatarViewModel(
     }
 
     fun nextButtonPressed() {
-        if (avatarWasSelected() && userName.value != null) {
+        if (avatarWasSelected() && !userName.value.isNullOrEmpty()) {
             val params = CreateUserUseCase.Params(
                 userName.value!!,
                 _avatars.value!![_selectedItem.value!!.toInt()].avatarName
             )
-            createUserUseCase.execute(object : DisposableSingleObserver<User>() {
-                override fun onSuccess(newUser: User) {
-                    _userSavedSuccessFully.postValue(newUser)
-                }
-
-                override fun onError(e: Throwable) {
-                    _userSaveFailed.postValue(e.localizedMessage)
-                }
-            }, params)
+            createUserUseCase.execute(params, CreateUserUseCaseHandler())
+            _nextButtonClicked.call()
         } else {
             _inputErrorMessageID.postValue(R.string.txt_error_userNameOrAvatarNotSet)
             return
         }
-        _nextButtonClicked.call()
+    }
+
+    private inner class CreateUserUseCaseHandler : DisposableSingleObserver<User>() {
+        override fun onSuccess(newUser: User) {
+            _userSavedSuccessFully.postValue(newUser)
+        }
+
+        override fun onError(e: Throwable) {
+            _userSaveFailed.postValue(e.localizedMessage)
+        }
     }
 
     private fun fetchAvatarImages() {
