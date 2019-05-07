@@ -9,6 +9,8 @@ interface AvatarProvider {
      */
     fun getAvatars(): List<Avatar> {
         return listOf(
+            "jongen_gamer",
+            "meisje_stoer",
             "avatar",
             "avatar2",
             "avatar3",
