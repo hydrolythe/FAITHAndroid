@@ -3,6 +3,7 @@ package be.hogent.faith.faith.emotionCapture.enterText
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterTextBinding
-import jp.wasabeef.richeditor.RichEditor
+import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_enter_text.editor
-
-
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class EnterTextFragment : Fragment() {
@@ -35,19 +34,23 @@ class EnterTextFragment : Fragment() {
         setUpListeners()
     }
 
-    private fun initEditor(){
+    private fun initEditor() {
         editor.setEditorHeight(200)
-        editor.setEditorFontSize(22)
-        editor.setEditorFontColor(Color.BLACK)
-        //editor.setEditorBackgroundColor(Color.BLUE);
+        editor.setEditorFontSize(30)
+         //editor.setEditorBackgroundColor(Color.BLUE);
         //editor.setBackgroundColor(Color.BLUE);
         //editor.setBackgroundResource(R.drawable.bg);
         editor.setPadding(10, 10, 10, 10)
         //editor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
-        editor.setPlaceholder("Insert text here...")
+        editor.setPlaceholder(".....")
         //editor.setInputEnabled(false);
 
+        editor.setOnTextChangeListener {
+            enterTextViewModel.textChanged(it);
+        }
+
     }
+
     private fun setUpListeners() {
         enterTextViewModel.selectedTextColor.observe(this, Observer { newColor ->
             editor.setTextColor(newColor)
@@ -60,6 +63,9 @@ class EnterTextFragment : Fragment() {
         })
         enterTextViewModel.underlineClicked.observe(this, Observer {
             editor.setUnderline()
+        })
+        enterTextViewModel.selectedFontSize.observe(this, Observer { newSize ->
+            editor.setFontSize(newSize)
         })
     }
 
