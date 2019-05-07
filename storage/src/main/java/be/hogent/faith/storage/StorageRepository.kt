@@ -15,6 +15,7 @@ import java.io.File
  * TODO: Currently only supports internal storage.
  */
 const val PICTURE_EXTENSION = "png"
+const val TEXT_EXTENSION = "txt"
 
 class StorageRepository(private val context: Context) {
 
@@ -94,6 +95,23 @@ class StorageRepository(private val context: Context) {
             val storedFile = File(createEventImageFolder(event), "${createSaveFileName(photoName)}.$PICTURE_EXTENSION")
             tempPhotoFile.copyTo(target = storedFile, overwrite = true)
             tempPhotoFile.delete()
+            storedFile
+        }
+    }
+
+    /**
+     *  Writes HTML to a text file
+     *
+     * @param text the html
+     * @param event the [Event] this photo will be added to as a detail (not by this function).
+     *          Used to store the photo in a folder specific for the event.
+     * @param fileName  Will be used for the filename.
+     */
+    fun writeHTML(text:String, event:Event,  fileName:String): Single<File>
+    {
+        return Single.fromCallable {
+            val storedFile = File(createEventImageFolder(event), "$fileName.$TEXT_EXTENSION")
+            storedFile.writeText(text)
             storedFile
         }
     }
