@@ -74,4 +74,5 @@
     <string name="lbl_activity_emotionCapture">Emotiecaptatie</string>
     <string name="lbl_activity_city">De Stad</string>
     <string name="description_event_avatar">Getekende avatar voor de gebeurtenis</string>
+    <string name="descr_city_park">Het stadspark</string>
 </resources>

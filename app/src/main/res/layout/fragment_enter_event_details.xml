@@ -9,160 +9,209 @@
             name="eventViewModel"
             type="be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel" />
     </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/screen_new_event"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/label_event_details_title"
-            style="@style/Base.TextAppearance.AppCompat.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="@string/event_details_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <!--ACHTERGROND-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/park_faith"
+            android:contentDescription="@string/descr_city_park" />
 
-        <TextView
-            android:id="@+id/label_event_details_event_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:labelFor="@id/txt_event_details_title"
-            android:text="@string/event_details_label_title"
-            app:layout_constraintBottom_toTopOf="@id/event_details_upperDivider"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_event_details_title" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/screen_new_event"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
-        <EditText
-            android:id="@+id/txt_event_details_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:text="@={eventViewModel.eventTitle}"
-            app:layout_constraintBaseline_toBaselineOf="@id/label_event_details_event_title"
-            app:layout_constraintEnd_toStartOf="@id/event_details_middleDivider"
-            app:layout_constraintStart_toEndOf="@id/label_event_details_event_title"
-            tools:text="Titel van de gebeurtenis" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_top_pole"
+                android:layout_width="8dp"
+                android:layout_height="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.4" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/event_details_upperDivider"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.15" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_middle_horizontal_pole"
+                android:layout_width="8dp"
+                android:layout_height="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.52" />
 
-        <ImageButton
-            android:id="@+id/btn_event_details_text"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="16dp"
-            android:contentDescription="@string/description_addText"
-            android:onClick="@{() -> eventViewModel.onTextButtonClicked()}"
-            android:src="@drawable/event_detail_text"
-            app:layout_constraintBottom_toTopOf="@id/btn_event_details_audio"
-            app:layout_constraintEnd_toStartOf="@id/event_details_middleDivider"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/event_details_upperDivider" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_bottom_pole"
+                android:layout_width="8dp"
+                android:layout_height="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.65" />
 
-        <ImageButton
-            android:id="@+id/btn_event_details_camera"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="16dp"
-            android:contentDescription="@string/description_addPhoto"
-            android:onClick="@{() -> eventViewModel.onCameraButtonClicked()}"
-            android:src="@drawable/event_detail_camera"
-            app:layout_constraintBottom_toTopOf="@id/btn_event_details_drawing"
-            app:layout_constraintEnd_toEndOf="@id/event_details_sideDivider"
-            app:layout_constraintStart_toEndOf="@id/event_details_middleDivider"
-            app:layout_constraintTop_toTopOf="@id/event_details_upperDivider" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_left_pole"
+                android:layout_width="8dp"
+                android:layout_height="12dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.45" />
 
-        <ImageButton
-            android:id="@+id/btn_event_details_audio"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="16dp"
-            android:contentDescription="@string/description_addAudio"
-            android:onClick="@{() -> eventViewModel.onAudioButtonClicked()}"
-            android:src="@drawable/event_detail_audio"
-            app:layout_constraintBottom_toBottomOf="@id/event_details_lowerDivider"
-            app:layout_constraintEnd_toStartOf="@id/event_details_middleDivider"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_event_details_text" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_right_pole"
+                android:layout_width="8dp"
+                android:layout_height="12dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.91" />
 
-        <ImageButton
-            android:id="@+id/btn_event_details_drawing"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="16dp"
-            android:contentDescription="@string/description_addDrawing"
-            android:onClick="@{() -> eventViewModel.onDrawingButtonClicked()}"
-            android:src="@drawable/event_detail_drawing"
-            app:layout_constraintBottom_toTopOf="@+id/event_details_lowerDivider"
-            app:layout_constraintEnd_toEndOf="@id/event_details_sideDivider"
-            app:layout_constraintStart_toEndOf="@id/event_details_middleDivider"
-            app:layout_constraintTop_toBottomOf="@id/btn_event_details_camera" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_middle_vertical_pole"
+                android:layout_width="8dp"
+                android:layout_height="12dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.68" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/event_details_lowerDivider"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.85" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_event_details_details"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="16dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/event_details_sideDivider"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/event_details_lowerDivider" />
+            <TextView
+                android:id="@+id/label_event_details_title"
+                style="@style/Base.TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@string/event_details_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/btn_event_details_send"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:minWidth="24dp"
-            android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
-            android:src="@drawable/event_details_send"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/event_details_sideDivider"
-            app:layout_constraintTop_toBottomOf="@id/event_details_lowerDivider" />
+            <TextView
+                android:id="@+id/label_event_details_event_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:labelFor="@id/txt_event_details_title"
+                android:text="@string/event_details_label_title"
+                app:layout_constraintBottom_toTopOf="@id/event_details_upperDivider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/label_event_details_title" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/event_details_sideDivider"
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintGuide_percent="0.9" />
+            <EditText
+                android:id="@+id/txt_event_details_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:inputType="text"
+                android:text="@={eventViewModel.eventTitle}"
+                app:layout_constraintBaseline_toBaselineOf="@id/label_event_details_event_title"
+                app:layout_constraintEnd_toStartOf="@+id/guide_left_pole"
+                app:layout_constraintStart_toEndOf="@id/label_event_details_event_title"
+                tools:text="Titel van de gebeurtenis" />
 
-        <ImageButton
-            android:id="@+id/btn_event_details_gotoEmotionAvatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{() -> eventViewModel.onEmotionAvatarClicked()}"
-            android:src="@drawable/event_detail_go_to_emotion"
-            app:layout_constraintBottom_toTopOf="@id/event_details_lowerDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/event_details_sideDivider"
-            app:layout_constraintTop_toBottomOf="@id/event_details_upperDivider" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/event_details_upperDivider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.15" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/event_details_middleDivider"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.45" />
+            <Button
+                android:id="@+id/btn_event_details_text"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="16dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/description_addText"
+                android:onClick="@{() -> eventViewModel.onTextButtonClicked()}"
+                app:layout_constraintBottom_toTopOf="@+id/guide_bottom_pole"
+                app:layout_constraintEnd_toStartOf="@+id/guide_right_pole"
+                app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
+                app:layout_constraintTop_toTopOf="@+id/guide_middle_horizontal_pole" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/btn_event_details_camera"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="16dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/description_addPhoto"
+                android:onClick="@{() -> eventViewModel.onCameraButtonClicked()}"
+                app:layout_constraintBottom_toTopOf="@+id/guide_bottom_pole"
+                app:layout_constraintEnd_toStartOf="@+id/guide_middle_vertical_pole"
+                app:layout_constraintStart_toStartOf="@+id/guide_left_pole"
+                app:layout_constraintTop_toTopOf="@+id/guide_middle_horizontal_pole" />
+
+            <Button
+                android:id="@+id/btn_event_details_audio"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="16dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/description_addAudio"
+                android:onClick="@{() -> eventViewModel.onAudioButtonClicked()}"
+                app:layout_constraintBottom_toTopOf="@+id/guide_middle_horizontal_pole"
+                app:layout_constraintEnd_toStartOf="@+id/guide_middle_vertical_pole"
+                app:layout_constraintStart_toStartOf="@+id/guide_left_pole"
+                app:layout_constraintTop_toTopOf="@+id/guide_top_pole" />
+
+            <Button
+                android:id="@+id/btn_event_details_drawing"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="16dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/description_addDrawing"
+                android:onClick="@{() -> eventViewModel.onDrawingButtonClicked()}"
+                android:src="@drawable/event_detail_drawing"
+                app:layout_constraintBottom_toTopOf="@+id/guide_middle_horizontal_pole"
+                app:layout_constraintEnd_toStartOf="@+id/guide_right_pole"
+                app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
+                app:layout_constraintTop_toTopOf="@+id/guide_top_pole" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_vertical_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.82" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_horizontal_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.78" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_event_details_details"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="16dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_event_details_gotoEmotionAvatar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/guide_horizontal_details" />
+
+            <ImageButton
+                android:id="@+id/btn_event_details_send"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:minWidth="24dp"
+                android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
+                android:src="@drawable/event_details_send"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/guide_horizontal_details" />
+
+            <Button
+                android:id="@+id/btn_event_details_gotoEmotionAvatar"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:onClick="@{() -> eventViewModel.onEmotionAvatarClicked()}"
+                android:background="@android:color/transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guide_vertical_avatar"
+                app:layout_constraintTop_toTopOf="@+id/guide_horizontal_details" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
 </layout>
