@@ -7,7 +7,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.CreateUserUseCase
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableSingleObserver
 
 /**
  * ViewModel for the Avatar selection screen
@@ -15,16 +15,13 @@ import io.reactivex.disposables.CompositeDisposable
 class AvatarViewModel(
     private val avatarProvider: AvatarProvider,
     private val createUserUseCase: CreateUserUseCase
-) :
-    ViewModel() {
+) : ViewModel() {
 
     private var _avatars = MutableLiveData<List<Avatar>>()
     val avatars: LiveData<List<Avatar>>
         get() = _avatars
 
     private var _selectedItem = MutableLiveData<Long>()
-
-    private val disposables = CompositeDisposable()
 
     private val _nextButtonClicked = SingleLiveEvent<Unit>()
     val nextButtonClicked: LiveData<Unit>
@@ -79,25 +76,35 @@ class AvatarViewModel(
     }
 
     fun nextButtonPressed() {
-        if (avatarWasSelected() && userName.value != null) {
+        if (avatarWasSelected() && !userName.value.isNullOrEmpty()) {
             val params = CreateUserUseCase.Params(
                 userName.value!!,
                 _avatars.value!![_selectedItem.value!!.toInt()].avatarName
             )
-            val disposable = createUserUseCase.execute(params).subscribe({ newUser ->
-                _userSavedSuccessFully.postValue(newUser)
-            }, {
-                _userSaveFailed.postValue(it.localizedMessage)
-            })
-            disposables.add(disposable)
+            createUserUseCase.execute(params, CreateUserUseCaseHandler())
+            _nextButtonClicked.call()
         } else {
             _inputErrorMessageID.postValue(R.string.txt_error_userNameOrAvatarNotSet)
             return
         }
-        _nextButtonClicked.call()
+    }
+
+    private inner class CreateUserUseCaseHandler : DisposableSingleObserver<User>() {
+        override fun onSuccess(newUser: User) {
+            _userSavedSuccessFully.postValue(newUser)
+        }
+
+        override fun onError(e: Throwable) {
+            _userSaveFailed.postValue(e.localizedMessage)
+        }
     }
 
     private fun fetchAvatarImages() {
         _avatars.postValue(avatarProvider.getAvatars())
+    }
+
+    override fun onCleared() {
+        createUserUseCase.dispose()
+        super.onCleared()
     }
 }

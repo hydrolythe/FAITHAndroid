@@ -2,6 +2,10 @@ package be.hogent.faith.service.usecases.base
 
 import io.reactivex.Scheduler
 import io.reactivex.Single
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Base class for a use case that will return a [Single].
@@ -12,21 +16,24 @@ import io.reactivex.Single
  * An example can be found in [be.hogent.faith.service.usecases.SaveEventUseCase].
  */
 abstract class SingleUseCase<Result, in Params>(
-    private val subscribeScheduler: Scheduler,
-    private val observeScheduler: Scheduler
+    private val observer: Scheduler
 ) {
-    /**
-     * This should be overridden with the business logic for the use case.
-     */
-    abstract fun buildUseCaseObservable(params: Params): Single<Result>
+    private val disposables = CompositeDisposable()
 
-    /**
-     * Executes the use case.
-     * It will run on the specified [subscribeScheduler] and can be observed on the given [observeScheduler].
-     */
-    open fun execute(params: Params): Single<Result> {
-        return this.buildUseCaseObservable(params)
-            .subscribeOn(subscribeScheduler)
-            .observeOn(observeScheduler)
+    protected abstract fun buildUseCaseSingle(params: Params): Single<Result>
+
+    open fun execute(params: Params, singleObserver: DisposableSingleObserver<Result>) {
+        val single = this.buildUseCaseSingle(params)
+            .subscribeOn(Schedulers.io())
+            .observeOn(observer)
+        addDisposable(single.subscribeWith(singleObserver))
+    }
+
+    private fun addDisposable(disposable: Disposable) {
+        disposables.add(disposable)
+    }
+
+    fun dispose() {
+        if (!disposables.isDisposed) disposables.dispose()
     }
 }
