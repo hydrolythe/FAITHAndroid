@@ -11,6 +11,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import io.reactivex.observers.DisposableSingleObserver
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -58,13 +59,12 @@ class ChooseAvatarViewModelTest {
         val params = slot<CreateUserUseCase.Params>()
         viewModel.setSelectedItem(selection.toLong())
         viewModel.userName.postValue(name)
-        every { createUserUseCase.execute(any(), capture(params)) }
 
         // Act
         viewModel.nextButtonPressed()
 
         // Assert
-        verify { createUserUseCase.execute(any(), any()) }
+        verify { createUserUseCase.execute(any(), capture(params)) }
         with(params.captured) {
             assertEquals(username, name)
             assertEquals(avatarName, listOfAvatars[selection].avatarName)
@@ -75,6 +75,7 @@ class ChooseAvatarViewModelTest {
     fun avatarItemViewModel_nextButtonClicked_callUseCaseAndNotifiesSuccess() {
         // Arrange
         val params = slot<CreateUserUseCase.Params>()
+        val observer = slot<DisposableSingleObserver<User>>()
         viewModel.setSelectedItem(selection.toLong())
         viewModel.userName.postValue(name)
         every { createUserUseCase.execute(any(), capture(params)) }
@@ -88,6 +89,8 @@ class ChooseAvatarViewModelTest {
         viewModel.nextButtonPressed()
 
         // Assert
+        verify { createUserUseCase.execute(capture(observer), capture(params)) }
+        observer.captured.onSuccess(mockk())
         verify { successObserver.onChanged(any()) }
         verify { failObserver wasNot called }
     }
