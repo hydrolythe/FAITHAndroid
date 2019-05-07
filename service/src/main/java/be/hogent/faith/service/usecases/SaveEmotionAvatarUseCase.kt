@@ -6,7 +6,6 @@ import be.hogent.faith.service.usecases.base.CompletableUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
-import io.reactivex.schedulers.Schedulers
 
 const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
 
@@ -18,7 +17,6 @@ class SaveEmotionAvatarUseCase(
     private val storageRepository: StorageRepository,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEmotionAvatarUseCase.Params>(
-    Schedulers.io(),
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {

@@ -5,14 +5,12 @@ import be.hogent.faith.service.usecases.base.CompletableUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
-import io.reactivex.schedulers.Schedulers
 import java.io.File
 
 class TakeEventPhotoUseCase(
     private val storageRepository: StorageRepository,
     observeScheduler: Scheduler
 ) : CompletableUseCase<TakeEventPhotoUseCase.Params>(
-    Schedulers.io(),
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {
