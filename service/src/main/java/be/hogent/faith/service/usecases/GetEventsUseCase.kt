@@ -6,12 +6,11 @@ import be.hogent.faith.domain.repository.EventRepository
 import be.hogent.faith.service.usecases.base.FlowableUseCase
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
-import io.reactivex.schedulers.Schedulers
 
 class GetEventsUseCase(
     private val eventRepository: EventRepository,
     observeScheduler: Scheduler
-) : FlowableUseCase<List<Event>, GetEventsUseCase.Params>(Schedulers.io(), observeScheduler) {
+) : FlowableUseCase<List<Event>, GetEventsUseCase.Params>(observeScheduler) {
 
     override fun buildUseCaseObservable(params: Params): Flowable<List<Event>> {
         return eventRepository.getAll(params.user)

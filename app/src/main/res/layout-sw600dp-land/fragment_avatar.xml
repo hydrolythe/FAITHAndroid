@@ -10,75 +10,88 @@
             type="be.hogent.faith.faith.registerAvatar.AvatarViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/avatar_tv_title"
-            style="@style/Base.TextAppearance.AppCompat.Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/frag_avatar_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/avatar_tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/frag_avatar_lbl_name"
-            app:layout_constraintBottom_toTopOf="@+id/avatar_tv_pick_avatar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/avatar_tv_title" />
-
-        <EditText
-            android:id="@+id/txt_avatar_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:autofillHints="username"
-            android:hint="@string/naam_hint"
-            android:inputType="textPersonName"
-            android:text="@={avatarViewModel.userName}"
-            app:layout_constraintBaseline_toBaselineOf="@id/avatar_tv_name"
-            app:layout_constraintStart_toEndOf="@+id/avatar_tv_name"
-            tools:text="@tools:sample/full_names" />
-
-        <TextView
-            android:id="@+id/avatar_tv_pick_avatar"
-            style="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="@string/frag_avatar_pick_avatar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/avatar_tv_name" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/avatar_rv_avatar"
+        <!--ACHTERGROND-->
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/avatar_tv_pick_avatar"
-            tools:listitem="@layout/avatar_rv_item"/>
+            android:layout_height="match_parent"
+            android:src="@drawable/register_background" />
 
-        <Button
-            android:id="@+id/btn_avatar_go_to_town"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:onClick="@{() -> avatarViewModel.nextButtonPressed()}"
-            android:text="@string/frag_avatar_lbl_to_town"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/avatar_tv_title"
+                style="@style/Base.TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/frag_avatar_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/avatar_tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/frag_avatar_lbl_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/avatar_tv_title" />
+
+            <EditText
+                android:id="@+id/txt_avatar_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:autofillHints="username"
+                android:hint="@string/naam_hint"
+                android:inputType="textPersonName"
+                android:text="@={avatarViewModel.userName}"
+                app:layout_constraintBaseline_toBaselineOf="@id/avatar_tv_name"
+                app:layout_constraintStart_toEndOf="@+id/avatar_tv_name"
+                tools:text="@tools:sample/full_names" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/avatar_rv_avatar"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/guide_bottom_rv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guide_top_rv"
+                tools:listitem="@layout/avatar_rv_item" />
+
+            <Button
+                android:id="@+id/btn_avatar_go_to_town"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:onClick="@{() -> avatarViewModel.nextButtonPressed()}"
+                android:text="@string/frag_avatar_lbl_to_town"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_top_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.53" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_bottom_rv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.91" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
 </layout>

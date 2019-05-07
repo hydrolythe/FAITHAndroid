@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.TakeEventPhotoUseCase
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableCompletableObserver
 import java.io.File
 
 class TakePhotoViewModel(
@@ -34,8 +34,6 @@ class TakePhotoViewModel(
     val photoSavedSuccessFully: LiveData<Unit>
         get() = _photoSavedSuccessFully
 
-    private val disposables = CompositeDisposable()
-
     /**
      * Will be updated with the latest error message when an error occurs when saving the recording.
      */
@@ -52,19 +50,20 @@ class TakePhotoViewModel(
     }
 
     fun onSaveButtonClicked() {
-        val disposable = takeEventPhotoUseCase.execute(
-            TakeEventPhotoUseCase.Params(tempPhotoFile, event, photoName.value!!)
-        ).subscribe(
-            {
-                _photoSavedSuccessFully.value = Unit
-                // Name has to be cleared so future pictures start with an empty recordingName
-                photoName.value = ""
-            },
-            {
-                _recordingSaveFailed.postValue(it.message)
-            }
-        )
-        disposables.add(disposable)
+        val params = TakeEventPhotoUseCase.Params(tempPhotoFile, event, photoName.value!!)
+        takeEventPhotoUseCase.execute(params, TakeEventPhotoUseCaseHandler())
+    }
+
+    private inner class TakeEventPhotoUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _photoSavedSuccessFully.value = Unit
+            // Name has to be cleared so future pictures start with an empty recordingName
+            photoName.value = ""
+        }
+
+        override fun onError(e: Throwable) {
+            _recordingSaveFailed.postValue(e.message)
+        }
     }
 
     fun onCancelButtonClicked() {
@@ -73,6 +72,6 @@ class TakePhotoViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        disposables.clear()
+        takeEventPhotoUseCase.dispose()
     }
 }

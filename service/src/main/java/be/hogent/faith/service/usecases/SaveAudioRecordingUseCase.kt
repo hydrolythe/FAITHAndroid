@@ -5,13 +5,12 @@ import be.hogent.faith.service.usecases.base.CompletableUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
-import io.reactivex.schedulers.Schedulers
 import java.io.File
 
 class SaveAudioRecordingUseCase(
     private val storageRepository: StorageRepository,
     observeScheduler: Scheduler
-) : CompletableUseCase<SaveAudioRecordingUseCase.SaveAudioRecordingParams>(Schedulers.io(), observeScheduler) {
+) : CompletableUseCase<SaveAudioRecordingUseCase.SaveAudioRecordingParams>(observeScheduler) {
 
     override fun buildUseCaseObservable(params: SaveAudioRecordingParams): Completable {
         return Completable.fromSingle(
