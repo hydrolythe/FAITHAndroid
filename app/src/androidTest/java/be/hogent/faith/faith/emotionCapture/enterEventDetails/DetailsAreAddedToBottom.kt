@@ -3,6 +3,7 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -25,7 +26,8 @@ class DetailsAreAddedToBottom {
     private lateinit var uiDevice: UiDevice
 
     @get:Rule
-    var activityScenarioRule = ActivityTestRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java, true, true)
+    var activityScenarioRule =
+        ActivityTestRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java, true, true)
 
     @Before
     fun setUp() {
@@ -46,6 +48,7 @@ class DetailsAreAddedToBottom {
         Thread.sleep(3000)
         // Enter picture recordingName
         onView(withId(R.id.txt_save_photo_name)).perform(typeText("Photo recordingName"))
+        closeSoftKeyboard()
         // Click Save
         onView(withId(R.id.btn_save_photo_save)).perform(click())
         // back to overview
