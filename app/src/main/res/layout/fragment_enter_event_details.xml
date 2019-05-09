@@ -9,6 +9,7 @@
             name="eventViewModel"
             type="be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel" />
     </data>
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -114,7 +115,6 @@
                 android:id="@+id/btn_event_details_text"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_margin="16dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/description_addText"
                 android:onClick="@{() -> eventViewModel.onTextButtonClicked()}"
@@ -127,7 +127,6 @@
                 android:id="@+id/btn_event_details_camera"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_margin="16dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/description_addPhoto"
                 android:onClick="@{() -> eventViewModel.onCameraButtonClicked()}"
@@ -140,7 +139,6 @@
                 android:id="@+id/btn_event_details_audio"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_margin="16dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/description_addAudio"
                 android:onClick="@{() -> eventViewModel.onAudioButtonClicked()}"
@@ -153,7 +151,6 @@
                 android:id="@+id/btn_event_details_drawing"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_margin="16dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/description_addDrawing"
                 android:onClick="@{() -> eventViewModel.onDrawingButtonClicked()}"
@@ -169,6 +166,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.82" />
+
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_horizontal_details"
                 android:layout_width="wrap_content"
@@ -190,21 +188,21 @@
 
             <ImageButton
                 android:id="@+id/btn_event_details_send"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:minWidth="24dp"
                 android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
                 android:src="@drawable/event_details_send"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/guide_horizontal_details" />
+                app:layout_constraintTop_toBottomOf="@id/guide_horizontal_details"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/btn_event_details_gotoEmotionAvatar"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:onClick="@{() -> eventViewModel.onEmotionAvatarClicked()}"
                 android:background="@android:color/transparent"
+                android:onClick="@{() -> eventViewModel.onEmotionAvatarClicked()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guide_vertical_avatar"
