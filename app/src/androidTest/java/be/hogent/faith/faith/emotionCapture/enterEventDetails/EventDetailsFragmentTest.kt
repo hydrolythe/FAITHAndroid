@@ -71,7 +71,6 @@ class EventDetailsFragmentTest {
     fun eventDetailsFragment_enterEventTitle() {
         onView(withId(R.id.txt_event_details_title)).perform(typeText("Titel van Event"))
         closeSoftKeyboard()
-
     }
 
     @Test

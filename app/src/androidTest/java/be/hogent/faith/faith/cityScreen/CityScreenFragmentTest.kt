@@ -37,6 +37,5 @@ class CityScreenFragmentTest {
         onView(withId(R.id.city_second_location)).perform(click())
         onView(withId(R.id.screen_new_event)).check(matches(isDisplayed()))
         pressBack()
-
     }
 }
