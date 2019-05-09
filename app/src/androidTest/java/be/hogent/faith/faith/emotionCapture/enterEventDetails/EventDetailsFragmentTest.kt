@@ -4,6 +4,7 @@ import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
@@ -69,12 +70,13 @@ class EventDetailsFragmentTest {
     @Test
     fun eventDetailsFragment_enterEventTitle() {
         onView(withId(R.id.txt_event_details_title)).perform(typeText("Titel van Event"))
+        closeSoftKeyboard()
     }
 
     @Test
     fun eventDetailsFragment_saveEventWithoutTitleEntered_errorMessage() {
         onView(withId(R.id.btn_event_details_send)).perform(click())
-        onView(withId(R.id.btn_save_event_save)).perform(click())
+        onView(withId(R.id.btn_save_event_save)).perform(scrollTo(), click())
         ToastMatcher.isToastMessageDisplayed(R.string.error_event_no_title)
     }
 
@@ -82,9 +84,10 @@ class EventDetailsFragmentTest {
     fun eventDetailsFragment_saveEvent_showsSuccess() {
         onView(withId(R.id.btn_event_details_send)).perform(click())
         onView(withId(R.id.txt_save_event_title)).perform(typeText("Titel van Event"))
+        closeSoftKeyboard()
         onView(withId(R.id.txt_save_event_notes)).perform(typeText("Notities notities notities"))
         closeSoftKeyboard()
-        onView(withId(R.id.btn_save_event_save)).perform(click())
+        onView(withId(R.id.btn_save_event_save)).perform(scrollTo(), click())
         ToastMatcher.isToastMessageDisplayed(R.string.error_save_event_success)
     }
 }
