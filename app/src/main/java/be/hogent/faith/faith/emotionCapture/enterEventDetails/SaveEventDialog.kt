@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,12 @@ class SaveEventDialog : DialogFragment() {
     companion object {
         fun newInstance(): SaveEventDialog {
             return SaveEventDialog()
+        }
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return Dialog(activity, R.style.Dialog_NearlyFullScreen).apply {
+            setStyle(DialogFragment.STYLE_NO_TITLE, 0)
         }
     }
 
