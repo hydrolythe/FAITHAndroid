@@ -103,11 +103,11 @@ class StorageRepository(private val context: Context) {
      *  Writes HTML to a text file
      *
      * @param text the html
-     * @param event the [Event] this photo will be added to as a detail (not by this function).
-     *          Used to store the photo in a folder specific for the event.
-     * @param fileName  Will be used for the filename.
+     * @param event the [Event] this text will be added to as a detail (not by this function).
+     *          Used to store the text in a folder specific for the event.
+     * @param fileName Will be used for the filename.
      */
-    fun writeHTML(text:String, event:Event,  fileName:String): Single<File>
+    fun writeHTML(text: String, event: Event, fileName: String): Single<File>
     {
         return Single.fromCallable {
             val storedFile = File(createEventImageFolder(event), "$fileName.$TEXT_EXTENSION")

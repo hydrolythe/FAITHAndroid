@@ -14,12 +14,12 @@ import io.reactivex.observers.DisposableCompletableObserver
 
 class EnterTextViewModel(
     private val event: Event,
-    private val saveTextUseCase : SaveTextUseCase
-):ViewModel() {
+    private val saveTextUseCase: SaveTextUseCase
+) : ViewModel() {
 
     private val _text = MutableLiveData<String>()
-    val text:LiveData<String>
-    get()=_text
+    val text: LiveData<String>
+    get() = _text
 
     private val _selectedTextColor = MutableLiveData<@ColorInt Int>()
     val selectedTextColor: LiveData<Int>
@@ -41,7 +41,6 @@ class EnterTextViewModel(
     val underlineClicked: LiveData<Unit>
         get() = _underlineClicked
 
-
     private val _textSavedSuccessFully = SingleLiveEvent<Unit>()
     val textSavedSuccessFully: LiveData<Unit>
         get() = _textSavedSuccessFully
@@ -58,15 +57,15 @@ class EnterTextViewModel(
         _selectedFontSize.value = FontSize.NORMAL.size
     }
 
-    fun onBoldClicked(){
+    fun onBoldClicked() {
         _boldClicked.call()
     }
 
-    fun onItalicClicked(){
+    fun onItalicClicked() {
         _italicClicked.call()
     }
 
-    fun onUnderlineClicked(){
+    fun onUnderlineClicked() {
         _underlineClicked.call()
     }
 
@@ -91,13 +90,13 @@ class EnterTextViewModel(
         _selectedTextColor.value = color
     }
 
-    fun pickFontSize(fontSize:FontSize){
-        _selectedFontSize.value = fontSize.size;
+    fun pickFontSize(fontSize: FontSize) {
+        _selectedFontSize.value = fontSize.size
     }
 
-    fun textChanged(text:String){
-        _text.value=text
-        Log.d(TAG, "html ${text}")
+    fun textChanged(text: String) {
+        _text.value = text
+        Log.d(TAG, "html $text")
     }
 
     override fun onCleared() {

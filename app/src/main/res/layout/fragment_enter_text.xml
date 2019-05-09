@@ -50,7 +50,7 @@
                 android:src="@drawable/circle_blue" />
 
             <ImageButton
-                android:id="@+id/btn_draw_setColorRed"
+                android:id="@+id/btn_enter_text_setColorRed"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -68,7 +68,7 @@
                 android:src="@drawable/circle_yellow" />
 
             <ImageButton
-                android:id="@+id/btn_draw_setColorGreen"
+                android:id="@+id/btn_enter_text_setColorGreen"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -131,7 +131,7 @@
                 android:text="Opslaan" />
 
         </LinearLayout>
-        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        <ScrollView 
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"
