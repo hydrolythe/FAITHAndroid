@@ -19,21 +19,20 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-
 class EnterTextViewModelTest {
-   private val saveTextUseCase = mockk<SaveTextUseCase>(relaxed = true)
-   private val event = mockk<Event>()
-   private lateinit var viewModel: EnterTextViewModel
+    private val saveTextUseCase = mockk<SaveTextUseCase>(relaxed = true)
+    private val event = mockk<Event>()
+    private lateinit var viewModel: EnterTextViewModel
     private val text = "Hello world"
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
 
     @Before
-   fun setUp() {
+    fun setUp() {
         viewModel = EnterTextViewModel(event, saveTextUseCase)
         viewModel.textChanged(text)
-   }
+    }
 
     @Test
     fun enterTextVM_pickNewTextColor_isSelected() {
@@ -83,8 +82,6 @@ class EnterTextViewModelTest {
         verify { observer.onChanged(any()) }
     }
 
-
-
     @Test
     fun enterTextVM_saveText_callsUseCase() {
 
@@ -108,7 +105,7 @@ class EnterTextViewModelTest {
         viewModel.textSaveFailed.observeForever(errorObserver)
         viewModel.textSavedSuccessFully.observeForever(successObserver)
 
-       // Act
+        // Act
         viewModel.saveText()
         verify { saveTextUseCase.execute(capture(params), capture(observer)) }
         observer.captured.onComplete()
@@ -138,5 +135,4 @@ class EnterTextViewModelTest {
         verify { errorObserver.onChanged(any()) }
         verify { successObserver wasNot Called }
     }
-
 }

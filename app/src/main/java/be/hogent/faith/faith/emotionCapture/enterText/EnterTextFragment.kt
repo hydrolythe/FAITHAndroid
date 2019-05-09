@@ -1,6 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.enterText
 
-//uses https://github.com/wasabeef/richeditor-android
+// uses https://github.com/wasabeef/richeditor-android
 
 import android.os.Bundle
 import android.view.LayoutInflater
