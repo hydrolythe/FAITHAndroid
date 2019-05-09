@@ -1,23 +1,24 @@
 package be.hogent.faith.faith.emotionCapture.enterText
 
+//uses https://github.com/wasabeef/richeditor-android
 
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterTextBinding
-import be.hogent.faith.util.TAG
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import kotlinx.android.synthetic.main.fragment_enter_text.editor
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class EnterTextFragment : Fragment() {
     protected val enterTextViewModel: EnterTextViewModel by sharedViewModel()
+    private val eventViewModel: EventViewModel by sharedViewModel()
 
     private lateinit var enterTextBinding: FragmentEnterTextBinding
 
@@ -34,21 +35,20 @@ class EnterTextFragment : Fragment() {
         setUpListeners()
     }
 
+    override fun onResume() {
+        super.onResume()
+        editor.html = enterTextViewModel.text.value ?: ""
+    }
+
     private fun initEditor() {
         editor.setEditorHeight(200)
         editor.setEditorFontSize(30)
-         //editor.setEditorBackgroundColor(Color.BLUE);
-        //editor.setBackgroundColor(Color.BLUE);
-        //editor.setBackgroundResource(R.drawable.bg);
         editor.setPadding(10, 10, 10, 10)
-        //editor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
         editor.setPlaceholder(".....")
-        //editor.setInputEnabled(false);
 
         editor.setOnTextChangeListener {
-            enterTextViewModel.textChanged(it);
+            enterTextViewModel.textChanged(it)
         }
-
     }
 
     private fun setUpListeners() {
@@ -66,6 +66,13 @@ class EnterTextFragment : Fragment() {
         })
         enterTextViewModel.selectedFontSize.observe(this, Observer { newSize ->
             editor.setFontSize(newSize)
+        })
+        enterTextViewModel.textSaveFailed.observe(this, Observer {
+            Toast.makeText(context, getString(R.string.frag_entertext_text_failed), Toast.LENGTH_SHORT).show()
+        })
+        enterTextViewModel.textSavedSuccessFully.observe(this, Observer {
+            Toast.makeText(context, getString(R.string.frag_entertext_save_successfull), Toast.LENGTH_SHORT).show()
+            eventViewModel.updateEvent()
         })
     }
 

@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.MakeDrawingFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.enterText.EnterTextFragment
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
@@ -116,6 +117,9 @@ class EditDetailFragment : Fragment() {
             DetailType.TEXT -> replaceChildFragment(
                 EnterTextFragment.newInstance(),
                 R.id.fragment_container_editDetail
+            )
+            DetailType.DRAWING -> replaceChildFragment(
+                MakeDrawingFragment.newInstance(), R.id.emotionCapture_fragment_container
             )
             else -> Log.e(TAG, "type not defined")
         }

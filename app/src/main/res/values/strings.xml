@@ -75,7 +75,9 @@
     <string name="lbl_activity_city">De Stad</string>
     <string name="description_event_avatar">Getekende avatar voor de gebeurtenis</string>
     <string name="descr_city_park">Het stadspark</string>
-    <string name="klein">small</string>
-    <string name="normaal">normal</string>
-    <string name="groot">large</string>
+    <string name="fontsize_small">klein</string>
+    <string name="fontsize_normal">normaal</string>
+    <string name="fontsize_large">groot</string>
+    <string name="frag_entertext_text_failed">Opslaan tekst mislukt</string>
+    <string name="frag_entertext_save_successfull">tekst werd opgeslaan</string>
 </resources>

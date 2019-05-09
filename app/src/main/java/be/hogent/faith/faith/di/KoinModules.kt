@@ -40,7 +40,7 @@ val appModule = module(override = true) {
     viewModel { (user: LiveData<User>) -> EventViewModel(get(), get(), user) }
     viewModel { DrawViewModel() }
     viewModel { EditDetailViewModel() }
-    viewModel { (event: Event) -> EnterTextViewModel(event) }
+    viewModel { (event: Event) -> EnterTextViewModel(event, get()) }
     viewModel { (user: LiveData<User>) -> OverviewEventsViewModel(user) }
     viewModel { AvatarViewModel(get(), get()) }
     viewModel { (event: Event) -> RecordAudioViewModel(get(), event) }
