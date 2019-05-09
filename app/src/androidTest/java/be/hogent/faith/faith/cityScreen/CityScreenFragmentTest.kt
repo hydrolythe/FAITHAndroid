@@ -30,15 +30,13 @@ class CityScreenFragmentTest {
 
     @Test
     fun mainScreenFragment_buttonsOpenCorrectScreen() {
-//        onView(withId(R.id.main_first_location)).perform(click())
-//        pressBack()
+        onView(withId(R.id.city_first_location)).perform(click())
+        onView(withId(R.id.screen_overview_events)).check(matches(isDisplayed()))
+        pressBack()
 
         onView(withId(R.id.city_second_location)).perform(click())
         onView(withId(R.id.screen_new_event)).check(matches(isDisplayed()))
         pressBack()
 
-        onView(withId(R.id.city_third_location)).perform(click())
-        onView(withId(R.id.screen_overview_events)).check(matches(isDisplayed()))
-        pressBack()
     }
 }

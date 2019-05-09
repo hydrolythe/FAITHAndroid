@@ -45,13 +45,10 @@ class CityScreenFragment : Fragment() {
 
     private fun registerListeners() {
         cityScreenViewModel.firstLocation.observe(this, Observer {
-            // NOP
+            navigation?.startOverviewEventsFragment()
         })
         cityScreenViewModel.secondLocation.observe(this, Observer {
             navigation?.startEmotionCapture()
-        })
-        cityScreenViewModel.thirdLocation.observe(this, Observer {
-            navigation?.startOverviewEventsFragment()
         })
 
         cityScreenViewModel.logOutClicked.observe(this, Observer {
