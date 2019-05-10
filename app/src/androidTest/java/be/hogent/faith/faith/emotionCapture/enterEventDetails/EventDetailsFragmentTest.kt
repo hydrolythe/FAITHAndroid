@@ -88,6 +88,6 @@ class EventDetailsFragmentTest {
         onView(withId(R.id.txt_save_event_notes)).perform(typeText("Notities notities notities"))
         closeSoftKeyboard()
         onView(withId(R.id.btn_save_event_save)).perform(scrollTo(), click())
-        ToastMatcher.isToastMessageDisplayed(R.string.error_save_event_success)
+        ToastMatcher.isToastMessageDisplayed(R.string.save_event_success)
     }
 }

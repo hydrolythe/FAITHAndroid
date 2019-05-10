@@ -128,7 +128,7 @@ class RecordAudioFragment : Fragment() {
             recorder.reset()
         })
         recordAudioViewModel.recordingSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, R.string.error_save_audio_success, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
             eventViewModel.updateEvent()
             saveDialog.dismiss()
         })
