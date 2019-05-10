@@ -15,13 +15,18 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
+import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.util.TAG
 import be.hogent.faith.faith.util.TempFileProvider
+import be.hogent.faith.util.TAG
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.logcat
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * The requestcode that will be used to request photoTaker permissions
@@ -32,21 +37,15 @@ class TakePhotoFragment : Fragment() {
 
     private val eventViewModel: EventViewModel by sharedViewModel()
 
-    private val takePhotoViewModel: TakePhotoViewModel by sharedViewModel()
+    private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+
+    private val takePhotoViewModel: TakePhotoViewModel by viewModel()
 
     private lateinit var takePhotoBinding: FragmentTakePhotoBinding
 
     private lateinit var fotoApparat: Fotoapparat
 
     private val tempFileProvider by inject<TempFileProvider>()
-
-    /**
-     * The Dialog that requests the user to enter a recordingName for the photograph.
-     * It is saved here so we can dismiss it once the cancel or save buttons are clicked.
-     * This should normally be done in the Dialog itself but SingleLiveEvent only supports a single Listener.
-     * We need one here to update the eventDetailsVM and one in the Dialog to close it.
-     */
-    private lateinit var saveDialog: SavePhotoDialog
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         takePhotoBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_take_photo, container, false)
@@ -76,24 +75,21 @@ class TakePhotoFragment : Fragment() {
         takePhotoViewModel.takePhotoButtonClicked.observe(this, Observer {
             takeAndSavePictureToCache()
         })
-        takePhotoViewModel.recordingSaveFailed.observe(this, Observer {
-            Log.e(TAG, it)
-            Toast.makeText(context, getString(R.string.toast_save_photo_failed), Toast.LENGTH_SHORT).show()
-            saveDialog.dismiss()
+
+        userViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
+            Log.e(TAG, context!!.getString(errorMessageResourceID))
+            Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
         })
-        takePhotoViewModel.photoSavedSuccessFully.observe(this, Observer {
+        userViewModel.photoSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT).show()
             eventViewModel.updateEvent()
-            saveDialog.dismiss()
         })
     }
 
     private fun takeAndSavePictureToCache() {
         val saveFile = tempFileProvider.tempPhotoFile
         fotoApparat.takePicture().saveToFile(saveFile).whenAvailable {
-            takePhotoViewModel.tempPhotoFile = saveFile
-            saveDialog = SavePhotoDialog.newInstance()
-            saveDialog.show(fragmentManager!!, null)
+            userViewModel.savePhoto(saveFile, eventViewModel.event.value!!)
         }
     }
 
