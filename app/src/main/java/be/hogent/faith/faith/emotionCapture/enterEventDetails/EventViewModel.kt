@@ -10,10 +10,8 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
-import be.hogent.faith.service.usecases.SaveEventUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
 import org.threeten.bp.LocalDateTime
@@ -21,17 +19,22 @@ import org.threeten.bp.format.DateTimeFormatter
 import java.util.UUID
 
 class EventViewModel(
-    private val saveEventUseCase: SaveEventUseCase,
     private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase,
-    val user: LiveData<User>,
     eventUuid: UUID? = null
 ) : ViewModel() {
+
+    /**
+     * The event that will be discussed and explained using audio, video, drawings,...
+     * Updates to the [eventTitle], [eventDate] and [eventNotes] are automatically applied to the event.
+     */
+    val event = MediatorLiveData<Event>()
 
     /**
      * The title of the event.
      * It's optional on the main event screen, but has to be filled in when saving the event.
      */
     val eventTitle = MutableLiveData<String>()
+
     /**
      * The title of the event (optional when on the main entry screen.
      */
@@ -46,19 +49,7 @@ class EventViewModel(
      */
     val eventNotes = MutableLiveData<String>()
 
-    private val _eventSavedSuccessFully = SingleLiveEvent<Unit>()
-    val eventSavedSuccessFully: LiveData<Unit>
-        get() = _eventSavedSuccessFully
 
-    /**
-     * The event that will be discussed and explained using audio, video, drawings,...
-     * Updates to the [eventTitle], [eventDate] and [eventNotes] are automatically applied to the event.
-     */
-    val event = MediatorLiveData<Event>()
-
-    /**
-     * Will be updated with the latest error message when an error occurs when saving
-     */
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
@@ -80,9 +71,11 @@ class EventViewModel(
         event.addSource(eventNotes) { notes -> event.value?.notes = notes }
     }
 
+    //TODO: check how to get correct event
     private fun getEventFromUser(eventUuid: UUID): Event {
-        return user.value!!.getEvent(eventUuid)
-            ?: throw IllegalArgumentException("Couldn't find event with UUID $eventUuid for user ${user.value}")
+        return Event()
+//        return user.value!!.getEvent(eventUuid)
+//            ?: throw IllegalArgumentException("Couldn't find event with UUID $eventUuid for user ${user.value}")
     }
 
     fun setEvent(newEvent: Event) {
@@ -166,20 +159,12 @@ class EventViewModel(
         _dateButtonClicked.call()
     }
 
-    fun onSaveButtonClicked() {
-        if (eventTitle.value.isNullOrEmpty()) {
-            _errorMessage.postValue(R.string.error_event_no_title)
-            return
-        }
-        val params = SaveEventUseCase.Params(event.value!!, user.value!!)
-        // TODO: checken of user livedata ook geupdated wordt als een van zijn events aangepast wordt.
-        saveEventUseCase.execute(params, SaveEventUseCaseHandler())
-    }
 
     /**
      * Used to reset the ViewModel once an Event is saved.
      * This will allow the ViewModel to be reused for a new event.
      */
+    //TODO: check if still needed?
     fun resetViewModel() {
         event.postValue(Event())
         eventDate.postValue(LocalDateTime.now())
@@ -192,7 +177,6 @@ class EventViewModel(
     }
 
     override fun onCleared() {
-        saveEventUseCase.dispose()
         saveEmotionAvatarUseCase.dispose()
         super.onCleared()
     }
@@ -220,16 +204,4 @@ class EventViewModel(
         }
     }
 
-    private inner class SaveEventUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            Log.i(TAG, "New event saved: ${event.value!!.title}")
-            _eventSavedSuccessFully.call()
-            resetViewModel()
-        }
-
-        override fun onError(e: Throwable) {
-            Log.i(TAG, "Event failed to save because: ${e.message}")
-            _errorMessage.postValue(R.string.error_save_event_failed)
-        }
-    }
 }
