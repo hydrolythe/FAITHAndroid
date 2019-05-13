@@ -33,7 +33,11 @@ class LoginOrRegisterActivity : AppCompatActivity(),
 
     private fun createScopedUserViewModel() {
         Log.e(TAG, "Creating USER SCOPE")
-        getKoin().createScope(KoinModules.USER_SCOPE_ID)
+        // Don't create SCOPE twice
+        // This sometimes happens when running tests that reuse the same Activity twice
+        if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) == null) {
+            getKoin().createScope(KoinModules.USER_SCOPE_ID)
+        }
     }
 
     override fun onDestroy() {
