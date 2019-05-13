@@ -21,8 +21,6 @@ import java.util.concurrent.Executor
 
 class SaveEventUseCaseTest {
     private lateinit var saveEventUseCase: SaveEventUseCase
-    private lateinit var executor: Executor
-    private lateinit var scheduler: Scheduler
     private lateinit var repository: EventRepository
 
     private lateinit var event: Event
@@ -32,12 +30,10 @@ class SaveEventUseCaseTest {
 
     @Before
     fun setUp() {
-        executor = mockk()
-        scheduler = mockk()
         event = EventFactory.makeEvent(nbrOfDetails = 0)
         user = spyk(User(DataFactory.randomString(), DataFactory.randomString()))
         repository = mockk(relaxed = true)
-        saveEventUseCase = SaveEventUseCase(repository, scheduler)
+        saveEventUseCase = SaveEventUseCase(repository, mockk())
     }
 
     @Test
