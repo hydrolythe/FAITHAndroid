@@ -12,12 +12,10 @@ import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
 import io.reactivex.Completable
-import io.reactivex.Scheduler
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.util.concurrent.Executor
 
 class SaveEventUseCaseTest {
     private lateinit var saveEventUseCase: SaveEventUseCase
