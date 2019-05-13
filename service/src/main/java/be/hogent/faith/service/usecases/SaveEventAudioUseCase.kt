@@ -7,18 +7,20 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 import java.io.File
 
-class SaveAudioRecordingUseCase(
+class SaveEventAudioUseCase(
     private val storageRepository: StorageRepository,
     observeScheduler: Scheduler
-) : CompletableUseCase<SaveAudioRecordingUseCase.Params>(observeScheduler) {
+) : CompletableUseCase<SaveEventAudioUseCase.Params>(observeScheduler) {
 
     override fun buildUseCaseObservable(params: Params): Completable {
         return Completable.fromSingle(
-            storageRepository.storeAudioRecording(params.tempStorageFile, params.event)
-                .doOnSuccess { storedFile ->
-                    // TODO: remove once detail names are removed
-                    params.event.addNewAudioDetail(storedFile, "audioRecordingName")
-                })
+            storageRepository.saveEventAudio(
+                params.tempStorageFile,
+                params.event
+            ).doOnSuccess { storedFile ->
+                // TODO: remove once detail names are removed
+                params.event.addNewAudioDetail(storedFile, "audioRecordingName")
+            })
     }
 
     data class Params(
