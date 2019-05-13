@@ -8,9 +8,6 @@
         <variable
             name="eventViewModel"
             type="be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel" />
-        <variable
-            name="userViewModel"
-            type="be.hogent.faith.faith.UserViewModel"/>
     </data>
 
     <FrameLayout
@@ -190,12 +187,12 @@
                 app:layout_constraintTop_toBottomOf="@id/guide_horizontal_details" />
 
             <ImageButton
-                android:id="@+id/btn_event_save"
+                android:id="@+id/btn_event_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="24dp"
-                android:onClick="@{() -> userViewModel.saveEvent(eventViewModel.eventTitle, eventViewModel.event)}"
                 android:src="@drawable/event_details_send"
+                android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/guide_horizontal_details"
                 app:layout_constraintTop_toTopOf="parent" />

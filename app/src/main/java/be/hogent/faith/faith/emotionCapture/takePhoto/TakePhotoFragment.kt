@@ -80,9 +80,8 @@ class TakePhotoFragment : Fragment() {
             Log.e(TAG, context!!.getString(errorMessageResourceID))
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
         })
-        userViewModel.photoSavedSuccessFully.observe(this, Observer {
+        eventViewModel.photoSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT).show()
-            eventViewModel.updateEvent()
         })
     }
 
@@ -93,7 +92,7 @@ class TakePhotoFragment : Fragment() {
          * the tempPhotoFile.
          */
         fotoApparat.takePicture().saveToFile(saveFile).whenAvailable {
-            userViewModel.savePhoto(saveFile, eventViewModel.event.value!!)
+            eventViewModel.savePhoto(saveFile)
         }
     }
 

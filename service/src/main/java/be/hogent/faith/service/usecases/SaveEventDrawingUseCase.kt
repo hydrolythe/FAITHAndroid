@@ -19,7 +19,7 @@ class SaveEventDrawingUseCase(
                 params.bitmap,
                 params.event
             ).doOnSuccess { storedFile ->
-                //TODO: remove second param once detail name is removed
+                // TODO: remove second param once detail name is removed
                 params.event.addNewPictureDetail(storedFile, "Drawing")
             }
         )

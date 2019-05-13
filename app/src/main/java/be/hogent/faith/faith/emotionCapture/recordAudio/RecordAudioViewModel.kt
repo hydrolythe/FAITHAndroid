@@ -11,8 +11,6 @@ class RecordAudioViewModel : ViewModel() {
     val recordingStatus: LiveData<RecordingStatus>
         get() = _recordingStatus
 
-    val recordingName = MutableLiveData<String>()
-
     /**
      * True when pausing an audio recording is supported.
      * Support starts at SDK 24.
@@ -23,7 +21,6 @@ class RecordAudioViewModel : ViewModel() {
     init {
         _recordingStatus.value = RecordingStatus.INITIAL
         pauseSupported.value = false
-        recordingName.value = ""
     }
 
     private val _recordButtonClicked = SingleLiveEvent<Unit>()

@@ -32,6 +32,8 @@ class EventDetailsFragment : Fragment() {
 
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
 
+    private lateinit var saveDialog: SaveEventDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,7 +47,6 @@ class EventDetailsFragment : Fragment() {
         eventDetailsBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_enter_event_details, container, false)
         eventDetailsBinding.eventViewModel = eventViewModel
-        eventDetailsBinding.userViewModel = userViewModel
         eventDetailsBinding.lifecycleOwner = this@EventDetailsFragment
 
         return eventDetailsBinding.root
@@ -101,6 +102,19 @@ class EventDetailsFragment : Fragment() {
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
 
+        eventViewModel.sendButtonClicked.observe(this, Observer {
+            saveDialog = SaveEventDialog.newInstance()
+            saveDialog.show(fragmentManager!!, null)
+        })
+
+        userViewModel.eventSavedSuccessFully.observe(this, Observer {
+            Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
+            saveDialog.dismiss()
+
+            // Go back to main screen
+            fragmentManager!!.popBackStack()
+        })
+
         userViewModel.eventSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
             // Go back to main screen TOOD: not working right now
@@ -109,7 +123,6 @@ class EventDetailsFragment : Fragment() {
         userViewModel.errorMessage.observe(this, Observer { errorMessage ->
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
-
     }
 
     override fun onStop() {

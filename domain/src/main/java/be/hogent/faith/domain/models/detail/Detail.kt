@@ -11,7 +11,7 @@ abstract class Detail(
      * The location of this Detail
      */
     val file: File,
-    //TODO: remove or not? Keep filled in by default now to avoid errors
+    // TODO: remove or not? Keep filled in by default now to avoid errors
     val name: String? = "Detail",
     val uuid: UUID = UUID.randomUUID()
 )

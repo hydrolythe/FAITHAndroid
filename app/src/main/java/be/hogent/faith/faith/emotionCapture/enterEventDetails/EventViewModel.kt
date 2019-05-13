@@ -12,14 +12,21 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
+import be.hogent.faith.service.usecases.SaveEventAudioUseCase
+import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
+import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import java.io.File
 import java.util.UUID
 
 class EventViewModel(
     private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase,
+    private val saveEventPhotoUseCase: SaveEventPhotoUseCase,
+    private val saveEventAudioUseCase: SaveEventAudioUseCase,
+    private val saveEventDrawingUseCase: SaveEventDrawingUseCase,
     eventUuid: UUID? = null
 ) : ViewModel() {
 
@@ -49,14 +56,25 @@ class EventViewModel(
      */
     val eventNotes = MutableLiveData<String>()
 
+    private val _photoSavedSuccessFully = SingleLiveEvent<Unit>()
+    val photoSavedSuccessFully: LiveData<Unit>
+        get() = _photoSavedSuccessFully
 
-    private val _errorMessage = MutableLiveData<@IdRes Int>()
-    val errorMessage: LiveData<Int>
-        get() = _errorMessage
+    private val _drawingSavedSuccessFully = SingleLiveEvent<Unit>()
+    val drawingSavedSuccessFully: LiveData<Unit>
+        get() = _drawingSavedSuccessFully
+
+    private val _recordingSavedSuccessFully = SingleLiveEvent<Unit>()
+    val recordingSavedSuccessFully: LiveData<Unit>
+        get() = _recordingSavedSuccessFully
 
     private val _avatarSavedSuccessFully = SingleLiveEvent<Unit>()
     val avatarSavedSuccessFully: LiveData<Unit>
         get() = _avatarSavedSuccessFully
+
+    private val _errorMessage = MutableLiveData<@IdRes Int>()
+    val errorMessage: LiveData<Int>
+        get() = _errorMessage
 
     init {
         if (eventUuid != null) {
@@ -71,7 +89,7 @@ class EventViewModel(
         event.addSource(eventNotes) { notes -> event.value?.notes = notes }
     }
 
-    //TODO: check how to get correct event
+    // TODO: check how to get correct event
     private fun getEventFromUser(eventUuid: UUID): Event {
         return Event()
 //        return user.value!!.getEvent(eventUuid)
@@ -159,12 +177,11 @@ class EventViewModel(
         _dateButtonClicked.call()
     }
 
-
     /**
      * Used to reset the ViewModel once an Event is saved.
      * This will allow the ViewModel to be reused for a new event.
      */
-    //TODO: check if still needed?
+    // TODO: check if still needed?
     fun resetViewModel() {
         event.postValue(Event())
         eventDate.postValue(LocalDateTime.now())
@@ -176,11 +193,7 @@ class EventViewModel(
         _emotionAvatarClicked.call()
     }
 
-    override fun onCleared() {
-        saveEmotionAvatarUseCase.dispose()
-        super.onCleared()
-    }
-
+    //region saveEmotionAvatar
     /**
      * Save avatarName bitmap. This updates the property emotionAvatar. Must be done in this viewmodel
      * because otherwise the event is not updated (if this code is in DrawEmotionViewModel, then the
@@ -203,5 +216,68 @@ class EventViewModel(
             _errorMessage.postValue(R.string.error_save_avatar_failed)
         }
     }
+    //endregion
 
+    //region saveAudio
+    fun saveAudio(tempRecordingFile: File) {
+        val params = SaveEventAudioUseCase.Params(
+            tempRecordingFile,
+            event.value!!
+        )
+        saveEventAudioUseCase.execute(params, SaveAudioUseCaseHandler())
+    }
+
+    private inner class SaveAudioUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _recordingSavedSuccessFully.call()
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_audio_failed)
+        }
+    }
+    //endregion
+
+    //region savePhoto
+    fun savePhoto(tempPhotoFile: File) {
+        // TODO: remove name from UC when it's not necessary anymore
+        val params = SaveEventPhotoUseCase.Params(tempPhotoFile, event.value!!, "TempPhotoName")
+        saveEventPhotoUseCase.execute(params, TakeEventPhotoUseCaseHandler())
+    }
+
+    private inner class TakeEventPhotoUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _photoSavedSuccessFully.value = Unit
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_photo_failed)
+        }
+    }
+    //endregion
+
+    //region saveDrawing
+    fun saveDrawing(bitmap: Bitmap) {
+        val params = SaveEventDrawingUseCase.Params(bitmap, event.value!!)
+        saveEventDrawingUseCase.execute(params, SaveEventDrawingUseCaseHandler())
+    }
+
+    private inner class SaveEventDrawingUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _drawingSavedSuccessFully.value = Unit
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_drawing_failed)
+        }
+    }
+    //endregion
+
+    override fun onCleared() {
+        saveEventAudioUseCase.dispose()
+        saveEventPhotoUseCase.dispose()
+        saveEmotionAvatarUseCase.dispose()
+        saveEventDrawingUseCase.dispose()
+        super.onCleared()
+    }
 }
