@@ -11,7 +11,6 @@ import androidx.test.uiautomator.UiDevice
 import be.hogent.faith.R
 import be.hogent.faith.faith.registerAvatar.LoginOrRegisterActivity
 import be.hogent.faith.faith.util.NavigationUtil
-import be.hogent.faith.faith.util.RecyclerViewItemCountAssertion
 import be.hogent.faith.faith.util.allowPermissionsIfNeeded
 import org.junit.Before
 import org.junit.Rule
