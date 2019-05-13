@@ -8,12 +8,12 @@ import io.reactivex.Scheduler
 
 const val TEXT_FILENAME = "text"
 
-class SaveTextUseCase(
+class SaveEventTextUseCase(
     private val storageRepository: StorageRepository,
     observeScheduler: Scheduler
-) : CompletableUseCase<SaveTextUseCase.SaveTextParams>(observeScheduler) {
+) : CompletableUseCase<SaveEventTextUseCase.SaveTextParams>(observeScheduler) {
 
-    override fun buildUseCaseObservable(params: SaveTextUseCase.SaveTextParams): Completable {
+    override fun buildUseCaseObservable(params: SaveEventTextUseCase.SaveTextParams): Completable {
         return Completable.fromSingle(
             storageRepository.writeHTML(params.text, params.event, TEXT_FILENAME)
                 .doOnSuccess { storedFile ->

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
 
->
+    >
 
     <data>
+
+        <variable
+            name="eventViewModel"
+            type="be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel" />
 
         <variable
             name="enterTextViewModel"
@@ -20,16 +24,14 @@
         android:id="@+id/screen_enter_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_marginRight="20dp"
-       >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/btn_enter_text_setColorBlack"
@@ -124,26 +126,27 @@
                 android:onClick="@{() -> enterTextViewModel.pickFontSize(FontSize.LARGE)}"
                 android:text="@string/fontsize_large" />
 
-            <Button android:id="@+id/btn_enter_text_save"
+            <Button
+                android:id="@+id/btn_enter_text_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="@{() -> enterTextViewModel.saveText()}"
+                android:onClick="@{() -> eventViewModel.saveText(enterTextViewModel.text)}"
                 android:text="Opslaan" />
 
         </LinearLayout>
-        <ScrollView 
+
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
             android:layout_weight="1"
+            android:fillViewport="true"
             android:scrollbars="vertical">
 
-        <jp.wasabeef.richeditor.RichEditor
-            android:id="@+id/editor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            />
+            <jp.wasabeef.richeditor.RichEditor
+                android:id="@+id/editor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp" />
         </ScrollView>
     </LinearLayout>
 

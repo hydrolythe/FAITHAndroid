@@ -14,8 +14,8 @@ import org.junit.Before
 import org.junit.Test
 import java.io.IOException
 
-class SaveTextUseCaseTest {
-    private lateinit var saveTextUseCase: SaveTextUseCase
+class SaveEventTextUseCaseTest {
+    private lateinit var saveEventTextUseCase: SaveEventTextUseCase
     private val scheduler: Scheduler = mockk()
     private val repository: StorageRepository = mockk(relaxed = true)
 
@@ -24,7 +24,7 @@ class SaveTextUseCaseTest {
 
     @Before
     fun setUp() {
-        saveTextUseCase = SaveTextUseCase(repository, scheduler)
+        saveEventTextUseCase = SaveEventTextUseCase(repository, scheduler)
         event = EventFactory.makeEvent(nbrOfDetails = 0)
     }
 
@@ -34,8 +34,8 @@ class SaveTextUseCaseTest {
         every { repository.writeHTML(text, event, TEXT_FILENAME) } returns Single.just(mockk())
 
         // Act
-        saveTextUseCase.buildUseCaseObservable(
-            SaveTextUseCase.SaveTextParams(event, text)
+        saveEventTextUseCase.buildUseCaseObservable(
+            SaveEventTextUseCase.SaveTextParams(event, text)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -50,8 +50,8 @@ class SaveTextUseCaseTest {
         every { repository.writeHTML(text, event, TEXT_FILENAME) } returns Single.just(mockk())
 
         // Act
-        saveTextUseCase.buildUseCaseObservable(
-            SaveTextUseCase.SaveTextParams(event, text)
+        saveEventTextUseCase.buildUseCaseObservable(
+            SaveEventTextUseCase.SaveTextParams(event, text)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -70,8 +70,8 @@ class SaveTextUseCaseTest {
         every { repository.writeHTML(text, event, TEXT_FILENAME) } returns Single.error(IOException())
 
         // Act
-        saveTextUseCase.buildUseCaseObservable(
-            SaveTextUseCase.SaveTextParams(event, text)
+        saveEventTextUseCase.buildUseCaseObservable(
+            SaveEventTextUseCase.SaveTextParams(event, text)
         ).test()
             .assertError(IOException::class.java)
 

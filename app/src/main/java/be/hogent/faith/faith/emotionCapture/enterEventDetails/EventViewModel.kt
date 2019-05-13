@@ -10,28 +10,40 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
-import be.hogent.faith.service.usecases.SaveEventUseCase
+import be.hogent.faith.service.usecases.SaveEventAudioUseCase
+import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
+import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
+import be.hogent.faith.service.usecases.SaveEventTextUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import java.io.File
 import java.util.UUID
 
 class EventViewModel(
-    private val saveEventUseCase: SaveEventUseCase,
     private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase,
-    val user: LiveData<User>,
+    private val saveEventPhotoUseCase: SaveEventPhotoUseCase,
+    private val saveEventAudioUseCase: SaveEventAudioUseCase,
+    private val saveEventDrawingUseCase: SaveEventDrawingUseCase,
+    private val saveEventTextUseCase: SaveEventTextUseCase,
     eventUuid: UUID? = null
 ) : ViewModel() {
+
+    /**
+     * The event that will be discussed and explained using audio, video, drawings,...
+     * Updates to the [eventTitle], [eventDate] and [eventNotes] are automatically applied to the event.
+     */
+    val event = MediatorLiveData<Event>()
 
     /**
      * The title of the event.
      * It's optional on the main event screen, but has to be filled in when saving the event.
      */
     val eventTitle = MutableLiveData<String>()
+
     /**
      * The title of the event (optional when on the main entry screen.
      */
@@ -46,26 +58,29 @@ class EventViewModel(
      */
     val eventNotes = MutableLiveData<String>()
 
-    private val _eventSavedSuccessFully = SingleLiveEvent<Unit>()
-    val eventSavedSuccessFully: LiveData<Unit>
-        get() = _eventSavedSuccessFully
+    private val _photoSavedSuccessFully = SingleLiveEvent<Unit>()
+    val photoSavedSuccessFully: LiveData<Unit>
+        get() = _photoSavedSuccessFully
 
-    /**
-     * The event that will be discussed and explained using audio, video, drawings,...
-     * Updates to the [eventTitle], [eventDate] and [eventNotes] are automatically applied to the event.
-     */
-    val event = MediatorLiveData<Event>()
+    private val _drawingSavedSuccessFully = SingleLiveEvent<Unit>()
+    val drawingSavedSuccessFully: LiveData<Unit>
+        get() = _drawingSavedSuccessFully
 
-    /**
-     * Will be updated with the latest error message when an error occurs when saving
-     */
-    private val _errorMessage = MutableLiveData<@IdRes Int>()
-    val errorMessage: LiveData<Int>
-        get() = _errorMessage
+    private val _recordingSavedSuccessFully = SingleLiveEvent<Unit>()
+    val recordingSavedSuccessFully: LiveData<Unit>
+        get() = _recordingSavedSuccessFully
+
+    private val _textSavedSuccessFully = SingleLiveEvent<Unit>()
+    val textSavedSuccessFully: LiveData<Unit>
+        get() = _textSavedSuccessFully
 
     private val _avatarSavedSuccessFully = SingleLiveEvent<Unit>()
     val avatarSavedSuccessFully: LiveData<Unit>
         get() = _avatarSavedSuccessFully
+
+    private val _errorMessage = MutableLiveData<@IdRes Int>()
+    val errorMessage: LiveData<Int>
+        get() = _errorMessage
 
     init {
         if (eventUuid != null) {
@@ -80,9 +95,11 @@ class EventViewModel(
         event.addSource(eventNotes) { notes -> event.value?.notes = notes }
     }
 
+    // TODO: check how to get correct event
     private fun getEventFromUser(eventUuid: UUID): Event {
-        return user.value!!.getEvent(eventUuid)
-            ?: throw IllegalArgumentException("Couldn't find event with UUID $eventUuid for user ${user.value}")
+        return Event()
+//        return user.value!!.getEvent(eventUuid)
+//            ?: throw IllegalArgumentException("Couldn't find event with UUID $eventUuid for user ${user.value}")
     }
 
     fun setEvent(newEvent: Event) {
@@ -166,20 +183,11 @@ class EventViewModel(
         _dateButtonClicked.call()
     }
 
-    fun onSaveButtonClicked() {
-        if (eventTitle.value.isNullOrEmpty()) {
-            _errorMessage.postValue(R.string.error_event_no_title)
-            return
-        }
-        val params = SaveEventUseCase.Params(event.value!!, user.value!!)
-        // TODO: checken of user livedata ook geupdated wordt als een van zijn events aangepast wordt.
-        saveEventUseCase.execute(params, SaveEventUseCaseHandler())
-    }
-
     /**
      * Used to reset the ViewModel once an Event is saved.
      * This will allow the ViewModel to be reused for a new event.
      */
+    // TODO: check if still needed?
     fun resetViewModel() {
         event.postValue(Event())
         eventDate.postValue(LocalDateTime.now())
@@ -191,12 +199,7 @@ class EventViewModel(
         _emotionAvatarClicked.call()
     }
 
-    override fun onCleared() {
-        saveEventUseCase.dispose()
-        saveEmotionAvatarUseCase.dispose()
-        super.onCleared()
-    }
-
+    //region saveEmotionAvatar
     /**
      * Save avatarName bitmap. This updates the property emotionAvatar. Must be done in this viewmodel
      * because otherwise the event is not updated (if this code is in DrawEmotionViewModel, then the
@@ -219,17 +222,90 @@ class EventViewModel(
             _errorMessage.postValue(R.string.error_save_avatar_failed)
         }
     }
+    //endregion
 
-    private inner class SaveEventUseCaseHandler : DisposableCompletableObserver() {
+    //region saveAudio
+    fun saveAudio(tempRecordingFile: File) {
+        val params = SaveEventAudioUseCase.Params(
+            tempRecordingFile,
+            event.value!!
+        )
+        saveEventAudioUseCase.execute(params, SaveAudioUseCaseHandler())
+    }
+
+    private inner class SaveAudioUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            Log.i(TAG, "New event saved: ${event.value!!.title}")
-            _eventSavedSuccessFully.call()
-            resetViewModel()
+            _recordingSavedSuccessFully.call()
         }
 
         override fun onError(e: Throwable) {
-            Log.i(TAG, "Event failed to save because: ${e.message}")
-            _errorMessage.postValue(R.string.error_save_event_failed)
+            _errorMessage.postValue(R.string.error_save_audio_failed)
         }
+    }
+    //endregion
+
+    //region savePhoto
+    fun savePhoto(tempPhotoFile: File) {
+        // TODO: remove name from UC when it's not necessary anymore
+        val params = SaveEventPhotoUseCase.Params(tempPhotoFile, event.value!!, "TempPhotoName")
+        saveEventPhotoUseCase.execute(params, TakeEventPhotoUseCaseHandler())
+    }
+
+    private inner class TakeEventPhotoUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _photoSavedSuccessFully.value = Unit
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_photo_failed)
+        }
+    }
+    //endregion
+
+    //region saveDrawing
+    fun saveDrawing(bitmap: Bitmap) {
+        val params = SaveEventDrawingUseCase.Params(bitmap, event.value!!)
+        saveEventDrawingUseCase.execute(params, SaveEventDrawingUseCaseHandler())
+    }
+
+    private inner class SaveEventDrawingUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _drawingSavedSuccessFully.value = Unit
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_drawing_failed)
+        }
+    }
+    //endregion
+
+    //region saveText
+    fun saveText(text: String?) {
+        if (!text.isNullOrBlank()) {
+            val params = SaveEventTextUseCase.SaveTextParams(event.value!!, text)
+            saveEventTextUseCase.execute(params, SaveTextUseCaseHandler())
+        } else {
+            _errorMessage.postValue(R.string.save_text_error_empty)
+        }
+    }
+
+    private inner class SaveTextUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _textSavedSuccessFully.value = Unit
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_text_failed)
+        }
+    }
+    //endregion
+
+    override fun onCleared() {
+        saveEventAudioUseCase.dispose()
+        saveEventPhotoUseCase.dispose()
+        saveEmotionAvatarUseCase.dispose()
+        saveEventDrawingUseCase.dispose()
+        saveEventTextUseCase.dispose()
+        super.onCleared()
     }
 }

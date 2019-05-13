@@ -62,7 +62,7 @@ class EventDetailsFragmentTest {
         onView(withId(R.id.screen_draw_avatar)).check(matches(isDisplayed()))
         pressBack()
 
-        onView(withId(R.id.btn_event_details_send)).perform(click())
+        onView(withId(R.id.btn_event_send)).perform(click())
         onView(withId(R.id.screen_save_event)).check(matches(isDisplayed()))
         pressBack()
     }
@@ -75,19 +75,19 @@ class EventDetailsFragmentTest {
 
     @Test
     fun eventDetailsFragment_saveEventWithoutTitleEntered_errorMessage() {
-        onView(withId(R.id.btn_event_details_send)).perform(click())
+        onView(withId(R.id.btn_event_send)).perform(click())
         onView(withId(R.id.btn_save_event_save)).perform(scrollTo(), click())
         ToastMatcher.isToastMessageDisplayed(R.string.error_event_no_title)
     }
 
     @Test
     fun eventDetailsFragment_saveEvent_showsSuccess() {
-        onView(withId(R.id.btn_event_details_send)).perform(click())
+        onView(withId(R.id.btn_event_send)).perform(click())
         onView(withId(R.id.txt_save_event_title)).perform(typeText("Titel van Event"))
         closeSoftKeyboard()
         onView(withId(R.id.txt_save_event_notes)).perform(typeText("Notities notities notities"))
         closeSoftKeyboard()
         onView(withId(R.id.btn_save_event_save)).perform(scrollTo(), click())
-        ToastMatcher.isToastMessageDisplayed(R.string.error_save_event_success)
+        ToastMatcher.isToastMessageDisplayed(R.string.save_event_success)
     }
 }

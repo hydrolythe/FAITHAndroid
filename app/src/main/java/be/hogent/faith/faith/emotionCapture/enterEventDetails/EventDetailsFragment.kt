@@ -11,7 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
+import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import java.util.UUID
 
@@ -22,6 +26,7 @@ class EventDetailsFragment : Fragment() {
     private var navigation: EventDetailsNavigationListener? = null
 
     private val eventViewModel: EventViewModel by sharedViewModel()
+    private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
 
     private lateinit var eventDetailsBinding: be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
 
@@ -42,7 +47,8 @@ class EventDetailsFragment : Fragment() {
         eventDetailsBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_enter_event_details, container, false)
         eventDetailsBinding.eventViewModel = eventViewModel
-        eventDetailsBinding.lifecycleOwner = this
+        eventDetailsBinding.lifecycleOwner = this@EventDetailsFragment
+
         return eventDetailsBinding.root
     }
 
@@ -96,20 +102,29 @@ class EventDetailsFragment : Fragment() {
             navigation?.startMakeDrawingFragment()
         })
 
+        eventViewModel.errorMessage.observe(this, Observer { errorMessage ->
+            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+        })
+
         eventViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
             saveDialog.show(fragmentManager!!, null)
         })
 
-        eventViewModel.eventSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, R.string.error_save_event_success, Toast.LENGTH_LONG).show()
+        userViewModel.eventSavedSuccessFully.observe(this, Observer {
+            Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
             saveDialog.dismiss()
 
             // Go back to main screen
             fragmentManager!!.popBackStack()
         })
 
-        eventViewModel.errorMessage.observe(this, Observer { errorMessage ->
+        userViewModel.eventSavedSuccessFully.observe(this, Observer {
+            Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
+            // Go back to main screen TOOD: not working right now
+            fragmentManager!!.popBackStack()
+        })
+        userViewModel.errorMessage.observe(this, Observer { errorMessage ->
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
     }
