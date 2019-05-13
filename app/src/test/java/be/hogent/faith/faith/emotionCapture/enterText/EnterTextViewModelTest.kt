@@ -3,16 +3,10 @@ package be.hogent.faith.faith.emotionCapture.enterText
 import android.graphics.Color
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.TestUtils
-import be.hogent.faith.service.usecases.SaveEventTextUseCase
-import io.mockk.Called
-import io.mockk.called
 
 import io.mockk.mockk
-import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.observers.DisposableCompletableObserver
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -79,5 +73,4 @@ class EnterTextViewModelTest {
 
         verify { observer.onChanged(any()) }
     }
-
 }

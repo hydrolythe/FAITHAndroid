@@ -2,10 +2,7 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
-import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
-import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.Called
 import io.mockk.mockk
