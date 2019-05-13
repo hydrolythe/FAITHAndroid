@@ -10,19 +10,19 @@ import java.io.File
 class SaveAudioRecordingUseCase(
     private val storageRepository: StorageRepository,
     observeScheduler: Scheduler
-) : CompletableUseCase<SaveAudioRecordingUseCase.SaveAudioRecordingParams>(observeScheduler) {
+) : CompletableUseCase<SaveAudioRecordingUseCase.Params>(observeScheduler) {
 
-    override fun buildUseCaseObservable(params: SaveAudioRecordingParams): Completable {
+    override fun buildUseCaseObservable(params: Params): Completable {
         return Completable.fromSingle(
             storageRepository.storeAudioRecording(params.tempStorageFile, params.event)
                 .doOnSuccess { storedFile ->
-                    params.event.addNewAudioDetail(storedFile, params.recordingName)
+                    // TODO: remove once detail names are removed
+                    params.event.addNewAudioDetail(storedFile, "audioRecordingName")
                 })
     }
 
-    class SaveAudioRecordingParams(
+    data class Params(
         val tempStorageFile: File,
-        val event: Event,
-        val recordingName: String
+        val event: Event
     )
 }

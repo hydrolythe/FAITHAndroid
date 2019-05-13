@@ -88,6 +88,10 @@ class TakePhotoFragment : Fragment() {
 
     private fun takeAndSavePictureToCache() {
         val saveFile = tempFileProvider.tempPhotoFile
+        /**
+         * Saving the photo is triggered here instead of from the VM because then it would need to hold
+         * the tempPhotoFile.
+         */
         fotoApparat.takePicture().saveToFile(saveFile).whenAvailable {
             userViewModel.savePhoto(saveFile, eventViewModel.event.value!!)
         }

@@ -63,7 +63,7 @@ class RecordAudioViewModelTest {
     @Test
     fun recordAudioVM_saveButtonClicked_callsUseCase() {
         // Arrange
-        val params = slot<SaveAudioRecordingUseCase.SaveAudioRecordingParams>()
+        val params = slot<SaveAudioRecordingUseCase.Params>()
         val observer = slot<DisposableCompletableObserver>()
         viewModel.tempRecordingFile = mockk()
 

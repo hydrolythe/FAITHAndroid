@@ -39,7 +39,7 @@ class SaveAudioRecordingUseCaseTest {
 
         // Act
         saveAudioRecordingUseCase.buildUseCaseObservable(
-            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event, recordingName)
+            SaveAudioRecordingUseCase.Params(tempStorageFile, event, recordingName)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -55,7 +55,7 @@ class SaveAudioRecordingUseCaseTest {
 
         // Act
         saveAudioRecordingUseCase.buildUseCaseObservable(
-            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event, recordingName)
+            SaveAudioRecordingUseCase.Params(tempStorageFile, event, recordingName)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -75,7 +75,7 @@ class SaveAudioRecordingUseCaseTest {
 
         // Act
         saveAudioRecordingUseCase.buildUseCaseObservable(
-            SaveAudioRecordingUseCase.SaveAudioRecordingParams(tempStorageFile, event, recordingName)
+            SaveAudioRecordingUseCase.Params(tempStorageFile, event, recordingName)
         ).test()
             .assertError(IOException::class.java)
 
