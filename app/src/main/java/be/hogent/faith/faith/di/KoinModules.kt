@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.di
 
 import androidx.lifecycle.LiveData
-import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
@@ -41,13 +40,13 @@ val appModule = module(override = true) {
     viewModel { EditDetailViewModel() }
     viewModel { (user: LiveData<User>) -> OverviewEventsViewModel(user) }
     viewModel { AvatarViewModel(get(), get()) }
-    viewModel { (event: Event) -> RecordAudioViewModel(get(), event) }
+    viewModel { RecordAudioViewModel() }
     viewModel { TakePhotoViewModel() }
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.
     scope(USER_SCOPE_ID) {
-        UserViewModel(get(), get())
+        UserViewModel(get(), get(), get())
     }
 
     single { TempFileProvider(androidContext()) }

@@ -8,6 +8,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.SaveAudioRecordingUseCase
 import be.hogent.faith.service.usecases.SaveEventUseCase
 import be.hogent.faith.service.usecases.TakeEventPhotoUseCase
 import io.reactivex.observers.DisposableCompletableObserver
@@ -19,7 +20,8 @@ import java.io.File
  */
 class UserViewModel(
     private val saveEventUseCase: SaveEventUseCase,
-    private val takeEventPhotoUseCase: TakeEventPhotoUseCase
+    private val takeEventPhotoUseCase: TakeEventPhotoUseCase,
+    private val saveAudioRecordingUseCase: SaveAudioRecordingUseCase
 ) : ViewModel() {
 
     private val _eventSavedSuccessFully = SingleLiveEvent<Unit>()
@@ -29,6 +31,10 @@ class UserViewModel(
     private val _photoSavedSuccessFully = SingleLiveEvent<Unit>()
     val photoSavedSuccessFully: LiveData<Unit>
         get() = _photoSavedSuccessFully
+
+    private val _recordingSavedSuccessFully = SingleLiveEvent<Unit>()
+    val recordingSavedSuccessFully: LiveData<Unit>
+        get() = _recordingSavedSuccessFully
 
     /**
      * Will be updated with the latest error message when an error occurs
@@ -50,6 +56,25 @@ class UserViewModel(
      */
     fun setUser(user: User) {
         _user.postValue(user)
+    }
+
+    fun saveAudio(tempRecordingFile: File, event: Event) {
+        val params = SaveAudioRecordingUseCase.Params(
+            tempRecordingFile,
+            event
+        )
+        saveAudioRecordingUseCase.execute(params, SaveAudioUseCaseHandler())
+    }
+
+    private inner class SaveAudioUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _recordingSavedSuccessFully.call()
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_audio_failed)
+        }
+
     }
 
     fun savePhoto(tempPhotoFile: File, event: Event) {
@@ -90,6 +115,9 @@ class UserViewModel(
 
     override fun onCleared() {
         saveEventUseCase.dispose()
+        saveAudioRecordingUseCase.dispose()
+        takeEventPhotoUseCase.dispose()
         super.onCleared()
     }
 }
+
