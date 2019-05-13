@@ -6,20 +6,14 @@ import androidx.annotation.ColorInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.SaveTextUseCase
 import be.hogent.faith.util.TAG
-import io.reactivex.observers.DisposableCompletableObserver
 
-class EnterTextViewModel(
-    private val event: Event,
-    private val saveTextUseCase: SaveTextUseCase
-) : ViewModel() {
+class EnterTextViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>()
     val text: LiveData<String>
-    get() = _text
+        get() = _text
 
     private val _selectedTextColor = MutableLiveData<@ColorInt Int>()
     val selectedTextColor: LiveData<Int>
@@ -41,17 +35,6 @@ class EnterTextViewModel(
     val underlineClicked: LiveData<Unit>
         get() = _underlineClicked
 
-    private val _textSavedSuccessFully = SingleLiveEvent<Unit>()
-    val textSavedSuccessFully: LiveData<Unit>
-        get() = _textSavedSuccessFully
-
-    /**
-     * Will be updated with the latest error message when an error occurs when saving the text.
-     */
-    private val _textSaveFailed = MutableLiveData<String>()
-    val textSaveFailed: LiveData<String>
-        get() = _textSaveFailed
-
     init {
         _selectedTextColor.value = Color.BLACK
         _selectedFontSize.value = FontSize.NORMAL.size
@@ -69,23 +52,6 @@ class EnterTextViewModel(
         _underlineClicked.call()
     }
 
-    fun saveText() {
-        if (text.value !== "") {
-            val params = SaveTextUseCase.SaveTextParams(event, text.value ?: "")
-            saveTextUseCase.execute(params, SaveTextUseCaseHandler())
-        }
-    }
-
-    private inner class SaveTextUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _textSavedSuccessFully.value = Unit
-        }
-
-        override fun onError(e: Throwable) {
-            _textSaveFailed.postValue(e.message)
-        }
-    }
-
     fun pickTextColor(@ColorInt color: Int) {
         _selectedTextColor.value = color
     }
@@ -97,11 +63,6 @@ class EnterTextViewModel(
     fun textChanged(text: String) {
         _text.value = text
         Log.d(TAG, "html $text")
-    }
-
-    override fun onCleared() {
-        saveTextUseCase.dispose()
-        super.onCleared()
     }
 
     enum class FontSize(val size: Int) {

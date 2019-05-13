@@ -9,13 +9,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.databinding.DialogSaveEventBinding
+import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.di.KoinModules
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class SaveEventDialog : DialogFragment() {
-    private lateinit var saveEventBinding: DialogSaveEventBinding
+    private lateinit var saveEventBinding: be.hogent.faith.databinding.DialogSaveEventBinding
 
     private val eventDetailsViewModel: EventViewModel by sharedViewModel()
+    private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
 
     companion object {
         fun newInstance(): SaveEventDialog {
@@ -32,10 +36,9 @@ class SaveEventDialog : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         saveEventBinding =
             DataBindingUtil.inflate(inflater, R.layout.dialog_save_event, container, false)
-        saveEventBinding.apply {
-            eventViewModel = eventDetailsViewModel
-            lifecycleOwner = this@SaveEventDialog
-        }
+        saveEventBinding.eventViewModel = eventDetailsViewModel
+        saveEventBinding.userViewModel = userViewModel
+        saveEventBinding.lifecycleOwner = this@SaveEventDialog
         return saveEventBinding.root
     }
 

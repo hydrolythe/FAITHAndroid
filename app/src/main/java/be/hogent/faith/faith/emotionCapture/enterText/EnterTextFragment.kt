@@ -44,7 +44,7 @@ class EnterTextFragment : Fragment() {
         editor.setEditorHeight(200)
         editor.setEditorFontSize(30)
         editor.setPadding(10, 10, 10, 10)
-        editor.setPlaceholder(".....")
+        editor.setPlaceholder("...")
 
         editor.setOnTextChangeListener {
             enterTextViewModel.textChanged(it)
@@ -55,7 +55,7 @@ class EnterTextFragment : Fragment() {
         enterTextViewModel.selectedTextColor.observe(this, Observer { newColor ->
             editor.setTextColor(newColor)
         })
-        enterTextViewModel.boldClicked.observe(this, Observer { lineWidth ->
+        enterTextViewModel.boldClicked.observe(this, Observer {
             editor.setBold()
         })
         enterTextViewModel.italicClicked.observe(this, Observer {
@@ -67,12 +67,11 @@ class EnterTextFragment : Fragment() {
         enterTextViewModel.selectedFontSize.observe(this, Observer { newSize ->
             editor.setFontSize(newSize)
         })
-        enterTextViewModel.textSaveFailed.observe(this, Observer {
-            Toast.makeText(context, getString(R.string.frag_entertext_text_failed), Toast.LENGTH_SHORT).show()
+        eventViewModel.errorMessage.observe(this, Observer { errorMessageResourceId ->
+            Toast.makeText(context, errorMessageResourceId, Toast.LENGTH_SHORT).show()
         })
-        enterTextViewModel.textSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, getString(R.string.frag_entertext_save_successfull), Toast.LENGTH_SHORT).show()
-            eventViewModel.updateEvent()
+        eventViewModel.textSavedSuccessFully.observe(this, Observer {
+            Toast.makeText(context, R.string.save_text_success, Toast.LENGTH_SHORT).show()
         })
     }
 

@@ -6,6 +6,9 @@
         <variable
             name="photoViewModel"
             type="be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel" />
+        <variable
+            name="userViewModel"
+            type="be.hogent.faith.faith.UserViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

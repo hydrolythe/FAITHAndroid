@@ -14,6 +14,7 @@ open class SaveEventUseCase(
 
     override fun buildUseCaseObservable(params: Params): Completable {
         return Completable.fromCallable {
+            params.event.title = params.eventTitle
             // First add in domain so we can do business logic
             // If this fails the event won't get added to the Repo.
             params.user.addEvent(params.event)
@@ -25,6 +26,7 @@ open class SaveEventUseCase(
     }
 
     data class Params(
+        val eventTitle: String,
         val event: Event,
         val user: User
     )

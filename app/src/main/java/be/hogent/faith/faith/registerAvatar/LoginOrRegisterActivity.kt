@@ -2,10 +2,12 @@ package be.hogent.faith.faith.registerAvatar
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.faith.cityScreen.CityScreenActivity
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.util.TAG
 import org.koin.android.ext.android.getKoin
 
 class LoginOrRegisterActivity : AppCompatActivity(),
@@ -30,12 +32,14 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     }
 
     private fun createScopedUserViewModel() {
+        Log.e(TAG, "Creating USER SCOPE")
         getKoin().createScope(KoinModules.USER_SCOPE_ID)
     }
 
     override fun onDestroy() {
-        super.onDestroy()
+        Log.e(TAG, "Destroying USER SCOPE")
         getKoin().getScope(KoinModules.USER_SCOPE_ID).close()
+        super.onDestroy()
     }
 
     override fun goToCityScreen() {

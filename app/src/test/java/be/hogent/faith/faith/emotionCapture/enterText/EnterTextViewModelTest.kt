@@ -5,7 +5,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.TestUtils
-import be.hogent.faith.service.usecases.SaveTextUseCase
+import be.hogent.faith.service.usecases.SaveEventTextUseCase
 import io.mockk.Called
 import io.mockk.called
 
@@ -20,8 +20,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class EnterTextViewModelTest {
-    private val saveTextUseCase = mockk<SaveTextUseCase>(relaxed = true)
-    private val event = mockk<Event>()
     private lateinit var viewModel: EnterTextViewModel
     private val text = "Hello world"
 
@@ -30,7 +28,7 @@ class EnterTextViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = EnterTextViewModel(event, saveTextUseCase)
+        viewModel = EnterTextViewModel()
         viewModel.textChanged(text)
     }
 
@@ -82,57 +80,4 @@ class EnterTextViewModelTest {
         verify { observer.onChanged(any()) }
     }
 
-    @Test
-    fun enterTextVM_saveText_callsUseCase() {
-
-        val params = slot<SaveTextUseCase.SaveTextParams>()
-
-        viewModel.saveText()
-        verify { saveTextUseCase.execute(capture(params), any()) }
-
-        assertEquals(text, params.captured.text)
-        assertEquals(event, params.captured.event)
-    }
-
-    @Test
-    fun enterTextVM_saveText_callUseCaseAndNotifiesSuccess() {
-        // Arrange
-        val params = slot<SaveTextUseCase.SaveTextParams>()
-        val observer = slot<DisposableCompletableObserver>()
-
-        val errorObserver = mockk<Observer<String>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        viewModel.textSaveFailed.observeForever(errorObserver)
-        viewModel.textSavedSuccessFully.observeForever(successObserver)
-
-        // Act
-        viewModel.saveText()
-        verify { saveTextUseCase.execute(capture(params), capture(observer)) }
-        observer.captured.onComplete()
-
-        // Assert
-        verify { successObserver.onChanged(any()) }
-        verify { errorObserver wasNot called }
-    }
-
-    @Test
-    fun enterTextViewModel_saveText_notifiesWhenSaveFails() {
-        // Arrange
-        val params = slot<SaveTextUseCase.SaveTextParams>()
-        val observer = slot<DisposableCompletableObserver>()
-
-        val errorObserver = mockk<Observer<String>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        viewModel.textSaveFailed.observeForever(errorObserver)
-        viewModel.textSavedSuccessFully.observeForever(successObserver)
-
-        // Act
-        viewModel.saveText()
-        verify { saveTextUseCase.execute(capture(params), capture(observer)) }
-        observer.captured.onError(mockk(relaxed = true))
-
-        // Assert
-        verify { errorObserver.onChanged(any()) }
-        verify { successObserver wasNot Called }
-    }
 }

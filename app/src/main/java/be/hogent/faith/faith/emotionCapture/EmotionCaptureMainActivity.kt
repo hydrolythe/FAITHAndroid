@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
-import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.drawing.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.MakeDrawingFragment
@@ -18,15 +17,11 @@ import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
-import be.hogent.faith.faith.registerAvatar.UserViewModel
 import be.hogent.faith.faith.util.replaceFragment
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_drawer_layout
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_nav_view
-import org.koin.android.ext.android.get
-import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import java.util.UUID
 
 class EmotionCaptureMainActivity : AppCompatActivity(),
@@ -46,13 +41,11 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     // This VM is made here because it holds the event that is described in the EventDetailsFragment and
     // the fragments that can be started from there.
     // They all require the same event object so it has to be shared.
-    // This may cause issues when entering multiple events. A possible solution might be to have an Activity for each
-    // of the 4 main functions of the app.
     private lateinit var eventViewModel: EventViewModel
 
     private lateinit var takePhotoViewModel: TakePhotoViewModel
 
-    lateinit var recordAudioViewModel: RecordAudioViewModel
+    private lateinit var recordAudioViewModel: RecordAudioViewModel
 
     lateinit var enterTextViewModel: EnterTextViewModel
 
@@ -60,21 +53,10 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_emotion_capture)
 
-        eventViewModel = getViewModel {
-            val userSessionScope = getKoin().getScope(KoinModules.USER_SCOPE_ID)
-            parametersOf(get<UserViewModel>(scope = userSessionScope).user)
-        }
-
-        takePhotoViewModel = getViewModel {
-            parametersOf(eventViewModel.event.value)
-        }
-        recordAudioViewModel = getViewModel {
-            parametersOf(eventViewModel.event.value)
-        }
-
-        enterTextViewModel = getViewModel {
-            parametersOf(eventViewModel.event.value)
-        }
+        eventViewModel = getViewModel()
+        takePhotoViewModel = getViewModel()
+        recordAudioViewModel = getViewModel()
+        enterTextViewModel = getViewModel()
 
         // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
