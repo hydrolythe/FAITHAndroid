@@ -16,46 +16,45 @@ import org.junit.Before
 import org.junit.Test
 import java.io.IOException
 
-class SaveAudioRecordingUseCaseTest {
-    private lateinit var saveAudioRecordingUseCase: SaveAudioRecordingUseCase
+class SaveEventAudioUseCaseTest {
+    private lateinit var saveEventAudioUseCase: SaveEventAudioUseCase
     private val scheduler: Scheduler = mockk()
     private val repository: StorageRepository = mockk(relaxed = true)
 
     private val tempStorageFile = DataFactory.randomFile()
-    private val eventName = DataFactory.randomString()
     private val recordingName = DataFactory.randomString()
     private lateinit var event: Event
 
     @Before
     fun setUp() {
-        saveAudioRecordingUseCase = SaveAudioRecordingUseCase(repository, scheduler)
+        saveEventAudioUseCase = SaveEventAudioUseCase(repository, scheduler)
         event = EventFactory.makeEvent(nbrOfDetails = 0)
     }
 
     @Test
     fun saveAudioUC_saveAudioNormal_savedToStorage() {
         // Arrange
-        every { repository.storeAudioRecording(tempStorageFile, event) } returns Single.just(mockk())
+        every { repository.saveEventAudio(any(), any()) } returns Single.just(mockk())
 
         // Act
-        saveAudioRecordingUseCase.buildUseCaseObservable(
-            SaveAudioRecordingUseCase.Params(tempStorageFile, event, recordingName)
+        saveEventAudioUseCase.buildUseCaseObservable(
+            SaveEventAudioUseCase.Params(tempStorageFile, event)
         ).test()
             .assertNoErrors()
             .assertComplete()
 
         // Assert
-        verify { repository.storeAudioRecording(any(), event) }
+        verify { repository.saveEventAudio(any(), any()) }
     }
 
     @Test
     fun saveAudioUC_saveAudioNormal_addedToEvent() {
         // Arrange
-        every { repository.storeAudioRecording(tempStorageFile, event) } returns Single.just(mockk())
+        every { repository.saveEventAudio(any(), any()) } returns Single.just(mockk())
 
         // Act
-        saveAudioRecordingUseCase.buildUseCaseObservable(
-            SaveAudioRecordingUseCase.Params(tempStorageFile, event, recordingName)
+        saveEventAudioUseCase.buildUseCaseObservable(
+            SaveEventAudioUseCase.Params(tempStorageFile, event)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -65,17 +64,16 @@ class SaveAudioRecordingUseCaseTest {
 
         val resultingDetail = event.details.first()
         assertTrue(resultingDetail is AudioDetail)
-        assertEquals(recordingName, resultingDetail.name)
     }
 
     @Test
     fun saveAudioUC_errorInRepo_notAddedToEvent() {
         // Arrange
-        every { repository.storeAudioRecording(tempStorageFile, event) } returns Single.error(IOException())
+        every { repository.saveEventAudio(any(), any()) } returns Single.error(IOException())
 
         // Act
-        saveAudioRecordingUseCase.buildUseCaseObservable(
-            SaveAudioRecordingUseCase.Params(tempStorageFile, event, recordingName)
+        saveEventAudioUseCase.buildUseCaseObservable(
+            SaveEventAudioUseCase.Params(tempStorageFile, event)
         ).test()
             .assertError(IOException::class.java)
 

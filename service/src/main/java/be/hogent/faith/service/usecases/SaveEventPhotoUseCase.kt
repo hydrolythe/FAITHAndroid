@@ -7,18 +7,19 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 import java.io.File
 
-class TakeEventPhotoUseCase(
+class SaveEventPhotoUseCase(
     private val storageRepository: StorageRepository,
     observeScheduler: Scheduler
-) : CompletableUseCase<TakeEventPhotoUseCase.Params>(
+) : CompletableUseCase<SaveEventPhotoUseCase.Params>(
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {
         return Completable.fromSingle(
-            storageRepository.movePhotoFromTempStorage(params.tempPhotoFile, params.event, params.photoName)
-                .doOnSuccess { storedFile ->
-                    params.event.addNewPictureDetail(storedFile, params.photoName)
-                }
+            storageRepository.saveEventPhoto(
+                params.tempPhotoFile, params.event
+            ).doOnSuccess { storedFile ->
+                params.event.addNewPictureDetail(storedFile, params.photoName)
+            }
         )
     }
 
