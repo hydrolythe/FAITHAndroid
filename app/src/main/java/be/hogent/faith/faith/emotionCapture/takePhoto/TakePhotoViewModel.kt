@@ -13,5 +13,4 @@ class TakePhotoViewModel : ViewModel() {
     fun onTakePhotoButtonClicked() {
         _takePhotoButtonClicked.call()
     }
-
 }

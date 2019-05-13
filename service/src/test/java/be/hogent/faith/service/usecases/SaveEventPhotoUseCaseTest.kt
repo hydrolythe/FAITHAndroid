@@ -51,7 +51,7 @@ class SaveEventPhotoUseCaseTest {
     }
 
     @Test
-    fun takePhotoUC_executeNormally_addedToEvent() {
+    fun takelPhotoUC_executeNormally_addedToEvent() {
         // Arrange
         every {
             storageRepository.saveEventPhoto(tempRecordingFile, event)

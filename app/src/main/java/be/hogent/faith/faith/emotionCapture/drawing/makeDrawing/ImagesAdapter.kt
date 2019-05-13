@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.emotionCapture.drawing.makeDrawing
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -8,7 +7,7 @@ import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 
-class ImagesAdapter(private val context: Context, @IdRes private val imageDrawableIDs: List<Int>) :
+class ImagesAdapter(@IdRes private val imageDrawableIDs: List<Int>) :
     RecyclerView.Adapter<ImageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {

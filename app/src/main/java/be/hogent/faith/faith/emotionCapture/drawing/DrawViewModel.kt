@@ -27,6 +27,10 @@ class DrawViewModel : ViewModel() {
     val undoClicked: LiveData<Unit>
         get() = _undoClicked
 
+    private val _saveClicked = SingleLiveEvent<Unit>()
+    val saveClicked: LiveData<Unit>
+        get() = _saveClicked
+
     /**
      * Contains all actions that have been drawn on the [DrawView].
      * This belongs here because it's part of the UI state, just like how you would save text that's already been typed.
@@ -57,6 +61,10 @@ class DrawViewModel : ViewModel() {
 
     fun undo() {
         _undoClicked.call()
+    }
+
+    fun onSaveButtonClicked() {
+        _saveClicked.call()
     }
 
     enum class LineWidth(val width: Float) {

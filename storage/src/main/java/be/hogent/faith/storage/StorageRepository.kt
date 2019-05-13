@@ -111,5 +111,4 @@ class StorageRepository(private val context: Context) {
             storedFile
         }
     }
-
 }

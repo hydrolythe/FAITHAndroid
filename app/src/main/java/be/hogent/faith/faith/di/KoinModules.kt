@@ -34,8 +34,8 @@ val appModule = module(override = true) {
 
     // ViewModels
     viewModel { CityScreenViewModel() }
-    viewModel { (eventUuid: UUID?) -> EventViewModel(get(), eventUuid) }
-    viewModel { EventViewModel(get(), null) }
+    viewModel { (eventUuid: UUID?) -> EventViewModel(get(), get(), get(), get(), eventUuid) }
+    viewModel { EventViewModel(get(), get(), get(), get()) }
     viewModel { DrawViewModel() }
     viewModel { EditDetailViewModel() }
     viewModel { (user: LiveData<User>) -> OverviewEventsViewModel(user) }
@@ -46,7 +46,7 @@ val appModule = module(override = true) {
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.
     scope(USER_SCOPE_ID) {
-        UserViewModel(get(), get(), get())
+        UserViewModel(get())
     }
 
     single { TempFileProvider(androidContext()) }

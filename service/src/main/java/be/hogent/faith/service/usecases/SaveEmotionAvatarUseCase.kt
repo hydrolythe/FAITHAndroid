@@ -7,7 +7,6 @@ import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
-
 /**
  * Stores the (colored) emotion avatarName for an event on the device's storage.
  * Will overwrite a previously stored avatarName.
