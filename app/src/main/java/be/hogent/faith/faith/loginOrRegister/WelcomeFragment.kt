@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -31,8 +32,15 @@ class WelcomeFragment : Fragment() {
     }
 
     private fun registerListeners() {
-        welcomeViewModel.registerButtonClicked.observe(this, Observer<Any> {
+        welcomeViewModel.registerButtonClicked.observe(this, Observer {
             navigation!!.goToRegistrationScreen()
+        })
+        welcomeViewModel.loginButtonClicked.observe(this, Observer {
+            // TODO: add username/password auth here!
+            Toast.makeText(context, "Inloggen is nog niet geimplementeerd!", Toast.LENGTH_SHORT).show()
+        })
+        welcomeViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
+            Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
         })
     }
 
@@ -45,6 +53,7 @@ class WelcomeFragment : Fragment() {
 
     interface WelcomeNavigationListener {
         fun goToRegistrationScreen()
+        fun goToCityScreen()
     }
 
     companion object {

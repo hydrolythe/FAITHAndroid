@@ -77,4 +77,8 @@
     <string name="description_event_avatar">Getekende avatar voor de gebeurtenis</string>
     <string name="descr_city_park">Het stadspark</string>
     <string name="descr_loginscreen">Loginscherm</string>
+    <string name="username">Gebruikersnaam</string>
+    <string name="password">Wachtwoord</string>
+    <string name="login_error_noUsername">Je moet je gebruikersnaam ingeven!</string>
+    <string name="login_error_noPassword">Je moet je wachtwoord ingeven!</string>
 </resources>

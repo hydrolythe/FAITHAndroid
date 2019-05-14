@@ -26,6 +26,7 @@
         <activity
             android:name=".faith.loginOrRegister.LoginOrRegisterActivity"
             android:label="@string/app_name"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
 
             <intent-filter>
@@ -36,6 +37,7 @@
         <activity
             android:name=".faith.cityScreen.CityScreenActivity"
             android:label="@string/lbl_activity_city"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen" />
         <activity
             android:name=".faith.emotionCapture.EmotionCaptureMainActivity"

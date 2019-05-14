@@ -11,6 +11,7 @@
     </data>
 
     <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -61,7 +62,35 @@
                 app:layout_constraintGuide_percent="0.95" />
 
             <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_form_start"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.28" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_form_end"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.425" />
+
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_pole_bottom"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.42" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_password_bottom"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.51" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_userName"
                 android:layout_width="1dp"
                 android:layout_height="1dp"
                 android:orientation="horizontal"
@@ -95,11 +124,38 @@
                 android:id="@+id/btn_welcome_login"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:onClick="@{() -> welcomeViewModel.loginButtonClicked()}"
                 android:background="#00000000"
                 app:layout_constraintBottom_toTopOf="@+id/guide_pole_bottom"
                 app:layout_constraintEnd_toStartOf="@id/guide_pole_left_start"
                 app:layout_constraintStart_toStartOf="@+id/guide_pole_left_end"
                 app:layout_constraintTop_toTopOf="@+id/guide_pole_top" />
+
+            <EditText
+                android:id="@+id/txt_welcome_userName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:hint="@string/username"
+                android:inputType="textPersonName"
+                android:text="@={welcomeViewModel.userName}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                app:layout_constraintBottom_toTopOf="@+id/guide_userName"
+                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_form_start" />
+
+            <EditText
+                android:id="@+id/txt_welcome_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:text="@={welcomeViewModel.password}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                app:layout_constraintBottom_toTopOf="@+id/guide_password_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_form_start" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>
