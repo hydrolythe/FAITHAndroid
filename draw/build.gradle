@@ -1,9 +1,9 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 28
-
-
 
     defaultConfig {
         minSdkVersion 19
@@ -44,6 +44,3 @@ dependencies {
     implementation commonDependencies.coroutines_core
     implementation commonDependencies.coroutines_android
 }
-
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
