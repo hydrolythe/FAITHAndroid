@@ -3,6 +3,7 @@ package be.hogent.faith.faith.emotionCapture.enterText
 // uses https://github.com/wasabeef/richeditor-android
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterTextBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
+import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_enter_text.editor
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -68,7 +70,8 @@ class EnterTextFragment : Fragment() {
             editor.setFontSize(newSize)
         })
         eventViewModel.errorMessage.observe(this, Observer { errorMessageResourceId ->
-            Toast.makeText(context, errorMessageResourceId, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, errorMessageResourceId, Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "saving textdetail failed : ${getString(errorMessageResourceId)}")
         })
         eventViewModel.textSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_text_success, Toast.LENGTH_SHORT).show()

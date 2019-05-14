@@ -31,7 +31,7 @@ class SaveEventTextUseCaseTest {
     @Test
     fun saveTextUC_saveTextNormal_savedToStorage() {
         // Arrange
-        every { repository.writeHTML(text, event, TEXT_FILENAME) } returns Single.just(mockk())
+        every { repository.saveText(text, event) } returns Single.just(mockk())
 
         // Act
         saveEventTextUseCase.buildUseCaseObservable(
@@ -41,13 +41,13 @@ class SaveEventTextUseCaseTest {
             .assertComplete()
 
         // Assert
-        verify { repository.writeHTML(any(), event, TEXT_FILENAME) }
+        verify { repository.saveText(text, event) }
     }
 
     @Test
     fun saveTextUC_saveTextNormal_addedToEvent() {
         // Arrange
-        every { repository.writeHTML(text, event, TEXT_FILENAME) } returns Single.just(mockk())
+        every { repository.saveText(text, event) } returns Single.just(mockk())
 
         // Act
         saveEventTextUseCase.buildUseCaseObservable(
@@ -61,13 +61,12 @@ class SaveEventTextUseCaseTest {
 
         val resultingDetail = event.details.first()
         Assert.assertTrue(resultingDetail is TextDetail)
-        Assert.assertEquals(TEXT_FILENAME, resultingDetail.name)
     }
 
     @Test
     fun saveTextUC_errorInRepo_notAddedToEvent() {
         // Arrange
-        every { repository.writeHTML(text, event, TEXT_FILENAME) } returns Single.error(IOException())
+        every { repository.saveText(text, event) } returns Single.error(IOException())
 
         // Act
         saveEventTextUseCase.buildUseCaseObservable(

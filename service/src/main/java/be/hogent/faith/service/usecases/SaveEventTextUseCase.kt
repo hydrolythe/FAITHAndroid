@@ -6,8 +6,6 @@ import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
-const val TEXT_FILENAME = "text"
-
 class SaveEventTextUseCase(
     private val storageRepository: StorageRepository,
     observeScheduler: Scheduler
@@ -15,9 +13,9 @@ class SaveEventTextUseCase(
 
     override fun buildUseCaseObservable(params: SaveEventTextUseCase.SaveTextParams): Completable {
         return Completable.fromSingle(
-            storageRepository.writeHTML(params.text, params.event, TEXT_FILENAME)
+            storageRepository.saveText(params.text, params.event)
                 .doOnSuccess { storedFile ->
-                    params.event.addNewTextDetail(storedFile, TEXT_FILENAME)
+                    params.event.addNewTextDetail(storedFile, "textName")
                 })
     }
 

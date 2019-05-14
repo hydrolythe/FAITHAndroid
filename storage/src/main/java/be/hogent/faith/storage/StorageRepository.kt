@@ -55,6 +55,12 @@ class StorageRepository(private val context: Context) {
         return eventDir
     }
 
+    private fun getEventTextDirectory(event: Event): File {
+        val textDir = File(context.filesDir, "text/${event.uuid}")
+        textDir.mkdirs()
+        return textDir
+    }
+
     fun saveEventAudio(tempStorageFile: File, event: Event): Single<File> {
         return moveFileFromTempStorageToPermanentStorage(
             tempStorageFile,
@@ -122,10 +128,10 @@ class StorageRepository(private val context: Context) {
      *          Used to store the text in a folder specific for the event.
      * @param fileName Will be used for the filename.
      */
-    fun writeHTML(text: String, event: Event, fileName: String): Single<File>
+    fun saveText(text: String, event: Event): Single<File>
     {
         return Single.fromCallable {
-            val storedFile = File(getEventImageDirectory(event), "$fileName.$TEXT_EXTENSION")
+            val storedFile = File(getEventTextDirectory(event), "${createSaveFileName()}.$TEXT_EXTENSION")
             storedFile.writeText(text)
             storedFile
         }
