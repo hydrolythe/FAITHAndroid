@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="recordAudioViewModel"
+            type="be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel" />
+
+        <import type="be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel.RecordingStatus" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/screen_record_audio"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_recordAudio_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:contentDescription="@string/description_pause_recording"
+            android:onClick="@{() -> recordAudioViewModel.onPauseButtonClicked()}"
+            android:src="@drawable/audio_pause"
+            android:visibility="@{recordAudioViewModel.recordingStatus != RecordingStatus.PAUSED? View.VISIBLE : View.INVISIBLE}"/>
+
+        <ImageButton
+            android:id="@+id/btn_recordAudio_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:contentDescription="@string/description_start_recording"
+            android:onClick="@{() -> recordAudioViewModel.onRecordButtonClicked()}"
+            android:src="@drawable/audio_record"
+            android:visibility="@{recordAudioViewModel.recordingStatus != RecordingStatus.RECORDING? View.VISIBLE : View.INVISIBLE}"/>
+
+        <ImageButton
+            android:id="@+id/btn_recordAudio_restart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:contentDescription="@string/description_restart_recording"
+            android:onClick="@{() -> recordAudioViewModel.onRestartButtonClicked()}"
+            android:src="@drawable/audio_restart"/>
+
+        <ImageButton
+            android:id="@+id/btn_recordAudio_stop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:contentDescription="@string/description_stop_recording"
+            android:onClick="@{() -> recordAudioViewModel.onStopButtonClicked()}"
+            android:src="@drawable/audio_stop"/>
+
+
+    </LinearLayout>
+</layout>

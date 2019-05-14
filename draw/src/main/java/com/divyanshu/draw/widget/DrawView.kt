@@ -5,10 +5,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
+import android.os.AsyncTask
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -16,9 +16,6 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
 import androidx.core.graphics.ColorUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 /**
  * Defines how much of the View's height the background may use.
@@ -27,14 +24,31 @@ import kotlinx.coroutines.launch
 const val BACKGROUND_MAX_HEIGHT_USED = 0.8
 
 class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
-    private var mPaths = LinkedHashMap<MyPath, PaintOptions>()
+    /**
+     * Holds all [DrawingAction]s that will be drawn when calling [onDraw].
+     */
+    private var _drawingActions = mutableListOf<DrawingAction>()
+    val drawingActions: List<DrawingAction>
+        get() = _drawingActions
 
-    private var mLastPaths = LinkedHashMap<MyPath, PaintOptions>()
-    private var mUndonePaths = LinkedHashMap<MyPath, PaintOptions>()
+    /**
+     * Holds a copy of all actions that were done before [clear] was called.
+     * Used to restore them when calling [undo] after a call to [clear].
+     */
+    private var lastDrawingActions = mutableListOf<DrawingAction>()
 
-    private var mPaint = Paint()
-    private var mPath = MyPath()
-    private var mPaintOptions = PaintOptions()
+    /**
+     * Map of all actions that have been undone using the [undo] method.
+     * Used to restore them when calling [redo].
+     */
+    private var undoneActions = mutableListOf<DrawingAction>()
+
+    private var currentPath: MyPath? = null
+
+    /**
+     * Current settings for painting the [currentPath].
+     */
+    private var currentPaintOptions = PaintOptions()
 
     private var mCurX = 0f
     private var mCurY = 0f
@@ -52,72 +66,69 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     private val drawingListeners = mutableListOf<DrawViewListener>()
 
-    var isEraserOn = false
-        private set
-
-    init {
-        mPaint.apply {
-            color = mPaintOptions.color
-            style = Paint.Style.STROKE
-            strokeJoin = Paint.Join.ROUND
-            strokeCap = Paint.Cap.ROUND
-            strokeWidth = mPaintOptions.strokeWidth
-            isAntiAlias = true
-        }
-    }
-
     fun addDrawViewListener(newListener: DrawViewListener) {
         drawingListeners += newListener
     }
 
     private fun callDrawViewListeners() {
-        Log.i("DrawView", "Drawing was updated, calling ${drawingListeners.size} listeners")
-        GlobalScope.launch(Dispatchers.Main) {
-            val bitmap = getBitmap()
-            Log.i("DrawView", "Bitmap size: ${bitmap.width}, ${bitmap.height}")
-            drawingListeners.forEach {
-                it.onDrawingChanged(bitmap)
+        class SendBitMapToListeners : AsyncTask<Void?, Void?, Void?>() {
+            private lateinit var bitmap: Bitmap
+            override fun doInBackground(vararg params: Void?): Void? {
+                bitmap = getBitmap()
+                return null
+            }
+
+            override fun onPostExecute(result: Void?) {
+                drawingListeners.forEach {
+                    it.onDrawingChanged(bitmap)
+                }
             }
         }
+
+        SendBitMapToListeners().execute()
     }
 
     fun undo() {
-        if (mPaths.isEmpty() && mLastPaths.isNotEmpty()) {
-            mPaths = mLastPaths.clone() as LinkedHashMap<MyPath, PaintOptions>
-            mLastPaths.clear()
+        if (_drawingActions.isEmpty() && lastDrawingActions.isNotEmpty()) {
+            // Last action was a call to [clearCanvas]
+            _drawingActions = lastDrawingActions.toMutableList() // Copy
+            lastDrawingActions.clear()
             invalidate()
             return
         }
-        if (mPaths.isEmpty()) {
+        if (_drawingActions.isEmpty()) {
             return
         }
-        val lastPath = mPaths.values.lastOrNull()
-        val lastKey = mPaths.keys.lastOrNull()
+        val lastAction = _drawingActions.lastOrNull()
 
-        mPaths.remove(lastKey)
-        if (lastPath != null && lastKey != null) {
-            mUndonePaths[lastKey] = lastPath
+        // Remove last element
+        _drawingActions.removeAt(_drawingActions.size - 1)
+
+        if (lastAction != null) {
+            undoneActions.add(lastAction)
         }
         invalidate()
         callDrawViewListeners()
     }
 
     fun redo() {
-        if (mUndonePaths.keys.isEmpty()) {
+        if (undoneActions.isEmpty()) {
             return
         }
 
-        val lastKey = mUndonePaths.keys.last()
-        addPath(lastKey, mUndonePaths.values.last())
-        mUndonePaths.remove(lastKey)
+        with(undoneActions.last()) {
+            addDrawingAction(this)
+            undoneActions.remove(this)
+        }
+
         invalidate()
         callDrawViewListeners()
     }
 
     fun setColor(newColor: Int) {
         @ColorInt
-        val alphaColor = ColorUtils.setAlphaComponent(newColor, mPaintOptions.alpha)
-        mPaintOptions.color = alphaColor
+        val alphaColor = ColorUtils.setAlphaComponent(newColor, currentPaintOptions.alpha)
+        currentPaintOptions.color = alphaColor
         if (mIsStrokeWidthBarEnabled) {
             invalidate()
         }
@@ -125,12 +136,12 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     fun setAlpha(newAlpha: Int) {
         val alpha = (newAlpha * 255) / 100
-        mPaintOptions.alpha = alpha
-        setColor(mPaintOptions.color)
+        currentPaintOptions.alpha = alpha
+        setColor(currentPaintOptions.color)
     }
 
     fun setStrokeWidth(newStrokeWidth: Float) {
-        mPaintOptions.strokeWidth = newStrokeWidth
+        currentPaintOptions.strokeWidth = newStrokeWidth
         if (mIsStrokeWidthBarEnabled) {
             invalidate()
         }
@@ -141,7 +152,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
      */
     @WorkerThread
     fun getBitmap(): Bitmap {
-        Log.i("DrawView", "View size: $width, $height")
         val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
@@ -151,8 +161,13 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         return bitmap
     }
 
-    fun addPath(path: MyPath, options: PaintOptions) {
-        mPaths[path] = options
+    /**
+     * Add a [DrawingAction] to the list.
+     * Invalidates the View, ensuring the new action gets painted.
+     */
+    fun addDrawingAction(drawingAction: DrawingAction) {
+        _drawingActions.add(drawingAction)
+        invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -167,60 +182,74 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 null
             )
         }
-        for ((key, value) in mPaths) {
-            changePaint(value)
-            canvas.drawPath(key, mPaint)
+        _drawingActions.forEach { action ->
+            action.drawOn(canvas)
         }
 
-        changePaint(mPaintOptions)
-        canvas.drawPath(mPath, mPaint)
+        currentPath?.drawOn(canvas)
     }
 
     fun changePaint(paintOptions: PaintOptions) {
-        mPaint.color = if (paintOptions.isEraserOn) Color.WHITE else paintOptions.color
-        mPaint.strokeWidth = paintOptions.strokeWidth
+        currentPaintOptions.color = if (paintOptions.isEraserOn) Color.WHITE else paintOptions.color
+        currentPaintOptions.strokeWidth = paintOptions.strokeWidth
     }
 
     fun clearCanvas() {
-        mLastPaths = mPaths.clone() as LinkedHashMap<MyPath, PaintOptions>
-        mPath.reset()
-        mPaths.clear()
+        lastDrawingActions = _drawingActions.toMutableList() // copy
+        currentPath?.reset()
+        _drawingActions.clear()
         invalidate()
         callDrawViewListeners()
     }
 
     private fun actionDown(x: Float, y: Float) {
-        mPath.reset()
-        mPath.moveTo(x, y)
+        startNewPath()
+
+        currentPath!!.moveTo(x, y)
         mCurX = x
         mCurY = y
     }
 
     private fun actionMove(x: Float, y: Float) {
-        mPath.quadTo(mCurX, mCurY, (x + mCurX) / 2, (y + mCurY) / 2)
+        currentPath?.quadTo(mCurX, mCurY, (x + mCurX) / 2, (y + mCurY) / 2)
         mCurX = x
         mCurY = y
     }
 
     private fun actionUp() {
-        mPath.lineTo(mCurX, mCurY)
+        currentPath?.let {
+            Log.d("DrawView", "Finishing path")
+            it.lineTo(mCurX, mCurY)
 
-        // draw a dot on click
-        if (mStartX == mCurX && mStartY == mCurY) {
-            mPath.lineTo(mCurX, mCurY + 2)
-            mPath.lineTo(mCurX + 1, mCurY + 2)
-            mPath.lineTo(mCurX + 1, mCurY)
+            // draw a dot on click
+            if (mStartX == mCurX && mStartY == mCurY) {
+                it.lineTo(mCurX, mCurY + 2)
+                it.lineTo(mCurX + 1, mCurY + 2)
+                it.lineTo(mCurX + 1, mCurY)
+            }
+
+            // Add finished path to actions
+            _drawingActions.add(it)
+
+            // Start a new Path. We have to do this here already so changing PaintOptions after drawing a line
+            // doesn't change the options for that line, but sets up the new line.
+            startNewPath()
+
+            callDrawViewListeners()
         }
+    }
 
-        mPaths[mPath] = mPaintOptions
-        mPath = MyPath()
-        mPaintOptions = PaintOptions(
-            mPaintOptions.color,
-            mPaintOptions.strokeWidth,
-            mPaintOptions.alpha,
-            mPaintOptions.isEraserOn
+    /**
+     * Starts a new Path with the currently chosen PaintOptions
+     */
+    private fun startNewPath() {
+        currentPaintOptions = PaintOptions(
+            currentPaintOptions.color,
+            currentPaintOptions.strokeWidth,
+            currentPaintOptions.alpha,
+            currentPaintOptions.isEraserOn
         )
-        callDrawViewListeners()
+        currentPath = MyPath(currentPaintOptions)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -233,7 +262,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 mStartX = x
                 mStartY = y
                 actionDown(x, y)
-                mUndonePaths.clear()
+                undoneActions.clear()
             }
             MotionEvent.ACTION_MOVE -> actionMove(x, y)
             MotionEvent.ACTION_UP -> actionUp()
@@ -301,9 +330,15 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         paintedBackground = bitmapDrawable.bitmap
     }
 
+    fun addDrawable(drawableResourceID: Int, x: Int, y: Int) {
+        val drawable = context.resources.getDrawable(drawableResourceID)
+        drawable.bounds = Rect(x, y, x + drawable.intrinsicWidth, y + drawable.intrinsicHeight)
+        addDrawingAction(MyDrawable(drawable))
+        invalidate()
+    }
+
     fun toggleEraser() {
-        isEraserOn = !isEraserOn
-        mPaintOptions.isEraserOn = isEraserOn
+        currentPaintOptions.isEraserOn = currentPaintOptions.isEraserOn.not()
         invalidate()
     }
 
@@ -316,13 +351,13 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     /**
-     * Sets the paths to be drawn.
+     * Sets the actions to be drawn.
      * This is used to save the state in a ViewModel and restore it when the View was destroyed.
-     * Not everything that's part of the UI state should be saved. The other maps containing baths are only
-     * there for the undo/redo and clearCanvas functionality which we *currently* don't fully use. (Only undo)
+     * Not everything that's part of the UI state should be saved. The other maps containing actions are only
+     * there for the undo/redo and clearCanvas functionality.
      */
-    fun setPaths(newPaths: LinkedHashMap<MyPath, PaintOptions>) {
-        mPaths = newPaths
+    fun setActions(newPaths: MutableList<DrawingAction>) {
+        _drawingActions = newPaths
         invalidate()
     }
 }

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="eventViewModel"
+            type="be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TableLayout
+            android:id="@+id/screen_save_event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1">
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/lbl_save_event_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/lbl_save_event_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <EditText
+                    android:id="@+id/txt_save_event_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:text="@={eventViewModel.eventTitle}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    tools:text="Titel van event" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/lbl_save_event_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/lbl_save_event_date"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <Button
+                    android:id="@+id/btn_save_event_open_datepicker"
+                    style="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:onClick="@{() -> eventViewModel.onDateButtonClicked()}"
+                    android:text="@{eventViewModel.eventDateString}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    tools:text="@tools:sample/date/ddmmyy" />
+            </TableRow>
+
+            <TableRow android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/lbl_save_event_notes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/lbl_save_event_notes"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+
+                <EditText
+                    android:id="@+id/txt_save_event_notes"
+                    android:layout_width="0dp"
+                    android:layout_margin="8dp"
+                    android:inputType="textMultiLine"
+                    android:minHeight="150dp"
+                    android:singleLine="false"
+                    android:text="@={eventViewModel.eventNotes}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    tools:text="@tools:sample/lorem/random" />
+            </TableRow>
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/btn_save_event_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:onClick="@{() -> eventViewModel.onCancelButtonClicked()}"
+                    android:text="@string/lbl_back"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                <Button
+                    android:id="@+id/btn_save_event_save"
+                    style="@style/Widget.AppCompat.Button.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:onClick="@{() -> eventViewModel.onSaveButtonClicked()}"
+                    android:text="@string/save"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+</layout>

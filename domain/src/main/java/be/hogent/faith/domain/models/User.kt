@@ -1,19 +1,28 @@
 package be.hogent.faith.domain.models
 
-class User(
-    val eventLog: EventLog = EventLog(),
+import java.util.UUID
 
+data class User(
+    val username: String,
     /**
-     * The [Avatar] used to represent the user.
+     * The name of the avatar this user chose.
+     * This should be unique, and will be used to request the image corresponding to the chosen avatar.
      */
-    val avatar : Avatar,
+    val avatarName: String,
+    val uuid: UUID = UUID.randomUUID()
+) {
+    private val _events = HashMap<UUID, Event>()
+    val events: List<Event>
+        get() = _events.values.toList()
 
-    /**
-     * User name of the user.
-     */
-    val username : String
+    fun addEvent(event: Event) {
+        if (event.title.isNullOrBlank()) {
+            throw IllegalArgumentException("Een gebeurtenis moet een ingevulde titel hebben.")
+        }
+        _events[event.uuid] = event
+    }
 
-
-
-
-)
+    fun getEvent(eventUUID: UUID): Event? {
+        return _events[eventUUID]
+    }
+}

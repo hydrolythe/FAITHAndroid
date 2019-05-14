@@ -3,6 +3,7 @@ package be.hogent.faith.service.usecases
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.util.factory.EventFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -12,8 +13,6 @@ import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
-import org.threeten.bp.LocalDateTime
-import java.io.File
 import java.io.IOException
 
 class SaveEmotionAvatarUseCaseTest {
@@ -21,21 +20,19 @@ class SaveEmotionAvatarUseCaseTest {
     private lateinit var observer: Scheduler
     private lateinit var storageRepository: StorageRepository
     private var bitmap = mockk<Bitmap>()
-    // Give own dateTime because AndroidThreeTen requires context to init timezones
-    private var event = Event(
-        dateTime = LocalDateTime.of(2019, 2, 19, 16, 58)
-    )
+    private lateinit var event: Event
 
     @Before
     fun setUp() {
         observer = mockk()
         storageRepository = mockk(relaxed = true)
         saveEmotionAvatarUseCase = SaveEmotionAvatarUseCase(storageRepository, observer)
+        event = EventFactory.makeEvent(nbrOfDetails = 0)
     }
 
     @Test
     fun saveBitMapUC_execute_saves() {
-        every { storageRepository.storeBitmap(any(), any(), any()) } returns Single.just(mockk<File>())
+        every { storageRepository.storeBitmap(any(), any(), any()) } returns Single.just(mockk())
 
         saveEmotionAvatarUseCase.buildUseCaseObservable(SaveEmotionAvatarUseCase.Params(bitmap, event))
             .test()
