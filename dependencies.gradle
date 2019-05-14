@@ -1,7 +1,7 @@
 //To avoid duplication amongst all gradle files, all dependencies are gathered here.
 ext {
     androidCompileSdkVersion = 28
-    androidMinSdkVersion = 19
+    androidMinSdkVersion = 21
     androidTargetSdkVersion = 28
 
     constraint_layout_version = '2.0.0-alpha3'
