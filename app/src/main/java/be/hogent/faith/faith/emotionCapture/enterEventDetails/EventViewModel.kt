@@ -125,9 +125,12 @@ class EventViewModel(
     val drawingButtonClicked: LiveData<Unit>
         get() = _drawingButtonClicked
 
+    /**
+     * verhuisd naar EditDetail
     private val _sendButtonClicked = SingleLiveEvent<Unit>()
     val sendButtonClicked: LiveData<Unit>
         get() = _sendButtonClicked
+     */
 
     private val _emotionAvatarClicked = SingleLiveEvent<Unit>()
     val emotionAvatarClicked: LiveData<Unit>
@@ -165,9 +168,12 @@ class EventViewModel(
         _drawingButtonClicked.call()
     }
 
+    /**
+     * verhuisd naar EditDetail
     fun onSendButtonClicked() {
         _sendButtonClicked.call()
     }
+    */
 
     fun onCancelButtonClicked() {
         _cancelButtonClicked.call()
