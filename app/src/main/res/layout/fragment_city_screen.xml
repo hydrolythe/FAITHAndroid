@@ -39,45 +39,45 @@
                 on screens of different resolutions. Guidelines can be set using percentages which will scale with
                 the device.-->
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_loc1_left"
+                android:id="@+id/guide_pole_right_start"
                 android:layout_width="8dp"
                 android:layout_height="12dp"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.49" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_loc1_top"
+                android:id="@+id/guide_pole_top"
                 android:layout_width="8dp"
                 android:layout_height="12dp"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.0" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_loc1_right"
+                android:id="@+id/guide_pole_right_end"
                 android:layout_width="8dp"
                 android:layout_height="12dp"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.73" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_loc1_bottom"
+                android:id="@+id/guide_pole_bottom"
                 android:layout_width="8dp"
                 android:layout_height="12dp"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.24" />
 
             <View
-                android:id="@+id/city_first_location"
+                android:id="@+id/btn_welcome_register"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:onClick="@{() -> cityScreenViewModel.firstLocationClicked()}"
-                app:layout_constraintBottom_toTopOf="@id/guide_loc1_bottom"
-                app:layout_constraintEnd_toStartOf="@id/guide_loc1_right"
-                app:layout_constraintStart_toStartOf="@+id/guide_loc1_left"
-                app:layout_constraintTop_toTopOf="@+id/guide_loc1_top" />
+                app:layout_constraintBottom_toTopOf="@id/guide_pole_bottom"
+                app:layout_constraintEnd_toStartOf="@id/guide_pole_right_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_pole_right_start"
+                app:layout_constraintTop_toTopOf="@+id/guide_pole_top" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_loc2_left"
+                android:id="@+id/guide_pole_left_end"
                 android:layout_width="8dp"
                 android:layout_height="12dp"
                 android:orientation="vertical"
@@ -91,7 +91,7 @@
                 app:layout_constraintGuide_percent="0.38" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_loc2_right"
+                android:id="@+id/guide_pole_left_start"
                 android:layout_width="8dp"
                 android:layout_height="12dp"
                 android:orientation="vertical"
@@ -116,15 +116,15 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <View
-                android:id="@+id/city_second_location"
+                android:id="@+id/btn_welcome_login"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="#00000000"
                 android:onClick="@{() -> cityScreenViewModel.secondLocationClicked()}"
                 app:layout_constraintBottom_toTopOf="@id/guide_loc2_bottom"
-                app:layout_constraintEnd_toStartOf="@id/guide_loc2_right"
+                app:layout_constraintEnd_toStartOf="@id/guide_pole_left_start"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guide_loc2_left"
+                app:layout_constraintStart_toStartOf="@+id/guide_pole_left_end"
                 app:layout_constraintTop_toTopOf="@+id/guide_loc2_top"
                 app:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
