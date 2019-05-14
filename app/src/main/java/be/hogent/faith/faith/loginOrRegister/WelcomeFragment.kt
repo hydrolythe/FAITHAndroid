@@ -9,8 +9,18 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import be.hogent.faith.R
 import org.koin.android.viewmodel.ext.android.viewModel
+import com.auth0.android.Auth0
+import org.koin.android.ext.android.inject
+import com.auth0.android.provider.AuthCallback
+import com.auth0.android.provider.WebAuthProvider
+import android.app.Activity
+import android.app.Dialog
+import android.util.Log
+import be.hogent.faith.util.TAG
+import com.auth0.android.authentication.AuthenticationException
+import com.auth0.android.result.Credentials
+
 
 class WelcomeFragment : Fragment() {
 
@@ -18,16 +28,18 @@ class WelcomeFragment : Fragment() {
 
     private val welcomeViewModel by viewModel<WelcomeViewModel>()
 
+    private val auth0: Auth0 by inject()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: be.hogent.faith.databinding.FragmentWelcomeBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_welcome, container, false)
+            DataBindingUtil.inflate(inflater, be.hogent.faith.R.layout.fragment_welcome, container, false)
         binding.welcomeViewModel = welcomeViewModel
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-
+        auth0.setOIDCConformant(true)
         registerListeners()
     }
 
@@ -36,8 +48,7 @@ class WelcomeFragment : Fragment() {
             navigation!!.goToRegistrationScreen()
         })
         welcomeViewModel.loginButtonClicked.observe(this, Observer {
-            // TODO: add username/password auth here!
-            Toast.makeText(context, "Inloggen is nog niet geimplementeerd!", Toast.LENGTH_SHORT).show()
+           login()
         })
         welcomeViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
@@ -54,6 +65,32 @@ class WelcomeFragment : Fragment() {
     interface WelcomeNavigationListener {
         fun goToRegistrationScreen()
         fun goToCityScreen()
+    }
+
+    private fun login(){
+        WebAuthProvider.init(auth0)
+            .withScheme("app")
+            .withAudience(String.format("https://%s/userinfo", getString(be.hogent.faith.R.string.com_auth0_domain)))
+            .start(activity as Activity, object : AuthCallback {
+               override fun onFailure( dialog: Dialog) {
+                    activity!!.runOnUiThread(Runnable { dialog.show() })
+                }
+
+                override fun onFailure(exception: AuthenticationException) {
+                    activity!!.runOnUiThread(Runnable {
+                        Toast.makeText(
+                            activity,
+                            "Error: " + exception.description,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    })
+                }
+
+                override fun onSuccess(credentials: Credentials) {
+                    navigation!!.goToCityScreen()
+                }
+            });
+
     }
 
     companion object {

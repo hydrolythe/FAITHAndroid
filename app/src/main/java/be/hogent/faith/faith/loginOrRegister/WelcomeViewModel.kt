@@ -29,14 +29,6 @@ class WelcomeViewModel : ViewModel() {
     }
 
     fun loginButtonClicked() {
-        if (userName.value.isNullOrEmpty()) {
-            _errorMessage.postValue(R.string.login_error_noUsername)
-            return
-        }
-        if (password.value.isNullOrEmpty()) {
-            _errorMessage.postValue(R.string.login_error_noPassword)
-            return
-        }
         _loginButtonClicked.call()
     }
 }

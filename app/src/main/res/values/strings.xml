@@ -101,7 +101,7 @@
     <string name="login_error_noPassword">Je moet je wachtwoord ingeven!</string>
 
     <!-- Information for authentication and authorization !-->
-    <string name="com_auth0_client_id">yeKdXzq9JB1fXqmBb0LMnNGFzUBxJmFA</string>
+    <string name="com_auth0_client_id">VRX5hqPAdDhkj5DJJ9df4Q4SMZS06io9</string>
     <string name="com_auth0_domain">e-quality.eu.auth0.com</string>
 
 </resources>
