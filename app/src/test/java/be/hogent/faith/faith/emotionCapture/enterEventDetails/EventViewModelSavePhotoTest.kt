@@ -2,9 +2,6 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
-import be.hogent.faith.service.usecases.SaveEventAudioUseCase
-import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
 import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.Called
@@ -16,14 +13,10 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.RuntimeException
 
 class EventViewModelSavePhotoTest {
     private lateinit var viewModel: EventViewModel
-    private val saveEmotionAvatarUseCase = mockk<SaveEmotionAvatarUseCase>(relaxed = true)
     private val savePhotoUseCase = mockk<SaveEventPhotoUseCase>(relaxed = true)
-    private val saveDrawingUseCase = mockk<SaveEventDrawingUseCase>(relaxed = true)
-    private val saveAudioUseCase = mockk<SaveEventAudioUseCase>(relaxed = true)
 
     private val eventTitle = DataFactory.randomString()
     private val eventNotes = DataFactory.randomString()
@@ -38,10 +31,11 @@ class EventViewModelSavePhotoTest {
     @Before
     fun setUp() {
         viewModel = EventViewModel(
-            saveEmotionAvatarUseCase,
+            mockk(),
             savePhotoUseCase,
-            saveAudioUseCase,
-            saveDrawingUseCase
+            mockk(),
+            mockk(),
+            mockk()
         )
 
         // We have to add an observer so event changes when title/notes/date are given a new value
