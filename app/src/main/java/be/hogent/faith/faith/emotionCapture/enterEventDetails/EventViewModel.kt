@@ -15,6 +15,7 @@ import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
 import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
 import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
+import be.hogent.faith.service.usecases.SaveEventTextUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
 import org.threeten.bp.LocalDateTime
@@ -27,6 +28,7 @@ class EventViewModel(
     private val saveEventPhotoUseCase: SaveEventPhotoUseCase,
     private val saveEventAudioUseCase: SaveEventAudioUseCase,
     private val saveEventDrawingUseCase: SaveEventDrawingUseCase,
+    private val saveEventTextUseCase: SaveEventTextUseCase,
     eventUuid: UUID? = null
 ) : ViewModel() {
 
@@ -67,6 +69,10 @@ class EventViewModel(
     private val _recordingSavedSuccessFully = SingleLiveEvent<Unit>()
     val recordingSavedSuccessFully: LiveData<Unit>
         get() = _recordingSavedSuccessFully
+
+    private val _textSavedSuccessFully = SingleLiveEvent<Unit>()
+    val textSavedSuccessFully: LiveData<Unit>
+        get() = _textSavedSuccessFully
 
     private val _avatarSavedSuccessFully = SingleLiveEvent<Unit>()
     val avatarSavedSuccessFully: LiveData<Unit>
@@ -279,11 +285,33 @@ class EventViewModel(
     }
     //endregion
 
+    //region saveText
+    fun saveText(text: String?) {
+        if (!text.isNullOrBlank()) {
+            val params = SaveEventTextUseCase.SaveTextParams(event.value!!, text)
+            saveEventTextUseCase.execute(params, SaveTextUseCaseHandler())
+        } else {
+            _errorMessage.postValue(R.string.save_text_error_empty)
+        }
+    }
+
+    private inner class SaveTextUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _textSavedSuccessFully.value = Unit
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_text_failed)
+        }
+    }
+    //endregion
+
     override fun onCleared() {
         saveEventAudioUseCase.dispose()
         saveEventPhotoUseCase.dispose()
         saveEmotionAvatarUseCase.dispose()
         saveEventDrawingUseCase.dispose()
+        saveEventTextUseCase.dispose()
         super.onCleared()
     }
 }

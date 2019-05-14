@@ -17,7 +17,6 @@ import kotlinx.android.synthetic.main.fragments_overview_events.rv_events
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.getViewModel
-import org.koin.core.parameter.parametersOf
 import java.util.UUID
 
 class OverviewEventsFragment : Fragment() {
@@ -30,16 +29,15 @@ class OverviewEventsFragment : Fragment() {
 
     private lateinit var eventsOverViewViewModel: OverviewEventsViewModel
 
+    private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+
     private lateinit var eventsAdapter: EventsAdapter
 
     private lateinit var eventListener: EventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val userSessionScope = getKoin().getScope(KoinModules.USER_SCOPE_ID)
-        get<UserViewModel>(scope = userSessionScope).let {
-            eventsOverViewViewModel = getViewModel { parametersOf(it.user) }
-        }
+        eventsOverViewViewModel = getViewModel()
     }
 
     override fun onCreateView(
@@ -64,7 +62,7 @@ class OverviewEventsFragment : Fragment() {
     }
 
     private fun startListeners() {
-        eventsOverViewViewModel.user.observe(this, Observer<User> { user ->
+        userViewModel.user.observe(this, Observer<User> { user ->
             user?.let {
                 eventsAdapter.apply {
                     events = user.events

@@ -14,7 +14,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import androidx.test.uiautomator.UiDevice
 import be.hogent.faith.R
-import be.hogent.faith.faith.registerAvatar.LoginOrRegisterActivity
+import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
 import be.hogent.faith.faith.util.NavigationUtil
 import be.hogent.faith.faith.util.ToastMatcher
 import be.hogent.faith.faith.util.allowPermissionsIfNeeded
@@ -55,8 +55,7 @@ class EventDetailsFragmentTest {
         pressBack()
 
         onView(withId(R.id.btn_event_details_text)).perform(click())
-        // TODO: Enable once text has been implemented
-//        pressBack()
+        pressBack()
 
         onView(withId(R.id.btn_event_details_gotoEmotionAvatar)).perform(click())
         onView(withId(R.id.screen_draw_avatar)).check(matches(isDisplayed()))

@@ -1,13 +1,15 @@
 package be.hogent.faith.faith.util
 
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import be.hogent.faith.R
-import be.hogent.faith.faith.registerAvatar.AvatarItemAdapter
+import be.hogent.faith.faith.loginOrRegister.AvatarItemAdapter
 
 object NavigationUtil {
     fun goToCityScreen() {
@@ -27,16 +29,25 @@ object NavigationUtil {
         closeSoftKeyboard()
     }
 
+    fun createEvent() {
+        goToNewEventScreen()
+        onView(withId(R.id.btn_event_send)).perform(click())
+        onView(withId(R.id.txt_save_event_title)).perform(typeText("Titel van Event"))
+        closeSoftKeyboard()
+        onView(withId(R.id.btn_save_event_save)).perform(ViewActions.scrollTo(), click())
+        Espresso.pressBack()
+    }
+
     fun goToEventsOverviewScreen() {
         goToCityScreen()
-        onView(withId(R.id.city_first_location)).perform(click())
+        onView(withId(R.id.btn_welcome_register)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }
 
     fun goToNewEventScreen() {
         goToCityScreen()
-        onView(withId(R.id.city_second_location)).perform(click())
+        onView(withId(R.id.btn_welcome_login)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }

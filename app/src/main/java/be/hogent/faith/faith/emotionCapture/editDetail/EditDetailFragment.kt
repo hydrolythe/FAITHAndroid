@@ -17,8 +17,10 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.MakeDrawingFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.SaveEventDialog
+import be.hogent.faith.faith.emotionCapture.enterText.EnterTextFragment
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.util.replaceChildFragment
@@ -133,6 +135,13 @@ class EditDetailFragment : Fragment() {
             DetailType.AUDIO -> replaceChildFragment(
                 RecordAudioFragment.newInstance(),
                 R.id.fragment_container_editDetail
+            )
+            DetailType.TEXT -> replaceChildFragment(
+                EnterTextFragment.newInstance(),
+                R.id.fragment_container_editDetail
+            )
+            DetailType.DRAWING -> replaceChildFragment(
+                MakeDrawingFragment.newInstance(), R.id.fragment_container_editDetail
             )
             else -> Log.e(TAG, "type not defined")
         }

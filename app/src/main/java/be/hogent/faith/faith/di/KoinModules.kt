@@ -1,7 +1,5 @@
 package be.hogent.faith.faith.di
 
-import androidx.lifecycle.LiveData
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_ID
@@ -10,12 +8,14 @@ import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.PremadeImagesPro
 import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.PremadeImagesProviderFromResources
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
+import be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
+import be.hogent.faith.faith.loginOrRegister.AvatarProvider
+import be.hogent.faith.faith.loginOrRegister.AvatarViewModel
+import be.hogent.faith.faith.loginOrRegister.ResourceAvatarProvider
+import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
 import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
-import be.hogent.faith.faith.registerAvatar.AvatarProvider
-import be.hogent.faith.faith.registerAvatar.AvatarViewModel
-import be.hogent.faith.faith.registerAvatar.ResourceAvatarProvider
 import be.hogent.faith.faith.util.TempFileProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.koin.androidContext
@@ -34,12 +34,14 @@ val appModule = module(override = true) {
 
     // ViewModels
     viewModel { CityScreenViewModel() }
-    viewModel { (eventUuid: UUID?) -> EventViewModel(get(), get(), get(), get(), eventUuid) }
-    viewModel { EventViewModel(get(), get(), get(), get()) }
+    viewModel { (eventUuid: UUID?) -> EventViewModel(get(), get(), get(), get(), get(), eventUuid) }
+    viewModel { EventViewModel(get(), get(), get(), get(), get()) }
     viewModel { DrawViewModel() }
     viewModel { EditDetailViewModel() }
-    viewModel { (user: LiveData<User>) -> OverviewEventsViewModel(user) }
+    viewModel { EnterTextViewModel() }
+    viewModel { OverviewEventsViewModel() }
     viewModel { AvatarViewModel(get(), get()) }
+    viewModel { WelcomeViewModel() }
     viewModel { RecordAudioViewModel() }
     viewModel { TakePhotoViewModel() }
 
