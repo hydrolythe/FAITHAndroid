@@ -91,6 +91,7 @@ dependencies {
     implementation uiDependencies.fotoApparat
     implementation uiDependencies.fotoApparatAdapters
     implementation uiDependencies.navigation
+    implementation uiDependencies.texteditor
 
     //TESTING
     debugImplementation androidTestDependencies.fragmentTesting

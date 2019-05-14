@@ -16,6 +16,8 @@ const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
  *
  * TODO: Currently only supports internal storage.
  */
+const val TEXT_EXTENSION = "txt"
+
 class StorageRepository(private val context: Context) {
 
     /**
@@ -51,6 +53,12 @@ class StorageRepository(private val context: Context) {
         val eventDir = File(context.filesDir, "events/${event.uuid}")
         eventDir.mkdirs()
         return eventDir
+    }
+
+    private fun getEventTextDirectory(event: Event): File {
+        val textDir = File(context.filesDir, "text/${event.uuid}")
+        textDir.mkdirs()
+        return textDir
     }
 
     fun saveEventAudio(tempStorageFile: File, event: Event): Single<File> {
@@ -108,6 +116,23 @@ class StorageRepository(private val context: Context) {
             val storedFile = File(folder, fileName)
             tempStorageFile.copyTo(target = storedFile, overwrite = true)
             tempStorageFile.delete()
+            storedFile
+        }
+    }
+
+    /**
+     *  Writes HTML to a text file
+     *
+     * @param text the html
+     * @param event the [Event] this text will be added to as a detail (not by this function).
+     *          Used to store the text in a folder specific for the event.
+     * @param fileName Will be used for the filename.
+     */
+    fun saveText(text: String, event: Event): Single<File>
+    {
+        return Single.fromCallable {
+            val storedFile = File(getEventTextDirectory(event), "${createSaveFileName()}.$TEXT_EXTENSION")
+            storedFile.writeText(text)
             storedFile
         }
     }

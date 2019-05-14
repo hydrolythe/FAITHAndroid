@@ -94,6 +94,10 @@ class EventDetailsFragment : Fragment() {
             // navigation?.startRecordAudioFragment()
             navigation?.startEventDetail(DetailType.AUDIO)
         })
+        eventViewModel.textButtonClicked.observe(this, Observer {
+            // navigation?.startRecordAudioFragment()
+            navigation?.startEventDetail(DetailType.TEXT)
+        })
         eventViewModel.drawingButtonClicked.observe(this, Observer {
             navigation?.startMakeDrawingFragment()
         })

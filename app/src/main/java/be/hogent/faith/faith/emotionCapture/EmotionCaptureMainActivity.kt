@@ -11,6 +11,7 @@ import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
+import be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
@@ -46,6 +47,8 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
 
     private lateinit var recordAudioViewModel: RecordAudioViewModel
 
+    lateinit var enterTextViewModel: EnterTextViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_emotion_capture)
@@ -53,6 +56,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         eventViewModel = getViewModel()
         takePhotoViewModel = getViewModel()
         recordAudioViewModel = getViewModel()
+        enterTextViewModel = getViewModel()
 
         // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
         // savedInstanceState is null when the activity is first created, and not null when being recreated.

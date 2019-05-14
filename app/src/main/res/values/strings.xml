@@ -35,10 +35,12 @@
     <string name="save_drawing_success">Je tekening werd opgeslagen</string>
     <string name="save_photo_success">Je foto werd opgeslagen</string>
     <string name="save_event_success">Je gebeurtenis werd opgeslagen</string>
+    <string name="save_text_success">Je tekst werd opgeslagen</string>
     <string name="error_save_audio_failed">Er ging iets fout bij het opslaan van je opname</string>
     <string name="error_save_event_failed">Er ging iets fout bij het opslaan van je gebeurtenis</string>
     <string name="error_save_avatar_failed">Er ging iets fout bij het opslaan van je avatar</string>
     <string name="error_save_photo_failed">Er ging iets fout bij het opslaan van je foto</string>
+    <string name="error_save_text_failed">Er ging iets fout bij het opslaan van je tekst</string>
     <string name="error_save_drawing_failed">Er ging iets fout bij het opslaan van je tekening</string>
     <string name="error_pause_not_supported">Pauzeren wordt door je apparaat niet ondersteund</string>
     <string name="permission_take_picture">Je moet je toestemming geven om foto\'s te nemen</string>
@@ -76,6 +78,10 @@
     <string name="lbl_activity_city">De Stad</string>
     <string name="description_event_avatar">Getekende avatar voor de gebeurtenis</string>
     <string name="descr_city_park">Het stadspark</string>
+    <string name="fontsize_small">klein</string>
+    <string name="fontsize_normal">normaal</string>
+    <string name="fontsize_large">groot</string>
+    <string name="save_text_error_empty">Lege tekst kan je niet opslaan</string>
     <string name="descr_loginscreen">Loginscherm</string>
     <string name="username">Gebruikersnaam</string>
     <string name="password">Wachtwoord</string>
