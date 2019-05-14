@@ -116,4 +116,8 @@ ext {
 
     ]
 
+    authdependencies = [
+            auth0 :  'com.auth0.android:auth0:1.+',
+    ]
+
 }
