@@ -162,6 +162,20 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     /**
+     * Returns a bitmap of what is currently drawn.
+     */
+    @WorkerThread
+    fun getBitmap(saveListener: (bitmap: Bitmap) -> Unit) {
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(Color.WHITE)
+        mIsSaving = true
+        draw(canvas)
+        mIsSaving = false
+        saveListener(bitmap)
+    }
+
+    /**
      * Add a [DrawingAction] to the list.
      * Invalidates the View, ensuring the new action gets painted.
      */

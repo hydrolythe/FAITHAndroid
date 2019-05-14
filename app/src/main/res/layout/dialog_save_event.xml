@@ -7,6 +7,9 @@
         <variable
             name="eventViewModel"
             type="be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel" />
+        <variable
+            name="userViewModel"
+            type="be.hogent.faith.faith.UserViewModel"/>
     </data>
 
     <ScrollView
@@ -104,7 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:onClick="@{() -> eventViewModel.onSaveButtonClicked()}"
+                    android:onClick="@{() -> userViewModel.saveEvent(eventViewModel.eventTitle, eventViewModel.event)}"
                     android:text="@string/save"
                     android:textAppearance="@style/TextAppearance.AppCompat.Small" />
             </TableRow>

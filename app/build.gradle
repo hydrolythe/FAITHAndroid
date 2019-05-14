@@ -1,11 +1,7 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
-
 apply plugin: 'composer'
 
 buildscript {
@@ -97,6 +93,7 @@ dependencies {
     implementation uiDependencies.fotoApparat
     implementation uiDependencies.fotoApparatAdapters
     implementation uiDependencies.navigation
+    implementation uiDependencies.texteditor
 
     //TESTING
     debugImplementation androidTestDependencies.fragmentTesting

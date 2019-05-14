@@ -1,24 +1,16 @@
 package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.User
-import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
-import be.hogent.faith.service.usecases.SaveEventUseCase
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
-import be.hogent.faith.util.factory.UserFactory
-import io.mockk.Called
 import io.mockk.Runs
-import io.mockk.called
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.observers.DisposableCompletableObserver
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
@@ -30,25 +22,22 @@ import org.threeten.bp.LocalDateTime
 
 class EventViewModelTest {
     private lateinit var viewModel: EventViewModel
-    private var saveEventUseCase = mockk<SaveEventUseCase>(relaxed = true)
 
     private val eventTitle = DataFactory.randomString()
     private val eventNotes = DataFactory.randomString()
     private val eventDateTime = DataFactory.randomDateTime()
-    private val saveEmotionAvatarUseCase = mockk<SaveEmotionAvatarUseCase>(relaxed = true)
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {
-        val userLiveData = mockk<LiveData<User>>(relaxed = true)
-        every { userLiveData.value } returns UserFactory.makeUser()
-
         viewModel = EventViewModel(
-            saveEventUseCase,
-            saveEmotionAvatarUseCase,
-            userLiveData
+            mockk(),
+            mockk(),
+            mockk(),
+            mockk(),
+            mockk()
         )
 
         // We have to add an observer so event changes when title/notes/date are given a new value
@@ -112,97 +101,6 @@ class EventViewModelTest {
 
         // Assert
         assertEquals(newEventDate, viewModel.event.value!!.dateTime)
-    }
-
-    @Test
-    fun eventViewModel_saveButtonClicked_nullTitle_noUseCaseCall_errorMessage() {
-        // Arrange
-        viewModel.eventTitle.value = null
-        val errorMessageObserver = mockk<Observer<Int>>(relaxed = true)
-        viewModel.errorMessage.observeForever(errorMessageObserver)
-
-        // Act
-        viewModel.onSaveButtonClicked()
-
-        // Assert
-        verify { saveEventUseCase wasNot called }
-        verify { errorMessageObserver.onChanged(any()) }
-    }
-
-    @Test
-    fun eventViewModel_saveButtonClicked_emptyTitle_noUseCaseCall_errorMessage() {
-        // Arrange
-        viewModel.eventTitle.value = ""
-        val errorMessageObserver = mockk<Observer<Int>>(relaxed = true)
-        viewModel.errorMessage.observeForever(errorMessageObserver)
-
-        // Act
-        viewModel.onSaveButtonClicked()
-
-        // Assert
-        verify { saveEventUseCase wasNot called }
-        verify { errorMessageObserver.onChanged(any()) }
-    }
-
-    @Test
-    fun eventViewModel_saveButtonClicked__CallUseCaseWithCorrectParams() {
-        // Arrange
-        val params = slot<SaveEventUseCase.Params>()
-
-        // Act
-        viewModel.onSaveButtonClicked()
-        verify { saveEventUseCase.execute(capture(params), any()) }
-
-        // Assert
-        with(params.captured.event) {
-            assertEquals(eventDateTime, dateTime)
-            assertEquals(eventTitle, title)
-            assertEquals(eventNotes, notes)
-        }
-    }
-
-    @Test
-    fun eventViewModel_saveButtonClicked_callUseCaseAndNotifiesSuccess() {
-        // Arrange
-        val params = slot<SaveEventUseCase.Params>()
-        val observer = slot<DisposableCompletableObserver>()
-
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.eventSavedSuccessFully.observeForever(successObserver)
-
-        // Act
-        viewModel.onSaveButtonClicked()
-        verify { saveEventUseCase.execute(capture(params), capture(observer)) }
-        // Make the UC-handler call the success handler
-        observer.captured.onComplete()
-
-        // Assert
-        verify { successObserver.onChanged(any()) }
-        verify { errorObserver wasNot called }
-    }
-
-    @Test
-    fun eventViewModel_saveButtonClicked_callUseCaseAndNotifiesFailure() {
-        // Arrange
-        val params = slot<SaveEventUseCase.Params>()
-        val observer = slot<DisposableCompletableObserver>()
-
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.eventSavedSuccessFully.observeForever(successObserver)
-
-        // Act
-        viewModel.onSaveButtonClicked()
-        verify { saveEventUseCase.execute(capture(params), capture(observer)) }
-        // Make the UC-handler call the success handler
-        observer.captured.onError(mockk(relaxed = true))
-
-        // Assert
-        verify { errorObserver.onChanged(any()) }
-        verify { successObserver wasNot called }
     }
 
     @Test
@@ -272,63 +170,5 @@ class EventViewModelTest {
         with(event) {
             return title.isNullOrEmpty() && notes.isNullOrEmpty() && emotionAvatar == null && details.isEmpty()
         }
-    }
-
-    @Test
-    fun eventViewModel_saveImage_callsUseCase() {
-        // Arrange
-        val params = slot<SaveEmotionAvatarUseCase.Params>()
-        val observer = slot<DisposableCompletableObserver>()
-
-        // Act
-        viewModel.saveEmotionAvatarImage(mockk())
-        verify { saveEmotionAvatarUseCase.execute(capture(params), capture(observer)) }
-        // Make the UC-handler call the success handler
-        observer.captured.onComplete()
-
-        // Assert
-        assertEquals(viewModel.event.value, params.captured.event)
-    }
-
-    @Test
-    fun eventViewModel_saveImage_notifiesWhenSaveCompletes() {
-        // Arrange
-        val observer = slot<DisposableCompletableObserver>()
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        val failedObserver = mockk<Observer<Int>>(relaxed = true)
-
-        viewModel.avatarSavedSuccessFully.observeForever(successObserver)
-        viewModel.errorMessage.observeForever(failedObserver)
-
-        // Act
-        viewModel.saveEmotionAvatarImage(mockk())
-        verify { saveEmotionAvatarUseCase.execute(any(), capture(observer)) }
-        // Make the UC-handler call the success handler
-        observer.captured.onComplete()
-
-        // Assert
-        verify { successObserver.onChanged(any()) }
-        verify { failedObserver wasNot Called }
-    }
-
-    @Test
-    fun eventViewModel_saveImage_notifiesWhenSaveFails() {
-        // Arrange
-        val observer = slot<DisposableCompletableObserver>()
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        val failedObserver = mockk<Observer<Int>>(relaxed = true)
-
-        viewModel.avatarSavedSuccessFully.observeForever(successObserver)
-        viewModel.errorMessage.observeForever(failedObserver)
-
-        // Act
-        viewModel.saveEmotionAvatarImage(mockk())
-        verify { saveEmotionAvatarUseCase.execute(any(), capture(observer)) }
-        // Make the UC-handler call the success handler
-        observer.captured.onError(mockk(relaxed = true))
-
-        // Assert
-        verify { failedObserver.onChanged(any()) }
-        verify { successObserver wasNot Called }
     }
 }
