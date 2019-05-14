@@ -2,7 +2,6 @@ package be.hogent.faith.faith.overviewEvents
 
 import androidx.test.rule.ActivityTestRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import be.hogent.faith.R
 import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
 import be.hogent.faith.faith.util.NavigationUtil
 import org.junit.Before
