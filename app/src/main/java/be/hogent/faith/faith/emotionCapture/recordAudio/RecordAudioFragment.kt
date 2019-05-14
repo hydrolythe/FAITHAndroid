@@ -19,6 +19,7 @@ import be.hogent.faith.databinding.FragmentRecordAudioBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel.RecordingStatus.PAUSED
 import be.hogent.faith.faith.util.TempFileProvider
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -42,7 +43,6 @@ class RecordAudioFragment : Fragment() {
      * This should normally be done in the Dialog itself but SingleLiveEvent only supports a single Listener.
      * We need one here to update the eventDetailsVM and one in the Dialog to close it.
      */
-    private lateinit var saveDialog: SaveAudioRecordingDialogFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,22 +127,17 @@ class RecordAudioFragment : Fragment() {
         recordAudioViewModel.restartButtonClicked.observe(this, Observer {
             recorder.reset()
         })
-        recordAudioViewModel.recordingSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, R.string.error_save_audio_success, Toast.LENGTH_SHORT).show()
-            eventViewModel.updateEvent()
-            saveDialog.dismiss()
+        eventViewModel.recordingSavedSuccessFully.observe(this, Observer {
+            Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
         })
-        recordAudioViewModel.recordingSaveFailed.observe(this, Observer {
-            Toast.makeText(context, R.string.error_save_audio_failed, Toast.LENGTH_SHORT).show()
-            saveDialog.dismiss()
+        eventViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
+            Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
         })
     }
 
     private fun stopAndSaveRecording() {
         recorder.stop()
-        recordAudioViewModel.tempRecordingFile = tempFileProvider.tempAudioRecordingFile
-        saveDialog = SaveAudioRecordingDialogFragment.newInstance()
-        saveDialog.show(fragmentManager!!, null)
+        eventViewModel.saveAudio(tempFileProvider.tempAudioRecordingFile)
     }
 
     private fun startRecordingAudio() {

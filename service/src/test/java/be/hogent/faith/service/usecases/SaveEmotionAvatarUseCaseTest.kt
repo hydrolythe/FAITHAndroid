@@ -32,21 +32,23 @@ class SaveEmotionAvatarUseCaseTest {
 
     @Test
     fun saveBitMapUC_execute_saves() {
-        every { storageRepository.storeBitmap(any(), any(), any()) } returns Single.just(mockk())
+        every { storageRepository.saveEventEmotionAvatar(any(), any()) } returns Single.just(mockk())
 
         saveEmotionAvatarUseCase.buildUseCaseObservable(SaveEmotionAvatarUseCase.Params(bitmap, event))
             .test()
             .assertNoErrors()
 
         // The image should be stored in the repo
-        verify { storageRepository.storeBitmap(bitmap, event, any()) }
-        // The image should be added to the event
-        assertNotNull(event.emotionAvatar)
+        verify {
+            storageRepository.saveEventEmotionAvatar(bitmap, event)
+            // The image should be added to the event
+            assertNotNull(event.emotionAvatar)
+        }
     }
 
     @Test
     fun saveBitMapUC_execute_failsOnRepoError() {
-        every { storageRepository.storeBitmap(any(), any(), any()) } returns Single.error(IOException())
+        every { storageRepository.saveEventEmotionAvatar(any(), any()) } returns Single.error(IOException())
 
         saveEmotionAvatarUseCase.buildUseCaseObservable(SaveEmotionAvatarUseCase.Params(bitmap, event))
             .test()

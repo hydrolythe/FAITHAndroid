@@ -3,28 +3,13 @@ package be.hogent.faith.faith.emotionCapture.recordAudio
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.SaveAudioRecordingUseCase
-import io.reactivex.observers.DisposableCompletableObserver
-import java.io.File
 
-class RecordAudioViewModel(
-    private val saveAudioUseCase: SaveAudioRecordingUseCase,
-    private val event: Event
-) : ViewModel() {
-
-    /**
-     * The file where the recording is temporarily saved.
-     * Will be filled in by the [RecordAudioFragment] once the picture was taken.
-     */
-    lateinit var tempRecordingFile: File
+class RecordAudioViewModel : ViewModel() {
 
     private val _recordingStatus = MutableLiveData<RecordingStatus>()
     val recordingStatus: LiveData<RecordingStatus>
         get() = _recordingStatus
-
-    val recordingName = MutableLiveData<String>()
 
     /**
      * True when pausing an audio recording is supported.
@@ -36,7 +21,6 @@ class RecordAudioViewModel(
     init {
         _recordingStatus.value = RecordingStatus.INITIAL
         pauseSupported.value = false
-        recordingName.value = ""
     }
 
     private val _recordButtonClicked = SingleLiveEvent<Unit>()
@@ -58,17 +42,6 @@ class RecordAudioViewModel(
     private val _cancelButtonClicked = SingleLiveEvent<Unit>()
     val cancelButtonClicked: LiveData<Unit>
         get() = _cancelButtonClicked
-
-    private val _recordingSavedSuccessFully = SingleLiveEvent<Unit>()
-    val recordingSavedSuccessFully: LiveData<Unit>
-        get() = _recordingSavedSuccessFully
-
-    /**
-     * Will be updated with the latest error message when an error occurs when saving the recording.
-     */
-    private val _recordingSaveFailed = MutableLiveData<String>()
-    val recordingSaveFailed: LiveData<String>
-        get() = _recordingSaveFailed
 
     fun onRecordButtonClicked() {
         _recordingStatus.value = RecordingStatus.RECORDING
@@ -92,32 +65,6 @@ class RecordAudioViewModel(
 
     fun onCancelButtonClicked() {
         _cancelButtonClicked.call()
-    }
-
-    fun onSaveButtonClicked() {
-        val params = SaveAudioRecordingUseCase.SaveAudioRecordingParams(
-            tempRecordingFile,
-            event,
-            recordingName.value!!
-        )
-        saveAudioUseCase.execute(params, SaveAudioUseCaseHandler())
-    }
-
-    private inner class SaveAudioUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _recordingSavedSuccessFully.call()
-            // Name has to be cleared so future pictures start with an empty recordingName
-            recordingName.value = ""
-        }
-
-        override fun onError(e: Throwable) {
-            _recordingSaveFailed.postValue(e.message)
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        saveAudioUseCase.dispose()
     }
 
     enum class RecordingStatus {

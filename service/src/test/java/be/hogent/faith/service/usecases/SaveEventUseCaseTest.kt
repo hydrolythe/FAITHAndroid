@@ -12,30 +12,26 @@ import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
 import io.reactivex.Completable
-import io.reactivex.Scheduler
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import java.util.concurrent.Executor
 
 class SaveEventUseCaseTest {
     private lateinit var saveEventUseCase: SaveEventUseCase
-    private lateinit var executor: Executor
-    private lateinit var scheduler: Scheduler
     private lateinit var repository: EventRepository
 
     private lateinit var event: Event
     private lateinit var user: User
 
+    private val eventTitle = "title"
+
     @Before
     fun setUp() {
-        executor = mockk()
-        scheduler = mockk()
         event = EventFactory.makeEvent(nbrOfDetails = 0)
         user = spyk(User(DataFactory.randomString(), DataFactory.randomString()))
         repository = mockk(relaxed = true)
-        saveEventUseCase = SaveEventUseCase(repository, scheduler)
+        saveEventUseCase = SaveEventUseCase(repository, mockk())
     }
 
     @Test
@@ -45,7 +41,7 @@ class SaveEventUseCaseTest {
         val userArg = slot<User>()
         every { repository.insert(capture(eventArg), capture(userArg)) } returns Completable.complete()
 
-        val params = SaveEventUseCase.Params(event, user)
+        val params = SaveEventUseCase.Params(eventTitle, event, user)
 
         // Act
         val result = saveEventUseCase.buildUseCaseObservable(params)
@@ -62,7 +58,7 @@ class SaveEventUseCaseTest {
         // Arrange
         every { repository.insert(any(), any()) } returns Completable.complete()
 
-        val params = SaveEventUseCase.Params(event, user)
+        val params = SaveEventUseCase.Params(eventTitle, event, user)
 
         // Act
         val result = saveEventUseCase.buildUseCaseObservable(params)
@@ -78,7 +74,7 @@ class SaveEventUseCaseTest {
         // Arrange
         every { repository.insert(any(), any()) } returns Completable.complete()
 
-        val params = SaveEventUseCase.Params(event, user)
+        val params = SaveEventUseCase.Params(eventTitle, event, user)
 
         // Act
         val result = saveEventUseCase.buildUseCaseObservable(params)
@@ -95,7 +91,7 @@ class SaveEventUseCaseTest {
         // Arrange
         every { repository.insert(any(), any()) } returns Completable.error(RuntimeException())
 
-        val params = SaveEventUseCase.Params(event, user)
+        val params = SaveEventUseCase.Params(eventTitle, event, user)
 
         // Act
         val result = saveEventUseCase.buildUseCaseObservable(params)
@@ -110,9 +106,9 @@ class SaveEventUseCaseTest {
     @Test
     fun execute_addEventToUserFails_notSavedToRepo() {
         // Arrange
-        every { user.addEvent(any()) } throws java.lang.RuntimeException()
+        every { user.addEvent(any()) } throws RuntimeException()
 
-        val params = SaveEventUseCase.Params(event, user)
+        val params = SaveEventUseCase.Params(eventTitle, event, user)
 
         // Act
         val result = saveEventUseCase.buildUseCaseObservable(params)

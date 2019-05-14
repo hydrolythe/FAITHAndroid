@@ -7,8 +7,6 @@ import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
-const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
-
 /**
  * Stores the (colored) emotion avatarName for an event on the device's storage.
  * Will overwrite a previously stored avatarName.
@@ -21,10 +19,9 @@ class SaveEmotionAvatarUseCase(
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {
         return Completable.fromSingle(
-            storageRepository.storeBitmap(
+            storageRepository.saveEventEmotionAvatar(
                 params.bitmap,
-                params.event,
-                EMOTION_AVATAR_FILENAME
+                params.event
             ).doOnSuccess {
                 params.event.emotionAvatar = it
             }

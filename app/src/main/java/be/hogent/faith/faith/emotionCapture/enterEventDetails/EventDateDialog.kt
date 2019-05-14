@@ -5,14 +5,12 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
-import be.hogent.faith.databinding.DialogSaveEventBinding
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 
 class EventDateDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
-    private lateinit var saveEventBinding: DialogSaveEventBinding
     private val eventDetailsViewModel: EventViewModel by sharedViewModel()
 
     companion object {

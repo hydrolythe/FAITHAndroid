@@ -7,7 +7,7 @@
 
         <variable
             name="avatarViewModel"
-            type="be.hogent.faith.faith.registerAvatar.AvatarViewModel" />
+            type="be.hogent.faith.faith.loginOrRegister.AvatarViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
