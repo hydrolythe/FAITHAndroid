@@ -7,7 +7,7 @@ import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import be.hogent.faith.R
-import be.hogent.faith.faith.registerAvatar.AvatarItemAdapter
+import be.hogent.faith.faith.loginOrRegister.AvatarItemAdapter
 
 object NavigationUtil {
     fun goToCityScreen() {
@@ -29,14 +29,14 @@ object NavigationUtil {
 
     fun goToEventsOverviewScreen() {
         goToCityScreen()
-        onView(withId(R.id.city_first_location)).perform(click())
+        onView(withId(R.id.btn_welcome_register)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }
 
     fun goToNewEventScreen() {
         goToCityScreen()
-        onView(withId(R.id.city_second_location)).perform(click())
+        onView(withId(R.id.btn_welcome_login)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }
