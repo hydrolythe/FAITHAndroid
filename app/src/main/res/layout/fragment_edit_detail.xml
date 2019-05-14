@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="editdetailViewModel"
+            type="be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/motionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/editdetail_slide_avatar">
+
+        <FrameLayout
+            android:id="@+id/fragment_container_editDetail"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/image_editDetail_avatar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_editDetail_avatar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/avatar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.utils.widget.ImageFilterView
+            android:id="@+id/tv_editdetail_slideToEmotionAvatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/colorAccent"
+            android:src="@drawable/ic_baseline_chevron_left_24px"
+            app:altSrc="@drawable/ic_baseline_chevron_right_24px"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_editDetail_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintGuide_percent="0.7"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_editDetail_gotoEditEmotionAvatar"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:elevation="2dp"
+            android:onClick="@{() -> editdetailViewModel.onGoToEmotionAvatarButtonClicked()}"
+            android:src="@drawable/ic_baseline_edit_24px"
+            app:layout_constraintBottom_toBottomOf="@id/image_editDetail_avatar"
+            app:layout_constraintStart_toStartOf="@id/image_editDetail_avatar" />
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+</layout>

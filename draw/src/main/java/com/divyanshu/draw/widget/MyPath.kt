@@ -1,12 +1,31 @@
 package com.divyanshu.draw.widget
 
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Path
 import java.io.ObjectInputStream
 import java.io.Serializable
 import java.util.LinkedList
 
-class MyPath : Path(), Serializable {
-    val actions = LinkedList<Action>()
+// TODO: remove redundant paintOptions
+class MyPath(val paintOptions: PaintOptions = PaintOptions()) : Path(), Serializable, DrawingAction {
+
+    private val paint = Paint().also {
+        // Same for every path
+        it.style = Paint.Style.STROKE
+        it.strokeJoin = Paint.Join.ROUND
+        it.strokeCap = Paint.Cap.ROUND
+    }
+    private val actions = LinkedList<Action>()
+
+    override fun drawOn(canvas: Canvas) {
+        val paint = paint.also {
+            it.color = if (paintOptions.isEraserOn) Color.WHITE else paintOptions.color
+            it.strokeWidth = paintOptions.strokeWidth
+        }
+        canvas.drawPath(this, paint)
+    }
 
     private fun readObject(inputStream: ObjectInputStream) {
         inputStream.defaultReadObject()
