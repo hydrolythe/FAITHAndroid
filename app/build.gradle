@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'composer'
+
 
 buildscript {
     repositories {
@@ -11,14 +11,12 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.github.trevjonez.composer-gradle-plugin:plugin:0.10.0'
         classpath 'com.android.tools.build:gradle:3.4.0'
     }
 }
 
 
-composer {
-}
+
 
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
