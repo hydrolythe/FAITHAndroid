@@ -1,7 +1,5 @@
 package be.hogent.faith.faith.di
 
-import androidx.lifecycle.LiveData
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_ID
@@ -40,7 +38,7 @@ val appModule = module(override = true) {
     viewModel { DrawViewModel() }
     viewModel { EditDetailViewModel() }
     viewModel { EnterTextViewModel() }
-    viewModel { (user: LiveData<User>) -> OverviewEventsViewModel(user) }
+    viewModel { OverviewEventsViewModel() }
     viewModel { AvatarViewModel(get(), get()) }
     viewModel { RecordAudioViewModel() }
     viewModel { TakePhotoViewModel() }
