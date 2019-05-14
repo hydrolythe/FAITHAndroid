@@ -43,7 +43,6 @@ class WelcomeFragment : Fragment() {
         }
     }
 
-
     interface WelcomeNavigationListener {
         fun goToRegistrationScreen()
     }
