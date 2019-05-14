@@ -131,31 +131,9 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_pole_left_end"
                 app:layout_constraintTop_toTopOf="@+id/guide_pole_top" />
 
-            <EditText
-                android:id="@+id/txt_welcome_userName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:hint="@string/username"
-                android:inputType="textPersonName"
-                android:text="@={welcomeViewModel.userName}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                app:layout_constraintBottom_toTopOf="@+id/guide_userName"
-                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
-                app:layout_constraintStart_toStartOf="@+id/guide_form_start" />
+>
 
-            <EditText
-                android:id="@+id/txt_welcome_password"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:text="@={welcomeViewModel.password}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                app:layout_constraintBottom_toTopOf="@+id/guide_password_bottom"
-                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
-                app:layout_constraintStart_toStartOf="@+id/guide_form_start" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>

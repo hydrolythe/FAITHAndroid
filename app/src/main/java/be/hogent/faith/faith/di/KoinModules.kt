@@ -17,6 +17,7 @@ import be.hogent.faith.faith.loginOrRegister.ResourceAvatarProvider
 import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
 import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
 import be.hogent.faith.faith.util.TempFileProvider
+import com.auth0.android.Auth0
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.ext.koin.viewModel
@@ -55,4 +56,6 @@ val appModule = module(override = true) {
     single { ResourceAvatarProvider(androidContext()) as AvatarProvider }
 
     single { PremadeImagesProviderFromResources() as PremadeImagesProvider }
+
+    single{ Auth0(androidContext()) }
 }
