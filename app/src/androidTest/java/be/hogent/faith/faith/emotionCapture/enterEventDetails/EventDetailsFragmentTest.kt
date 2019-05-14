@@ -55,8 +55,7 @@ class EventDetailsFragmentTest {
         pressBack()
 
         onView(withId(R.id.btn_event_details_text)).perform(click())
-        // TODO: Enable once text has been implemented
-//        pressBack()
+        pressBack()
 
         onView(withId(R.id.btn_event_details_gotoEmotionAvatar)).perform(click())
         onView(withId(R.id.screen_draw_avatar)).check(matches(isDisplayed()))

@@ -2,9 +2,10 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import be.hogent.faith.service.usecases.SaveEventAudioUseCase
+import be.hogent.faith.service.usecases.SaveEventTextUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.Called
+import io.mockk.called
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
@@ -14,13 +15,15 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class EventViewModelSaveAudioTest {
+class EventViewModelSaveTextTest {
     private lateinit var viewModel: EventViewModel
-    private val saveAudioUseCase = mockk<SaveEventAudioUseCase>(relaxed = true)
+    private val saveTextUseCase = mockk<SaveEventTextUseCase>(relaxed = true)
 
     private val eventTitle = DataFactory.randomString()
     private val eventNotes = DataFactory.randomString()
     private val eventDateTime = DataFactory.randomDateTime()
+
+    private val text = "Hello World!"
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -33,9 +36,9 @@ class EventViewModelSaveAudioTest {
         viewModel = EventViewModel(
             mockk(),
             mockk(),
-            saveAudioUseCase,
             mockk(),
-            mockk()
+            mockk(),
+            saveTextUseCase
         )
 
         // We have to add an observer so event changes when title/notes/date are given a new value
@@ -47,61 +50,55 @@ class EventViewModelSaveAudioTest {
     }
 
     @Test
-    fun eventViewModel_saveAudio_callsUseCase() {
-        // Arrange
-        val params = slot<SaveEventAudioUseCase.Params>()
-        val observer = slot<DisposableCompletableObserver>()
+    fun enterTextVM_saveText_callsUseCase() {
+        val params = slot<SaveEventTextUseCase.SaveTextParams>()
 
-        // Act
-        viewModel.saveAudio(mockk())
+        viewModel.saveText(text)
+        verify { saveTextUseCase.execute(capture(params), any()) }
 
-        verify { saveAudioUseCase.execute(capture(params), capture(observer)) }
-        // Make the UC-handler call the success handler
-        observer.captured.onComplete()
-
-        // Assert
+        assertEquals(text, params.captured.text)
         assertEquals(event, params.captured.event)
     }
 
     @Test
-    fun eventViewModel_saveAudio_notifiesWhenSaveCompletes() {
+    fun enterTextVM_saveText_callUseCaseAndNotifiesSuccess() {
         // Arrange
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        val failedObserver = mockk<Observer<Int>>(relaxed = true)
+        val params = slot<SaveEventTextUseCase.SaveTextParams>()
         val observer = slot<DisposableCompletableObserver>()
 
-        viewModel.recordingSavedSuccessFully.observeForever(successObserver)
-        viewModel.errorMessage.observeForever(failedObserver)
+        val errorObserver = mockk<Observer<Int>>(relaxed = true)
+        val successObserver = mockk<Observer<Unit>>(relaxed = true)
+        viewModel.errorMessage.observeForever(errorObserver)
+        viewModel.textSavedSuccessFully.observeForever(successObserver)
 
         // Act
-        viewModel.saveAudio(mockk())
-        verify { saveAudioUseCase.execute(any(), capture(observer)) }
-        // Make the UC-handler call the success handler
+        viewModel.saveText(text)
+        verify { saveTextUseCase.execute(capture(params), capture(observer)) }
         observer.captured.onComplete()
 
         // Assert
         verify { successObserver.onChanged(any()) }
-        verify { failedObserver wasNot Called }
+        verify { errorObserver wasNot called }
     }
 
     @Test
-    fun eventViewModel_saveAudio_notifiesWithErrorMessageWhenSaveFails() {
+    fun enterTextViewModel_saveText_notifiesWhenSaveFails() {
         // Arrange
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        val failedObserver = mockk<Observer<Int>>(relaxed = true)
+        val params = slot<SaveEventTextUseCase.SaveTextParams>()
         val observer = slot<DisposableCompletableObserver>()
 
-        viewModel.recordingSavedSuccessFully.observeForever(successObserver)
-        viewModel.errorMessage.observeForever(failedObserver)
+        val errorObserver = mockk<Observer<Int>>(relaxed = true)
+        val successObserver = mockk<Observer<Unit>>(relaxed = true)
+        viewModel.errorMessage.observeForever(errorObserver)
+        viewModel.textSavedSuccessFully.observeForever(successObserver)
 
         // Act
-        viewModel.saveAudio(mockk())
-        verify { saveAudioUseCase.execute(any(), capture(observer)) }
-        // Make the UC-handler call the success handler
+        viewModel.saveText(text)
+        verify { saveTextUseCase.execute(capture(params), capture(observer)) }
         observer.captured.onError(mockk(relaxed = true))
 
         // Assert
-        verify { failedObserver.onChanged(any()) }
+        verify { errorObserver.onChanged(any()) }
         verify { successObserver wasNot Called }
     }
 }
