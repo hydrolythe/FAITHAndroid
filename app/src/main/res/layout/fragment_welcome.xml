@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <data>
+
+        <variable
+            name="welcomeViewModel"
+            type="be.hogent.faith.faith.loginOrRegister.WelcomeViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--ACHTERGROND-->
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/loginscherm"
+            android:contentDescription="@string/descr_loginscreen" />
+
+        <!-- KNOPPEN -->
+        <!-- Invisible to make it transparent -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000">
+
+            <!--Every button is set by using two intersecting guidelines.
+                The top left corner of the button is located at the intersection.
+                It might be better to use four guidelines so that we get 2 points (top-left and bottom-right),
+                and let the Views decide their dimensions solely through their constrains.
+                This will however produce a large amount of Guidelines.
+
+                Why use guidelines, and not a kind of map? Because maps inherently use pixels, and those won't work
+                on screens of different resolutions. Guidelines can be set using percentages which will scale with
+                the device.-->
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_pole_right_start"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.76" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_pole_top"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.33" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_pole_right_end"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_pole_bottom"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.42" />
+
+            <View
+                android:id="@+id/btn_welcome_register"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:onClick="@{() -> welcomeViewModel.registerButtonClicked()}"
+                app:layout_constraintBottom_toTopOf="@id/guide_pole_bottom"
+                app:layout_constraintEnd_toStartOf="@id/guide_pole_right_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_pole_right_start"
+                app:layout_constraintTop_toTopOf="@+id/guide_pole_top" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_pole_left_end"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.55" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_pole_left_start"
+                android:layout_width="0dp"
+                android:layout_height="12dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.73" />
+
+            <View
+                android:id="@+id/btn_welcome_login"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#00000000"
+                app:layout_constraintBottom_toTopOf="@+id/guide_pole_bottom"
+                app:layout_constraintEnd_toStartOf="@id/guide_pole_left_start"
+                app:layout_constraintStart_toStartOf="@+id/guide_pole_left_end"
+                app:layout_constraintTop_toTopOf="@+id/guide_pole_top" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+</layout>

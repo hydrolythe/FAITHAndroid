@@ -12,10 +12,11 @@ import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
+import be.hogent.faith.faith.loginOrRegister.AvatarProvider
+import be.hogent.faith.faith.loginOrRegister.AvatarViewModel
+import be.hogent.faith.faith.loginOrRegister.ResourceAvatarProvider
+import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
 import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
-import be.hogent.faith.faith.registerAvatar.AvatarProvider
-import be.hogent.faith.faith.registerAvatar.AvatarViewModel
-import be.hogent.faith.faith.registerAvatar.ResourceAvatarProvider
 import be.hogent.faith.faith.util.TempFileProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.koin.androidContext
@@ -40,6 +41,7 @@ val appModule = module(override = true) {
     viewModel { EditDetailViewModel() }
     viewModel { (user: LiveData<User>) -> OverviewEventsViewModel(user) }
     viewModel { AvatarViewModel(get(), get()) }
+    viewModel { WelcomeViewModel() }
     viewModel { RecordAudioViewModel() }
     viewModel { TakePhotoViewModel() }
 

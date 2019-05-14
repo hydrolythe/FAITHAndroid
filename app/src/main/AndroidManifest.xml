@@ -24,7 +24,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
-            android:name=".faith.registerAvatar.LoginOrRegisterActivity"
+            android:name=".faith.loginOrRegister.LoginOrRegisterActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
 
