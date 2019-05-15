@@ -99,7 +99,7 @@ class RegisterAvatarFragment : Fragment() {
             registerUserViewModel.registerUser(
                 registerUserInfoViewModel.userName.value!!,
                 registerUserInfoViewModel.password.value!!,
-                //TODO: fix so we can used [RegisterAvatarViewModel.selectedAvatar]
+                // TODO: fix so we can used [RegisterAvatarViewModel.selectedAvatar]
                 registerAvatarViewModel.avatars.value!![registerAvatarViewModel.selectedItem.value!!.toInt()]
             )
         })
