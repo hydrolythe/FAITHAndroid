@@ -21,11 +21,14 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
+import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
 import be.hogent.faith.faith.util.getRotation
 import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -46,6 +49,9 @@ class RegisterAvatarFragment : Fragment() {
     private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel()
 
     private val userViewModel by inject<UserViewModel>(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val registerUserInfoViewModel by sharedViewModel<RegisterUserInfoViewModel>()
+
+    private val registerUserViewModel by viewModel<RegisterUserViewModel>()
 
     /**
      * Object used to track the selection on the Recyclerview
@@ -61,6 +67,15 @@ class RegisterAvatarFragment : Fragment() {
         }
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val binding: be.hogent.faith.databinding.FragmentRegisterAvatarBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_register_avatar, container, false)
+        binding.registerAvatarViewModel = registerAvatarViewModel
+        binding.registerUserInfoViewModel = registerUserInfoViewModel
+        binding.registerUserViewModel = registerUserViewModel
+        return binding.root
+    }
+
     override fun onStart() {
         super.onStart()
         configureRecyclerViewAdapter()
@@ -69,20 +84,27 @@ class RegisterAvatarFragment : Fragment() {
     }
 
     private fun registerListeners() {
-        registerAvatarViewModel.nextButtonClicked.observe(this, Observer<Any> {
+        registerUserViewModel.userRegisteredSuccessFully.observe(this, Observer { newUser ->
+            userViewModel.setUser(newUser)
             navigation!!.goToCityScreen()
         })
 
-        registerAvatarViewModel.userSaveFailed.observe(this, Observer { errorMessage ->
-            Log.e(TAG, errorMessage)
-            Toast.makeText(context, R.string.error_save_user_failed, Toast.LENGTH_LONG).show()
+        registerUserViewModel.finishRegistrationClicked.observe(this, Observer {
+            Log.d(
+                TAG, "Registering user with:" +
+                        "username ${registerUserInfoViewModel.userName.value}, " +
+                        "password ${registerUserInfoViewModel.password.value}, " +
+                        "avatar ${registerAvatarViewModel.selectedAvatar.value}"
+            )
+            registerUserViewModel.registerUser(
+                registerUserInfoViewModel.userName.value!!,
+                registerUserInfoViewModel.password.value!!,
+                //TODO: fix so we can used [RegisterAvatarViewModel.selectedAvatar]
+                registerAvatarViewModel.avatars.value!![registerAvatarViewModel.selectedItem.value!!.toInt()]
+            )
         })
 
-        registerAvatarViewModel.userSavedSuccessFully.observe(this, Observer { newUser ->
-            userViewModel.setUser(newUser)
-        })
-
-        registerAvatarViewModel.inputErrorMessageID.observe(this, Observer { errorMessageID ->
+        registerUserViewModel.errorMessage.observe(this, Observer { errorMessageID ->
             Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
         })
     }
@@ -92,13 +114,6 @@ class RegisterAvatarFragment : Fragment() {
         if (context is AvatarFragmentNavigationListener) {
             navigation = context
         }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding: be.hogent.faith.databinding.FragmentRegisterAvatarBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_register_avatar, container, false)
-        binding.registerAvatarViewModel = registerAvatarViewModel
-        return binding.root
     }
 
     private fun setRecyclerViewOrientation() {

@@ -2,8 +2,8 @@ package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
 
 /**
@@ -24,28 +24,16 @@ class RegisterAvatarViewModel(
         get() = _nextButtonClicked
 
     /**
-     * Updates with the new User when it was saved successfully.
+     * Will always hold the [Avatar] corresponding with the [_selectedItem].
      */
-    private val _userSavedSuccessFully = SingleLiveEvent<User>()
-    val userSavedSuccessFully: LiveData<User>
-        get() = _userSavedSuccessFully
+    //TODO: find a way to make this work so to avoid calculting this in the RegisterAvatarFragment
+    val selectedAvatar: LiveData<Avatar> = Transformations.map(_selectedItem) { item -> _avatars.value!![item.toInt()] }
 
-    private val _inputErrorMessageID = MutableLiveData<Int>()
-    val inputErrorMessageID: LiveData<Int>
-        get() = _inputErrorMessageID
-
-    /**
-     * Will be updated with the latest error message when an error occurs when saving
-     */
-    private val _userSaveFailed = MutableLiveData<String>()
-    val userSaveFailed: LiveData<String>
-        get() = _userSaveFailed
 
     init {
-        // Set initially to -1 = no selection has been provided.
-        _selectedItem.value = -1
-
         fetchAvatarImages()
+        // Set initially to -1 = no selection has been provided.
+        _selectedItem.postValue(-1)
     }
 
     /**
@@ -58,7 +46,9 @@ class RegisterAvatarViewModel(
      * Returns true if an Avatar has been selected, false if not.
      */
     fun avatarWasSelected(): Boolean {
-        return _selectedItem.value!!.toInt() != -1
+        with(selectedItem.value) {
+            return this != null && this.toInt() != -1
+        }
     }
 
     /**
@@ -70,6 +60,6 @@ class RegisterAvatarViewModel(
     }
 
     private fun fetchAvatarImages() {
-        _avatars.postValue(avatarProvider.getAvatars())
+        _avatars.value = (avatarProvider.getAvatars())
     }
 }
