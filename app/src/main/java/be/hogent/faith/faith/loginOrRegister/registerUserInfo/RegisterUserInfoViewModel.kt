@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
 
 class RegisterUserInfoViewModel : ViewModel() {
@@ -21,10 +20,6 @@ class RegisterUserInfoViewModel : ViewModel() {
     private val _confirmUserInfoClicked = SingleLiveEvent<Unit>()
     val confirmUserInfoClicked: LiveData<Unit>
         get() = _confirmUserInfoClicked
-
-    private val _userSavedSuccessFully = SingleLiveEvent<User>()
-    val userSavedSuccessFully: LiveData<User>
-        get() = _userSavedSuccessFully
 
     fun onConfirmUserInfoClicked() {
         if (password.value.isNullOrBlank()) {

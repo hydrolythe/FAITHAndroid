@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class RegisterUserInfoFragment : Fragment() {
@@ -18,7 +19,7 @@ class RegisterUserInfoFragment : Fragment() {
     /**
      * ViewModel used for the avatars.
      */
-    private val registerUserInfoViewModel: RegisterUserInfoViewModel by viewModel()
+    private val registerUserInfoViewModel: RegisterUserInfoViewModel by sharedViewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: be.hogent.faith.databinding.FragmentRegisterUserinfoBinding =

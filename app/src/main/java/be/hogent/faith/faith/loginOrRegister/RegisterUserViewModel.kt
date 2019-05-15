@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.Avatar
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.CreateUserUseCase
 import io.reactivex.observers.DisposableSingleObserver
@@ -18,22 +19,28 @@ class RegisterUserViewModel(
     val errorMessage: LiveData<Int>
         get() = _errorMessage
 
-    private val _userSavedSuccessFully = SingleLiveEvent<User>()
-    val userSavedSuccessFully: LiveData<User>
-        get() = _userSavedSuccessFully
+    private val _userRegisteredSuccessFully = SingleLiveEvent<User>()
+    val userRegisteredSuccessFully: LiveData<User>
+        get() = _userRegisteredSuccessFully
+    private val _finishRegistrationClicked = SingleLiveEvent<User>()
+    val finishRegistrationClicked: LiveData<User>
+        get() = _finishRegistrationClicked
 
-    fun registerUser(userName: String, password: String, avatarName: String) {
+    fun registerUser(userName: String, password: String, avatar: Avatar) {
         val params = CreateUserUseCase.Params(
             userName,
             password,
-            avatarName
+            avatar.avatarName
         )
         createUserUseCase.execute(params, CreateUserUseCaseHandler())
     }
 
+    fun onFinishRegistrationClicked() {
+        _finishRegistrationClicked.call()
+    }
     private inner class CreateUserUseCaseHandler : DisposableSingleObserver<User>() {
         override fun onSuccess(newUser: User) {
-            _userSavedSuccessFully.postValue(newUser)
+            _userRegisteredSuccessFully.postValue(newUser)
         }
 
         override fun onError(e: Throwable) {
