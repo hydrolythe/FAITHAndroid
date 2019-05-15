@@ -103,7 +103,7 @@ class EventDetailsFragment : Fragment() {
             navigation?.startEventDetail(DetailType.TEXT)
         })
         eventViewModel.drawingButtonClicked.observe(this, Observer {
-           // navigation?.startMakeDrawingFragment()
+            // navigation?.startMakeDrawingFragment()
             navigation?.startEventDetail(DetailType.DRAWING)
         })
 
