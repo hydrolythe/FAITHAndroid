@@ -1,20 +1,16 @@
-package be.hogent.faith.faith.loginOrRegister
+package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.CreateUserUseCase
-import io.reactivex.observers.DisposableSingleObserver
 
 /**
  * ViewModel for the Avatar selection screen
  */
-class AvatarViewModel(
-    private val avatarProvider: AvatarProvider,
-    private val createUserUseCase: CreateUserUseCase
+class RegisterAvatarViewModel(
+    private val avatarProvider: AvatarProvider
 ) : ViewModel() {
 
     private var _avatars = MutableLiveData<List<Avatar>>()
@@ -45,8 +41,6 @@ class AvatarViewModel(
     val userSaveFailed: LiveData<String>
         get() = _userSaveFailed
 
-    var userName = MutableLiveData<String>()
-
     init {
         // Set initially to -1 = no selection has been provided.
         _selectedItem.value = -1
@@ -75,36 +69,7 @@ class AvatarViewModel(
         _selectedItem.postValue(selectedItem)
     }
 
-    fun nextButtonPressed() {
-        if (avatarWasSelected() && !userName.value.isNullOrEmpty()) {
-            val params = CreateUserUseCase.Params(
-                userName.value!!,
-                _avatars.value!![_selectedItem.value!!.toInt()].avatarName
-            )
-            createUserUseCase.execute(params, CreateUserUseCaseHandler())
-            _nextButtonClicked.call()
-        } else {
-            _inputErrorMessageID.postValue(R.string.txt_error_userNameOrAvatarNotSet)
-            return
-        }
-    }
-
-    private inner class CreateUserUseCaseHandler : DisposableSingleObserver<User>() {
-        override fun onSuccess(newUser: User) {
-            _userSavedSuccessFully.postValue(newUser)
-        }
-
-        override fun onError(e: Throwable) {
-            _userSaveFailed.postValue(e.localizedMessage)
-        }
-    }
-
     private fun fetchAvatarImages() {
         _avatars.postValue(avatarProvider.getAvatars())
-    }
-
-    override fun onCleared() {
-        createUserUseCase.dispose()
-        super.onCleared()
     }
 }
