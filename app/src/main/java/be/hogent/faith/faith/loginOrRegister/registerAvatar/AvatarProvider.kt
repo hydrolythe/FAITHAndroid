@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.loginOrRegister
+package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
 import android.graphics.drawable.Drawable
 

@@ -87,4 +87,7 @@
     <string name="password">Wachtwoord</string>
     <string name="login_error_noUsername">Je moet je gebruikersnaam ingeven!</string>
     <string name="login_error_noPassword">Je moet je wachtwoord ingeven!</string>
+    <string name="register_passwords_nomatch">Je ingevulde wachtwoorden zijn niet gelijk aan elkaar.</string>
+    <string name="register_password_empty">Je moet een wachtwoord ingeven.</string>
+    <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
 </resources>

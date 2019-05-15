@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.loginOrRegister
+package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
 import android.content.Context
 import android.os.Bundle
@@ -21,11 +21,14 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
+import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
 import be.hogent.faith.faith.util.getRotation
 import be.hogent.faith.util.TAG
-import kotlinx.android.synthetic.main.fragment_avatar.avatar_rv_avatar
+import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
@@ -43,9 +46,12 @@ class RegisterAvatarFragment : Fragment() {
     /**
      * ViewModel used for the avatars.
      */
-    private val avatarViewModel: AvatarViewModel by viewModel()
+    private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel()
 
     private val userViewModel by inject<UserViewModel>(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val registerUserInfoViewModel by sharedViewModel<RegisterUserInfoViewModel>()
+
+    private val registerUserViewModel by viewModel<RegisterUserViewModel>()
 
     /**
      * Object used to track the selection on the Recyclerview
@@ -61,6 +67,15 @@ class RegisterAvatarFragment : Fragment() {
         }
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val binding: be.hogent.faith.databinding.FragmentRegisterAvatarBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_register_avatar, container, false)
+        binding.registerAvatarViewModel = registerAvatarViewModel
+        binding.registerUserInfoViewModel = registerUserInfoViewModel
+        binding.registerUserViewModel = registerUserViewModel
+        return binding.root
+    }
+
     override fun onStart() {
         super.onStart()
         configureRecyclerViewAdapter()
@@ -69,20 +84,27 @@ class RegisterAvatarFragment : Fragment() {
     }
 
     private fun registerListeners() {
-        avatarViewModel.nextButtonClicked.observe(this, Observer<Any> {
+        registerUserViewModel.userRegisteredSuccessFully.observe(this, Observer { newUser ->
+            userViewModel.setUser(newUser)
             navigation!!.goToCityScreen()
         })
 
-        avatarViewModel.userSaveFailed.observe(this, Observer { errorMessage ->
-            Log.e(TAG, errorMessage)
-            Toast.makeText(context, R.string.error_save_user_failed, Toast.LENGTH_LONG).show()
+        registerUserViewModel.finishRegistrationClicked.observe(this, Observer {
+            Log.d(
+                TAG, "Registering user with:" +
+                        "username ${registerUserInfoViewModel.userName.value}, " +
+                        "password ${registerUserInfoViewModel.password.value}, " +
+                        "avatar ${registerAvatarViewModel.selectedAvatar.value}"
+            )
+            registerUserViewModel.registerUser(
+                registerUserInfoViewModel.userName.value!!,
+                registerUserInfoViewModel.password.value!!,
+                //TODO: fix so we can used [RegisterAvatarViewModel.selectedAvatar]
+                registerAvatarViewModel.avatars.value!![registerAvatarViewModel.selectedItem.value!!.toInt()]
+            )
         })
 
-        avatarViewModel.userSavedSuccessFully.observe(this, Observer { newUser ->
-            userViewModel.setUser(newUser)
-        })
-
-        avatarViewModel.inputErrorMessageID.observe(this, Observer { errorMessageID ->
+        registerUserViewModel.errorMessage.observe(this, Observer { errorMessageID ->
             Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
         })
     }
@@ -92,13 +114,6 @@ class RegisterAvatarFragment : Fragment() {
         if (context is AvatarFragmentNavigationListener) {
             navigation = context
         }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding: be.hogent.faith.databinding.FragmentAvatarBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_avatar, container, false)
-        binding.avatarViewModel = avatarViewModel
-        return binding.root
     }
 
     private fun setRecyclerViewOrientation() {
@@ -143,9 +158,9 @@ class RegisterAvatarFragment : Fragment() {
 
         (avatar_rv_avatar.adapter as AvatarItemAdapter).selectionTracker = avatarTracker
 
-        if (avatarViewModel.avatarWasSelected()) {
-            avatarTracker?.select(avatarViewModel.selectedItem.value!!)
-            avatar_rv_avatar.smoothScrollToPosition(avatarViewModel.selectedItem.value!!.toInt())
+        if (registerAvatarViewModel.avatarWasSelected()) {
+            avatarTracker?.select(registerAvatarViewModel.selectedItem.value!!)
+            avatar_rv_avatar.smoothScrollToPosition(registerAvatarViewModel.selectedItem.value!!.toInt())
         }
 
         // We also need to observe selection changes in the RecyclerView.
@@ -154,13 +169,13 @@ class RegisterAvatarFragment : Fragment() {
                 val iterator = avatarTracker?.selection?.iterator()
                 if (iterator!!.hasNext()) {
                     val itemPressed = iterator.next()
-                    avatarViewModel.setSelectedItem(itemPressed)
+                    registerAvatarViewModel.setSelectedItem(itemPressed)
                 }
             }
         })
 
         // Observe the changes in the list of the avatars and update the adapter
-        avatarViewModel.avatars.observe(this, Observer<List<Avatar>> { avatarList ->
+        registerAvatarViewModel.avatars.observe(this, Observer<List<Avatar>> { avatarList ->
             avatarList?.let {
                 avatarAdapter.avatars = avatarList
                 avatarAdapter.notifyDataSetChanged()

@@ -9,7 +9,7 @@ import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import be.hogent.faith.R
-import be.hogent.faith.faith.loginOrRegister.AvatarItemAdapter
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter
 
 object NavigationUtil {
     fun goToCityScreen() {
