@@ -11,10 +11,12 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
-import be.hogent.faith.faith.loginOrRegister.AvatarProvider
-import be.hogent.faith.faith.loginOrRegister.AvatarViewModel
-import be.hogent.faith.faith.loginOrRegister.ResourceAvatarProvider
+import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvider
+import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
 import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
 import be.hogent.faith.faith.util.TempFileProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -40,9 +42,11 @@ val appModule = module(override = true) {
     viewModel { EditDetailViewModel() }
     viewModel { EnterTextViewModel() }
     viewModel { OverviewEventsViewModel() }
-    viewModel { AvatarViewModel(get(), get()) }
+    viewModel { RegisterAvatarViewModel(get()) }
     viewModel { WelcomeViewModel() }
     viewModel { RecordAudioViewModel() }
+    viewModel { RegisterUserViewModel(get()) }
+    viewModel { RegisterUserInfoViewModel() }
     viewModel { TakePhotoViewModel() }
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
