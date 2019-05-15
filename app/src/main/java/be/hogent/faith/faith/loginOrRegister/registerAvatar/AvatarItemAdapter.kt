@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.loginOrRegister
+package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -65,7 +65,8 @@ class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
         // TODO: inject
-        private val avatarProvider = ResourceAvatarProvider(view.context)
+        private val avatarProvider =
+            ResourceAvatarProvider(view.context)
 
         /**
          * Executes the binding of the data to the [ViewHolder].
