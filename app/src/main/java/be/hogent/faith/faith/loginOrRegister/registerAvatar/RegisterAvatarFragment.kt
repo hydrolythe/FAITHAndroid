@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.loginOrRegister
+package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
 import android.content.Context
 import android.os.Bundle
@@ -23,7 +23,7 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.util.getRotation
 import be.hogent.faith.util.TAG
-import kotlinx.android.synthetic.main.fragment_avatar.avatar_rv_avatar
+import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -43,7 +43,7 @@ class RegisterAvatarFragment : Fragment() {
     /**
      * ViewModel used for the avatars.
      */
-    private val avatarViewModel: AvatarViewModel by viewModel()
+    private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel()
 
     private val userViewModel by inject<UserViewModel>(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
 
@@ -69,20 +69,20 @@ class RegisterAvatarFragment : Fragment() {
     }
 
     private fun registerListeners() {
-        avatarViewModel.nextButtonClicked.observe(this, Observer<Any> {
+        registerAvatarViewModel.nextButtonClicked.observe(this, Observer<Any> {
             navigation!!.goToCityScreen()
         })
 
-        avatarViewModel.userSaveFailed.observe(this, Observer { errorMessage ->
+        registerAvatarViewModel.userSaveFailed.observe(this, Observer { errorMessage ->
             Log.e(TAG, errorMessage)
             Toast.makeText(context, R.string.error_save_user_failed, Toast.LENGTH_LONG).show()
         })
 
-        avatarViewModel.userSavedSuccessFully.observe(this, Observer { newUser ->
+        registerAvatarViewModel.userSavedSuccessFully.observe(this, Observer { newUser ->
             userViewModel.setUser(newUser)
         })
 
-        avatarViewModel.inputErrorMessageID.observe(this, Observer { errorMessageID ->
+        registerAvatarViewModel.inputErrorMessageID.observe(this, Observer { errorMessageID ->
             Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
         })
     }
@@ -95,9 +95,9 @@ class RegisterAvatarFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding: be.hogent.faith.databinding.FragmentAvatarBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_avatar, container, false)
-        binding.avatarViewModel = avatarViewModel
+        val binding: be.hogent.faith.databinding.FragmentRegisterAvatarBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_register_avatar, container, false)
+        binding.registerAvatarViewModel = registerAvatarViewModel
         return binding.root
     }
 
@@ -143,9 +143,9 @@ class RegisterAvatarFragment : Fragment() {
 
         (avatar_rv_avatar.adapter as AvatarItemAdapter).selectionTracker = avatarTracker
 
-        if (avatarViewModel.avatarWasSelected()) {
-            avatarTracker?.select(avatarViewModel.selectedItem.value!!)
-            avatar_rv_avatar.smoothScrollToPosition(avatarViewModel.selectedItem.value!!.toInt())
+        if (registerAvatarViewModel.avatarWasSelected()) {
+            avatarTracker?.select(registerAvatarViewModel.selectedItem.value!!)
+            avatar_rv_avatar.smoothScrollToPosition(registerAvatarViewModel.selectedItem.value!!.toInt())
         }
 
         // We also need to observe selection changes in the RecyclerView.
@@ -154,13 +154,13 @@ class RegisterAvatarFragment : Fragment() {
                 val iterator = avatarTracker?.selection?.iterator()
                 if (iterator!!.hasNext()) {
                     val itemPressed = iterator.next()
-                    avatarViewModel.setSelectedItem(itemPressed)
+                    registerAvatarViewModel.setSelectedItem(itemPressed)
                 }
             }
         })
 
         // Observe the changes in the list of the avatars and update the adapter
-        avatarViewModel.avatars.observe(this, Observer<List<Avatar>> { avatarList ->
+        registerAvatarViewModel.avatars.observe(this, Observer<List<Avatar>> { avatarList ->
             avatarList?.let {
                 avatarAdapter.avatars = avatarList
                 avatarAdapter.notifyDataSetChanged()

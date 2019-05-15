@@ -7,12 +7,15 @@ import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.faith.cityScreen.CityScreenActivity
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarFragment
+import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoFragment
 import be.hogent.faith.faith.util.replaceFragment
 import be.hogent.faith.util.TAG
 import org.koin.android.ext.android.getKoin
 
 class LoginOrRegisterActivity : AppCompatActivity(),
     WelcomeFragment.WelcomeNavigationListener,
+    RegisterUserInfoFragment.RegisterUserInfoNavigationListener,
     RegisterAvatarFragment.AvatarFragmentNavigationListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +57,10 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     }
 
     override fun goToRegistrationScreen() {
+        replaceFragment(RegisterUserInfoFragment.newInstance(), R.id.fragment_container)
+    }
+
+    override fun goToRegisterAvatarScreen() {
         replaceFragment(RegisterAvatarFragment.newInstance(), R.id.fragment_container)
     }
 }
