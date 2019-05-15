@@ -21,7 +21,7 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     RegisterUserInfoFragment.RegisterUserInfoNavigationListener,
     RegisterAvatarFragment.AvatarFragmentNavigationListener {
 
-    private lateinit var registerUserInfoViewModel : RegisterUserInfoViewModel
+    private lateinit var registerUserInfoViewModel: RegisterUserInfoViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
