@@ -23,7 +23,6 @@ import com.auth0.android.result.Credentials
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import com.auth0.android.authentication.storage.SecureCredentialsManager
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import com.auth0.android.authentication.storage.CredentialsManagerException
 import com.auth0.android.callback.BaseCallback
 
@@ -37,7 +36,7 @@ class WelcomeFragment : Fragment() {
     private val CODE_DEVICE_AUTHENTICATION = 22
     val KEY_CLEAR_CREDENTIALS = "com.auth0.CLEAR_CREDENTIALS"
     val EXTRA_ACCESS_TOKEN = "com.auth0.ACCESS_TOKEN"
-    val EXTRA_ID_TOKEN = "com.auth0.ID_TOKEN""
+    val EXTRA_ID_TOKEN = "com.auth0.ID_TOKEN"
 
     /**
      * Authentication variables
