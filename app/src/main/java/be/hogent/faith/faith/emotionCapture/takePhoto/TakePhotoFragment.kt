@@ -20,13 +20,15 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.util.TAG
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.logcat
+import kotlinx.android.synthetic.main.fragment_take_photo.img_takePhoto_Photo
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * The requestcode that will be used to request photoTaker permissions
@@ -39,7 +41,7 @@ class TakePhotoFragment : Fragment() {
 
     private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
 
-    private val takePhotoViewModel: TakePhotoViewModel by viewModel()
+    private val takePhotoViewModel: TakePhotoViewModel by sharedViewModel()
 
     private lateinit var takePhotoBinding: FragmentTakePhotoBinding
 
@@ -71,9 +73,26 @@ class TakePhotoFragment : Fragment() {
         startListeners()
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
+
     private fun startListeners() {
+
         takePhotoViewModel.takePhotoButtonClicked.observe(this, Observer {
             takeAndSavePictureToCache()
+        })
+
+        takePhotoViewModel.okPhotoButtonClicked.observe(this, Observer {
+            addPhotoDetail()
+        })
+
+        takePhotoViewModel.photo.observe(this, Observer {
+            if (it != null) {
+                Glide.with(context!!).load(it).diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .skipMemoryCache(true).into(img_takePhoto_Photo)
+                Log.d(TAG, "photo saved ${it.name} ${it.path}")
+            }
         })
 
         userViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
@@ -82,7 +101,12 @@ class TakePhotoFragment : Fragment() {
         })
         eventViewModel.photoSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT).show()
+            takePhotoViewModel.setSavedPhoto(eventViewModel.getLatestDetail()!!.file)
         })
+    }
+
+    private fun addPhotoDetail() {
+        eventViewModel.savePhoto(takePhotoViewModel.photo.value!!)
     }
 
     private fun takeAndSavePictureToCache() {
@@ -92,7 +116,7 @@ class TakePhotoFragment : Fragment() {
          * the tempPhotoFile.
          */
         fotoApparat.takePicture().saveToFile(saveFile).whenAvailable {
-            eventViewModel.savePhoto(saveFile)
+            takePhotoViewModel.setPhotoInCache(saveFile)
         }
     }
 

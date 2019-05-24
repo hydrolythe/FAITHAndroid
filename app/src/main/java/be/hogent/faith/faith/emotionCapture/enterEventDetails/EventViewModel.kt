@@ -10,6 +10,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
@@ -187,6 +188,10 @@ class EventViewModel(
 
     fun onDateButtonClicked() {
         _dateButtonClicked.call()
+    }
+
+    fun getLatestDetail(): Detail? {
+        return event.value?.getLastDetail() ?: null
     }
 
     /**
