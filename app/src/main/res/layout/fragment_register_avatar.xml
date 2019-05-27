@@ -40,7 +40,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@+id/guide_avatarRecyclerView_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/btn_register_finishRegistration"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guide_avatarRecyclerView_start"
                 app:layout_constraintTop_toTopOf="@id/guide_avatarRecyclerView_top"
                 tools:listitem="@layout/avatar_rv_item" />
 
@@ -95,6 +95,13 @@
                 app:layout_constraintEnd_toStartOf="@+id/guide_city_end"
                 app:layout_constraintStart_toStartOf="@+id/guide_city_start"
                 app:layout_constraintTop_toTopOf="@+id/guide_city_top" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatarRecyclerView_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="72dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
