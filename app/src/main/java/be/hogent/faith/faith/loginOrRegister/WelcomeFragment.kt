@@ -1,7 +1,10 @@
 package be.hogent.faith.faith.loginOrRegister
 
+import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,22 +12,18 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import org.koin.android.viewmodel.ext.android.viewModel
+import be.hogent.faith.util.TAG
 import com.auth0.android.Auth0
-import org.koin.android.ext.android.inject
+import com.auth0.android.authentication.AuthenticationAPIClient
+import com.auth0.android.authentication.AuthenticationException
+import com.auth0.android.authentication.storage.CredentialsManagerException
+import com.auth0.android.authentication.storage.SecureCredentialsManager
+import com.auth0.android.callback.BaseCallback
 import com.auth0.android.provider.AuthCallback
 import com.auth0.android.provider.WebAuthProvider
-import android.app.Activity
-import android.app.Dialog
-import android.util.Log
-import be.hogent.faith.util.TAG
-import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.result.Credentials
-import com.auth0.android.authentication.AuthenticationAPIClient
-import com.auth0.android.authentication.storage.SharedPreferencesStorage
-import com.auth0.android.authentication.storage.SecureCredentialsManager
-import com.auth0.android.authentication.storage.CredentialsManagerException
-import com.auth0.android.callback.BaseCallback
+import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class WelcomeFragment : Fragment() {
@@ -33,10 +32,7 @@ class WelcomeFragment : Fragment() {
 
     private val welcomeViewModel by viewModel<WelcomeViewModel>()
 
-    private val CODE_DEVICE_AUTHENTICATION = 22
-    val KEY_CLEAR_CREDENTIALS = "com.auth0.CLEAR_CREDENTIALS"
-    val EXTRA_ACCESS_TOKEN = "com.auth0.ACCESS_TOKEN"
-    val EXTRA_ID_TOKEN = "com.auth0.ID_TOKEN"
+
 
     /**
      * Authentication variables
@@ -55,18 +51,9 @@ class WelcomeFragment : Fragment() {
     }
 
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        // Check if the activity was launched after a logout
-        if(activity!!.intent.getBooleanExtra(KEY_CLEAR_CREDENTIALS, false)){
-            credentialsManager.clearCredentials();
-
-        }
-    }
-
     override fun onStart() {
         super.onStart()
-        auth0.setOIDCConformant(true)
+        auth0.isOIDCConformant = true
         registerListeners()
 
         // Obtain the existing credentials and move to the next activity
@@ -113,7 +100,7 @@ class WelcomeFragment : Fragment() {
             //Allow refresh tokens
             .withScope("openid offline_access")
             .withAudience(String.format("https://%s/userinfo", getString(be.hogent.faith.R.string.com_auth0_domain)))
-            .start(activity as Activity, webCallback);
+            .start(activity as Activity, webCallback)
 
     }
 
@@ -140,6 +127,11 @@ class WelcomeFragment : Fragment() {
 
 
     companion object {
+
+        private val CODE_DEVICE_AUTHENTICATION = 22
+
+
+
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.

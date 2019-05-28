@@ -50,7 +50,6 @@ class AvatarViewModel(
     init {
         // Set initially to -1 = no selection has been provided.
         _selectedItem.value = -1
-
         fetchAvatarImages()
     }
 
