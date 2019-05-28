@@ -18,7 +18,10 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/register_background" />
+            android:scaleType="fitXY"
+            android:src="@drawable/avatar_selection_background"
+            app:srcCompat="@drawable/avatar_selection_background"
+            tools:srcCompat="@drawable/avatar_selection_background" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -30,6 +33,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:layout_marginStart="904dp"
+                android:layout_marginTop="44dp"
                 android:text="@string/frag_avatar_title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -48,6 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:layout_marginStart="892dp"
                 android:autofillHints="username"
                 android:hint="@string/naam_hint"
                 android:inputType="textPersonName"
@@ -63,8 +69,10 @@
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@+id/guide_bottom_rv"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guide_top_rv"
+                app:layout_constraintVertical_bias="1.0"
                 tools:listitem="@layout/avatar_rv_item" />
 
             <Button
@@ -89,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.91" />
+                app:layout_constraintGuide_percent="0.86" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

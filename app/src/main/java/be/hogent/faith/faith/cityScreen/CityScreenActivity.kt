@@ -2,11 +2,17 @@ package be.hogent.faith.faith.cityScreen
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
+import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
 import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.util.replaceFragment
+import co.zsmb.materialdrawerkt.builders.drawer
+import co.zsmb.materialdrawerkt.builders.footer
+import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
+
 
 class CityScreenActivity : AppCompatActivity(),
     CityScreenFragment.CityScreenNavigationListener {
@@ -21,8 +27,24 @@ class CityScreenActivity : AppCompatActivity(),
         if (savedInstanceState == null) {
             val fragment = CityScreenFragment.newInstance()
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragment)
+                .add(be.hogent.faith.R.id.fragment_container, fragment)
                 .commit()
+        }
+
+        drawer {
+            footer {
+                primaryItem("Logout") {
+                    onClick { _ ->
+                        Log.d("DRAWER", "Clicked logout")
+                        val intent = Intent(applicationContext, LoginOrRegisterActivity::class.java)
+                        intent.putExtra(LoginOrRegisterActivity.KEY_CLEAR_CREDENTIALS, true)
+                        startActivity(intent)
+                        finish()
+                        true
+                    }
+                }
+
+            }
         }
     }
 

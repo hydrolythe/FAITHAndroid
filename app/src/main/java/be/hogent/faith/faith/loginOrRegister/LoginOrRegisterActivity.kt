@@ -9,11 +9,15 @@ import be.hogent.faith.faith.cityScreen.CityScreenActivity
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.util.replaceFragment
 import be.hogent.faith.util.TAG
+import com.auth0.android.authentication.storage.SecureCredentialsManager
 import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.android.inject
 
 class LoginOrRegisterActivity : AppCompatActivity(),
     WelcomeFragment.WelcomeNavigationListener,
     RegisterAvatarFragment.AvatarFragmentNavigationListener {
+
+    private val credentialsManager: SecureCredentialsManager by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +36,15 @@ class LoginOrRegisterActivity : AppCompatActivity(),
                 .commit()
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (intent.getBooleanExtra(LoginOrRegisterActivity.KEY_CLEAR_CREDENTIALS, false)) {
+            credentialsManager.clearCredentials()
+            Log.d(TAG, "Logged out")
+        }
+    }
+
 
     private fun createScopedUserViewModel() {
         Log.e(TAG, "Creating USER SCOPE")
@@ -55,5 +68,9 @@ class LoginOrRegisterActivity : AppCompatActivity(),
 
     override fun goToRegistrationScreen() {
         replaceFragment(RegisterAvatarFragment.newInstance(), R.id.fragment_container)
+    }
+
+    companion object {
+        const val KEY_CLEAR_CREDENTIALS = "com.auth0.CLEAR_CREDENTIALS"
     }
 }
