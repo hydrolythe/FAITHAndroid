@@ -32,7 +32,7 @@ class CreateUserUseCaseTest {
         val userArg = slot<User>()
         every { repository.insert(capture(userArg)) } returns Completable.complete()
 
-        val params = CreateUserUseCase.Params("username", "testPassword","avatarName")
+        val params = CreateUserUseCase.Params("username", "testPassword", "avatarName")
 
         // Act
         val result = createUserUseCase.buildUseCaseSingle(params)

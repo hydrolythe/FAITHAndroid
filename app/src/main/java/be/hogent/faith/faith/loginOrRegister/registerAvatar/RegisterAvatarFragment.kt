@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
@@ -69,7 +68,7 @@ class RegisterAvatarFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: be.hogent.faith.databinding.FragmentRegisterAvatarBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_register_avatar, container, false)
+            DataBindingUtil.inflate(inflater, be.hogent.faith.R.layout.fragment_register_avatar, container, false)
         binding.registerAvatarViewModel = registerAvatarViewModel
         binding.registerUserInfoViewModel = registerUserInfoViewModel
         binding.registerUserViewModel = registerUserViewModel
@@ -99,7 +98,7 @@ class RegisterAvatarFragment : Fragment() {
             registerUserViewModel.registerUser(
                 registerUserInfoViewModel.userName.value!!,
                 registerUserInfoViewModel.password.value!!,
-                //TODO: fix so we can used [RegisterAvatarViewModel.selectedAvatar]
+                // TODO: fix so we can used [RegisterAvatarViewModel.selectedAvatar]
                 registerAvatarViewModel.avatars.value!![registerAvatarViewModel.selectedItem.value!!.toInt()]
             )
         })
@@ -121,14 +120,14 @@ class RegisterAvatarFragment : Fragment() {
         val orientation = if (activity is AppCompatActivity) {
             (activity as AppCompatActivity).getRotation()
         } else {
-            R.integer.LANDSCAPE
+            be.hogent.faith.R.integer.LANDSCAPE
         }
         when (orientation) {
-            R.integer.PORTRAIT -> {
+            be.hogent.faith.R.integer.PORTRAIT -> {
                 avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
                 avatar_rv_avatar.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
             }
-            R.integer.LANDSCAPE -> {
+            be.hogent.faith.R.integer.LANDSCAPE -> {
                 avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
                 avatar_rv_avatar.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
             }
