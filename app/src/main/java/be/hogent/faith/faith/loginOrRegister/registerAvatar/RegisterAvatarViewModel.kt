@@ -26,9 +26,8 @@ class RegisterAvatarViewModel(
     /**
      * Will always hold the [Avatar] corresponding with the [_selectedItem].
      */
-    //TODO: find a way to make this work so to avoid calculting this in the RegisterAvatarFragment
+    // TODO: find a way to make this work so to avoid calculting this in the RegisterAvatarFragment
     val selectedAvatar: LiveData<Avatar> = Transformations.map(_selectedItem) { item -> _avatars.value!![item.toInt()] }
-
 
     init {
         fetchAvatarImages()
