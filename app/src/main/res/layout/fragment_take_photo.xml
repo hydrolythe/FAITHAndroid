@@ -8,7 +8,7 @@
             type="be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel" />
         <variable
             name="userViewModel"
-            type="be.hogent.faith.faith.UserViewModel"/>
+            type="be.hogent.faith.faith.UserViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -22,6 +22,18 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="0dp"
+            android:visibility="@{safeUnbox(photoViewModel.visibilityTakePhoto)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_takePhoto_Photo"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="0dp"
+            android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenOrSaved)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,8 +46,36 @@
             android:layout_margin="8dp"
             android:onClick="@{() -> photoViewModel.onTakePhotoButtonClicked()}"
             android:text="@string/frag_takePhoto_takePhoto"
+            android:visibility="@{safeUnbox(photoViewModel.visibilityTakePhoto)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_takePhoto_Ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/ok"
+            android:layout_margin="8dp"
+            android:onClick="@{() -> photoViewModel.onOkPhotoButtonClicked()}"
+            android:src="@drawable/ic_outline_thumb_up"
+            android:text="@string/frag_takePhoto_takePhoto"
+            android:tint="@color/colorPrimary"
+            android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenNotSaved)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_takePhoto_NotOk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:contentDescription="@string/cancel"
+            android:onClick="@{() -> photoViewModel.onNotOkPhotoButtonClicked()}"
+            android:src="@drawable/ic_outline_thumb_down"
+            android:tint="@color/colorAccent"
+            android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenNotSaved)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_takePhoto_Ok" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
