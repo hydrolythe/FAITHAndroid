@@ -18,13 +18,11 @@ class RecordStatePaused(
     override fun onRecordPressed() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             recorder.resume()
-            Log.d(TAG, "Recorder is now recording again after being paused")
-            context.setState(
-                RecordStateRecording(context, recorder, mediaPlayer, tempFileProvider)
-            )
+            Log.d(TAG, "Paused -> Recording")
+            context.setState(RecordStateRecording(context, recorder, mediaPlayer, tempFileProvider))
         } else {
             Log.d(TAG, "Resuming the recorder is not supported on a device with this API level")
-            Log.d(TAG, "How did you even start recording?")
+            Log.d(TAG, "How did you even pause the recording?")
         }
     }
 

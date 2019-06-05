@@ -87,11 +87,11 @@ class TakePhotoFragment : Fragment() {
             addPhotoDetail()
         })
 
-        takePhotoViewModel.photo.observe(this, Observer {
-            if (it != null) {
-                Glide.with(context!!).load(it).diskCacheStrategy(DiskCacheStrategy.NONE)
+        takePhotoViewModel.photo.observe(this, Observer { photo ->
+            if (photo != null) {
+                Glide.with(context!!).load(photo).diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).into(img_takePhoto_Photo)
-                Log.d(TAG, "photo saved ${it.name} ${it.path}")
+                Log.d(TAG, "photo saved ${photo.name} ${photo.path}")
             }
         })
 

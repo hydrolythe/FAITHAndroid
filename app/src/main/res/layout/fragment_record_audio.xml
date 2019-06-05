@@ -8,8 +8,6 @@
             name="recordAudioViewModel"
             type="be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel" />
 
-        <import type="be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel.RecordingStatus" />
-
         <import type="android.view.View" />
     </data>
 
@@ -34,9 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="32dp"
             android:contentDescription="@string/description_pause_recording"
-            android:onClick="@{() -> recordAudioViewModel.onUserViewModel"
-            android:src="@drawable/audio_pause"
-            android:visibility="@{recordAudioViewModel.recordingStatus != RecordingStatus.PAUSED? View.VISIBLE : View.INVISIBLE}" />
+            android:onClick="@{() -> recordAudioViewModel.onPauseButtonClicked()}"
+            android:src="@drawable/audio_pause"/>
 
         <ImageButton
             android:id="@+id/btn_recordAudio_record"
@@ -45,8 +42,7 @@
             android:layout_margin="32dp"
             android:contentDescription="@string/description_start_recording"
             android:onClick="@{() -> recordAudioViewModel.onRecordButtonClicked()}"
-            android:src="@drawable/audio_record"
-            android:visibility="@{recordAudioViewModel.recordingStatus != RecordingStatus.RECORDING? View.VISIBLE : View.INVISIBLE}" />
+            android:src="@drawable/audio_record"/>
 
         <ImageButton
             android:id="@+id/btn_recordAudio_restart"
@@ -54,8 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="32dp"
             android:contentDescription="@string/description_restart_recording"
-            android:onClick="@{() -> recordAudioViewModel.onRestartButtonClicked()}"
-            android:src="@drawable/audio_restart" />
+            android:onClick="@{() -> recordAudioViewModel.onRestartButtonClicked()}"/>
 
         <ImageButton
             android:id="@+id/btn_recordAudio_stop"
