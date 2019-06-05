@@ -47,12 +47,11 @@ class RecordStateRecording(
             )
         )
         Log.d(TAG, "Recording -> Stopped")
-        //TODO: let context save to VM if it receives stopped state?
+        // TODO: let context save to VM if it receives stopped state?
 //        eventViewModel.saveAudio(tempFileProvider.tempAudioRecordingFile)
     }
 
     override fun onRestartPressed() {
         Log.d(TAG, "Recording -> Initial: Restarting a recording means going resetting it")
     }
-
 }
