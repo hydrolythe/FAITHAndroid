@@ -14,6 +14,7 @@ class TakePhotoViewModel : ViewModel() {
 
     private var _currentState = MutableLiveData<PhotoState>()
 
+    // OPM: moet private zijn?
     val _photo = MutableLiveData<File>()
     val photo: LiveData<File>
         get() = _photo

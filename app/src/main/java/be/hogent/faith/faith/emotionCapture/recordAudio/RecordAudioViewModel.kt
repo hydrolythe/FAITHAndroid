@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordState
-import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateStopped
 import be.hogent.faith.faith.util.SingleLiveEvent
 
-class RecordAudioViewModel : ViewModel() {
+class RecordAudioViewModel : RecordingContext, ViewModel() {
 
     private val _recordState = MutableLiveData<RecordState>()
     val recordState: LiveData<RecordState>
@@ -21,8 +20,11 @@ class RecordAudioViewModel : ViewModel() {
     val pauseSupported = MutableLiveData<Boolean>()
 
     init {
-        _recordState.value = RecordStateStopped()
         pauseSupported.value = false
+    }
+
+    override fun setState(newState: RecordState) {
+        _recordState.value = newState
     }
 
     private val _recordButtonClicked = SingleLiveEvent<Unit>()
@@ -45,9 +47,9 @@ class RecordAudioViewModel : ViewModel() {
     val playButtonClicked: LiveData<Unit>
         get() = _playButtonClicked
 
-    private val _cancelButtonClicked = SingleLiveEvent<Unit>()
-    val cancelButtonClicked: LiveData<Unit>
-        get() = _cancelButtonClicked
+    private val _saveButtonClicked = SingleLiveEvent<Unit>()
+    val saveButtonClicked: LiveData<Unit>
+        get() = _saveButtonClicked
 
     fun onRecordButtonClicked() {
         recordState.value!!.onRecordPressed()
@@ -69,8 +71,7 @@ class RecordAudioViewModel : ViewModel() {
         _pauseButtonClicked.call()
     }
 
-    fun onCancelButtonClicked() {
-        _cancelButtonClicked.call()
+    fun onSaveButtonClicked() {
+        _saveButtonClicked.call()
     }
-
 }

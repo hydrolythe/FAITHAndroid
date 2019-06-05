@@ -19,7 +19,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentRecordAudioBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel.RecordingStatus.PAUSED
+import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateStopped
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.util.TAG
 import org.koin.android.ext.android.inject
@@ -28,9 +28,10 @@ import java.io.IOException
 
 const val REQUESTCODE_AUDIO = 12
 
-class RecordAudioFragment : RecordingContext, Fragment() {
+class RecordAudioFragment : Fragment() {
     private val eventViewModel: EventViewModel by sharedViewModel()
 
+    // TODO: check if this still needs to be a shared VM
     private val recordAudioViewModel: RecordAudioViewModel by sharedViewModel()
 
     private lateinit var recordAudioBinding: FragmentRecordAudioBinding
@@ -53,20 +54,6 @@ class RecordAudioFragment : RecordingContext, Fragment() {
         recordAudioViewModel.pauseSupported.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
     }
 
-    private fun initializeRecorder() {
-        if (!hasRecordingPermissions()) {
-            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
-        } else {
-            recorder = MediaRecorder().also {
-                it.setAudioSource(MediaRecorder.AudioSource.MIC)
-                it.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-                it.setOutputFile(tempFileProvider.tempAudioRecordingFile.path)
-                it.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT)
-                it.prepare()
-            }
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         recordAudioBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_record_audio, container, false)
         recordAudioBinding.apply {
@@ -78,7 +65,17 @@ class RecordAudioFragment : RecordingContext, Fragment() {
 
     override fun onStart() {
         super.onStart()
-        initializeRecorder()
+        checkAudioRecordingPermission()
+        //TODO: find a better location possibly?
+        // Strange to pass recordAudioVM to itself, but it can't create Android objects
+        recordAudioViewModel.setState(
+            RecordStateStopped(
+                recordAudioViewModel,
+                MediaRecorder(),
+                MediaPlayer(),
+                tempFileProvider
+            )
+        )
         startListeners()
     }
 
@@ -88,16 +85,20 @@ class RecordAudioFragment : RecordingContext, Fragment() {
     }
 
     private fun hasRecordingPermissions(): Boolean {
-        hasAudioRecordingPermission =
-            checkSelfPermission(activity!!, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
-        return hasAudioRecordingPermission
+        return checkSelfPermission(activity!!, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun checkAudioRecordingPermission() {
+        if (!hasRecordingPermissions()) {
+            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == REQUESTCODE_AUDIO) {
             if (grantResults[0] == PERMISSION_GRANTED) {
                 hasAudioRecordingPermission = true
-                initializeRecorder()
+                checkAudioRecordingPermission()
             } else {
                 Toast.makeText(this.context, getString(R.string.permission_record_audio), Toast.LENGTH_LONG).show()
             }
@@ -118,6 +119,9 @@ class RecordAudioFragment : RecordingContext, Fragment() {
                 }
             }
         }
+        recordAudioViewModel.saveButtonClicked.observe(this, Observer {
+            eventViewModel.saveAudio(tempFileProvider.tempAudioRecordingFile)
+        })
         eventViewModel.recordingSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
         })
@@ -126,18 +130,6 @@ class RecordAudioFragment : RecordingContext, Fragment() {
         })
     }
 
-    private fun stopAndSaveRecording() {
-        recorder.stop()
-        eventViewModel.saveAudio(tempFileProvider.tempAudioRecordingFile)
-    }
-
-    private fun startRecordingAudio() {
-        if (!hasRecordingPermissions()) {
-            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
-        } else {
-            recorder.start()
-        }
-    }
 
     companion object {
         fun newInstance(): RecordAudioFragment {
