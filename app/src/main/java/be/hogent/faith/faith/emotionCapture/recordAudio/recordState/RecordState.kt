@@ -1,9 +1,8 @@
-package be.hogent.faith.faith.emotionCapture.recordAudio
+package be.hogent.faith.faith.emotionCapture.recordAudio.recordState
 
 interface RecordState {
     fun onRecordPressed()
     fun onPausePressed()
     fun onStopPressed()
-    fun onPlayPressed()
     fun onRestartPressed()
 }

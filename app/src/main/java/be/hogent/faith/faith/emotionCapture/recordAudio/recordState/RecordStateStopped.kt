@@ -1,11 +1,11 @@
-package be.hogent.faith.faith.emotionCapture.recordAudio
+package be.hogent.faith.faith.emotionCapture.recordAudio.recordState
 
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.util.Log
+import be.hogent.faith.faith.emotionCapture.recordAudio.RecordingContext
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.util.TAG
-import java.io.IOException
 
 class RecordStateStopped(
     private val context: RecordingContext,
@@ -24,35 +24,27 @@ class RecordStateStopped(
             start()
         }
 
-        Log.d(TAG, "Going to Record State: Recording")
-        context.setState(RecordStateRecording())
+        Log.d(TAG, "Stopped->Recording")
+        context.setState(
+            RecordStateRecording(
+                context,
+                recorder,
+                mediaPlayer,
+                tempFileProvider
+            )
+        )
     }
 
     override fun onPausePressed() {
-        Log.d(TAG, "Recorder was stopped, pausing does nothing")
+        Log.d(TAG, "Stopped->Stopped: Can't stop a paused recording")
     }
 
     override fun onStopPressed() {
-        Log.d(TAG, "Recorder was already stopped")
-    }
-
-    override fun onPlayPressed() {
-        mediaPlayer.apply {
-            try {
-                setDataSource(tempFileProvider.tempAudioRecordingFile.path)
-                prepare()
-                start()
-                Log.d(TAG, "Started playing audio from ${tempFileProvider.tempAudioRecordingFile.path}")
-            } catch (e: IOException) {
-                Log.e(TAG, "Preparing audio playback failed")
-            }
-        }
-
-        Log.d(TAG, "Going to Record State: Playing")
-        context.setState(RecordStatePlaying())
+        Log.d(TAG, "Stopped->Stopped: Recorder was already stopped")
     }
 
     override fun onRestartPressed() {
+        recorder.stop()
         Log.d(TAG, "Recorder was stopped, restarting stays in initial state: stopped")
     }
 
