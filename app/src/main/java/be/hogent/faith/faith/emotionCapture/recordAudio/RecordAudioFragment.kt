@@ -2,9 +2,11 @@ package be.hogent.faith.faith.emotionCapture.recordAudio
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,9 +21,11 @@ import be.hogent.faith.databinding.FragmentRecordAudioBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel.RecordingStatus.PAUSED
 import be.hogent.faith.faith.util.TempFileProvider
-import org.koin.android.ext.android.get
+import be.hogent.faith.util.TAG
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import java.io.IOError
+import java.io.IOException
 
 const val REQUESTCODE_AUDIO = 12
 
@@ -102,6 +106,18 @@ class RecordAudioFragment : Fragment() {
     }
 
     private fun startListeners() {
+        recordAudioBinding.btnRecordAudioPlay.setOnClickListener {
+            MediaPlayer().apply {
+                try {
+                    setDataSource(tempFileProvider.tempAudioRecordingFile.path)
+                    prepare()
+                    start()
+                    Log.d(TAG, "Started playing audio from ${tempFileProvider.tempAudioRecordingFile.path}")
+                } catch (e: IOException) {
+                    Log.e(TAG, "Preparing audio playback failed")
+                }
+            }
+        }
         recordAudioViewModel.recordButtonClicked.observe(this, Observer {
             if (recordAudioViewModel.recordingStatus.value == PAUSED) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

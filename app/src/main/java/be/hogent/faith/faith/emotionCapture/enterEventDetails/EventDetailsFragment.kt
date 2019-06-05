@@ -14,6 +14,8 @@ import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.fragment_enter_event_details.background_enter_event_details
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -53,6 +55,7 @@ class EventDetailsFragment : Fragment() {
         eventDetailsBinding.eventViewModel = eventViewModel
         eventDetailsBinding.lifecycleOwner = this@EventDetailsFragment
 
+
         return eventDetailsBinding.root
     }
 
@@ -67,6 +70,7 @@ class EventDetailsFragment : Fragment() {
         super.onStart()
         startListeners()
         updateUI()
+        Glide.with(this).load(R.drawable.park_faith).into(background_enter_event_details)
     }
 
     private fun updateUI() {
