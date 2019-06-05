@@ -28,7 +28,7 @@ import java.io.IOException
 
 const val REQUESTCODE_AUDIO = 12
 
-class RecordAudioFragment : Fragment() {
+class RecordAudioFragment : RecordingContext, Fragment() {
     private val eventViewModel: EventViewModel by sharedViewModel()
 
     private val recordAudioViewModel: RecordAudioViewModel by sharedViewModel()
