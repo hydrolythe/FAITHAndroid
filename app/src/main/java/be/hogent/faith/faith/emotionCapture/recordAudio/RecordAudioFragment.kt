@@ -24,7 +24,6 @@ import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.util.TAG
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import java.io.IOError
 import java.io.IOException
 
 const val REQUESTCODE_AUDIO = 12

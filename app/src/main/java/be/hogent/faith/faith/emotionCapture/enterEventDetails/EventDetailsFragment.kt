@@ -55,7 +55,6 @@ class EventDetailsFragment : Fragment() {
         eventDetailsBinding.eventViewModel = eventViewModel
         eventDetailsBinding.lifecycleOwner = this@EventDetailsFragment
 
-
         return eventDetailsBinding.root
     }
 
