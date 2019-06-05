@@ -1,13 +1,8 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStatePaused
-import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateRecording
-import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateStopped
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 
 class RecordAudioViewModelTest {
 

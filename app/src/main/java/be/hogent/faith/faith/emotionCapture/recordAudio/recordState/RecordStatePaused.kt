@@ -38,5 +38,4 @@ class RecordStatePaused(
     override fun onRestartPressed() {
         Log.d(TAG, "Recorder was paused, restarting stays in initial state: stopped")
     }
-
 }

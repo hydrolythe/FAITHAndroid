@@ -66,7 +66,7 @@ class RecordAudioFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         checkAudioRecordingPermission()
-        //TODO: find a better location possibly?
+        // TODO: find a better location possibly?
         // Strange to pass recordAudioVM to itself, but it can't create Android objects
         recordAudioViewModel.setState(
             RecordStateStopped(
@@ -106,7 +106,7 @@ class RecordAudioFragment : Fragment() {
     }
 
     private fun startListeners() {
-        //TODO: convert to also use a state for play/pause/restart
+        // TODO: convert to also use a state for play/pause/restart
         recordAudioBinding.btnRecordAudioPlay.setOnClickListener {
             MediaPlayer().apply {
                 try {
@@ -129,7 +129,6 @@ class RecordAudioFragment : Fragment() {
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
         })
     }
-
 
     companion object {
         fun newInstance(): RecordAudioFragment {

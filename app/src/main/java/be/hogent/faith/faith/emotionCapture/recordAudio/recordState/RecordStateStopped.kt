@@ -47,5 +47,4 @@ class RecordStateStopped(
         recorder.stop()
         Log.d(TAG, "Recorder was stopped, restarting stays in initial state: stopped")
     }
-
 }
