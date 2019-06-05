@@ -105,6 +105,7 @@ class RecordAudioFragment : RecordingContext, Fragment() {
     }
 
     private fun startListeners() {
+        //TODO: convert to also use a state for play/pause/restart
         recordAudioBinding.btnRecordAudioPlay.setOnClickListener {
             MediaPlayer().apply {
                 try {
@@ -117,31 +118,6 @@ class RecordAudioFragment : RecordingContext, Fragment() {
                 }
             }
         }
-        recordAudioViewModel.recordButtonClicked.observe(this, Observer {
-            if (recordAudioViewModel.recordingStatus.value == PAUSED) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    recorder.resume()
-                } else {
-                    Toast.makeText(context, R.string.error_pause_not_supported, Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                startRecordingAudio()
-            }
-        })
-        recordAudioViewModel.stopButtonClicked.observe(this, Observer {
-            stopAndSaveRecording()
-        })
-        recordAudioViewModel.pauseButtonClicked.observe(this, Observer {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                recorder.pause()
-            } else {
-                // TODO: pauzeerknop niet tonen bij te lage SKD?
-                Toast.makeText(context, R.string.error_pause_not_supported, Toast.LENGTH_SHORT).show()
-            }
-        })
-        recordAudioViewModel.restartButtonClicked.observe(this, Observer {
-            recorder.reset()
-        })
         eventViewModel.recordingSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
         })

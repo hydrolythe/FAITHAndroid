@@ -20,7 +20,7 @@ class RecordAudioViewModelTest {
 
     @Test
     fun recordAudioVM_initialisation_correctState() {
-        assertEquals(RecordAudioViewModel.RecordingStatus.INITIAL, viewModel.recordingStatus.value)
+        assertEquals(RecordAudioViewModel.RecordingStatus.INITIAL, viewModel.recordState.value)
     }
 
     @Test
@@ -29,7 +29,7 @@ class RecordAudioViewModelTest {
         viewModel.onRecordButtonClicked()
 
         // Assert
-        assertEquals(RecordAudioViewModel.RecordingStatus.RECORDING, viewModel.recordingStatus.value)
+        assertEquals(RecordAudioViewModel.RecordingStatus.RECORDING, viewModel.recordState.value)
     }
 
     @Test
@@ -38,7 +38,7 @@ class RecordAudioViewModelTest {
         viewModel.onPauseButtonClicked()
 
         // Assert
-        assertEquals(RecordAudioViewModel.RecordingStatus.PAUSED, viewModel.recordingStatus.value)
+        assertEquals(RecordAudioViewModel.RecordingStatus.PAUSED, viewModel.recordState.value)
     }
 
     @Test
@@ -47,6 +47,6 @@ class RecordAudioViewModelTest {
         viewModel.onStopButtonClicked()
 
         // Assert
-        assertEquals(RecordAudioViewModel.RecordingStatus.STOPPED, viewModel.recordingStatus.value)
+        assertEquals(RecordAudioViewModel.RecordingStatus.STOPPED, viewModel.recordState.value)
     }
 }
