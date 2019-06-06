@@ -47,8 +47,10 @@ data class Event(
         _details += detail
     }
 
-    fun addNewPictureDetail(saveFile: File, photoName: String) {
-        addDetail(PictureDetail(saveFile, photoName))
+    fun addNewPictureDetail(saveFile: File, photoName: String): Detail {
+        val newDetail = PictureDetail(saveFile, photoName)
+        addDetail(newDetail)
+        return newDetail
     }
 
     fun addNewAudioDetail(saveFile: File, audioRecordingName: String) {

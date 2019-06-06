@@ -2,6 +2,7 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.Called
@@ -9,6 +10,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.observers.DisposableSingleObserver
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -49,13 +51,13 @@ class EventViewModelSavePhotoTest {
     @Test
     fun eventViewModel_savePhoto_usesCorrectParams() {
         // Arrange
-        val observer = slot<DisposableCompletableObserver>()
+        val observer = slot<DisposableSingleObserver<Detail>>()
         val params = slot<SaveEventPhotoUseCase.Params>()
 
         // Act
         viewModel.savePhoto(mockk())
-        verify { savePhotoUseCase.execute(capture(params), capture(observer)) }
-        observer.captured.onComplete()
+        verify { savePhotoUseCase.execute(capture(params),  capture(observer)) }
+        observer.captured.onSuccess(mockk())
 
         // Assert
         assertEquals(event, params.captured.event)
@@ -64,9 +66,9 @@ class EventViewModelSavePhotoTest {
     @Test
     fun eventViewModel_savePhoto_notifiesWhenSaveFails() {
         // Arrange
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
+        val successObserver = mockk<Observer<Detail>>(relaxed = true)
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val observer = slot<DisposableCompletableObserver>()
+        val observer =slot<DisposableSingleObserver<Detail>>()
 
         viewModel.photoSavedSuccessFully.observeForever(successObserver)
         viewModel.errorMessage.observeForever(errorObserver)
@@ -84,9 +86,9 @@ class EventViewModelSavePhotoTest {
     @Test
     fun eventViewModel_savePhoto_notifiesWhenSaveCompletes() {
         // Arrange
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
+        val successObserver = mockk<Observer<Detail>>(relaxed = true)
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val observer = slot<DisposableCompletableObserver>()
+        val observer = slot<DisposableSingleObserver<Detail>>()
 
         viewModel.photoSavedSuccessFully.observeForever(successObserver)
         viewModel.errorMessage.observeForever(errorObserver)
@@ -94,7 +96,7 @@ class EventViewModelSavePhotoTest {
         // Act
         viewModel.savePhoto(mockk())
         verify { savePhotoUseCase.execute(any(), capture(observer)) }
-        observer.captured.onComplete()
+        observer.captured.onSuccess(mockk())
 
         // Assert
         verify { successObserver.onChanged(any()) }

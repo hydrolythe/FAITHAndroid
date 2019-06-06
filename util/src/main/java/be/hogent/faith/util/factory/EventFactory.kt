@@ -21,6 +21,7 @@ object EventFactory {
                     is AudioDetail -> event.addNewAudioDetail(detail.file, detail.name!!)
                     is PictureDetail -> event.addNewPictureDetail(detail.file, detail.name!!)
                     is TextDetail -> event.addNewTextDetail(detail.file, detail.name!!)
+                    else -> event.addNewAudioDetail(detail.file, detail.name!!)
                 }
             }
         }

@@ -101,7 +101,7 @@ class TakePhotoFragment : Fragment() {
         })
         eventViewModel.photoSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT).show()
-            takePhotoViewModel.setSavedPhoto(eventViewModel.getLatestDetail()!!.file)
+            takePhotoViewModel.setSavedPhoto(it.file)
         })
     }
 
