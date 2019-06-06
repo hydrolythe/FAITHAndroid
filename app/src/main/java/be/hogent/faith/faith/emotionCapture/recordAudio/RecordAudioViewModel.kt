@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordState
+import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordingContext
 import be.hogent.faith.faith.util.SingleLiveEvent
 
 class RecordAudioViewModel : RecordingContext, ViewModel() {
@@ -23,7 +24,7 @@ class RecordAudioViewModel : RecordingContext, ViewModel() {
         pauseSupported.value = false
     }
 
-    override fun setState(newState: RecordState) {
+    override fun goToState(newState: RecordState) {
         _recordState.value = newState
     }
 
