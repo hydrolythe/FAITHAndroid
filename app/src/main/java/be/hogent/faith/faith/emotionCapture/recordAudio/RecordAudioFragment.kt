@@ -19,7 +19,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentRecordAudioBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateStopped
+import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateInitial
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.util.TAG
 import org.koin.android.ext.android.inject
@@ -68,13 +68,8 @@ class RecordAudioFragment : Fragment() {
         checkAudioRecordingPermission()
         // TODO: find a better location possibly?
         // Strange to pass recordAudioVM to itself, but it can't create Android objects
-        recordAudioViewModel.setState(
-            RecordStateStopped(
-                recordAudioViewModel,
-                MediaRecorder(),
-                MediaPlayer(),
-                tempFileProvider
-            )
+        recordAudioViewModel.goToState(
+            RecordStateInitial(recordAudioViewModel, tempFileProvider)
         )
         startListeners()
     }

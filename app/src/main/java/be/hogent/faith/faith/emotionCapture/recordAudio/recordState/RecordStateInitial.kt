@@ -5,13 +5,14 @@ import android.util.Log
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.util.TAG
 
-class RecordStateStopped(
+class RecordStateInitial(
     private val context: RecordingContext,
-    private val recorder: MediaRecorder,
     private val tempFileProvider: TempFileProvider
 ) : RecordState {
 
-    override fun onRecordPressed() {
+    private val recorder = MediaRecorder()
+
+    init {
         recorder.apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
@@ -20,8 +21,11 @@ class RecordStateStopped(
             prepare()
             start()
         }
+        Log.d(TAG, "Recorder initialised")
+    }
 
-        Log.d(TAG, "Stopped->Recording")
+    override fun onRecordPressed() {
+        recorder.start()
         context.goToState(
             RecordStateRecording(
                 context,
