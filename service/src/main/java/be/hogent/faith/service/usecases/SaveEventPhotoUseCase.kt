@@ -1,26 +1,27 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.usecases.base.CompletableUseCase
+import be.hogent.faith.service.usecases.base.SingleUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
+import io.reactivex.Single
 import java.io.File
 
 class SaveEventPhotoUseCase(
     private val storageRepository: StorageRepository,
     observeScheduler: Scheduler
-) : CompletableUseCase<SaveEventPhotoUseCase.Params>(
+) : SingleUseCase<Detail, SaveEventPhotoUseCase.Params>(
     observeScheduler
 ) {
-    override fun buildUseCaseObservable(params: Params): Completable {
-        return Completable.fromSingle(
-            storageRepository.saveEventPhoto(
+    override fun buildUseCaseSingle(params: Params): Single<Detail> {
+            return      storageRepository.saveEventPhoto(
                 params.tempPhotoFile, params.event
-            ).doOnSuccess { storedFile ->
+            ).map{ storedFile ->
                 params.event.addNewPictureDetail(storedFile, params.photoName)
             }
-        )
     }
 
     data class Params(

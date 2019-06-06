@@ -40,7 +40,7 @@ class SaveEventPhotoUseCaseTest {
         } returns Single.just(mockk())
 
         // Act
-        saveEventPhotoUseCase.buildUseCaseObservable(
+        saveEventPhotoUseCase.buildUseCaseSingle(
             SaveEventPhotoUseCase.Params(tempRecordingFile, event, photoName)
         ).test()
             .assertNoErrors()
@@ -51,20 +51,23 @@ class SaveEventPhotoUseCaseTest {
     }
 
     @Test
-    fun takelPhotoUC_executeNormally_addedToEvent() {
+    fun takelPhotoUC_executeNormally_addedToEventAndReturnsDetail() {
         // Arrange
         every {
             storageRepository.saveEventPhoto(tempRecordingFile, event)
         } returns Single.just(mockk())
 
         // Act
-        saveEventPhotoUseCase.buildUseCaseObservable(
+        val result = saveEventPhotoUseCase.buildUseCaseSingle(
             SaveEventPhotoUseCase.Params(tempRecordingFile, event, photoName)
-        ).test()
-            .assertNoErrors()
-            .assertComplete()
+        )
 
-        // Assert
+        result.test()
+            .assertNoErrors()
+            .assertValue{newDetail -> newDetail is PictureDetail}
+            .assertValue{newDetail -> newDetail.name == photoName }
+
+           // Assert
         assertTrue(event.details.isNotEmpty())
 
         val resultingDetail = event.details.first()
@@ -80,7 +83,7 @@ class SaveEventPhotoUseCaseTest {
         } returns Single.error(IOException())
 
         // Act
-        saveEventPhotoUseCase.buildUseCaseObservable(
+        saveEventPhotoUseCase.buildUseCaseSingle(
             SaveEventPhotoUseCase.Params(tempRecordingFile, event, photoName)
         ).test()
             .assertError(IOException::class.java)
