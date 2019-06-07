@@ -6,23 +6,17 @@ import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.util.TAG
 
 class RecordStateStopped(
-    private val context: RecordingContext,
-    private val recorder: MediaRecorder,
-    private val tempFileProvider: TempFileProvider
-) : RecordState {
+    context: RecordingContext,
+    recorder: MediaRecorder,
+    tempFileProvider: TempFileProvider
+) : RecordState(context, recorder, tempFileProvider) {
 
     override fun onRecordPressed() {
-        recorder.apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            setOutputFile(tempFileProvider.tempAudioRecordingFile.path)
-            setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT)
-            prepare()
-            start()
-        }
+        reinitialiseRecorder()
+        recorder.start()
 
         Log.d(TAG, "Stopped->Recording")
-        context.goToState(
+        context.goToRecordState(
             RecordStateRecording(
                 context,
                 recorder,
@@ -40,7 +34,8 @@ class RecordStateStopped(
     }
 
     override fun onRestartPressed() {
-        recorder.stop()
-        Log.d(TAG, "Recorder was stopped, restarting stays in initial state: stopped")
+        reinitialiseRecorder()
+        context.goToRecordState(RecordStateInitial(context, tempFileProvider))
+        Log.d(TAG, "Stopped -> Initial")
     }
 }

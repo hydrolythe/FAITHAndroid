@@ -3,17 +3,29 @@ package be.hogent.faith.faith.emotionCapture.recordAudio
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayContext
+import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayState
+import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayStateInitial
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordState
+import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateInitial
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordingContext
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.faith.util.TempFileProvider
 
-class RecordAudioViewModel : RecordingContext, ViewModel() {
+class RecordAudioViewModel(
+    val tempFileProvider: TempFileProvider
+) : RecordingContext, PlayContext, ViewModel() {
 
     private val _recordState = MutableLiveData<RecordState>()
     val recordState: LiveData<RecordState>
         get() = _recordState
 
+    private val _playState = MutableLiveData<PlayState>()
+    val playState: LiveData<PlayState>
+        get() = _playState
+
     /**
+     *
      * True when pausing an audio recording is supported.
      * Support starts at SDK 24.
      * Default false, users of this ViewModel should change this to be true when supported.
@@ -22,10 +34,16 @@ class RecordAudioViewModel : RecordingContext, ViewModel() {
 
     init {
         pauseSupported.value = false
+        _recordState.value = RecordStateInitial(this, tempFileProvider)
+        _playState.value = PlayStateInitial(this, tempFileProvider)
     }
 
-    override fun goToState(newState: RecordState) {
-        _recordState.value = newState
+    override fun goToRecordState(newState: RecordState) {
+        _recordState.postValue(newState)
+    }
+
+    override fun goToPlayState(newState: PlayState) {
+        _playState.postValue(newState)
     }
 
     private val _recordButtonClicked = SingleLiveEvent<Unit>()
