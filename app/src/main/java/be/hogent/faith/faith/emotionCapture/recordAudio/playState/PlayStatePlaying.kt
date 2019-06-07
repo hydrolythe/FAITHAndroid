@@ -5,24 +5,23 @@ import android.util.Log
 import be.hogent.faith.util.TAG
 
 class PlayStatePlaying(
-    private val context: PlayContext,
-    private val mediaPlayer: MediaPlayer
-) : PlayState {
+    context: PlayContext,
+    mediaPlayer: MediaPlayer
+) : PlayState(context, mediaPlayer) {
 
     override fun onPlayPressed() {
         Log.d(TAG, "Playing -> Playing: was already playing")
-
     }
 
     override fun onPausePressed() {
         mediaPlayer.pause()
-        context.goToState(PlayStatePaused(context, mediaPlayer))
+        context.goToPlayState(PlayStatePaused(context, mediaPlayer))
         Log.d(TAG, "Playing -> Paused")
     }
 
     override fun onStopPressed() {
         mediaPlayer.stop()
-        context.goToState(PlayStatePaused(context, mediaPlayer))
-        Log.d(TAG, "Paused -> Stopped")
+        context.goToPlayState(PlayStateStopped(context, mediaPlayer))
+        Log.d(TAG, "Playing -> Stopped")
     }
 }

@@ -5,18 +5,17 @@ import android.util.Log
 import be.hogent.faith.util.TAG
 
 class PlayStateStopped(
-    private val context: PlayContext,
-    private val mediaPlayer: MediaPlayer
-) : PlayState {
+    context: PlayContext,
+    mediaPlayer: MediaPlayer
+) : PlayState(context, mediaPlayer) {
 
     override fun onPlayPressed() {
         mediaPlayer.start()
-        context.goToState(PlayStatePlaying(context, mediaPlayer))
+        context.goToPlayState(PlayStatePlaying(context, mediaPlayer))
     }
 
     override fun onPausePressed() {
         Log.d(TAG, "Stopped -> Stopped: can't pause when stopped")
-
     }
 
     override fun onStopPressed() {

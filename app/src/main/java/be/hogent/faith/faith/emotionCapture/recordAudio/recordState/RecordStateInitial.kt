@@ -6,45 +6,30 @@ import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.util.TAG
 
 class RecordStateInitial(
-    private val context: RecordingContext,
-    private val tempFileProvider: TempFileProvider
-) : RecordState {
-
-    private val recorder = MediaRecorder()
+    context: RecordingContext,
+    tempFileProvider: TempFileProvider
+) : RecordState(context, MediaRecorder(), tempFileProvider) {
 
     init {
-        recorder.apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            setOutputFile(tempFileProvider.tempAudioRecordingFile.path)
-            setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT)
-            prepare()
-            start()
-        }
+        initialiseRecorder()
         Log.d(TAG, "Recorder initialised")
     }
 
     override fun onRecordPressed() {
         recorder.start()
-        context.goToState(
-            RecordStateRecording(
-                context,
-                recorder,
-                tempFileProvider
-            )
-        )
+        context.goToRecordState(RecordStateRecording(context, recorder, tempFileProvider))
     }
 
     override fun onPausePressed() {
-        Log.d(TAG, "Stopped->Stopped: Can't stop a paused recording")
+        Log.d(TAG, "Initial -> Initial: Can't pause a recording that hasn't started yet.")
     }
 
     override fun onStopPressed() {
-        Log.d(TAG, "Stopped->Stopped: Recorder was already stopped")
+        Log.d(TAG, "Initial -> Initial: can't stop a recording that hasn't started yet.")
     }
 
     override fun onRestartPressed() {
-        recorder.stop()
-        Log.d(TAG, "Recorder was stopped, restarting stays in initial state: stopped")
+        reinitialiseRecorder()
+        Log.d(TAG, "Initial -> Initial: can't restart a recording that hasn't started yet.")
     }
 }

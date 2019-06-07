@@ -2,11 +2,8 @@ package be.hogent.faith.faith.emotionCapture.recordAudio
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.media.MediaPlayer
-import android.media.MediaRecorder
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +16,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentRecordAudioBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateInitial
-import be.hogent.faith.faith.util.TempFileProvider
-import be.hogent.faith.util.TAG
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import java.io.IOException
 
 const val REQUESTCODE_AUDIO = 12
 
@@ -38,9 +30,6 @@ class RecordAudioFragment : Fragment() {
 
     private var hasAudioRecordingPermission = false
 
-    private lateinit var recorder: MediaRecorder
-
-    private val tempFileProvider by inject<TempFileProvider>()
     /**
      * The Dialog that requests the user to enter a recordingName for the recording.
      * It is saved here so we can dismiss it once the cancel or save buttons are clicked.
@@ -66,17 +55,12 @@ class RecordAudioFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         checkAudioRecordingPermission()
-        // TODO: find a better location possibly?
-        // Strange to pass recordAudioVM to itself, but it can't create Android objects
-        recordAudioViewModel.goToState(
-            RecordStateInitial(recordAudioViewModel, tempFileProvider)
-        )
         startListeners()
     }
 
     override fun onStop() {
         super.onStop()
-        recorder.release()
+        //TODO: find a way to release the recorder
     }
 
     private fun hasRecordingPermissions(): Boolean {
@@ -101,21 +85,8 @@ class RecordAudioFragment : Fragment() {
     }
 
     private fun startListeners() {
-        // TODO: convert to also use a state for play/pause/restart
-        recordAudioBinding.btnRecordAudioPlay.setOnClickListener {
-            MediaPlayer().apply {
-                try {
-                    setDataSource(tempFileProvider.tempAudioRecordingFile.path)
-                    prepare()
-                    start()
-                    Log.d(TAG, "Started playing audio from ${tempFileProvider.tempAudioRecordingFile.path}")
-                } catch (e: IOException) {
-                    Log.e(TAG, "Preparing audio playback failed")
-                }
-            }
-        }
         recordAudioViewModel.saveButtonClicked.observe(this, Observer {
-            eventViewModel.saveAudio(tempFileProvider.tempAudioRecordingFile)
+            eventViewModel.saveAudio(recordAudioViewModel.tempFileProvider.tempAudioRecordingFile)
         })
         eventViewModel.recordingSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
