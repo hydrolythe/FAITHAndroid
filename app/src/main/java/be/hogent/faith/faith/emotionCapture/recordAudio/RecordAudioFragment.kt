@@ -60,7 +60,7 @@ class RecordAudioFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        //TODO: find a way to release the recorder
+        // TODO: find a way to release the recorder
     }
 
     private fun hasRecordingPermissions(): Boolean {
