@@ -31,5 +31,4 @@ abstract class RecordState(
         recorder.reset()
         initialiseRecorder()
     }
-
 }
