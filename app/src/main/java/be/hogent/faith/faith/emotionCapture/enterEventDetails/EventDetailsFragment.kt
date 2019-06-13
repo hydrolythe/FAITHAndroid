@@ -14,8 +14,15 @@ import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
+import be.hogent.faith.util.TAG
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_inkleuren
+import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_zittend
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import java.util.UUID
 
@@ -31,6 +38,8 @@ class EventDetailsFragment : Fragment() {
     private lateinit var eventDetailsBinding: be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
 
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
+
+    private val avatarProvider: AvatarProvider by inject()
 
 /***
  * Momenteel in commentaar gezet omdat de save Event knop nu op de details wordt getoond. In de toekomst zal het misschien toch nodig
@@ -84,6 +93,11 @@ class EventDetailsFragment : Fragment() {
         // Update adapter when event changes
         eventViewModel.event.observe(this, Observer { event ->
             detailThumbnailsAdapter?.updateDetailsList(event.details)
+        })
+
+        userViewModel.user.observe(this, Observer{user ->
+            Glide.with(context!!).load(avatarProvider.getAvatarDrawableZitten(user.avatarName)).diskCacheStrategy(DiskCacheStrategy.ALL).centerCrop().into(img_event_details_avatar_zittend)
+            Glide.with(context!!).load(avatarProvider.getAvatarDrawableGezicht(user.avatarName)).diskCacheStrategy(DiskCacheStrategy.ALL).centerCrop().into(img_event_details_avatar_inkleuren)
         })
 
         // Four main actions
