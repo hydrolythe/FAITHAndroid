@@ -236,17 +236,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.7" />
+                app:layout_constraintGuide_percent="0.72" />
 
             <ImageView
                 android:id="@+id/img_event_details_avatar_zittend"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/avatar_zittend"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 app:layout_constraintBottom_toTopOf="@+id/guide_avatar_bottom"
-                app:layout_constraintEnd_toStartOf="@+id/guide_avatar_right"
                 app:layout_constraintStart_toStartOf="@+id/guide_avatar_left"
                 app:layout_constraintTop_toBottomOf="@+id/guide_avatar_top"
                 app:srcCompat="@drawable/meisje_stoer_zitten" />
@@ -256,38 +255,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_end="121dp"
-                app:layout_constraintGuide_percent="0.83" />
+                app:layout_constraintGuide_end="93dp"
+                app:layout_constraintGuide_percent="0.88" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_avatar_inkleuren_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.8" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_avatar_inkleuren_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.95" />
+                app:layout_constraintGuide_percent="0.82" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_avatar_inkleuren_bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.96" />
+                app:layout_constraintGuide_percent="0.93" />
 
             <ImageView
                 android:id="@+id/img_event_details_avatar_inkleuren"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:scaleType="centerCrop"
                 android:contentDescription="@string/avatar_inkleuren"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
                 app:layout_constraintBottom_toTopOf="@+id/guide_avatar_inkleuren_bottom"
-                app:layout_constraintEnd_toStartOf="@+id/guide_avatar_inkleuren_right"
                 app:layout_constraintStart_toStartOf="@+id/guide_avatar_inkleuren_left"
                 app:layout_constraintTop_toBottomOf="@+id/guide_avatar_inkleuren_top"
                 app:srcCompat="@drawable/meisje_stoer_gezicht" />
