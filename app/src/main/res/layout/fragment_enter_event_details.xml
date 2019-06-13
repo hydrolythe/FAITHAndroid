@@ -18,7 +18,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/park_faith"
+            android:background="@drawable/park"
             android:contentDescription="@string/descr_city_park" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -99,9 +99,8 @@
                 android:layout_marginEnd="8dp"
                 android:inputType="text"
                 android:text="@={eventViewModel.eventTitle}"
-                app:layout_constraintBaseline_toBaselineOf="@id/label_event_details_event_title"
-                app:layout_constraintEnd_toStartOf="@+id/guide_left_pole"
-                app:layout_constraintStart_toEndOf="@id/label_event_details_event_title"
+                app:layout_constraintBaseline_toBaselineOf="@id/label_event_details_title"
+                app:layout_constraintStart_toEndOf="@id/label_event_details_title"
                 tools:text="Titel van de gebeurtenis" />
 
             <androidx.constraintlayout.widget.Guideline
@@ -183,8 +182,10 @@
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_event_details_gotoEmotionAvatar"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/guide_horizontal_details" />
+                app:layout_constraintTop_toBottomOf="@id/guide_horizontal_details"
+                app:layout_constraintVertical_bias="0.806" />
 
             <!--ImageButton
                 android:id="@+id/btn_event_send"
@@ -208,6 +209,88 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guide_vertical_avatar"
                 app:layout_constraintTop_toTopOf="@+id/guide_horizontal_details" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.18" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.33" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.3392613" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.7" />
+
+            <ImageView
+                android:id="@+id/img_event_details_avatar_zittend"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/avatar_zittend"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toTopOf="@+id/guide_avatar_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/guide_avatar_right"
+                app:layout_constraintStart_toStartOf="@+id/guide_avatar_left"
+                app:layout_constraintTop_toBottomOf="@+id/guide_avatar_top"
+                app:srcCompat="@drawable/meisje_stoer_zitten" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_inkleuren_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="121dp"
+                app:layout_constraintGuide_percent="0.83" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_inkleuren_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.8" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_inkleuren_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.95" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_inkleuren_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.96" />
+
+            <ImageView
+                android:id="@+id/img_event_details_avatar_inkleuren"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="@string/avatar_inkleuren"
+                app:layout_constraintBottom_toTopOf="@+id/guide_avatar_inkleuren_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/guide_avatar_inkleuren_right"
+                app:layout_constraintStart_toStartOf="@+id/guide_avatar_inkleuren_left"
+                app:layout_constraintTop_toBottomOf="@+id/guide_avatar_inkleuren_top"
+                app:srcCompat="@drawable/meisje_stoer_gezicht" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
