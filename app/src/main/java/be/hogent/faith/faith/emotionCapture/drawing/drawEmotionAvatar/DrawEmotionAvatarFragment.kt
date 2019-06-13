@@ -82,7 +82,7 @@ class DrawEmotionAvatarFragment : DrawFragment() {
         drawView.setAlpha(70)
 
         if (avatarOutlineResId != NO_AVATAR) {
-            drawView.setPaintedBackground(ContextCompat.getDrawable(context!!, R.drawable.outline) as BitmapDrawable)
+            drawView.setPaintedBackground(ContextCompat.getDrawable(context!!, avatarOutlineResId) as BitmapDrawable)
         }
 
         drawView.addDrawViewListener(object : DrawView.DrawViewListener {
