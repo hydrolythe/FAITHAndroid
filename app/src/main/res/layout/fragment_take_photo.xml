@@ -39,16 +39,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <ImageView
             android:id="@+id/btn_takePhoto_takePhoto"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
             android:layout_margin="8dp"
             android:onClick="@{() -> photoViewModel.onTakePhotoButtonClicked()}"
             android:text="@string/frag_takePhoto_takePhoto"
             android:visibility="@{safeUnbox(photoViewModel.visibilityTakePhoto)}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/btn_take_picture"/>
 
         <ImageButton
             android:id="@+id/btn_takePhoto_Ok"
@@ -75,7 +78,8 @@
             android:tint="@color/colorAccent"
             android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenNotSaved)}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_takePhoto_Ok" />
+            app:layout_constraintEnd_toStartOf="@+id/btn_takePhoto_Ok"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

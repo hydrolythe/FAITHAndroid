@@ -40,4 +40,9 @@ class ResourceAvatarProvider(private val context: Context) :
         val resourceId = context.resources.getIdentifier(avatarResourceName, "drawable", context.packageName)
         return ContextCompat.getDrawable(context, resourceId)!!
     }
+
+    override fun getAvatarDrawableOutlineId(avatarName:String) : Int{
+        return context.getResources().getIdentifier("${avatarName}_outline", "drawable",
+            context.getPackageName());
+    }
 }
