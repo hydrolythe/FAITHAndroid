@@ -90,35 +90,48 @@ class RecordAudioViewModel(
     }
 
     fun onPauseButtonClicked() {
-        recordState.value!!.onPausePressed()
-        _pauseButtonClicked.call()
+        if (pauseSupported.value!!) {
+            recordState.value!!.onPausePressed()
+            _pauseButtonClicked.call()
+        }
+    }
+
+    fun onPlayButtonClicked() {
+        _playState.value!!.onPlayPressed()
+        _playButtonClicked.call()
     }
 
     fun onSaveButtonClicked() {
         _saveButtonClicked.call()
     }
 
-    val pauseButtonVisible = Transformations.map<RecordState, Int>(_recordState) { recordState ->
-        when (recordState) {
-            is RecordStatePaused -> View.GONE
-            else -> View.VISIBLE
+    val pauseButtonVisible: LiveData<Int> = Transformations.map<RecordState, Int>(_recordState) { recordState ->
+        if (!pauseSupported.value!!) {
+            View.GONE
+        } else {
+            when (recordState) {
+                is RecordStatePaused -> View.GONE
+                is RecordStateStopped -> View.GONE
+                else -> View.VISIBLE
+            }
         }
     }
-    val stopButtonVisible = Transformations.map<RecordState, Int>(_recordState) { recordState ->
+    val stopButtonVisible: LiveData<Int> = Transformations.map<RecordState, Int>(_recordState) { recordState ->
         when (recordState) {
             is RecordStateStopped -> View.GONE
             else -> View.VISIBLE
         }
     }
-    val recordButtonVisible = Transformations.map<RecordState, Int>(_recordState) { recordState ->
+    val recordButtonVisible: LiveData<Int> = Transformations.map<RecordState, Int>(_recordState) { recordState ->
         when (recordState) {
             is RecordStateInitial -> View.VISIBLE
             is RecordStatePaused -> View.VISIBLE
+            is RecordStateStopped -> View.VISIBLE
             else -> View.GONE
         }
     }
 
-    val restartButtonVisible = Transformations.map<RecordState, Int>(_recordState) { recordState ->
+    val restartButtonVisible: LiveData<Int> = Transformations.map<RecordState, Int>(_recordState) { recordState ->
         when (recordState) {
             is RecordStateInitial -> View.GONE
             else -> View.VISIBLE
