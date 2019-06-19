@@ -18,12 +18,12 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_recordAudio_play"
             android:layout_width="wrap_content"
+            android:layout_margin="32dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button"
+            android:src="@drawable/audio_play"
             tools:text="Play" />
 
         <ImageButton
@@ -48,6 +48,7 @@
             android:id="@+id/btn_recordAudio_restart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/audio_restart"
             android:layout_margin="32dp"
             android:contentDescription="@string/description_restart_recording"
             android:onClick="@{() -> recordAudioViewModel.onRestartButtonClicked()}"/>
