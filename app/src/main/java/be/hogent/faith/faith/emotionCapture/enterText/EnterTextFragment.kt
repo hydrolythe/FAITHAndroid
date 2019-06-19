@@ -48,7 +48,6 @@ class EnterTextFragment : Fragment() {
         editor.setEditorHeight(200)
         editor.setEditorFontSize(30)
         editor.setPadding(10, 10, 10, 10)
-        editor.setPlaceholder("...")
         editor.focusEditor()
         val inputMethodManager = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT)
@@ -71,7 +70,7 @@ class EnterTextFragment : Fragment() {
             editor.setUnderline()
         })
         enterTextViewModel.selectedFontSize.observe(this, Observer { newSize ->
-            editor.setFontSize(newSize)
+            editor.setFontSize(newSize.size)
         })
         eventViewModel.errorMessage.observe(this, Observer { errorMessageResourceId ->
                 Toast.makeText(context, errorMessageResourceId, Toast.LENGTH_SHORT).show()

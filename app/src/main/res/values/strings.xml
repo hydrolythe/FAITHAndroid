@@ -92,4 +92,9 @@
     <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
     <string name="avatar_zittend">avatar zittend</string>
     <string name="avatar_inkleuren">avatar inkleuren</string>
+    <string name="editor">editor</string>
+    <string name="tekenen">tekenen</string>
+    <string name="choose_underline">kies onderlijnd</string>
+    <string name="choose_italic">kies cursief</string>
+    <string name="choose_bold">kies vetjes</string>
 </resources>

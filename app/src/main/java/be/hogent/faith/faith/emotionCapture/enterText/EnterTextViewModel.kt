@@ -19,37 +19,40 @@ class EnterTextViewModel : ViewModel() {
     val selectedTextColor: LiveData<Int>
         get() = _selectedTextColor
 
-    private val _selectedFontSize = MutableLiveData<@ColorInt Int>()
-    val selectedFontSize: LiveData<Int>
+    private val _selectedFontSize = MutableLiveData<FontSize>()
+    val selectedFontSize: LiveData<FontSize>
         get() = _selectedFontSize
 
-    private val _boldClicked = SingleLiveEvent<Unit>()
-    val boldClicked: LiveData<Unit>
+    private val _boldClicked = MutableLiveData<Boolean>()
+    val boldClicked: LiveData<Boolean>
         get() = _boldClicked
 
-    private val _italicClicked = SingleLiveEvent<Unit>()
-    val italicClicked: LiveData<Unit>
+    private val _italicClicked = MutableLiveData<Boolean>()
+    val italicClicked: LiveData<Boolean>
         get() = _italicClicked
 
-    private val _underlineClicked = SingleLiveEvent<Unit>()
-    val underlineClicked: LiveData<Unit>
+    private val _underlineClicked = MutableLiveData<Boolean>()
+    val underlineClicked: LiveData<Boolean>
         get() = _underlineClicked
 
     init {
         _selectedTextColor.value = Color.BLACK
-        _selectedFontSize.value = FontSize.NORMAL.size
+        _selectedFontSize.value = FontSize.NORMAL
+        _boldClicked.value = false
+        _italicClicked.value=false
+        _underlineClicked.value = false
     }
 
     fun onBoldClicked() {
-        _boldClicked.call()
+        _boldClicked.value = !boldClicked.value!!
     }
 
     fun onItalicClicked() {
-        _italicClicked.call()
+        _italicClicked.value = !_italicClicked.value!!
     }
 
     fun onUnderlineClicked() {
-        _underlineClicked.call()
+        _underlineClicked.value = !_underlineClicked.value!!
     }
 
     fun pickTextColor(@ColorInt color: Int) {
@@ -57,12 +60,11 @@ class EnterTextViewModel : ViewModel() {
     }
 
     fun pickFontSize(fontSize: FontSize) {
-        _selectedFontSize.value = fontSize.size
+        _selectedFontSize.value = fontSize
     }
 
     fun textChanged(text: String) {
         _text.value = text
-        Log.d(TAG, "html $text")
     }
 
     enum class FontSize(val size: Int) {
