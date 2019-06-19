@@ -8,25 +8,24 @@ import java.io.IOException
 
 class PlayStateInitial(
     context: PlayContext,
-    tempFileProvider: TempFileProvider
+    private val tempFileProvider: TempFileProvider
 ) : PlayState(context, MediaPlayer()) {
 
-    init {
+    override fun onPlayPressed() {
         // An uninitialised MediaPlayer was passed to the superclass.
-        // Now we initialise it.
+        // We can only initialise it once the recording has been saved to the recordingFile, otherwise
+        // initialisation fails.
         with(mediaPlayer) {
             try {
                 setDataSource(tempFileProvider.tempAudioRecordingFile.path)
                 prepare()
-                start()
                 Log.d(TAG, "Started playing audio from ${tempFileProvider.tempAudioRecordingFile.path}")
             } catch (e: IOException) {
                 Log.e(TAG, "Preparing audio playback failed")
+                Log.e(TAG, "Reason: ${e.localizedMessage}")
             }
         }
-    }
 
-    override fun onPlayPressed() {
         mediaPlayer.start()
         context.goToPlayState(PlayStatePlaying(context, mediaPlayer))
     }
