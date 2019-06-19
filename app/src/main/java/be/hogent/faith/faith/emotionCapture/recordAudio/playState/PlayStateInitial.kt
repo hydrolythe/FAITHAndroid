@@ -35,6 +35,7 @@ class PlayStateInitial(
 
         mediaPlayer.setOnCompletionListener {
             context.goToPlayState(PlayStateStopped(context, mediaPlayer))
+            Log.d(TAG, "Playing -> Stopped: finished playback")
         }
     }
 
