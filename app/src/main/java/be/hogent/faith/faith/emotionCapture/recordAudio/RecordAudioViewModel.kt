@@ -116,6 +116,7 @@ class RecordAudioViewModel(
 
     fun onStopButtonClicked() {
         recordState.value!!.onStopPressed()
+        playState.value!!.onStopPressed()
         _stopButtonClicked.call()
     }
 
@@ -124,6 +125,7 @@ class RecordAudioViewModel(
             recordState.value!!.onPausePressed()
             _pauseButtonClicked.call()
         }
+        playState.value!!.onPausePressed()
     }
 
     fun onPlayButtonClicked() {
