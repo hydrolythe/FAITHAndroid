@@ -2,12 +2,16 @@ package be.hogent.faith.faith.emotionCapture.recordAudio
 
 import android.view.View
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayContext
 import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayState
 import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayStateInitial
+import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayStatePaused
+import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayStatePlaying
+import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayStateStopped
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordState
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateInitial
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStatePaused
@@ -36,10 +40,36 @@ class RecordAudioViewModel(
      */
     val pauseSupported = MutableLiveData<Boolean>()
 
+    val pauseButtonVisible = MediatorLiveData<Int>()
+
     init {
         pauseSupported.value = false
         _recordState.value = RecordStateInitial(this, tempFileProvider)
         _playState.value = PlayStateInitial(this, tempFileProvider)
+
+        configurePauseButtonVisibility()
+    }
+
+    private fun configurePauseButtonVisibility() {
+        pauseButtonVisible.addSource(_recordState) { recordState ->
+            if (!pauseSupported.value!!) {
+                View.GONE
+            } else {
+                when (recordState) {
+                    is RecordStatePaused -> View.GONE
+                    is RecordStateStopped -> View.GONE
+                    else -> View.VISIBLE
+                }
+            }
+        }
+        pauseButtonVisible.addSource(_playState) { playState ->
+            when (playState) {
+                is PlayStatePlaying -> View.VISIBLE
+                is PlayStateInitial -> View.VISIBLE
+                is PlayStatePaused -> View.GONE
+                is PlayStateStopped -> View.GONE
+            }
+        }
     }
 
     override fun goToRecordState(newState: RecordState) {
@@ -105,17 +135,6 @@ class RecordAudioViewModel(
         _saveButtonClicked.call()
     }
 
-    val pauseButtonVisible: LiveData<Int> = Transformations.map<RecordState, Int>(_recordState) { recordState ->
-        if (!pauseSupported.value!!) {
-            View.GONE
-        } else {
-            when (recordState) {
-                is RecordStatePaused -> View.GONE
-                is RecordStateStopped -> View.GONE
-                else -> View.VISIBLE
-            }
-        }
-    }
     val stopButtonVisible: LiveData<Int> = Transformations.map<RecordState, Int>(_recordState) { recordState ->
         when (recordState) {
             is RecordStateStopped -> View.GONE
