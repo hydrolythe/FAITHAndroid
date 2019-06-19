@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/tools"
+>
 
     <data>
 
@@ -10,41 +12,96 @@
 
     </data>
 
-    <LinearLayout
-        android:id="@+id/screen_draw"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <include
-            android:id="@+id/container_draw_utilities"
-            layout="@layout/panel_drawing_tools"
-            bind:drawViewModel="@{drawViewModel}" />
-
-        <LinearLayout
-            android:layout_width="0dp"
+        android:orientation="vertical">
+        <!--ACHTERGROND-->
+        <ImageView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:background="@drawable/draw_emotion"
+            android:contentDescription="@string/frag_main_descr_city_plan" />
+
+        <!-- KNOPPEN -->
+        <!-- Invisible to make it transparent -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_draw_utilities_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <include
+                android:id="@+id/container_draw_utilities"
+                layout="@layout/panel_drawing_tools"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/guide_draw_drawview_bottom"
+                app:layout_constraintStart_toStartOf="@+id/guide_draw_utilities_left"
+                app:layout_constraintTop_toTopOf="@+id/guide_draw_drawview_top"
+                bind:drawViewModel="@{drawViewModel}" />
+
 
             <com.divyanshu.draw.widget.DrawView
                 android:id="@+id/drawView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_weight="1" />
+                android:layout_margin="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/guide_draw_drawview_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/container_draw_images"
+                app:layout_constraintStart_toEndOf="@+id/guide_draw_drawview_left"
+                app:layout_constraintTop_toTopOf="@+id/guide_draw_drawview_top" />
+
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_margin="8dp"
                 android:onClick="@{() -> drawViewModel.onSaveButtonClicked()}"
-                android:text="@string/save" />
-        </LinearLayout>
-
-        <include
-            android:id="@+id/container_draw_images"
-            layout="@layout/panel_drawing_images" />
+                android:text="@string/save"
+                app:layout_constraintBottom_toBottomOf="@+id/guide_draw_drawview_bottom"
+                app:layout_constraintEnd_toEndOf="@+id/guide_draw_drawview_left"
+                app:layout_constraintStart_toEndOf="@+id/container_draw_utilities" />
 
 
-    </LinearLayout>
+            <include
+                android:id="@+id/container_draw_images"
+                layout="@layout/panel_drawing_images"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_margin="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/guide_draw_drawview_bottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guide_draw_drawview_top" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_draw_drawview_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.24" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_draw_drawview_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.04" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_draw_drawview_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.93" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 </layout>
