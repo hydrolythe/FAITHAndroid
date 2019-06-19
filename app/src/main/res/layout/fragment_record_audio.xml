@@ -15,13 +15,14 @@
         android:id="@+id/screen_record_audio"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="32dp"
         android:gravity="center"
         android:orientation="horizontal">
 
         <ImageButton
             android:id="@+id/btn_recordAudio_play"
             android:layout_width="wrap_content"
-            android:layout_margin="32dp"
+            android:onClick="@{() -> recordAudioViewModel.onPlayButtonClicked()}"
             android:layout_height="wrap_content"
             android:src="@drawable/audio_play"
             tools:text="Play" />
@@ -30,7 +31,7 @@
             android:id="@+id/btn_recordAudio_pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:visibility="@{recordAudioViewModel.pauseButtonVisible}"
             android:contentDescription="@string/description_pause_recording"
             android:onClick="@{() -> recordAudioViewModel.onPauseButtonClicked()}"
             android:src="@drawable/audio_pause"/>
@@ -39,7 +40,7 @@
             android:id="@+id/btn_recordAudio_record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:visibility="@{recordAudioViewModel.recordButtonVisible}"
             android:contentDescription="@string/description_start_recording"
             android:onClick="@{() -> recordAudioViewModel.onRecordButtonClicked()}"
             android:src="@drawable/audio_record"/>
@@ -48,8 +49,8 @@
             android:id="@+id/btn_recordAudio_restart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="@{recordAudioViewModel.restartButtonVisible}"
             android:src="@drawable/audio_restart"
-            android:layout_margin="32dp"
             android:contentDescription="@string/description_restart_recording"
             android:onClick="@{() -> recordAudioViewModel.onRestartButtonClicked()}"/>
 
@@ -57,7 +58,7 @@
             android:id="@+id/btn_recordAudio_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+           android:visibility="@{recordAudioViewModel.stopButtonVisible}"
             android:contentDescription="@string/description_stop_recording"
             android:onClick="@{() -> recordAudioViewModel.onStopButtonClicked()}"
             android:src="@drawable/audio_stop" />
