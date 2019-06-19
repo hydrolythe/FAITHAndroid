@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -22,46 +22,51 @@
         <ImageButton
             android:id="@+id/btn_recordAudio_play"
             android:layout_width="wrap_content"
-            android:onClick="@{() -> recordAudioViewModel.onPlayButtonClicked()}"
             android:layout_height="wrap_content"
+            android:onClick="@{() -> recordAudioViewModel.onPlayButtonClicked()}"
             android:src="@drawable/audio_play"
+            android:visibility="@{recordAudioViewModel.playButtonVisible}"
             tools:text="Play" />
 
         <ImageButton
             android:id="@+id/btn_recordAudio_pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{recordAudioViewModel.pauseButtonVisible}"
             android:contentDescription="@string/description_pause_recording"
             android:onClick="@{() -> recordAudioViewModel.onPauseButtonClicked()}"
-            android:src="@drawable/audio_pause"/>
+            android:src="@drawable/audio_pause"
+            android:visibility="@{recordAudioViewModel.pauseButtonVisible}"
+            tools:text="Pause" />
 
         <ImageButton
             android:id="@+id/btn_recordAudio_record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{recordAudioViewModel.recordButtonVisible}"
             android:contentDescription="@string/description_start_recording"
             android:onClick="@{() -> recordAudioViewModel.onRecordButtonClicked()}"
-            android:src="@drawable/audio_record"/>
+            android:src="@drawable/audio_record"
+            android:visibility="@{recordAudioViewModel.recordButtonVisible}"
+            tools:text="Record" />
 
         <ImageButton
             android:id="@+id/btn_recordAudio_restart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{recordAudioViewModel.restartButtonVisible}"
-            android:src="@drawable/audio_restart"
             android:contentDescription="@string/description_restart_recording"
-            android:onClick="@{() -> recordAudioViewModel.onRestartButtonClicked()}"/>
+            android:onClick="@{() -> recordAudioViewModel.onRestartButtonClicked()}"
+            android:src="@drawable/audio_restart"
+            android:visibility="@{recordAudioViewModel.restartButtonVisible}"
+            tools:text="Restart" />
 
         <ImageButton
             android:id="@+id/btn_recordAudio_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-           android:visibility="@{recordAudioViewModel.stopButtonVisible}"
             android:contentDescription="@string/description_stop_recording"
             android:onClick="@{() -> recordAudioViewModel.onStopButtonClicked()}"
-            android:src="@drawable/audio_stop" />
+            android:src="@drawable/audio_stop"
+            android:visibility="@{recordAudioViewModel.stopButtonVisible}"
+            tools:text="Stop" />
 
 
     </LinearLayout>
