@@ -1,13 +1,17 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayContext
 import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayState
 import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayStateInitial
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordState
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateInitial
+import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStatePaused
+import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateStopped
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordingContext
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
@@ -92,5 +96,32 @@ class RecordAudioViewModel(
 
     fun onSaveButtonClicked() {
         _saveButtonClicked.call()
+    }
+
+    val pauseButtonVisible = Transformations.map<RecordState, Int>(_recordState) { recordState ->
+        when (recordState) {
+            is RecordStatePaused -> View.GONE
+            else -> View.VISIBLE
+        }
+    }
+    val stopButtonVisible = Transformations.map<RecordState, Int>(_recordState) { recordState ->
+        when (recordState) {
+            is RecordStateStopped -> View.GONE
+            else -> View.VISIBLE
+        }
+    }
+    val recordButtonVisible = Transformations.map<RecordState, Int>(_recordState) { recordState ->
+        when (recordState) {
+            is RecordStateInitial -> View.VISIBLE
+            is RecordStatePaused -> View.VISIBLE
+            else -> View.GONE
+        }
+    }
+
+    val restartButtonVisible = Transformations.map<RecordState, Int>(_recordState) { recordState ->
+        when (recordState) {
+            is RecordStateInitial -> View.GONE
+            else -> View.VISIBLE
+        }
     }
 }
