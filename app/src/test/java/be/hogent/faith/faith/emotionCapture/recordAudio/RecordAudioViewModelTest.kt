@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import io.mockk.mockk
 import org.junit.Before
 import org.junit.Rule
 
@@ -13,7 +14,7 @@ class RecordAudioViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = RecordAudioViewModel()
+        viewModel = RecordAudioViewModel(mockk())
     }
 
 //    @Test
