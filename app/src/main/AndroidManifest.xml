@@ -42,6 +42,7 @@
         <activity
             android:name=".faith.emotionCapture.EmotionCaptureMainActivity"
             android:label="@string/lbl_activity_emotionCapture"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
     </application>
