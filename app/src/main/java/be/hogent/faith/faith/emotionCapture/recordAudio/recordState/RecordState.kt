@@ -13,8 +13,10 @@ abstract class RecordState(
     abstract fun onStopPressed()
     abstract fun onRestartPressed()
 
-    // Required to release recorder resource when a configuration change occurs
-    internal fun releaseRecorder() {
+    /**
+     * @see MediaRecorder.release
+     */
+    internal fun release() {
         recorder.release()
     }
 
@@ -27,6 +29,7 @@ abstract class RecordState(
             prepare()
         }
     }
+
     internal fun reinitialiseRecorder() {
         recorder.reset()
         initialiseRecorder()
