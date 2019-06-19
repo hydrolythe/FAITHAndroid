@@ -11,18 +11,39 @@
 
     </data>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <!--ACHTERGROND-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/draw_emotion"
+        android:contentDescription="@string/tekenen" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/screen_draw_avatar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#00000000">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_draw_utilities_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
 
         <include
             android:id="@+id/container_draw_utilities"
             layout="@layout/panel_drawing_tools"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/guide_drawView_drawTools_right"
-            app:layout_constraintStart_toStartOf="@+id/guide_drawView_drawTools_left"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_drawView_drawTools_bottom"
+            app:layout_constraintEnd_toEndOf="@+id/guide_drawView_drawTools_left"
+            app:layout_constraintStart_toStartOf="@+id/guide_drawView_drawUtilities_left"
+            app:layout_constraintTop_toTopOf="@+id/guide_drawView_drawTools_top"
             bind:drawViewModel="@{drawViewModel}" />
 
         <com.divyanshu.draw.widget.DrawView
@@ -30,23 +51,30 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/guide_drawView_drawTools_bottom"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/container_draw_utilities"
+            app:layout_constraintEnd_toEndOf="@+id/guide_drawView_drawTools_right"
+            app:layout_constraintStart_toEndOf="@+id/guide_drawView_drawTools_left"
             app:layout_constraintTop_toTopOf="@+id/guide_drawView_drawTools_top" />
 
         <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide_drawView_drawTools_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.04" />
+            android:id="@+id/guide_drawView_drawUtilities_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_drawView_drawTools_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.18" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_drawView_drawTools_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.15" />
+            app:layout_constraintGuide_percent="0.95" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_drawView_drawTools_bottom"
@@ -62,8 +90,6 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.04" />
 
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 </layout>
