@@ -13,8 +13,8 @@ class PlayStateInitial(
 
     override fun onPlayPressed() {
         // An uninitialised MediaPlayer was passed to the superclass.
-        // We can only initialise it once the recording has been saved to the recordingFile, otherwise
-        // initialisation fails.
+        // We can only initialise it once the recording has been saved to the recordingFile,
+        // otherwise initialisation fails.
         initialisePlayer()
 
         mediaPlayer.start()

@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -9,16 +10,16 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayContext
 import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayState
 import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayStateInitial
-import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayStatePaused
 import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayStatePlaying
-import be.hogent.faith.faith.emotionCapture.recordAudio.playState.PlayStateStopped
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordState
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateInitial
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStatePaused
+import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateRecording
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordStateStopped
 import be.hogent.faith.faith.emotionCapture.recordAudio.recordState.RecordingContext
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
+import be.hogent.faith.util.TAG
 
 class RecordAudioViewModel(
     val tempFileProvider: TempFileProvider
@@ -42,32 +43,51 @@ class RecordAudioViewModel(
 
     val pauseButtonVisible = MediatorLiveData<Int>()
 
+    val playButtonVisible = MediatorLiveData<Int>()
+
     init {
         pauseSupported.value = false
         _recordState.value = RecordStateInitial(this, tempFileProvider)
         _playState.value = PlayStateInitial(this, tempFileProvider)
 
         configurePauseButtonVisibility()
+        configurePlayButtonVisibility()
     }
 
-    private fun configurePauseButtonVisibility() {
-        pauseButtonVisible.addSource(_recordState) { recordState ->
-            if (!pauseSupported.value!!) {
-                View.GONE
-            } else {
+    private fun configurePlayButtonVisibility() {
+        playButtonVisible.apply {
+            addSource(_playState) { playState ->
+                when (playState) {
+                    is PlayStatePlaying -> value = View.GONE
+                    else -> value = View.VISIBLE
+                }
+            }
+            addSource(_recordState) { recordState ->
                 when (recordState) {
-                    is RecordStatePaused -> View.GONE
-                    is RecordStateStopped -> View.GONE
-                    else -> View.VISIBLE
+                    is RecordStateStopped -> value = View.VISIBLE
+                    else -> value = View.GONE
                 }
             }
         }
-        pauseButtonVisible.addSource(_playState) { playState ->
-            when (playState) {
-                is PlayStatePlaying -> View.VISIBLE
-                is PlayStateInitial -> View.VISIBLE
-                is PlayStatePaused -> View.GONE
-                is PlayStateStopped -> View.GONE
+    }
+
+    private fun configurePauseButtonVisibility() {
+        pauseButtonVisible.apply {
+            if (!pauseSupported.value!!) {
+                value = View.GONE
+            }
+
+            addSource(_recordState) { recordState ->
+                when (recordState) {
+                    is RecordStateRecording -> value = View.VISIBLE
+                    else -> value = View.GONE
+                }
+            }
+            addSource(_playState) { playState ->
+                when (playState) {
+                    is PlayStatePlaying -> value = View.VISIBLE
+                    else -> value = View.GONE
+                }
             }
         }
     }
@@ -105,22 +125,26 @@ class RecordAudioViewModel(
         get() = _saveButtonClicked
 
     fun onRecordButtonClicked() {
+        Log.d(TAG, "Record pressed")
         recordState.value!!.onRecordPressed()
         _recordButtonClicked.call()
     }
 
     fun onRestartButtonClicked() {
+        Log.d(TAG, "Restart pressed")
         recordState.value!!.onRestartPressed()
         _restartButtonClicked.call()
     }
 
     fun onStopButtonClicked() {
+        Log.d(TAG, "Stop pressed")
         recordState.value!!.onStopPressed()
         playState.value!!.onStopPressed()
         _stopButtonClicked.call()
     }
 
     fun onPauseButtonClicked() {
+        Log.d(TAG, "Pause pressed")
         if (pauseSupported.value!!) {
             recordState.value!!.onPausePressed()
             _pauseButtonClicked.call()
@@ -129,6 +153,7 @@ class RecordAudioViewModel(
     }
 
     fun onPlayButtonClicked() {
+        Log.d(TAG, "Play pressed")
         _playState.value!!.onPlayPressed()
         _playButtonClicked.call()
     }
