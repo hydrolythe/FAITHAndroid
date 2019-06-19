@@ -9,4 +9,11 @@ abstract class PlayState(
     abstract fun onPlayPressed()
     abstract fun onPausePressed()
     abstract fun onStopPressed()
+
+    /**
+     * @see MediaPlayer.release
+     */
+    fun release() {
+        mediaPlayer.release()
+    }
 }
