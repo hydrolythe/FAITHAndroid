@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -12,51 +13,150 @@
         <import type="android.view.View" />
     </data>
 
-    <LinearLayout
-        android:id="@+id/screen_record_audio"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+    <!--ACHTERGROND-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/record_audio"
+        android:contentDescription="@string/tekenen" />
 
-        <ImageButton
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000">
+
+        <ImageView
             android:id="@+id/btn_recordAudio_pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:contentDescription="@string/description_pause_recording"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
             android:onClick="@{() -> recordAudioViewModel.onUserViewModel"
             android:src="@drawable/audio_pause"
-            android:visibility="@{recordAudioViewModel.recordingStatus != RecordingStatus.PAUSED? View.VISIBLE : View.INVISIBLE}" />
+            android:visibility="@{recordAudioViewModel.recordingStatus != RecordingStatus.PAUSED? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_recordaudio_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/guide_recordaudio_pauze_right"
+            app:layout_constraintStart_toEndOf="@+id/guide_recordaudio_pauze_left"
+            app:layout_constraintTop_toTopOf="@+id/guide_recordaudio_top" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/btn_recordAudio_record"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
             android:contentDescription="@string/description_start_recording"
             android:onClick="@{() -> recordAudioViewModel.onRecordButtonClicked()}"
             android:src="@drawable/audio_record"
-            android:visibility="@{recordAudioViewModel.recordingStatus != RecordingStatus.RECORDING? View.VISIBLE : View.INVISIBLE}" />
+            android:visibility="@{recordAudioViewModel.recordingStatus != RecordingStatus.RECORDING? View.VISIBLE : View.INVISIBLE}"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_recordaudio_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/guide_recordaudio_record_right"
+            app:layout_constraintStart_toEndOf="@+id/guide_recordaudio_record_left"
+            app:layout_constraintTop_toTopOf="@+id/guide_recordaudio_top"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/btn_recordAudio_restart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
             android:contentDescription="@string/description_restart_recording"
             android:onClick="@{() -> recordAudioViewModel.onRestartButtonClicked()}"
-            android:src="@drawable/audio_restart" />
+            android:src="@drawable/audio_restart"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_recordaudio_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/guide_recordaudio_restart_right"
+            app:layout_constraintStart_toEndOf="@+id/guide_recordaudio_restart_left"
+            app:layout_constraintTop_toTopOf="@+id/guide_recordaudio_top"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/btn_recordAudio_stop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="32dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
             android:contentDescription="@string/description_stop_recording"
             android:onClick="@{() -> recordAudioViewModel.onStopButtonClicked()}"
-            android:src="@drawable/audio_stop" />
+            android:src="@drawable/audio_stop"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_recordaudio_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/guide_recordaudio_stop_right"
+            app:layout_constraintStart_toEndOf="@+id/guide_recordaudio_stop_left"
+            app:layout_constraintTop_toTopOf="@+id/guide_recordaudio_top"/>
 
 
-    </LinearLayout>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_recordaudio_pauze_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.27" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_recordaudio_pauze_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.35" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_recordaudio_record_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.41" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_recordaudio_record_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.49" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_recordaudio_restart_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.54" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_recordaudio_restart_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.62" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_recordaudio_stop_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.68" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_recordaudio_stop_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.76" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_recordaudio_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.22" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_recordaudio_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.36" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 </layout>
