@@ -38,9 +38,13 @@ class EnterTextViewModel : ViewModel() {
     init {
         _selectedTextColor.value = Color.BLACK
         _selectedFontSize.value = FontSize.NORMAL
+        //anders staat bold in het begin aan. De editor registreert een click aan bold aan, volgende click bold uit
+        _boldClicked.value = true
         _boldClicked.value = false
+        _italicClicked.value=true
         _italicClicked.value=false
-        _underlineClicked.value = false
+        _underlineClicked.value = true
+        _underlineClicked.value=false
     }
 
     fun onBoldClicked() {
