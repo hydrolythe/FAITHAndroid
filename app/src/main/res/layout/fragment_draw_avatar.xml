@@ -14,7 +14,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/screen_draw_avatar">
     <!--ACHTERGROND-->
     <ImageView
         android:layout_width="match_parent"
@@ -23,7 +24,6 @@
         android:contentDescription="@string/tekenen" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/screen_draw_avatar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#00000000">
