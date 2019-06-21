@@ -16,8 +16,6 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_city_screen.image_main_avatar
-import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_inkleuren
-import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_zittend
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
@@ -68,7 +66,7 @@ class CityScreenFragment : Fragment() {
             // TODO: go back to login Screen
         })
 
-        userViewModel.user.observe(this, Observer{user ->
+        userViewModel.user.observe(this, Observer { user ->
             Glide.with(context!!).load(avatarProvider.getAvatarDrawableStaan(user.avatarName)).diskCacheStrategy(
                 DiskCacheStrategy.ALL).into(image_main_avatar)
         })

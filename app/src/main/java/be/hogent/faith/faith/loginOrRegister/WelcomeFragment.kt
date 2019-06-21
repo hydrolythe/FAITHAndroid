@@ -10,6 +10,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.di.KoinModules
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class WelcomeFragment : Fragment() {
@@ -36,7 +41,14 @@ class WelcomeFragment : Fragment() {
         })
         welcomeViewModel.loginButtonClicked.observe(this, Observer {
             // TODO: add username/password auth here!
-            Toast.makeText(context, "Inloggen is nog niet geimplementeerd!", Toast.LENGTH_SHORT).show()
+            var userViewModel: UserViewModel
+            if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) == null) {
+                getKoin().createScope(KoinModules.USER_SCOPE_ID)
+            }
+            userViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+            userViewModel.setUser(User(welcomeViewModel.userName.value!!, avatarName = "meisje_stoer"))
+            navigation?.goToCityScreen()
+            // Toast.makeText(context, "Inloggen is nog niet geimplementeerd!", Toast.LENGTH_SHORT).show()
         })
         welcomeViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()

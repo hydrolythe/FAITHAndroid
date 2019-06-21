@@ -15,7 +15,6 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
-import be.hogent.faith.util.TAG
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_inkleuren
@@ -95,7 +94,7 @@ class EventDetailsFragment : Fragment() {
             detailThumbnailsAdapter?.updateDetailsList(event.details)
         })
 
-        userViewModel.user.observe(this, Observer{user ->
+        userViewModel.user.observe(this, Observer { user ->
             Glide.with(context!!).load(avatarProvider.getAvatarDrawableZitten(user.avatarName)).diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_zittend)
             Glide.with(context!!).load(avatarProvider.getAvatarDrawableGezicht(user.avatarName)).diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_inkleuren)
         })

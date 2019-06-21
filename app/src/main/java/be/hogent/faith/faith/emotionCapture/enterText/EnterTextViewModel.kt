@@ -1,13 +1,10 @@
 package be.hogent.faith.faith.emotionCapture.enterText
 
 import android.graphics.Color
-import android.util.Log
 import androidx.annotation.ColorInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.util.TAG
 
 class EnterTextViewModel : ViewModel() {
 
@@ -23,40 +20,33 @@ class EnterTextViewModel : ViewModel() {
     val selectedFontSize: LiveData<FontSize>
         get() = _selectedFontSize
 
-    private val _boldClicked = MutableLiveData<Boolean>()
-    val boldClicked: LiveData<Boolean>
+    private val _boldClicked = MutableLiveData<Boolean?>()
+    val boldClicked: LiveData<Boolean?>
         get() = _boldClicked
 
-    private val _italicClicked = MutableLiveData<Boolean>()
-    val italicClicked: LiveData<Boolean>
+    private val _italicClicked = MutableLiveData<Boolean?>()
+    val italicClicked: LiveData<Boolean?>
         get() = _italicClicked
 
-    private val _underlineClicked = MutableLiveData<Boolean>()
-    val underlineClicked: LiveData<Boolean>
+    private val _underlineClicked = MutableLiveData<Boolean?>()
+    val underlineClicked: LiveData<Boolean?>
         get() = _underlineClicked
 
     init {
         _selectedTextColor.value = Color.BLACK
         _selectedFontSize.value = FontSize.NORMAL
-        //anders staat bold in het begin aan. De editor registreert een click aan bold aan, volgende click bold uit
-        _boldClicked.value = true
-        _boldClicked.value = false
-        _italicClicked.value=true
-        _italicClicked.value=false
-        _underlineClicked.value = true
-        _underlineClicked.value=false
     }
 
     fun onBoldClicked() {
-        _boldClicked.value = !boldClicked.value!!
+        _boldClicked.value = !(boldClicked.value ?: false)
     }
 
     fun onItalicClicked() {
-        _italicClicked.value = !_italicClicked.value!!
+        _italicClicked.value = !(_italicClicked.value?:false)
     }
 
     fun onUnderlineClicked() {
-        _underlineClicked.value = !_underlineClicked.value!!
+        _underlineClicked.value = !(_underlineClicked.value ?:false)
     }
 
     fun pickTextColor(@ColorInt color: Int) {
