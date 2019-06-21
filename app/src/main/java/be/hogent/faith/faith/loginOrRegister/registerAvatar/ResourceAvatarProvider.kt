@@ -19,30 +19,29 @@ class ResourceAvatarProvider(private val context: Context) :
         return getDrawable(avatarName)
     }
 
-    override fun getAvatarDrawableStaan(avatarName:String) : Drawable {
-        return getDrawable(avatarName, "staan" )
+    override fun getAvatarDrawableStaan(avatarName: String): Drawable {
+        return getDrawable(avatarName, "staan")
     }
 
-    override fun getAvatarDrawableZitten(avatarName:String) : Drawable {
-        return getDrawable(avatarName, "zitten" )
+    override fun getAvatarDrawableZitten(avatarName: String): Drawable {
+        return getDrawable(avatarName, "zitten")
     }
-    override fun getAvatarDrawableGezicht(avatarName:String) : Drawable {
-        return getDrawable(avatarName, "gezicht" )
+    override fun getAvatarDrawableGezicht(avatarName: String): Drawable {
+        return getDrawable(avatarName, "gezicht")
+    }
+    override fun getAvatarDrawableOutline(avatarName: String): Drawable {
+        return getDrawable(avatarName, "outline")
+    }
 
-    }
-    override fun getAvatarDrawableOutline(avatarName:String) : Drawable {
-        return getDrawable(avatarName, "outline" )
-    }
-
-    private fun getDrawable(avatarName: String, type:String? = null): Drawable {
-        val avatarResourceName = if (type!=null) "${avatarName}_${type}" else  avatarName
+    private fun getDrawable(avatarName: String, type: String? = null): Drawable {
+        val avatarResourceName = if (type != null) "${avatarName}_$type" else avatarName
         Log.d(TAG, avatarResourceName)
         val resourceId = context.resources.getIdentifier(avatarResourceName, "drawable", context.packageName)
         return ContextCompat.getDrawable(context, resourceId)!!
     }
 
-    override fun getAvatarDrawableOutlineId(avatarName:String) : Int{
+    override fun getAvatarDrawableOutlineId(avatarName: String): Int {
         return context.getResources().getIdentifier("${avatarName}_outline", "drawable",
-            context.getPackageName());
+            context.getPackageName())
     }
 }

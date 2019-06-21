@@ -265,7 +265,7 @@ class EventViewModel(
 
     private inner class TakeEventPhotoUseCaseHandler : DisposableSingleObserver<Detail>() {
         override fun onSuccess(t: Detail) {
-             _photoSavedSuccessFully.value = t
+            _photoSavedSuccessFully.value = t
         }
 
         override fun onError(e: Throwable) {

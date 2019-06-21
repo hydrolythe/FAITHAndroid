@@ -46,7 +46,7 @@ class EnterTextViewModelTest {
 
     @Test
     fun enterTextVM_onBoldClicked_callsListeners() {
-        val observer = mockk<Observer<Boolean>>(relaxed = true)
+        val observer = mockk<Observer<Boolean?>>(relaxed = true)
         viewModel.boldClicked.observeForever(observer)
 
         viewModel.onBoldClicked()
@@ -56,7 +56,7 @@ class EnterTextViewModelTest {
 
     @Test
     fun enterTextVM_onItalicClicked_callsListeners() {
-        val observer = mockk<Observer<Boolean>>(relaxed = true)
+        val observer = mockk<Observer<Boolean?>>(relaxed = true)
         viewModel.italicClicked.observeForever(observer)
 
         viewModel.onItalicClicked()
@@ -66,7 +66,7 @@ class EnterTextViewModelTest {
 
     @Test
     fun enterTextVM_onUnderlineClicked_callsListeners() {
-        val observer = mockk<Observer<Boolean>>(relaxed = true)
+        val observer = mockk<Observer<Boolean?>>(relaxed = true)
         viewModel.underlineClicked.observeForever(observer)
 
         viewModel.onUnderlineClicked()

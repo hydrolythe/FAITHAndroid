@@ -9,7 +9,6 @@ import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -56,7 +55,7 @@ class EventViewModelSavePhotoTest {
 
         // Act
         viewModel.savePhoto(mockk())
-        verify { savePhotoUseCase.execute(capture(params),  capture(observer)) }
+        verify { savePhotoUseCase.execute(capture(params), capture(observer)) }
         observer.captured.onSuccess(mockk())
 
         // Assert
@@ -68,7 +67,7 @@ class EventViewModelSavePhotoTest {
         // Arrange
         val successObserver = mockk<Observer<Detail>>(relaxed = true)
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val observer =slot<DisposableSingleObserver<Detail>>()
+        val observer = slot<DisposableSingleObserver<Detail>>()
 
         viewModel.photoSavedSuccessFully.observeForever(successObserver)
         viewModel.errorMessage.observeForever(errorObserver)
