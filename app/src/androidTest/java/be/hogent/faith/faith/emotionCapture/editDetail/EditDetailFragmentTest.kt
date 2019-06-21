@@ -40,7 +40,7 @@ class EditDetailFragmentTest {
             .perform(ViewActions.typeText("Notities notities notities"))
         Espresso.closeSoftKeyboard()
         Espresso.onView(ViewMatchers.withId(R.id.btn_save_event_save))
-            .perform( ViewActions.click())
+            .perform(ViewActions.click())
         ToastMatcher.isToastMessageDisplayed(R.string.save_event_success)
     }
 }
