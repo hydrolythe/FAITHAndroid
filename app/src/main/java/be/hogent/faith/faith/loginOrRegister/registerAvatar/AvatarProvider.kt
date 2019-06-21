@@ -11,11 +11,24 @@ interface AvatarProvider {
         return listOf(
             "jongen_gamer",
             "meisje_stoer",
-            "avatar",
-            "avatar2",
-            "avatar3",
-            "avatar4",
-            "avatar5"
+            "jongen_gamer",
+            "meisje_stoer",
+            "jongen_gamer",
+            "meisje_stoer",
+            "jongen_gamer",
+            "meisje_stoer",
+            "jongen_gamer",
+            "meisje_stoer",
+            "jongen_gamer",
+            "meisje_stoer",
+            "jongen_gamer",
+            "meisje_stoer",
+            "jongen_gamer",
+            "meisje_stoer",
+            "jongen_gamer",
+            "meisje_stoer",
+            "jongen_gamer",
+            "meisje_stoer"
         ).map { name -> Avatar(name) }
     }
 
