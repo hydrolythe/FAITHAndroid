@@ -64,10 +64,10 @@ class SaveEventPhotoUseCaseTest {
 
         result.test()
             .assertNoErrors()
-            .assertValue{newDetail -> newDetail is PictureDetail}
-            .assertValue{newDetail -> newDetail.name == photoName }
+            .assertValue { newDetail -> newDetail is PictureDetail }
+            .assertValue { newDetail -> newDetail.name == photoName }
 
-           // Assert
+        // Assert
         assertTrue(event.details.isNotEmpty())
 
         val resultingDetail = event.details.first()
