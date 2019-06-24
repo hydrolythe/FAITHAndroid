@@ -15,9 +15,9 @@
 
         <!--ACHTERGROND-->
         <ImageView
+            android:id="@+id/background_register_userinfo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/register_background_userinfo" />
+            android:layout_height="match_parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -105,9 +105,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
+                android:hint="Kies een wachtwoord"
                 android:inputType="textPassword"
                 android:text="@={registerUserInfoViewModel.password}"
-                android:hint="Kies een wachtwoord"
                 app:layout_constraintBottom_toTopOf="@+id/guide_password_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
                 app:layout_constraintStart_toStartOf="@+id/guide_form_start" />
