@@ -17,11 +17,13 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterTextBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.util.TAG
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.fragment_enter_text.background_enter_text_screen
 import kotlinx.android.synthetic.main.fragment_enter_text.editor
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class EnterTextFragment : Fragment() {
-    protected val enterTextViewModel: EnterTextViewModel by sharedViewModel()
+    private val enterTextViewModel: EnterTextViewModel by sharedViewModel()
     private val eventViewModel: EventViewModel by sharedViewModel()
 
     private lateinit var enterTextBinding: FragmentEnterTextBinding
@@ -35,8 +37,16 @@ class EnterTextFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
+        setBackgroundImage()
         initEditor()
         setUpListeners()
+    }
+
+    private fun setBackgroundImage() {
+        Glide.with(requireContext())
+            .load(R.drawable.editor_horizontal)
+            .into(background_enter_text_screen)
     }
 
     override fun onResume() {

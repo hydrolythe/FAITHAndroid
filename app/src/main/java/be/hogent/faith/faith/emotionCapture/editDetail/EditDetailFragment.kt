@@ -91,6 +91,10 @@ class EditDetailFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        setUpListeners()
+    }
+
+    private fun setUpListeners() {
         val width = Resources.getSystem().displayMetrics.widthPixels
         val height = Resources.getSystem().displayMetrics.heightPixels
         eventViewModel.event.observe(this, Observer {
