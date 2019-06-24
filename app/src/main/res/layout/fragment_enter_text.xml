@@ -26,9 +26,9 @@
         android:orientation="vertical">
     <!--ACHTERGROND-->
     <ImageView
+        android:id="@+id/background_enter_text_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/editor_horizontal"
         android:contentDescription="@string/tekenen" />
 
     <!-- KNOPPEN -->
@@ -154,7 +154,7 @@
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:background="@{enterTextViewModel.selectedFontSize==FontSize.SMALL? @drawable/background : @drawable/background_noborder}"
-                        android:onClick="@{() -> enterTextViewModel.pickFontSize(FontSize.SMALL)}"
+                        android:contentDescription="@string/enter_text_font_small" android:onClick="@{() -> enterTextViewModel.pickFontSize(FontSize.SMALL)}"
                         android:src="@drawable/font_sizesmall" />
 
                     <ImageView
@@ -168,7 +168,7 @@
                         android:scaleType="centerInside"
                         android:background="@{enterTextViewModel.selectedFontSize==FontSize.NORMAL? @drawable/background : @drawable/background_noborder}"
 
-                        android:onClick="@{() -> enterTextViewModel.pickFontSize(FontSize.NORMAL)}"
+                        android:contentDescription="@string/enter_text_font_medium" android:onClick="@{() -> enterTextViewModel.pickFontSize(FontSize.NORMAL)}"
                         android:src="@drawable/font_sizemedium" />
 
                     <ImageView
@@ -181,7 +181,7 @@
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:background="@{enterTextViewModel.selectedFontSize==FontSize.LARGE? @drawable/background : @drawable/background_noborder}"
-                        android:onClick="@{() -> enterTextViewModel.pickFontSize(FontSize.LARGE)}"
+                        android:contentDescription="@string/enter_text_font_large"  android:onClick="@{() -> enterTextViewModel.pickFontSize(FontSize.LARGE)}"
                         android:src="@drawable/font_sizelarge" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

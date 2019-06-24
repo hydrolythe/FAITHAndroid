@@ -97,4 +97,17 @@
     <string name="choose_underline">kies onderlijnd</string>
     <string name="choose_italic">kies cursief</string>
     <string name="choose_bold">kies vetjes</string>
+    <string name="avatar">avatar</string>
+    <string name="takePhoto_neem_foto">neem foto</string>
+    <string name="registerAvatar">registreer avatar</string>
+    <string name="enter_text_font_small">kies klein lettertype</string>
+    <string name="enter_text_font_large">kies groot lettertype</string>
+    <string name="enter_text_font_medium">kies normaal lettertype</string>
+    <string name="register_userinfo">registreer</string>
+    <string name="edit_detail">Geef de detailgegevens in</string>
+    <string name="emotion_avatar">kleur emoties in</string>
+    <string name="send">verstuur</string>
+    <string name="draw_setthinline">kies voor een dunne lijn</string>
+    <string name="draw_setmediumline">Kies voor een medium lijn dikte</string>
+    <string name="draw_thickline">Kies voor een dikke lijn</string>
 </resources>

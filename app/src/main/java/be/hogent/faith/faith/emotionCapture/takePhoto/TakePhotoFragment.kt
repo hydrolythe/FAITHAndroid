@@ -70,6 +70,7 @@ class TakePhotoFragment : Fragment() {
         } else {
             requestPermissions(arrayOf(Manifest.permission.CAMERA), REQUESTCODE_CAMERA)
         }
+
         startListeners()
     }
 

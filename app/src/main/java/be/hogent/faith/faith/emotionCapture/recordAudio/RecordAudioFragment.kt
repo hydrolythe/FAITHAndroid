@@ -19,7 +19,8 @@ import be.hogent.faith.databinding.FragmentRecordAudioBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel.RecordingStatus.PAUSED
 import be.hogent.faith.faith.util.TempFileProvider
-import org.koin.android.ext.android.get
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.fragment_record_audio.background_recordaudio_screen
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -75,8 +76,15 @@ class RecordAudioFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        setBackgroundImage()
         initializeRecorder()
         startListeners()
+    }
+
+    private fun setBackgroundImage() {
+        Glide.with(requireContext())
+            .load(R.drawable.record_audio)
+            .into(background_recordaudio_screen)
     }
 
     override fun onStop() {

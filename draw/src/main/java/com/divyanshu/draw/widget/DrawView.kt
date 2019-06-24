@@ -15,6 +15,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 
 /**
@@ -345,10 +346,12 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     fun addDrawable(drawableResourceID: Int, x: Int, y: Int) {
-        val drawable = context.resources.getDrawable(drawableResourceID)
-        drawable.bounds = Rect(x, y, x + drawable.intrinsicWidth, y + drawable.intrinsicHeight)
-        addDrawingAction(MyDrawable(drawable))
-        invalidate()
+        val drawable = ContextCompat.getDrawable(context,drawableResourceID)
+        if (drawable!=null) {
+            drawable.bounds = Rect(x, y, x + drawable.intrinsicWidth, y + drawable.intrinsicHeight)
+            addDrawingAction(MyDrawable(drawable))
+            invalidate()
+        }
     }
 
     fun toggleEraser() {
