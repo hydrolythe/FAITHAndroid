@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="registerUserInfoViewModel"
+            type="be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!--ACHTERGROND-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/register_background_userinfo" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatarRecyclerView_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.4" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_password_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.46" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_city_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.525" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_city_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.573" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_city_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.685" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_city_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.81" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_continue_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.47" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_form_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.462" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_form_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.553" />
+
+            <EditText
+                android:id="@+id/txt_register_username"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:hint="Kies een gebruikersnaam"
+                android:inputType="textPersonName"
+                android:text="@={registerUserInfoViewModel.userName}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/guide_avatarRecyclerView_top"
+                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_form_start" />
+
+            <EditText
+                android:id="@+id/txt_register_password"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:inputType="textPassword"
+                android:text="@={registerUserInfoViewModel.password}"
+                android:hint="Kies een wachtwoord"
+                app:layout_constraintBottom_toTopOf="@+id/guide_password_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_form_start" />
+
+            <EditText
+                android:id="@+id/txt_register_password_repeat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:hint="Herhaal je wachtwoord"
+                android:inputType="textPassword"
+                android:text="@={registerUserInfoViewModel.passwordRepeated}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                app:layout_constraintBottom_toTopOf="@+id/guide_city_top"
+                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_form_start" />
+
+            <View
+                android:id="@+id/btn_register_confirmInfo"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:onClick="@{()->registerUserInfoViewModel.onConfirmUserInfoClicked()}"
+                app:layout_constraintBottom_toTopOf="@+id/guide_city_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/guide_city_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_city_start"
+                app:layout_constraintTop_toTopOf="@+id/guide_continue_top" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+</layout>

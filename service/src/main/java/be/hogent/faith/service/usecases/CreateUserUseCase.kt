@@ -18,6 +18,7 @@ class CreateUserUseCase(
 
     data class Params(
         val username: String,
+        val password: String,
         val avatarName: String
     )
 }

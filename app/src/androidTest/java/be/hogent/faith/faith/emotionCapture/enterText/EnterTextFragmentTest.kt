@@ -4,11 +4,9 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import androidx.test.uiautomator.UiDevice
 import be.hogent.faith.R
-import be.hogent.faith.faith.registerAvatar.LoginOrRegisterActivity
+import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
 import be.hogent.faith.faith.util.NavigationUtil
 import org.junit.Before
 import org.junit.Rule
@@ -18,15 +16,12 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class EnterTextFragmentTest {
 
-    private lateinit var uiDevice: UiDevice
-
     @get:Rule
     var activityScenarioRule =
         ActivityTestRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java, true, true)
 
     @Before
     fun goToScreen() {
-        uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         NavigationUtil.goToWriteTextScreen()
     }
 

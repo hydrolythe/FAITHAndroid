@@ -74,25 +74,29 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
             emotionCapture_drawer_layout.closeDrawers()
             // perform action
             when (menuItem.itemId) {
-                R.id.nav_city -> {
-                    val alertDialog: AlertDialog = this.run {
-                        val builder = AlertDialog.Builder(this).apply {
-                            setTitle(R.string.dialog_to_the_city_title)
-                            setMessage(R.string.dialog_to_the_city_message)
-                            setPositiveButton(R.string.ok) { _, _ ->
-                                finish()
-                            }
-                            setNegativeButton(R.string.cancel) { dialog, _ ->
-                                dialog.cancel()
-                            }
-                        }
-                        builder.create()
-                    }
-                    alertDialog.show()
+                be.hogent.faith.R.id.nav_city -> {
+                    showExitAlert()
                 }
             }
             true
         }
+    }
+
+    private fun showExitAlert() {
+        val alertDialog: AlertDialog = this.run {
+            val builder = AlertDialog.Builder(this).apply {
+                setTitle(R.string.dialog_to_the_city_title)
+                setMessage(R.string.dialog_to_the_city_message)
+                setPositiveButton(R.string.ok) { _, _ ->
+                    finish()
+                }
+                setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.cancel()
+                }
+            }
+            builder.create()
+        }
+        alertDialog.show()
     }
 
     override fun startDrawEmotionAvatarFragment() {
@@ -122,5 +126,18 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
             EditDetailFragment.newInstance(type, R.drawable.outline),
             R.id.emotionCapture_fragment_container
         )
+    }
+
+    override fun eventSaved() {
+        finish()
+    }
+
+    override fun onBackPressed() {
+        val f = supportFragmentManager.findFragmentById(be.hogent.faith.R.id.emotionCapture_fragment_container)
+        if (f is EventDetailsFragment) {
+            showExitAlert()
+        } else {
+            super.onBackPressed()
+        }
     }
 }

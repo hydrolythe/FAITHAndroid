@@ -38,6 +38,10 @@ data class Event(
     val details: List<Detail>
         get() = _details
 
+    fun getLastDetail(): Detail {
+        return _details.last()
+    }
+
     @TestOnly
     fun addDetail(detail: Detail) {
         _details += detail

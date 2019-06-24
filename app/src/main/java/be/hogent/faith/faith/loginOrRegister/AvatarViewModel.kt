@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.Avatar
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.CreateUserUseCase
 import io.reactivex.observers.DisposableSingleObserver
@@ -78,7 +80,7 @@ class AvatarViewModel(
         if (avatarWasSelected() && !userName.value.isNullOrEmpty()) {
             val params = CreateUserUseCase.Params(
                 userName.value!!,
-                _avatars.value!![_selectedItem.value!!.toInt()].avatarName
+                _avatars.value!![_selectedItem.value!!.toInt()].avatarName, userName.value!!
             )
             createUserUseCase.execute(params, CreateUserUseCaseHandler())
             _nextButtonClicked.call()

@@ -7,21 +7,31 @@ import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.faith.cityScreen.CityScreenActivity
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarFragment
+import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoFragment
+import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
 import be.hogent.faith.faith.util.replaceFragment
 import be.hogent.faith.util.TAG
 import com.auth0.android.authentication.storage.SecureCredentialsManager
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.getViewModel
+
 
 class LoginOrRegisterActivity : AppCompatActivity(),
     WelcomeFragment.WelcomeNavigationListener,
+    RegisterUserInfoFragment.RegisterUserInfoNavigationListener,
     RegisterAvatarFragment.AvatarFragmentNavigationListener {
 
     private val credentialsManager: SecureCredentialsManager by inject()
+    private lateinit var registerUserInfoViewModel: RegisterUserInfoViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        registerUserInfoViewModel = getViewModel()
 
         // Must happen before creating the RegisterFragment because it uses the scope
         createScopedUserViewModel()
@@ -67,6 +77,10 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     }
 
     override fun goToRegistrationScreen() {
+        replaceFragment(RegisterUserInfoFragment.newInstance(), R.id.fragment_container)
+    }
+
+    override fun goToRegisterAvatarScreen() {
         replaceFragment(RegisterAvatarFragment.newInstance(), R.id.fragment_container)
     }
 
