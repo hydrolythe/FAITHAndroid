@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_city_screen.image_main_avatar
 import org.koin.android.ext.android.get
+import kotlinx.android.synthetic.main.fragment_city_screen.background_city_screen
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -50,6 +51,14 @@ class CityScreenFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         registerListeners()
+
+        setBackgroundImage()
+    }
+
+    private fun setBackgroundImage() {
+        Glide.with(requireContext())
+            .load(R.drawable.citymap_faith)
+            .into(background_city_screen)
     }
 
     private fun registerListeners() {

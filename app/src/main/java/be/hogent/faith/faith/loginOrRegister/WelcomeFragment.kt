@@ -15,6 +15,8 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.fragment_welcome.background_welcome
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class WelcomeFragment : Fragment() {
@@ -33,6 +35,13 @@ class WelcomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         registerListeners()
+        setBackgroundImage()
+    }
+
+    private fun setBackgroundImage() {
+        Glide.with(requireContext())
+            .load(R.drawable.loginscherm)
+            .into(background_welcome)
     }
 
     private fun registerListeners() {
@@ -41,11 +50,10 @@ class WelcomeFragment : Fragment() {
         })
         welcomeViewModel.loginButtonClicked.observe(this, Observer {
             // TODO: add username/password auth here!
-            var userViewModel: UserViewModel
             if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) == null) {
                 getKoin().createScope(KoinModules.USER_SCOPE_ID)
             }
-            userViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+            val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
             userViewModel.setUser(User(welcomeViewModel.userName.value!!, avatarName = "meisje_stoer"))
             navigation?.goToCityScreen()
             // Toast.makeText(context, "Inloggen is nog niet geimplementeerd!", Toast.LENGTH_SHORT).show()
