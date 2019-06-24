@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_inkleuren
 import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_zittend
+import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
@@ -78,6 +79,8 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun updateUI() {
+        setBackgroundImage()
+
         eventDetailsBinding.recyclerViewEventDetailsDetails.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -86,6 +89,12 @@ class EventDetailsFragment : Fragment() {
         }
         detailThumbnailsAdapter =
             eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
+    }
+
+    private fun setBackgroundImage() {
+        Glide.with(requireContext())
+            .load(R.drawable.park)
+            .into(background_event_details)
     }
 
     private fun startListeners() {

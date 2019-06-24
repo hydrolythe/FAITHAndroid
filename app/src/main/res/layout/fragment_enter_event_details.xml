@@ -16,9 +16,9 @@
 
         <!--ACHTERGROND-->
         <ImageView
+            android:id="@+id/background_event_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/park"
             android:contentDescription="@string/descr_city_park" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -83,7 +83,7 @@
 
             <EditText
                 android:id="@+id/txt_event_details_title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:inputType="text"
