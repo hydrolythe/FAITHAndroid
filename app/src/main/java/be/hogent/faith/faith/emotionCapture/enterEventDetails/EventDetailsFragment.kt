@@ -32,7 +32,11 @@ class EventDetailsFragment : Fragment() {
 
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
 
-    private lateinit var saveDialog: SaveEventDialog
+/***
+ * Momenteel in commentaar gezet omdat de save Event knop nu op de details wordt getoond. In de toekomst zal het misschien toch nodig
+ * zijn als beslist wordt om een event op te slaan als bvb enkel de avatar al is ingekleurd
+   private lateinit var saveDialog: SaveEventDialog
+*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,13 +103,17 @@ class EventDetailsFragment : Fragment() {
             navigation?.startEventDetail(DetailType.TEXT)
         })
         eventViewModel.drawingButtonClicked.observe(this, Observer {
-            navigation?.startMakeDrawingFragment()
+            // navigation?.startMakeDrawingFragment()
+            navigation?.startEventDetail(DetailType.DRAWING)
         })
 
         eventViewModel.errorMessage.observe(this, Observer { errorMessage ->
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
 
+        /***
+         * Momenteel in commentaar gezet omdat de save Event knop nu op de details wordt getoond. In de toekomst zal het misschien toch nodig
+         * zijn als beslist wordt om een event op te slaan als bvb enkel de avatar al is ingekleurd
         eventViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
             saveDialog.show(fragmentManager!!, null)
@@ -127,6 +135,7 @@ class EventDetailsFragment : Fragment() {
         userViewModel.errorMessage.observe(this, Observer { errorMessage ->
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
+        */
     }
 
     override fun onStop() {

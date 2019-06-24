@@ -5,21 +5,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.Avatar
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvider
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.avatar_rv_item.view.avatar_list_image
 
 /**
  * Adapter used by the Recyclerview which shows the Avatars in the [RegisterAvatarFragment].
- * The Recyclerview center their elements in the middle and snap the elements there.
  * The elements in the recyclerview are able to be selected.
  */
-class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
+class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>(), AvatarClickListener {
 
 
     /**
      * The list of avatars which need to be displayed.
      */
     var avatars: List<Avatar> = emptyList()
+
+    /*
+    * Position in the list which is selected. -1 if none of the elements is selected.
+     */
+    var itemSelected = -1;
 
     /**
      * Creates the ViewHolder.
@@ -67,6 +73,17 @@ class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
         fun bind(avatarItem: Avatar) {
             val avatarDrawable = avatarProvider.getAvatarDrawable(avatarItem.avatarName)
             Glide.with(this.itemView.context).load(avatarDrawable).into(view.avatar_list_image)
+        }
+
+    }
+
+    override fun onAvatarClicked(view : View, position: Int) {
+        if(itemSelected == position){
+            //We need to deselect the selected element
+            view.isSelected = false;
+        }else{
+            //Some other element has been selected
+            //TODO: implement
         }
 
     }

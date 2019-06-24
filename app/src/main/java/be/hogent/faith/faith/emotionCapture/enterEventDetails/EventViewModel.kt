@@ -10,6 +10,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
@@ -131,9 +132,12 @@ class EventViewModel(
     val drawingButtonClicked: LiveData<Unit>
         get() = _drawingButtonClicked
 
+    /**
+     * verhuisd naar EditDetail
     private val _sendButtonClicked = SingleLiveEvent<Unit>()
     val sendButtonClicked: LiveData<Unit>
         get() = _sendButtonClicked
+     */
 
     private val _emotionAvatarClicked = SingleLiveEvent<Unit>()
     val emotionAvatarClicked: LiveData<Unit>
@@ -171,9 +175,12 @@ class EventViewModel(
         _drawingButtonClicked.call()
     }
 
+    /**
+     * verhuisd naar EditDetail
     fun onSendButtonClicked() {
         _sendButtonClicked.call()
     }
+    */
 
     fun onCancelButtonClicked() {
         _cancelButtonClicked.call()
@@ -181,6 +188,10 @@ class EventViewModel(
 
     fun onDateButtonClicked() {
         _dateButtonClicked.call()
+    }
+
+    fun getLatestDetail(): Detail? {
+        return event.value?.getLastDetail() ?: null
     }
 
     /**

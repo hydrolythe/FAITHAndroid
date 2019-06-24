@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.loginOrRegister
+package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
 import android.graphics.drawable.Drawable
 
@@ -10,13 +10,25 @@ interface AvatarProvider {
     fun getAvatars(): List<Avatar> {
         return listOf(
             "jongen_gamer",
+            "meisje_stoer",
             "jongen_gamer",
+            "meisje_stoer",
             "jongen_gamer",
+            "meisje_stoer",
             "jongen_gamer",
+            "meisje_stoer",
             "jongen_gamer",
+            "meisje_stoer",
             "jongen_gamer",
+            "meisje_stoer",
             "jongen_gamer",
-            "jongen_gamer"
+            "meisje_stoer",
+            "jongen_gamer",
+            "meisje_stoer",
+            "jongen_gamer",
+            "meisje_stoer",
+            "jongen_gamer",
+            "meisje_stoer"
         ).map { name -> Avatar(name) }
     }
 
