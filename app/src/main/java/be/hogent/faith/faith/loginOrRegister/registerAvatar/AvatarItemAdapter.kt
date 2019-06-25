@@ -1,34 +1,29 @@
 package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
+import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.selection.ItemDetailsLookup
-import androidx.recyclerview.selection.ItemKeyProvider
-import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
-import be.hogent.faith.R
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.avatar_rv_item.view.avatar_list_image
 
-/**
- * Adapter used by the Recyclerview which shows the Avatars in the [RegisterAvatarFragment].
- * The Recyclerview center their elements in the middle and snap the elements there.
- * The elements in the recyclerview are able to be selected.
- */
-class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
 
-    /**
-     * This [SelectionTracker] provides support for managing a selection of the items in the
-     * RecyclerView instance.
-     */
-    var selectionTracker: SelectionTracker<Long>? = null
+
+class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
+
 
     /**
      * The list of avatars which need to be displayed.
      */
     var avatars: List<Avatar> = emptyList()
+
+    var selectedItem : Int = -1
+
+    /**
+     * The Onclicklistener for when a view has been clicked.
+     */
+    lateinit var mOnItemClickListener: View.OnClickListener
 
     /**
      * Creates the ViewHolder.
@@ -36,7 +31,7 @@ class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.avatar_rv_item,
+                be.hogent.faith.R.layout.avatar_rv_item,
                 parent,
                 false
             )
@@ -50,13 +45,20 @@ class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
         return avatars.size
     }
 
+    fun setOnItemClickListener(itemClickListener: View.OnClickListener) {
+        mOnItemClickListener = itemClickListener
+    }
+
     /**
      * Binds the image view of the list item to the desired image.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        selectionTracker?.let {
-            holder.bind(avatars[position], it.isSelected(position.toLong()))
+        if(position == selectedItem){
+            holder.bind(avatars[position], true)
+        }else {
+            holder.bind(avatars[position], false)
         }
+        holder.setClicklistener()
     }
 
     /**
@@ -74,72 +76,16 @@ class AvatarItemAdapter : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
          */
         fun bind(avatarItem: Avatar, isActivated: Boolean) {
             val avatarDrawable = avatarProvider.getAvatarDrawable(avatarItem.avatarName)
+            view.isActivated= isActivated
             Glide.with(this.itemView.context).load(avatarDrawable).into(view.avatar_list_image)
-            // This property is defined in res/drawable/item_background which in turn is used in the layout file
-            // itself.
-            itemView.isActivated = isActivated
         }
 
-        /**
-         * This function returns the details for the items in the recyclerView.
-         * Required to use the [SelectionTracker].
-         */
-        fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> {
-            return Details().apply {
-                this.position = adapterPosition.toLong()
-            }
+        fun setClicklistener(){
+            view.setTag(this)
+            view.setOnClickListener(mOnItemClickListener)
         }
+
     }
 
-    /**
-     * Extra information used by the selection library about the selected element in the Recyclerview.
-     */
-    internal class Details : ItemDetailsLookup.ItemDetails<Long>() {
 
-        var position: Long = 0
-
-        override fun getPosition(): Int {
-            return position.toInt()
-        }
-
-        override fun getSelectionKey(): Long? {
-            return position
-        }
-
-        override fun inSelectionHotspot(e: MotionEvent): Boolean {
-            return true
-        }
-    }
-
-    /**
-     * Class which return the keys for a certain element in the Recyclerview.
-     * In this case we are still using the position in the RV.
-     */
-    internal class KeyProvider : ItemKeyProvider<Long>(SCOPE_MAPPED) {
-
-        override fun getKey(position: Int): Long? {
-            return position.toLong()
-        }
-
-        override fun getPosition(key: Long): Int {
-            return key.toInt()
-        }
-    }
-
-    /**
-     * This class provides the selection library code necessary access
-     * to information about items associated with android.view.MotionEvent
-     */
-    internal class DetailsLookup(private val recyclerView: RecyclerView) : ItemDetailsLookup<Long>() {
-        override fun getItemDetails(e: MotionEvent): ItemDetailsLookup.ItemDetails<Long>? {
-            val view = recyclerView.findChildViewUnder(e.x, e.y)
-            if (view != null) {
-                val viewHolder = recyclerView.getChildViewHolder(view)
-                if (viewHolder is ViewHolder) {
-                    return viewHolder.getItemDetails()
-                }
-            }
-            return null
-        }
-    }
 }
