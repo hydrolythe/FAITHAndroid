@@ -22,14 +22,14 @@ class RegisterUserInfoViewModel : ViewModel() {
         get() = _confirmUserInfoClicked
 
     fun onConfirmUserInfoClicked() {
-        if (password.value.isNullOrBlank()) {
-            _errorMessage.postValue(R.string.register_password_empty)
-            return
-        }
-        if (password.value != passwordRepeated.value) {
-            _errorMessage.postValue(R.string.register_passwords_nomatch)
-            return
-        }
+//        if (password.value.isNullOrBlank()) {
+//            _errorMessage.postValue(R.string.register_password_empty)
+//            return
+//        }
+//        if (password.value != passwordRepeated.value) {
+//            _errorMessage.postValue(R.string.register_passwords_nomatch)
+//            return
+//        }
         _confirmUserInfoClicked.call()
     }
 }

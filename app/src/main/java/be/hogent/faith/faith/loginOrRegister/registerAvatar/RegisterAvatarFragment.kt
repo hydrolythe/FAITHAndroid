@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.library.baseAdapters.BR.avatarViewModel
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -41,15 +40,14 @@ const val SELECTION_ID = "avatarSelection"
 class RegisterAvatarFragment : Fragment() {
 
     private var navigation: AvatarFragmentNavigationListener? = null
-
+    val avatarAdapter = AvatarItemAdapter()
     /**
      * ViewModel used for the avatars.
      */
-    private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel()
+    private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel<RegisterAvatarViewModel>()
 
     private val userViewModel by inject<UserViewModel>(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
     private val registerUserInfoViewModel by sharedViewModel<RegisterUserInfoViewModel>()
-
     private val registerUserViewModel by viewModel<RegisterUserViewModel>()
 
 
@@ -59,6 +57,7 @@ class RegisterAvatarFragment : Fragment() {
         binding.registerAvatarViewModel = registerAvatarViewModel
         binding.registerUserInfoViewModel = registerUserInfoViewModel
         binding.registerUserViewModel = registerUserViewModel
+        Log.i(TAG, "Created the Fragmentview")
         return binding.root
     }
 
@@ -66,8 +65,6 @@ class RegisterAvatarFragment : Fragment() {
         super.onStart()
         configureRecyclerViewAdapter()
         registerListeners()
-
-
     }
 
     private fun registerListeners() {
@@ -107,34 +104,34 @@ class RegisterAvatarFragment : Fragment() {
     }
 
 
-
-    private fun setRecyclerViewOrientation() {
-        // Check here so we can use FragmentScenario to test
-        val orientation = if (activity is AppCompatActivity) {
-            (activity as AppCompatActivity).getRotation()
-        } else {
-            be.hogent.faith.R.integer.LANDSCAPE
-        }
-        when (orientation) {
-            be.hogent.faith.R.integer.PORTRAIT -> {
-                avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-                avatar_rv_avatar.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-            }
-            be.hogent.faith.R.integer.LANDSCAPE -> {
-                avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
-                avatar_rv_avatar.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
-            }
-        }
-    }
-
     private fun configureRecyclerViewAdapter() {
-        val avatarAdapter = AvatarItemAdapter()
+
+        avatarAdapter.avatars = registerAvatarViewModel.avatars.value!!
         avatar_rv_avatar.adapter = avatarAdapter
-        LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar);
+        avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
+        avatarAdapter.setOnItemClickListener(onItemClickListener)
+
+
     }
 
     interface AvatarFragmentNavigationListener {
         fun goToCityScreen()
+    }
+
+    /**
+     * Does the update of the ViewModel en sets the selection of the avatar.
+     */
+    private val onItemClickListener = View.OnClickListener { view ->
+        val viewHolder = view.tag as RecyclerView.ViewHolder
+        val position = viewHolder.adapterPosition
+        viewHolder.itemView.isActivated = true
+        val oldSelection = avatarAdapter.selectedItem
+        avatarAdapter.selectedItem = position
+        if(oldSelection != -1)
+            avatarAdapter.notifyItemChanged(oldSelection)
+        avatarAdapter.notifyItemChanged(position)
+        registerAvatarViewModel.onAvatarClicked(position)
+
     }
 
     companion object {
