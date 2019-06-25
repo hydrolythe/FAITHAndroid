@@ -48,17 +48,6 @@
                 app:layout_constraintTop_toTopOf="@+id/top_guide_line"
                 tools:listitem="@layout/avatar_rv_item" />
 
-            <View
-                android:id="@+id/btn_register_finishRegistration"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:onClick="@{() -> registerUserViewModel.onFinishRegistrationClicked()}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/top_guide_line"
                 android:layout_width="wrap_content"
@@ -72,6 +61,21 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.85" />
+
+            <Button
+                android:id="@+id/btn_register_finishRegistration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:onClick="@{() -> registerUserViewModel.onFinishRegistrationClicked()}"
+                android:background="@drawable/ic_pijl"
+                android:text="Button"
+                app:layout_constraintBottom_toTopOf="@+id/avatar_rv_avatar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

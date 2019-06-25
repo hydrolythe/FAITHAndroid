@@ -46,4 +46,7 @@ class RegisterAvatarViewModel(
         _avatars.value = (avatarProvider.getAvatars())
     }
 
+     fun onAvatarClicked(index: Int) {
+        _selectedItem.postValue(index)
+    }
 }
