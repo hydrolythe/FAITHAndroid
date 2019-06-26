@@ -27,7 +27,7 @@ class EditDetailFragmentTest {
     fun editDetailsFragment_saveEventWithoutTitleEntered_errorMessage() {
         Espresso.onView(ViewMatchers.withId(R.id.btn_event_send)).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withId(R.id.btn_save_event_save))
-            .perform(ViewActions.scrollTo(), ViewActions.click())
+            .perform(ViewActions.click())
         ToastMatcher.isToastMessageDisplayed(R.string.error_event_no_title)
     }
 
@@ -40,7 +40,7 @@ class EditDetailFragmentTest {
             .perform(ViewActions.typeText("Notities notities notities"))
         Espresso.closeSoftKeyboard()
         Espresso.onView(ViewMatchers.withId(R.id.btn_save_event_save))
-            .perform(ViewActions.scrollTo(), ViewActions.click())
+            .perform(ViewActions.click())
         ToastMatcher.isToastMessageDisplayed(R.string.save_event_success)
     }
 }
