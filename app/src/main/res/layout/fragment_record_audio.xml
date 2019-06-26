@@ -19,9 +19,9 @@
         android:orientation="vertical">
     <!--ACHTERGROND-->
     <ImageView
-        android:id="@+id/background_recordaudio_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/record_audio"
         android:contentDescription="@string/tekenen" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

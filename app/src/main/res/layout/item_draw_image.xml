@@ -4,4 +4,4 @@
     android:id="@+id/img_draw_image"
     android:layout_width="50dp"
     android:layout_height="50dp"
-    android:contentDescription="@string/avatar" tools:src="@tools:sample/avatars" />
+    tools:src="@tools:sample/avatars" />
