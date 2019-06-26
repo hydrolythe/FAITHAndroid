@@ -79,7 +79,7 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun updateUI() {
-        setBackgroundImage()
+       // setBackgroundImage()
 
         eventDetailsBinding.recyclerViewEventDetailsDetails.apply {
             setHasFixedSize(true)

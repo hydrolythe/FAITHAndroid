@@ -19,7 +19,8 @@
             android:id="@+id/background_city_screen"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/frag_main_descr_city_plan" />
+            android:contentDescription="@string/frag_main_descr_city_plan"
+            android:background="@drawable/citymap_faith"/>
 
         <!-- KNOPPEN -->
         <!-- Invisible to make it transparent -->

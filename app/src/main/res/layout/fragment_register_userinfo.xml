@@ -19,7 +19,8 @@
         <ImageView
             android:id="@+id/background_register_userinfo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@drawable/register_background_userinfo" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
