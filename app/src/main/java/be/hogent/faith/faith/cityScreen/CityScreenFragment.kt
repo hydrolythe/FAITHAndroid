@@ -52,7 +52,7 @@ class CityScreenFragment : Fragment() {
         super.onStart()
         registerListeners()
 
-        setBackgroundImage()
+       // setBackgroundImage()
     }
 
     private fun setBackgroundImage() {

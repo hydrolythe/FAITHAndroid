@@ -35,7 +35,7 @@ class WelcomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         registerListeners()
-        setBackgroundImage()
+      //  setBackgroundImage()
     }
 
     private fun setBackgroundImage() {
