@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -11,8 +12,7 @@
             type="be.hogent.faith.faith.UserViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/screen_take_photo"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -34,48 +34,59 @@
             android:layout_height="0dp"
             android:layout_margin="0dp"
             android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenOrSaved)}"
+            android:contentDescription="@string/take_photo_de_foto"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <ImageView
             android:id="@+id/btn_takePhoto_takePhoto"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
             android:onClick="@{() -> photoViewModel.onTakePhotoButtonClicked()}"
+            android:scaleType="fitXY"
+            android:contentDescription="@string/take_photo_neem_foto"
+            android:src="@drawable/btn_take_picture"
             android:text="@string/frag_takePhoto_takePhoto"
             android:visibility="@{safeUnbox(photoViewModel.visibilityTakePhoto)}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
             android:id="@+id/btn_takePhoto_Ok"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/ok"
             android:layout_margin="8dp"
+            android:contentDescription="@string/ok"
             android:onClick="@{() -> photoViewModel.onOkPhotoButtonClicked()}"
-            android:src="@drawable/ic_outline_thumb_up"
             android:text="@string/frag_takePhoto_takePhoto"
             android:tint="@color/colorPrimary"
             android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenNotSaved)}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/btn_takePhoto_NotOk"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_thumb_up"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
 
         <ImageButton
             android:id="@+id/btn_takePhoto_NotOk"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:contentDescription="@string/cancel"
             android:onClick="@{() -> photoViewModel.onNotOkPhotoButtonClicked()}"
-            android:src="@drawable/ic_outline_thumb_down"
             android:tint="@color/colorAccent"
             android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenNotSaved)}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_takePhoto_Ok" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_takePhoto_Ok"
+            app:srcCompat="@drawable/ic_thumb_down" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

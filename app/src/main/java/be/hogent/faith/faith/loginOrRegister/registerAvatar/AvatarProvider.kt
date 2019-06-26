@@ -28,4 +28,9 @@ interface AvatarProvider {
      * Get the drawable for a specific entry in [avatarNames]
      */
     fun getAvatarDrawable(avatarName: String): Drawable
+    fun getAvatarDrawableStaan(avatarName: String): Drawable
+    fun getAvatarDrawableZitten(avatarName: String): Drawable
+    fun getAvatarDrawableGezicht(avatarName: String): Drawable
+    fun getAvatarDrawableOutline(avatarName: String): Drawable
+    fun getAvatarDrawableOutlineId(avatarName: String): Int
 }

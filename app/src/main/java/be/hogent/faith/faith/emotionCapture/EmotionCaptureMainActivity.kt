@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
+import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.drawing.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.MakeDrawingFragment
@@ -16,10 +18,14 @@ import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.util.replaceFragment
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_drawer_layout
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_nav_view
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.UUID
@@ -46,6 +52,9 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     private lateinit var takePhotoViewModel: TakePhotoViewModel
 
     private lateinit var recordAudioViewModel: RecordAudioViewModel
+
+    private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val avatarProvider: AvatarProvider by inject()
 
     lateinit var enterTextViewModel: EnterTextViewModel
 
@@ -100,8 +109,9 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     }
 
     override fun startDrawEmotionAvatarFragment() {
+        val avatar = avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
         replaceFragment(
-            DrawEmotionAvatarFragment.newInstance(R.drawable.outline), R.id.emotionCapture_fragment_container
+            DrawEmotionAvatarFragment.newInstance(avatar), R.id.emotionCapture_fragment_container
         )
     }
 
@@ -122,8 +132,9 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     }
 
     override fun startEventDetail(type: DetailType) {
+        val avatar = avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
         replaceFragment(
-            EditDetailFragment.newInstance(type, R.drawable.outline),
+            EditDetailFragment.newInstance(type, avatar),
             R.id.emotionCapture_fragment_container
         )
     }
