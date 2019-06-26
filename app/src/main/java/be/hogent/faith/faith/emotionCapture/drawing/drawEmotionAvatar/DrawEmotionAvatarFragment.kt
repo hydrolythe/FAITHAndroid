@@ -15,10 +15,8 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
 import be.hogent.faith.faith.emotionCapture.drawing.DrawFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import com.bumptech.glide.Glide
 import com.divyanshu.draw.widget.DrawView
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.android.synthetic.main.fragment_draw_avatar.background_draw_avatar_screen
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 /**
@@ -63,15 +61,8 @@ class DrawEmotionAvatarFragment : DrawFragment() {
     override fun onStart() {
         super.onStart()
 
-        setBackgroundImage()
         configureDrawingCanvas()
         listenToViewModelEvents()
-    }
-
-    private fun setBackgroundImage() {
-        Glide.with(requireContext())
-            .load(R.drawable.draw_emotion)
-            .into(background_draw_avatar_screen)
     }
 
     private fun listenToViewModelEvents() {

@@ -13,9 +13,7 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawBinding
 import be.hogent.faith.faith.emotionCapture.drawing.DrawFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import com.bumptech.glide.Glide
 import com.divyanshu.draw.widget.DrawView
-import kotlinx.android.synthetic.main.fragment_draw.background_draw_screen
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -41,17 +39,10 @@ class MakeDrawingFragment : DrawFragment() {
     override fun onStart() {
         super.onStart()
 
-        setBackgroundImage()
         configureDraggableImagesRecyclerView()
         configureDrawView()
 
         startListeners()
-    }
-
-    private fun setBackgroundImage() {
-        Glide.with(requireContext())
-            .load(R.drawable.draw_emotion)
-            .into(background_draw_screen)
     }
 
     private fun startListeners() {
