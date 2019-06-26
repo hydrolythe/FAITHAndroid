@@ -9,9 +9,9 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 /**
  * ViewModel for the Avatar selection screen
  */
-class RegisterAvatarViewModel(
+class RegisterAvatarViewModel (
     private val avatarProvider: AvatarProvider
-) : ViewModel() {
+) : ViewModel(), AvatarItemAdapter.onAvatarClickListener {
 
     private var _avatars = MutableLiveData<List<Avatar>>()
     val avatars: LiveData<List<Avatar>>
@@ -46,7 +46,7 @@ class RegisterAvatarViewModel(
         _avatars.value = (avatarProvider.getAvatars())
     }
 
-     fun onAvatarClicked(index: Int) {
+     override fun onAvatarClicked(index: Int) {
         _selectedItem.postValue(index)
     }
 }

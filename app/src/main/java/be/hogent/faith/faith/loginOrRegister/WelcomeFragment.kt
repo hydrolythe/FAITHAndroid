@@ -32,17 +32,6 @@ class WelcomeFragment : Fragment() {
 
     private val welcomeViewModel by viewModel<WelcomeViewModel>()
 
-
-
-    /**
-     * Authentication variables
-     */
-    private val auth0: Auth0 by inject()
-    private val client : AuthenticationAPIClient by inject()
-    private val  credentialsManager : SecureCredentialsManager by inject()
-
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: be.hogent.faith.databinding.FragmentWelcomeBinding =
             DataBindingUtil.inflate(inflater, be.hogent.faith.R.layout.fragment_welcome, container, false)
@@ -53,18 +42,23 @@ class WelcomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        //OIDC conformant = strict application of the authentication flow of OAuth
         auth0.isOIDCConformant = true
         registerListeners()
 
         // Obtain the existing credentials and move to the next activity
         credentialsManager.getCredentials(object : BaseCallback<Credentials, CredentialsManagerException> {
-           override fun onSuccess(credentials: Credentials) {
+
+            /**
+             * User was already logged in
+             */
+            override fun onSuccess(credentials: Credentials) {
                 navigation!!.goToCityScreen()
             }
 
+            //Authentication cancelled by the user
             override fun onFailure(error: CredentialsManagerException) {
-                //Authentication cancelled by the user. Exit the app
-                Log.e(TAG,"${error.message}")
+                    Log.e(TAG,"${error.message}")
             }
         })
 
@@ -94,41 +88,10 @@ class WelcomeFragment : Fragment() {
         fun goToCityScreen()
     }
 
-    private fun login() {
-        WebAuthProvider.init(auth0)
-            .withScheme("app")
-            //Allow refresh tokens
-            .withScope("openid offline_access")
-            .withAudience(String.format("https://%s/userinfo", getString(be.hogent.faith.R.string.com_auth0_domain)))
-            .start(activity as Activity, webCallback)
 
-    }
-
-
-    private val webCallback = object : AuthCallback {
-        override fun onFailure( dialog: Dialog) {
-            activity!!.runOnUiThread(Runnable { dialog.show() })
-        }
-
-        override fun onFailure(exception: AuthenticationException) {
-            activity!!.runOnUiThread(Runnable {
-                Toast.makeText(activity, "Log In - Error Occurred", Toast.LENGTH_SHORT).show()
-            })
-        }
-
-        override fun onSuccess(credentials: Credentials) {
-            activity!!.runOnUiThread(Runnable {
-                Toast.makeText(activity, "Log In - Success", Toast.LENGTH_SHORT).show()
-            })
-            credentialsManager.saveCredentials(credentials)
-            navigation!!.goToCityScreen()
-        }
-    }
 
 
     companion object {
-
-        private val CODE_DEVICE_AUTHENTICATION = 22
 
         /**
          * Use this factory method to create a new instance of

@@ -40,7 +40,7 @@ const val SELECTION_ID = "avatarSelection"
 class RegisterAvatarFragment : Fragment() {
 
     private var navigation: AvatarFragmentNavigationListener? = null
-    val avatarAdapter = AvatarItemAdapter()
+
     /**
      * ViewModel used for the avatars.
      */
@@ -81,12 +81,15 @@ class RegisterAvatarFragment : Fragment() {
                         "password ${registerUserInfoViewModel.password.value}, " +
                         "avatar ${registerAvatarViewModel.selectedAvatar.value}"
             )
-            registerUserViewModel.registerUser(
-                registerUserInfoViewModel.userName.value!!,
-                registerUserInfoViewModel.password.value!!,
+            //registerUserViewModel.registerUser
+            //(
+                //registerUserInfoViewModel.userName.value!!,
+                //registerUserInfoViewModel.password.value!!,
                 // TODO: fix so we can used [RegisterAvatarViewModel.selectedAvatar]
-                registerAvatarViewModel.avatars.value!![registerAvatarViewModel.selectedItem.value!!.toInt()]
-            )
+                //registerAvatarViewModel.avatars.value!![registerAvatarViewModel.selectedItem.value!!.toInt()]
+            //)
+            //TODO: tijdelijke fix na het registreren met een user toegevoegd worden
+            navigation!!.goToCityScreen()
         })
 
         registerUserViewModel.errorMessage.observe(this, Observer { errorMessageID ->
@@ -105,34 +108,17 @@ class RegisterAvatarFragment : Fragment() {
 
 
     private fun configureRecyclerViewAdapter() {
-
-        avatarAdapter.avatars = registerAvatarViewModel.avatars.value!!
-        avatar_rv_avatar.adapter = avatarAdapter
+        with(AvatarItemAdapter(registerAvatarViewModel)) {
+            avatars = registerAvatarViewModel.avatars.value!!
+            avatar_rv_avatar.adapter = this
+        }
         avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
-        avatarAdapter.setOnItemClickListener(onItemClickListener)
-
-
     }
 
     interface AvatarFragmentNavigationListener {
         fun goToCityScreen()
     }
 
-    /**
-     * Does the update of the ViewModel en sets the selection of the avatar.
-     */
-    private val onItemClickListener = View.OnClickListener { view ->
-        val viewHolder = view.tag as RecyclerView.ViewHolder
-        val position = viewHolder.adapterPosition
-        viewHolder.itemView.isActivated = true
-        val oldSelection = avatarAdapter.selectedItem
-        avatarAdapter.selectedItem = position
-        if(oldSelection != -1)
-            avatarAdapter.notifyItemChanged(oldSelection)
-        avatarAdapter.notifyItemChanged(position)
-        registerAvatarViewModel.onAvatarClicked(position)
-
-    }
 
     companion object {
         /**

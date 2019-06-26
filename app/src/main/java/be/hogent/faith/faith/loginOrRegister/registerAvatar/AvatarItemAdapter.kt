@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +8,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.avatar_rv_item.view.avatar_list_image
 
 
-
-class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
+class AvatarItemAdapter(private val avatarClickListener: onAvatarClickListener) : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
 
 
     /**
@@ -18,12 +16,7 @@ class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>()
      */
     var avatars: List<Avatar> = emptyList()
 
-    var selectedItem : Int = -1
-
-    /**
-     * The Onclicklistener for when a view has been clicked.
-     */
-    lateinit var mOnItemClickListener: View.OnClickListener
+    var selectedItem: Int = -1
 
     /**
      * Creates the ViewHolder.
@@ -45,20 +38,17 @@ class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>()
         return avatars.size
     }
 
-    fun setOnItemClickListener(itemClickListener: View.OnClickListener) {
-        mOnItemClickListener = itemClickListener
-    }
 
     /**
      * Binds the image view of the list item to the desired image.
      */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if(position == selectedItem){
+        if (position == selectedItem) {
             holder.bind(avatars[position], true)
-        }else {
+        } else {
             holder.bind(avatars[position], false)
         }
-        holder.setClicklistener()
+
     }
 
     /**
@@ -76,15 +66,32 @@ class AvatarItemAdapter() : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>()
          */
         fun bind(avatarItem: Avatar, isActivated: Boolean) {
             val avatarDrawable = avatarProvider.getAvatarDrawable(avatarItem.avatarName)
-            view.isActivated= isActivated
+            view.isActivated = isActivated
             Glide.with(this.itemView.context).load(avatarDrawable).into(view.avatar_list_image)
+            view.tag = this
+            setClickListener()
         }
 
-        fun setClicklistener(){
-            view.setTag(this)
-            view.setOnClickListener(mOnItemClickListener)
+        private fun setClickListener() {
+            view.setOnClickListener(View.OnClickListener {
+                val viewHolder = it.tag as RecyclerView.ViewHolder
+                val position = viewHolder.adapterPosition
+                viewHolder.itemView.isActivated = true
+                val oldSelection = selectedItem
+                selectedItem = position
+                if (oldSelection != -1)
+                    notifyItemChanged(oldSelection)
+                notifyItemChanged(position)
+                avatarClickListener.onAvatarClicked(position)
+
+            })
         }
 
+    }
+
+
+    interface onAvatarClickListener {
+        fun onAvatarClicked(index: Int)
     }
 
 
