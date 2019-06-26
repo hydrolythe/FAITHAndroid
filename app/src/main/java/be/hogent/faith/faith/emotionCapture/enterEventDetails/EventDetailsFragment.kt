@@ -15,7 +15,7 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.fragment_enter_event_details.background_enter_event_details
+import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -34,11 +34,11 @@ class EventDetailsFragment : Fragment() {
 
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
 
-/***
- * Momenteel in commentaar gezet omdat de save Event knop nu op de details wordt getoond. In de toekomst zal het misschien toch nodig
- * zijn als beslist wordt om een event op te slaan als bvb enkel de avatar al is ingekleurd
-   private lateinit var saveDialog: SaveEventDialog
-*/
+    /***
+     * Momenteel in commentaar gezet omdat de save Event knop nu op de details wordt getoond. In de toekomst zal het misschien toch nodig
+     * zijn als beslist wordt om een event op te slaan als bvb enkel de avatar al is ingekleurd
+    private lateinit var saveDialog: SaveEventDialog
+     */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,10 +69,11 @@ class EventDetailsFragment : Fragment() {
         super.onStart()
         startListeners()
         updateUI()
-        Glide.with(this).load(R.drawable.park_faith).into(background_enter_event_details)
     }
 
     private fun updateUI() {
+        setBackgroundImage()
+
         eventDetailsBinding.recyclerViewEventDetailsDetails.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -81,6 +82,12 @@ class EventDetailsFragment : Fragment() {
         }
         detailThumbnailsAdapter =
             eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
+    }
+
+    private fun setBackgroundImage() {
+        Glide.with(requireContext())
+            .load(R.drawable.park_faith)
+            .into(background_event_details)
     }
 
     private fun startListeners() {
@@ -118,27 +125,27 @@ class EventDetailsFragment : Fragment() {
          * Momenteel in commentaar gezet omdat de save Event knop nu op de details wordt getoond. In de toekomst zal het misschien toch nodig
          * zijn als beslist wordt om een event op te slaan als bvb enkel de avatar al is ingekleurd
         eventViewModel.sendButtonClicked.observe(this, Observer {
-            saveDialog = SaveEventDialog.newInstance()
-            saveDialog.show(fragmentManager!!, null)
+        saveDialog = SaveEventDialog.newInstance()
+        saveDialog.show(fragmentManager!!, null)
         })
 
         userViewModel.eventSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
-            saveDialog.dismiss()
+        Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
+        saveDialog.dismiss()
 
-            // Go back to main screen
-            fragmentManager!!.popBackStack()
+        // Go back to main screen
+        fragmentManager!!.popBackStack()
         })
 
         userViewModel.eventSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
-            // Go back to main screen TOOD: not working right now
-            fragmentManager!!.popBackStack()
+        Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
+        // Go back to main screen TOOD: not working right now
+        fragmentManager!!.popBackStack()
         })
         userViewModel.errorMessage.observe(this, Observer { errorMessage ->
-            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
-        */
+         */
     }
 
     override fun onStop() {

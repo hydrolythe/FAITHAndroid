@@ -18,9 +18,9 @@
 
         <!--ACHTERGROND-->
         <ImageView
+            android:id="@+id/background_welcome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/loginscherm"
             android:contentDescription="@string/descr_loginscreen" />
 
         <!-- KNOPPEN -->
