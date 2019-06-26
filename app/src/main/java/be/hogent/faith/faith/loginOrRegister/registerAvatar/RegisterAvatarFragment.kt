@@ -80,7 +80,7 @@ class RegisterAvatarFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        setBackgroundImage()
+        // setBackgroundImage()
         configureRecyclerViewAdapter()
 
         registerListeners()

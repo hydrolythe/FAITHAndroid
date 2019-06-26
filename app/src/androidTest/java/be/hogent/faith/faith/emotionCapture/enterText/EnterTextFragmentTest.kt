@@ -27,8 +27,6 @@ class EnterTextFragmentTest {
 
     @Test()
     fun enterTextFragment_canClickAllButtons() {
-        Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_save)).perform(ViewActions.click())
-
         Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setBold)).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setItalic)).perform(ViewActions.click())
         Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setUnderline)).perform(ViewActions.click())

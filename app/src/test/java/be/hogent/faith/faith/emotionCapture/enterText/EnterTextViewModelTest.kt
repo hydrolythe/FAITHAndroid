@@ -38,15 +38,15 @@ class EnterTextViewModelTest {
     @Test
     fun enterTextVM_pickNewFontSize_isSelected() {
         viewModel.pickFontSize(EnterTextViewModel.FontSize.NORMAL)
-        Assert.assertEquals(EnterTextViewModel.FontSize.NORMAL.size, TestUtils.getValue(viewModel.selectedFontSize))
+        Assert.assertEquals(EnterTextViewModel.FontSize.NORMAL, TestUtils.getValue(viewModel.selectedFontSize))
 
         viewModel.pickFontSize(EnterTextViewModel.FontSize.LARGE)
-        Assert.assertEquals(EnterTextViewModel.FontSize.LARGE.size, TestUtils.getValue(viewModel.selectedFontSize))
+        Assert.assertEquals(EnterTextViewModel.FontSize.LARGE, TestUtils.getValue(viewModel.selectedFontSize))
     }
 
     @Test
     fun enterTextVM_onBoldClicked_callsListeners() {
-        val observer = mockk<Observer<Unit>>(relaxed = true)
+        val observer = mockk<Observer<Boolean?>>(relaxed = true)
         viewModel.boldClicked.observeForever(observer)
 
         viewModel.onBoldClicked()
@@ -56,7 +56,7 @@ class EnterTextViewModelTest {
 
     @Test
     fun enterTextVM_onItalicClicked_callsListeners() {
-        val observer = mockk<Observer<Unit>>(relaxed = true)
+        val observer = mockk<Observer<Boolean?>>(relaxed = true)
         viewModel.italicClicked.observeForever(observer)
 
         viewModel.onItalicClicked()
@@ -66,7 +66,7 @@ class EnterTextViewModelTest {
 
     @Test
     fun enterTextVM_onUnderlineClicked_callsListeners() {
-        val observer = mockk<Observer<Unit>>(relaxed = true)
+        val observer = mockk<Observer<Boolean?>>(relaxed = true)
         viewModel.underlineClicked.observeForever(observer)
 
         viewModel.onUnderlineClicked()
