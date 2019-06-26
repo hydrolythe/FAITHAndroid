@@ -26,11 +26,20 @@ import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class WelcomeFragment : Fragment() {
+class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
 
     private var navigation: WelcomeNavigationListener? = null
 
     private val welcomeViewModel by viewModel<WelcomeViewModel>()
+
+    private lateinit var loginManager :LoginManager
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loginManager = LoginManager(requireContext(),this)
+    }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: be.hogent.faith.databinding.FragmentWelcomeBinding =
@@ -42,25 +51,7 @@ class WelcomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        //OIDC conformant = strict application of the authentication flow of OAuth
-        auth0.isOIDCConformant = true
         registerListeners()
-
-        // Obtain the existing credentials and move to the next activity
-        credentialsManager.getCredentials(object : BaseCallback<Credentials, CredentialsManagerException> {
-
-            /**
-             * User was already logged in
-             */
-            override fun onSuccess(credentials: Credentials) {
-                navigation!!.goToCityScreen()
-            }
-
-            //Authentication cancelled by the user
-            override fun onFailure(error: CredentialsManagerException) {
-                    Log.e(TAG,"${error.message}")
-            }
-        })
 
     }
 
@@ -69,7 +60,7 @@ class WelcomeFragment : Fragment() {
             navigation!!.goToRegistrationScreen()
         })
         welcomeViewModel.loginButtonClicked.observe(this, Observer {
-            login()
+            loginManager.login()
         })
         welcomeViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
@@ -89,6 +80,13 @@ class WelcomeFragment : Fragment() {
     }
 
 
+    override fun onSuccess() {
+        navigation!!.goToCityScreen()
+    }
+
+    override fun onFailure(msg: String) {
+        Toast.makeText(activity, "Log In - Error Occurred : $msg", Toast.LENGTH_SHORT).show()
+    }
 
 
     companion object {

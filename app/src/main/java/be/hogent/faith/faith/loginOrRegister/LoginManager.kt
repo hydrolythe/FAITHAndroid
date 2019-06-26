@@ -2,23 +2,29 @@ package be.hogent.faith.faith.loginOrRegister
 
 import android.app.Activity
 import android.app.Dialog
-import android.widget.Toast
+import android.content.Context
+import be.hogent.faith.R
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationException
+import com.auth0.android.authentication.storage.CredentialsManagerException
 import com.auth0.android.authentication.storage.SecureCredentialsManager
+import com.auth0.android.callback.BaseCallback
 import com.auth0.android.provider.AuthCallback
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
-import org.koin.android.ext.android.inject
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.get
 
-class LoginManager {
+class LoginManager(
+    private val context: Context, private val loginCallback: LoginCallback
+) : KoinComponent {
 
     /**
      * Authentication variables
      */
-    private val auth0: Auth0 by inject()
+    private val auth0: Auth0 = get()
 
-    private val  credentialsManager : SecureCredentialsManager by inject()
+    private val credentialsManager: SecureCredentialsManager = get()
 
     init {
         auth0.isOIDCConformant = true
@@ -26,33 +32,54 @@ class LoginManager {
 
 
     fun login() {
-        WebAuthProvider.init(auth0)
-            .withScheme("app")
-            //Allow refresh tokens
-            .withScope("openid offline_access")
-            .withAudience(String.format("https://%s/userinfo", getString(be.hogent.faith.R.string.com_auth0_domain)))
-            .start(activity as Activity, webCallback)
+        // Obtain the existing credentials and move to the next activity
+        credentialsManager.getCredentials(object : BaseCallback<Credentials, CredentialsManagerException> {
+
+            /**
+             * User was already logged in
+             */
+            override fun onSuccess(credentials: Credentials) {
+                loginCallback.onSuccess()
+            }
+
+            override fun onFailure(error: CredentialsManagerException) {
+                WebAuthProvider.init(auth0)
+                    .withScheme("app")
+                    //Allow refresh tokens
+                    .withScope("openid offline_access")
+                    .withAudience(
+                        String.format(
+                            "https://%s/userinfo",
+                            context.getString(be.hogent.faith.R.string.com_auth0_domain)
+                        )
+                    )
+                    .start(context as Activity, webCallback)
+            }
+        })
+
 
     }
 
 
     private val webCallback = object : AuthCallback {
-        override fun onFailure( dialog: Dialog) {
-            activity!!.runOnUiThread(Runnable { dialog.show() })
+        override fun onFailure(dialog: Dialog) {
+            loginCallback.onFailure("onFailere called")
         }
 
         override fun onFailure(exception: AuthenticationException) {
-            activity!!.runOnUiThread(Runnable {
-                Toast.makeText(activity, "Log In - Error Occurred", Toast.LENGTH_SHORT).show()
-            })
+            loginCallback.onFailure(exception.localizedMessage)
         }
 
         override fun onSuccess(credentials: Credentials) {
-            activity!!.runOnUiThread(Runnable {
-                Toast.makeText(activity, "Log In - Success", Toast.LENGTH_SHORT).show()
-            })
             credentialsManager.saveCredentials(credentials)
-            navigation!!.goToCityScreen()
+            loginCallback.onSuccess()
         }
+    }
+
+
+    interface LoginCallback {
+        fun onSuccess()
+
+        fun onFailure(msg: String)
     }
 }
