@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -17,89 +18,169 @@
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:weightSum="100">
 
-        <ImageView
-            android:id="@+id/btn_draw_setColorBlack"
-            android:layout_width="50dp"
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/choose_black"
-            android:onClick="@{() -> drawViewModel.pickColor(Color.BLACK)}"
-            android:src="@drawable/circle_black" />
+            android:layout_weight="75"
+            app:cardCornerRadius="10dp"
+            android:layout_marginBottom="8dp">
 
-        <ImageView
-            android:id="@+id/btn_draw_setColorBlue"
-            android:layout_width="50dp"
+            <LinearLayout
+                android:id="@+id/linearLayoutColors"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/btn_draw_setColorBlack"
+                    android:layout_width="70dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:background="@{drawViewModel.selectedColor==Color.BLACK ? @drawable/background : @drawable/background_noborder}"
+                    android:contentDescription="@string/choose_black"
+                    android:onClick="@{() -> drawViewModel.pickColor(Color.BLACK)}"
+                    android:padding="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/paintpot_black" />
+
+                <ImageView
+                    android:id="@+id/btn_draw_setColorBlue"
+                    android:layout_width="70dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:background="@{drawViewModel.selectedColor==Color.BLUE ? @drawable/background : @drawable/background_noborder}"
+                    android:contentDescription="@string/choose_blue"
+                    android:onClick="@{() -> drawViewModel.pickColor(Color.BLUE)}"
+                    android:padding="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/paintpot_blue" />
+
+                <ImageView
+                    android:id="@+id/btn_draw_setColorRed"
+                    android:layout_width="70dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:background="@{drawViewModel.selectedColor==Color.RED ? @drawable/background : @drawable/background_noborder }"
+                    android:contentDescription="@string/choose_red"
+                    android:onClick="@{() -> drawViewModel.pickColor(Color.RED)}"
+                    android:padding="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/paintpot_red" />
+
+                <ImageView
+                    android:id="@+id/btn_draw_setColorYellow"
+                    android:layout_width="70dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:background="@{drawViewModel.selectedColor==Color.YELLOW ? @drawable/background : @drawable/background_noborder }"
+                    android:contentDescription="@string/choose_yellow"
+                    android:onClick="@{() -> drawViewModel.pickColor(Color.YELLOW)}"
+                    android:padding="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/paintpot_yellow" />
+
+                <ImageView
+                    android:id="@+id/btn_draw_setColorGreen"
+                    android:layout_width="70dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:background="@{drawViewModel.selectedColor==Color.GREEN ? @drawable/background : @drawable/background_noborder}"
+                    android:contentDescription="@string/choose_green"
+                    android:onClick="@{() -> drawViewModel.pickColor(Color.GREEN)}"
+                    android:padding="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/paintpot_green" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/choose_blue"
-            android:onClick="@{() -> drawViewModel.pickColor(Color.BLUE)}"
-            android:src="@drawable/circle_blue" />
+            android:layout_weight="25"
+            app:cardCornerRadius="10dp">
 
-        <ImageView
-            android:id="@+id/btn_draw_setColorRed"
-            android:layout_width="50dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            <LinearLayout
+                android:id="@+id/linearLayoutPensils"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
 
-            android:contentDescription="@string/choose_red"
-            android:onClick="@{() -> drawViewModel.pickColor(Color.RED)}"
-            android:src="@drawable/circle_red" />
-
-        <ImageView
-            android:id="@+id/btn_draw_setColorYellow"
-            android:layout_width="50dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/choose_yellow"
-            android:onClick="@{() -> drawViewModel.pickColor(Color.YELLOW)}"
-            android:src="@drawable/circle_yellow" />
-
-        <ImageView
-            android:id="@+id/btn_draw_setColorGreen"
-            android:layout_width="50dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/choose_green"
-            android:onClick="@{() -> drawViewModel.pickColor(Color.GREEN)}"
-            android:src="@drawable/circle_green" />
-
-        <Button
-            android:id="@+id/btn_draw_setThinLineWidth"
-            android:layout_width="50dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THIN)}"
-            android:text="@string/lineWidth_thin" />
+                <ImageView
+                    android:id="@+id/btn_draw_setThinLineWidth"
+                    android:layout_width="90dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:background="@{drawViewModel.selectedLineWidth==LineWidth.THIN ? @drawable/background : @drawable/background_noborder }"
+                    android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THIN)}"
+                    android:padding="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/brush_thinline"
+                    android:tint="@{drawViewModel.selectedColor}" />
 
 
-        <Button
-            android:id="@+id/btn_draw_setMediumLineWidth"
-            android:layout_width="50dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.MEDIUM)}"
-            android:text="@string/lineWidth_medium" />
+                <ImageView
+                    android:id="@+id/btn_draw_setMediumLineWidth"
+                    android:layout_width="90dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="left"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:background="@{drawViewModel.selectedLineWidth==LineWidth.MEDIUM ? @drawable/background : @drawable/background_noborder }"
+                    android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.MEDIUM)}"
+                    android:padding="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/brush_mediumline"
+                    android:tint="@{drawViewModel.selectedColor}" />
 
-        <Button
-            android:id="@+id/btn_draw_setThickLineWidth"
-            android:layout_width="50dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THICK)}"
-            android:text="@string/lineWidth_Thick" />
+                <ImageView
+                    android:id="@+id/btn_draw_setThickLineWidth"
+                    android:layout_width="90dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:background="@{drawViewModel.selectedLineWidth==LineWidth.THICK ? @drawable/background: @drawable/background_noborder}"
+                    android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THICK)}"
+                    android:padding="5dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/brush_thickline"
+                    android:tint="@{drawViewModel.selectedColor}" />
 
-        <ImageView
-            android:id="@+id/btn_draw_undo"
-            android:layout_width="50dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:contentDescription="@string/undo"
-            android:onClick="@{() -> drawViewModel.undo()}"
-            android:src="@drawable/ic_undo_black_24dp" />
+                <ImageView
+                    android:id="@+id/btn_draw_undo"
+                    android:layout_width="90dp"
+                    android:layout_height="0dp"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/undo"
+                    android:onClick="@{() -> drawViewModel.undo()}"
+                    android:padding="5dp"
+                    app:srcCompat="@drawable/ic_undo_black_24dp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
+
 </layout>
 
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -7,111 +8,178 @@
         <variable
             name="eventViewModel"
             type="be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel" />
+
         <variable
             name="userViewModel"
-            type="be.hogent.faith.faith.UserViewModel"/>
+            type="be.hogent.faith.faith.UserViewModel" />
     </data>
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TableLayout
-            android:id="@+id/screen_save_event"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--ACHTERGROND-->
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:stretchColumns="1">
+            android:layout_height="match_parent"
+            android:background="@drawable/edit_details_dialog"
+            android:contentDescription="@string/tekenen" />
 
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/lbl_save_event_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:text="@string/lbl_save_event_title"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                <EditText
-                    android:id="@+id/txt_save_event_title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:lines="1"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:text="@={eventViewModel.eventTitle}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    tools:text="Titel van event" />
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/lbl_save_event_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:text="@string/lbl_save_event_date"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                <Button
-                    android:id="@+id/btn_save_event_open_datepicker"
-                    style="@style/TextAppearance.AppCompat.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:onClick="@{() -> eventViewModel.onDateButtonClicked()}"
-                    android:text="@{eventViewModel.eventDateString}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    tools:text="@tools:sample/date/ddmmyy" />
-            </TableRow>
-
-            <TableRow android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/lbl_save_event_notes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:text="@string/lbl_save_event_notes"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        <!-- KNOPPEN -->
+        <!-- Invisible to make it transparent -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000">
 
 
-                <EditText
-                    android:id="@+id/txt_save_event_notes"
-                    android:layout_width="0dp"
-                    android:layout_margin="8dp"
-                    android:inputType="textMultiLine"
-                    android:minHeight="150dp"
-                    android:singleLine="false"
-                    android:text="@={eventViewModel.eventNotes}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    tools:text="@tools:sample/lorem/random" />
-            </TableRow>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.55" />
 
-            <TableRow>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
 
-                <Button
-                    android:id="@+id/btn_save_event_cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:onClick="@{() -> eventViewModel.onCancelButtonClicked()}"
-                    android:text="@string/lbl_back"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.73" />
 
-                <Button
-                    android:id="@+id/btn_save_event_save"
-                    style="@style/Widget.AppCompat.Button.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:onClick="@{() -> userViewModel.saveEvent(eventViewModel.eventTitle, eventViewModel.event)}"
-                    android:text="@string/save"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-            </TableRow>
-        </TableLayout>
-    </ScrollView>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.77" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_back_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.22" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_back_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.27" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_title_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.22" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_date_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.32" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_notes_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_form_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.28" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_form_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.77" />
+
+
+            <EditText
+                android:id="@+id/txt_save_event_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:hint="titel"
+                android:singleLine="true"
+                android:text="@={eventViewModel.eventTitle}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintBottom_toTopOf="@+id/guide_title_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_form_start"
+                tools:text="Titel van event" />
+
+
+            <EditText
+                android:id="@+id/btn_save_event_open_datepicker"
+                style="@style/TextAppearance.AppCompat.Small"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="#00000000"
+                android:inputType="date"
+                android:onClick="@{() -> eventViewModel.onDateButtonClicked()}"
+                android:text="@{eventViewModel.eventDateString}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintBottom_toTopOf="@+id/guide_date_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_form_start"
+                tools:text="@tools:sample/date/ddmmyy" />
+
+            <EditText
+                android:id="@+id/txt_save_event_notes"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#00000000"
+                android:hint="notities"
+                android:inputType="textMultiLine"
+                android:singleLine="false"
+                android:text="@={eventViewModel.eventNotes}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintBottom_toTopOf="@+id/guide_notes_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_form_start"
+                app:layout_constraintTop_toBottomOf="@+id/guide_date_bottom"
+                tools:text="@tools:sample/lorem/random" />
+
+            <View
+                android:id="@+id/btn_save_event_cancel"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:onClick="@{() -> eventViewModel.onCancelButtonClicked()}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintBottom_toTopOf="@+id/guide_save_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/guide_back_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_back_start"
+                app:layout_constraintTop_toBottomOf="@+id/guide_save_top" />
+
+            <View
+                android:id="@+id/btn_save_event_save"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:onClick="@{() -> userViewModel.saveEvent(eventViewModel.eventTitle, eventViewModel.event)}"
+                app:layout_constraintBottom_toTopOf="@+id/guide_save_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/guide_save_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_save_start"
+                app:layout_constraintTop_toBottomOf="@+id/guide_save_top" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
 
 </layout>

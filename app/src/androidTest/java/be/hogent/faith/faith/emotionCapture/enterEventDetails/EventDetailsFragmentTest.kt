@@ -40,7 +40,7 @@ class EventDetailsFragmentTest {
     fun eventDetailsFragment_buttonsOpenCorrectScreen() {
         onView(withId(R.id.btn_event_details_audio)).perform(click())
         allowPermissionsIfNeeded(uiDevice)
-        onView(withId(R.id.screen_record_audio)).check(matches(isDisplayed()))
+        onView(withId(R.id.btn_recordAudio_record)).check(matches(isDisplayed()))
         pressBack()
 
         onView(withId(R.id.btn_event_details_camera)).perform(click())
@@ -53,10 +53,6 @@ class EventDetailsFragmentTest {
         pressBack()
 
         onView(withId(R.id.btn_event_details_text)).perform(click())
-        pressBack()
-
-        onView(withId(R.id.btn_event_details_gotoEmotionAvatar)).perform(click())
-        onView(withId(R.id.screen_draw_avatar)).check(matches(isDisplayed()))
         pressBack()
     }
 

@@ -11,13 +11,16 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <!--ACHTERGROND-->
         <ImageView
             android:id="@+id/background_register_userinfo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@drawable/register_background_userinfo" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -106,6 +109,7 @@
                 android:layout_height="wrap_content"
                 android:background="#00000000"
                 android:hint="Kies een wachtwoord"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:inputType="textPassword"
                 android:text="@={registerUserInfoViewModel.password}"
                 app:layout_constraintBottom_toTopOf="@+id/guide_password_bottom"

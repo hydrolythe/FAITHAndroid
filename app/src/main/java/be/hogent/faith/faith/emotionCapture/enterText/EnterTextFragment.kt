@@ -2,11 +2,13 @@ package be.hogent.faith.faith.emotionCapture.enterText
 
 // uses https://github.com/wasabeef/richeditor-android
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -46,8 +48,9 @@ class EnterTextFragment : Fragment() {
         editor.setEditorHeight(200)
         editor.setEditorFontSize(30)
         editor.setPadding(10, 10, 10, 10)
-        editor.setPlaceholder("...")
-
+        editor.focusEditor()
+        val inputMethodManager = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT)
         editor.setOnTextChangeListener {
             enterTextViewModel.textChanged(it)
         }
@@ -67,7 +70,7 @@ class EnterTextFragment : Fragment() {
             editor.setUnderline()
         })
         enterTextViewModel.selectedFontSize.observe(this, Observer { newSize ->
-            editor.setFontSize(newSize)
+            editor.setFontSize(newSize.size)
         })
         eventViewModel.errorMessage.observe(this, Observer { errorMessageResourceId ->
                 Toast.makeText(context, errorMessageResourceId, Toast.LENGTH_SHORT).show()
