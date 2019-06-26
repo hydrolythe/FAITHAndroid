@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
@@ -17,9 +16,9 @@ import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
 import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_inkleuren
 import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_zittend
-import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
@@ -81,7 +80,9 @@ class EventDetailsFragment : Fragment() {
     private fun updateUI() {
        // setBackgroundImage()
 
-        eventDetailsBinding.recyclerViewEventDetailsDetails.apply {
+      /*
+      eventDetailsBinding.recyclerViewEventDetailsDetails.apply {
+
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             // Start with empty list and then fill it in
@@ -89,6 +90,7 @@ class EventDetailsFragment : Fragment() {
         }
         detailThumbnailsAdapter =
             eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
+      */
     }
 
     private fun setBackgroundImage() {
