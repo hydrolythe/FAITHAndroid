@@ -46,7 +46,6 @@ class LoginManager( private val loginCallback: LoginCallback
                 loginCallback.onSuccess()
 
             }
-
             override fun onFailure(error: CredentialsManagerException) {
                 WebAuthProvider.init(auth0)
                     .withScheme("app")
@@ -91,7 +90,6 @@ class LoginManager( private val loginCallback: LoginCallback
 
     interface LoginCallback {
         fun onSuccess()
-
         fun onFailure(msg: String)
     }
 

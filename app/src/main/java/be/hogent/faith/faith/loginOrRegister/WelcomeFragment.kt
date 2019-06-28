@@ -72,18 +72,7 @@ class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
             navigation!!.goToRegistrationScreen()
         })
         welcomeViewModel.loginButtonClicked.observe(this, Observer {
-
             loginManager.login(activity!!)
-
-            // TODO: add username/password auth here!
-            // if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) == null) {
-            //    getKoin().createScope(KoinModules.USER_SCOPE_ID)
-            //}
-            //val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
-            //userViewModel.setUser(User(welcomeViewModel.userName.value!!, avatarName = "meisje_stoer"))
-            //navigation?.goToCityScreen()
-
-
         })
         welcomeViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
@@ -104,6 +93,12 @@ class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
 
 
     override fun onSuccess() {
+        if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) == null) {
+            getKoin().createScope(KoinModules.USER_SCOPE_ID)
+        }
+        val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+        // TODO: Call the Auth0 profile and retrieve user name
+        userViewModel.setUser(User("testuser", avatarName = "meisje_stoer"))
         navigation!!.goToCityScreen()
     }
 
