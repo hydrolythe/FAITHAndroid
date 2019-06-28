@@ -99,4 +99,5 @@
     <string name="choose_bold">kies vetjes</string>
     <string name="take_photo_de_foto">de foto</string>
     <string name="take_photo_neem_foto">neem foto</string>
+    <string name="register_username_empty">Je gebruikersnaam mag niet leeg zijn.</string>
 </resources>
