@@ -22,14 +22,28 @@ class RegisterUserInfoViewModel : ViewModel() {
         get() = _confirmUserInfoClicked
 
     fun onConfirmUserInfoClicked() {
+        if (userNameIsValid() && passwordIsValid()) {
+            _confirmUserInfoClicked.call()
+        }
+    }
+
+    private fun userNameIsValid(): Boolean {
+        if (userName.value.isNullOrBlank()) {
+            _errorMessage.postValue(R.string.register_username_empty)
+            return false
+        }
+        return true
+    }
+
+    private fun passwordIsValid(): Boolean {
         if (password.value.isNullOrBlank()) {
             _errorMessage.postValue(R.string.register_password_empty)
-            return
+            return false
         }
         if (password.value != passwordRepeated.value) {
             _errorMessage.postValue(R.string.register_passwords_nomatch)
-            return
+            return false
         }
-        _confirmUserInfoClicked.call()
+        return true
     }
 }

@@ -133,6 +133,7 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_pole_left_end"
                 app:layout_constraintTop_toTopOf="@+id/guide_pole_top" />
 
+
             <Button
                 android:id="@+id/btn_createUserAndGotoCity"
                 android:layout_width="0dp"
@@ -170,6 +171,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/guide_password_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
                 app:layout_constraintStart_toStartOf="@+id/guide_form_start" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>

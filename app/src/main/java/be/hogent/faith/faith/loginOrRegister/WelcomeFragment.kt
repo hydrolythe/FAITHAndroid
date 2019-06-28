@@ -9,25 +9,30 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.User
-import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.di.KoinModules
 import org.koin.android.ext.android.get
-import org.koin.android.ext.android.getKoin
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_welcome.background_welcome
+
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class WelcomeFragment : Fragment() {
+class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
 
     private var navigation: WelcomeNavigationListener? = null
 
     private val welcomeViewModel by viewModel<WelcomeViewModel>()
 
+    private lateinit var loginManager: LoginManager
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loginManager = LoginManager(requireContext(), this)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: be.hogent.faith.databinding.FragmentWelcomeBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_welcome, container, false)
+            DataBindingUtil.inflate(inflater, be.hogent.faith.R.layout.fragment_welcome, container, false)
         binding.welcomeViewModel = welcomeViewModel
         return binding.root
     }
@@ -49,14 +54,16 @@ class WelcomeFragment : Fragment() {
             navigation!!.goToRegistrationScreen()
         })
         welcomeViewModel.loginButtonClicked.observe(this, Observer {
+
+            loginManager.login()
+
             // TODO: add username/password auth here!
-            if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) == null) {
-                getKoin().createScope(KoinModules.USER_SCOPE_ID)
-            }
-            val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
-            userViewModel.setUser(User(welcomeViewModel.userName.value!!, avatarName = "meisje_stoer"))
+            // if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) == null) {
+            //    getKoin().createScope(KoinModules.USER_SCOPE_ID)
+            // }
+            // val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+            // userViewModel.setUser(User(welcomeViewModel.userName.value!!, avatarName = "meisje_stoer"))
             navigation?.goToCityScreen()
-            // Toast.makeText(context, "Inloggen is nog niet geimplementeerd!", Toast.LENGTH_SHORT).show()
         })
         welcomeViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
@@ -75,7 +82,16 @@ class WelcomeFragment : Fragment() {
         fun goToCityScreen()
     }
 
+    override fun onSuccess() {
+        navigation!!.goToCityScreen()
+    }
+
+    override fun onFailure(msg: String) {
+        Toast.makeText(activity, "Log In - Error Occurred : $msg", Toast.LENGTH_SHORT).show()
+    }
+
     companion object {
+
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
