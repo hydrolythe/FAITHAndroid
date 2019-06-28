@@ -72,7 +72,7 @@
                 android:padding="5dp"
                 android:scaleType="centerInside"
                 android:onClick="@{() -> enterTextViewModel.pickTextColor(Color.BLACK)}"
-                android:background="@{enterTextViewModel.selectedTextColor==Color.BLACK ? @drawable/background : @drawable/background_noborder}"
+                android:background="@{safeUnbox(enterTextViewModel.selectedTextColor)==Color.BLACK ? @drawable/background : @drawable/background_noborder}"
                 android:src="@drawable/paintpot_black" />
 
             <ImageButton
@@ -83,7 +83,7 @@
                 android:adjustViewBounds="true"
                 android:padding="5dp"
                 android:scaleType="centerInside"
-                android:background="@{enterTextViewModel.selectedTextColor==Color.BLUE ? @drawable/background : @drawable/background_noborder}"
+                android:background="@{safeUnbox(enterTextViewModel.selectedTextColor)==Color.BLUE ? @drawable/background : @drawable/background_noborder}"
                 android:contentDescription="@string/choose_blue"
                 android:onClick="@{() -> enterTextViewModel.pickTextColor(Color.BLUE)}"
                 android:src="@drawable/paintpot_blue" />
@@ -96,7 +96,7 @@
                 android:adjustViewBounds="true"
                 android:padding="5dp"
                 android:scaleType="centerInside"
-                android:background="@{enterTextViewModel.selectedTextColor==Color.RED ? @drawable/background : @drawable/background_noborder}"
+                android:background="@{safeUnbox(enterTextViewModel.selectedTextColor)==Color.RED ? @drawable/background : @drawable/background_noborder}"
 
                 android:contentDescription="@string/choose_red"
                 android:onClick="@{() -> enterTextViewModel.pickTextColor(Color.RED)}"
@@ -110,7 +110,7 @@
                 android:adjustViewBounds="true"
                 android:padding="5dp"
                 android:scaleType="centerInside"
-                android:background="@{enterTextViewModel.selectedTextColor==Color.YELLOW ? @drawable/background : @drawable/background_noborder}"
+                android:background="@{safeUnbox(enterTextViewModel.selectedTextColor)==Color.YELLOW ? @drawable/background : @drawable/background_noborder}"
                 android:contentDescription="@string/choose_yellow"
                 android:onClick="@{() -> enterTextViewModel.pickTextColor(Color.YELLOW)}"
                 android:src="@drawable/paintpot_yellow" />

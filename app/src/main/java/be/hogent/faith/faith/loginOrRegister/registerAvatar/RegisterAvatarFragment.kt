@@ -151,6 +151,7 @@ class RegisterAvatarFragment : Fragment() {
         val avatarAdapter = AvatarItemAdapter()
         avatar_rv_avatar.adapter = avatarAdapter
 
+        avatar_rv_avatar.setOnFlingListener(null)
         LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
 
         setRecyclerViewOrientation()

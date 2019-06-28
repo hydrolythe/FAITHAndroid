@@ -2,18 +2,20 @@ package be.hogent.faith.faith.cityScreen
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import be.hogent.faith.R
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.util.replaceFragment
+import android.R
+import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
 
 class CityScreenActivity : AppCompatActivity(),
     CityScreenFragment.CityScreenNavigationListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(be.hogent.faith.R.layout.activity_main)
 
         // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
@@ -21,7 +23,7 @@ class CityScreenActivity : AppCompatActivity(),
         if (savedInstanceState == null) {
             val fragment = CityScreenFragment.newInstance()
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragment)
+                .add(be.hogent.faith.R.id.fragment_container, fragment)
                 .commit()
         }
     }
@@ -32,6 +34,24 @@ class CityScreenActivity : AppCompatActivity(),
     }
 
     override fun startOverviewEventsFragment() {
-        replaceFragment(OverviewEventsFragment.newInstance(), R.id.fragment_container)
+        replaceFragment(OverviewEventsFragment.newInstance(), be.hogent.faith.R.id.fragment_container)
+    }
+
+    override fun onBackPressed() {
+        val alertDialog: AlertDialog = this.run {
+            val builder = AlertDialog.Builder(this).apply {
+                setTitle(getString(be.hogent.faith.R.string.cityScreen_logOut))
+                setMessage(getString(be.hogent.faith.R.string.cityscreen_stad_verlaten))
+                setPositiveButton(R.string.ok) { _, _ ->
+                    // TODO nog uitloggen
+                    navigateUpTo(Intent(applicationContext, LoginOrRegisterActivity::class.java))
+                }
+                setNegativeButton(be.hogent.faith.R.string.cancel) { dialog, _ ->
+                    dialog.cancel()
+                }
+            }
+            builder.create()
+        }
+        alertDialog.show()
     }
 }
