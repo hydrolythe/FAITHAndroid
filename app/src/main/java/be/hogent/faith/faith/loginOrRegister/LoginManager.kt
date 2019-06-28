@@ -82,4 +82,8 @@ class LoginManager(
 
         fun onFailure(msg: String)
     }
+
+    companion object {
+        const val KEY_CLEAR_CREDENTIALS = "com.auth0.CLEAR_CREDENTIALS"
+    }
 }
