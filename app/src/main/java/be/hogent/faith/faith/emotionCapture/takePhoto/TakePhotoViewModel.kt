@@ -14,6 +14,7 @@ class TakePhotoViewModel : ViewModel() {
 
     private var _currentState = MutableLiveData<PhotoState>()
 
+    // OPM: moet private zijn?
     val _photo = MutableLiveData<File>()
     val photo: LiveData<File>
         get() = _photo
@@ -52,19 +53,19 @@ class TakePhotoViewModel : ViewModel() {
     }
 
     fun onTakePhotoButtonClicked() {
-        _currentState.value?.takePhoto(this)
+        _currentState.value!!.takePhoto(this)
     }
 
     fun onOkPhotoButtonClicked() {
-        _currentState.value?.savePhoto(this)
+        _currentState.value!!.savePhoto(this)
     }
 
     fun onNotOkPhotoButtonClicked() {
-        _currentState.value?.deletePhoto(this)
+        _currentState.value!!.deletePhoto(this)
     }
 
     fun setPhotoInCache(file: File) {
-        _currentState.value?.setPhotoInCache(this, file)
+        _currentState.value!!.setPhotoInCache(this, file)
     }
 
     fun setSavedPhoto(file: File) {

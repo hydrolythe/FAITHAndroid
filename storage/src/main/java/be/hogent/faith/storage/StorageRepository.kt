@@ -115,7 +115,7 @@ class StorageRepository(private val context: Context) {
         return Single.fromCallable {
             val storedFile = File(folder, fileName)
             tempStorageFile.copyTo(target = storedFile, overwrite = true)
-            tempStorageFile.delete()
+//            tempStorageFile.delete()
             storedFile
         }
     }
