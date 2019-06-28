@@ -1,11 +1,13 @@
 package be.hogent.faith.faith.loginOrRegister.registerUserInfo
 
+import android.util.Log
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.util.TAG
 
 class RegisterUserInfoViewModel : ViewModel() {
 
@@ -22,14 +24,15 @@ class RegisterUserInfoViewModel : ViewModel() {
         get() = _confirmUserInfoClicked
 
     fun onConfirmUserInfoClicked() {
-        if (password.value.isNullOrBlank()) {
-            _errorMessage.postValue(R.string.register_password_empty)
-            return
-        }
-        if (password.value != passwordRepeated.value) {
-            _errorMessage.postValue(R.string.register_passwords_nomatch)
-            return
-        }
+        Log.i(TAG,"Clicker")
+//        if (password.value.isNullOrBlank()) {
+//            _errorMessage.postValue(R.string.register_password_empty)
+//            return
+//        }
+//        if (password.value != passwordRepeated.value) {
+//            _errorMessage.postValue(R.string.register_passwords_nomatch)
+//            return
+//        }
         _confirmUserInfoClicked.call()
     }
 }

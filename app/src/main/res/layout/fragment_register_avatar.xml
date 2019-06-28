@@ -26,7 +26,11 @@
         <ImageView
             android:id="@+id/background_register_avatar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/avatar_selection_background"
+            app:srcCompat="@drawable/avatar_selection_background" />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -36,72 +40,43 @@
                 android:id="@+id/avatar_rv_avatar"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@+id/guide_avatarRecyclerView_bottom"
-                app:layout_constraintEnd_toStartOf="@+id/btn_register_finishRegistration"
-                app:layout_constraintStart_toStartOf="@+id/guide_avatarRecyclerView_start"
-                app:layout_constraintTop_toTopOf="@id/guide_avatarRecyclerView_top"
+                app:layout_constraintBottom_toTopOf="@+id/bottom_guide_line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/top_guide_line"
                 tools:listitem="@layout/avatar_rv_item" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_avatarRecyclerView_top"
+                android:id="@+id/top_guide_line"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.515" />
+                app:layout_constraintGuide_percent="0.5" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_avatarRecyclerView_bottom"
+                android:id="@+id/bottom_guide_line"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.86" />
+                app:layout_constraintGuide_percent="0.85" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_city_top"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.55" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_city_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.64" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_city_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.71" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_city_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.87" />
-
-            <View
+            <Button
                 android:id="@+id/btn_register_finishRegistration"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_pijl"
                 android:onClick="@{() -> registerUserViewModel.onFinishRegistrationClicked()}"
-                app:layout_constraintBottom_toTopOf="@+id/guide_city_bottom"
-                app:layout_constraintEnd_toStartOf="@+id/guide_city_end"
-                app:layout_constraintStart_toStartOf="@+id/guide_city_start"
-                app:layout_constraintTop_toTopOf="@+id/guide_city_top" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_avatarRecyclerView_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="72dp" />
+                android:text="@string/msg_naar_de_stad"
+                app:layout_constraintBottom_toTopOf="@+id/avatar_rv_avatar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

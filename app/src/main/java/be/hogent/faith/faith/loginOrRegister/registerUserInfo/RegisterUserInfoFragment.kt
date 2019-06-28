@@ -2,6 +2,7 @@ package be.hogent.faith.faith.loginOrRegister.registerUserInfo
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.util.TAG
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_register_userinfo.background_register_userinfo
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -44,6 +46,7 @@ class RegisterUserInfoFragment : Fragment() {
     private fun registerListeners() {
         registerUserInfoViewModel.confirmUserInfoClicked.observe(this, Observer {
             navigation!!.goToRegisterAvatarScreen()
+            Log.i(TAG,"Jooo")
         })
     }
 
