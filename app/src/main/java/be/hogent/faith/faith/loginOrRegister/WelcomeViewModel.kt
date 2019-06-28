@@ -4,7 +4,6 @@ import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import be.hogent.faith.R
 import be.hogent.faith.faith.util.SingleLiveEvent
 
 class WelcomeViewModel : ViewModel() {
@@ -29,14 +28,6 @@ class WelcomeViewModel : ViewModel() {
     }
 
     fun loginButtonClicked() {
-        if (userName.value.isNullOrEmpty()) {
-            _errorMessage.postValue(R.string.login_error_noUsername)
-            return
-        }
-        if (password.value.isNullOrEmpty()) {
-            _errorMessage.postValue(R.string.login_error_noPassword)
-            return
-        }
         _loginButtonClicked.call()
     }
 
