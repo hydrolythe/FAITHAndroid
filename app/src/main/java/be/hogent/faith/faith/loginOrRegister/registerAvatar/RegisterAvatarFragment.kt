@@ -7,23 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.selection.SelectionPredicates
-import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StorageStrategy
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter.OnAvatarClickListener
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
-import be.hogent.faith.faith.util.getRotation
 import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
 import org.koin.android.ext.android.getKoin
@@ -39,7 +33,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
  */
 const val SELECTION_ID = "avatarSelection"
 
-class RegisterAvatarFragment : Fragment() {
+class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
 
     private var navigation: AvatarFragmentNavigationListener? = null
 
@@ -50,22 +44,7 @@ class RegisterAvatarFragment : Fragment() {
 
     private val userViewModel by inject<UserViewModel>(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
     private val registerUserInfoViewModel by sharedViewModel<RegisterUserInfoViewModel>()
-
     private val registerUserViewModel by viewModel<RegisterUserViewModel>()
-
-    /**
-     * Object used to track the selection on the Recyclerview
-     */
-    private var avatarTracker: SelectionTracker<Long>? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (savedInstanceState != null) {
-            // If the Fragment is still in memory restore the state
-            avatarTracker?.onRestoreInstanceState(savedInstanceState)
-        }
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: be.hogent.faith.databinding.FragmentRegisterAvatarBinding =
@@ -77,7 +56,6 @@ class RegisterAvatarFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         configureRecyclerViewAdapter()
-
         registerListeners()
     }
 
@@ -86,6 +64,7 @@ class RegisterAvatarFragment : Fragment() {
             userViewModel.setUser(newUser)
             navigation!!.goToCityScreen()
         })
+
         registerAvatarViewModel.finishRegistrationClicked.observe(this, Observer {
             Log.d(
                 TAG, "Registering user with:" +
@@ -93,11 +72,13 @@ class RegisterAvatarFragment : Fragment() {
                         "password ${registerUserInfoViewModel.password.value}, " +
                         "avatar ${registerAvatarViewModel.selectedAvatar}"
             )
-            registerUserViewModel.registerUser(
-                registerUserInfoViewModel.userName.value!!,
-                registerUserInfoViewModel.password.value!!,
-                registerAvatarViewModel.selectedAvatar!!
-            )
+//            registerUserViewModel.registerUser(
+//                registerUserInfoViewModel.userName.value!!,
+//                registerUserInfoViewModel.password.value!!,
+//                registerAvatarViewModel.selectedAvatar!!
+//            )
+            // TODO: tijdelijke fix na het registreren moet een user toegevoegd worden
+            navigation!!.goToCityScreen()
         })
 
         registerAvatarViewModel.errorMessage.observe(this, Observer { errorMessageID ->
@@ -115,85 +96,20 @@ class RegisterAvatarFragment : Fragment() {
         }
     }
 
-    private fun setRecyclerViewOrientation() {
-        // Check here so we can use FragmentScenario to test
-        val orientation = if (activity is AppCompatActivity) {
-            (activity as AppCompatActivity).getRotation()
-        } else {
-            be.hogent.faith.R.integer.LANDSCAPE
-        }
-        when (orientation) {
-            be.hogent.faith.R.integer.PORTRAIT -> {
-                avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-                avatar_rv_avatar.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
-            }
-            be.hogent.faith.R.integer.LANDSCAPE -> {
-                avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
-                avatar_rv_avatar.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
-            }
-        }
-    }
-
-    /*
-     * Checks for the orientation of the device and sets the LayoutManager for the Adapter based on this.
-     */
     private fun configureRecyclerViewAdapter() {
-        val avatarAdapter = AvatarItemAdapter()
-        avatar_rv_avatar.adapter = avatarAdapter
-
-        LinearSnapHelper().attachToRecyclerView(avatar_rv_avatar)
-
-        setRecyclerViewOrientation()
-
-        avatarTracker = SelectionTracker.Builder<Long>(
-            SELECTION_ID,
-            avatar_rv_avatar,
-            AvatarItemAdapter.KeyProvider(),
-            AvatarItemAdapter.DetailsLookup(avatar_rv_avatar),
-            StorageStrategy.createLongStorage()
-        ).withSelectionPredicate(
-            SelectionPredicates.createSelectSingleAnything()
-        ).build()
-
-        (avatar_rv_avatar.adapter as AvatarItemAdapter).selectionTracker = avatarTracker
-
-        if (registerAvatarViewModel.avatarWasSelected()) {
-            avatarTracker?.select(registerAvatarViewModel.selectedAvatarPosition.value!!)
-            avatar_rv_avatar.smoothScrollToPosition(registerAvatarViewModel.selectedAvatarPosition.value!!.toInt())
+        with(AvatarItemAdapter(this)) {
+            avatars = registerAvatarViewModel.avatars.value!!
+            avatar_rv_avatar.adapter = this
         }
-
-        // We also need to observe selection changes in the RecyclerView.
-        avatarTracker?.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
-            override fun onSelectionChanged() {
-                val iterator = avatarTracker?.selection?.iterator()
-                if (iterator!!.hasNext()) {
-                    val itemPressed = iterator.next()
-                    registerAvatarViewModel.setSelectedAvatar(itemPressed)
-                }
-            }
-        })
-
-        // Observe the changes in the list of the avatars and update the adapter
-        registerAvatarViewModel.avatars.observe(this, Observer<List<Avatar>> { avatarList ->
-            avatarList?.let {
-                avatarAdapter.avatars = avatarList
-                avatarAdapter.notifyDataSetChanged()
-            }
-        })
-    }
-
-    /**
-     * We need to save the instance state of the selectionTracker, otherwise
-     * the selected item will be lost.
-     * TODO: See if this is possible without the onSaveinstanceState but with an observer.
-     */
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        avatarTracker!!.onSaveInstanceState(outState)
+        avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
     }
 
     interface AvatarFragmentNavigationListener {
         fun goToCityScreen()
+    }
+
+    override fun onAvatarClicked(index: Int) {
+        registerAvatarViewModel.setSelectedAvatar(index)
     }
 
     companion object {

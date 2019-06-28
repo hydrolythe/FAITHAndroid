@@ -19,9 +19,9 @@ class RegisterAvatarViewModel(
     val avatars: LiveData<List<Avatar>>
         get() = _avatars
 
-    val selectedAvatarPosition: LiveData<Long>
+    val selectedAvatarPosition: LiveData<Int>
         get() = _selectedAvatarPosition
-    private var _selectedAvatarPosition = MutableLiveData<Long>()
+    private var _selectedAvatarPosition = MutableLiveData<Int>()
 
     private val _finishRegistrationClicked = SingleLiveEvent<User>()
     val finishRegistrationClicked: LiveData<User>
@@ -45,7 +45,7 @@ class RegisterAvatarViewModel(
     val selectedAvatar: Avatar?
         get() {
             return if (avatarWasSelected()) {
-                _avatars.value!![selectedAvatarPosition.value!!.toInt()]
+                _avatars.value!![selectedAvatarPosition.value!!]
             } else {
                 null
             }
@@ -56,7 +56,7 @@ class RegisterAvatarViewModel(
      */
     fun avatarWasSelected(): Boolean {
         with(selectedAvatarPosition.value) {
-            return this != null && this.toInt() != -1
+            return (this != null) && (this != -1)
         }
     }
 
@@ -72,7 +72,7 @@ class RegisterAvatarViewModel(
      * Sets the selected item (the selected avatars). In this case this is
      * still the position in the recyclerView.
      */
-    fun setSelectedAvatar(position: Long) {
+    fun setSelectedAvatar(position: Int) {
         _selectedAvatarPosition.postValue(position)
     }
 
