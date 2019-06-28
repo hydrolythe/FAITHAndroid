@@ -22,9 +22,6 @@ class RegisterUserViewModel(
     private val _userRegisteredSuccessFully = SingleLiveEvent<User>()
     val userRegisteredSuccessFully: LiveData<User>
         get() = _userRegisteredSuccessFully
-    private val _finishRegistrationClicked = SingleLiveEvent<User>()
-    val finishRegistrationClicked: LiveData<User>
-        get() = _finishRegistrationClicked
 
     fun registerUser(userName: String, password: String, avatar: Avatar) {
         val params = CreateUserUseCase.Params(
@@ -33,10 +30,6 @@ class RegisterUserViewModel(
             avatar.avatarName
         )
         createUserUseCase.execute(params, CreateUserUseCaseHandler())
-    }
-
-    fun onFinishRegistrationClicked() {
-        _finishRegistrationClicked.call()
     }
     private inner class CreateUserUseCaseHandler : DisposableSingleObserver<User>() {
         override fun onSuccess(newUser: User) {

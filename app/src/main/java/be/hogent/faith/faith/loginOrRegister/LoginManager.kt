@@ -2,7 +2,6 @@ package be.hogent.faith.faith.loginOrRegister
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.util.Log
 import be.hogent.faith.R
 import be.hogent.faith.util.TAG
@@ -17,7 +16,8 @@ import com.auth0.android.result.Credentials
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.get
 
-class LoginManager( private val loginCallback: LoginCallback
+class LoginManager(
+    private val loginCallback: LoginCallback
 ) : KoinComponent {
 
     /**
@@ -31,11 +31,10 @@ class LoginManager( private val loginCallback: LoginCallback
         auth0.isOIDCConformant = true
     }
 
-
     fun login(activity: Activity) {
         // Obtain the existing credentials and move to the next activity
-        if(credentialsManager.hasValidCredentials()){
-            Log.i(TAG,"Still Found credentials")
+        if (credentialsManager.hasValidCredentials()) {
+            Log.i(TAG, "Still Found credentials")
         }
         credentialsManager.getCredentials(object : BaseCallback<Credentials, CredentialsManagerException> {
 
@@ -44,12 +43,11 @@ class LoginManager( private val loginCallback: LoginCallback
              */
             override fun onSuccess(credentials: Credentials) {
                 loginCallback.onSuccess()
-
             }
             override fun onFailure(error: CredentialsManagerException) {
                 WebAuthProvider.init(auth0)
                     .withScheme("app")
-                    //Allow refresh tokens
+                    // Allow refresh tokens
                     .withScope("openid offline_access")
                     .withAudience(
                         String.format(
@@ -60,17 +58,13 @@ class LoginManager( private val loginCallback: LoginCallback
                     .start(activity, webCallback)
             }
         })
-
-
     }
 
-
-    fun logout(){
+    fun logout() {
         credentialsManager.clearCredentials()
         Log.d(TAG, "Logged the user out")
-        //TODO: the part where the user object of the application should be set to null or something.
+        // TODO: the part where the user object of the application should be set to null or something.
     }
-
 
     private val webCallback = object : AuthCallback {
         override fun onFailure(dialog: Dialog) {
@@ -86,7 +80,6 @@ class LoginManager( private val loginCallback: LoginCallback
             loginCallback.onSuccess()
         }
     }
-
 
     interface LoginCallback {
         fun onSuccess()

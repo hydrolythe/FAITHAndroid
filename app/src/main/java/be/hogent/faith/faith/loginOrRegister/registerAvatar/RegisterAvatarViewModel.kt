@@ -1,15 +1,17 @@
 package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
+import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.R
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
 
 /**
  * ViewModel for the Avatar selection screen
  */
-class RegisterAvatarViewModel (
+class RegisterAvatarViewModel(
     private val avatarProvider: AvatarProvider
 ) : ViewModel() {
 
@@ -17,37 +19,64 @@ class RegisterAvatarViewModel (
     val avatars: LiveData<List<Avatar>>
         get() = _avatars
 
-    private var _selectedItem = MutableLiveData<Int>()
+    val selectedAvatarPosition: LiveData<Int>
+        get() = _selectedAvatarPosition
+    private var _selectedAvatarPosition = MutableLiveData<Int>()
 
-    private val _nextButtonClicked = SingleLiveEvent<Unit>()
+    private val _finishRegistrationClicked = SingleLiveEvent<User>()
+    val finishRegistrationClicked: LiveData<User>
+        get() = _finishRegistrationClicked
 
-    val nextButtonClicked: LiveData<Unit>
-        get() = _nextButtonClicked
-
-    /**
-     * Will always hold the [Avatar] corresponding with the [_selectedItem].
-     */
-    val selectedAvatar: LiveData<Avatar> = Transformations.map(_selectedItem) { item -> _avatars.value!![item.toInt()] }
+    private val _errorMessage = MutableLiveData<@IdRes Int>()
+    val errorMessage: LiveData<Int>
+        get() = _errorMessage
 
     init {
         fetchAvatarImages()
         // Set initially to -1 = no selection has been provided.
-        _selectedItem.postValue(-1)
+        _selectedAvatarPosition.postValue(-1)
     }
 
     /**
-     * The item selected in the recyclerView as the avatarName.
+     * Will always hold the [Avatar] corresponding with the [_selectedAvatarPosition].
+     * Exposing a LiveData would be nicer (using a map on [_selectedAvatarPosition] but that only updates
+     * when someone is actually observing this Livedata. As we only need it once no observing is needed.
      */
-    val selectedItem: LiveData<Int>
-        get() = _selectedItem
+    val selectedAvatar: Avatar?
+        get() {
+            return if (avatarWasSelected()) {
+                _avatars.value!![selectedAvatarPosition.value!!]
+            } else {
+                null
+            }
+        }
 
+    /**
+     * Returns true if an Avatar has been selected, false if not.
+     */
+    fun avatarWasSelected(): Boolean {
+        with(selectedAvatarPosition.value) {
+            return (this != null) && (this != -1)
+        }
+    }
+
+    fun onFinishRegistrationClicked() {
+        if (avatarWasSelected()) {
+            _finishRegistrationClicked.call()
+        } else {
+            _errorMessage.postValue(R.string.register_avatar_mustSelect)
+        }
+    }
+
+    /**
+     * Sets the selected item (the selected avatars). In this case this is
+     * still the position in the recyclerView.
+     */
+    fun setSelectedAvatar(position: Int) {
+        _selectedAvatarPosition.postValue(position)
+    }
 
     private fun fetchAvatarImages() {
         _avatars.value = (avatarProvider.getAvatars())
     }
-
-    fun setSelectedAvatar(index : Int){
-        _selectedItem.postValue(index)
-    }
-
 }

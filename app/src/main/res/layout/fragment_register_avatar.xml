@@ -4,15 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <variable
-            name="registerUserInfoViewModel"
-            type="be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel" />
-
-        <variable
-            name="registerUserViewModel"
-            type="be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel" />
-
         <variable
             name="registerAvatarViewModel"
             type="be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel" />
@@ -73,7 +64,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/ic_pijl"
-                android:onClick="@{() -> registerUserViewModel.onFinishRegistrationClicked()}"
+                android:onClick="@{() -> registerAvatarViewModel.onFinishRegistrationClicked()}"
                 android:text="@string/msg_naar_de_stad"
                 app:layout_constraintBottom_toTopOf="@+id/avatar_rv_avatar"
                 app:layout_constraintEnd_toEndOf="parent"
