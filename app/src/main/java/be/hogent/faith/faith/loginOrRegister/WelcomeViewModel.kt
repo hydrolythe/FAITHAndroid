@@ -31,4 +31,9 @@ class WelcomeViewModel : ViewModel() {
     fun loginButtonClicked() {
         _loginButtonClicked.call()
     }
+
+    fun gotoCityButtonClicked() {
+        userName.value = "Jan"
+        _loginButtonClicked.call()
+    }
 }

@@ -2,7 +2,6 @@ package be.hogent.faith.faith.util
 
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.contrib.RecyclerViewActions
@@ -36,7 +35,7 @@ object NavigationUtil {
         onView(withId(R.id.btn_event_send)).perform(click())
         onView(withId(R.id.txt_save_event_title)).perform(typeText("Titel van Event"))
         closeSoftKeyboard()
-        onView(withId(R.id.btn_save_event_save)).perform(ViewActions.scrollTo(), click())
+        onView(withId(R.id.btn_save_event_save)).perform(click())
     }
 
     fun goToEventsOverviewScreen() {
