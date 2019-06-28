@@ -131,15 +131,15 @@
 
             <View
                 android:id="@+id/btn_register_confirmInfo"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:onClick="@{()->registerUserInfoViewModel.onConfirmUserInfoClicked()}"
                 app:layout_constraintBottom_toTopOf="@+id/guide_city_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/guide_city_end"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guide_city_start"
-                app:layout_constraintTop_toTopOf="@+id/guide_continue_top" />
-
-
+                app:layout_constraintTop_toTopOf="@+id/guide_continue_top"
+                app:layout_constraintVertical_bias="0.911" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
