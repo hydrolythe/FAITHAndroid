@@ -30,7 +30,6 @@
             android:scaleType="fitXY"
             android:src="@drawable/avatar_selection_background"
             app:srcCompat="@drawable/avatar_selection_background" />
-            android:src="@drawable/register_background_avatar" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,6 +63,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.85" />
+
+
 
             <Button
                 android:id="@+id/btn_register_finishRegistration"
