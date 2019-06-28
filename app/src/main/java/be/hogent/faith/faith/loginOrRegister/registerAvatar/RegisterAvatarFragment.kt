@@ -72,12 +72,11 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
                         "password ${registerUserInfoViewModel.password.value}, " +
                         "avatar ${registerAvatarViewModel.selectedAvatar}"
             )
-//            registerUserViewModel.registerUser(
-//                registerUserInfoViewModel.userName.value!!,
-//                registerUserInfoViewModel.password.value!!,
-//                registerAvatarViewModel.selectedAvatar!!
-//            )
-            // TODO: tijdelijke fix na het registreren moet een user toegevoegd worden
+            registerUserViewModel.registerUser(
+                registerUserInfoViewModel.userName.value!!,
+                registerUserInfoViewModel.password.value!!,
+                registerAvatarViewModel.selectedAvatar!!
+            )
             navigation!!.goToCityScreen()
         })
 
