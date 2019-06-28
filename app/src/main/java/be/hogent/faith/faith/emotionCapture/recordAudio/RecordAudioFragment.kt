@@ -2,7 +2,6 @@ package be.hogent.faith.faith.emotionCapture.recordAudio
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.media.MediaRecorder
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,9 +16,6 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentRecordAudioBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel.RecordingStatus.PAUSED
-import be.hogent.faith.faith.util.TempFileProvider
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 const val REQUESTCODE_AUDIO = 12
@@ -27,15 +23,13 @@ const val REQUESTCODE_AUDIO = 12
 class RecordAudioFragment : Fragment() {
     private val eventViewModel: EventViewModel by sharedViewModel()
 
+    // TODO: check if this still needs to be a shared VM
     private val recordAudioViewModel: RecordAudioViewModel by sharedViewModel()
 
     private lateinit var recordAudioBinding: FragmentRecordAudioBinding
 
     private var hasAudioRecordingPermission = false
 
-    private lateinit var recorder: MediaRecorder
-
-    private val tempFileProvider by inject<TempFileProvider>()
     /**
      * The Dialog that requests the user to enter a recordingName for the recording.
      * It is saved here so we can dismiss it once the cancel or save buttons are clicked.
@@ -49,20 +43,6 @@ class RecordAudioFragment : Fragment() {
         recordAudioViewModel.pauseSupported.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
     }
 
-    private fun initializeRecorder() {
-        if (!hasRecordingPermissions()) {
-            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
-        } else {
-            recorder = MediaRecorder().also {
-                it.setAudioSource(MediaRecorder.AudioSource.MIC)
-                it.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-                it.setOutputFile(tempFileProvider.tempAudioRecordingFile.path)
-                it.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT)
-                it.prepare()
-            }
-        }
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         recordAudioBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_record_audio, container, false)
         recordAudioBinding.apply {
@@ -74,26 +54,31 @@ class RecordAudioFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        initializeRecorder()
+        checkAudioRecordingPermission()
         startListeners()
     }
 
     override fun onStop() {
         super.onStop()
-        recorder.release()
+        recordAudioViewModel.recordState.value?.release()
+        recordAudioViewModel.playState.value?.release()
     }
 
     private fun hasRecordingPermissions(): Boolean {
-        hasAudioRecordingPermission =
-            checkSelfPermission(activity!!, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
-        return hasAudioRecordingPermission
+        return checkSelfPermission(activity!!, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun checkAudioRecordingPermission() {
+        if (!hasRecordingPermissions()) {
+            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == REQUESTCODE_AUDIO) {
             if (grantResults[0] == PERMISSION_GRANTED) {
                 hasAudioRecordingPermission = true
-                initializeRecorder()
+                checkAudioRecordingPermission()
             } else {
                 Toast.makeText(this.context, getString(R.string.permission_record_audio), Toast.LENGTH_LONG).show()
             }
@@ -101,30 +86,8 @@ class RecordAudioFragment : Fragment() {
     }
 
     private fun startListeners() {
-        recordAudioViewModel.recordButtonClicked.observe(this, Observer {
-            if (recordAudioViewModel.recordingStatus.value == PAUSED) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    recorder.resume()
-                } else {
-                    Toast.makeText(context, R.string.error_pause_not_supported, Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                startRecordingAudio()
-            }
-        })
-        recordAudioViewModel.stopButtonClicked.observe(this, Observer {
-            stopAndSaveRecording()
-        })
-        recordAudioViewModel.pauseButtonClicked.observe(this, Observer {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                recorder.pause()
-            } else {
-                // TODO: pauzeerknop niet tonen bij te lage SKD?
-                Toast.makeText(context, R.string.error_pause_not_supported, Toast.LENGTH_SHORT).show()
-            }
-        })
-        recordAudioViewModel.restartButtonClicked.observe(this, Observer {
-            recorder.reset()
+        recordAudioViewModel.saveButtonClicked.observe(this, Observer {
+            eventViewModel.saveAudio(recordAudioViewModel.tempFileProvider.tempAudioRecordingFile)
         })
         eventViewModel.recordingSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
@@ -132,19 +95,6 @@ class RecordAudioFragment : Fragment() {
         eventViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
         })
-    }
-
-    private fun stopAndSaveRecording() {
-        recorder.stop()
-        eventViewModel.saveAudio(tempFileProvider.tempAudioRecordingFile)
-    }
-
-    private fun startRecordingAudio() {
-        if (!hasRecordingPermissions()) {
-            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
-        } else {
-            recorder.start()
-        }
     }
 
     companion object {
