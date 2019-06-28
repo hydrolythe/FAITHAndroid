@@ -3,7 +3,9 @@ package be.hogent.faith.faith.loginOrRegister
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.util.Log
 import be.hogent.faith.R
+import be.hogent.faith.util.TAG
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.authentication.storage.CredentialsManagerException
@@ -15,8 +17,7 @@ import com.auth0.android.result.Credentials
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.get
 
-class LoginManager(
-    private val context: Context, private val loginCallback: LoginCallback
+class LoginManager( private val loginCallback: LoginCallback
 ) : KoinComponent {
 
     /**
@@ -31,8 +32,11 @@ class LoginManager(
     }
 
 
-    fun login() {
+    fun login(activity: Activity) {
         // Obtain the existing credentials and move to the next activity
+        if(credentialsManager.hasValidCredentials()){
+            Log.i(TAG,"Still Found credentials")
+        }
         credentialsManager.getCredentials(object : BaseCallback<Credentials, CredentialsManagerException> {
 
             /**
@@ -40,6 +44,7 @@ class LoginManager(
              */
             override fun onSuccess(credentials: Credentials) {
                 loginCallback.onSuccess()
+
             }
 
             override fun onFailure(error: CredentialsManagerException) {
@@ -50,14 +55,21 @@ class LoginManager(
                     .withAudience(
                         String.format(
                             "https://%s/userinfo",
-                            context.getString(be.hogent.faith.R.string.com_auth0_domain)
+                            activity.getString(R.string.com_auth0_domain)
                         )
                     )
-                    .start(context as Activity, webCallback)
+                    .start(activity, webCallback)
             }
         })
 
 
+    }
+
+
+    fun logout(){
+        credentialsManager.clearCredentials()
+        Log.d(TAG, "Logged the user out")
+        //TODO: the part where the user object of the application should be set to null or something.
     }
 
 
