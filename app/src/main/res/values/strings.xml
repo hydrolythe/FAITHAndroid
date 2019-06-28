@@ -99,4 +99,6 @@
     <string name="choose_bold">kies vetjes</string>
     <string name="take_photo_de_foto">de foto</string>
     <string name="take_photo_neem_foto">neem foto</string>
+    <string name="cityScreen_logOut">Wil je uitloggen?</string>
+    <string name="cityscreen_stad_verlaten">Wil je uitloggen en de stad verlaten?</string>
 </resources>
