@@ -69,10 +69,8 @@ class RegisterAvatarFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: be.hogent.faith.databinding.FragmentRegisterAvatarBinding =
-            DataBindingUtil.inflate(inflater, be.hogent.faith.R.layout.fragment_register_avatar, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_register_avatar, container, false)
         binding.registerAvatarViewModel = registerAvatarViewModel
-        binding.registerUserInfoViewModel = registerUserInfoViewModel
-        binding.registerUserViewModel = registerUserViewModel
         return binding.root
     }
 
@@ -88,22 +86,23 @@ class RegisterAvatarFragment : Fragment() {
             userViewModel.setUser(newUser)
             navigation!!.goToCityScreen()
         })
-
-        registerUserViewModel.finishRegistrationClicked.observe(this, Observer {
+        registerAvatarViewModel.finishRegistrationClicked.observe(this, Observer {
             Log.d(
                 TAG, "Registering user with:" +
                         "username ${registerUserInfoViewModel.userName.value}, " +
                         "password ${registerUserInfoViewModel.password.value}, " +
-                        "avatar ${registerAvatarViewModel.selectedAvatar.value}"
+                        "avatar ${registerAvatarViewModel.selectedAvatar}"
             )
             registerUserViewModel.registerUser(
                 registerUserInfoViewModel.userName.value!!,
                 registerUserInfoViewModel.password.value!!,
-                // TODO: fix so we can used [RegisterAvatarViewModel.selectedAvatar]
-                registerAvatarViewModel.avatars.value!![registerAvatarViewModel.selectedItem.value!!.toInt()]
+                registerAvatarViewModel.selectedAvatar!!
             )
         })
 
+        registerAvatarViewModel.errorMessage.observe(this, Observer { errorMessageID ->
+            Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
+        })
         registerUserViewModel.errorMessage.observe(this, Observer { errorMessageID ->
             Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
         })
@@ -159,8 +158,8 @@ class RegisterAvatarFragment : Fragment() {
         (avatar_rv_avatar.adapter as AvatarItemAdapter).selectionTracker = avatarTracker
 
         if (registerAvatarViewModel.avatarWasSelected()) {
-            avatarTracker?.select(registerAvatarViewModel.selectedItem.value!!)
-            avatar_rv_avatar.smoothScrollToPosition(registerAvatarViewModel.selectedItem.value!!.toInt())
+            avatarTracker?.select(registerAvatarViewModel.selectedAvatarPosition.value!!)
+            avatar_rv_avatar.smoothScrollToPosition(registerAvatarViewModel.selectedAvatarPosition.value!!.toInt())
         }
 
         // We also need to observe selection changes in the RecyclerView.
@@ -169,7 +168,7 @@ class RegisterAvatarFragment : Fragment() {
                 val iterator = avatarTracker?.selection?.iterator()
                 if (iterator!!.hasNext()) {
                     val itemPressed = iterator.next()
-                    registerAvatarViewModel.setSelectedItem(itemPressed)
+                    registerAvatarViewModel.setSelectedAvatar(itemPressed)
                 }
             }
         })
