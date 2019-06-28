@@ -26,6 +26,11 @@ import com.auth0.android.result.Credentials
 import org.koin.android.ext.android.inject
 
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.di.KoinModules
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.getKoin
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_welcome.background_welcome
 
@@ -58,7 +63,7 @@ class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
     override fun onStart() {
         super.onStart()
         registerListeners()
-        setBackgroundImage()
+        //  setBackgroundImage()
     }
 
     private fun setBackgroundImage() {
@@ -72,7 +77,17 @@ class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
             navigation!!.goToRegistrationScreen()
         })
         welcomeViewModel.loginButtonClicked.observe(this, Observer {
+
             loginManager.login()
+
+            // TODO: add username/password auth here!
+            // if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) == null) {
+            //    getKoin().createScope(KoinModules.USER_SCOPE_ID)
+            //}
+            //val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+            //userViewModel.setUser(User(welcomeViewModel.userName.value!!, avatarName = "meisje_stoer"))
+            navigation?.goToCityScreen()
+
         })
         welcomeViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()

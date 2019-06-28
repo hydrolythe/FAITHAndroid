@@ -19,7 +19,8 @@
             android:id="@+id/background_event_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/descr_city_park" />
+            android:contentDescription="@string/descr_city_park"
+            android:background="@drawable/park"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/screen_new_event"
@@ -71,38 +72,19 @@
                 app:layout_constraintGuide_percent="0.68" />
 
 
-            <TextView
-                android:id="@+id/label_event_details_title"
-                style="@style/Base.TextAppearance.AppCompat.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/event_details_title"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/label_event_details_event_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:labelFor="@id/txt_event_details_title"
-                android:text="@string/event_details_label_title"
-                app:layout_constraintBottom_toTopOf="@id/event_details_upperDivider"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/label_event_details_title" />
-
             <EditText
                 android:id="@+id/txt_event_details_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:hint="@string/event_details_title"
                 android:inputType="text"
                 android:text="@={eventViewModel.eventTitle}"
-                app:layout_constraintBaseline_toBaselineOf="@id/label_event_details_event_title"
-                app:layout_constraintEnd_toStartOf="@+id/guide_left_pole"
-                app:layout_constraintStart_toEndOf="@id/label_event_details_event_title"
-                tools:text="Titel van de gebeurtenis" />
+                app:layout_constraintBottom_toTopOf="@+id/guide_avatar_titel_bottom"
+                app:layout_constraintStart_toStartOf="@+id/guide_avatar_titel_left"
+                tools:text="@string/event_details_title" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/event_details_upperDivider"
@@ -154,7 +136,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/description_addDrawing"
                 android:onClick="@{() -> eventViewModel.onDrawingButtonClicked()}"
-                android:src="@drawable/event_detail_drawing"
+                app:srcCompat="@drawable/event_detail_drawing"
                 app:layout_constraintBottom_toTopOf="@+id/guide_middle_horizontal_pole"
                 app:layout_constraintEnd_toStartOf="@+id/guide_right_pole"
                 app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
@@ -174,6 +156,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.78" />
 
+            <!--
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_event_details_details"
                 android:layout_width="0dp"
@@ -183,8 +166,11 @@
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_event_details_gotoEmotionAvatar"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/guide_horizontal_details" />
+                app:layout_constraintTop_toBottomOf="@id/guide_horizontal_details"
+                app:layout_constraintVertical_bias="0.806" />
+                -->
 
             <!--ImageButton
                 android:id="@+id/btn_event_send"
@@ -208,6 +194,95 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guide_vertical_avatar"
                 app:layout_constraintTop_toTopOf="@+id/guide_horizontal_details" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.18" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.33" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.3392613" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.72" />
+
+            <ImageView
+                android:id="@+id/img_event_details_avatar_zittend"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/avatar_zittend"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toTopOf="@+id/guide_avatar_bottom"
+                app:layout_constraintStart_toStartOf="@+id/guide_avatar_left"
+                app:layout_constraintTop_toBottomOf="@+id/guide_avatar_top"
+                app:srcCompat="@drawable/meisje_stoer_zitten" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_inkleuren_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="93dp"
+                app:layout_constraintGuide_percent="0.88" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_inkleuren_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.82" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_titel_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="366dp"
+                app:layout_constraintGuide_percent="0.50" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_titel_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.16" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_avatar_inkleuren_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.93" />
+
+            <ImageView
+                android:id="@+id/img_event_details_avatar_inkleuren"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:contentDescription="@string/avatar_inkleuren"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toTopOf="@+id/guide_avatar_inkleuren_bottom"
+                app:layout_constraintStart_toStartOf="@+id/guide_avatar_inkleuren_left"
+                app:layout_constraintTop_toBottomOf="@+id/guide_avatar_inkleuren_top"
+                app:srcCompat="@drawable/meisje_stoer_gezicht" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

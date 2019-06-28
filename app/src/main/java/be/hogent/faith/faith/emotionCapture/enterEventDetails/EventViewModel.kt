@@ -19,6 +19,7 @@ import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
 import be.hogent.faith.service.usecases.SaveEventTextUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.observers.DisposableSingleObserver
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.io.File
@@ -59,12 +60,12 @@ class EventViewModel(
      */
     val eventNotes = MutableLiveData<String>()
 
-    private val _photoSavedSuccessFully = SingleLiveEvent<Unit>()
-    val photoSavedSuccessFully: LiveData<Unit>
+    private val _photoSavedSuccessFully = SingleLiveEvent<Detail>()
+    val photoSavedSuccessFully: LiveData<Detail>
         get() = _photoSavedSuccessFully
 
-    private val _drawingSavedSuccessFully = SingleLiveEvent<Unit>()
-    val drawingSavedSuccessFully: LiveData<Unit>
+    private val _drawingSavedSuccessFully = SingleLiveEvent<Detail>()
+    val drawingSavedSuccessFully: LiveData<Detail>
         get() = _drawingSavedSuccessFully
 
     private val _recordingSavedSuccessFully = SingleLiveEvent<Unit>()
@@ -262,9 +263,9 @@ class EventViewModel(
         saveEventPhotoUseCase.execute(params, TakeEventPhotoUseCaseHandler())
     }
 
-    private inner class TakeEventPhotoUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _photoSavedSuccessFully.value = Unit
+    private inner class TakeEventPhotoUseCaseHandler : DisposableSingleObserver<Detail>() {
+        override fun onSuccess(t: Detail) {
+            _photoSavedSuccessFully.value = t
         }
 
         override fun onError(e: Throwable) {
@@ -279,9 +280,9 @@ class EventViewModel(
         saveEventDrawingUseCase.execute(params, SaveEventDrawingUseCaseHandler())
     }
 
-    private inner class SaveEventDrawingUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _drawingSavedSuccessFully.value = Unit
+    private inner class SaveEventDrawingUseCaseHandler : DisposableSingleObserver<Detail>() {
+        override fun onSuccess(t: Detail) {
+            _drawingSavedSuccessFully.value = t
         }
 
         override fun onError(e: Throwable) {
