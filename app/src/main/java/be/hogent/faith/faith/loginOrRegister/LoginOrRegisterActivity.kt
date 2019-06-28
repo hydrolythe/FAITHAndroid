@@ -49,7 +49,7 @@ class LoginOrRegisterActivity : AppCompatActivity(),
 
     override fun onResume() {
         super.onResume()
-        if (intent.getBooleanExtra(LoginOrRegisterActivity.KEY_CLEAR_CREDENTIALS, false)) {
+        if (intent.getBooleanExtra(LoginManager.KEY_CLEAR_CREDENTIALS, false)) {
             credentialsManager.clearCredentials()
             Log.d(TAG, "Logged out")
         }
@@ -84,7 +84,5 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         replaceFragment(RegisterAvatarFragment.newInstance(), R.id.fragment_container)
     }
 
-    companion object {
-        const val KEY_CLEAR_CREDENTIALS = "com.auth0.CLEAR_CREDENTIALS"
-    }
+
 }

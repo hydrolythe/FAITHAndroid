@@ -11,6 +11,7 @@ import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
 import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.util.replaceFragment
 import android.R
+import be.hogent.faith.faith.loginOrRegister.LoginManager
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.builders.footer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
@@ -38,7 +39,7 @@ class CityScreenActivity : AppCompatActivity(),
                 primaryItem("Logout") {
                     onClick { _ ->
                         val intent = Intent(applicationContext, LoginOrRegisterActivity::class.java)
-                        intent.putExtra(LoginOrRegisterActivity.KEY_CLEAR_CREDENTIALS, true)
+                        intent.putExtra(LoginManager.KEY_CLEAR_CREDENTIALS, true)
                         startActivity(intent)
                         finish()
                         true
