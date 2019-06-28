@@ -27,7 +27,7 @@ class CityScreenActivity : AppCompatActivity(),
         if (savedInstanceState == null) {
             val fragment = CityScreenFragment.newInstance()
             supportFragmentManager.beginTransaction()
-                .add(be.hogent.faith.R.id.fragment_container, fragment)
+                .add(R.id.fragment_container, fragment)
                 .commit()
         }
 
@@ -35,7 +35,6 @@ class CityScreenActivity : AppCompatActivity(),
             footer {
                 primaryItem("Logout") {
                     onClick { _ ->
-                        Log.d("DRAWER", "Clicked logout")
                         val intent = Intent(applicationContext, LoginOrRegisterActivity::class.java)
                         intent.putExtra(LoginOrRegisterActivity.KEY_CLEAR_CREDENTIALS, true)
                         startActivity(intent)
