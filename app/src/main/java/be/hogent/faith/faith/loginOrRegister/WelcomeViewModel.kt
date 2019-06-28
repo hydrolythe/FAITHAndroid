@@ -4,7 +4,6 @@ import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import be.hogent.faith.R
 import be.hogent.faith.faith.util.SingleLiveEvent
 
 class WelcomeViewModel : ViewModel() {

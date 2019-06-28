@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.di
 
-import android.content.Context
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_ID
@@ -63,15 +62,14 @@ val appModule = module(override = true) {
 
     single { TempFileProvider(androidContext()) }
 
-    single {(callback : LoginManager.LoginCallback) -> LoginManager(callback)}
+    single { (callback: LoginManager.LoginCallback) -> LoginManager(callback) }
 
     single { ResourceAvatarProvider(androidContext()) as AvatarProvider }
 
     single { PremadeImagesProviderFromResources() as PremadeImagesProvider }
 
-
     // Dependency injection for the login, authentication
-    single{ Auth0(androidContext()) }
+    single { Auth0(androidContext()) }
     single { AuthenticationAPIClient(get() as Auth0) }
     // We are using SharedPrefs to store tokens, in PRIVATE mode
     single { SecureCredentialsManager(get(), get() as AuthenticationAPIClient, get() as SharedPreferencesStorage) }

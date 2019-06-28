@@ -12,12 +12,10 @@ import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoFr
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
 import be.hogent.faith.faith.util.replaceFragment
 import be.hogent.faith.util.TAG
-import com.auth0.android.authentication.storage.SecureCredentialsManager
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
-
 
 class LoginOrRegisterActivity : AppCompatActivity(),
     WelcomeFragment.WelcomeNavigationListener,
@@ -27,7 +25,6 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     private lateinit var registerUserInfoViewModel: RegisterUserInfoViewModel
 
     private val loginManager: LoginManager by inject { parametersOf(this) }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +55,6 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         }
     }
 
-
     private fun createScopedUserViewModel() {
         Log.e(TAG, "Creating USER SCOPE")
         // Don't create SCOPE twice
@@ -86,6 +82,4 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     override fun goToRegisterAvatarScreen() {
         replaceFragment(RegisterAvatarFragment.newInstance(), R.id.fragment_container)
     }
-
-
 }
