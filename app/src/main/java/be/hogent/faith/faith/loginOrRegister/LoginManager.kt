@@ -16,7 +16,8 @@ import org.koin.standalone.KoinComponent
 import org.koin.standalone.get
 
 class LoginManager(
-    private val context: Context, private val loginCallback: LoginCallback
+    private val context: Context,
+    private val loginCallback: LoginCallback
 ) : KoinComponent {
 
     /**
@@ -29,7 +30,6 @@ class LoginManager(
     init {
         auth0.isOIDCConformant = true
     }
-
 
     fun login() {
         // Obtain the existing credentials and move to the next activity
@@ -45,7 +45,7 @@ class LoginManager(
             override fun onFailure(error: CredentialsManagerException) {
                 WebAuthProvider.init(auth0)
                     .withScheme("app")
-                    //Allow refresh tokens
+                    // Allow refresh tokens
                     .withScope("openid offline_access")
                     .withAudience(
                         String.format(
@@ -56,10 +56,7 @@ class LoginManager(
                     .start(context as Activity, webCallback)
             }
         })
-
-
     }
-
 
     private val webCallback = object : AuthCallback {
         override fun onFailure(dialog: Dialog) {
@@ -75,7 +72,6 @@ class LoginManager(
             loginCallback.onSuccess()
         }
     }
-
 
     interface LoginCallback {
         fun onSuccess()

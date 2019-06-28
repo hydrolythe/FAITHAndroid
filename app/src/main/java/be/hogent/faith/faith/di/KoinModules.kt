@@ -64,9 +64,8 @@ val appModule = module(override = true) {
 
     single { PremadeImagesProviderFromResources() as PremadeImagesProvider }
 
-
     // Dependency injection for the login, authentication
-    single{ Auth0(androidContext()) }
+    single { Auth0(androidContext()) }
     single { AuthenticationAPIClient(get() as Auth0) }
     // We are using SharedPrefs to store tokens, in PRIVATE mode
     single { SecureCredentialsManager(get(), get() as AuthenticationAPIClient, get() as SharedPreferencesStorage) }

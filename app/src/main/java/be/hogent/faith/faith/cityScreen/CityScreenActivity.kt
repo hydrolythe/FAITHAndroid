@@ -15,7 +15,6 @@ import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.builders.footer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
 
-
 class CityScreenActivity : AppCompatActivity(),
     CityScreenFragment.CityScreenNavigationListener {
 
@@ -44,7 +43,6 @@ class CityScreenActivity : AppCompatActivity(),
                         true
                     }
                 }
-
             }
         }
     }

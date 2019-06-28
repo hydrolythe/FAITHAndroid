@@ -4,13 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import be.hogent.faith.R.*
+import be.hogent.faith.R
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.avatar_rv_item.view.avatar_list_image
 
-
-class AvatarItemAdapter(private val avatarClickListener: OnAvatarClickListener) : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
-
+class AvatarItemAdapter(private val avatarClickListener: OnAvatarClickListener) :
+    RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
 
     /**
      * The list of avatars which need to be displayed.
@@ -25,7 +24,7 @@ class AvatarItemAdapter(private val avatarClickListener: OnAvatarClickListener) 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                layout.avatar_rv_item,
+                R.layout.avatar_rv_item,
                 parent,
                 false
             )
@@ -39,7 +38,6 @@ class AvatarItemAdapter(private val avatarClickListener: OnAvatarClickListener) 
         return avatars.size
     }
 
-
     /**
      * Binds the image view of the list item to the desired image.
      */
@@ -49,7 +47,6 @@ class AvatarItemAdapter(private val avatarClickListener: OnAvatarClickListener) 
         } else {
             holder.bind(avatars[position], false)
         }
-
     }
 
     /**
@@ -86,13 +83,9 @@ class AvatarItemAdapter(private val avatarClickListener: OnAvatarClickListener) 
                 avatarClickListener.onAvatarClicked(position)
             }
         }
-
     }
-
 
     interface OnAvatarClickListener {
         fun onAvatarClicked(index: Int)
     }
-
-
 }
