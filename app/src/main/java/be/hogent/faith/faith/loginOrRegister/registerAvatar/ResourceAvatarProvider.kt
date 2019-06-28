@@ -4,10 +4,13 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.core.content.ContextCompat
+import org.koin.android.viewmodel.ext.android.viewModel
 import be.hogent.faith.util.TAG
+
 
 class ResourceAvatarProvider(private val context: Context) :
     AvatarProvider {
+
 
     override fun getAvatarDrawables(): List<Drawable> {
         return getAvatars()

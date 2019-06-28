@@ -10,12 +10,25 @@ interface AvatarProvider {
     fun getAvatars(): List<Avatar> {
         return listOf(
             "jongen_gamer",
-            "meisje_stoer",
-            "avatar",
-            "avatar2",
-            "avatar3",
-            "avatar4",
-            "avatar5"
+            "meisje_stoer_staand",
+            "jongen_gamer",
+            "meisje_stoer_staand",
+            "jongen_gamer",
+            "meisje_stoer_staand",
+            "jongen_gamer",
+            "meisje_stoer_staand",
+            "jongen_gamer",
+            "meisje_stoer_staand",
+            "jongen_gamer",
+            "meisje_stoer_staand",
+            "jongen_gamer",
+            "meisje_stoer_staand",
+            "jongen_gamer",
+            "meisje_stoer_staand",
+            "jongen_gamer",
+            "meisje_stoer_staand",
+            "jongen_gamer",
+            "meisje_stoer_staand"
         ).map { name -> Avatar(name) }
     }
 

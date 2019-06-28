@@ -78,6 +78,18 @@
     <string name="lbl_activity_city">De Stad</string>
     <string name="description_event_avatar">Getekende avatar voor de gebeurtenis</string>
     <string name="descr_city_park">Het stadspark</string>
+
+    <string name="prompt_password">Wat is je pwd</string>
+    <string name="action_sign_in_short">pwd</string>
+    <string name="action_sign_in">log in</string>
+    <string name="prompt_email">Wat is je email?</string>
+    <string name="permission_rationale">Permissies?</string>
+    <string name="error_field_required">verplicht</string>
+    <string name="error_invalid_email">ongeldig email</string>
+    <string name="error_invalid_password">ongeldig pwd</string>
+    <string name="error_incorrect_password">ongeldig pwd</string>
+
+
     <string name="fontsize_small">klein</string>
     <string name="fontsize_normal">normaal</string>
     <string name="fontsize_large">groot</string>
@@ -87,9 +99,16 @@
     <string name="password">Wachtwoord</string>
     <string name="login_error_noUsername">Je moet je gebruikersnaam ingeven!</string>
     <string name="login_error_noPassword">Je moet je wachtwoord ingeven!</string>
+
+    <!-- Information for authentication and authorization !-->
+    <string name="com_auth0_client_id">VRX5hqPAdDhkj5DJJ9df4Q4SMZS06io9</string>
+    <string name="com_auth0_domain">e-quality.eu.auth0.com</string>
+
     <string name="register_passwords_nomatch">Je ingevulde wachtwoorden zijn niet gelijk aan elkaar.</string>
     <string name="register_password_empty">Je moet een wachtwoord ingeven.</string>
     <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
+    <string name="error_no_credentials">No credentials have been stored</string>
+    <string name="msg_naar_de_stad">Naar de stad</string>
     <string name="avatar_zittend">avatar zittend</string>
     <string name="avatar_inkleuren">avatar inkleuren</string>
     <string name="editor">editor</string>
@@ -101,4 +120,6 @@
     <string name="take_photo_neem_foto">neem foto</string>
     <string name="cityScreen_logOut">Wil je uitloggen?</string>
     <string name="cityscreen_stad_verlaten">Wil je uitloggen en de stad verlaten?</string>
+
+>>>>>>> dev
 </resources>

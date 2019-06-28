@@ -19,6 +19,10 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvid
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
 import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
 import be.hogent.faith.faith.util.TempFileProvider
+import com.auth0.android.Auth0
+import com.auth0.android.authentication.AuthenticationAPIClient
+import com.auth0.android.authentication.storage.SecureCredentialsManager
+import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.ext.koin.viewModel
@@ -59,4 +63,12 @@ val appModule = module(override = true) {
     single { ResourceAvatarProvider(androidContext()) as AvatarProvider }
 
     single { PremadeImagesProviderFromResources() as PremadeImagesProvider }
+
+
+    // Dependency injection for the login, authentication
+    single{ Auth0(androidContext()) }
+    single { AuthenticationAPIClient(get() as Auth0) }
+    // We are using SharedPrefs to store tokens, in PRIVATE mode
+    single { SecureCredentialsManager(get(), get() as AuthenticationAPIClient, get() as SharedPreferencesStorage) }
+    single { SharedPreferencesStorage(androidContext()) }
 }
