@@ -12,13 +12,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter.OnAvatarClickListener
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
 import be.hogent.faith.util.TAG
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
+import kotlinx.android.synthetic.main.fragment_register_avatar.background_register_avatar
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -59,8 +62,15 @@ class RegisterAvatarFragment : Fragment() , OnAvatarClickListener{
 
     override fun onStart() {
         super.onStart()
+        setBackgroundImage()
         configureRecyclerViewAdapter()
         registerListeners()
+    }
+
+    private fun setBackgroundImage() {
+        Glide.with(requireContext())
+            .load(R.drawable.register_background_avatar)
+            .into(background_register_avatar)
     }
 
     private fun registerListeners() {

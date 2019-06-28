@@ -24,11 +24,13 @@
 
         <!--ACHTERGROND-->
         <ImageView
+            android:id="@+id/background_register_avatar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:src="@drawable/avatar_selection_background"
             app:srcCompat="@drawable/avatar_selection_background" />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -64,14 +66,13 @@
 
             <Button
                 android:id="@+id/btn_register_finishRegistration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:onClick="@{() -> registerUserViewModel.onFinishRegistrationClicked()}"
                 android:background="@drawable/ic_pijl"
-                android:text="Button"
+                android:onClick="@{() -> registerUserViewModel.onFinishRegistrationClicked()}"
+                android:text="@string/msg_naar_de_stad"
                 app:layout_constraintBottom_toTopOf="@+id/avatar_rv_avatar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
