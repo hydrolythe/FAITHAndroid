@@ -108,5 +108,6 @@
     <string name="register_password_empty">Je moet een wachtwoord ingeven.</string>
     <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
     <string name="error_no_credentials">No credentials have been stored</string>
+    <string name="msg_naar_de_stad">Naar de stad</string>
 
 </resources>

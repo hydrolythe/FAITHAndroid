@@ -19,8 +19,8 @@
         <!--ACHTERGROND-->
         <ImageView
             android:layout_width="match_parent"
+            android:id="@+id/background_welcome"
             android:layout_height="match_parent"
-            android:background="@drawable/loginscherm"
             android:contentDescription="@string/descr_loginscreen" />
 
         <!-- KNOPPEN -->
@@ -129,10 +129,6 @@
                 app:layout_constraintEnd_toStartOf="@id/guide_pole_left_start"
                 app:layout_constraintStart_toStartOf="@+id/guide_pole_left_end"
                 app:layout_constraintTop_toTopOf="@+id/guide_pole_top" />
-
->
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>
