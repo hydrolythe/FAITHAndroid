@@ -12,18 +12,19 @@ import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoFr
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
 import be.hogent.faith.faith.util.replaceFragment
 import be.hogent.faith.util.TAG
-import com.auth0.android.authentication.storage.SecureCredentialsManager
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
+import org.koin.core.parameter.parametersOf
 
 class LoginOrRegisterActivity : AppCompatActivity(),
     WelcomeFragment.WelcomeNavigationListener,
     RegisterUserInfoFragment.RegisterUserInfoNavigationListener,
     RegisterAvatarFragment.AvatarFragmentNavigationListener {
 
-    private val credentialsManager: SecureCredentialsManager by inject()
     private lateinit var registerUserInfoViewModel: RegisterUserInfoViewModel
+
+    private val loginManager: LoginManager by inject { parametersOf(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,9 +48,10 @@ class LoginOrRegisterActivity : AppCompatActivity(),
 
     override fun onResume() {
         super.onResume()
-        if (intent.getBooleanExtra(LoginOrRegisterActivity.KEY_CLEAR_CREDENTIALS, false)) {
-            credentialsManager.clearCredentials()
-            Log.d(TAG, "Logged out")
+        if (intent.getBooleanExtra(LoginManager.KEY_CLEAR_CREDENTIALS, false)) {
+            loginManager.logout()
+            if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) != null)
+                getKoin().getScope(KoinModules.USER_SCOPE_ID).close()
         }
     }
 
@@ -79,9 +81,5 @@ class LoginOrRegisterActivity : AppCompatActivity(),
 
     override fun goToRegisterAvatarScreen() {
         replaceFragment(RegisterAvatarFragment.newInstance(), R.id.fragment_container)
-    }
-
-    companion object {
-        const val KEY_CLEAR_CREDENTIALS = "com.auth0.CLEAR_CREDENTIALS"
     }
 }

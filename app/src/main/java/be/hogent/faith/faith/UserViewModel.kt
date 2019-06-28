@@ -32,7 +32,7 @@ class UserViewModel(
         get() = _user
 
     fun setUser(user: User) {
-        _user.value = user
+        _user.postValue(user)
     }
 
     fun saveEvent(eventTitle: String?, event: Event) {
