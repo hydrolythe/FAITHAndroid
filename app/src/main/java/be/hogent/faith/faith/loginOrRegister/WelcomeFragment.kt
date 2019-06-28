@@ -35,6 +35,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_welcome.background_welcome
 
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
 class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
@@ -43,13 +44,7 @@ class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
 
     private val welcomeViewModel by viewModel<WelcomeViewModel>()
 
-    private lateinit var loginManager :LoginManager
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        loginManager = LoginManager(requireContext(),this)
-    }
+    private val loginManager: LoginManager by inject { parametersOf( this)}
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -78,7 +73,7 @@ class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
         })
         welcomeViewModel.loginButtonClicked.observe(this, Observer {
 
-            loginManager.login()
+            loginManager.login(activity!!)
 
             // TODO: add username/password auth here!
             // if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) == null) {
@@ -86,7 +81,8 @@ class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
             //}
             //val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
             //userViewModel.setUser(User(welcomeViewModel.userName.value!!, avatarName = "meisje_stoer"))
-            navigation?.goToCityScreen()
+            //navigation?.goToCityScreen()
+
 
         })
         welcomeViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->

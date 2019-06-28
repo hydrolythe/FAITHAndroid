@@ -16,6 +16,7 @@ import com.auth0.android.authentication.storage.SecureCredentialsManager
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
+import org.koin.core.parameter.parametersOf
 
 
 class LoginOrRegisterActivity : AppCompatActivity(),
@@ -23,8 +24,9 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     RegisterUserInfoFragment.RegisterUserInfoNavigationListener,
     RegisterAvatarFragment.AvatarFragmentNavigationListener {
 
-    private val credentialsManager: SecureCredentialsManager by inject()
     private lateinit var registerUserInfoViewModel: RegisterUserInfoViewModel
+
+    private val loginManager: LoginManager by inject { parametersOf(this) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,8 +52,7 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     override fun onResume() {
         super.onResume()
         if (intent.getBooleanExtra(LoginManager.KEY_CLEAR_CREDENTIALS, false)) {
-            credentialsManager.clearCredentials()
-            Log.d(TAG, "Logged out")
+            loginManager.logout()
         }
     }
 
