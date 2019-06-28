@@ -17,7 +17,6 @@ import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
 
-
 class LoginOrRegisterActivity : AppCompatActivity(),
     WelcomeFragment.WelcomeNavigationListener,
     RegisterUserInfoFragment.RegisterUserInfoNavigationListener,
@@ -25,7 +24,6 @@ class LoginOrRegisterActivity : AppCompatActivity(),
 
     private val credentialsManager: SecureCredentialsManager by inject()
     private lateinit var registerUserInfoViewModel: RegisterUserInfoViewModel
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +52,6 @@ class LoginOrRegisterActivity : AppCompatActivity(),
             Log.d(TAG, "Logged out")
         }
     }
-
 
     private fun createScopedUserViewModel() {
         Log.e(TAG, "Creating USER SCOPE")

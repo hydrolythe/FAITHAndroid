@@ -19,9 +19,7 @@ import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter.OnAvatarClickListener
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
 import be.hogent.faith.util.TAG
-import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
-import kotlinx.android.synthetic.main.fragment_register_avatar.background_register_avatar
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -35,8 +33,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
  */
 const val SELECTION_ID = "avatarSelection"
 
-class RegisterAvatarFragment : Fragment() , OnAvatarClickListener{
-
+class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
 
     private var navigation: AvatarFragmentNavigationListener? = null
 
@@ -49,28 +46,17 @@ class RegisterAvatarFragment : Fragment() , OnAvatarClickListener{
     private val registerUserInfoViewModel by sharedViewModel<RegisterUserInfoViewModel>()
     private val registerUserViewModel by viewModel<RegisterUserViewModel>()
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: be.hogent.faith.databinding.FragmentRegisterAvatarBinding =
-            DataBindingUtil.inflate(inflater, be.hogent.faith.R.layout.fragment_register_avatar, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_register_avatar, container, false)
         binding.registerAvatarViewModel = registerAvatarViewModel
-        binding.registerUserInfoViewModel = registerUserInfoViewModel
-        binding.registerUserViewModel = registerUserViewModel
-        Log.i(TAG, "Created the Fragmentview")
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
-        // setBackgroundImage()
         configureRecyclerViewAdapter()
         registerListeners()
-    }
-
-    private fun setBackgroundImage() {
-        Glide.with(requireContext())
-            .load(R.drawable.register_background_avatar)
-            .into(background_register_avatar)
     }
 
     private fun registerListeners() {
@@ -79,30 +65,28 @@ class RegisterAvatarFragment : Fragment() , OnAvatarClickListener{
             navigation!!.goToCityScreen()
         })
 
-
-        registerUserViewModel.finishRegistrationClicked.observe(this, Observer {
+        registerAvatarViewModel.finishRegistrationClicked.observe(this, Observer {
             Log.d(
                 TAG, "Registering user with:" +
                         "username ${registerUserInfoViewModel.userName.value}, " +
                         "password ${registerUserInfoViewModel.password.value}, " +
-                        "avatar ${registerAvatarViewModel.selectedAvatar.value}"
+                        "avatar ${registerAvatarViewModel.selectedAvatar}"
             )
-            //registerUserViewModel.registerUser
-            //(
-                //registerUserInfoViewModel.userName.value!!,
-                //registerUserInfoViewModel.password.value!!,
-                // TODO: fix so we can used [RegisterAvatarViewModel.selectedAvatar]
-                //registerAvatarViewModel.avatars.value!![registerAvatarViewModel.selectedItem.value!!.toInt()]
-            //)
-            //TODO: tijdelijke fix na het registreren moet een user toegevoegd worden
+//            registerUserViewModel.registerUser(
+//                registerUserInfoViewModel.userName.value!!,
+//                registerUserInfoViewModel.password.value!!,
+//                registerAvatarViewModel.selectedAvatar!!
+//            )
+            // TODO: tijdelijke fix na het registreren moet een user toegevoegd worden
             navigation!!.goToCityScreen()
         })
 
+        registerAvatarViewModel.errorMessage.observe(this, Observer { errorMessageID ->
+            Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
+        })
         registerUserViewModel.errorMessage.observe(this, Observer { errorMessageID ->
             Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
         })
-
-
     }
 
     override fun onAttach(context: Context) {
@@ -111,7 +95,6 @@ class RegisterAvatarFragment : Fragment() , OnAvatarClickListener{
             navigation = context
         }
     }
-
 
     private fun configureRecyclerViewAdapter() {
         with(AvatarItemAdapter(this)) {
@@ -128,7 +111,6 @@ class RegisterAvatarFragment : Fragment() , OnAvatarClickListener{
     override fun onAvatarClicked(index: Int) {
         registerAvatarViewModel.setSelectedAvatar(index)
     }
-
 
     companion object {
         /**

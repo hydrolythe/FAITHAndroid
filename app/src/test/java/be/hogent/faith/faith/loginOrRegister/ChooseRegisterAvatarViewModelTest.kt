@@ -32,8 +32,8 @@ class ChooseRegisterAvatarViewModelTest {
 
     @Test
     fun avatarViewModel_setSelectedItem() {
-        viewModelRegister.setSelectedItem(selection.toLong())
-        assertEquals(selection, getValue(viewModelRegister.selectedItem).toInt())
+        viewModelRegister.setSelectedAvatar(selection.toLong())
+        assertEquals(selection, getValue(viewModelRegister.selectedAvatarPosition).toInt())
     }
 
     @Test
@@ -45,7 +45,7 @@ class ChooseRegisterAvatarViewModelTest {
     fun avatarViewModel_saveButtonClicked__CallUseCaseWithCorrectParams() {
         // Arrange
         val params = slot<CreateUserUseCase.Params>()
-        viewModelRegister.setSelectedItem(selection.toLong())
+        viewModelRegister.setSelectedAvatar(selection.toLong())
         viewModelRegister.userName.postValue(name)
 
         // Act
@@ -65,7 +65,7 @@ class ChooseRegisterAvatarViewModelTest {
         val params = slot<CreateUserUseCase.Params>()
         val observer = slot<DisposableSingleObserver<User>>()
 
-        viewModelRegister.setSelectedItem(selection.toLong())
+        viewModelRegister.setSelectedAvatar(selection.toLong())
         viewModelRegister.userName.postValue(name)
 
         val failObserver = mockk<Observer<String>>(relaxed = true)
@@ -90,7 +90,7 @@ class ChooseRegisterAvatarViewModelTest {
         val params = slot<CreateUserUseCase.Params>()
         val observer = slot<DisposableSingleObserver<User>>()
 
-        viewModelRegister.setSelectedItem(selection.toLong())
+        viewModelRegister.setSelectedAvatar(selection.toLong())
         viewModelRegister.userName.postValue(name)
 
         val failObserver = mockk<Observer<String>>(relaxed = true)
@@ -128,7 +128,7 @@ class ChooseRegisterAvatarViewModelTest {
     @Test
     fun eventViewModel_noNameGiven_notifiesAndNoUseCaseCalled() {
         // Arrange
-        viewModelRegister.setSelectedItem(selection.toLong())
+        viewModelRegister.setSelectedAvatar(selection.toLong())
 
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         viewModelRegister.inputErrorMessageID.observeForever(errorObserver)
