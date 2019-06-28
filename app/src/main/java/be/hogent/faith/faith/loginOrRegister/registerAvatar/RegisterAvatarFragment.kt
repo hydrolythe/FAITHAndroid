@@ -7,21 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
-
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter.OnAvatarClickListener
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
-import be.hogent.faith.faith.util.getRotation
-
 import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
 import org.koin.android.ext.android.getKoin
@@ -37,14 +32,15 @@ import org.koin.android.viewmodel.ext.android.viewModel
  */
 const val SELECTION_ID = "avatarSelection"
 
-class RegisterAvatarFragment : Fragment() {
+class RegisterAvatarFragment : Fragment() , OnAvatarClickListener{
+
 
     private var navigation: AvatarFragmentNavigationListener? = null
 
     /**
      * ViewModel used for the avatars.
      */
-    private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel<RegisterAvatarViewModel>()
+    private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel()
 
     private val userViewModel by inject<UserViewModel>(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
     private val registerUserInfoViewModel by sharedViewModel<RegisterUserInfoViewModel>()
@@ -88,7 +84,7 @@ class RegisterAvatarFragment : Fragment() {
                 // TODO: fix so we can used [RegisterAvatarViewModel.selectedAvatar]
                 //registerAvatarViewModel.avatars.value!![registerAvatarViewModel.selectedItem.value!!.toInt()]
             //)
-            //TODO: tijdelijke fix na het registreren met een user toegevoegd worden
+            //TODO: tijdelijke fix na het registreren moet een user toegevoegd worden
             navigation!!.goToCityScreen()
         })
 
@@ -108,7 +104,7 @@ class RegisterAvatarFragment : Fragment() {
 
 
     private fun configureRecyclerViewAdapter() {
-        with(AvatarItemAdapter(registerAvatarViewModel)) {
+        with(AvatarItemAdapter(this)) {
             avatars = registerAvatarViewModel.avatars.value!!
             avatar_rv_avatar.adapter = this
         }
@@ -117,6 +113,10 @@ class RegisterAvatarFragment : Fragment() {
 
     interface AvatarFragmentNavigationListener {
         fun goToCityScreen()
+    }
+
+    override fun onAvatarClicked(index: Int) {
+        registerAvatarViewModel.setSelectedAvatar(index)
     }
 
 

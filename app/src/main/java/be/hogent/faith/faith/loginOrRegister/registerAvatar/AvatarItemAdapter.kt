@@ -4,11 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import be.hogent.faith.R.*
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.avatar_rv_item.view.avatar_list_image
 
 
-class AvatarItemAdapter(private val avatarClickListener: onAvatarClickListener) : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
+class AvatarItemAdapter(private val avatarClickListener: OnAvatarClickListener) : RecyclerView.Adapter<AvatarItemAdapter.ViewHolder>() {
 
 
     /**
@@ -24,7 +25,7 @@ class AvatarItemAdapter(private val avatarClickListener: onAvatarClickListener) 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                be.hogent.faith.R.layout.avatar_rv_item,
+                layout.avatar_rv_item,
                 parent,
                 false
             )
@@ -73,7 +74,7 @@ class AvatarItemAdapter(private val avatarClickListener: onAvatarClickListener) 
         }
 
         private fun setClickListener() {
-            view.setOnClickListener(View.OnClickListener {
+            view.setOnClickListener {
                 val viewHolder = it.tag as RecyclerView.ViewHolder
                 val position = viewHolder.adapterPosition
                 viewHolder.itemView.isActivated = true
@@ -83,14 +84,13 @@ class AvatarItemAdapter(private val avatarClickListener: onAvatarClickListener) 
                     notifyItemChanged(oldSelection)
                 notifyItemChanged(position)
                 avatarClickListener.onAvatarClicked(position)
-
-            })
+            }
         }
 
     }
 
 
-    interface onAvatarClickListener {
+    interface OnAvatarClickListener {
         fun onAvatarClicked(index: Int)
     }
 
