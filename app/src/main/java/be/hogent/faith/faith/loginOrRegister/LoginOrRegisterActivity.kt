@@ -53,6 +53,8 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         super.onResume()
         if (intent.getBooleanExtra(LoginManager.KEY_CLEAR_CREDENTIALS, false)) {
             loginManager.logout()
+            if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) != null)
+                getKoin().getScope(KoinModules.USER_SCOPE_ID).close()
         }
     }
 
