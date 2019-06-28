@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'composer'
+
 
 buildscript {
     repositories {
@@ -11,14 +11,14 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
+
         classpath 'com.github.trevjonez.composer-gradle-plugin:plugin:0.10.0'
         classpath 'com.android.tools.build:gradle:3.4.1'
     }
 }
 
 
-composer {
-}
+
 
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
@@ -29,7 +29,9 @@ android {
         targetSdkVersion globalConfig["androidTargetSdkVersion"]
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [auth0Domain: "@string/com_auth0_domain", auth0Scheme: "app"]
     }
     buildTypes {
         release {
@@ -63,6 +65,9 @@ dependencies {
     implementation project(':draw')
     implementation project(':util')
 
+
+    implementation authdependencies.auth0
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     def commonDependencies = rootProject.ext.commonDependencies
@@ -83,6 +88,8 @@ dependencies {
     implementation androidDependencies.lifecycle
 
     implementation uiDependencies.glide
+    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+    implementation 'com.google.android.material:material:1.0.0-beta01'
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
     implementation uiDependencies.rv_selection
@@ -92,6 +99,11 @@ dependencies {
     implementation uiDependencies.fotoApparatAdapters
     implementation uiDependencies.navigation
     implementation uiDependencies.texteditor
+
+    implementation uiDependencies.materialdrawer
+    implementation uiDependencies.annotation
+    implementation uiDependencies.material
+
 
     //TESTING
     debugImplementation androidTestDependencies.fragmentTesting
@@ -109,6 +121,8 @@ dependencies {
     androidTestImplementation androidTestDependencies.testRules
     androidTestImplementation androidTestDependencies.testRunner
     androidTestImplementation androidTestDependencies.espresso
+
     androidTestImplementation androidTestDependencies.espressoContrib
     androidTestImplementation androidTestDependencies.uiAutomator
 }
+
