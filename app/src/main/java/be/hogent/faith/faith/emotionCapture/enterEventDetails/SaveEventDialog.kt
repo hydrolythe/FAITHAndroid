@@ -19,7 +19,7 @@ class SaveEventDialog : DialogFragment() {
     private lateinit var saveEventBinding: be.hogent.faith.databinding.DialogSaveEventBinding
 
     private val eventDetailsViewModel: EventViewModel by sharedViewModel()
-    private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     companion object {
         fun newInstance(): SaveEventDialog {

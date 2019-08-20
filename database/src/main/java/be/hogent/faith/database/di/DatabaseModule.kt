@@ -13,7 +13,7 @@ import be.hogent.faith.database.repositories.UserRepositoryImpl
 import be.hogent.faith.domain.repository.EventRepository
 import be.hogent.faith.domain.repository.UserRepository
 import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module.module
+import org.koin.dsl.module
 
 val databaseModule = module {
     single { EventMapper }

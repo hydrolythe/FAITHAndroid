@@ -32,7 +32,7 @@ class EventDetailsFragment : Fragment() {
     private var navigation: EventDetailsNavigationListener? = null
 
     private val eventViewModel: EventViewModel by sharedViewModel()
-    private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private lateinit var eventDetailsBinding: be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
 

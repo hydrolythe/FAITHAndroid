@@ -29,7 +29,7 @@ class OverviewEventsFragment : Fragment() {
 
     private lateinit var eventsOverViewViewModel: OverviewEventsViewModel
 
-    private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private lateinit var eventsAdapter: EventsAdapter
 

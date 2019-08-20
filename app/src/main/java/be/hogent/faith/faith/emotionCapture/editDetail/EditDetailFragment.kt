@@ -63,7 +63,7 @@ class EditDetailFragment : Fragment() {
     private lateinit var editDetailBinding: be.hogent.faith.databinding.FragmentEditDetailBinding
     private var avatarOutlineResId: Int = NO_AVATAR
 
-    private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private lateinit var saveDialog: SaveEventDialog
 
     override fun onAttach(context: Context) {

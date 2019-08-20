@@ -2,7 +2,7 @@ package be.hogent.faith.faith.di
 
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
-import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_ID
+import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.PremadeImagesProvider
 import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.PremadeImagesProviderFromResources
@@ -26,12 +26,14 @@ import com.auth0.android.authentication.storage.SecureCredentialsManager
 import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.viewmodel.ext.koin.viewModel
-import org.koin.dsl.module.module
+import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 import java.util.UUID
 
 object KoinModules {
-    const val USER_SCOPE_ID = "USER_SCOPE"
+    const val USER_SCOPE_NAME = "USER_SCOPE_NAME"
+    const val USER_SCOPE_ID = "USER_SCOPE_ID"
 }
 
 val appModule = module(override = true) {
@@ -56,8 +58,8 @@ val appModule = module(override = true) {
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.
-    scope(USER_SCOPE_ID) {
-        UserViewModel(get())
+    scope(named(USER_SCOPE_NAME)) {
+        scoped { UserViewModel(get()) }
     }
 
     single { TempFileProvider(androidContext()) }
