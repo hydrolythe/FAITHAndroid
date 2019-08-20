@@ -13,7 +13,7 @@ buildscript {
     dependencies {
 
         classpath 'com.github.trevjonez.composer-gradle-plugin:plugin:0.10.0'
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
     }
 }
 
@@ -90,8 +90,6 @@ dependencies {
     implementation androidDependencies.lifecycle
 
     implementation uiDependencies.glide
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
-    implementation 'com.google.android.material:material:1.0.0-beta01'
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
     implementation uiDependencies.rv_selection
@@ -99,7 +97,6 @@ dependencies {
     implementation uiDependencies.fragment
     implementation uiDependencies.fotoApparat
     implementation uiDependencies.fotoApparatAdapters
-    implementation uiDependencies.navigation
     implementation uiDependencies.texteditor
 
     implementation uiDependencies.materialdrawer
