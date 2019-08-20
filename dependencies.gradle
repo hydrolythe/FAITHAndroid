@@ -5,57 +5,62 @@ ext {
     androidTargetSdkVersion = 28
 
     constraint_layout_version = '2.0.0-alpha3'
-    fragment_version = '1.1.0-alpha03'
-    recyclerview_version = '1.0.0'
+    fragment_version = '1.2.0-alpha02'
+    recyclerview_version = '1.1.0-beta03'
+	recyclerview_selection_version = '1.1.0-alpha06'
     glide_version = '4.9.0'
     cardview_version = '1.0.0'
-    material_version='1.0.0'
+    material_version='1.1.0-alpha09'
 
-    androidX = '1.0.0'
+    androidX = '1.1.0'
+	anroidx_junit_version = '1.1.1'
 
     coroutines_version = '1.1.1'
     coroutines_android_version = '1.1.1'
 
     koin_version = '1.0.2'
 
-    aac_core_version = '2.0.0-rc01'
+    aac_core_version = '2.1.0-rc01'
 
-    lifecycle_version = '2.0.0'
+    lifecycle_version = '2.2.0-alpha03'
 
     appcompat_version = '1.0.2'
 
-    testrunner_version = '1.1.0'
+    testrunner_version = '1.3.0-alpha02'
     testcore_version = '1.0.0'
 
-    espresso_core_version = '3.1.1'
-    espresso_contrib_version = '3.1.1'
+    espresso_core_version = '3.3.0-alpha02'
+    espresso_contrib_version = '3.3.0-alpha02'
 
     uiAutomator_version = '2.2.0'
     junit_version = '4.12'
 
-    threeTenABP_version = '1.2.0'
-    threeTenBP_version = '1.3.8'
+    threeTenABP_version = '1.2.1'
+    threeTenBP_version = '1.4.0'
 
     rxjava_version = '2.2.7'
     rxjava_android_version = '2.1.1'
     rxkotlin_version = '2.3.0'
 
-    room_runtime_version = '2.1.0-alpha04'
+    room_runtime_version = '2.2.0-alpha02'
     room_compiler_version = '2.1.0-alpha03'
-    room_testing_version = '2.1.0-alpha03'
+    room_testing_version = '2.2.0-alpha02'
     room_rxjava_version = '2.1.0-alpha03'
 
     ktlint_version = '0.31.0'
 
     mockk_version = '1.9.3.kotlin12'
 
-    fragment_testing_version = '1.1.0-alpha07'
+    fragment_testing_version = '1.2.0-alpha02'
 
     fotoApparat_version = '2.6.1'
 
     textEditor_version = '1.2.2'
 
     materialdrawer_version = '2.0.1'
+	
+	annotation_version = '1.1.0'
+	
 
     commonDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
@@ -71,7 +76,7 @@ ext {
     ]
 
     androidDependencies = [
-            appcompat: "androidx.appcompat:appcompat:$androidX",
+            appcompat: "androidx.appcompat:appcompat:$appcompat_version",
             lifecycle: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     ]
 
@@ -84,7 +89,7 @@ ext {
 
     androidTestDependencies = [
             testCore       : "androidx.test:core:$testcore_version",
-            testRunner     : "androidx.test.ext:junit:$testrunner_version",
+            testRunner     : "androidx.test.ext:junit:$anroidx_junit_version",
             espresso       : "androidx.test.espresso:espresso-core:$espresso_core_version",
             aac_core       : "androidx.arch.core:core-testing:$aac_core_version",
             testRules      : "androidx.test:rules:$testrunner_version",
@@ -110,21 +115,20 @@ ext {
             fragment           : "androidx.fragment:fragment:$fragment_version",
             glide              : "com.github.bumptech.glide:glide:$glide_version",
             glidecompiler      : "com.github.bumptech.glide:compiler:$glide_version",
-            recyclerview       : "androidx.recyclerview:recyclerview:$androidX",
-            annotation         :  "androidx.annotation:annotation:${androidX}",
+            recyclerview       : "androidx.recyclerview:recyclerview:$recyclerview_version",
+            annotation         :  "androidx.annotation:annotation:$annotation_version",
             fotoApparat        : "io.fotoapparat:fotoapparat:$fotoApparat_version",
             fotoApparatAdapters: "io.fotoapparat.fotoapparat:adapter-rxjava2:$fotoApparat_version",
-            rv_selection        : "androidx.recyclerview:recyclerview-selection:$androidX",
-            cardView            : "androidx.cardview:cardview:$androidX",
-            navigation          :  "com.google.android.material:material:$material_version",
+            rv_selection        : "androidx.recyclerview:recyclerview-selection:$recyclerview_selection_version",
+            cardView            : "androidx.cardview:cardview:$cardview_version",
             texteditor          :  "jp.wasabeef:richeditor-android:$textEditor_version",
-            material            : "com.google.android.material:material:${androidX}",
+            material            : "com.google.android.material:material:$material_version",
             materialdrawer      : "co.zsmb:materialdrawer-kt:$materialdrawer_version"
 
     ]
 
     authdependencies = [
-            auth0 :  'com.auth0.android:auth0:1.+',
+            auth0 :  'com.auth0.android:auth0:1.+'
     ]
 
 }
