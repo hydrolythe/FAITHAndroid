@@ -7,13 +7,13 @@ ext {
     constraint_layout_version = '2.0.0-alpha3'
     fragment_version = '1.2.0-alpha02'
     recyclerview_version = '1.1.0-beta03'
-	recyclerview_selection_version = '1.1.0-alpha06'
+    recyclerview_selection_version = '1.1.0-alpha06'
     glide_version = '4.9.0'
     cardview_version = '1.0.0'
-    material_version='1.1.0-alpha09'
+    material_version = '1.1.0-alpha09'
 
     androidX = '1.1.0'
-	anroidx_junit_version = '1.1.1'
+    anroidx_junit_version = '1.1.1'
 
     coroutines_version = '1.1.1'
     coroutines_android_version = '1.1.1'
@@ -58,9 +58,9 @@ ext {
     textEditor_version = '1.2.2'
 
     materialdrawer_version = '2.0.1'
-	
-	annotation_version = '1.1.0'
-	
+
+    annotation_version = '1.1.0'
+
 
     commonDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
@@ -116,19 +116,19 @@ ext {
             glide              : "com.github.bumptech.glide:glide:$glide_version",
             glidecompiler      : "com.github.bumptech.glide:compiler:$glide_version",
             recyclerview       : "androidx.recyclerview:recyclerview:$recyclerview_version",
-            annotation         :  "androidx.annotation:annotation:$annotation_version",
+            annotation         : "androidx.annotation:annotation:$annotation_version",
             fotoApparat        : "io.fotoapparat:fotoapparat:$fotoApparat_version",
             fotoApparatAdapters: "io.fotoapparat.fotoapparat:adapter-rxjava2:$fotoApparat_version",
-            rv_selection        : "androidx.recyclerview:recyclerview-selection:$recyclerview_selection_version",
-            cardView            : "androidx.cardview:cardview:$cardview_version",
-            texteditor          :  "jp.wasabeef:richeditor-android:$textEditor_version",
-            material            : "com.google.android.material:material:$material_version",
-            materialdrawer      : "co.zsmb:materialdrawer-kt:$materialdrawer_version"
+            rv_selection       : "androidx.recyclerview:recyclerview-selection:$recyclerview_selection_version",
+            cardView           : "androidx.cardview:cardview:$cardview_version",
+            texteditor         : "jp.wasabeef:richeditor-android:$textEditor_version",
+            material           : "com.google.android.material:material:$material_version",
+            materialdrawer     : "co.zsmb:materialdrawer-kt:$materialdrawer_version"
 
     ]
 
     authdependencies = [
-            auth0 :  'com.auth0.android:auth0:1.+'
+            auth0: 'com.auth0.android:auth0:1.+'
     ]
 
 }

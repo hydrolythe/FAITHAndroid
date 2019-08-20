@@ -18,8 +18,6 @@ buildscript {
 }
 
 
-
-
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
     compileSdkVersion globalConfig["androidCompileSdkVersion"]
@@ -46,7 +44,7 @@ android {
         unitTests.returnDefaultValues = true
     }
 
-    lintOptions{
+    lintOptions {
         disable "ResourceType"
     }
 
