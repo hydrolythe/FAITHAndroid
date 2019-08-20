@@ -13,8 +13,8 @@ import com.auth0.android.callback.BaseCallback
 import com.auth0.android.provider.AuthCallback
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.get
+import org.koin.core.KoinComponent
+import org.koin.core.get
 
 class LoginManager(
     private val loginCallback: LoginCallback
@@ -44,6 +44,7 @@ class LoginManager(
             override fun onSuccess(credentials: Credentials) {
                 loginCallback.onSuccess()
             }
+
             override fun onFailure(error: CredentialsManagerException) {
                 WebAuthProvider.init(auth0)
                     .withScheme("app")

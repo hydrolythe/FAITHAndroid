@@ -13,13 +13,15 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_welcome.background_welcome
-import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.error.ScopeAlreadyCreatedException
 import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
 
 class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
 
@@ -73,10 +75,12 @@ class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
     }
 
     override fun onSuccess() {
-        if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) == null) {
-            getKoin().createScope(KoinModules.USER_SCOPE_ID)
+        val scope = try {
+            getKoin().createScope(KoinModules.USER_SCOPE_ID, named(USER_SCOPE_NAME))
+        } catch (e: ScopeAlreadyCreatedException) {
+            getKoin().getScope(KoinModules.USER_SCOPE_ID)
         }
-        val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+        val userViewModel: UserViewModel = scope.get()
         // TODO: Call the Auth0 profile and retrieve user name
         userViewModel.setUser(User("testuser", avatarName = "meisje_stoer"))
         navigation!!.goToCityScreen()

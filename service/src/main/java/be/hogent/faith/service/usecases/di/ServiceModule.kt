@@ -7,9 +7,9 @@ import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
 import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
 import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
-import be.hogent.faith.service.usecases.SaveEventUseCase
 import be.hogent.faith.service.usecases.SaveEventTextUseCase
-import org.koin.dsl.module.module
+import be.hogent.faith.service.usecases.SaveEventUseCase
+import org.koin.dsl.module
 
 /**
  * Module containing all the use cases.

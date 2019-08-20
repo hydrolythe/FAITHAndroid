@@ -39,7 +39,7 @@ class TakePhotoFragment : Fragment() {
 
     private val eventViewModel: EventViewModel by sharedViewModel()
 
-    private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private val takePhotoViewModel: TakePhotoViewModel by sharedViewModel()
 
