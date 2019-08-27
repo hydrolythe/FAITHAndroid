@@ -12,5 +12,15 @@ pipeline {
 yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses'''
       }
     }
+    stage('Compile') {
+      steps {
+        sh './gradlew compileDebugSources'
+      }
+    }
+    stage('Unit Test') {
+      steps {
+        sh './gradlew testDebugUnitTest testDebugUnitTest'
+      }
+    }
   }
 }
