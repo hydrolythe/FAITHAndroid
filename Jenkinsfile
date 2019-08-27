@@ -16,8 +16,14 @@ yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses'''
         }
         stage('Give permissions for Jenkins') {
           steps {
-            sh '''sudo chmod ug+rw /home/jenkins/.android
-sudo chown jenkins /home/jenkins/.android'''
+            sh '''dir="/home/jenkins/.android"
+if [ -d "$dir" ]; then
+  sudo chown jenkins $dir
+  sudo chmod ug+rw $dir
+else
+  mkdir $dir
+fi
+'''
           }
         }
       }
