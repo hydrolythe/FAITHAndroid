@@ -13,8 +13,17 @@ yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses'''
       }
     }
     stage('Compile') {
-      steps {
-        sh './gradlew compileDebugSources'
+      parallel {
+        stage('Compile') {
+          steps {
+            sh './gradlew compileDebugSources'
+          }
+        }
+        stage('Linting') {
+          steps {
+            sh './gradlew ktlint'
+          }
+        }
       }
     }
     stage('Unit Test') {
