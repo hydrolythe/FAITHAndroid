@@ -3,10 +3,9 @@ package be.hogent.faith.faith.emotionCapture.drawing
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.divyanshu.draw.widget.DrawView
-import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 abstract class DrawFragment : Fragment() {
-    protected val drawViewModel: DrawViewModel by sharedViewModel()
+    abstract val drawViewModel: DrawViewModel
 
     abstract val drawView: DrawView
 
@@ -25,6 +24,11 @@ abstract class DrawFragment : Fragment() {
         })
         drawViewModel.undoClicked.observe(this, Observer {
             drawView.undo()
+        })
+        drawViewModel.drawnPaths.observe(this, Observer {
+            // It's very important that the drawCanvas doesn't create its own paths but uses a paths object
+            // that is saved in such a way that it survives configuration changes. See [DrawViewModel].
+            drawView.setActions(it)
         })
     }
 }
