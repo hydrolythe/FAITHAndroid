@@ -20,6 +20,13 @@ yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses'''
     stage('Unit Test') {
       steps {
         sh './gradlew testDebugUnitTest testDebugUnitTest'
+        junit '**/TEST-*.xml'
+      }
+    }
+    stage('Build APK') {
+      steps {
+        sh './gradlew assembleDebug'
+        archiveArtifacts '**/*.apk'
       }
     }
   }
