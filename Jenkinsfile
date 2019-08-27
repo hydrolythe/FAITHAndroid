@@ -7,23 +7,24 @@ pipeline {
   }
   stages {
     stage('Accept Licenses') {
-      steps {
-        sh '''sudo chown -R jenkins $ANDROID_HOME
+      parallel {
+        stage('Accept Licenses') {
+          steps {
+            sh '''sudo chown -R jenkins $ANDROID_HOME
 yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses'''
+          }
+        }
+        stage('Give permissions for Jenkins') {
+          steps {
+            sh '''sudo chmod ug+rw /home/jenkins/.android
+sudo chown jenkins /home/jenkins/.android'''
+          }
+        }
       }
     }
     stage('Compile') {
-      parallel {
-        stage('Compile') {
-          steps {
-            sh './gradlew compileDebugSources'
-          }
-        }
-        stage('Linting') {
-          steps {
-            sh './gradlew ktlint'
-          }
-        }
+      steps {
+        sh './gradlew compileDebugSources'
       }
     }
     stage('Unit Test') {
@@ -36,6 +37,11 @@ yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses'''
       steps {
         sh './gradlew assembleDebug'
         archiveArtifacts '**/*.apk'
+      }
+    }
+    stage('Linting') {
+      steps {
+        sh './gradlew ktlint'
       }
     }
   }
