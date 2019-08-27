@@ -50,5 +50,13 @@ fi
         sh './gradlew ktlint'
       }
     }
+    stage('Deploy') {
+      steps {
+        sh '''./gradlew assembleRelease
+'''
+        archiveArtifacts '**/*.apk'
+        androidApkUpload(apkFilesPattern: '**/*-release.apk', googleCredentialsId: 'Google Play')
+      }
+    }
   }
 }
