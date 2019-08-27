@@ -55,7 +55,7 @@ fi
         sh '''./gradlew assembleRelease
 '''
         archiveArtifacts '**/*.apk'
-        androidApkUpload(apkFilesPattern: '**/*-release.apk', googleCredentialsId: 'Google Play')
+        androidApkUpload(apkFilesPattern: '**/*-release.apk', googleCredentialsId: 'Google Play', trackName: 'beta')
       }
     }
   }
