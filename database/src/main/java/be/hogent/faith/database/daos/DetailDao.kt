@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import be.hogent.faith.database.models.detail.AudioDetailEntity
 import be.hogent.faith.database.models.detail.DetailEntity
 import be.hogent.faith.database.models.detail.PictureDetailEntity
@@ -29,7 +28,6 @@ abstract class DetailDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract fun insertText(text: TextDetailEntity): Completable
 
-    @Transaction
     open fun insert(detailEntity: DetailEntity): Completable {
         return when (detailEntity) {
             is AudioDetailEntity -> insertAudio(detailEntity)
@@ -51,7 +49,6 @@ abstract class DetailDao {
     @Query("SELECT * FROM textDetails WHERE eventUuid= :eventUuid")
     abstract fun getTextDetailsForEvent(eventUuid: UUID): Flowable<List<TextDetailEntity>>
 
-    @Transaction
     open fun getDetailsForEvent(eventUuid: UUID): Flowable<List<DetailEntity>> {
         return Flowable.combineLatest(
             getAudioDetailsForEvent(eventUuid),
