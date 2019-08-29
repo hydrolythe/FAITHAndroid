@@ -176,13 +176,6 @@ class EventViewModel(
         _drawingButtonClicked.call()
     }
 
-    /**
-     * verhuisd naar EditDetail
-    fun onSendButtonClicked() {
-        _sendButtonClicked.call()
-    }
-    */
-
     fun onCancelButtonClicked() {
         _cancelButtonClicked.call()
     }
