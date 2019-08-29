@@ -19,7 +19,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
 import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_inkleuren
 import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_zittend
-import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -40,11 +39,11 @@ class EventDetailsFragment : Fragment() {
 
     private val avatarProvider: AvatarProvider by inject()
 
-/***
- * Momenteel in commentaar gezet omdat de save Event knop nu op de details wordt getoond. In de toekomst zal het misschien toch nodig
- * zijn als beslist wordt om een event op te slaan als bvb enkel de avatar al is ingekleurd
-   private lateinit var saveDialog: SaveEventDialog
-*/
+    /***
+     * Momenteel in commentaar gezet omdat de save Event knop nu op de details wordt getoond. In de toekomst zal het misschien toch nodig
+     * zijn als beslist wordt om een event op te slaan als bvb enkel de avatar al is ingekleurd
+    private lateinit var saveDialog: SaveEventDialog
+     */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +54,18 @@ class EventDetailsFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         eventDetailsBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_enter_event_details, container, false)
+            DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_enter_event_details,
+                container,
+                false
+            )
         eventDetailsBinding.eventViewModel = eventViewModel
         eventDetailsBinding.lifecycleOwner = this@EventDetailsFragment
 
@@ -106,8 +114,10 @@ class EventDetailsFragment : Fragment() {
         })
 
         userViewModel.user.observe(this, Observer { user ->
-            Glide.with(context!!).load(avatarProvider.getAvatarDrawableZitten(user.avatarName)).diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_zittend)
-            Glide.with(context!!).load(avatarProvider.getAvatarDrawableGezicht(user.avatarName)).diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_inkleuren)
+            Glide.with(context!!).load(avatarProvider.getAvatarDrawableZitten(user.avatarName))
+                .diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_zittend)
+            Glide.with(context!!).load(avatarProvider.getAvatarDrawableGezicht(user.avatarName))
+                .diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_inkleuren)
         })
 
         // Four main actions
@@ -139,27 +149,27 @@ class EventDetailsFragment : Fragment() {
          * Momenteel in commentaar gezet omdat de save Event knop nu op de details wordt getoond. In de toekomst zal het misschien toch nodig
          * zijn als beslist wordt om een event op te slaan als bvb enkel de avatar al is ingekleurd
         eventViewModel.sendButtonClicked.observe(this, Observer {
-            saveDialog = SaveEventDialog.newInstance()
-            saveDialog.show(fragmentManager!!, null)
+        saveDialog = SaveEventDialog.newInstance()
+        saveDialog.show(fragmentManager!!, null)
         })
 
         userViewModel.eventSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
-            saveDialog.dismiss()
+        Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
+        saveDialog.dismiss()
 
-            // Go back to main screen
-            fragmentManager!!.popBackStack()
+        // Go back to main screen
+        fragmentManager!!.popBackStack()
         })
 
         userViewModel.eventSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
-            // Go back to main screen TOOD: not working right now
-            fragmentManager!!.popBackStack()
+        Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
+        // Go back to main screen TOOD: not working right now
+        fragmentManager!!.popBackStack()
         })
         userViewModel.errorMessage.observe(this, Observer { errorMessage ->
-            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
-        */
+         */
     }
 
     override fun onStop() {
