@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -43,8 +42,13 @@ class RecordAudioFragment : Fragment() {
         recordAudioViewModel.pauseSupported.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        recordAudioBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_record_audio, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        recordAudioBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_record_audio, container, false)
         recordAudioBinding.apply {
             recordAudioViewModel = this@RecordAudioFragment.recordAudioViewModel
             lifecycleOwner = this@RecordAudioFragment
@@ -65,7 +69,10 @@ class RecordAudioFragment : Fragment() {
     }
 
     private fun hasRecordingPermissions(): Boolean {
-        return checkSelfPermission(activity!!, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+        return checkSelfPermission(
+            activity!!,
+            Manifest.permission.RECORD_AUDIO
+        ) == PERMISSION_GRANTED
     }
 
     private fun checkAudioRecordingPermission() {
@@ -74,13 +81,21 @@ class RecordAudioFragment : Fragment() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         if (requestCode == REQUESTCODE_AUDIO) {
             if (grantResults[0] == PERMISSION_GRANTED) {
                 hasAudioRecordingPermission = true
                 checkAudioRecordingPermission()
             } else {
-                Toast.makeText(this.context, getString(R.string.permission_record_audio), Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this.context,
+                    getString(R.string.permission_record_audio),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }

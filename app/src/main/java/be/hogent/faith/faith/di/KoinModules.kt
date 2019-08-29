@@ -2,6 +2,7 @@ package be.hogent.faith.faith.di
 
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
+import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.PremadeImagesProvider
@@ -34,6 +35,9 @@ import java.util.UUID
 object KoinModules {
     const val USER_SCOPE_NAME = "USER_SCOPE_NAME"
     const val USER_SCOPE_ID = "USER_SCOPE_ID"
+
+    const val DRAWING_SCOPE_NAME = "DRAWING_SCOPE_NAME"
+    const val DRAWING_SCOPE_ID = "DRAWING_SCOPE_ID"
 }
 
 val appModule = module(override = true) {
@@ -60,6 +64,14 @@ val appModule = module(override = true) {
     // Scope is opened when logging in a new user and closed when logging out.
     scope(named(USER_SCOPE_NAME)) {
         scoped { UserViewModel(get()) }
+    }
+
+    // Both the normal DrawingFragment and the DrawAvatarFragment need a DrawViewModel.
+    // The DrawAvatarFragment uses a shared VM from the EmotionCapturyActivity because
+    // there's only one EmotionAvatar per EmotionCapture.
+    // The DrawingFragment should retain its VM until the drawing is saved
+    scope(named(DRAWING_SCOPE_NAME)) {
+        scoped { DrawViewModel() }
     }
 
     single { TempFileProvider(androidContext()) }

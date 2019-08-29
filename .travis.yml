@@ -2,7 +2,7 @@ language: android
 dist: trusty
 env:
   global:
-    - ANDROID_TARGET=android-19
+    - ANDROID_TARGET=android-21
     - ANDROID_ABI=armeabi-v7a
     - ANDROID_BUILD_TOOLS_VERSION=28.0.3
 android:

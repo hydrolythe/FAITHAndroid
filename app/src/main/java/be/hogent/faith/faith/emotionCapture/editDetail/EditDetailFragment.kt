@@ -28,7 +28,6 @@ import be.hogent.faith.util.TAG
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_edit_detail.image_editDetail_avatar
-import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -81,8 +80,13 @@ class EditDetailFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        editDetailBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_detail, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        editDetailBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_edit_detail, container, false)
         editDetailBinding.editdetailViewModel = editDetailViewModel
         editDetailBinding.lifecycleOwner = this
 
@@ -95,7 +99,10 @@ class EditDetailFragment : Fragment() {
         val height = Resources.getSystem().displayMetrics.heightPixels
         eventViewModel.event.observe(this, Observer {
             val image =
-                it.emotionAvatar ?: ContextCompat.getDrawable(this.context!!, avatarOutlineResId) as BitmapDrawable
+                it.emotionAvatar ?: ContextCompat.getDrawable(
+                    this.context!!,
+                    avatarOutlineResId
+                ) as BitmapDrawable
             Glide.with(this)
                 .load(image)
                 // to refresh the picture and not get it from the glide cache
@@ -118,6 +125,11 @@ class EditDetailFragment : Fragment() {
         userViewModel.eventSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
             saveDialog.dismiss()
+
+            // Drawing scope can now be deleted so a new DrawingVM will be created when another
+            // drawing is made.
+            getKoin().deleteScope(KoinModules.DRAWING_SCOPE_ID)
+
             navigation?.eventSaved()
         })
         userViewModel.errorMessage.observe(this, Observer { errorMessage ->
