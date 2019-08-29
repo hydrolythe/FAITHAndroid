@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.MakeDrawingFragment
@@ -95,23 +96,13 @@ class EditDetailFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val width = Resources.getSystem().displayMetrics.widthPixels
-        val height = Resources.getSystem().displayMetrics.heightPixels
-        eventViewModel.event.observe(this, Observer {
-            val image =
-                it.emotionAvatar ?: ContextCompat.getDrawable(
-                    this.context!!,
-                    avatarOutlineResId
-                ) as BitmapDrawable
-            Glide.with(this)
-                .load(image)
-                // to refresh the picture and not get it from the glide cache
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                // scaling, otherwise picture is blurry
-                .override((width * 0.3).toInt(), height)
-                .fitCenter()
-                .into(image_editDetail_avatar)
+        startListeners()
+        eventViewModel.updateEvent()
+    }
+
+    private fun startListeners() {
+        eventViewModel.event.observe(this, Observer { event ->
+            loadAvatarImage(event)
         })
         editDetailViewModel.emotionAvatarButtonClicked.observe(this, Observer {
             navigation?.startDrawEmotionAvatarFragment()
@@ -120,7 +111,6 @@ class EditDetailFragment : Fragment() {
             saveDialog = SaveEventDialog.newInstance()
             saveDialog.show(fragmentManager!!, null)
         })
-        eventViewModel.updateEvent()
 
         userViewModel.eventSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
@@ -135,6 +125,27 @@ class EditDetailFragment : Fragment() {
         userViewModel.errorMessage.observe(this, Observer { errorMessage ->
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
+    }
+
+    private fun loadAvatarImage(event: Event) {
+        val image =
+            event.emotionAvatar ?: ContextCompat.getDrawable(
+                this.context!!,
+                avatarOutlineResId
+            ) as BitmapDrawable
+
+        val width = Resources.getSystem().displayMetrics.widthPixels
+        val height = Resources.getSystem().displayMetrics.heightPixels
+
+        Glide.with(this)
+            .load(image)
+            // to refresh the picture and not get it from the glide cache
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            // scaling, otherwise picture is blurry
+            .override((width * 0.3).toInt(), height)
+            .fitCenter()
+            .into(image_editDetail_avatar)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
