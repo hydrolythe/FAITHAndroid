@@ -15,8 +15,8 @@ pipeline {
           }
         }
         stage('Give permissions for Jenkins') {
-            steps {
-                sh '''dir="/home/jenkins/.android"
+          steps {
+            sh '''dir="/home/jenkins/.android"
                 if [ -d "$dir" ]; then
                     sudo chown jenkins $dir
                     sudo chmod ug+rw $dir
@@ -24,7 +24,7 @@ pipeline {
                     mkdir $dir
                 fi
                 '''
-            }
+          }
         }
       }
     }
@@ -48,6 +48,14 @@ pipeline {
     stage('Linting') {
       steps {
         sh './gradlew ktlint'
+      }
+    }
+    stage('Integration test') {
+      steps {
+        sh '''$ANDROID_SYSTEM=\'system-images;android-29;google_apis_playstore;x86_64\'
+$ANDROID_HOME/tools/bin/sdkmanager $ANDROID_SYSTEM
+
+echo no | $ANDROID_HOME/tools/bin/avdmanager -v create avd --force --package $ANDROID_SYSTEM --name Android29 --tag google_apis --abi armeabi-v7a'''
       }
     }
   }
