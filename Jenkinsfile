@@ -11,20 +11,20 @@ pipeline {
         stage('Accept Licenses') {
           steps {
             sh '''sudo chown -R jenkins $ANDROID_HOME
-yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses'''
+            yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses'''
           }
         }
         stage('Give permissions for Jenkins') {
-          steps {
-            sh '''dir="/home/jenkins/.android"
-if [ -d "$dir" ]; then
-  sudo chown jenkins $dir
-  sudo chmod ug+rw $dir
-else
-  mkdir $dir
-fi
-'''
-          }
+            steps {
+                sh '''dir="/home/jenkins/.android"
+                if [ -d "$dir" ]; then
+                    sudo chown jenkins $dir
+                    sudo chmod ug+rw $dir
+                else
+                    mkdir $dir
+                fi
+                '''
+            }
         }
       }
     }
@@ -48,14 +48,6 @@ fi
     stage('Linting') {
       steps {
         sh './gradlew ktlint'
-      }
-    }
-    stage('Deploy') {
-      steps {
-        sh '''./gradlew assembleRelease
-'''
-        archiveArtifacts '**/*.apk'
-        androidApkUpload(apkFilesPattern: '**/*-release.apk', googleCredentialsId: 'Google Play', trackName: 'beta')
       }
     }
   }
