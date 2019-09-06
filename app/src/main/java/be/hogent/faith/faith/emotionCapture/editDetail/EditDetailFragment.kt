@@ -107,21 +107,7 @@ class EditDetailFragment : Fragment() {
         editDetailViewModel.emotionAvatarButtonClicked.observe(this, Observer {
             navigation?.startDrawEmotionAvatarFragment()
         })
-        editDetailViewModel.sendButtonClicked.observe(this, Observer {
-            saveDialog = SaveEventDialog.newInstance()
-            saveDialog.show(fragmentManager!!, null)
-        })
 
-        userViewModel.eventSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
-            saveDialog.dismiss()
-
-            // Drawing scope can now be deleted so a new DrawingVM will be created when another
-            // drawing is made.
-            getKoin().deleteScope(KoinModules.DRAWING_SCOPE_ID)
-
-            navigation?.eventSaved()
-        })
         userViewModel.errorMessage.observe(this, Observer { errorMessage ->
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
@@ -183,6 +169,5 @@ class EditDetailFragment : Fragment() {
 
     interface EditDetailNavigationListener {
         fun startDrawEmotionAvatarFragment()
-        fun eventSaved()
     }
 }

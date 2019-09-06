@@ -16,25 +16,18 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentRecordAudioBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 const val REQUESTCODE_AUDIO = 12
 
 class RecordAudioFragment : Fragment() {
     private val eventViewModel: EventViewModel by sharedViewModel()
 
-    // TODO: check if this still needs to be a shared VM
-    private val recordAudioViewModel: RecordAudioViewModel by sharedViewModel()
+    private val recordAudioViewModel: RecordAudioViewModel by viewModel()
 
     private lateinit var recordAudioBinding: FragmentRecordAudioBinding
 
     private var hasAudioRecordingPermission = false
-
-    /**
-     * The Dialog that requests the user to enter a recordingName for the recording.
-     * It is saved here so we can dismiss it once the cancel or save buttons are clicked.
-     * This should normally be done in the Dialog itself but SingleLiveEvent only supports a single Listener.
-     * We need one here to update the eventDetailsVM and one in the Dialog to close it.
-     */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +42,10 @@ class RecordAudioFragment : Fragment() {
     ): View? {
         recordAudioBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_record_audio, container, false)
-        recordAudioBinding.apply {
-            recordAudioViewModel = this@RecordAudioFragment.recordAudioViewModel
-            lifecycleOwner = this@RecordAudioFragment
-        }
+        recordAudioBinding.recordAudioViewModel = recordAudioViewModel
+        recordAudioBinding.eventViewModel = eventViewModel
+        recordAudioBinding.lifecycleOwner = this
+
         return recordAudioBinding.root
     }
 
@@ -64,8 +57,8 @@ class RecordAudioFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        recordAudioViewModel.recordState.value?.release()
-        recordAudioViewModel.playState.value?.release()
+        // TODO: make sure both the mediarecorder and audioplayer are released
+        recordAudioViewModel.audioState.value?.release()
     }
 
     private fun hasRecordingPermissions(): Boolean {
@@ -75,9 +68,15 @@ class RecordAudioFragment : Fragment() {
         ) == PERMISSION_GRANTED
     }
 
+    /**
+     * Checks for audio permissions and initialises the [RecordAudioViewModel] fully once the
+     * required permissions are given.
+     */
     private fun checkAudioRecordingPermission() {
         if (!hasRecordingPermissions()) {
             requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
+        } else {
+            recordAudioViewModel.initialiseState()
         }
     }
 
@@ -90,6 +89,7 @@ class RecordAudioFragment : Fragment() {
             if (grantResults[0] == PERMISSION_GRANTED) {
                 hasAudioRecordingPermission = true
                 checkAudioRecordingPermission()
+                recordAudioViewModel.initialiseState()
             } else {
                 Toast.makeText(
                     this.context,
@@ -101,9 +101,6 @@ class RecordAudioFragment : Fragment() {
     }
 
     private fun startListeners() {
-        recordAudioViewModel.saveButtonClicked.observe(this, Observer {
-            eventViewModel.saveAudio(recordAudioViewModel.tempFileProvider.tempAudioRecordingFile)
-        })
         eventViewModel.recordingSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
         })
