@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
@@ -138,7 +139,6 @@ class EventDetailsFragment : Fragment() {
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
 
-
         eventViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
             saveDialog.show(fragmentManager!!, null)
@@ -148,19 +148,17 @@ class EventDetailsFragment : Fragment() {
             Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
             saveDialog.dismiss()
 
+            // Drawing scope can now be deleted so a new DrawingVM will be created when another
+            // drawing is made.
+            getKoin().deleteScope(KoinModules.DRAWING_SCOPE_ID)
+
+            navigation?.closeEvent()
             // Go back to main screen
-            fragmentManager!!.popBackStack()
         })
 
-        userViewModel.eventSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
-            // Go back to main screen TOOD: not working right now
-            fragmentManager!!.popBackStack()
-        })
         userViewModel.errorMessage.observe(this, Observer { errorMessage ->
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
-        */
     }
 
     override fun onStop() {
@@ -176,6 +174,7 @@ class EventDetailsFragment : Fragment() {
 
         // TODO: verwijderen van DetailType
         fun startEventDetail(type: DetailType)
+        fun closeEvent()
     }
 
     companion object {

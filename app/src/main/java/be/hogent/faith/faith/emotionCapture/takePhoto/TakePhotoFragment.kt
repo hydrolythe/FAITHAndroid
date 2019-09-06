@@ -76,12 +76,7 @@ class TakePhotoFragment : Fragment() {
         startListeners()
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     private fun startListeners() {
-
         takePhotoViewModel.takePhotoButtonClicked.observe(this, Observer {
             takeAndSavePictureToCache()
         })
