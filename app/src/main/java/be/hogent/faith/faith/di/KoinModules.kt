@@ -1,5 +1,7 @@
 package be.hogent.faith.faith.di
 
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
@@ -55,7 +57,7 @@ val appModule = module(override = true) {
     viewModel { OverviewEventsViewModel() }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { WelcomeViewModel() }
-    viewModel { RecordAudioViewModel(get()) }
+    viewModel { RecordAudioViewModel() }
     viewModel { RegisterUserViewModel(get()) }
     viewModel { RegisterUserInfoViewModel() }
     viewModel { TakePhotoViewModel() }
@@ -76,6 +78,9 @@ val appModule = module(override = true) {
 
     single { TempFileProvider(androidContext()) }
 
+    single { MediaRecorder() }
+    single { MediaPlayer() }
+
     single { (callback: LoginManager.LoginCallback) -> LoginManager(callback) }
 
     single { ResourceAvatarProvider(androidContext()) as AvatarProvider }
@@ -86,6 +91,12 @@ val appModule = module(override = true) {
     single { Auth0(androidContext()) }
     single { AuthenticationAPIClient(get() as Auth0) }
     // We are using SharedPrefs to store tokens, in PRIVATE mode
-    single { SecureCredentialsManager(get(), get() as AuthenticationAPIClient, get() as SharedPreferencesStorage) }
+    single {
+        SecureCredentialsManager(
+            get(),
+            get() as AuthenticationAPIClient,
+            get() as SharedPreferencesStorage
+        )
+    }
     single { SharedPreferencesStorage(androidContext()) }
 }

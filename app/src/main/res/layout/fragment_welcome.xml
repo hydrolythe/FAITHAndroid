@@ -99,7 +99,7 @@
                 app:layout_constraintGuide_percent="0.42" />
 
             <View
-                android:id="@+id/btn_welcome_register"
+                android:id="@+id/btn_archive"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:onClick="@{() -> welcomeViewModel.registerButtonClicked()}"

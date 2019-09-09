@@ -12,6 +12,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
 import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
@@ -20,6 +21,8 @@ import be.hogent.faith.service.usecases.SaveEventTextUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.io.File
@@ -32,8 +35,9 @@ class EventViewModel(
     private val saveEventDrawingUseCase: SaveEventDrawingUseCase,
     private val saveEventTextUseCase: SaveEventTextUseCase,
     eventUuid: UUID? = null
-) : ViewModel() {
+) : ViewModel(), KoinComponent {
 
+    private val fileProvider: TempFileProvider by inject()
     /**
      * The event that will be discussed and explained using audio, video, drawings,...
      * Updates to the [eventTitle], [eventDate] and [eventNotes] are automatically applied to the event.
@@ -51,9 +55,10 @@ class EventViewModel(
      */
     val eventDate = MutableLiveData<LocalDateTime>()
 
-    val eventDateString: LiveData<String> = Transformations.map<LocalDateTime, String>(eventDate) { date ->
-        date.format(DateTimeFormatter.ISO_DATE)
-    }
+    val eventDateString: LiveData<String> =
+        Transformations.map<LocalDateTime, String>(eventDate) { date ->
+            date.format(DateTimeFormatter.ISO_DATE)
+        }
 
     /**
      * The notes that are added when saving the event
@@ -79,6 +84,14 @@ class EventViewModel(
     private val _avatarSavedSuccessFully = SingleLiveEvent<Unit>()
     val avatarSavedSuccessFully: LiveData<Unit>
         get() = _avatarSavedSuccessFully
+
+    private val _sendButtonClicked = SingleLiveEvent<Unit>()
+    val sendButtonClicked: LiveData<Unit>
+        get() = _sendButtonClicked
+
+    fun onSendButtonClicked() {
+        _sendButtonClicked.call()
+    }
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
@@ -137,7 +150,7 @@ class EventViewModel(
      * verhuisd naar EditDetail
     private val _sendButtonClicked = SingleLiveEvent<Unit>()
     val sendButtonClicked: LiveData<Unit>
-        get() = _sendButtonClicked
+    get() = _sendButtonClicked
      */
 
     private val _emotionAvatarClicked = SingleLiveEvent<Unit>()
@@ -175,13 +188,6 @@ class EventViewModel(
     fun onDrawingButtonClicked() {
         _drawingButtonClicked.call()
     }
-
-    /**
-     * verhuisd naar EditDetail
-    fun onSendButtonClicked() {
-        _sendButtonClicked.call()
-    }
-    */
 
     fun onCancelButtonClicked() {
         _cancelButtonClicked.call()
@@ -237,9 +243,9 @@ class EventViewModel(
     //endregion
 
     //region saveAudio
-    fun saveAudio(tempRecordingFile: File) {
+    fun saveAudio() {
         val params = SaveEventAudioUseCase.Params(
-            tempRecordingFile,
+            fileProvider.tempAudioRecordingFile,
             event.value!!
         )
         saveEventAudioUseCase.execute(params, SaveAudioUseCaseHandler())
