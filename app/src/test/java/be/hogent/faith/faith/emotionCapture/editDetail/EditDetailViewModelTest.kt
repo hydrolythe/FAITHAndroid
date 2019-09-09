@@ -2,7 +2,6 @@ package be.hogent.faith.faith.emotionCapture.editDetail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Before
@@ -30,5 +29,4 @@ class EditDetailViewModelTest {
 
         verify { observer.onChanged(any()) }
     }
-
 }
