@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            step([$class: 'StashNotifier'])
+            
             label 'ubuntu-1604-android-slave'
         }
 
