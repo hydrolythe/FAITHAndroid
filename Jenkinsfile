@@ -16,7 +16,7 @@ pipeline {
     }
     stage('Setup Emulator') {
       when {
-        branch 'CICD'
+        branch 'master'
       }
       steps {
         sh '''
