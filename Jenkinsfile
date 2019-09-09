@@ -27,5 +27,15 @@ chmod u+rwx waitForEmulator.sh
 '''
       }
     }
+    stage('Build') {
+      steps {
+        sh './gradlew compileDebugSources'
+      }
+    }
+    stage('Run integration tests') {
+      steps {
+        sh './gradlew connectedCheck'
+      }
+    }
   }
 }
