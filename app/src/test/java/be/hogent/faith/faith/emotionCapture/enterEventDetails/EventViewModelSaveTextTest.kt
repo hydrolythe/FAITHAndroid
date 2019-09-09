@@ -20,7 +20,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 
-class EventViewModelSaveTextTest  : KoinTest {
+class EventViewModelSaveTextTest : KoinTest {
     private lateinit var viewModel: EventViewModel
     private val saveTextUseCase = mockk<SaveEventTextUseCase>(relaxed = true)
 
@@ -60,7 +60,6 @@ class EventViewModelSaveTextTest  : KoinTest {
     fun takeDown() {
         stopKoin()
     }
-
 
     @Test
     fun enterTextVM_saveText_callsUseCase() {

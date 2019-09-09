@@ -48,7 +48,7 @@ class EventViewModelSaveEmotionAvatarTest : KoinTest {
         viewModel.eventNotes.value = eventNotes
         viewModel.eventDate.value = eventDateTime
     }
-   
+
     @After
     fun takeDown() {
         stopKoin()
