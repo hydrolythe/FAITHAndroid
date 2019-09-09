@@ -107,6 +107,7 @@ dependencies {
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
     testImplementation testDependencies.coreTesting
+    testImplementation testDependencies.koinTesting
 
     androidTestImplementation androidTestDependencies.testCore
     androidTestImplementation androidTestDependencies.testRules

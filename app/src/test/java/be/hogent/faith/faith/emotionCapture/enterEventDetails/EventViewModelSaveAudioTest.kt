@@ -2,6 +2,8 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import be.hogent.faith.faith.di.appModule
+import be.hogent.faith.faith.testModule
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.Called
@@ -9,12 +11,16 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.observers.DisposableCompletableObserver
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.test.KoinTest
 
-class EventViewModelSaveAudioTest {
+class EventViewModelSaveAudioTest : KoinTest {
     private lateinit var viewModel: EventViewModel
     private val saveAudioUseCase = mockk<SaveEventAudioUseCase>(relaxed = true)
 
@@ -30,6 +36,7 @@ class EventViewModelSaveAudioTest {
 
     @Before
     fun setUp() {
+        startKoin { modules(listOf(appModule, testModule)) }
         viewModel = EventViewModel(
             mockk(),
             mockk(),
@@ -45,6 +52,12 @@ class EventViewModelSaveAudioTest {
         viewModel.eventNotes.value = eventNotes
         viewModel.eventDate.value = eventDateTime
     }
+
+    @After
+    fun takeDown() {
+        stopKoin()
+    }
+
 
     @Test
     fun eventViewModel_saveAudio_callsUseCase() {
