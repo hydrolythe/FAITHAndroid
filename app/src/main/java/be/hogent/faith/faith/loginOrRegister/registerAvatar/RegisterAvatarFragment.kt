@@ -21,7 +21,6 @@ import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoVi
 import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
 import org.koin.android.ext.android.getKoin
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -41,8 +40,7 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
      * ViewModel used for the avatars.
      */
     private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel()
-
-    private val userViewModel by inject<UserViewModel>(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private val registerUserInfoViewModel by sharedViewModel<RegisterUserInfoViewModel>()
     private val registerUserViewModel by viewModel<RegisterUserViewModel>()
 

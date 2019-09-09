@@ -26,9 +26,15 @@ class EnterTextFragment : Fragment() {
 
     private lateinit var enterTextBinding: FragmentEnterTextBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        enterTextBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_enter_text, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        enterTextBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_enter_text, container, false)
         enterTextBinding.enterTextViewModel = enterTextViewModel
+        enterTextBinding.eventViewModel = eventViewModel
         enterTextBinding.lifecycleOwner = this
         return enterTextBinding.root
     }
@@ -49,7 +55,8 @@ class EnterTextFragment : Fragment() {
         editor.setEditorFontSize(30)
         editor.setPadding(10, 10, 10, 10)
         editor.focusEditor()
-        val inputMethodManager = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT)
         editor.setOnTextChangeListener {
             enterTextViewModel.textChanged(it)
@@ -73,8 +80,8 @@ class EnterTextFragment : Fragment() {
             editor.setFontSize(newSize.size)
         })
         eventViewModel.errorMessage.observe(this, Observer { errorMessageResourceId ->
-                Toast.makeText(context, errorMessageResourceId, Toast.LENGTH_SHORT).show()
-                Log.e(TAG, "saving textdetail failed : ${getString(errorMessageResourceId)}")
+            Toast.makeText(context, errorMessageResourceId, Toast.LENGTH_SHORT).show()
+            Log.e(TAG, "saving textdetail failed : ${getString(errorMessageResourceId)}")
         })
         eventViewModel.textSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_text_success, Toast.LENGTH_SHORT).show()

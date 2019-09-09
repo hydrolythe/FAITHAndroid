@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.faith.cityScreen.CityScreenActivity
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarFragment
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoFragment
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
@@ -15,7 +16,9 @@ import be.hogent.faith.util.TAG
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
+import org.koin.core.error.ScopeNotCreatedException
 import org.koin.core.parameter.parametersOf
+import org.koin.core.qualifier.named
 
 class LoginOrRegisterActivity : AppCompatActivity(),
     WelcomeFragment.WelcomeNavigationListener,
@@ -50,8 +53,7 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         super.onResume()
         if (intent.getBooleanExtra(LoginManager.KEY_CLEAR_CREDENTIALS, false)) {
             loginManager.logout()
-            if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) != null)
-                getKoin().getScope(KoinModules.USER_SCOPE_ID).close()
+            getKoin().getScope(KoinModules.USER_SCOPE_ID).close()
         }
     }
 
@@ -59,8 +61,10 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         Log.e(TAG, "Creating USER SCOPE")
         // Don't create SCOPE twice
         // This sometimes happens when running tests that reuse the same Activity twice
-        if (getKoin().scopeRegistry.getScope(KoinModules.USER_SCOPE_ID) == null) {
-            getKoin().createScope(KoinModules.USER_SCOPE_ID)
+        try {
+            getKoin().createScope(KoinModules.USER_SCOPE_ID, named(USER_SCOPE_NAME))
+        } catch (e: ScopeNotCreatedException) {
+            Log.i(TAG, "User scope already existed, not recreating")
         }
     }
 

@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.takePhoto
 
 import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,7 +24,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.logcat
 import kotlinx.android.synthetic.main.fragment_take_photo.img_takePhoto_Photo
-import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -39,7 +37,7 @@ class TakePhotoFragment : Fragment() {
 
     private val eventViewModel: EventViewModel by sharedViewModel()
 
-    private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private val takePhotoViewModel: TakePhotoViewModel by sharedViewModel()
 
@@ -49,8 +47,13 @@ class TakePhotoFragment : Fragment() {
 
     private val tempFileProvider by inject<TempFileProvider>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        takePhotoBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_take_photo, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        takePhotoBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_take_photo, container, false)
         takePhotoBinding.photoViewModel = takePhotoViewModel
         takePhotoBinding.lifecycleOwner = this
 
@@ -73,12 +76,7 @@ class TakePhotoFragment : Fragment() {
         startListeners()
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     private fun startListeners() {
-
         takePhotoViewModel.takePhotoButtonClicked.observe(this, Observer {
             takeAndSavePictureToCache()
         })
@@ -100,7 +98,8 @@ class TakePhotoFragment : Fragment() {
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
         })
         eventViewModel.photoSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
+                .show()
             takePhotoViewModel.setSavedPhoto(it.file)
         })
     }
@@ -121,19 +120,24 @@ class TakePhotoFragment : Fragment() {
     }
 
     private fun hasCameraPermissions(): Boolean {
-        return checkSelfPermission(activity!!, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        return checkSelfPermission(activity!!, Manifest.permission.CAMERA) == PERMISSION_GRANTED
     }
 
     /**
      * Checks if requested permissions have been granted and starts the action that required the permission
      *  in the first place.
      */
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         if (requestCode == REQUESTCODE_CAMERA) {
             if (grantResults[0] == PERMISSION_GRANTED) {
                 fotoApparat.start()
             } else {
-                Toast.makeText(this.context, R.string.permission_take_picture, Toast.LENGTH_LONG).show()
+                Toast.makeText(this.context, R.string.permission_take_picture, Toast.LENGTH_LONG)
+                    .show()
             }
         }
     }

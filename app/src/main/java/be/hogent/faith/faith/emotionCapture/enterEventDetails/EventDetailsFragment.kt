@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
@@ -19,7 +20,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
 import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_inkleuren
 import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_zittend
-import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -32,7 +32,7 @@ class EventDetailsFragment : Fragment() {
     private var navigation: EventDetailsNavigationListener? = null
 
     private val eventViewModel: EventViewModel by sharedViewModel()
-    private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private lateinit var eventDetailsBinding: be.hogent.faith.databinding.FragmentEnterEventDetailsBinding
 
@@ -40,11 +40,7 @@ class EventDetailsFragment : Fragment() {
 
     private val avatarProvider: AvatarProvider by inject()
 
-/***
- * Momenteel in commentaar gezet omdat de save Event knop nu op de details wordt getoond. In de toekomst zal het misschien toch nodig
- * zijn als beslist wordt om een event op te slaan als bvb enkel de avatar al is ingekleurd
-   private lateinit var saveDialog: SaveEventDialog
-*/
+    private lateinit var saveDialog: SaveEventDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +51,18 @@ class EventDetailsFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         eventDetailsBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_enter_event_details, container, false)
+            DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_enter_event_details,
+                container,
+                false
+            )
         eventDetailsBinding.eventViewModel = eventViewModel
         eventDetailsBinding.lifecycleOwner = this@EventDetailsFragment
 
@@ -78,11 +83,9 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun updateUI() {
-        // setBackgroundImage()
+        setBackgroundImage()
 
-        /*
-      eventDetailsBinding.recyclerViewEventDetailsDetails.apply {
-
+        eventDetailsBinding.recyclerViewEventDetailsDetails.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             // Start with empty list and then fill it in
@@ -90,7 +93,6 @@ class EventDetailsFragment : Fragment() {
         }
         detailThumbnailsAdapter =
             eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
-      */
     }
 
     private fun setBackgroundImage() {
@@ -106,8 +108,10 @@ class EventDetailsFragment : Fragment() {
         })
 
         userViewModel.user.observe(this, Observer { user ->
-            Glide.with(context!!).load(avatarProvider.getAvatarDrawableZitten(user.avatarName)).diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_zittend)
-            Glide.with(context!!).load(avatarProvider.getAvatarDrawableGezicht(user.avatarName)).diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_inkleuren)
+            Glide.with(context!!).load(avatarProvider.getAvatarDrawableZitten(user.avatarName))
+                .diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_zittend)
+            Glide.with(context!!).load(avatarProvider.getAvatarDrawableGezicht(user.avatarName))
+                .diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_inkleuren)
         })
 
         // Four main actions
@@ -135,9 +139,6 @@ class EventDetailsFragment : Fragment() {
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
 
-        /***
-         * Momenteel in commentaar gezet omdat de save Event knop nu op de details wordt getoond. In de toekomst zal het misschien toch nodig
-         * zijn als beslist wordt om een event op te slaan als bvb enkel de avatar al is ingekleurd
         eventViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
             saveDialog.show(fragmentManager!!, null)
@@ -147,19 +148,17 @@ class EventDetailsFragment : Fragment() {
             Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
             saveDialog.dismiss()
 
+            // Drawing scope can now be deleted so a new DrawingVM will be created when another
+            // drawing is made.
+            getKoin().deleteScope(KoinModules.DRAWING_SCOPE_ID)
+
+            navigation?.closeEvent()
             // Go back to main screen
-            fragmentManager!!.popBackStack()
         })
 
-        userViewModel.eventSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
-            // Go back to main screen TOOD: not working right now
-            fragmentManager!!.popBackStack()
-        })
         userViewModel.errorMessage.observe(this, Observer { errorMessage ->
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
-        */
     }
 
     override fun onStop() {
@@ -175,6 +174,7 @@ class EventDetailsFragment : Fragment() {
 
         // TODO: verwijderen van DetailType
         fun startEventDetail(type: DetailType)
+        fun closeEvent()
     }
 
     companion object {

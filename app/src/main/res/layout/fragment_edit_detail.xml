@@ -24,17 +24,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/btn_event_send"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="true"
-            android:src="@drawable/btn_send"
-            android:onClick="@{() -> editdetailViewModel.onSendButtonClicked()}"
-            app:layout_constraintEnd_toStartOf="@+id/image_editDetail_avatar"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <ImageView
             android:id="@+id/image_editDetail_avatar"
             android:layout_width="0dp"

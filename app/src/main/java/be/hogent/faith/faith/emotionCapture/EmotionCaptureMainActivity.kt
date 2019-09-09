@@ -15,7 +15,6 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragme
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
-import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
@@ -23,7 +22,6 @@ import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.util.replaceFragment
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_drawer_layout
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_nav_view
-import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
@@ -51,9 +49,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
 
     private lateinit var takePhotoViewModel: TakePhotoViewModel
 
-    private lateinit var recordAudioViewModel: RecordAudioViewModel
-
-    private val userViewModel: UserViewModel = get(scope = getKoin().getScope(KoinModules.USER_SCOPE_ID))
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private val avatarProvider: AvatarProvider by inject()
 
     lateinit var enterTextViewModel: EnterTextViewModel
@@ -64,14 +60,12 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
 
         eventViewModel = getViewModel()
         takePhotoViewModel = getViewModel()
-        recordAudioViewModel = getViewModel()
         enterTextViewModel = getViewModel()
 
         // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
         // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
-            // val fragment = RegisterAvatarFragment.newInstance()
             val fragment = EventDetailsFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .add(R.id.emotionCapture_fragment_container, fragment)
@@ -83,7 +77,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
             emotionCapture_drawer_layout.closeDrawers()
             // perform action
             when (menuItem.itemId) {
-                be.hogent.faith.R.id.nav_city -> {
+                R.id.nav_city -> {
                     showExitAlert()
                 }
             }
@@ -109,7 +103,8 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     }
 
     override fun startDrawEmotionAvatarFragment() {
-        val avatar = avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
+        val avatar =
+            avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
         replaceFragment(
             DrawEmotionAvatarFragment.newInstance(avatar), R.id.emotionCapture_fragment_container
         )
@@ -124,7 +119,10 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     }
 
     override fun startEventDetailsFragment(eventUuid: UUID) {
-        replaceFragment(EventDetailsFragment.newInstance(eventUuid), R.id.emotionCapture_fragment_container)
+        replaceFragment(
+            EventDetailsFragment.newInstance(eventUuid),
+            R.id.emotionCapture_fragment_container
+        )
     }
 
     override fun startMakeDrawingFragment() {
@@ -132,19 +130,21 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     }
 
     override fun startEventDetail(type: DetailType) {
-        val avatar = avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
+        val avatar =
+            avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
         replaceFragment(
             EditDetailFragment.newInstance(type, avatar),
             R.id.emotionCapture_fragment_container
         )
     }
 
-    override fun eventSaved() {
+    override fun closeEvent() {
         finish()
     }
 
     override fun onBackPressed() {
-        val f = supportFragmentManager.findFragmentById(be.hogent.faith.R.id.emotionCapture_fragment_container)
+        val f =
+            supportFragmentManager.findFragmentById(R.id.emotionCapture_fragment_container)
         if (f is EventDetailsFragment) {
             showExitAlert()
         } else {

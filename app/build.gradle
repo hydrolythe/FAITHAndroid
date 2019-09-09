@@ -11,13 +11,9 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-
-        classpath 'com.github.trevjonez.composer-gradle-plugin:plugin:0.10.0'
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.5.0'
     }
 }
-
-
 
 
 android {
@@ -46,7 +42,7 @@ android {
         unitTests.returnDefaultValues = true
     }
 
-    lintOptions{
+    lintOptions {
         disable "ResourceType"
     }
 
@@ -90,8 +86,6 @@ dependencies {
     implementation androidDependencies.lifecycle
 
     implementation uiDependencies.glide
-    implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
-    implementation 'com.google.android.material:material:1.0.0-beta01'
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
     implementation uiDependencies.rv_selection
@@ -99,16 +93,11 @@ dependencies {
     implementation uiDependencies.fragment
     implementation uiDependencies.fotoApparat
     implementation uiDependencies.fotoApparatAdapters
-    implementation uiDependencies.navigation
     implementation uiDependencies.texteditor
 
     implementation uiDependencies.materialdrawer
     implementation uiDependencies.annotation
     implementation uiDependencies.material
-
-
-    //TESTING
-    debugImplementation androidTestDependencies.fragmentTesting
 
     //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
     testImplementation(testDependencies.threeTenBP) {
@@ -121,7 +110,7 @@ dependencies {
 
     androidTestImplementation androidTestDependencies.testCore
     androidTestImplementation androidTestDependencies.testRules
-    androidTestImplementation androidTestDependencies.testRunner
+    androidTestImplementation androidTestDependencies.androidJunit
     androidTestImplementation androidTestDependencies.espresso
 
     androidTestImplementation androidTestDependencies.espressoContrib

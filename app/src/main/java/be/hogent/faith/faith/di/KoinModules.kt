@@ -1,8 +1,11 @@
 package be.hogent.faith.faith.di
 
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
-import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_ID
+import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
+import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.PremadeImagesProvider
 import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.PremadeImagesProviderFromResources
@@ -26,12 +29,17 @@ import com.auth0.android.authentication.storage.SecureCredentialsManager
 import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.viewmodel.ext.koin.viewModel
-import org.koin.dsl.module.module
+import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 import java.util.UUID
 
 object KoinModules {
-    const val USER_SCOPE_ID = "USER_SCOPE"
+    const val USER_SCOPE_NAME = "USER_SCOPE_NAME"
+    const val USER_SCOPE_ID = "USER_SCOPE_ID"
+
+    const val DRAWING_SCOPE_NAME = "DRAWING_SCOPE_NAME"
+    const val DRAWING_SCOPE_ID = "DRAWING_SCOPE_ID"
 }
 
 val appModule = module(override = true) {
@@ -49,18 +57,29 @@ val appModule = module(override = true) {
     viewModel { OverviewEventsViewModel() }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { WelcomeViewModel() }
-    viewModel { RecordAudioViewModel(get()) }
+    viewModel { RecordAudioViewModel() }
     viewModel { RegisterUserViewModel(get()) }
     viewModel { RegisterUserInfoViewModel() }
     viewModel { TakePhotoViewModel() }
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.
-    scope(USER_SCOPE_ID) {
-        UserViewModel(get())
+    scope(named(USER_SCOPE_NAME)) {
+        scoped { UserViewModel(get()) }
+    }
+
+    // Both the normal DrawingFragment and the DrawAvatarFragment need a DrawViewModel.
+    // The DrawAvatarFragment uses a shared VM from the EmotionCapturyActivity because
+    // there's only one EmotionAvatar per EmotionCapture.
+    // The DrawingFragment should retain its VM until the drawing is saved
+    scope(named(DRAWING_SCOPE_NAME)) {
+        scoped { DrawViewModel() }
     }
 
     single { TempFileProvider(androidContext()) }
+
+    single { MediaRecorder() }
+    single { MediaPlayer() }
 
     single { (callback: LoginManager.LoginCallback) -> LoginManager(callback) }
 
@@ -72,6 +91,12 @@ val appModule = module(override = true) {
     single { Auth0(androidContext()) }
     single { AuthenticationAPIClient(get() as Auth0) }
     // We are using SharedPrefs to store tokens, in PRIVATE mode
-    single { SecureCredentialsManager(get(), get() as AuthenticationAPIClient, get() as SharedPreferencesStorage) }
+    single {
+        SecureCredentialsManager(
+            get(),
+            get() as AuthenticationAPIClient,
+            get() as SharedPreferencesStorage
+        )
+    }
     single { SharedPreferencesStorage(androidContext()) }
 }
