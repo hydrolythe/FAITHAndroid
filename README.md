@@ -1,3 +1,2 @@
-[![Build Status](https://travis-ci.org/FAITH-HoGent/FAITH.svg?branch=master)](https://travis-ci.org/FAITH-HoGent/FAITH)
-
+[![Build Status](http://107.178.214.77/jenkins/job/FAITH/job/master/badge/icon)](http://107.178.214.77/jenkins/job/FAITH/job/master/)
 # FAITH
