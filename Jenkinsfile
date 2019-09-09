@@ -14,13 +14,10 @@ pipeline {
         '''
       }
     }
-
-
     stage('Setup Emulator') {
-       when {
-            // Only execute this stage when building from the `master` branch
-            branch 'master'
-         }
+      when {
+        branch 'master'
+      }
       steps {
         sh '''
         EMULATOR_API_LEVEL=24
@@ -36,39 +33,36 @@ pipeline {
         '''
       }
     }
-
     stage('Linting') {
-           steps {
-             sh './gradlew ktlint'
-           }
+      steps {
+        sh './gradlew ktlint'
+      }
     }
-
     stage('Build') {
       steps {
         sh './gradlew compileDebugSources'
       }
     }
-
     stage('Unit Test') {
       steps {
         sh './gradlew testDebugUnitTest testDebugUnitTest'
       }
     }
-
     stage('Run integration tests') {
-       when {
-            // Only execute this stage when building from the `master` branch
-            branch 'master'
-       }
+      when {
+        branch 'master'
+      }
       steps {
         sh './gradlew connectedCheck'
       }
     }
   }
   post {
-      always {
-          sh 'adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done'
-          junit '**/TEST-*.xml'
-      }
-}
+    always {
+      sh 'adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done'
+      junit '**/TEST-*.xml'
+
+    }
+
+  }
 }
