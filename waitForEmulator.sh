@@ -11,8 +11,7 @@ timeout_in_sec=360
 until [[ "$bootanim" =~ "stopped" ]]; do
   bootanim=`adb -e shell getprop init.svc.bootanim 2>&1 &`
   echo $bootanim
-  if [[ "$bootanim" =~ "device not found" || "$bootanim" =~ "device offline"
-    || "$bootanim" =~ "running" ]]; then
+  if [[ "$bootanim" =~ "device not found" || "$bootanim" =~ "device offline" ]]; then
     let "failcounter += 1"
     echo "Waiting for emulator to start"
     if [[ $failcounter -gt timeout_in_sec ]]; then
