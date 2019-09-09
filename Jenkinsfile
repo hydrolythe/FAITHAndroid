@@ -16,10 +16,12 @@ pipeline {
     }
     stage('Setup Emulator') {
       when {
-        branch 'master'
+        branch 'CICD'
       }
       steps {
         sh '''
+        export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
+        echo $PATH
         EMULATOR_API_LEVEL=24
         ANDROID_ABI="default;armeabi-v7a"
         sdkmanager "system-images;android-$EMULATOR_API_LEVEL;$ANDROID_ABI"
