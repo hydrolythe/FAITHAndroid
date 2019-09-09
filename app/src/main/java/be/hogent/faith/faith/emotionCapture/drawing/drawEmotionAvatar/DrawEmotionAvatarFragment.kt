@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
 import be.hogent.faith.faith.emotionCapture.drawing.DrawFragment
+import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import com.divyanshu.draw.widget.DrawView
 import io.reactivex.disposables.CompositeDisposable
@@ -33,6 +34,9 @@ private const val NO_AVATAR = -1
  * Fragment that allows the user to color in the outline of their avatarName according to their emotional state.
  */
 class DrawEmotionAvatarFragment : DrawFragment() {
+
+    override val drawViewModel: DrawViewModel by sharedViewModel()
+
     override val drawView: DrawView
         get() = drawAvatarBinding.drawView
 
@@ -47,12 +51,17 @@ class DrawEmotionAvatarFragment : DrawFragment() {
 
     private val disposables = CompositeDisposable()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         arguments?.let {
             avatarOutlineResId = it.getInt(ARG_AVATAR_RES_ID)
         }
 
-        drawAvatarBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_draw_avatar, container, false)
+        drawAvatarBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_draw_avatar, container, false)
         drawAvatarBinding.drawViewModel = drawViewModel
         drawAvatarBinding.lifecycleOwner = this
         return drawAvatarBinding.root
@@ -66,14 +75,9 @@ class DrawEmotionAvatarFragment : DrawFragment() {
     }
 
     private fun listenToViewModelEvents() {
-        drawViewModel.drawnPaths.observe(this, Observer {
-            // It's very important that the drawCanvas doesn't create its own paths but uses a paths object
-            // that is saved in such a way that it survives configuration changes. See [DrawViewModel].
-            drawView.setActions(it)
-        })
-
         eventViewModel.errorMessage.observe(this, Observer {
-            Toast.makeText(context, getString(R.string.error_saving_drawing), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.error_saving_drawing), Toast.LENGTH_SHORT)
+                .show()
         })
     }
 
@@ -82,7 +86,12 @@ class DrawEmotionAvatarFragment : DrawFragment() {
         drawView.setAlpha(70)
 
         if (avatarOutlineResId != NO_AVATAR) {
-            drawView.setPaintedBackground(ContextCompat.getDrawable(context!!, avatarOutlineResId) as BitmapDrawable)
+            drawView.setPaintedBackground(
+                ContextCompat.getDrawable(
+                    context!!,
+                    avatarOutlineResId
+                ) as BitmapDrawable
+            )
         }
 
         drawView.addDrawViewListener(object : DrawView.DrawViewListener {

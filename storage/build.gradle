@@ -44,7 +44,7 @@ dependencies {
 
     implementation androidDependencies.appcompat
 
-    androidTestImplementation androidTestDependencies.testRunner
+    androidTestImplementation androidTestDependencies.androidJunit
     androidTestImplementation androidTestDependencies.espresso
 
 }
