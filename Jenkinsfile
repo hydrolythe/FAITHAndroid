@@ -6,86 +6,31 @@ pipeline {
 
   }
   stages {
-    stage('Accept Licenses') {
+    stage('Setup VM') {
       steps {
         sh '''
-        sudo apt-get install android-tools-adb android-tools-fastboot
-        sudo chown -R jenkins $ANDROID_HOME
-        export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH"
-        yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
+        export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
+        echo $PATH
         '''
       }
     }
-    stage('Set SDK directory correct') {
-      steps {
-        sh '''dir="$ANDROID_HOME/platforms"
-            if [ -d "$dir" ]; then
-                sudo chown jenkins $dir
-                sudo chmod ug+rw $dir
-            else
-                mkdir $dir
-            fi
-
-            dir="$ANDROID_HOME/platform-tools"
-                if [ -d "$dir" ]; then
-                    sudo chown jenkins $dir
-                    sudo chmod ug+rw $dir
-                else
-                    mkdir $dir
-                fi
-            '''
+    stage('Setup Emulator') {
+      when {
+        branch 'master'
       }
-    }
-
-    stage('Give permissions for Jenkins') {
       steps {
-        sh '''dir="/home/jenkins/.android"
-            if [ -d "$dir" ]; then
-                sudo chown jenkins $dir
-                sudo chmod ug+rw $dir
-            else
-                mkdir $dir
-            fi
-            '''
-      }
-    }
-    stage('Set up emulator') {
-        steps{
-            sh '''
-            ANDROID_SYSTEM='system-images;android-29;google_apis_playstore;x86_64'
-            ANDROID_ABI=armeabi-v7a
-            $ANDROID_HOME/tools/bin/sdkmanager $ANDROID_SYSTEM
-            yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
-            echo no | $ANDROID_HOME/tools/bin/avdmanager create avd --force --name test -k "$ANDROID_SYSTEM"
-            emulator -avd test -no-skin -no-audio -no-window &
-            chmod u+rwx waitForEmulator.sh
-            ./waitForEmulator.sh
-            '''
-        }
-    }
-
-
-    stage('Compile') {
-      steps {
-        sh './gradlew compileDebugSources'
-      }
-    }
-    stage('Unit Test') {
-      steps {
-        sh './gradlew testDebugUnitTest testDebugUnitTest'
-        junit '**/TEST-*.xml'
-      }
-    }
-    stage('Integration Tests') {
-      steps {
-        sh '$ANDROID_HOME/tools/bin/sdkmanager'
-        junit '**/TEST-*.xml'
-      }
-    }
-    stage('Build APK') {
-      steps {
-        sh './gradlew assembleDebug'
-        archiveArtifacts '**/*.apk'
+        sh '''
+        EMULATOR_API_LEVEL=24
+        ANDROID_ABI="default;armeabi-v7a"
+        sdkmanager "system-images;android-$EMULATOR_API_LEVEL;$ANDROID_ABI"
+        yes | sdkmanager --licenses
+        touch ~/.android/repositories.cfg
+        sdkmanager --update
+        echo no | avdmanager create avd --force -n test -k "system-images;android-$EMULATOR_API_LEVEL;$ANDROID_ABI"
+        emulator -avd test -no-audio -no-window -no-snapshot -gpu auto &
+        chmod u+rwx waitForEmulator.sh
+        ./waitForEmulator.sh
+        '''
       }
     }
     stage('Linting') {
@@ -93,18 +38,31 @@ pipeline {
         sh './gradlew ktlint'
       }
     }
-    stage('Integration test') {
+    stage('Build') {
       steps {
-        sh '''
-            adb shell settings put global window_animation_scale 0
-            adb shell settings put global transition_animation_scale 0
-            adb shell settings put global animator_duration_scale 0
-            adb shell input keyevent 82 &
-            adb shell setprop dalvik.vm.dexopt-flags v=n,o=v
-            ./gradlew connectedCheck
-
-        '''
+        sh './gradlew compileDebugSources'
       }
     }
+    stage('Unit Test') {
+      steps {
+        sh './gradlew testDebugUnitTest testDebugUnitTest'
+      }
+    }
+    stage('Run integration tests') {
+      when {
+        branch 'master'
+      }
+      steps {
+        sh './gradlew connectedCheck'
+      }
+    }
+  }
+  post {
+    always {
+      sh 'adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done'
+      junit '**/TEST-*.xml'
+
+    }
+
   }
 }
