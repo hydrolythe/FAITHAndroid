@@ -31,14 +31,4 @@ class EditDetailViewModelTest {
         verify { observer.onChanged(any()) }
     }
 
-    @Test
-    fun editDetailVM_onSendButtonClicked_callsListeners() {
-        val observer = mockk<Observer<Unit>>()
-        every { observer.onChanged(any()) } returns Unit
-        viewModel.sendButtonClicked.observeForever(observer)
-
-        viewModel.onSendButtonClicked()
-
-        verify { observer.onChanged(any()) }
-    }
 }
