@@ -16,6 +16,7 @@ ANDROID_ABI="default;armeabi-v7a"
 sdkmanager "system-images;android-$EMULATOR_API_LEVEL;$ANDROID_ABI"
 yes | sdkmanager --licenses
 touch ~/.android/repositories.cfg
+sdkmanager --update
 echo no | avdmanager create avd --force -n test -k "system-images;android-$EMULATOR_API_LEVEL;$ANDROID_ABI"
 emulator -avd test -no-skin -no-audio -no-window -gpu auto &
 chmod u+rwx waitForEmulator.sh
