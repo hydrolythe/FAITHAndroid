@@ -109,7 +109,6 @@ class EventViewModel(
         event.addSource(eventNotes) { notes -> event.value?.notes = notes }
     }
 
-
     fun setEvent(newEvent: Event) {
         event.value = newEvent
         // We have to manually update the related streams for the event MediatorLiveData.
