@@ -144,7 +144,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
 
     override fun onBackPressed() {
         val f =
-            supportFragmentManager.findFragmentById(be.hogent.faith.R.id.emotionCapture_fragment_container)
+            supportFragmentManager.findFragmentById(R.id.emotionCapture_fragment_container)
         if (f is EventDetailsFragment) {
             showExitAlert()
         } else {
