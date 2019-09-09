@@ -3,6 +3,7 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.Runs
@@ -11,16 +12,20 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.test.KoinTest
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 
-class EventViewModelTest {
+class EventViewModelTest : KoinTest {
     private lateinit var viewModel: EventViewModel
 
     private val eventTitle = DataFactory.randomString()
@@ -32,6 +37,8 @@ class EventViewModelTest {
 
     @Before
     fun setUp() {
+        startKoin { modules(appModule) }
+
         viewModel = EventViewModel(
             mockk(),
             mockk(),
@@ -46,6 +53,11 @@ class EventViewModelTest {
         viewModel.eventTitle.value = eventTitle
         viewModel.eventNotes.value = eventNotes
         viewModel.eventDate.value = eventDateTime
+    }
+
+    @After
+    fun takeDown() {
+        stopKoin()
     }
 
     @Test

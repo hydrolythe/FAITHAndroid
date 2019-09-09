@@ -2,6 +2,7 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.Called
@@ -9,12 +10,16 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.observers.DisposableCompletableObserver
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.test.KoinTest
 
-class EventViewModelSaveEmotionAvatarTest {
+class EventViewModelSaveEmotionAvatarTest : KoinTest {
     private lateinit var viewModel: EventViewModel
     private val saveEmotionAvatarUseCase = mockk<SaveEmotionAvatarUseCase>(relaxed = true)
 
@@ -27,6 +32,7 @@ class EventViewModelSaveEmotionAvatarTest {
 
     @Before
     fun setUp() {
+        startKoin { modules(appModule) }
         viewModel = EventViewModel(
             saveEmotionAvatarUseCase,
             mockk(),
@@ -41,6 +47,11 @@ class EventViewModelSaveEmotionAvatarTest {
         viewModel.eventTitle.value = eventTitle
         viewModel.eventNotes.value = eventNotes
         viewModel.eventDate.value = eventDateTime
+    }
+
+    @After
+    fun takeDown() {
+        stopKoin()
     }
 
     @Test
