@@ -20,7 +20,7 @@ class EditDetailFragmentTest {
 
     @Before
     fun goToScreen() {
-        NavigationUtil.goToWriteTextScreen()
+        NavigationUtil.goToNewEventScreen()
     }
 
     @Test

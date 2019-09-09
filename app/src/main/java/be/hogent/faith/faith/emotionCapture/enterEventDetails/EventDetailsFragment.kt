@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
@@ -39,11 +40,7 @@ class EventDetailsFragment : Fragment() {
 
     private val avatarProvider: AvatarProvider by inject()
 
-    /***
-     * Momenteel in commentaar gezet omdat de save Event knop nu op de details wordt getoond. In de toekomst zal het misschien toch nodig
-     * zijn als beslist wordt om een event op te slaan als bvb enkel de avatar al is ingekleurd
     private lateinit var saveDialog: SaveEventDialog
-     */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,11 +83,9 @@ class EventDetailsFragment : Fragment() {
     }
 
     private fun updateUI() {
-        // setBackgroundImage()
+        setBackgroundImage()
 
-        /*
-      eventDetailsBinding.recyclerViewEventDetailsDetails.apply {
-
+        eventDetailsBinding.recyclerViewEventDetailsDetails.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             // Start with empty list and then fill it in
@@ -98,7 +93,6 @@ class EventDetailsFragment : Fragment() {
         }
         detailThumbnailsAdapter =
             eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
-      */
     }
 
     private fun setBackgroundImage() {
@@ -145,31 +139,26 @@ class EventDetailsFragment : Fragment() {
             Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
 
-        /***
-         * Momenteel in commentaar gezet omdat de save Event knop nu op de details wordt getoond. In de toekomst zal het misschien toch nodig
-         * zijn als beslist wordt om een event op te slaan als bvb enkel de avatar al is ingekleurd
         eventViewModel.sendButtonClicked.observe(this, Observer {
-        saveDialog = SaveEventDialog.newInstance()
-        saveDialog.show(fragmentManager!!, null)
+            saveDialog = SaveEventDialog.newInstance()
+            saveDialog.show(fragmentManager!!, null)
         })
 
         userViewModel.eventSavedSuccessFully.observe(this, Observer {
-        Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
-        saveDialog.dismiss()
+            Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
+            saveDialog.dismiss()
 
-        // Go back to main screen
-        fragmentManager!!.popBackStack()
+            // Drawing scope can now be deleted so a new DrawingVM will be created when another
+            // drawing is made.
+            getKoin().deleteScope(KoinModules.DRAWING_SCOPE_ID)
+
+            navigation?.closeEvent()
+            // Go back to main screen
         })
 
-        userViewModel.eventSavedSuccessFully.observe(this, Observer {
-        Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
-        // Go back to main screen TOOD: not working right now
-        fragmentManager!!.popBackStack()
-        })
         userViewModel.errorMessage.observe(this, Observer { errorMessage ->
-        Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
+            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
         })
-         */
     }
 
     override fun onStop() {
@@ -185,6 +174,7 @@ class EventDetailsFragment : Fragment() {
 
         // TODO: verwijderen van DetailType
         fun startEventDetail(type: DetailType)
+        fun closeEvent()
     }
 
     companion object {

@@ -19,7 +19,7 @@ class RecordAudioViewModelTest {
 
 //    @Test
 //    fun recordAudioVM_initialisation_correctState() {
-//        assertEquals(RecordStateStopped::class, viewModel.recordState.value!!::class)
+//        assertEquals(RecordStateStopped::class, viewModel.audioState.value!!::class)
 //    }
 //
 //    @Test
@@ -28,7 +28,7 @@ class RecordAudioViewModelTest {
 //        viewModel.onRecordButtonClicked()
 //
 //        // Assert
-//        assertEquals(RecordStateRecording::class, viewModel.recordState.value!!::class)
+//        assertEquals(RecordStateRecording::class, viewModel.audioState.value!!::class)
 //    }
 //
 //    @Test
@@ -37,7 +37,7 @@ class RecordAudioViewModelTest {
 //        viewModel.onPauseButtonClicked()
 //
 //        // Assert
-//        assertEquals(RecordStatePaused::class, viewModel.recordState.value!!::class)
+//        assertEquals(RecordStatePaused::class, viewModel.audioState.value!!::class)
 //    }
 //
 //    @Test
@@ -46,6 +46,6 @@ class RecordAudioViewModelTest {
 //        viewModel.onStopButtonClicked()
 //
 //        // Assert
-//        assertEquals(RecordStateStopped::class, viewModel.recordState.value!!::class)
+//        assertEquals(RecordStateStopped::class, viewModel.audioState.value!!::class)
 //    }
 }
