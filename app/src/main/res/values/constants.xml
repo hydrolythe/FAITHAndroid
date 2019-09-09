@@ -2,4 +2,5 @@
 <resources>
     <integer name="LANDSCAPE">0</integer>
     <integer name="PORTRAIT">1</integer>
+    <item name="TAG_VIEWHOLDER" type="id" />
 </resources>

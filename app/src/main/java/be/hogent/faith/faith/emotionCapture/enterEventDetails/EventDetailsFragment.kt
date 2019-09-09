@@ -47,7 +47,9 @@ class EventDetailsFragment : Fragment() {
 
         // When an UUID is given the [eventViewModel] should be updated to show the given event's state.
         arguments?.getSerializable(ARG_EVENTUUID)?.let {
-            eventViewModel.setEvent(it as UUID)
+            val event = userViewModel.user.value?.getEvent(it as UUID)
+            requireNotNull(event) { "Could not find event with UUID $it." }
+            eventViewModel.setEvent(event)
         }
     }
 

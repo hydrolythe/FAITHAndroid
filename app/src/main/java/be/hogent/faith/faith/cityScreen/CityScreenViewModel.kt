@@ -10,19 +10,19 @@ import be.hogent.faith.util.TAG
  */
 class CityScreenViewModel : ViewModel() {
 
-    val firstLocation = SingleLiveEvent<Unit>()
-    val secondLocation = SingleLiveEvent<Unit>()
+    val archiveClicked = SingleLiveEvent<Unit>()
+    val parkClicked = SingleLiveEvent<Unit>()
     val thirdLocation = SingleLiveEvent<Unit>()
     val logOutClicked = SingleLiveEvent<Unit>()
 
-    fun firstLocationClicked() {
+    fun onArchiveClicked() {
         Log.i(TAG, "First location clicked")
-        firstLocation.call()
+        archiveClicked.call()
     }
 
-    fun secondLocationClicked() {
+    fun onParkClicked() {
         Log.i(TAG, "Second location clicked")
-        secondLocation.call()
+        parkClicked.call()
     }
 
     fun thirdLocationClicked() {

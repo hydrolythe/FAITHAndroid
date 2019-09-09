@@ -61,10 +61,10 @@ class CityScreenFragment : Fragment() {
     }
 
     private fun registerListeners() {
-        cityScreenViewModel.firstLocation.observe(this, Observer {
+        cityScreenViewModel.archiveClicked.observe(this, Observer {
             navigation?.startOverviewEventsFragment()
         })
-        cityScreenViewModel.secondLocation.observe(this, Observer {
+        cityScreenViewModel.parkClicked.observe(this, Observer {
             navigation?.startEmotionCapture()
         })
 

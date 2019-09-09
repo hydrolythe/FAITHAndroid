@@ -70,7 +70,7 @@
                 android:id="@+id/btn_archive"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:onClick="@{() -> cityScreenViewModel.firstLocationClicked()}"
+                android:onClick="@{() -> cityScreenViewModel.onArchiveClicked()}"
                 app:layout_constraintBottom_toTopOf="@id/guide_pole_bottom"
                 app:layout_constraintEnd_toStartOf="@id/guide_pole_right_end"
                 app:layout_constraintStart_toStartOf="@+id/guide_pole_right_start"
@@ -118,11 +118,11 @@
                 android:src="@drawable/meisje_stoer_staan"/>
 
             <View
-                android:id="@+id/btn_welcome_login"
+                android:id="@+id/btn_city_startNewEvent"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="#00000000"
-                android:onClick="@{() -> cityScreenViewModel.secondLocationClicked()}"
+                android:onClick="@{() -> cityScreenViewModel.onParkClicked()}"
                 app:layout_constraintBottom_toTopOf="@id/guide_loc2_bottom"
                 app:layout_constraintEnd_toStartOf="@id/guide_pole_left_start"
                 app:layout_constraintHorizontal_bias="0.0"

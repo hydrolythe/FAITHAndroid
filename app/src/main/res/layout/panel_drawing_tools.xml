@@ -117,7 +117,7 @@
             app:cardCornerRadius="10dp">
 
             <LinearLayout
-                android:id="@+id/linearLayoutPensils"
+                android:id="@+id/linearLayoutPencils"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_margin="8dp"
