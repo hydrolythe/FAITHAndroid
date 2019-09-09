@@ -6,6 +6,16 @@ pipeline {
 
   }
   stages {
+
+    stage('Install HAXM'){
+        steps{
+            sh '''
+            sudo apt-get install qemu-kvm libvirt-daemon-system libvirt-clients bridge-utils
+            sudo adduser `id -un` libvirtd
+            '''
+        }
+    }
+
     stage('Accept Licenses') {
       steps {
         sh '''
