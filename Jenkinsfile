@@ -18,7 +18,7 @@ yes | sdkmanager --licenses
 touch ~/.android/repositories.cfg
 sdkmanager --update
 echo no | avdmanager create avd --force -n test -k "system-images;android-$EMULATOR_API_LEVEL;$ANDROID_ABI"
-emulator -avd test -no-skin -no-audio -no-window -no-snapshot -gpu auto &
+emulator -avd test -no-audio -no-window -no-snapshot -gpu auto &
 chmod u+rwx waitForEmulator.sh
 ./waitForEmulator.sh
 	
