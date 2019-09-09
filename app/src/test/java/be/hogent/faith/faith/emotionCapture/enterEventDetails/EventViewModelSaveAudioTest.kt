@@ -53,7 +53,7 @@ class EventViewModelSaveAudioTest {
         val observer = slot<DisposableCompletableObserver>()
 
         // Act
-        viewModel.saveAudio(mockk())
+        viewModel.saveAudio()
 
         verify { saveAudioUseCase.execute(capture(params), capture(observer)) }
         // Make the UC-handler call the success handler
@@ -74,7 +74,7 @@ class EventViewModelSaveAudioTest {
         viewModel.errorMessage.observeForever(failedObserver)
 
         // Act
-        viewModel.saveAudio(mockk())
+        viewModel.saveAudio()
         verify { saveAudioUseCase.execute(any(), capture(observer)) }
         // Make the UC-handler call the success handler
         observer.captured.onComplete()
@@ -95,7 +95,7 @@ class EventViewModelSaveAudioTest {
         viewModel.errorMessage.observeForever(failedObserver)
 
         // Act
-        viewModel.saveAudio(mockk())
+        viewModel.saveAudio()
         verify { saveAudioUseCase.execute(any(), capture(observer)) }
         // Make the UC-handler call the success handler
         observer.captured.onError(mockk(relaxed = true))
