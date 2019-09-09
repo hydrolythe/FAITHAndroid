@@ -2,6 +2,7 @@ package be.hogent.faith.faith.di
 
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
@@ -33,7 +34,6 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import java.util.UUID
 
 object KoinModules {
     const val USER_SCOPE_NAME = "USER_SCOPE_NAME"
@@ -50,7 +50,7 @@ val appModule = module(override = true) {
 
     // ViewModels
     viewModel { CityScreenViewModel() }
-    viewModel { (eventUuid: UUID?) -> EventViewModel(get(), get(), get(), get(), get(), eventUuid) }
+    viewModel { (event: Event) -> EventViewModel(get(), get(), get(), get(), get(), event) }
     viewModel { EventViewModel(get(), get(), get(), get(), get()) }
     viewModel { DrawViewModel() }
     viewModel { EditDetailViewModel() }

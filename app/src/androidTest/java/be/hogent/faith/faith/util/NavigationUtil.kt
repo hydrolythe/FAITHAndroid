@@ -51,7 +51,7 @@ object NavigationUtil {
 
     fun goToNewEventScreen() {
         goToCityScreen()
-        onView(withId(R.id.btn_welcome_login)).perform(click())
+        onView(withId(R.id.btn_city_startNewEvent)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }

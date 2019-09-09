@@ -26,7 +26,6 @@ import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.io.File
-import java.util.UUID
 
 class EventViewModel(
     private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase,
@@ -34,7 +33,7 @@ class EventViewModel(
     private val saveEventAudioUseCase: SaveEventAudioUseCase,
     private val saveEventDrawingUseCase: SaveEventDrawingUseCase,
     private val saveEventTextUseCase: SaveEventTextUseCase,
-    eventUuid: UUID? = null
+    givenEvent: Event? = null
 ) : ViewModel(), KoinComponent {
 
     private val fileProvider: TempFileProvider by inject()
@@ -98,8 +97,8 @@ class EventViewModel(
         get() = _errorMessage
 
     init {
-        if (eventUuid != null) {
-            setEvent(getEventFromUser(eventUuid))
+        if (givenEvent != null) {
+            setEvent(givenEvent)
         } else {
             setEvent(Event())
         }
@@ -110,12 +109,6 @@ class EventViewModel(
         event.addSource(eventNotes) { notes -> event.value?.notes = notes }
     }
 
-    // TODO: check how to get correct event
-    private fun getEventFromUser(eventUuid: UUID): Event {
-        return Event()
-//        return user.value!!.getEvent(eventUuid)
-//            ?: throw IllegalArgumentException("Couldn't find event with UUID $eventUuid for user ${user.value}")
-    }
 
     fun setEvent(newEvent: Event) {
         event.value = newEvent
@@ -124,10 +117,6 @@ class EventViewModel(
         eventTitle.postValue(newEvent.title)
         eventNotes.postValue(newEvent.notes)
         eventDate.postValue(newEvent.dateTime)
-    }
-
-    fun setEvent(eventUuid: UUID) {
-        setEvent(getEventFromUser(eventUuid))
     }
 
     private val _cameraButtonClicked = SingleLiveEvent<Unit>()
@@ -195,10 +184,6 @@ class EventViewModel(
 
     fun onDateButtonClicked() {
         _dateButtonClicked.call()
-    }
-
-    fun getLatestDetail(): Detail? {
-        return event.value?.getLastDetail() ?: null
     }
 
     /**

@@ -38,11 +38,7 @@ class EventDetailsFragmentTest {
 
     @Test
     fun eventDetailsFragment_buttonsOpenCorrectScreen() {
-        onView(withId(R.id.btn_event_details_audio)).perform(click())
-        allowPermissionsIfNeeded(uiDevice)
-        onView(withId(R.id.btn_recordAudio_record)).check(matches(isDisplayed()))
-        pressBack()
-
+        // Audio is not tested as emulator don't support audio.
         onView(withId(R.id.btn_event_details_camera)).perform(click())
         allowPermissionsIfNeeded(uiDevice)
         onView(withId(R.id.screen_take_photo)).check(matches(isDisplayed()))

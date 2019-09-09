@@ -32,7 +32,7 @@ class DetailThumbnailsAdapter(private val context: Context, details: List<Detail
     }
 
     override fun onBindViewHolder(holder: ThumbnailViewHolder, position: Int) {
-        val thumbnail = when (_details[position]) {
+        val thumbnail: Any = when (_details[position]) {
             is AudioDetail -> R.drawable.event_detail_audio
             is PictureDetail -> _details[position].file
             is TextDetail -> R.drawable.event_detail_text
