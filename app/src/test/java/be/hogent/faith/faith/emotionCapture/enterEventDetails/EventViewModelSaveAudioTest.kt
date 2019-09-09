@@ -58,7 +58,6 @@ class EventViewModelSaveAudioTest : KoinTest {
         stopKoin()
     }
 
-
     @Test
     fun eventViewModel_saveAudio_callsUseCase() {
         // Arrange
