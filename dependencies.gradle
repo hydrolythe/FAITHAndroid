@@ -78,7 +78,8 @@ ext {
             junit      : "junit:junit:$junit_version",
             mockk      : "io.mockk:mockk:$mockk_version",
             coreTesting: "androidx.arch.core:core-testing:$aac_core_version",
-            threeTenBP : "org.threeten:threetenbp:$threeTenBP_version"
+            threeTenBP : "org.threeten:threetenbp:$threeTenBP_version",
+            koinTesting: "org.koin:koin-test:$koin_version"
     ]
 
     androidTestDependencies = [

@@ -22,6 +22,7 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewMo
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvider
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
 import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
+import be.hogent.faith.faith.util.AndroidTempFileProvider
 import be.hogent.faith.faith.util.TempFileProvider
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
@@ -76,7 +77,7 @@ val appModule = module(override = true) {
         scoped { DrawViewModel() }
     }
 
-    single { TempFileProvider(androidContext()) }
+    single { AndroidTempFileProvider(androidContext()) as TempFileProvider }
 
     single { MediaRecorder() }
     single { MediaPlayer() }
