@@ -12,6 +12,7 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCityScreenBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.loginOrRegister.LoginManager
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -39,8 +40,15 @@ class CityScreenFragment : Fragment() {
     private lateinit var avatarView: View
     private val avatarProvider: AvatarProvider by inject()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mainScreenBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_city_screen, container, false)
+    private val loginManager: LoginManager by inject()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        mainScreenBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_city_screen, container, false)
         mainScreenBinding.cityScreenViewModel = cityScreenViewModel
         mainScreenBinding.lifecycleOwner = this
         avatarView = mainScreenBinding.imageMainAvatar
@@ -51,7 +59,7 @@ class CityScreenFragment : Fragment() {
         super.onStart()
         registerListeners()
 
-        // setBackgroundImage()
+        setBackgroundImage()
     }
 
     private fun setBackgroundImage() {
@@ -69,15 +77,15 @@ class CityScreenFragment : Fragment() {
         })
 
         cityScreenViewModel.logOutClicked.observe(this, Observer {
-            // Close the user scope so a new one is created when logging in with another user
-            getKoin().getScope(KoinModules.USER_SCOPE_ID).close()
-            // TODO: go back to login Screen
+            loginManager.logout()
+            navigation?.logOut()
         })
 
         userViewModel.user.observe(this, Observer { user ->
-            Glide.with(context!!).load(avatarProvider.getAvatarDrawableStaan(user.avatarName)).diskCacheStrategy(
-                DiskCacheStrategy.ALL
-            ).into(image_main_avatar)
+            Glide.with(context!!).load(avatarProvider.getAvatarDrawableStaan(user.avatarName))
+                .diskCacheStrategy(
+                    DiskCacheStrategy.ALL
+                ).into(image_main_avatar)
         })
     }
 
@@ -91,5 +99,6 @@ class CityScreenFragment : Fragment() {
     interface CityScreenNavigationListener {
         fun startEmotionCapture()
         fun startOverviewEventsFragment()
+        fun logOut()
     }
 }

@@ -77,7 +77,7 @@ val appModule = module(override = true) {
 
     single { AndroidTempFileProvider(androidContext()) as TempFileProvider }
 
-    single { (callback: LoginManager.LoginCallback) -> LoginManager(callback) }
+    single { LoginManager() }
 
     single { ResourceAvatarProvider(androidContext()) as AvatarProvider }
 

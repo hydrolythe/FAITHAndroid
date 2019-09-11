@@ -75,7 +75,6 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
                 registerUserInfoViewModel.password.value!!,
                 registerAvatarViewModel.selectedAvatar!!
             )
-            navigation!!.goToCityScreen()
         })
 
         registerAvatarViewModel.errorMessage.observe(this, Observer { errorMessageID ->
