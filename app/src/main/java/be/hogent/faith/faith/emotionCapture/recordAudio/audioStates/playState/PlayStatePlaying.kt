@@ -3,7 +3,6 @@ package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.playState
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.util.Log
-import android.view.View
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
 import be.hogent.faith.util.TAG
 
@@ -33,14 +32,10 @@ class PlayStatePlaying(
         }
     }
 
-    override val playButtonVisible: Int
-        get() = View.INVISIBLE
-    override val pauseButtonVisible: Int
-        get() = View.VISIBLE
-    override val stopButtonVisible: Int
-        get() = View.VISIBLE
-    override val recordButtonVisible: Int
-        get() = View.INVISIBLE
+    override val playButtonEnabled = false
+    override val pauseButtonEnabled = true
+    override val stopButtonEnabled = true
+    override val recordButtonEnabled = false
 
     init {
         Log.d(TAG, "Started playing audio from ${tempFileProvider.tempAudioRecordingFile.path}")

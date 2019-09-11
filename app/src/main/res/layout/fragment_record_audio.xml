@@ -40,61 +40,65 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/btn_recordAudio_play"
                 android:layout_width="wrap_content"
-                android:layout_height="55dp"
+                android:layout_height="0dp"
+                android:enabled="@{recordAudioViewModel.playButtonEnabled}"
                 android:onClick="@{() -> recordAudioViewModel.onPlayButtonClicked()}"
-                android:src="@drawable/audio_play"
-                android:visibility="@{recordAudioViewModel.playButtonVisible}"
+                android:padding="8dp"
+                android:background="@drawable/audio_play"
                 app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/btn_recordAudio_pause"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/guide_recordAudio_top" />
 
-            <ImageView
+            <Button
                 android:id="@+id/btn_recordAudio_pause"
                 android:layout_width="wrap_content"
-                android:layout_height="39dp"
+                android:layout_height="0dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/description_pause_recording"
+                android:enabled="@{recordAudioViewModel.pauseButtonEnabled}"
                 android:onClick="@{() -> recordAudioViewModel.onPauseButtonClicked()}"
+                android:padding="8dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/audio_pause"
-                android:visibility="@{recordAudioViewModel.pauseButtonVisible}"
+                android:background="@drawable/audio_pause"
                 app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/btn_recordAudio_record"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btn_recordAudio_play"
                 app:layout_constraintTop_toTopOf="@+id/guide_recordAudio_top" />
 
-            <ImageView
+            <Button
                 android:id="@+id/btn_recordAudio_record"
                 android:layout_width="wrap_content"
-                android:layout_height="39dp"
+                android:layout_height="0dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/description_start_recording"
+                android:enabled="@{recordAudioViewModel.recordButtonEnabled}"
                 android:onClick="@{() -> recordAudioViewModel.onRecordButtonClicked()}"
+                android:padding="8dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/audio_record"
-                android:visibility="@{recordAudioViewModel.recordButtonVisible}"
+                android:background="@drawable/audio_record"
                 app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/btn_recordAudio_stop"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btn_recordAudio_pause"
                 app:layout_constraintTop_toTopOf="@+id/guide_recordAudio_top" />
 
-            <ImageView
+            <Button
                 android:id="@+id/btn_recordAudio_stop"
                 android:layout_width="wrap_content"
-                android:layout_height="39dp"
+                android:layout_height="0dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/description_stop_recording"
+                android:enabled="@{recordAudioViewModel.stopButtonEnabled}"
                 android:onClick="@{() -> recordAudioViewModel.onStopButtonClicked()}"
+                android:padding="8dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/audio_stop"
-                android:visibility="@{recordAudioViewModel.stopButtonVisible}"
+                android:background="@drawable/audio_stop"
                 app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -120,14 +124,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="196dp" />
+                app:layout_constraintGuide_percent="0.23" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="599dp" />
+                app:layout_constraintGuide_percent="0.79" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

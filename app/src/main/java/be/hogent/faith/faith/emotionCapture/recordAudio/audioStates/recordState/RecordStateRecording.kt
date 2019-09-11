@@ -4,7 +4,6 @@ import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Build
 import android.util.Log
-import android.view.View
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
 import be.hogent.faith.util.TAG
 
@@ -30,20 +29,10 @@ class RecordStateRecording(
         }
     }
 
-    override val playButtonVisible: Int
-        get() = View.INVISIBLE
-    override val stopButtonVisible: Int
-        get() = View.VISIBLE
-    override val recordButtonVisible: Int
-        get() = View.INVISIBLE
-    override val pauseButtonVisible: Int
-        get() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                return View.VISIBLE
-            } else {
-                return View.INVISIBLE
-            }
-        }
+    override val playButtonEnabled = false
+    override val stopButtonEnabled = true
+    override val recordButtonEnabled = false
+    override val pauseButtonEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
 
     override fun onPlayPressed() {
         Log.d(TAG, "Recording -> Recording: nothing to play yet")
