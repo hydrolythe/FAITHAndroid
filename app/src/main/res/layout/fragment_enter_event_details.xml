@@ -19,7 +19,8 @@
             android:id="@+id/background_event_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/descr_city_park"/>
+            android:contentDescription="@string/descr_city_park"
+            tools:src="@drawable/park" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/screen_new_event"
@@ -77,10 +78,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:hint="@string/event_details_title"
                 android:inputType="text"
                 android:text="@={eventViewModel.eventTitle}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 app:layout_constraintBottom_toTopOf="@+id/guide_avatar_titel_bottom"
                 app:layout_constraintStart_toStartOf="@+id/guide_avatar_titel_left"
                 tools:text="@string/event_details_title" />
@@ -135,11 +136,11 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/description_addDrawing"
                 android:onClick="@{() -> eventViewModel.onDrawingButtonClicked()}"
-                app:srcCompat="@drawable/event_detail_drawing"
                 app:layout_constraintBottom_toTopOf="@+id/guide_middle_horizontal_pole"
                 app:layout_constraintEnd_toStartOf="@+id/guide_right_pole"
                 app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
-                app:layout_constraintTop_toTopOf="@+id/guide_top_pole" />
+                app:layout_constraintTop_toTopOf="@+id/guide_top_pole"
+                app:srcCompat="@drawable/event_detail_drawing" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_vertical_avatar"
@@ -174,8 +175,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:minWidth="24dp"
-                android:src="@drawable/event_details_send"
                 android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
+                android:src="@drawable/event_details_send"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/guide_horizontal_details"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -272,8 +273,8 @@
                 android:id="@+id/img_event_details_avatar_inkleuren"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:contentDescription="@string/avatar_inkleuren"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/avatar_inkleuren"
                 android:scaleType="fitXY"
                 app:layout_constraintBottom_toTopOf="@+id/guide_avatar_inkleuren_bottom"
                 app:layout_constraintStart_toStartOf="@+id/guide_avatar_inkleuren_left"

@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.drawing.makeDrawing
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -50,6 +51,8 @@ class MakeDrawingFragment : DrawFragment() {
 
     private lateinit var drawBinding: FragmentDrawBinding
 
+    private var navigation: DrawingScreenNavigation? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,6 +74,13 @@ class MakeDrawingFragment : DrawFragment() {
         startListeners()
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is DrawingScreenNavigation) {
+            navigation = context
+        }
+    }
+
     private fun startListeners() {
         drawViewModel.saveClicked.observe(this, Observer {
             // TODO: move to something async, maybe a coroutine?
@@ -80,6 +90,7 @@ class MakeDrawingFragment : DrawFragment() {
         })
         eventViewModel.drawingSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_drawing_success, Toast.LENGTH_SHORT).show()
+            navigation?.backToEvent()
         })
     }
 
@@ -101,5 +112,9 @@ class MakeDrawingFragment : DrawFragment() {
         fun newInstance(): MakeDrawingFragment {
             return MakeDrawingFragment()
         }
+    }
+
+    interface DrawingScreenNavigation {
+        fun backToEvent()
     }
 }

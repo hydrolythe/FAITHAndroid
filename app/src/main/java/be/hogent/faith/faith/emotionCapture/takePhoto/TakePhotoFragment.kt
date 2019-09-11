@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.emotionCapture.takePhoto
 
 import android.Manifest
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -45,6 +46,8 @@ class TakePhotoFragment : Fragment() {
 
     private lateinit var fotoApparat: Fotoapparat
 
+    private var navigation: TakePhotoFragment.PhotoScreenNavigation? = null
+
     private val tempFileProvider by inject<TempFileProvider>()
 
     override fun onCreateView(
@@ -64,6 +67,13 @@ class TakePhotoFragment : Fragment() {
             cameraErrorCallback = { Log.e(TAG, it.message) }
         )
         return takePhotoBinding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is PhotoScreenNavigation) {
+            navigation = context
+        }
     }
 
     override fun onStart() {
@@ -101,6 +111,7 @@ class TakePhotoFragment : Fragment() {
             Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
                 .show()
             takePhotoViewModel.setSavedPhoto(it.file)
+            navigation?.backToEvent()
         })
     }
 
@@ -155,5 +166,9 @@ class TakePhotoFragment : Fragment() {
         fun newInstance(): TakePhotoFragment {
             return TakePhotoFragment()
         }
+    }
+
+    interface PhotoScreenNavigation {
+        fun backToEvent()
     }
 }
