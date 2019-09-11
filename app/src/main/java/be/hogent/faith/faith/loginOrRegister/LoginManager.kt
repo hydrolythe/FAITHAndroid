@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.util.Log
 import be.hogent.faith.R
+import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.util.TAG
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationException
@@ -16,9 +17,9 @@ import com.auth0.android.result.Credentials
 import org.koin.core.KoinComponent
 import org.koin.core.get
 
-class LoginManager(
-    private val loginCallback: LoginCallback
-) : KoinComponent {
+class LoginManager : KoinComponent {
+
+    private var loginSuccessListener: LoginSuccessListener? = null
 
     /**
      * Authentication variables
@@ -31,18 +32,23 @@ class LoginManager(
         auth0.isOIDCConformant = true
     }
 
+    fun attachLoginSuccesListener(listener: LoginSuccessListener) {
+        loginSuccessListener = listener
+    }
+
     fun login(activity: Activity) {
         // Obtain the existing credentials and move to the next activity
         if (credentialsManager.hasValidCredentials()) {
             Log.i(TAG, "Still Found credentials")
         }
-        credentialsManager.getCredentials(object : BaseCallback<Credentials, CredentialsManagerException> {
+        credentialsManager.getCredentials(object :
+            BaseCallback<Credentials, CredentialsManagerException> {
 
             /**
              * User was already logged in
              */
             override fun onSuccess(credentials: Credentials) {
-                loginCallback.onSuccess()
+                loginSuccessListener?.onLoginSuccess()
             }
 
             override fun onFailure(error: CredentialsManagerException) {
@@ -63,28 +69,28 @@ class LoginManager(
 
     fun logout() {
         credentialsManager.clearCredentials()
+        getKoin().getScope(KoinModules.USER_SCOPE_ID).close()
         Log.d(TAG, "Logged the user out")
-        // TODO: the part where the user object of the application should be set to null or something.
     }
 
     private val webCallback = object : AuthCallback {
         override fun onFailure(dialog: Dialog) {
-            loginCallback.onFailure("onFailere called")
+            loginSuccessListener?.onLoginFailure("onFailure called")
         }
 
         override fun onFailure(exception: AuthenticationException) {
-            loginCallback.onFailure(exception.localizedMessage)
+            loginSuccessListener?.onLoginFailure(exception.localizedMessage)
         }
 
         override fun onSuccess(credentials: Credentials) {
             credentialsManager.saveCredentials(credentials)
-            loginCallback.onSuccess()
+            loginSuccessListener?.onLoginSuccess()
         }
     }
 
-    interface LoginCallback {
-        fun onSuccess()
-        fun onFailure(msg: String)
+    interface LoginSuccessListener {
+        fun onLoginSuccess()
+        fun onLoginFailure(msg: String)
     }
 
     companion object {
