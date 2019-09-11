@@ -63,8 +63,8 @@
     <string name="navigation_terugNaarDeStad">Terug naar de stad</string>
     <string name="header_emotie_regulatie">Emotie regulatie</string>
     <string name="frag_viewEvent_notes">notes</string>
-    <string name="dialog_to_the_city_title">"Wil je teruggaan naar de stad</string>
-    <string name="dialog_to_the_city_message">Ben je zeker? Alle wijzigingen worden niet bijgehouden?</string>
+    <string name="dialog_to_the_city_title">"Wil je teruggaan naar de stad?</string>
+    <string name="dialog_to_the_city_message">Ben je zeker? Je gebeurtenis is nog niet opgeslagen!</string>
     <string name="ok">@android:string/ok</string>
     <string name="cancel">@android:string/cancel</string>
     <string name="txt_error_userNameOrAvatarNotSet">Vul je naam in en selecteer een avatar</string>
