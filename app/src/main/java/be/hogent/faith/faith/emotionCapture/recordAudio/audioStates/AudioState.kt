@@ -20,10 +20,10 @@ abstract class AudioState(
     abstract fun onStopPressed()
     abstract fun onRecordPressed()
 
-    abstract val playButtonVisible: Int
-    abstract val pauseButtonVisible: Int
-    abstract val stopButtonVisible: Int
-    abstract val recordButtonVisible: Int
+    abstract val playButtonEnabled: Boolean
+    abstract val pauseButtonEnabled: Boolean
+    abstract val stopButtonEnabled: Boolean
+    abstract val recordButtonEnabled: Boolean
 
     /**
      * Resets the internal [MediaRecorder] and [MediaPlayer]

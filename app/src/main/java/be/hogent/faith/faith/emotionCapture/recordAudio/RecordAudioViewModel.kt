@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio
 
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,16 +21,16 @@ class RecordAudioViewModel : ViewModel(), AudioContext {
      */
     val pauseSupported = MutableLiveData<Boolean>()
 
-    val playButtonVisible = MutableLiveData<Int>()
-    val pauseButtonVisible = MutableLiveData<Int>()
-    val stopButtonVisible = MutableLiveData<Int>()
-    val recordButtonVisible = MutableLiveData<Int>()
+    val playButtonEnabled = MutableLiveData<Boolean>()
+    val pauseButtonEnabled = MutableLiveData<Boolean>()
+    val stopButtonEnabled = MutableLiveData<Boolean>()
+    val recordButtonEnabled = MutableLiveData<Boolean>()
 
     init {
-        playButtonVisible.value = View.INVISIBLE
-        pauseButtonVisible.value = View.INVISIBLE
-        stopButtonVisible.value = View.INVISIBLE
-        recordButtonVisible.value = View.VISIBLE
+        playButtonEnabled.value = false
+        pauseButtonEnabled.value = false
+        stopButtonEnabled.value = false
+        recordButtonEnabled.value = true
     }
 
     /**
@@ -49,10 +48,10 @@ class RecordAudioViewModel : ViewModel(), AudioContext {
     }
 
     private fun updateButtonVisibilityStates() {
-        playButtonVisible.value = _audioState.value?.playButtonVisible
-        pauseButtonVisible.value = _audioState.value?.pauseButtonVisible
-        stopButtonVisible.value = _audioState.value?.stopButtonVisible
-        recordButtonVisible.value = _audioState.value?.recordButtonVisible
+        playButtonEnabled.value = _audioState.value?.playButtonEnabled
+        pauseButtonEnabled.value = _audioState.value?.pauseButtonEnabled
+        stopButtonEnabled.value = _audioState.value?.stopButtonEnabled
+        recordButtonEnabled.value = _audioState.value?.recordButtonEnabled
     }
 
     fun onRecordButtonClicked() {
