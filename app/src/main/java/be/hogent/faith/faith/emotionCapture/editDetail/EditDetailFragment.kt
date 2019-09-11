@@ -20,7 +20,6 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.MakeDrawingFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.SaveEventDialog
 import be.hogent.faith.faith.emotionCapture.enterText.EnterTextFragment
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
@@ -49,10 +48,8 @@ private const val NO_AVATAR = -1
 enum class DetailType {
     TEXT,
     PICTURE,
-    MUSIC,
     AUDIO,
     DRAWING,
-    VIDEO
 }
 
 class EditDetailFragment : Fragment() {
@@ -64,7 +61,6 @@ class EditDetailFragment : Fragment() {
     private var avatarOutlineResId: Int = NO_AVATAR
 
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
-    private lateinit var saveDialog: SaveEventDialog
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

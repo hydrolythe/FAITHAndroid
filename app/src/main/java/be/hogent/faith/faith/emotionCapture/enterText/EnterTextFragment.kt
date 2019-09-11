@@ -26,6 +26,8 @@ class EnterTextFragment : Fragment() {
 
     private lateinit var enterTextBinding: FragmentEnterTextBinding
 
+    private var navigation: TextScreenNavigation? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,6 +39,13 @@ class EnterTextFragment : Fragment() {
         enterTextBinding.eventViewModel = eventViewModel
         enterTextBinding.lifecycleOwner = this
         return enterTextBinding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is TextScreenNavigation) {
+            navigation = context
+        }
     }
 
     override fun onStart() {
@@ -85,6 +94,7 @@ class EnterTextFragment : Fragment() {
         })
         eventViewModel.textSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_text_success, Toast.LENGTH_SHORT).show()
+            navigation?.backToEvent()
         })
     }
 
@@ -92,5 +102,9 @@ class EnterTextFragment : Fragment() {
         fun newInstance(): EnterTextFragment {
             return EnterTextFragment()
         }
+    }
+
+    interface TextScreenNavigation {
+        fun backToEvent()
     }
 }

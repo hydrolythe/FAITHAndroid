@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio
 
 import android.Manifest
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -27,6 +28,8 @@ class RecordAudioFragment : Fragment() {
 
     private lateinit var recordAudioBinding: FragmentRecordAudioBinding
 
+    private var navigation: AudioScreenNavigation? = null
+
     private var hasAudioRecordingPermission = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +50,13 @@ class RecordAudioFragment : Fragment() {
         recordAudioBinding.lifecycleOwner = this
 
         return recordAudioBinding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is AudioScreenNavigation) {
+            navigation = context
+        }
     }
 
     override fun onStart() {
@@ -103,6 +113,7 @@ class RecordAudioFragment : Fragment() {
     private fun startListeners() {
         eventViewModel.recordingSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
+            navigation?.backToEvent()
         })
         eventViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
@@ -113,5 +124,9 @@ class RecordAudioFragment : Fragment() {
         fun newInstance(): RecordAudioFragment {
             return RecordAudioFragment()
         }
+    }
+
+    interface AudioScreenNavigation {
+        fun backToEvent()
     }
 }

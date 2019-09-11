@@ -13,6 +13,7 @@ import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
+import be.hogent.faith.faith.emotionCapture.enterText.EnterTextFragment
 import be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
@@ -31,7 +32,11 @@ import java.util.UUID
 class EmotionCaptureMainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
     OverviewEventsFragment.OverviewEventsNavigationListener,
-    EditDetailFragment.EditDetailNavigationListener {
+    EditDetailFragment.EditDetailNavigationListener,
+    RecordAudioFragment.AudioScreenNavigation,
+    MakeDrawingFragment.DrawingScreenNavigation,
+    EnterTextFragment.TextScreenNavigation,
+    TakePhotoFragment.PhotoScreenNavigation {
 
     // This ViewModel is for the [DrawEmotionAvatarFragment], but has been defined here because it should
     // survive the activity's lifecycle, not just its own.
@@ -136,6 +141,10 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
             EditDetailFragment.newInstance(type, avatar),
             R.id.emotionCapture_fragment_container
         )
+    }
+
+    override fun backToEvent() {
+        supportFragmentManager.popBackStack()
     }
 
     override fun closeEvent() {
