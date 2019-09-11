@@ -70,4 +70,8 @@ class RecordAudioViewModel : ViewModel(), AudioContext {
     fun onPlayButtonClicked() {
         _audioState.value?.onPlayPressed()
     }
+
+    override fun onCleared() {
+        _audioState.value?.release()
+    }
 }

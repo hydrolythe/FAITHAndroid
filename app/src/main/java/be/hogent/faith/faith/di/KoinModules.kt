@@ -1,7 +1,5 @@
 package be.hogent.faith.faith.di
 
-import android.media.MediaPlayer
-import android.media.MediaRecorder
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
@@ -78,9 +76,6 @@ val appModule = module(override = true) {
     }
 
     single { AndroidTempFileProvider(androidContext()) as TempFileProvider }
-
-    single { MediaRecorder() }
-    single { MediaPlayer() }
 
     single { (callback: LoginManager.LoginCallback) -> LoginManager(callback) }
 

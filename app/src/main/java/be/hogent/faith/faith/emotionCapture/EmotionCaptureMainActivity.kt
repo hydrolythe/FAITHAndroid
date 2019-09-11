@@ -107,6 +107,14 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         alertDialog.show()
     }
 
+    private fun closeEventSpecificScopes() {
+        // Close the drawing scope so unfinished drawings aren't shown when capturing
+        // a new event.
+        runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {
+            it.close()
+        }
+    }
+
     override fun startDrawEmotionAvatarFragment() {
         val avatar =
             avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
@@ -148,6 +156,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     }
 
     override fun closeEvent() {
+        closeEventSpecificScopes()
         finish()
     }
 

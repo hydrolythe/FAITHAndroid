@@ -65,12 +65,6 @@ class RecordAudioFragment : Fragment() {
         startListeners()
     }
 
-    override fun onStop() {
-        super.onStop()
-        // TODO: make sure both the mediarecorder and audioplayer are released
-        recordAudioViewModel.audioState.value?.release()
-    }
-
     private fun hasRecordingPermissions(): Boolean {
         return checkSelfPermission(
             activity!!,
@@ -113,6 +107,9 @@ class RecordAudioFragment : Fragment() {
     private fun startListeners() {
         eventViewModel.recordingSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
+
+            recordAudioViewModel.audioState.value?.reset()
+
             navigation?.backToEvent()
         })
         eventViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->

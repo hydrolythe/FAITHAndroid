@@ -90,6 +90,12 @@ class MakeDrawingFragment : DrawFragment() {
         })
         eventViewModel.drawingSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_drawing_success, Toast.LENGTH_SHORT).show()
+
+            // Close the scope so when we start a new drawing we start with an empty canvas.
+            kotlin.runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {
+                it.close()
+            }
+
             navigation?.backToEvent()
         })
     }

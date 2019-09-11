@@ -150,9 +150,11 @@ class EventDetailsFragment : Fragment() {
             Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
             saveDialog.dismiss()
 
-            // Drawing scope can now be deleted so a new DrawingVM will be created when another
+            // Drawing scope can now be closed so a new DrawingVM will be created when another
             // drawing is made.
-            getKoin().deleteScope(KoinModules.DRAWING_SCOPE_ID)
+            runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {
+                it.close()
+            }
 
             navigation?.closeEvent()
             // Go back to main screen
