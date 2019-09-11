@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            
+
             label 'ubuntu-1604-android-slave'
         }
 
