@@ -1,5 +1,7 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.recordState
 
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import android.os.Build
 import android.util.Log
 import android.view.View
@@ -10,7 +12,11 @@ import be.hogent.faith.util.TAG
  * A state representing a paused recording
  * @throws UnsupportedOperationException if the device does not support pausing (API level 23 and below)
  */
-class RecordStatePaused(context: AudioContext) : RecordState(context) {
+class RecordStatePaused(
+    context: AudioContext,
+    override val mediaPlayer: MediaPlayer,
+    override val recorder: MediaRecorder
+) : RecordState(context) {
 
     override val playButtonVisible: Int
         get() = View.INVISIBLE
@@ -25,7 +31,7 @@ class RecordStatePaused(context: AudioContext) : RecordState(context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             recorder.resume()
             Log.d(TAG, "Paused -> Recording")
-            context.goToNextState(RecordStateRecording(context))
+            context.goToNextState(RecordStateRecording(context, mediaPlayer, recorder))
         } else {
             throw UnsupportedOperationException(
                 "Device does not support resuming! How did you even pause?!"
@@ -44,6 +50,6 @@ class RecordStatePaused(context: AudioContext) : RecordState(context) {
     override fun onStopPressed() {
         Log.d(TAG, "Paused -> Stopped")
         recorder.stop()
-        context.goToNextState(RecordStateStopped(context))
+        context.goToNextState(RecordStateStopped(context, mediaPlayer, recorder))
     }
 }

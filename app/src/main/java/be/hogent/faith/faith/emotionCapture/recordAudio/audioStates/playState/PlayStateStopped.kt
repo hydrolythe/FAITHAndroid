@@ -1,12 +1,18 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.playState
 
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import android.util.Log
 import android.view.View
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.recordState.RecordStateRecording
 import be.hogent.faith.util.TAG
 
-class PlayStateStopped(context: AudioContext) : PlayState(context) {
+class PlayStateStopped(
+    context: AudioContext,
+    override val mediaPlayer: MediaPlayer,
+    override val recorder: MediaRecorder
+) : PlayState(context) {
 
     override val playButtonVisible: Int
         get() = View.VISIBLE
@@ -22,7 +28,7 @@ class PlayStateStopped(context: AudioContext) : PlayState(context) {
         mediaPlayer.prepare()
         // Go to Started state
         mediaPlayer.start()
-        context.goToNextState(PlayStatePlaying(context))
+        context.goToNextState(PlayStatePlaying(context, mediaPlayer, recorder))
     }
 
     override fun onPausePressed() {
@@ -37,6 +43,12 @@ class PlayStateStopped(context: AudioContext) : PlayState(context) {
         Log.d(TAG, "Stopped -> Recording. Resetting the Mediaplayer")
         // Resetting is required so we can start the initialisation process from scratch.
         mediaPlayer.reset()
-        context.goToNextState(RecordStateRecording.getRecordingState(context))
+        context.goToNextState(
+            RecordStateRecording.getRecordingState(
+                context,
+                mediaPlayer,
+                recorder
+            )
+        )
     }
 }

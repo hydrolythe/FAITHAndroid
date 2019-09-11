@@ -1,12 +1,16 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.recordState
 
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import android.util.Log
 import android.view.View
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
 import be.hogent.faith.util.TAG
-import org.koin.core.KoinComponent
 
-class RecordStateInitial(context: AudioContext) : RecordState(context), KoinComponent {
+class RecordStateInitial(context: AudioContext) : RecordState(context) {
+
+    override val mediaPlayer: MediaPlayer = MediaPlayer()
+    override val recorder: MediaRecorder = MediaRecorder()
 
     override val playButtonVisible: Int
         get() = View.INVISIBLE
@@ -28,7 +32,7 @@ class RecordStateInitial(context: AudioContext) : RecordState(context), KoinComp
     override fun onRecordPressed() {
         Log.d(TAG, "Initial -> Recording")
         recorder.start()
-        context.goToNextState(RecordStateRecording(context))
+        context.goToNextState(RecordStateRecording(context, mediaPlayer, recorder))
     }
 
     override fun onPausePressed() {

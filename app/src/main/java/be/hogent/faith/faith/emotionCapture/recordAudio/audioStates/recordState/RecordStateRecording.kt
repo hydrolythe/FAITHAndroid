@@ -1,19 +1,29 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.recordState
 
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import android.os.Build
 import android.util.Log
 import android.view.View
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
 import be.hogent.faith.util.TAG
 
-class RecordStateRecording(context: AudioContext) : RecordState(context) {
+class RecordStateRecording(
+    context: AudioContext,
+    override val mediaPlayer: MediaPlayer,
+    override val recorder: MediaRecorder
+) : RecordState(context) {
 
     companion object {
         /**
          * Get a new RecordStateRecording in the Recording State
          */
-        fun getRecordingState(context: AudioContext): RecordStateRecording {
-            return RecordStateRecording(context).apply {
+        fun getRecordingState(
+            context: AudioContext,
+            mediaPlayer: MediaPlayer,
+            recorder: MediaRecorder
+        ): RecordStateRecording {
+            return RecordStateRecording(context, mediaPlayer, recorder).apply {
                 initializeRecorder()
                 recorder.start()
             }
@@ -47,7 +57,7 @@ class RecordStateRecording(context: AudioContext) : RecordState(context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Log.d(TAG, "Recording -> Paused")
             recorder.pause()
-            context.goToNextState(RecordStatePaused(context))
+            context.goToNextState(RecordStatePaused(context, mediaPlayer, recorder))
         } else {
             Log.d(
                 TAG,
@@ -59,6 +69,6 @@ class RecordStateRecording(context: AudioContext) : RecordState(context) {
     override fun onStopPressed() {
         Log.d(TAG, "Recording -> Stopped")
         recorder.stop()
-        context.goToNextState(RecordStateStopped(context))
+        context.goToNextState(RecordStateStopped(context, mediaPlayer, recorder))
     }
 }
