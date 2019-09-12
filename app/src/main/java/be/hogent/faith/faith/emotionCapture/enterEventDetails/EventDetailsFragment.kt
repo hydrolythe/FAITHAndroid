@@ -99,7 +99,7 @@ class EventDetailsFragment : Fragment() {
 
     private fun setBackgroundImage() {
         Glide.with(requireContext())
-            .load(R.drawable.park)
+            .load(R.drawable.park2)
             .into(background_event_details)
     }
 
