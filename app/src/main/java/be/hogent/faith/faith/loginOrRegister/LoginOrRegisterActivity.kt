@@ -15,7 +15,7 @@ import be.hogent.faith.faith.util.replaceFragment
 import be.hogent.faith.util.TAG
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.getViewModel
-import org.koin.core.error.ScopeNotCreatedException
+import org.koin.core.error.ScopeAlreadyCreatedException
 import org.koin.core.qualifier.named
 
 class LoginOrRegisterActivity : AppCompatActivity(),
@@ -51,7 +51,7 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         // This sometimes happens when running tests that reuse the same Activity twice
         try {
             getKoin().createScope(KoinModules.USER_SCOPE_ID, named(USER_SCOPE_NAME))
-        } catch (e: ScopeNotCreatedException) {
+        } catch (e: ScopeAlreadyCreatedException) {
             Log.i(TAG, "User scope already existed, not recreating")
         }
     }

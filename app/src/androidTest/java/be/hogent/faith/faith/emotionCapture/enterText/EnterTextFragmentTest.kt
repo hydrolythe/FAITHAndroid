@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.enterText
 
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -46,8 +47,9 @@ class EnterTextFragmentTest {
 
     @Test
     fun enterTextFragment_saveSuccessful_backToPark() {
+        closeSoftKeyboard()
         onView(withId(R.id.btn_enter_text_save)).perform(click())
-        Thread.sleep(1000)
+        Thread.sleep(3000)
         onView(withId(R.id.screen_new_event)).check(matches(isDisplayed()))
     }
 
@@ -57,7 +59,6 @@ class EnterTextFragmentTest {
     @Test
     fun enterTextFragment_enterText_OK() {
 
-    val stringToBetyped = "Hello world"
     onWebView(ViewMatchers.withId(R.id.editor)).forceJavascriptEnabled()
     nWebView(ViewMatchers.withId(R.id.editor)).withElement(findElement(Locator.ID, "editor")).perform(webClick())
     onWebView(ViewMatchers.withId(R.id.editor)).withElement(findElement(Locator.ID, "editor")).perform(webKeys(stringToBetyped))
