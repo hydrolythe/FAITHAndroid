@@ -283,12 +283,8 @@ class EventViewModel(
 
     //region saveText
     fun saveText(text: String?) {
-        if (!text.isNullOrBlank()) {
-            val params = SaveEventTextUseCase.SaveTextParams(event.value!!, text)
-            saveEventTextUseCase.execute(params, SaveTextUseCaseHandler())
-        } else {
-            _errorMessage.postValue(R.string.save_text_error_empty)
-        }
+        val params = SaveEventTextUseCase.SaveTextParams(event.value!!, text ?: "")
+        saveEventTextUseCase.execute(params, SaveTextUseCaseHandler())
     }
 
     private inner class SaveTextUseCaseHandler : DisposableCompletableObserver() {

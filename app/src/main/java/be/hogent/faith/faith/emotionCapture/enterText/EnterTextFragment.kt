@@ -1,7 +1,5 @@
 package be.hogent.faith.faith.emotionCapture.enterText
 
-// uses https://github.com/wasabeef/richeditor-android
-
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -17,9 +15,10 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterTextBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.util.TAG
-import kotlinx.android.synthetic.main.fragment_enter_text.editor
+import kotlinx.android.synthetic.main.fragment_enter_text.enterText_editor
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
+// uses https://github.com/wasabeef/richeditor-android
 class EnterTextFragment : Fragment() {
     protected val enterTextViewModel: EnterTextViewModel by sharedViewModel()
     private val eventViewModel: EventViewModel by sharedViewModel()
@@ -56,37 +55,39 @@ class EnterTextFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        editor.html = enterTextViewModel.text.value ?: ""
+        enterText_editor.html = enterTextViewModel.text.value ?: ""
     }
 
     private fun initEditor() {
-        editor.setEditorHeight(200)
-        editor.setEditorFontSize(30)
-        editor.setPadding(10, 10, 10, 10)
-        editor.focusEditor()
+        with(enterText_editor) {
+            setEditorHeight(200)
+            setEditorFontSize(30)
+            setPadding(10, 10, 10, 10)
+            setOnTextChangeListener {
+                enterTextViewModel.textChanged(it)
+            }
+            focusEditor()
+        }
         val inputMethodManager =
             context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.showSoftInput(editor, InputMethodManager.SHOW_IMPLICIT)
-        editor.setOnTextChangeListener {
-            enterTextViewModel.textChanged(it)
-        }
+        inputMethodManager.showSoftInput(enterText_editor, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun setUpListeners() {
         enterTextViewModel.selectedTextColor.observe(this, Observer { newColor ->
-            editor.setTextColor(newColor)
+            enterText_editor.setTextColor(newColor)
         })
         enterTextViewModel.boldClicked.observe(this, Observer {
-            editor.setBold()
+            enterText_editor.setBold()
         })
         enterTextViewModel.italicClicked.observe(this, Observer {
-            editor.setItalic()
+            enterText_editor.setItalic()
         })
         enterTextViewModel.underlineClicked.observe(this, Observer {
-            editor.setUnderline()
+            enterText_editor.setUnderline()
         })
         enterTextViewModel.selectedFontSize.observe(this, Observer { newSize ->
-            editor.setFontSize(newSize.size)
+            enterText_editor.setFontSize(newSize.size)
         })
         eventViewModel.errorMessage.observe(this, Observer { errorMessageResourceId ->
             Toast.makeText(context, errorMessageResourceId, Toast.LENGTH_SHORT).show()

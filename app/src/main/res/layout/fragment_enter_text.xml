@@ -264,7 +264,7 @@
 
 
                 <jp.wasabeef.richeditor.RichEditor
-                    android:id="@+id/editor"
+                    android:id="@+id/enterText_editor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
