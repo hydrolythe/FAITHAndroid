@@ -17,15 +17,38 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_enter_text.enterText_editor
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import java.io.File
 
 // uses https://github.com/wasabeef/richeditor-android
+private const val TEXT_FILE_ARG = "location of text file"
+
 class EnterTextFragment : Fragment() {
-    protected val enterTextViewModel: EnterTextViewModel by sharedViewModel()
+
+    private val enterTextViewModel: EnterTextViewModel by sharedViewModel()
     private val eventViewModel: EventViewModel by sharedViewModel()
 
     private lateinit var enterTextBinding: FragmentEnterTextBinding
 
     private var navigation: TextScreenNavigation? = null
+
+    companion object {
+        fun newInstance(): EnterTextFragment {
+            return EnterTextFragment()
+        }
+
+        fun newInstance(file: File): EnterTextFragment {
+            return EnterTextFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(TEXT_FILE_ARG, file)
+                }
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enterTextViewModel.loadText(arguments?.getSerializable(TEXT_FILE_ARG) as File)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,7 +87,7 @@ class EnterTextFragment : Fragment() {
             setEditorFontSize(30)
             setPadding(10, 10, 10, 10)
             setOnTextChangeListener {
-                enterTextViewModel.textChanged(it)
+                enterTextViewModel.setText(it)
             }
             focusEditor()
         }
@@ -97,12 +120,6 @@ class EnterTextFragment : Fragment() {
             Toast.makeText(context, R.string.save_text_success, Toast.LENGTH_SHORT).show()
             navigation?.backToEvent()
         })
-    }
-
-    companion object {
-        fun newInstance(): EnterTextFragment {
-            return EnterTextFragment()
-        }
     }
 
     interface TextScreenNavigation {

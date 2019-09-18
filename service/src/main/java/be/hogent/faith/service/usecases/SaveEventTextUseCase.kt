@@ -11,7 +11,7 @@ class SaveEventTextUseCase(
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEventTextUseCase.SaveTextParams>(observeScheduler) {
 
-    override fun buildUseCaseObservable(params: SaveEventTextUseCase.SaveTextParams): Completable {
+    override fun buildUseCaseObservable(params: SaveTextParams): Completable {
         return Completable.fromSingle(
             storageRepository.saveText(params.text, params.event)
                 .doOnSuccess { storedFile ->
