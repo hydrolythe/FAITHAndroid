@@ -121,19 +121,25 @@ class StorageRepository(private val context: Context) {
     }
 
     /**
-     *  Writes HTML to a text file
+     *  Writes a String to a text file
      *
-     * @param text the html
+     * @param text the String
      * @param event the [Event] this text will be added to as a detail (not by this function).
      *          Used to store the text in a folder specific for the event.
-     * @param fileName Will be used for the filename.
      */
-    fun saveText(text: String, event: Event): Single<File>
-    {
+    fun saveText(text: String, event: Event): Single<File> {
         return Single.fromCallable {
-            val storedFile = File(getEventTextDirectory(event), "${createSaveFileName()}.$TEXT_EXTENSION")
+            val storedFile =
+                File(getEventTextDirectory(event), "${createSaveFileName()}.$TEXT_EXTENSION")
             storedFile.writeText(text)
             storedFile
+        }
+    }
+
+    fun loadText(file: File): Single<String> {
+        return Single.fromCallable {
+            val readString = file.readText()
+            readString
         }
     }
 }
