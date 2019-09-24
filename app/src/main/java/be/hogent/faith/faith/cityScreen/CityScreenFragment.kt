@@ -24,8 +24,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_city_screen.background_city_screen
 import kotlinx.android.synthetic.main.fragment_city_screen.guide_loc2_bottom
 import kotlinx.android.synthetic.main.fragment_city_screen.guide_loc2_top
+import kotlinx.android.synthetic.main.fragment_city_screen.guide_pole_bottom
 import kotlinx.android.synthetic.main.fragment_city_screen.guide_pole_left_end
 import kotlinx.android.synthetic.main.fragment_city_screen.guide_pole_left_start
+import kotlinx.android.synthetic.main.fragment_city_screen.guide_pole_right_start
 import kotlinx.android.synthetic.main.fragment_city_screen.image_main_avatar
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
@@ -100,7 +102,7 @@ class CityScreenFragment : Fragment() {
                 val left = (screenWidth - displayedWidth) / 2
                 val top = (screenHeight - displayedHeight) / 2
 
-                // Adjust the guide lines
+                // Adjust the guide lines for the park
                 adjustGuidelineAfterScaling(guide_pole_left_end, left, displayedWidth, screenWidth)
                 adjustGuidelineAfterScaling(
                     guide_pole_left_start,
@@ -110,6 +112,21 @@ class CityScreenFragment : Fragment() {
                 )
                 adjustGuidelineAfterScaling(guide_loc2_bottom, top, displayedHeight, screenHeight)
                 adjustGuidelineAfterScaling(guide_loc2_top, top, displayedHeight, screenHeight)
+
+                // Adjust the guide lines for the library
+                adjustGuidelineAfterScaling(
+                    guide_pole_right_start,
+                    left,
+                    displayedWidth,
+                    screenWidth
+                )
+                adjustGuidelineAfterScaling(
+                    guide_pole_left_start,
+                    left,
+                    displayedWidth,
+                    screenWidth
+                )
+                adjustGuidelineAfterScaling(guide_pole_bottom, top, displayedHeight, screenHeight)
             }
         })
     }
