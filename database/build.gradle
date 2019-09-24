@@ -59,6 +59,11 @@ dependencies {
     implementation databaseDependencies.room_rxjava
     kapt databaseDependencies.room_compiler
 
+    //firebase components
+    implementation 'com.github.FrangSierra:RxFirebase:1.5.6'
+    implementation 'com.google.firebase:firebase-auth:19.0.0'
+
+    //test
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
     //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone

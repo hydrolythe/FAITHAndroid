@@ -4,12 +4,14 @@ import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.daos.UserDao
 import be.hogent.faith.database.database.EntityDatabase
+import be.hogent.faith.database.firebase.AuthManagerImpl
 import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.EventWithDetailsMapper
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.repositories.EventRepositoryImpl
 import be.hogent.faith.database.repositories.UserRepositoryImpl
+import be.hogent.faith.domain.repository.AuthManager
 import be.hogent.faith.domain.repository.EventRepository
 import be.hogent.faith.domain.repository.UserRepository
 import org.koin.android.ext.koin.androidContext
@@ -21,6 +23,7 @@ val databaseModule = module {
     single { UserMapper }
     single { DetailMapper }
 
+
     single { EntityDatabase.getDatabase(androidContext()) }
     single { constructEventDao(get()) }
     single { constructDetailDao(get()) }
@@ -31,6 +34,7 @@ val databaseModule = module {
     // so we have to explicitly mention it.
     single { EventRepositoryImpl(get(), get(), get(), get()) as EventRepository }
     single { UserRepositoryImpl(get(), get(), get()) as UserRepository }
+    single {AuthManagerImpl() as AuthManager}
 }
 
 fun constructEventDao(entityDatabase: EntityDatabase): EventDao {

@@ -69,6 +69,7 @@
     <string name="cancel">@android:string/cancel</string>
     <string name="txt_error_userNameOrAvatarNotSet">Vul je naam in en selecteer een avatar</string>
     <string name="error_save_user_failed">Het opslaan van de nieuwe gebruiker is gefaald.</string>
+    <string name="error_register_user_failed">Het opslaan van de nieuwe gebruiker is gefaald.</string>
     <string name="error_event_no_title">Je moet een titel geven aan je gebeurtenis.</string>
     <string name="lbl_save_event_notes">Notities</string>
     <string name="lbl_save_event_date">Dag</string>

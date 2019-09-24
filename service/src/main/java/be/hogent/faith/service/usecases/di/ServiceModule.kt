@@ -3,6 +3,7 @@ package be.hogent.faith.service.usecases.di
 import be.hogent.faith.service.usecases.CreateUserUseCase
 import be.hogent.faith.service.usecases.GetEventsUseCase
 import be.hogent.faith.service.usecases.GetUserUseCase
+import be.hogent.faith.service.usecases.RegisterUserUseCase
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
 import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
@@ -22,6 +23,7 @@ val serviceModule = module {
     factory { CreateUserUseCase(get(), get()) }
     factory { SaveEmotionAvatarUseCase(get(), get()) }
     factory { GetUserUseCase(get(), get()) }
+    factory { RegisterUserUseCase(get(), get()) }
     factory { SaveEventTextUseCase(get(), get()) }
     factory { SaveEventPhotoUseCase(get(), get()) }
     factory { SaveEventAudioUseCase(get(), get()) }

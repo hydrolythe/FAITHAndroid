@@ -38,6 +38,10 @@ class RegisterUserInfoFragment : Fragment() {
             navigation!!.goToRegisterAvatarScreen()
         })
 
+        registerUserInfoViewModel.UserRegisteredSuccessFully.observe(this, Observer {
+            navigation!!.goToRegisterAvatarScreen()
+        })
+
         registerUserInfoViewModel.errorMessage.observe(this, Observer { errorMessageID ->
             Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
         })
