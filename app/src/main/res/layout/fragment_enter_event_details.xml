@@ -19,8 +19,11 @@
             android:id="@+id/background_event_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/park_gras"
             android:contentDescription="@string/descr_city_park"
-            tools:src="@drawable/park" />
+            android:scaleType="fitStart"
+            app:srcCompat="@drawable/park"
+            tools:srcCompat="@drawable/park" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/screen_new_event"
@@ -71,20 +74,6 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.68" />
 
-
-            <EditText
-                android:id="@+id/txt_event_details_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
-                android:hint="@string/event_details_title"
-                android:inputType="text"
-                android:text="@={eventViewModel.eventTitle}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                app:layout_constraintBottom_toTopOf="@+id/guide_avatar_titel_bottom"
-                app:layout_constraintStart_toStartOf="@+id/guide_avatar_titel_left"
-                tools:text="@string/event_details_title" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/event_details_upperDivider"
