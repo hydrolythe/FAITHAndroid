@@ -118,18 +118,20 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_left_pole"
                 app:layout_constraintTop_toTopOf="@+id/guide_top_pole" />
 
-            <Button
+            <be.hogent.faith.faith.views.RightArrow
                 android:id="@+id/btn_event_details_drawing"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@android:color/transparent"
                 android:contentDescription="@string/description_addDrawing"
                 android:onClick="@{() -> eventViewModel.onDrawingButtonClicked()}"
+                app:image="@drawable/icoon_stad"
                 app:layout_constraintBottom_toTopOf="@+id/guide_middle_horizontal_pole"
                 app:layout_constraintEnd_toStartOf="@+id/guide_right_pole"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
                 app:layout_constraintTop_toTopOf="@+id/guide_top_pole"
-                app:srcCompat="@drawable/event_detail_drawing" />
+                app:layout_constraintVertical_bias="0.0"
+                app:text="Tekenen" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_vertical_avatar"
@@ -269,6 +271,7 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_avatar_inkleuren_left"
                 app:layout_constraintTop_toBottomOf="@+id/guide_avatar_inkleuren_top"
                 app:srcCompat="@drawable/meisje_stoer_gezicht" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
