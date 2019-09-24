@@ -47,10 +47,10 @@
     <string name="frag_takePhoto_goToEmotionAvatar">Ga naar emotieavatar</string>
     <string name="frag_takePhoto_takePhoto">Neem foto</string>
     <string name="description_thumbnail">Miniatuur</string>
-    <string name="description_addText">Tekst toevoegen</string>
-    <string name="description_addPhoto">Foto toevoegen</string>
-    <string name="description_addAudio">Geluidsopname toevoegen</string>
-    <string name="description_addDrawing">Tekening toevoegen</string>
+    <string name="description_addText">Schrijven</string>
+    <string name="description_addPhoto">Foto maken</string>
+    <string name="description_addAudio">Opnemen</string>
+    <string name="description_addDrawing">Tekenen</string>
     <string name="error_save_photo">Er ging iets mis bij het opslaan van je foto.</string>
     <string name="hint_photo_name">een naam voor je foto</string>
     <string name="lbl_name">Naam:</string>
@@ -119,4 +119,5 @@
     <string name="com_auth0_client_id">VRX5hqPAdDhkj5DJJ9df4Q4SMZS06io9</string>
     <string name="com_auth0_domain">e-quality.eu.auth0.com</string>
     <string name="lbl_archive">Je archief</string>
+    <string name="description_arrow_right">Icon for arrow to the right</string>
 </resources>
