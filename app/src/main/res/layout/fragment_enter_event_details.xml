@@ -82,10 +82,12 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.15" />
 
-            <Button
+            <be.hogent.faith.faith.views.RightArrow
                 android:id="@+id/btn_event_details_text"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                app:image="@drawable/icoon_stad"
+                app:text="@string/description_addText"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/description_addText"
                 android:onClick="@{() -> eventViewModel.onTextButtonClicked()}"
@@ -94,11 +96,13 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
                 app:layout_constraintTop_toTopOf="@+id/guide_middle_horizontal_pole" />
 
-            <Button
+            <be.hogent.faith.faith.views.LeftArrow
                 android:id="@+id/btn_event_details_camera"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                app:image="@drawable/icoon_stad"
                 android:background="@android:color/transparent"
+                app:text="@string/description_addPhoto"
                 android:contentDescription="@string/description_addPhoto"
                 android:onClick="@{() -> eventViewModel.onCameraButtonClicked()}"
                 app:layout_constraintBottom_toTopOf="@+id/guide_bottom_pole"
@@ -106,11 +110,12 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_left_pole"
                 app:layout_constraintTop_toTopOf="@+id/guide_middle_horizontal_pole" />
 
-            <Button
+            <be.hogent.faith.faith.views.LeftArrow
                 android:id="@+id/btn_event_details_audio"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@android:color/transparent"
+                app:image="@drawable/icoon_stad"
+                app:text="@string/description_addAudio"
                 android:contentDescription="@string/description_addAudio"
                 android:onClick="@{() -> eventViewModel.onAudioButtonClicked()}"
                 app:layout_constraintBottom_toTopOf="@+id/guide_middle_horizontal_pole"
@@ -131,7 +136,7 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
                 app:layout_constraintTop_toTopOf="@+id/guide_top_pole"
                 app:layout_constraintVertical_bias="0.0"
-                app:text="Tekenen" />
+                app:text="@string/description_addDrawing" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_vertical_avatar"
