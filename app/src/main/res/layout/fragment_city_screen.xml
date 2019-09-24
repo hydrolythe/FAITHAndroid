@@ -14,17 +14,21 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background_city"
         android:orientation="vertical">
         <!--ACHTERGROND-->
+
+        <!-- KNOPPEN -->
+        <!-- Invisible to make it transparent -->
         <ImageView
             android:id="@+id/background_city_screen"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/frag_main_descr_city_plan"
-            tools:src="@drawable/citymap_faith" />
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/stad"
+            tools:srcCompat="@drawable/stad" />
 
-        <!-- KNOPPEN -->
-        <!-- Invisible to make it transparent -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -82,7 +86,7 @@
                 android:layout_width="8dp"
                 android:layout_height="12dp"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.39" />
+                app:layout_constraintGuide_percent="0.37" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_loc2_top"
@@ -143,7 +147,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.66" />
+                app:layout_constraintGuide_percent="0.8" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>
