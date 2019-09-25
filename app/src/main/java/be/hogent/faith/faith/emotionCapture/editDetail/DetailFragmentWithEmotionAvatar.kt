@@ -34,7 +34,7 @@ import kotlinx.android.synthetic.main.fragment_edit_detail.image_editDetail_avat
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.io.File
+import java.util.UUID
 
 /**
  * Key for this Fragment's [Bundle] to hold the resource ID pointing to the outline drawing of the avatarName.
@@ -127,19 +127,17 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
     }
 
     companion object {
-        private const val DETAIL_SAVEFILE_LOCATION = "location of the savefile with the text"
+        private const val DETAIL_UUID = "UUID of the Detail"
         fun newInstance(detail: Detail, @DrawableRes avatarOutLineId: Int): DetailFragmentWithEmotionAvatar {
-            val args = getBundleForAvatarOutline(avatarOutLineId).apply {
-                putSerializable(DETAIL_SAVEFILE_LOCATION, detail.file)
-            }
-            val newFragment: DetailFragmentWithEmotionAvatar = when (detail) {
+            return when (detail) {
                 is AudioDetail -> AudioFragmentWithEmotionAvatar()
-                is TextDetail -> TextFragmentWithEmotionAvatar()
+                is TextDetail -> TextFragmentWithEmotionAvatar.newInstance(
+                    avatarOutLineId,
+                    detail.uuid
+                )
                 is DrawingDetail -> DrawingFragmentWithEmotionAvatar()
                 is PhotoDetail -> PhotoFragmentWithEmotionAvatar()
             }
-            newFragment.arguments = args
-            return newFragment
         }
 
         private fun getBundleForAvatarOutline(@DrawableRes avatarOutLineId: Int): Bundle {
@@ -190,17 +188,25 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                     arguments = getBundleForAvatarOutline(avatarOutLineId)
                 }
             }
+
+            fun newInstance(@DrawableRes avatarOutLineId: Int, detailUUID: UUID): TextFragmentWithEmotionAvatar {
+                return TextFragmentWithEmotionAvatar().apply {
+                    arguments = getBundleForAvatarOutline(avatarOutLineId).apply {
+                        putSerializable(DETAIL_UUID, detailUUID)
+                    }
+                }
+            }
         }
 
         override fun setChildFragment() {
-            val saveFile = arguments?.getSerializable(DETAIL_SAVEFILE_LOCATION)
-            if (saveFile == null) {
+            val detailUuid = arguments?.getSerializable(DETAIL_UUID) as UUID?
+            if (detailUuid == null) {
                 replaceChildFragment(
                     EnterTextFragment.newInstance(), R.id.fragment_container_editDetail
                 )
             } else {
                 replaceChildFragment(
-                    EnterTextFragment.newInstance(saveFile as File),
+                    EnterTextFragment.newInstance(detailUuid),
                     R.id.fragment_container_editDetail
                 )
             }

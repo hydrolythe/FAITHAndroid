@@ -99,7 +99,7 @@ class EnterTextViewModelTest {
         viewModel.text.observeForever(textObserver)
 
         // Act
-        viewModel.loadText(saveFile)
+        viewModel.loadExistingTextDetail(saveFile)
         verify { loadTextDetailUseCase.execute(capture(params), capture(resultObserver)) }
         resultObserver.captured.onSuccess(text)
 
@@ -118,7 +118,7 @@ class EnterTextViewModelTest {
         viewModel.errorMessage.observeForever(errorObserver)
 
         // Act
-        viewModel.loadText(saveFile)
+        viewModel.loadExistingTextDetail(saveFile)
         verify { loadTextDetailUseCase.execute(any(), capture(resultObserver)) }
         resultObserver.captured.onError(RuntimeException())
 

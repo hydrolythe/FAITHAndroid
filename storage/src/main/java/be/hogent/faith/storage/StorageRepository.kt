@@ -3,6 +3,7 @@ package be.hogent.faith.storage
 import android.content.Context
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.TextDetail
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -136,9 +137,9 @@ class StorageRepository(private val context: Context) {
         }
     }
 
-    fun loadText(file: File): Single<String> {
+    fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String> {
         return Single.fromCallable {
-            val readString = file.readText()
+            val readString = textDetail.file.readText()
             readString
         }
     }
