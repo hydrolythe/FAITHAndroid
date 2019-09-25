@@ -91,7 +91,6 @@ class EnterTextFragment : Fragment() {
         })
         eventViewModel.errorMessage.observe(this, Observer { errorMessageResourceId ->
             Toast.makeText(context, errorMessageResourceId, Toast.LENGTH_SHORT).show()
-            Log.e(TAG, "saving textdetail failed : ${getString(errorMessageResourceId)}")
         })
         eventViewModel.textSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_text_success, Toast.LENGTH_SHORT).show()

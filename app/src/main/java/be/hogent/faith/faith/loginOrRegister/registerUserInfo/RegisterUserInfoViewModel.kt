@@ -12,10 +12,9 @@ class RegisterUserInfoViewModel : ViewModel() {
     val userName = MutableLiveData<String>()
     val password = MutableLiveData<String>()
     val passwordRepeated = MutableLiveData<String>()
-
-    private val _errorMessage = MutableLiveData<@IdRes Int>()
-    val errorMessage: LiveData<Int>
-        get() = _errorMessage
+    val userNameErrorMessage = MutableLiveData<Int>()
+    val passwordErrorMessage = MutableLiveData<Int>()
+    val passwordRepeatErrorMessage = MutableLiveData<Int>()
 
     private val _confirmUserInfoClicked = SingleLiveEvent<Unit>()
     val confirmUserInfoClicked: LiveData<Unit>
@@ -29,7 +28,7 @@ class RegisterUserInfoViewModel : ViewModel() {
 
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
-            _errorMessage.postValue(R.string.register_username_empty)
+            userNameErrorMessage.value = R.string.register_username_empty
             return false
         }
         return true
@@ -37,11 +36,11 @@ class RegisterUserInfoViewModel : ViewModel() {
 
     private fun passwordIsValid(): Boolean {
         if (password.value.isNullOrBlank()) {
-            _errorMessage.postValue(R.string.register_password_empty)
+            passwordErrorMessage.value = R.string.register_password_empty
             return false
         }
         if (password.value != passwordRepeated.value) {
-            _errorMessage.postValue(R.string.register_passwords_nomatch)
+            passwordRepeatErrorMessage.value = R.string.register_passwords_nomatch
             return false
         }
         return true
