@@ -26,7 +26,7 @@ class LoadTextUseCaseTest {
     @Test
     fun loadTextUC_normal_returnsTextFromFile() {
         // Arrange
-        every { repository.loadText(saveFile) } returns Single.just(text)
+        every { repository.loadTextFromExistingDetail(saveFile) } returns Single.just(text)
 
         // Act
         loadTextUseCase.buildUseCaseSingle(
@@ -35,13 +35,13 @@ class LoadTextUseCaseTest {
             .assertValue(text)
 
         // Assert
-        verify { repository.loadText(saveFile) }
+        verify { repository.loadTextFromExistingDetail(saveFile) }
     }
 
     @Test
     fun loadTextUC_repoThrowsError_passesError() {
         // Arrange
-        every { repository.loadText(saveFile) } returns Single.error(RuntimeException())
+        every { repository.loadTextFromExistingDetail(saveFile) } returns Single.error(RuntimeException())
 
         // Act & Assert
         loadTextUseCase.buildUseCaseSingle(

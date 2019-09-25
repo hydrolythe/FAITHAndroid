@@ -7,9 +7,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.service.usecases.LoadTextDetailUseCase
 import io.reactivex.observers.DisposableSingleObserver
-import java.io.File
 
 class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCase) : ViewModel() {
 
@@ -70,8 +70,8 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
         _text.value = text
     }
 
-    fun loadText(file: File) {
-        val params = LoadTextDetailUseCase.LoadTextParams(file)
+    fun loadExistingTextDetail(textDetail: TextDetail) {
+        val params = LoadTextDetailUseCase.LoadTextParams(textDetail)
         loadTextDetailUseCase.execute(params, LoadTextUseCaseHandler())
     }
 
