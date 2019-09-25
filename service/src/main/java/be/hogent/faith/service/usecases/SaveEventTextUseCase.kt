@@ -1,6 +1,7 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
@@ -12,15 +13,20 @@ class SaveEventTextUseCase(
 ) : CompletableUseCase<SaveEventTextUseCase.SaveTextParams>(observeScheduler) {
 
     override fun buildUseCaseObservable(params: SaveTextParams): Completable {
-        return Completable.fromSingle(
-            storageRepository.saveText(params.text, params.event)
-                .doOnSuccess { storedFile ->
-                    params.event.addNewTextDetail(storedFile, "textName")
-                })
+        return if (params.existingDetail != null) {
+            storageRepository.overWriteTextDetail(params.text, params.existingDetail)
+        } else {
+            Completable.fromSingle(
+                storageRepository.saveText(params.text, params.event)
+                    .doOnSuccess { storedFile ->
+                        params.event.addNewTextDetail(storedFile, "textName")
+                    })
+        }
     }
 
     class SaveTextParams(
         val event: Event,
-        val text: String
+        val text: String,
+        val existingDetail: TextDetail? = null
     )
 }

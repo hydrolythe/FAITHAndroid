@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.TextDetail
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -141,6 +142,12 @@ class StorageRepository(private val context: Context) {
         return Single.fromCallable {
             val readString = textDetail.file.readText()
             readString
+        }
+    }
+
+    fun overWriteTextDetail(text: String, existingDetail: TextDetail): Completable {
+        return Completable.fromCallable {
+            existingDetail.file.writeText(text)
         }
     }
 }
