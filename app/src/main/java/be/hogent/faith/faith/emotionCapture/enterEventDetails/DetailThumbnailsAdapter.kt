@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.PictureDetail
+import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.AUDIO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.PICTURE_DETAIL
@@ -17,13 +17,15 @@ object DetailTypes {
     const val PICTURE_DETAIL = 3
 }
 
-class DetailThumbnailsAdapter(details: List<Detail>) :
-    RecyclerView.Adapter<DetailViewHolder>() {
+class DetailThumbnailsAdapter(
+    details: List<Detail>,
+    private val existingDetailNavigationListener: DetailViewHolder.ExistingDetailNavigationListener
+) : RecyclerView.Adapter<DetailViewHolder>() {
 
     private val _details = details.toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
-        return DetailViewHolderFactory.createViewHolder(parent, viewType)
+        return DetailViewHolderFactory.createViewHolder(parent, viewType, existingDetailNavigationListener)
     }
 
     override fun getItemCount(): Int {
@@ -33,7 +35,7 @@ class DetailThumbnailsAdapter(details: List<Detail>) :
     override fun getItemViewType(position: Int): Int {
         return when (_details[position]) {
             is AudioDetail -> AUDIO_DETAIL
-            is PictureDetail -> PICTURE_DETAIL
+            is DrawingDetail -> PICTURE_DETAIL
             is TextDetail -> TEXT_DETAIL
             else -> throw IllegalArgumentException("Unknown DetailType found in DetailAdapter")
         }

@@ -11,9 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
+import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -91,7 +92,10 @@ class EventDetailsFragment : Fragment() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             // Start with empty list and then fill it in
-            adapter = DetailThumbnailsAdapter(emptyList())
+            adapter = DetailThumbnailsAdapter(
+                emptyList(),
+                requireNotNull(activity) as EmotionCaptureMainActivity
+            )
         }
         detailThumbnailsAdapter =
             eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
@@ -122,19 +126,19 @@ class EventDetailsFragment : Fragment() {
         })
         eventViewModel.cameraButtonClicked.observe(this, Observer {
             // navigation?.startTakePhotoFragment()
-            navigation?.startEventDetail(DetailType.PICTURE)
+            navigation?.startPhotoDetailFragment()
         })
         eventViewModel.audioButtonClicked.observe(this, Observer {
             // navigation?.startRecordAudioFragment()
-            navigation?.startEventDetail(DetailType.AUDIO)
+            navigation?.startAudioDetailFragment()
         })
         eventViewModel.textButtonClicked.observe(this, Observer {
             // navigation?.startRecordAudioFragment()
-            navigation?.startEventDetail(DetailType.TEXT)
+            navigation?.startTextDetailFragment()
         })
         eventViewModel.drawingButtonClicked.observe(this, Observer {
             // navigation?.startMakeDrawingFragment()
-            navigation?.startEventDetail(DetailType.DRAWING)
+            navigation?.startDrawingDetailFragment()
         })
 
         eventViewModel.errorMessage.observe(this, Observer { errorMessage ->
@@ -172,12 +176,13 @@ class EventDetailsFragment : Fragment() {
 
     interface EventDetailsNavigationListener {
         fun startDrawEmotionAvatarFragment()
-        fun startTakePhotoFragment()
-        fun startRecordAudioFragment()
-        fun startMakeDrawingFragment()
+        fun startPhotoDetailFragment()
+        fun startAudioDetailFragment()
+        fun startDrawingDetailFragment()
+        fun startTextDetailFragment()
 
-        // TODO: verwijderen van DetailType
-        fun startEventDetail(type: DetailType)
+        fun openDetailScreenFor(detail: Detail)
+
         fun closeEvent()
     }
 

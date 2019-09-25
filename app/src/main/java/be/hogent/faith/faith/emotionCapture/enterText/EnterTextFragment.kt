@@ -17,6 +17,7 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_enter_text.enterText_editor
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
 
 // uses https://github.com/wasabeef/richeditor-android
@@ -24,7 +25,7 @@ private const val TEXT_FILE_ARG = "location of text file"
 
 class EnterTextFragment : Fragment() {
 
-    private val enterTextViewModel: EnterTextViewModel by sharedViewModel()
+    private val enterTextViewModel: EnterTextViewModel by viewModel()
     private val eventViewModel: EventViewModel by sharedViewModel()
 
     private lateinit var enterTextBinding: FragmentEnterTextBinding
@@ -47,7 +48,13 @@ class EnterTextFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enterTextViewModel.loadText(arguments?.getSerializable(TEXT_FILE_ARG) as File)
+        if (existingTextGiven()) {
+            enterTextViewModel.loadText(arguments?.getSerializable(TEXT_FILE_ARG) as File)
+        }
+    }
+
+    private fun existingTextGiven(): Boolean {
+        return arguments?.getSerializable(TEXT_FILE_ARG) != null
     }
 
     override fun onCreateView(
