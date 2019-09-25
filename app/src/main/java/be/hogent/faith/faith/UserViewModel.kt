@@ -31,13 +31,17 @@ class UserViewModel(
     val user: LiveData<User>
         get() = _user
 
+    private val _titleErrorMessage = MutableLiveData<Int>()
+    val titleErrorMessage: LiveData<Int>
+        get() = _titleErrorMessage
+
     fun setUser(user: User) {
         _user.postValue(user)
     }
 
     fun saveEvent(eventTitle: String?, event: Event) {
         if (eventTitle.isNullOrEmpty()) {
-            _errorMessage.postValue(R.string.error_event_no_title)
+            _titleErrorMessage.postValue(R.string.error_event_no_title)
             return
         }
         val params = SaveEventUseCase.Params(eventTitle, event, user.value!!)

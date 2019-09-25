@@ -119,6 +119,7 @@
                 android:hint="titel"
                 android:singleLine="true"
                 android:text="@={eventViewModel.eventTitle}"
+                app:errorMessageResId="@{userViewModel.titleErrorMessage}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintBottom_toTopOf="@+id/guide_title_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
