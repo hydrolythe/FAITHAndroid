@@ -75,8 +75,8 @@ class DrawEmotionAvatarFragment : DrawFragment() {
     }
 
     private fun listenToViewModelEvents() {
-        eventViewModel.errorMessage.observe(this, Observer {
-            Toast.makeText(context, getString(R.string.error_saving_drawing), Toast.LENGTH_SHORT)
+        eventViewModel.errorMessage.observe(this, Observer { errorMessageResId ->
+            Toast.makeText(context, getString(errorMessageResId), Toast.LENGTH_SHORT)
                 .show()
         })
     }
