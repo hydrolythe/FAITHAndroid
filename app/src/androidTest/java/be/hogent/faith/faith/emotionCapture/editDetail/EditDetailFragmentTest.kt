@@ -1,8 +1,11 @@
 package be.hogent.faith.faith.emotionCapture.editDetail
 
 import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.withHint
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import be.hogent.faith.R
 import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
@@ -25,21 +28,21 @@ class EditDetailFragmentTest {
 
     @Test
     fun editDetailsFragment_saveEventWithoutTitleEntered_errorMessage() {
-        Espresso.onView(ViewMatchers.withId(R.id.btn_event_send)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.btn_save_event_save))
-            .perform(ViewActions.click())
-        ToastMatcher.isToastMessageDisplayed(R.string.error_event_no_title)
+        onView(withId(R.id.btn_event_send)).perform(ViewActions.click())
+        onView(withId(R.id.btn_save_event_save)).perform(ViewActions.click())
+        onView(withId(R.id.txt_save_event_title)).check(matches(withHint(R.string.error_event_no_title)))
     }
 
     @Test
     fun editDetailsFragment_saveEvent_showsSuccess() {
-        Espresso.onView(ViewMatchers.withId(R.id.btn_event_send)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.txt_save_event_title)).perform(ViewActions.typeText("Titel van Event"))
+        onView(withId(R.id.btn_event_send)).perform(ViewActions.click())
+        onView(withId(R.id.txt_save_event_title))
+            .perform(ViewActions.typeText("Titel van Event"))
         Espresso.closeSoftKeyboard()
-        Espresso.onView(ViewMatchers.withId(R.id.txt_save_event_notes))
+        onView(withId(R.id.txt_save_event_notes))
             .perform(ViewActions.typeText("Notities notities notities"))
         Espresso.closeSoftKeyboard()
-        Espresso.onView(ViewMatchers.withId(R.id.btn_save_event_save))
+        onView(withId(R.id.btn_save_event_save))
             .perform(ViewActions.click())
         ToastMatcher.isToastMessageDisplayed(R.string.save_event_success)
     }
