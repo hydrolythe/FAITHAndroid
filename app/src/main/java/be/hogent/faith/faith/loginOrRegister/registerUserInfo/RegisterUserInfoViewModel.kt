@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.loginOrRegister.registerUserInfo
 
-import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,9 +11,18 @@ class RegisterUserInfoViewModel : ViewModel() {
     val userName = MutableLiveData<String>()
     val password = MutableLiveData<String>()
     val passwordRepeated = MutableLiveData<String>()
-    val userNameErrorMessage = MutableLiveData<Int>()
-    val passwordErrorMessage = MutableLiveData<Int>()
-    val passwordRepeatErrorMessage = MutableLiveData<Int>()
+
+    private val _userNameErrorMessage = MutableLiveData<Int>()
+    val userNameErrorMessage: LiveData<Int>
+        get() = _userNameErrorMessage
+
+    private val _passwordErrorMessage = MutableLiveData<Int>()
+    val passwordErrorMessage: LiveData<Int>
+        get() = _passwordErrorMessage
+
+    private val _passwordRepeatErrorMessage = MutableLiveData<Int>()
+    val passwordRepeatErrorMessage: LiveData<Int>
+        get() = _passwordRepeatErrorMessage
 
     private val _confirmUserInfoClicked = SingleLiveEvent<Unit>()
     val confirmUserInfoClicked: LiveData<Unit>
@@ -28,7 +36,7 @@ class RegisterUserInfoViewModel : ViewModel() {
 
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
-            userNameErrorMessage.value = R.string.register_username_empty
+            _userNameErrorMessage.value = R.string.register_username_empty
             return false
         }
         return true
@@ -36,11 +44,11 @@ class RegisterUserInfoViewModel : ViewModel() {
 
     private fun passwordIsValid(): Boolean {
         if (password.value.isNullOrBlank()) {
-            passwordErrorMessage.value = R.string.register_password_empty
+            _passwordErrorMessage.value = R.string.register_password_empty
             return false
         }
         if (password.value != passwordRepeated.value) {
-            passwordRepeatErrorMessage.value = R.string.register_passwords_nomatch
+            _passwordRepeatErrorMessage.value = R.string.register_passwords_nomatch
             return false
         }
         return true
