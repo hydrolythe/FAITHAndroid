@@ -1,5 +1,6 @@
 package be.hogent.faith.service.usecases
 
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.storage.StorageRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -8,7 +9,6 @@ import io.reactivex.Scheduler
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
-import java.io.File
 
 class LoadTextUseCaseTest {
     private lateinit var loadTextUseCase: LoadTextDetailUseCase
@@ -16,7 +16,7 @@ class LoadTextUseCaseTest {
     private val repository: StorageRepository = mockk(relaxed = true)
 
     private val text = "<font size='5'>Hello <b>World</b></font>"
-    private val saveFile = mockk<File>()
+    private val existingDetail = mockk<TextDetail>()
 
     @Before
     fun setUp() {
@@ -26,26 +26,28 @@ class LoadTextUseCaseTest {
     @Test
     fun loadTextUC_normal_returnsTextFromFile() {
         // Arrange
-        every { repository.loadTextFromExistingDetail(saveFile) } returns Single.just(text)
+        every { repository.loadTextFromExistingDetail(existingDetail) } returns Single.just(text)
 
         // Act
         loadTextUseCase.buildUseCaseSingle(
-            LoadTextDetailUseCase.LoadTextParams(saveFile)
+            LoadTextDetailUseCase.LoadTextParams(existingDetail)
         ).test()
             .assertValue(text)
 
         // Assert
-        verify { repository.loadTextFromExistingDetail(saveFile) }
+        verify { repository.loadTextFromExistingDetail(existingDetail) }
     }
 
     @Test
     fun loadTextUC_repoThrowsError_passesError() {
         // Arrange
-        every { repository.loadTextFromExistingDetail(saveFile) } returns Single.error(RuntimeException())
+        every { repository.loadTextFromExistingDetail(existingDetail) } returns Single.error(
+            RuntimeException()
+        )
 
         // Act & Assert
         loadTextUseCase.buildUseCaseSingle(
-            LoadTextDetailUseCase.LoadTextParams(saveFile)
+            LoadTextDetailUseCase.LoadTextParams(existingDetail)
         ).test()
             .assertError(RuntimeException::class.java)
     }

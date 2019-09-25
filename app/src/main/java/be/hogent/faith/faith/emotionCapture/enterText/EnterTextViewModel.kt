@@ -17,6 +17,10 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
     val text: LiveData<String>
         get() = _text
 
+    private val _existingDetail = MutableLiveData<TextDetail>()
+    val existingDetail: LiveData<TextDetail>
+        get() = _existingDetail
+
     private val _selectedTextColor = MutableLiveData<@ColorInt Int>()
     val selectedTextColor: LiveData<Int>
         get() = _selectedTextColor
@@ -71,6 +75,8 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
     }
 
     fun loadExistingTextDetail(textDetail: TextDetail) {
+        _existingDetail.value = textDetail
+
         val params = LoadTextDetailUseCase.LoadTextParams(textDetail)
         loadTextDetailUseCase.execute(params, LoadTextUseCaseHandler())
     }
