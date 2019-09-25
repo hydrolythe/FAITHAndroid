@@ -4,17 +4,17 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.drawing.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.MakeDrawingFragment
-import be.hogent.faith.faith.emotionCapture.editDetail.DetailType
-import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailFragment
+import be.hogent.faith.faith.emotionCapture.editDetail.DetailFragmentWithEmotionAvatar
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.enterText.EnterTextFragment
-import be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
@@ -32,12 +32,12 @@ import java.util.UUID
 class EmotionCaptureMainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
     OverviewEventsFragment.OverviewEventsNavigationListener,
-    EditDetailFragment.EditDetailNavigationListener,
+    DetailFragmentWithEmotionAvatar.EditDetailNavigationListener,
     RecordAudioFragment.AudioScreenNavigation,
     MakeDrawingFragment.DrawingScreenNavigation,
     EnterTextFragment.TextScreenNavigation,
-    TakePhotoFragment.PhotoScreenNavigation {
-
+    TakePhotoFragment.PhotoScreenNavigation,
+    DetailViewHolder.ExistingDetailNavigationListener {
     // This ViewModel is for the [DrawEmotionAvatarFragment], but has been defined here because it should
     // survive the activity's lifecycle, not just its own.
     // Reason: every time [startDrawFragment] is called, a new Fragment is created. In order to retain what has
@@ -57,15 +57,12 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private val avatarProvider: AvatarProvider by inject()
 
-    lateinit var enterTextViewModel: EnterTextViewModel
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_emotion_capture)
 
         eventViewModel = getViewModel()
         takePhotoViewModel = getViewModel()
-        enterTextViewModel = getViewModel()
 
         // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
@@ -123,14 +120,6 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         )
     }
 
-    override fun startTakePhotoFragment() {
-        replaceFragment(TakePhotoFragment.newInstance(), R.id.emotionCapture_fragment_container)
-    }
-
-    override fun startRecordAudioFragment() {
-        replaceFragment(RecordAudioFragment.newInstance(), R.id.emotionCapture_fragment_container)
-    }
-
     override fun startEventDetailsFragment(eventUuid: UUID) {
         replaceFragment(
             EventDetailsFragment.newInstance(eventUuid),
@@ -138,16 +127,46 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         )
     }
 
-    override fun startMakeDrawingFragment() {
-        replaceFragment(MakeDrawingFragment.newInstance(), R.id.emotionCapture_fragment_container)
+    override fun openDetailScreenFor(detail: Detail) {
+        val avatar = getAvatarOutline()
+        replaceFragment(
+            DetailFragmentWithEmotionAvatar.newInstance(detail, avatar),
+            R.id.emotionCapture_fragment_container
+        )
     }
 
-    override fun startEventDetail(type: DetailType) {
-        val avatar =
-            avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
+    private fun getAvatarOutline() =
+        avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
+
+    override fun startPhotoDetailFragment() {
         replaceFragment(
-            EditDetailFragment.newInstance(type, avatar),
-            R.id.emotionCapture_fragment_container
+            DetailFragmentWithEmotionAvatar.PhotoFragmentWithEmotionAvatar.newInstance(
+                getAvatarOutline()
+            ), R.id.emotionCapture_fragment_container
+        )
+    }
+
+    override fun startAudioDetailFragment() {
+        replaceFragment(
+            DetailFragmentWithEmotionAvatar.AudioFragmentWithEmotionAvatar.newInstance(
+                getAvatarOutline()
+            ), R.id.emotionCapture_fragment_container
+        )
+    }
+
+    override fun startDrawingDetailFragment() {
+        replaceFragment(
+            DetailFragmentWithEmotionAvatar.DrawingFragmentWithEmotionAvatar.newInstance(
+                getAvatarOutline()
+            ), R.id.emotionCapture_fragment_container
+        )
+    }
+
+    override fun startTextDetailFragment() {
+        replaceFragment(
+            DetailFragmentWithEmotionAvatar.TextFragmentWithEmotionAvatar.newInstance(
+                getAvatarOutline()
+            ), R.id.emotionCapture_fragment_container
         )
     }
 

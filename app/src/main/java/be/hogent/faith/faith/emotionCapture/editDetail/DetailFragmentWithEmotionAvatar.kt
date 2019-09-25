@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +15,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.MakeDrawingFragment
@@ -24,18 +28,14 @@ import be.hogent.faith.faith.emotionCapture.enterText.EnterTextFragment
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.util.replaceChildFragment
-import be.hogent.faith.util.TAG
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_edit_detail.image_editDetail_avatar
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.io.File
 
-/**
- * Key for this Fragment's [Bundle] to hold the DetailType pointing to type of detail
- */
-const val ARG_DETAILTYPE = "detailType"
 /**
  * Key for this Fragment's [Bundle] to hold the resource ID pointing to the outline drawing of the avatarName.
  */
@@ -45,15 +45,7 @@ private const val ARG_AVATAR_RES_ID = "avatarResId"
  */
 private const val NO_AVATAR = -1
 
-enum class DetailType {
-    TEXT,
-    PICTURE,
-    AUDIO,
-    DRAWING,
-}
-
-class EditDetailFragment : Fragment() {
-    private var detailType: DetailType? = null
+abstract class DetailFragmentWithEmotionAvatar : Fragment() {
     private var navigation: EditDetailNavigationListener? = null
     private val eventViewModel: EventViewModel by sharedViewModel()
     private val editDetailViewModel: EditDetailViewModel by viewModel()
@@ -72,7 +64,6 @@ class EditDetailFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            detailType = it.getSerializable(ARG_DETAILTYPE) as DetailType
             avatarOutlineResId = it.getInt(ARG_AVATAR_RES_ID)
         }
     }
@@ -132,35 +123,104 @@ class EditDetailFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        when (detailType) {
-            DetailType.PICTURE -> replaceChildFragment(
-                TakePhotoFragment.newInstance(),
-                R.id.fragment_container_editDetail
-            )
-            DetailType.AUDIO -> replaceChildFragment(
-                RecordAudioFragment.newInstance(),
-                R.id.fragment_container_editDetail
-            )
-            DetailType.TEXT -> replaceChildFragment(
-                EnterTextFragment.newInstance(),
-                R.id.fragment_container_editDetail
-            )
-            DetailType.DRAWING -> replaceChildFragment(
-                MakeDrawingFragment.newInstance(), R.id.fragment_container_editDetail
-            )
-            else -> Log.e(TAG, "type not defined")
-        }
+        setChildFragment()
     }
 
     companion object {
-        @JvmStatic
-        fun newInstance(detailType: DetailType, @DrawableRes avatarOutLineId: Int) =
-            EditDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(ARG_DETAILTYPE, detailType)
-                    putInt(ARG_AVATAR_RES_ID, avatarOutLineId)
+        private const val DETAIL_SAVEFILE_LOCATION = "location of the savefile with the text"
+        fun newInstance(detail: Detail, @DrawableRes avatarOutLineId: Int): DetailFragmentWithEmotionAvatar {
+            val args = getBundleForAvatarOutline(avatarOutLineId).apply {
+                putSerializable(DETAIL_SAVEFILE_LOCATION, detail.file)
+            }
+            val newFragment: DetailFragmentWithEmotionAvatar = when (detail) {
+                is AudioDetail -> AudioFragmentWithEmotionAvatar()
+                is TextDetail -> TextFragmentWithEmotionAvatar()
+                is DrawingDetail -> DrawingFragmentWithEmotionAvatar()
+                is PhotoDetail -> PhotoFragmentWithEmotionAvatar()
+            }
+            newFragment.arguments = args
+            return newFragment
+        }
+
+        private fun getBundleForAvatarOutline(@DrawableRes avatarOutLineId: Int): Bundle {
+            return Bundle().apply {
+                putInt(ARG_AVATAR_RES_ID, avatarOutLineId)
+            }
+        }
+    }
+
+    abstract fun setChildFragment()
+
+    class PhotoFragmentWithEmotionAvatar : DetailFragmentWithEmotionAvatar() {
+        companion object {
+            fun newInstance(@DrawableRes avatarOutLineId: Int): PhotoFragmentWithEmotionAvatar {
+                return PhotoFragmentWithEmotionAvatar().apply {
+                    arguments = getBundleForAvatarOutline(avatarOutLineId)
                 }
             }
+        }
+
+        override fun setChildFragment() {
+            replaceChildFragment(
+                TakePhotoFragment.newInstance(), R.id.fragment_container_editDetail
+            )
+        }
+    }
+
+    class DrawingFragmentWithEmotionAvatar : DetailFragmentWithEmotionAvatar() {
+        companion object {
+            fun newInstance(@DrawableRes avatarOutLineId: Int): DrawingFragmentWithEmotionAvatar {
+                return DrawingFragmentWithEmotionAvatar().apply {
+                    arguments = getBundleForAvatarOutline(avatarOutLineId)
+                }
+            }
+        }
+
+        override fun setChildFragment() {
+            replaceChildFragment(
+                MakeDrawingFragment.newInstance(), R.id.fragment_container_editDetail
+            )
+        }
+    }
+
+    class TextFragmentWithEmotionAvatar : DetailFragmentWithEmotionAvatar() {
+        companion object {
+            fun newInstance(@DrawableRes avatarOutLineId: Int): TextFragmentWithEmotionAvatar {
+                return TextFragmentWithEmotionAvatar().apply {
+                    arguments = getBundleForAvatarOutline(avatarOutLineId)
+                }
+            }
+        }
+
+        override fun setChildFragment() {
+            val saveFile = arguments?.getSerializable(DETAIL_SAVEFILE_LOCATION)
+            if (saveFile == null) {
+                replaceChildFragment(
+                    EnterTextFragment.newInstance(), R.id.fragment_container_editDetail
+                )
+            } else {
+                replaceChildFragment(
+                    EnterTextFragment.newInstance(saveFile as File),
+                    R.id.fragment_container_editDetail
+                )
+            }
+        }
+    }
+
+    class AudioFragmentWithEmotionAvatar : DetailFragmentWithEmotionAvatar() {
+        companion object {
+            fun newInstance(@DrawableRes avatarOutLineId: Int): AudioFragmentWithEmotionAvatar {
+                return AudioFragmentWithEmotionAvatar().apply {
+                    arguments = getBundleForAvatarOutline(avatarOutLineId)
+                }
+            }
+        }
+
+        override fun setChildFragment() {
+            replaceChildFragment(
+                RecordAudioFragment.newInstance(), R.id.fragment_container_editDetail
+            )
+        }
     }
 
     interface EditDetailNavigationListener {

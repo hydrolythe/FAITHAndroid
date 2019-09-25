@@ -1,7 +1,7 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.PictureDetail
+import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.storage.StorageRepository
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
@@ -64,14 +64,14 @@ class SaveEventPhotoUseCaseTest {
 
         result.test()
             .assertNoErrors()
-            .assertValue { newDetail -> newDetail is PictureDetail }
+            .assertValue { newDetail -> newDetail is DrawingDetail }
             .assertValue { newDetail -> newDetail.name == photoName }
 
         // Assert
         assertTrue(event.details.isNotEmpty())
 
         val resultingDetail = event.details.first()
-        assertTrue(resultingDetail is PictureDetail)
+        assertTrue(resultingDetail is DrawingDetail)
         assertEquals(resultingDetail.name, photoName)
     }
 

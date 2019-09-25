@@ -6,7 +6,7 @@ import be.hogent.faith.database.models.detail.PictureDetailEntity
 import be.hogent.faith.database.models.detail.TextDetailEntity
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.PictureDetail
+import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import java.util.UUID
 
@@ -28,7 +28,7 @@ object DetailMapper : MapperWithForeignKey<DetailEntity, Detail> {
         return when (entity) {
             is AudioDetailEntity -> AudioDetail(entity.file, entity.name, entity.uuid)
             is TextDetailEntity -> TextDetail(entity.file, entity.name, entity.uuid)
-            is PictureDetailEntity -> PictureDetail(entity.file, entity.name, entity.uuid)
+            is PictureDetailEntity -> DrawingDetail(entity.file, entity.name, entity.uuid)
             else -> throw ClassCastException("Unknown DetailEntity subclass encountered")
         }
     }
@@ -37,7 +37,7 @@ object DetailMapper : MapperWithForeignKey<DetailEntity, Detail> {
         return when (model) {
             is AudioDetail -> AudioDetailEntity(model.file, model.name, model.uuid, foreignKey)
             is TextDetail -> TextDetailEntity(model.file, model.name, model.uuid, foreignKey)
-            is PictureDetail -> PictureDetailEntity(model.file, model.name, model.uuid, foreignKey)
+            is DrawingDetail -> PictureDetailEntity(model.file, model.name, model.uuid, foreignKey)
             else -> throw ClassCastException("Unknown Detail subclass encountered")
         }
     }

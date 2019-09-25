@@ -87,7 +87,7 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
         }
 
         override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_load_text_failed)
+            _errorMessage.postValue(R.string.error_save_text_failed)
         }
     }
 }
