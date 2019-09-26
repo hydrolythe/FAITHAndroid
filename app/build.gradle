@@ -79,6 +79,8 @@ dependencies {
     implementation commonDependencies.rxjava
     implementation commonDependencies.rxandroid
 
+    implementation commonDependencies.timber
+
     implementation injectionDependencies.koin
     implementation injectionDependencies.koin_viewModel
 
