@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Matrix
 import android.graphics.Point
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -78,8 +77,6 @@ class CityScreenFragment : Fragment() {
         display?.getSize(size)
         val screenWidth = size.x.toFloat()
         val screenHeight = size.y.toFloat()
-        Log.e("Width", "" + screenWidth)
-        Log.e("height", "" + screenHeight)
 
         // We wait for the image to be drawn and scaled, get its dimensions and then
         // set the guidlines properly
