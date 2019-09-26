@@ -30,6 +30,9 @@ internal fun Fragment.replaceChildFragment(fragment: Fragment, frameId: Int) {
 
 /**
  * Adjusts the guideline (horizontally or vertically) based on the image which has been scaled.
+ * @param guideline The guide line which needs to be scaled
+ * @param padding The distance in pixels between the outer left (or top) side of the screen and the left side (top) of the background image
+ * @param imageLength The length of the screen (width / height) 
  */
 internal fun Fragment.adjustGuidelineAfterScaling(
     guideline: Guideline,
