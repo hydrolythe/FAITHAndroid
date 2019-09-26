@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.emotionCapture.drawing.makeDrawing
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -82,9 +83,13 @@ class MakeDrawingFragment : DrawFragment() {
     }
 
     private fun startListeners() {
+        drawViewModel.eraserClicked.observe(this, Observer {
+            drawView.setColor(Color.WHITE)
+        })
+
         drawViewModel.saveClicked.observe(this, Observer {
             // TODO: move to something async, maybe a coroutine?
-            drawBinding.drawView.getBitmap { bitmap ->
+            drawView.getBitmap { bitmap ->
                 eventViewModel.saveDrawing(bitmap)
             }
         })
@@ -101,7 +106,7 @@ class MakeDrawingFragment : DrawFragment() {
     }
 
     private fun configureDrawView() {
-        with(drawBinding.drawView) {
+        with(drawView) {
             setOnDragListener(DragListener(this))
         }
     }
