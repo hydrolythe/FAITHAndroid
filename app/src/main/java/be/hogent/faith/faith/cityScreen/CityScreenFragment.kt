@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -70,13 +71,8 @@ class CityScreenFragment : Fragment() {
         super.onStart()
 
         registerListeners()
+        val (screenWidth, screenHeight) = getScreenDimensions()
 
-        // We need to get the screen dimensions to set the guide lines correct
-        val display = activity?.windowManager?.defaultDisplay
-        val size = Point()
-        display?.getSize(size)
-        val screenWidth = size.x.toFloat()
-        val screenHeight = size.y.toFloat()
 
         // We wait for the image to be drawn and scaled, get its dimensions and then
         // set the guidlines properly
@@ -86,14 +82,7 @@ class CityScreenFragment : Fragment() {
 
                 // Remove the listener otherwise infinite loop
                 background_city_screen.viewTreeObserver.removeOnGlobalLayoutListener(this)
-
-                // Get the width & height of the background image after scaling
-                val f = FloatArray(9)
-                background_city_screen.imageMatrix.getValues(f)
-                val drawableHeight = background_city_screen.height.toFloat()
-                val drawableWidth = background_city_screen.width.toFloat()
-                val displayedWidth = drawableWidth * f[Matrix.MSCALE_X]
-                val displayedHeight = drawableHeight * f[Matrix.MSCALE_Y]
+                val (displayedWidth, displayedHeight) = getScaledDimensions(background_city_screen)
 
                 // Calculate "padding"
                 val left = (screenWidth - displayedWidth) / 2
@@ -127,6 +116,30 @@ class CityScreenFragment : Fragment() {
             }
         })
     }
+
+    /**
+     * Get the width & height of the background image after scaling
+     */
+    private fun getScaledDimensions(view: ImageView): Pair<Float, Float> {
+        val f = FloatArray(9)
+        view.imageMatrix.getValues(f)
+        val drawableHeight = background_city_screen.height.toFloat()
+        val drawableWidth = background_city_screen.width.toFloat()
+        val displayedWidth = drawableWidth * f[Matrix.MSCALE_X]
+        val displayedHeight = drawableHeight * f[Matrix.MSCALE_Y]
+        return Pair(displayedWidth, displayedHeight)
+    }
+
+    /**
+     * Return a Pair with the screen width and the screen height.
+     */
+    private fun getScreenDimensions(): Pair<Float, Float> {
+        val display = activity?.windowManager?.defaultDisplay
+        val size = Point()
+        display?.getSize(size)
+        return Pair(size.x.toFloat(), size.y.toFloat())
+    }
+
 
     private fun registerListeners() {
         cityScreenViewModel.archiveClicked.observe(this, Observer {
