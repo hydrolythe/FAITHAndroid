@@ -4,17 +4,24 @@ import android.graphics.Color
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.faith.TestUtils
-
+import be.hogent.faith.service.usecases.LoadTextDetailUseCase
+import io.mockk.called
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
+import io.reactivex.observers.DisposableSingleObserver
 import org.junit.Assert
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
+import java.lang.RuntimeException
 
 class EnterTextViewModelTest {
+    private val loadTextDetailUseCase = mockk<LoadTextDetailUseCase>(relaxed = true)
+
     private lateinit var viewModel: EnterTextViewModel
+
     private val text = "Hello world"
 
     @get:Rule
@@ -22,8 +29,9 @@ class EnterTextViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = EnterTextViewModel()
-        viewModel.textChanged(text)
+        viewModel = EnterTextViewModel(loadTextDetailUseCase)
+
+        viewModel.text.observeForever(mockk(relaxed = true))
     }
 
     @Test
@@ -38,10 +46,16 @@ class EnterTextViewModelTest {
     @Test
     fun enterTextVM_pickNewFontSize_isSelected() {
         viewModel.pickFontSize(EnterTextViewModel.FontSize.NORMAL)
-        Assert.assertEquals(EnterTextViewModel.FontSize.NORMAL, TestUtils.getValue(viewModel.selectedFontSize))
+        Assert.assertEquals(
+            EnterTextViewModel.FontSize.NORMAL,
+            TestUtils.getValue(viewModel.selectedFontSize)
+        )
 
         viewModel.pickFontSize(EnterTextViewModel.FontSize.LARGE)
-        Assert.assertEquals(EnterTextViewModel.FontSize.LARGE, TestUtils.getValue(viewModel.selectedFontSize))
+        Assert.assertEquals(
+            EnterTextViewModel.FontSize.LARGE,
+            TestUtils.getValue(viewModel.selectedFontSize)
+        )
     }
 
     @Test
@@ -72,5 +86,44 @@ class EnterTextViewModelTest {
         viewModel.onUnderlineClicked()
 
         verify { observer.onChanged(any()) }
+    }
+
+    @Test
+    fun enterTextVM_loadTextUC_updatesText() {
+        // Arrange
+        val saveFile = File("fake/path")
+        val params = slot<LoadTextDetailUseCase.LoadTextParams>()
+        val resultObserver = slot<DisposableSingleObserver<String>>()
+        val textObserver = mockk<Observer<String>>(relaxed = true)
+
+        viewModel.text.observeForever(textObserver)
+
+        // Act
+        viewModel.loadExistingTextDetail(saveFile)
+        verify { loadTextDetailUseCase.execute(capture(params), capture(resultObserver)) }
+        resultObserver.captured.onSuccess(text)
+
+        // Assert
+        verify { textObserver.onChanged(text) }
+    }
+    @Test
+    fun enterTextVM_loadTextUseCaseFails_updatesErrorMessage() {
+        // Arrange
+        val saveFile = File("fake/path")
+        val resultObserver = slot<DisposableSingleObserver<String>>()
+        val textObserver = mockk<Observer<String>>(relaxed = true)
+        val errorObserver = mockk<Observer<Int>>(relaxed = true)
+
+        viewModel.text.observeForever(textObserver)
+        viewModel.errorMessage.observeForever(errorObserver)
+
+        // Act
+        viewModel.loadExistingTextDetail(saveFile)
+        verify { loadTextDetailUseCase.execute(any(), capture(resultObserver)) }
+        resultObserver.captured.onError(RuntimeException())
+
+        // Assert
+        verify { textObserver wasNot called }
+        verify { errorObserver.onChanged(any()) }
     }
 }
