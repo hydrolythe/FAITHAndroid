@@ -2,15 +2,24 @@ package be.hogent.faith.faith.emotionCapture.enterText
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.R
+import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.service.usecases.LoadTextDetailUseCase
+import io.reactivex.observers.DisposableSingleObserver
 
-class EnterTextViewModel : ViewModel() {
+class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCase) : ViewModel() {
 
     private val _text = MutableLiveData<String>()
     val text: LiveData<String>
         get() = _text
+
+    private val _existingDetail = MutableLiveData<TextDetail>()
+    val existingDetail: LiveData<TextDetail>
+        get() = _existingDetail
 
     private val _selectedTextColor = MutableLiveData<@ColorInt Int>()
     val selectedTextColor: LiveData<Int>
@@ -32,6 +41,10 @@ class EnterTextViewModel : ViewModel() {
     val underlineClicked: LiveData<Boolean?>
         get() = _underlineClicked
 
+    private val _errorMessage = MutableLiveData<@IdRes Int>()
+    val errorMessage: LiveData<Int>
+        get() = _errorMessage
+
     init {
         _selectedTextColor.value = Color.BLACK
         _selectedFontSize.value = FontSize.NORMAL
@@ -42,11 +55,11 @@ class EnterTextViewModel : ViewModel() {
     }
 
     fun onItalicClicked() {
-        _italicClicked.value = !(_italicClicked.value?:false)
+        _italicClicked.value = !(_italicClicked.value ?: false)
     }
 
     fun onUnderlineClicked() {
-        _underlineClicked.value = !(_underlineClicked.value ?:false)
+        _underlineClicked.value = !(_underlineClicked.value ?: false)
     }
 
     fun pickTextColor(@ColorInt color: Int) {
@@ -57,13 +70,30 @@ class EnterTextViewModel : ViewModel() {
         _selectedFontSize.value = fontSize
     }
 
-    fun textChanged(text: String) {
+    fun setText(text: String) {
         _text.value = text
+    }
+
+    fun loadExistingTextDetail(textDetail: TextDetail) {
+        _existingDetail.value = textDetail
+
+        val params = LoadTextDetailUseCase.LoadTextParams(textDetail)
+        loadTextDetailUseCase.execute(params, LoadTextUseCaseHandler())
     }
 
     enum class FontSize(val size: Int) {
         SMALL(3),
         NORMAL(6),
         LARGE(7)
+    }
+
+    private inner class LoadTextUseCaseHandler : DisposableSingleObserver<String>() {
+        override fun onSuccess(loadedString: String) {
+            _text.value = loadedString
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_text_failed)
+        }
     }
 }

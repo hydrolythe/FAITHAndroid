@@ -3,13 +3,16 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.util.factory.DetailFactory
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
@@ -76,5 +79,49 @@ class SaveEventTextUseCaseTest {
 
         // Assert
         Assert.assertTrue(event.details.isEmpty())
+    }
+
+    @Test
+    fun saveTextUC_overwriteDetail_overWritesInRepo() {
+        // Arrange
+        val existingDetail = DetailFactory.makeTextDetail()
+        event.addDetail(existingDetail)
+
+        every {
+            repository.overWriteTextDetail(
+                text,
+                existingDetail
+            )
+        } returns Completable.complete()
+
+        // Act
+        saveEventTextUseCase.buildUseCaseObservable(
+            SaveEventTextUseCase.SaveTextParams(event, text, existingDetail)
+        ).test()
+            .assertNoErrors()
+            .assertComplete()
+
+        verify { repository.overWriteTextDetail(text, existingDetail) }
+    }
+
+    @Test
+    fun saveTextUC_overwriteDetail_detailFileUnchanged() {
+        // Arrange
+        val existingDetail = DetailFactory.makeTextDetail()
+        event.addDetail(existingDetail)
+
+        every {
+            repository.overWriteTextDetail(
+                text,
+                existingDetail
+            )
+        } returns Completable.complete()
+
+        // Act
+        saveEventTextUseCase.buildUseCaseObservable(
+            SaveEventTextUseCase.SaveTextParams(event, text, existingDetail)
+        ).test()
+
+        assertEquals(existingDetail, event.details.first())
     }
 }

@@ -52,7 +52,7 @@ val appModule = module(override = true) {
     viewModel { EventViewModel(get(), get(), get(), get(), get()) }
     viewModel { DrawViewModel() }
     viewModel { EditDetailViewModel() }
-    viewModel { EnterTextViewModel() }
+    viewModel { EnterTextViewModel(get()) }
     viewModel { OverviewEventsViewModel() }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { WelcomeViewModel() }

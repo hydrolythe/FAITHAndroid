@@ -12,7 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class EditDetailFragmentTest {
+class DetailFragmentWithEmotionAvatarTest {
 
     @get:Rule
     var activityScenarioRule =
