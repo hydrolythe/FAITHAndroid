@@ -90,12 +90,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="8dp"
+                android:layout_marginBottom="88dp"
                 android:onClick="@{() -> drawViewModel.onSaveButtonClicked()}"
                 android:text="@string/save"
                 app:layout_constraintBottom_toBottomOf="@+id/guide_draw_drawview_bottom"
-                app:layout_constraintEnd_toEndOf="@+id/guide_draw_drawview_left"
-                app:layout_constraintStart_toEndOf="@+id/container_draw_utilities" />
-
+                app:layout_constraintStart_toEndOf="@+id/container_draw_utilities"
+                app:layout_constraintStart_toStartOf="@+id/drawView" />
 
             <include
                 android:id="@+id/container_draw_images"
