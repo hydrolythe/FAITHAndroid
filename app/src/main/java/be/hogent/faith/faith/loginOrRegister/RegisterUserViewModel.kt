@@ -1,14 +1,15 @@
 package be.hogent.faith.faith.loginOrRegister
 
+import android.util.Log
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.Avatar
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.CreateUserUseCase
+import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableSingleObserver
 
 class RegisterUserViewModel(
@@ -37,7 +38,7 @@ class RegisterUserViewModel(
         }
 
         override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.register_error_create_user)
+            Log.e(TAG, "Registering user failed ${e.message}")
         }
     }
 

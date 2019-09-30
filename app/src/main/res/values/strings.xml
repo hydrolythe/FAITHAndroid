@@ -120,4 +120,7 @@
     <string name="com_auth0_client_id">VRX5hqPAdDhkj5DJJ9df4Q4SMZS06io9</string>
     <string name="com_auth0_domain">e-quality.eu.auth0.com</string>
     <string name="lbl_archive">Je archief</string>
+    <string name="register_error_weak_password">Wachtwoord moet bestaan uit minstens 6 karakters</string>
+    <string name="register_error_invalid_username">Gebruikersnaam moet beginnen met een letter, gevolgd door 1 of meerdere letters, getallen, -, _ of .</string>
+    <string name="register_error_username_already_exists">Gebruikersnaam bestaat reeds. Geef een andere gebruikersnaam in.</string>
 </resources>
