@@ -27,6 +27,10 @@ class DrawViewModel : ViewModel() {
     val undoClicked: LiveData<Unit>
         get() = _undoClicked
 
+    private val _eraserClicked = SingleLiveEvent<Unit>()
+    val eraserClicked: LiveData<Unit>
+        get() = _eraserClicked
+
     private val _saveClicked = SingleLiveEvent<Unit>()
     val saveClicked: LiveData<Unit>
         get() = _saveClicked
@@ -61,6 +65,14 @@ class DrawViewModel : ViewModel() {
 
     fun undo() {
         _undoClicked.call()
+    }
+
+    // Setting the color to white would work as well, but the colors of the brushes are linked to
+    // the [_selectedColor]. Selecting the color white would mean the brushes are white, making
+    // them invisible. Instead, the listeners of [eraserClicked] should set the DrawViews color
+    // directly, keeping the original [selectedColor].
+    fun onEraserClicked() {
+        _eraserClicked.call()
     }
 
     fun onSaveButtonClicked() {
