@@ -55,6 +55,7 @@ ext {
 
     // OTHER LIBRARIES
     ktlint_version = '0.31.0'
+    timber = '4.7.1'
 
     commonDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
@@ -66,7 +67,9 @@ ext {
             threeTenABP       : "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version",
 
             coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version",
-            coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android_version"
+            coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android_version",
+
+            timber            : "com.jakewharton.timber:timber:$timber"
     ]
 
     androidDependencies = [
