@@ -19,8 +19,11 @@
             android:id="@+id/background_event_details"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/park_gras"
             android:contentDescription="@string/descr_city_park"
-            tools:src="@drawable/park" />
+            android:scaleType="fitStart"
+            app:srcCompat="@drawable/park"
+            tools:srcCompat="@drawable/park" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/screen_new_event"
@@ -72,20 +75,6 @@
                 app:layout_constraintGuide_percent="0.68" />
 
 
-            <EditText
-                android:id="@+id/txt_event_details_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
-                android:hint="@string/event_details_title"
-                android:inputType="text"
-                android:text="@={eventViewModel.eventTitle}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                app:layout_constraintBottom_toTopOf="@+id/guide_avatar_titel_bottom"
-                app:layout_constraintStart_toStartOf="@+id/guide_avatar_titel_left"
-                tools:text="@string/event_details_title" />
-
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/event_details_upperDivider"
                 android:layout_width="wrap_content"
@@ -93,10 +82,12 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.15" />
 
-            <Button
+            <be.hogent.faith.faith.views.RightArrow
                 android:id="@+id/btn_event_details_text"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                app:image="@drawable/icoon_stad"
+                app:text="@string/description_addText"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/description_addText"
                 android:onClick="@{() -> eventViewModel.onTextButtonClicked()}"
@@ -105,11 +96,13 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
                 app:layout_constraintTop_toTopOf="@+id/guide_middle_horizontal_pole" />
 
-            <Button
+            <be.hogent.faith.faith.views.LeftArrow
                 android:id="@+id/btn_event_details_camera"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                app:image="@drawable/icoon_stad"
                 android:background="@android:color/transparent"
+                app:text="@string/description_addPhoto"
                 android:contentDescription="@string/description_addPhoto"
                 android:onClick="@{() -> eventViewModel.onCameraButtonClicked()}"
                 app:layout_constraintBottom_toTopOf="@+id/guide_bottom_pole"
@@ -117,11 +110,12 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_left_pole"
                 app:layout_constraintTop_toTopOf="@+id/guide_middle_horizontal_pole" />
 
-            <Button
+            <be.hogent.faith.faith.views.LeftArrow
                 android:id="@+id/btn_event_details_audio"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@android:color/transparent"
+                app:image="@drawable/icoon_stad"
+                app:text="@string/description_addAudio"
                 android:contentDescription="@string/description_addAudio"
                 android:onClick="@{() -> eventViewModel.onAudioButtonClicked()}"
                 app:layout_constraintBottom_toTopOf="@+id/guide_middle_horizontal_pole"
@@ -129,18 +123,20 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_left_pole"
                 app:layout_constraintTop_toTopOf="@+id/guide_top_pole" />
 
-            <Button
+            <be.hogent.faith.faith.views.RightArrow
                 android:id="@+id/btn_event_details_drawing"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="@android:color/transparent"
                 android:contentDescription="@string/description_addDrawing"
                 android:onClick="@{() -> eventViewModel.onDrawingButtonClicked()}"
+                app:image="@drawable/icoon_stad"
                 app:layout_constraintBottom_toTopOf="@+id/guide_middle_horizontal_pole"
                 app:layout_constraintEnd_toStartOf="@+id/guide_right_pole"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
                 app:layout_constraintTop_toTopOf="@+id/guide_top_pole"
-                app:srcCompat="@drawable/event_detail_drawing" />
+                app:layout_constraintVertical_bias="0.0"
+                app:text="@string/description_addDrawing" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_vertical_avatar"
@@ -280,6 +276,7 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_avatar_inkleuren_left"
                 app:layout_constraintTop_toBottomOf="@+id/guide_avatar_inkleuren_top"
                 app:srcCompat="@drawable/meisje_stoer_gezicht" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
