@@ -23,7 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             tools:src="@drawable/loginscherm"
-            android:contentDescription="@string/descr_loginscreen" />
+            android:contentDescription="@string/descr_loginscreen"
+            />
 
         <!-- KNOPPEN -->
         <!-- Invisible to make it transparent -->
@@ -55,7 +56,7 @@
                 android:layout_width="1dp"
                 android:layout_height="1dp"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.33" />
+                app:layout_constraintGuide_percent="0.36" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_pole_right_end"
@@ -83,7 +84,7 @@
                 android:layout_width="1dp"
                 android:layout_height="1dp"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.42" />
+                app:layout_constraintGuide_percent="0.47" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_password_bottom"
@@ -124,7 +125,7 @@
                 app:layout_constraintGuide_percent="0.73" />
 
             <View
-                android:id="@+id/btn_city_startNewEvent"
+                android:id="@+id/btn_loginUserAndGoToCity"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="#00000000"
@@ -133,18 +134,6 @@
                 app:layout_constraintEnd_toStartOf="@id/guide_pole_left_start"
                 app:layout_constraintStart_toStartOf="@+id/guide_pole_left_end"
                 app:layout_constraintTop_toTopOf="@+id/guide_pole_top" />
-
-
-            <Button
-                android:id="@+id/btn_createUserAndGotoCity"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="#00000000"
-                android:onClick="@{() -> welcomeViewModel.gotoCityButtonClicked()}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guide_form_start"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guide_userName" />
 
 
             <EditText

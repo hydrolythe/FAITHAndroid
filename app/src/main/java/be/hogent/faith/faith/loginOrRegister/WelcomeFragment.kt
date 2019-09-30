@@ -17,18 +17,15 @@ import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_welcome.background_welcome
 import org.koin.android.ext.android.getKoin
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.error.ScopeAlreadyCreatedException
 import org.koin.core.qualifier.named
 
-class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
+class WelcomeFragment : Fragment() {
 
     private var navigation: WelcomeNavigationListener? = null
 
     private val welcomeViewModel by viewModel<WelcomeViewModel>()
-
-    private val loginManager: LoginManager by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,8 +35,6 @@ class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
         val binding: be.hogent.faith.databinding.FragmentWelcomeBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_welcome, container, false)
         binding.welcomeViewModel = welcomeViewModel
-
-        loginManager.attachLoginSuccesListener(this)
 
         return binding.root
     }
@@ -60,8 +55,8 @@ class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
         welcomeViewModel.registerButtonClicked.observe(this, Observer {
             navigation!!.goToRegistrationScreen()
         })
-        welcomeViewModel.loginButtonClicked.observe(this, Observer {
-            loginManager.login(activity!!)
+        welcomeViewModel.UserLoggedInSuccessFully.observe(this, Observer {
+            onLoginSuccess()
         })
         welcomeViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
@@ -80,21 +75,18 @@ class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
         fun goToCityScreen()
     }
 
-    override fun onLoginSuccess() {
+    private fun onLoginSuccess() {
         val scope = try {
             getKoin().createScope(KoinModules.USER_SCOPE_ID, named(USER_SCOPE_NAME))
         } catch (e: ScopeAlreadyCreatedException) {
             getKoin().getScope(KoinModules.USER_SCOPE_ID)
         }
         val userViewModel: UserViewModel = scope.get()
-        // TODO: Call the Auth0 profile and retrieve user name
+        //TODO : get the user from Firebase
         userViewModel.setUser(User("testuser", avatarName = "meisje_stoer"))
         navigation!!.goToCityScreen()
     }
 
-    override fun onLoginFailure(msg: String) {
-        Toast.makeText(activity, "Log In - Error Occurred : $msg", Toast.LENGTH_SHORT).show()
-    }
 
     companion object {
 

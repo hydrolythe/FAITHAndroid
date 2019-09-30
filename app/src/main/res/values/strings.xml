@@ -98,7 +98,7 @@
     <string name="login_error_noUsername">Je moet je gebruikersnaam ingeven!</string>
     <string name="login_error_noPassword">Je moet je wachtwoord ingeven!</string>
     <string name="register_passwords_nomatch">Je ingevulde wachtwoorden zijn niet gelijk aan elkaar.</string>
-    <string name="register_password_empty">Je moet een wachtwoord ingeven.</string>
+    <string name="registerOrLogin_password_empty">Je moet een wachtwoord ingeven.</string>
     <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
     <string name="error_no_credentials">No credentials have been stored</string>
     <string name="msg_naar_de_stad">Naar de stad</string>
@@ -111,7 +111,7 @@
     <string name="choose_bold">kies vetjes</string>
     <string name="take_photo_de_foto">de foto</string>
     <string name="take_photo_neem_foto">neem foto</string>
-    <string name="register_username_empty">Je gebruikersnaam mag niet leeg zijn.</string>
+    <string name="registerOrLogin_username_empty">Je gebruikersnaam mag niet leeg zijn.</string>
     <string name="register_avatar_mustSelect">Je moet nog een avatar selecteren.</string>
     <string name="cityScreen_logOut">Wil je uitloggen?</string>
     <string name="cityscreen_stad_verlaten">Wil je uitloggen en de stad verlaten?</string>
@@ -123,4 +123,6 @@
     <string name="register_error_weak_password">Wachtwoord moet bestaan uit minstens 6 karakters</string>
     <string name="register_error_invalid_username">Gebruikersnaam moet beginnen met een letter, gevolgd door 1 of meerdere letters, getallen, -, _ of .</string>
     <string name="register_error_username_already_exists">Gebruikersnaam bestaat reeds. Geef een andere gebruikersnaam in.</string>
+    <string name="login_error_wrong_username_or_password">Gebruikersnaam of wachtwoord is fout. Probeer opnieuw.</string>
+    <string name="login_error">Inloggen mislukt. Probeer opnieuw.</string>
 </resources>

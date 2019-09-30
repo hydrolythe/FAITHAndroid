@@ -43,7 +43,7 @@ class RegisterUserInfoViewModel(private val registerUserUseCase: RegisterUserUse
 
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
-            _errorMessage.postValue(R.string.register_username_empty)
+            _errorMessage.postValue(R.string.registerOrLogin_username_empty)
             return false
         }
         return true
@@ -51,7 +51,7 @@ class RegisterUserInfoViewModel(private val registerUserUseCase: RegisterUserUse
 
     private fun passwordIsValid(): Boolean {
         if (password.value.isNullOrBlank()) {
-            _errorMessage.postValue(R.string.register_password_empty)
+            _errorMessage.postValue(R.string.registerOrLogin_password_empty)
             return false
         }
         if (password.value != passwordRepeated.value) {

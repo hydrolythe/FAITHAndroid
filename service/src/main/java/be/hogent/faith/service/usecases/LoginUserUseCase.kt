@@ -5,13 +5,13 @@ import be.hogent.faith.service.usecases.base.MaybeUseCase
 import io.reactivex.Maybe
 import io.reactivex.Scheduler
 
-class RegisterUserUseCase(
+class LoginUserUseCase(
     private val authManager: AuthManager,
     observer: Scheduler
-) : MaybeUseCase<String?, RegisterUserUseCase.Params>(observer) {
+) : MaybeUseCase<String?, LoginUserUseCase.Params>(observer) {
 
     override fun buildUseCaseMaybe(params: Params): Maybe<String?> {
-        return authManager.register("${params.username}@faith.be", params.password)
+        return authManager.signIn("${params.username}@faith.be", params.password)
     }
 
 
