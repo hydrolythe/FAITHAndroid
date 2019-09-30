@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -25,6 +24,7 @@ class RegisterUserInfoFragment : Fragment() {
         val binding: be.hogent.faith.databinding.FragmentRegisterUserinfoBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_register_userinfo, container, false)
         binding.registerUserInfoViewModel = registerUserInfoViewModel
+        binding.lifecycleOwner = this
         return binding.root
     }
 
@@ -36,10 +36,6 @@ class RegisterUserInfoFragment : Fragment() {
     private fun registerListeners() {
         registerUserInfoViewModel.confirmUserInfoClicked.observe(this, Observer {
             navigation!!.goToRegisterAvatarScreen()
-        })
-
-        registerUserInfoViewModel.errorMessage.observe(this, Observer { errorMessageID ->
-            Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
         })
     }
 
