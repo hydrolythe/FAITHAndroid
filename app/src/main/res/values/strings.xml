@@ -55,7 +55,6 @@
     <string name="hint_photo_name">een naam voor je foto</string>
     <string name="lbl_name">Naam:</string>
     <string name="lbl_save">Opslaan</string>
-    <string name="DateTime_no_title">Je moet een titel geven aan je gebeurtenis voordat je ze kan opslaan!</string>
     <string name="toast_save_photo_failed">Er ging iets fout bij het opslaan van je foto.</string>
     <string name="terug_naar_de_stad">Terug naar de stad</string>
     <string name="nav_emotieregulatie">Emotieregulatie</string>
@@ -94,10 +93,8 @@
     <string name="descr_loginscreen">Loginscherm</string>
     <string name="username">Gebruikersnaam</string>
     <string name="password">Wachtwoord</string>
-    <string name="login_error_noUsername">Je moet je gebruikersnaam ingeven!</string>
-    <string name="login_error_noPassword">Je moet je wachtwoord ingeven!</string>
-    <string name="register_passwords_nomatch">Je ingevulde wachtwoorden zijn niet gelijk aan elkaar.</string>
-    <string name="register_password_empty">Je moet een wachtwoord ingeven.</string>
+    <string name="register_passwords_nomatch">Wachtwoorden niet gelijk</string>
+    <string name="register_password_empty">Wachtwoord ingeven</string>
     <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
     <string name="error_no_credentials">No credentials have been stored</string>
     <string name="msg_naar_de_stad">Naar de stad</string>
@@ -110,7 +107,7 @@
     <string name="choose_bold">kies vetjes</string>
     <string name="take_photo_de_foto">de foto</string>
     <string name="take_photo_neem_foto">neem foto</string>
-    <string name="register_username_empty">Je gebruikersnaam mag niet leeg zijn.</string>
+    <string name="register_username_empty">Gebruikersnaam invullen</string>
     <string name="register_avatar_mustSelect">Je moet nog een avatar selecteren.</string>
     <string name="cityScreen_logOut">Wil je uitloggen?</string>
     <string name="cityscreen_stad_verlaten">Wil je uitloggen en de stad verlaten?</string>
@@ -119,4 +116,5 @@
     <string name="com_auth0_client_id">VRX5hqPAdDhkj5DJJ9df4Q4SMZS06io9</string>
     <string name="com_auth0_domain">e-quality.eu.auth0.com</string>
     <string name="lbl_archive">Je archief</string>
+    <string name="hint_choose_username">Kies een gebruikersnaam</string>
 </resources>
