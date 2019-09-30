@@ -20,11 +20,11 @@ class EventWithDetailsMapper : MapperWithForeignKey<EventWithDetails, Event> {
             it.eventEntity = EventMapper.mapToEntity(model, foreignKey)
             val mappedEntities = DetailMapper.mapToEntities(model.details, it.eventEntity.uuid)
             it.textDetailEntities =
-                mappedEntities.filterIsInstance<TextDetailEntity>() as MutableList<TextDetailEntity>
+                mappedEntities.filterIsInstance<TextDetailEntity>().toMutableList()
             it.pictureDetailEntities =
-                mappedEntities.filterIsInstance<PictureDetailEntity>() as MutableList<PictureDetailEntity>
+                mappedEntities.filterIsInstance<PictureDetailEntity>().toMutableList()
             it.audioDetailEntities =
-                mappedEntities.filterIsInstance<AudioDetailEntity>() as MutableList<AudioDetailEntity>
+                mappedEntities.filterIsInstance<AudioDetailEntity>().toMutableList()
         }
     }
 

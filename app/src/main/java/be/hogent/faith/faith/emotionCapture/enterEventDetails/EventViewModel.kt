@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
@@ -282,8 +283,12 @@ class EventViewModel(
     //endregion
 
     //region saveText
-    fun saveText(text: String?) {
-        val params = SaveEventTextUseCase.SaveTextParams(event.value!!, text ?: "")
+    /**
+     * Saves a text Detail. If an [existingDetail] is given then the contents of that Detail will
+     * be overwritten
+     */
+    fun saveText(text: String, existingDetail: TextDetail? = null) {
+        val params = SaveEventTextUseCase.SaveTextParams(event.value!!, text, existingDetail)
         saveEventTextUseCase.execute(params, SaveTextUseCaseHandler())
     }
 

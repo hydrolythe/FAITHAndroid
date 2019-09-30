@@ -3,6 +3,8 @@ package be.hogent.faith.storage
 import android.content.Context
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.TextDetail
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -121,19 +123,31 @@ class StorageRepository(private val context: Context) {
     }
 
     /**
-     *  Writes HTML to a text file
+     *  Writes a String to a text file
      *
-     * @param text the html
+     * @param text the String
      * @param event the [Event] this text will be added to as a detail (not by this function).
      *          Used to store the text in a folder specific for the event.
-     * @param fileName Will be used for the filename.
      */
-    fun saveText(text: String, event: Event): Single<File>
-    {
+    fun saveText(text: String, event: Event): Single<File> {
         return Single.fromCallable {
-            val storedFile = File(getEventTextDirectory(event), "${createSaveFileName()}.$TEXT_EXTENSION")
+            val storedFile =
+                File(getEventTextDirectory(event), "${createSaveFileName()}.$TEXT_EXTENSION")
             storedFile.writeText(text)
             storedFile
+        }
+    }
+
+    fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String> {
+        return Single.fromCallable {
+            val readString = textDetail.file.readText()
+            readString
+        }
+    }
+
+    fun overWriteTextDetail(text: String, existingDetail: TextDetail): Completable {
+        return Completable.fromCallable {
+            existingDetail.file.writeText(text)
         }
     }
 }
