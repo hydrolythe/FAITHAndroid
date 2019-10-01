@@ -41,15 +41,11 @@
                 android:layout_width="@dimen/material_icon_width"
                 android:layout_height="@dimen/material_icon_height"
                 android:layout_gravity="center"
-                android:layout_marginStart="12dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="92dp"
                 android:background="@drawable/save_btn"
                 android:onClick="@{() -> eventViewModel.saveText(enterTextViewModel.text, enterTextViewModel.existingDetail)}"
-                app:layout_constraintBottom_toTopOf="@+id/guide_editor_utilities_bottom"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/guide_editor_utilities_right"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
