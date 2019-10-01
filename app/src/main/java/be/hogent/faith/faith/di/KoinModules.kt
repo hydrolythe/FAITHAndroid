@@ -47,7 +47,7 @@ val appModule = module(override = true) {
     single { AndroidSchedulers.mainThread() }
 
     // ViewModels
-    viewModel { CityScreenViewModel() }
+    viewModel { CityScreenViewModel(get()) }
     viewModel { (event: Event) -> EventViewModel(get(), get(), get(), get(), get(), event) }
     viewModel { EventViewModel(get(), get(), get(), get(), get()) }
     viewModel { DrawViewModel() }

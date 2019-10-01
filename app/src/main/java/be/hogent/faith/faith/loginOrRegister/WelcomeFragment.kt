@@ -55,7 +55,7 @@ class WelcomeFragment : Fragment() {
         welcomeViewModel.registerButtonClicked.observe(this, Observer {
             navigation!!.goToRegistrationScreen()
         })
-        welcomeViewModel.UserLoggedInSuccessFully.observe(this, Observer {
+        welcomeViewModel.userLoggedInSuccessFully.observe(this, Observer {
             onLoginSuccess()
         })
         welcomeViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->

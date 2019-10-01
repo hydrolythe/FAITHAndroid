@@ -4,11 +4,12 @@ import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.daos.UserDao
 import be.hogent.faith.database.database.EntityDatabase
-import be.hogent.faith.database.firebase.AuthManagerImpl
+import be.hogent.faith.database.firebase.FirebaseAuthManager
 import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.EventWithDetailsMapper
 import be.hogent.faith.database.mappers.UserMapper
+import be.hogent.faith.database.repositories.AuthManagerImpl
 import be.hogent.faith.database.repositories.EventRepositoryImpl
 import be.hogent.faith.database.repositories.UserRepositoryImpl
 import be.hogent.faith.domain.repository.AuthManager
@@ -34,7 +35,8 @@ val databaseModule = module {
     // so we have to explicitly mention it.
     single { EventRepositoryImpl(get(), get(), get(), get()) as EventRepository }
     single { UserRepositoryImpl(get(), get(), get()) as UserRepository }
-    single {AuthManagerImpl() as AuthManager}
+    single { AuthManagerImpl(get()) as AuthManager}
+    single { FirebaseAuthManager()}
 }
 
 fun constructEventDao(entityDatabase: EntityDatabase): EventDao {

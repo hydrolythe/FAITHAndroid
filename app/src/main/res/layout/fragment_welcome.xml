@@ -15,16 +15,15 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"   >
+        android:orientation="vertical">
 
         <!--ACHTERGROND-->
         <ImageView
             android:id="@+id/background_welcome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:src="@drawable/loginscherm"
             android:contentDescription="@string/descr_loginscreen"
-            />
+            tools:src="@drawable/loginscherm" />
 
         <!-- KNOPPEN -->
         <!-- Invisible to make it transparent -->
@@ -135,7 +134,10 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_pole_left_end"
                 app:layout_constraintTop_toTopOf="@+id/guide_pole_top" />
 
-
+            <!--
+                          android:drawableStart="" van tekening ervoor een icon maken
+                          android:drawablePadding="10dp"
+                          -->
             <EditText
                 android:id="@+id/txt_welcome_userName"
                 android:layout_width="0dp"

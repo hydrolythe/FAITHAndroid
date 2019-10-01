@@ -2,7 +2,7 @@ package be.hogent.faith.domain.repository
 
 import io.reactivex.Completable
 import io.reactivex.Maybe
-import io.reactivex.Single
+import java.lang.RuntimeException
 
 interface AuthManager {
     fun register(email: String, password: String): Maybe<String?>

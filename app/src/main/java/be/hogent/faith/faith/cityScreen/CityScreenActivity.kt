@@ -6,18 +6,17 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
-import be.hogent.faith.faith.loginOrRegister.LoginManager
 import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
 import be.hogent.faith.faith.overviewEvents.OverviewEventsActivity
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.builders.footer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
-import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class CityScreenActivity : AppCompatActivity(),
     CityScreenFragment.CityScreenNavigationListener {
 
-    private val loginManager: LoginManager by inject()
+    private val cityScreenViewModel: CityScreenViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +55,7 @@ class CityScreenActivity : AppCompatActivity(),
     }
 
     override fun logOut() {
-        loginManager.logout()
+        cityScreenViewModel.onLogOutClicked()
         navigateUpTo(Intent(applicationContext, LoginOrRegisterActivity::class.java))
     }
 
@@ -68,7 +67,7 @@ class CityScreenActivity : AppCompatActivity(),
                 setPositiveButton(R.string.ok) { _, _ ->
                     logOut()
                 }
-                setNegativeButton(be.hogent.faith.R.string.cancel) { dialog, _ ->
+                setNegativeButton(R.string.cancel) { dialog, _ ->
                     dialog.cancel()
                 }
             }

@@ -16,8 +16,10 @@ import durdinapps.rxfirebase2.RxFirebaseAuth
 import io.reactivex.Completable
 import io.reactivex.Maybe
 
-class AuthManagerImpl : AuthManager {
-    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+class FirebaseAuthManager : AuthManager {
+    private val auth: FirebaseAuth by lazy {
+        FirebaseAuth.getInstance()
+    }
 
     val currentUser: String?
         get() = mapToUser(auth.currentUser)

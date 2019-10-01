@@ -28,16 +28,13 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     val registerButtonClicked: LiveData<Unit>
         get() = _registerButtonClicked
 
-    /*
-    private val _loginButtonClicked = SingleLiveEvent<Unit>()
-    val loginButtonClicked: LiveData<Unit>
-        get() = _loginButtonClicked
-*/
-
-
     private val _userLoggedInSuccessFully = SingleLiveEvent<Unit>()
-    val UserLoggedInSuccessFully: LiveData<Unit>
+    val userLoggedInSuccessFully: LiveData<Unit>
         get() = _userLoggedInSuccessFully
+
+    init {
+        //TODO als reeds aangemeld
+    }
 
     fun registerButtonClicked() {
         _registerButtonClicked.call()
