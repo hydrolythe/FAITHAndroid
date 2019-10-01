@@ -25,6 +25,7 @@ class RegisterUserInfoFragment : Fragment() {
         val binding: be.hogent.faith.databinding.FragmentRegisterUserinfoBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_register_userinfo, container, false)
         binding.registerUserInfoViewModel = registerUserInfoViewModel
+        binding.lifecycleOwner = this
         return binding.root
     }
 

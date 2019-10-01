@@ -24,9 +24,22 @@ class RegisterUserInfoViewModel(private val registerUserUseCase: RegisterUserUse
     val UUID: LiveData<String>
         get() = _uuid
 
+    private val _userNameErrorMessage = MutableLiveData<Int>()
+    val userNameErrorMessage: LiveData<Int>
+        get() = _userNameErrorMessage
+
+    private val _passwordErrorMessage = MutableLiveData<Int>()
+    val passwordErrorMessage: LiveData<Int>
+        get() = _passwordErrorMessage
+
+    private val _passwordRepeatErrorMessage = MutableLiveData<Int>()
+    val passwordRepeatErrorMessage: LiveData<Int>
+        get() = _passwordRepeatErrorMessage
+
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
+
 
     private val _confirmUserInfoClicked = SingleLiveEvent<Unit>()
     val confirmUserInfoClicked: LiveData<Unit>
@@ -43,7 +56,7 @@ class RegisterUserInfoViewModel(private val registerUserUseCase: RegisterUserUse
 
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
-            _errorMessage.postValue(R.string.registerOrLogin_username_empty)
+            _userNameErrorMessage.value = R.string.registerOrLogin_username_empty
             return false
         }
         return true
@@ -51,11 +64,11 @@ class RegisterUserInfoViewModel(private val registerUserUseCase: RegisterUserUse
 
     private fun passwordIsValid(): Boolean {
         if (password.value.isNullOrBlank()) {
-            _errorMessage.postValue(R.string.registerOrLogin_password_empty)
+            _passwordErrorMessage.value = R.string.registerOrLogin_password_empty
             return false
         }
         if (password.value != passwordRepeated.value) {
-            _errorMessage.postValue(R.string.register_passwords_nomatch)
+            _passwordRepeatErrorMessage.value = R.string.register_passwords_nomatch
             return false
         }
         return true
@@ -82,13 +95,15 @@ class RegisterUserInfoViewModel(private val registerUserUseCase: RegisterUserUse
         override fun onError(e: Throwable) {
             Log.e(TAG, e.localizedMessage)
             _errorMessage.postValue(
-                when (e) {
-                    is WeakPasswordException -> R.string.register_error_weak_password
-                    is InvalidCredentialsException -> R.string.register_error_invalid_username
-                    is UserCollisionException -> R.string.register_error_username_already_exists
-                    else -> R.string.register_error_create_user
-                }
-            )
+            when (e) {
+                is WeakPasswordException ->
+                    R.string.register_error_weak_password
+                is InvalidCredentialsException ->
+                    R.string.register_error_invalid_username
+                is UserCollisionException ->
+                    R.string.register_error_username_already_exists
+                else ->  R.string.register_error_create_user
+            })
         }
     }
 }
