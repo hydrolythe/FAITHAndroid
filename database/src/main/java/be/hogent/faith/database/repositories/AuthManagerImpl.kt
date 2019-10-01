@@ -2,6 +2,7 @@ package be.hogent.faith.database.repositories
 
 import be.hogent.faith.database.firebase.FirebaseAuthManager
 import be.hogent.faith.domain.repository.AuthManager
+import io.reactivex.subjects.BehaviorSubject
 
 class AuthManagerImpl(private val firebase: FirebaseAuthManager) : AuthManager {
 
@@ -11,7 +12,10 @@ class AuthManagerImpl(private val firebase: FirebaseAuthManager) : AuthManager {
 
     override fun signOut() = firebase.signOut()
 
-    override fun reset() {
+    override fun reset() {}
 
-    }
+    override val currentUser: BehaviorSubject<String>
+        get() = firebase.loggedInUser
+
 }
+

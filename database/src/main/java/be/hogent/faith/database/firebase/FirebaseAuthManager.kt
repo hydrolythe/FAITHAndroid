@@ -1,6 +1,5 @@
 package be.hogent.faith.database.firebase
 
-import be.hogent.faith.domain.repository.AuthManager
 import be.hogent.faith.domain.repository.InvalidCredentialsException
 import be.hogent.faith.domain.repository.SignInException
 import be.hogent.faith.domain.repository.SignOutException
@@ -15,19 +14,31 @@ import com.google.firebase.auth.FirebaseUser
 import durdinapps.rxfirebase2.RxFirebaseAuth
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.subjects.BehaviorSubject
 
-class FirebaseAuthManager : AuthManager {
+class FirebaseAuthManager {
     private val auth: FirebaseAuth by lazy {
         FirebaseAuth.getInstance()
     }
 
-    val currentUser: String?
-        get() = mapToUser(auth.currentUser)
+    //TODO:klopt dit wel
+    private var authStateListener: FirebaseAuth.AuthStateListener = FirebaseAuth.AuthStateListener {
+        if (it.currentUser != null && it.currentUser is FirebaseUser)
+            loggedInUser.onNext((it.currentUser as FirebaseUser).uid)
+        else
+            loggedInUser.onNext("")
+    }
 
-    override fun register(email: String, password: String): Maybe<String?> {
+    init {
+        auth.addAuthStateListener { authStateListener }
+    }
+
+    var loggedInUser: BehaviorSubject<String> = BehaviorSubject.create()
+
+    fun register(email: String, password: String): Maybe<String?> {
         return RxFirebaseAuth.createUserWithEmailAndPassword(auth, email, password)
             .map { mapToUser(it) }
-            //map firebaseExceptions to domain exceptions
+            //map FirebaseExceptions to domain exceptions
             .onErrorResumeNext { error: Throwable ->
                 when (error) {
                     is FirebaseAuthWeakPasswordException -> Maybe.error(WeakPasswordException(error))
@@ -45,7 +56,7 @@ class FirebaseAuthManager : AuthManager {
     }
 
 
-    override fun signIn(email: String, password: String): Maybe<String?> {
+    fun signIn(email: String, password: String): Maybe<String?> {
         return RxFirebaseAuth.signInWithEmailAndPassword(auth, email, password)
             .map { mapToUser(it) }
             .onErrorResumeNext { error: Throwable -> Maybe.error(SignInException(error)) }
@@ -55,7 +66,7 @@ class FirebaseAuthManager : AuthManager {
          */
     }
 
-    override fun signOut(): Completable {
+    fun signOut(): Completable {
         return try {
             auth.signOut()
             Completable.complete()
@@ -64,7 +75,7 @@ class FirebaseAuthManager : AuthManager {
         }
     }
 
-    override fun reset() {
+    fun reset() {
         throw NotImplementedError()
     }
 
@@ -74,5 +85,9 @@ class FirebaseAuthManager : AuthManager {
 
     private fun mapToUser(result: FirebaseUser?): String? {
         return result?.uid
+    }
+
+    fun disposeAuthListener() {
+        auth.removeAuthStateListener(authStateListener)
     }
 }
