@@ -168,13 +168,14 @@
 
             <ImageButton
                 android:id="@+id/btn_event_send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="@dimen/material_icon_height"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/save_btn"
                 android:minWidth="24dp"
                 android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
-                android:src="@drawable/event_details_send"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/guide_horizontal_details"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
