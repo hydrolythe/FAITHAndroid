@@ -23,8 +23,8 @@ android {
         applicationId "be.hogent.faith"
         minSdkVersion globalConfig["androidMinSdkVersion"]
         targetSdkVersion globalConfig["androidTargetSdkVersion"]
-        versionCode 1
-        versionName "1.0"
+        versionCode generateVersionCode()
+        versionName generateVersionName()
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [auth0Domain: "@string/com_auth0_domain", auth0Scheme: "app"]
@@ -118,5 +118,16 @@ dependencies {
 
     androidTestImplementation androidTestDependencies.espressoContrib
     androidTestImplementation androidTestDependencies.uiAutomator
+}
+
+private Integer generateVersionCode() {
+    def globalConfig = rootProject.extensions.getByName("ext")
+    return globalConfig["androidMinSdkVersion"] * 10000000 + globalConfig["versionMajor"] * 10000 + globalConfig["versionMinor"] * 100 + globalConfig["versionPatch"]
+}
+
+private String generateVersionName() {
+    def globalConfig = rootProject.extensions.getByName("ext")
+    String versionName = "${globalConfig["versionMajor"]}.${globalConfig["versionMinor"]}.${globalConfig["versionPatch"]}"
+    return versionName
 }
 

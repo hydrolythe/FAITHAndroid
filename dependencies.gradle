@@ -57,6 +57,12 @@ ext {
     ktlint_version = '0.31.0'
     timber = '4.7.1'
 
+    //Version Code
+    ext.versionMajor = 1
+    ext.versionMinor = 1
+    ext.versionPatch = 1
+    ext.versionClassifier = null
+
     commonDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
 
