@@ -49,6 +49,4 @@ class EventDetailsFragmentTest {
         onView(withId(R.id.btn_event_details_text)).perform(click())
         pressBack()
     }
-
-
 }

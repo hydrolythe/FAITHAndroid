@@ -20,7 +20,7 @@ class SaveEventDrawingUseCase(
             params.event
         ).map { storedFile ->
             // TODO: remove second param once detail name is removed
-            params.event.addNewPictureDetail(storedFile, "Drawing")
+            params.event.addNewDrawingDetail(storedFile, "Drawing")
         }
     }
 

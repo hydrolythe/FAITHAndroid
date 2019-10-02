@@ -18,30 +18,32 @@ class TakePhotoViewModel : ViewModel() {
     val photo: LiveData<File>
         get() = _photo
 
-    internal val _takePhotoButtonClicked = SingleLiveEvent<Unit>()
+    private val _takePhotoButtonClicked = SingleLiveEvent<Unit>()
     val takePhotoButtonClicked: LiveData<Unit>
         get() = _takePhotoButtonClicked
 
-    internal val _okPhotoButtonClicked = SingleLiveEvent<Unit>()
+    private val _okPhotoButtonClicked = SingleLiveEvent<Unit>()
     val okPhotoButtonClicked: LiveData<Unit>
         get() = _okPhotoButtonClicked
 
-    internal val _notOkPhotoButtonClicked = SingleLiveEvent<Unit>()
+    private val _notOkPhotoButtonClicked = SingleLiveEvent<Unit>()
     val notOkPhotoButtonClicked: LiveData<Unit>
         get() = _notOkPhotoButtonClicked
 
-    val visibilityTakePhoto = Transformations.map<PhotoState, Int>(_currentState) { state ->
-        if (state is TakePhotoState) View.VISIBLE else View.GONE
-    }
+    val visibilityTakePhoto: LiveData<Int> =
+        Transformations.map<PhotoState, Int>(_currentState) { state ->
+            if (state is TakePhotoState) View.VISIBLE else View.GONE
+        }
 
-    val visibilityPhotoTakenNotSaved =
+    val visibilityPhotoTakenNotSaved: LiveData<Int> =
         Transformations.map<PhotoState, Int>(_currentState) { state ->
             if (state is PhotoTakenState) View.VISIBLE else View.GONE
         }
 
-    val visibilityPhotoTakenOrSaved = Transformations.map<PhotoState, Int>(_currentState) { state ->
-        if (state is PhotoTakenState || state is PhotoSavedState) View.VISIBLE else View.GONE
-    }
+    val visibilityPhotoTakenOrSaved: LiveData<Int> =
+        Transformations.map<PhotoState, Int>(_currentState) { state ->
+            if (state is PhotoTakenState || state is PhotoSavedState) View.VISIBLE else View.GONE
+        }
 
     init {
         _currentState.value = TakePhotoState()

@@ -46,5 +46,4 @@ internal fun Fragment.adjustGuidelineAfterScaling(
     val newPercentage = ((originalPercentage * imageLength) + padding) / screenLength
     guide_pole_left_end.setGuidelinePercent(newPercentage)
     Timber.i("Changed %d from %f to %f", guideline.id, originalPercentage, newPercentage)
-
 }
