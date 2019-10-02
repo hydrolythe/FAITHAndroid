@@ -3,6 +3,7 @@ package be.hogent.faith.domain.models
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import org.jetbrains.annotations.TestOnly
 import org.threeten.bp.LocalDateTime
@@ -47,7 +48,13 @@ data class Event(
         _details += detail
     }
 
-    fun addNewPictureDetail(saveFile: File, photoName: String): Detail {
+    fun addNewPhotoDetail(saveFile: File, photoName: String): PhotoDetail {
+        val newDetail = PhotoDetail(saveFile, photoName)
+        addDetail(newDetail)
+        return newDetail
+    }
+
+    fun addNewDrawingDetail(saveFile: File, photoName: String): DrawingDetail {
         val newDetail = DrawingDetail(saveFile, photoName)
         addDetail(newDetail)
         return newDetail

@@ -46,7 +46,7 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     }
 
     private fun createScopedUserViewModel() {
-        Log.e(TAG, "Creating USER SCOPE")
+        Log.i(TAG, "Creating USER SCOPE")
         // Don't create SCOPE twice
         // This sometimes happens when running tests that reuse the same Activity twice
         try {

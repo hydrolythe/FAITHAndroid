@@ -73,7 +73,6 @@ class CityScreenFragment : Fragment() {
         registerListeners()
         val (screenWidth, screenHeight) = getScreenDimensions()
 
-
         // We wait for the image to be drawn and scaled, get its dimensions and then
         // set the guidlines properly
         background_city_screen.viewTreeObserver.addOnGlobalLayoutListener(object :
@@ -139,7 +138,6 @@ class CityScreenFragment : Fragment() {
         display?.getSize(size)
         return Pair(size.x.toFloat(), size.y.toFloat())
     }
-
 
     private fun registerListeners() {
         cityScreenViewModel.archiveClicked.observe(this, Observer {

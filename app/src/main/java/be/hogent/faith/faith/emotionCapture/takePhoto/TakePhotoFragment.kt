@@ -15,8 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
-import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.util.TAG
@@ -25,7 +23,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.logcat
 import kotlinx.android.synthetic.main.fragment_take_photo.img_takePhoto_Photo
-import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -37,8 +34,6 @@ const val REQUESTCODE_CAMERA = 1
 class TakePhotoFragment : Fragment() {
 
     private val eventViewModel: EventViewModel by sharedViewModel()
-
-    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private val takePhotoViewModel: TakePhotoViewModel by sharedViewModel()
 
@@ -103,10 +98,6 @@ class TakePhotoFragment : Fragment() {
             }
         })
 
-        userViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
-            Log.e(TAG, context!!.getString(errorMessageResourceID))
-            Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
-        })
         eventViewModel.photoSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
                 .show()
