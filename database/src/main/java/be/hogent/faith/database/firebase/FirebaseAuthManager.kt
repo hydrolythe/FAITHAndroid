@@ -1,5 +1,7 @@
 package be.hogent.faith.database.firebase
 
+import android.net.Uri
+import android.util.Log
 import be.hogent.faith.domain.repository.InvalidCredentialsException
 import be.hogent.faith.domain.repository.SignInException
 import be.hogent.faith.domain.repository.SignOutException
@@ -11,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import durdinapps.rxfirebase2.RxFirebaseAuth
 import io.reactivex.Completable
 import io.reactivex.Maybe

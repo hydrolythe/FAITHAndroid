@@ -4,6 +4,7 @@ import android.util.Log
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.daos.UserDao
 import be.hogent.faith.database.database.EntityDatabase
+import be.hogent.faith.database.firebase.FirebaseUserRepository
 import be.hogent.faith.database.mappers.EventWithDetailsMapper
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.domain.models.Event
@@ -21,7 +22,8 @@ open class UserRepositoryImpl(
     // This is required to insert an event together with all its details.
     private val database: EntityDatabase,
     private val userMapper: UserMapper,
-    private val eventWithDetailsMapper: EventWithDetailsMapper
+    private val eventWithDetailsMapper: EventWithDetailsMapper,
+private val firebaseUserRepository: FirebaseUserRepository
 ) : UserRepository {
     // Although the DAO's could be injected, that would mean we inject both the
     // database and the DAO's, while the latter are made from the former, and are properties of it.
@@ -35,12 +37,15 @@ open class UserRepositoryImpl(
 
     // een gebruiker heeft bij creatie nog geen events
     override fun insert(item: User): Completable {
-        return try {
+       /* return try {
             userDao.insert(userMapper.mapToEntity(item))
             Completable.complete()
         } catch (e: Exception) {
             Completable.error(e)
         }
+        */
+        return firebaseUserRepository.insert(item)
+
     }
 
     override fun get(uuid: UUID): Flowable<User> {

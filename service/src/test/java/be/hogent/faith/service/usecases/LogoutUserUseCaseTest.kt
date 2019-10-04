@@ -25,7 +25,7 @@ class LogoutUserUseCaseTest {
     }
 
     @Test
-    fun logoutUserUC_Succeeds() {
+    fun LogoutUserUC_Succeeds() {
         // Arrange
         every { authManager.signOut() } returns Completable.complete()
 

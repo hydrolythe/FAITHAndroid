@@ -5,6 +5,7 @@ import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.daos.UserDao
 import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.firebase.FirebaseAuthManager
+import be.hogent.faith.database.firebase.FirebaseUserRepository
 import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.EventWithDetailsMapper
@@ -34,9 +35,10 @@ val databaseModule = module {
     // Koin doesn't automatically see the Impl as an implementation of the interface,
     // so we have to explicitly mention it.
     single { EventRepositoryImpl(get(), get(), get(), get()) as EventRepository }
-    single { UserRepositoryImpl(get(), get(), get()) as UserRepository }
+    single { UserRepositoryImpl(get(), get(), get(), get()) as UserRepository }
     single { AuthManagerImpl(get()) as AuthManager}
     single { FirebaseAuthManager()}
+    single {FirebaseUserRepository()}
 }
 
 fun constructEventDao(entityDatabase: EntityDatabase): EventDao {
