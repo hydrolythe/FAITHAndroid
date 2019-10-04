@@ -25,6 +25,7 @@ class RecordStateStopped(
     override fun onRecordPressed() {
         Timber.d("Stopped->Recording")
         recorder.reset()
+        context.finishedRecording = false
         context.goToNextState(
             RecordStateRecording.getRecordingState(
                 context,

@@ -121,7 +121,9 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
         private const val DETAIL_UUID = "UUID of the Detail"
         fun newInstance(detail: Detail, @DrawableRes avatarOutLineId: Int): DetailFragmentWithEmotionAvatar {
             return when (detail) {
-                is AudioDetail -> AudioFragmentWithEmotionAvatar()
+                is AudioDetail -> AudioFragmentWithEmotionAvatar.newInstance(
+                    avatarOutLineId, detail.uuid
+                )
                 is TextDetail -> TextFragmentWithEmotionAvatar.newInstance(
                     avatarOutLineId, detail.uuid
                 )
@@ -239,16 +241,19 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
 
     class AudioFragmentWithEmotionAvatar : DetailFragmentWithEmotionAvatar() {
         companion object {
-            fun newInstance(@DrawableRes avatarOutLineId: Int): AudioFragmentWithEmotionAvatar {
+            fun newInstance(@DrawableRes avatarOutLineId: Int, detailUUID: UUID? = null): AudioFragmentWithEmotionAvatar {
                 return AudioFragmentWithEmotionAvatar().apply {
-                    arguments = getBundleForAvatarOutline(avatarOutLineId)
+                    arguments = getBundleForAvatarOutline(avatarOutLineId).apply {
+                        putSerializable(DETAIL_UUID, detailUUID)
+                    }
                 }
             }
         }
 
         override fun setChildFragment() {
+            val detailUuid = arguments?.getSerializable(DETAIL_UUID) as UUID?
             replaceChildFragment(
-                RecordAudioFragment.newInstance(), R.id.fragment_container_editDetail
+                RecordAudioFragment.newInstance(detailUuid), R.id.fragment_container_editDetail
             )
         }
     }

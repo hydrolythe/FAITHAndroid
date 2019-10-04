@@ -48,6 +48,8 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
     init {
         _selectedTextColor.value = Color.BLACK
         _selectedFontSize.value = FontSize.NORMAL
+        // Start with empty String so contents are never null
+        _text.value = ""
     }
 
     fun onBoldClicked() {

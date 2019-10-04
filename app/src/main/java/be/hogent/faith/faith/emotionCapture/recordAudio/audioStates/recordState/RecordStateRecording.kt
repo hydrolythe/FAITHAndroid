@@ -54,8 +54,9 @@ class RecordStateRecording(
     }
 
     override fun onStopPressed() {
-        Timber.d("Recording -> Stopped")
+        Timber.d("Recording -> Stopped: Finished recording")
         recorder.stop()
+        context.finishedRecording = true
         context.goToNextState(RecordStateStopped(context, mediaPlayer, recorder))
     }
 }

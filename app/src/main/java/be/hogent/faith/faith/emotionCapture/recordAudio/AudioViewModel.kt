@@ -9,15 +9,14 @@ import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioState
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.playState.PlayStateInitial
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.recordState.RecordStateInitial
 
-class RecordAudioViewModel : ViewModel(), AudioContext {
-
+class AudioViewModel : ViewModel(), AudioContext {
     private val _audioState = MutableLiveData<AudioState>()
     val audioState: LiveData<AudioState>
         get() = _audioState
 
     private val _existingDetail = MutableLiveData<AudioDetail>()
-    val existingDetail: LiveData<AudioDetail>
-        get() = _existingDetail
+
+    override var finishedRecording = false
 
     /**
      *
@@ -32,6 +31,15 @@ class RecordAudioViewModel : ViewModel(), AudioContext {
     val stopButtonEnabled = MutableLiveData<Boolean>()
     val recordButtonEnabled = MutableLiveData<Boolean>()
 
+    private val _saveButtonVisible = MutableLiveData<Boolean>()
+    val saveButtonVisible: LiveData<Boolean>
+        get() = _saveButtonVisible
+
+    init {
+        // Can be set to false once an existing Detail is added
+        _saveButtonVisible.value = true
+    }
+
     /**
      * Should be called after Audio permissions are granted in the [RecordAudioFragment].
      * This is because initialising the recording without the correct permissions results
@@ -39,7 +47,7 @@ class RecordAudioViewModel : ViewModel(), AudioContext {
      */
     fun initialiseState() {
         if (playingExistingAudioDetail()) {
-            goToNextState(PlayStateInitial(this, existingDetail.value!!))
+            goToNextState(PlayStateInitial(this, _existingDetail.value!!))
         } else {
             goToNextState(RecordStateInitial(this))
         }
@@ -61,6 +69,7 @@ class RecordAudioViewModel : ViewModel(), AudioContext {
             } else {
                 _audioState.value?.recordButtonEnabled
             }
+        _saveButtonVisible.value = finishedRecording
     }
 
     fun onRecordButtonClicked() {
@@ -85,5 +94,10 @@ class RecordAudioViewModel : ViewModel(), AudioContext {
 
     private fun playingExistingAudioDetail(): Boolean {
         return _existingDetail.value != null
+    }
+
+    fun loadExistingAudioDetail(givenDetail: AudioDetail) {
+        _existingDetail.value = givenDetail
+        _saveButtonVisible.value = false
     }
 }

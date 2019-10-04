@@ -5,6 +5,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.faith.TestUtils
 import be.hogent.faith.service.usecases.LoadTextDetailUseCase
+import be.hogent.faith.util.factory.DetailFactory
 import io.mockk.called
 import io.mockk.mockk
 import io.mockk.slot
@@ -14,7 +15,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.io.File
 import java.lang.RuntimeException
 
 class EnterTextViewModelTest {
@@ -91,7 +91,7 @@ class EnterTextViewModelTest {
     @Test
     fun enterTextVM_loadTextUC_updatesText() {
         // Arrange
-        val saveFile = File("fake/path")
+        val textDetail = DetailFactory.makeTextDetail()
         val params = slot<LoadTextDetailUseCase.LoadTextParams>()
         val resultObserver = slot<DisposableSingleObserver<String>>()
         val textObserver = mockk<Observer<String>>(relaxed = true)
@@ -99,7 +99,7 @@ class EnterTextViewModelTest {
         viewModel.text.observeForever(textObserver)
 
         // Act
-        viewModel.loadExistingTextDetail(saveFile)
+        viewModel.loadExistingTextDetail(textDetail)
         verify { loadTextDetailUseCase.execute(capture(params), capture(resultObserver)) }
         resultObserver.captured.onSuccess(text)
 
@@ -109,7 +109,7 @@ class EnterTextViewModelTest {
     @Test
     fun enterTextVM_loadTextUseCaseFails_updatesErrorMessage() {
         // Arrange
-        val saveFile = File("fake/path")
+        val textDetail = DetailFactory.makeTextDetail()
         val resultObserver = slot<DisposableSingleObserver<String>>()
         val textObserver = mockk<Observer<String>>(relaxed = true)
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
@@ -118,7 +118,7 @@ class EnterTextViewModelTest {
         viewModel.errorMessage.observeForever(errorObserver)
 
         // Act
-        viewModel.loadExistingTextDetail(saveFile)
+        viewModel.loadExistingTextDetail(textDetail)
         verify { loadTextDetailUseCase.execute(any(), capture(resultObserver)) }
         resultObserver.captured.onError(RuntimeException())
 
