@@ -84,6 +84,8 @@ class DrawEmotionAvatarFragment : DrawFragment() {
     private fun configureDrawingCanvas() {
         // Paint with semi-transparent paint so you can always see the background's outline
         drawView.setAlpha(70)
+        // Leave some whitespace around the avatar
+        drawView.fullScreenBackground = false
 
         if (avatarOutlineResId != NO_AVATAR) {
             drawView.setPaintedBackground(
