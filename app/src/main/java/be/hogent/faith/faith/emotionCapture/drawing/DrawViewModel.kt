@@ -5,6 +5,7 @@ import androidx.annotation.ColorInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import com.divyanshu.draw.widget.DrawView
 import com.divyanshu.draw.widget.DrawingAction
@@ -35,6 +36,10 @@ class DrawViewModel : ViewModel() {
     val saveClicked: LiveData<Unit>
         get() = _saveClicked
 
+    private val _existingDetail = MutableLiveData<DrawingDetail>()
+    val existingDetail: LiveData<DrawingDetail>
+        get() = _existingDetail
+
     /**
      * Contains all actions that have been drawn on the [DrawView].
      * This belongs here because it's part of the UI state, just like how you would save text that's already been typed.
@@ -53,6 +58,16 @@ class DrawViewModel : ViewModel() {
         _drawingActions.value = mutableListOf()
         _selectedColor.value = Color.BLACK
         _selectedLineWidth.value = LineWidth.MEDIUM
+    }
+
+    fun loadExistingDrawingDetail(drawingDetail: DrawingDetail) {
+        _existingDetail.value = drawingDetail
+        // The approach in the TextViewModel of fetching the existing text  using the UC
+        // and setting it in the VM is not applicable here because we have to interact
+        // directly with an Android-element (DrawView). Instead setting up the DrawView is done in the
+        // [MakeDrawingFragment].
+        // Saving the detail here is still necessary for passing it to the EventVM in order to
+        // overwrite the existing detail.
     }
 
     fun pickColor(@ColorInt color: Int) {

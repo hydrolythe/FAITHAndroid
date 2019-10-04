@@ -125,7 +125,9 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                 is TextDetail -> TextFragmentWithEmotionAvatar.newInstance(
                     avatarOutLineId, detail.uuid
                 )
-                is DrawingDetail -> DrawingFragmentWithEmotionAvatar()
+                is DrawingDetail -> DrawingFragmentWithEmotionAvatar.newInstance(
+                    avatarOutLineId, detail.uuid
+                )
                 is PhotoDetail -> PhotoFragmentWithEmotionAvatar.newInstance(
                     avatarOutLineId, detail.uuid
                 )
@@ -179,12 +181,27 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                     arguments = getBundleForAvatarOutline(avatarOutLineId)
                 }
             }
+
+            fun newInstance(@DrawableRes avatarOutLineId: Int, detailUUID: UUID): DrawingFragmentWithEmotionAvatar {
+                return DrawingFragmentWithEmotionAvatar().apply {
+                    arguments = getBundleForAvatarOutline(avatarOutLineId).apply {
+                        putSerializable(DETAIL_UUID, detailUUID)
+                    }
+                }
+            }
         }
 
         override fun setChildFragment() {
-            replaceChildFragment(
-                MakeDrawingFragment.newInstance(), R.id.fragment_container_editDetail
-            )
+            val detailUuid = arguments?.getSerializable(DETAIL_UUID) as UUID?
+            if (detailUuid == null) {
+                replaceChildFragment(
+                    MakeDrawingFragment.newInstance(), R.id.fragment_container_editDetail
+                )
+            } else {
+                replaceChildFragment(
+                    MakeDrawingFragment.newInstance(detailUuid), R.id.fragment_container_editDetail
+                )
+            }
         }
     }
 

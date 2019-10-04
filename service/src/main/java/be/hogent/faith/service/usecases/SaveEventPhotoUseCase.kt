@@ -18,13 +18,12 @@ class SaveEventPhotoUseCase(
         return storageRepository.saveEventPhoto(
             params.tempPhotoFile, params.event
         ).map { storedFile ->
-            params.event.addNewPhotoDetail(storedFile, params.photoName)
+            params.event.addNewPhotoDetail(storedFile)
         }
     }
 
     data class Params(
         val tempPhotoFile: File,
-        val event: Event,
-        val photoName: String
+        val event: Event
     )
 }
