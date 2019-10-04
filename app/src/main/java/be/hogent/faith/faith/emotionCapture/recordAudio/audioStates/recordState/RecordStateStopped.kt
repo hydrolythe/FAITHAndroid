@@ -4,6 +4,7 @@ import android.media.MediaPlayer
 import android.media.MediaRecorder
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.playState.PlayStatePlaying
+import timber.log.Timber
 
 class RecordStateStopped(
     context: AudioContext,
