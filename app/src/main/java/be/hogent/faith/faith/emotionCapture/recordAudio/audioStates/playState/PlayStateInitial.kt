@@ -8,6 +8,10 @@ import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioState
 import be.hogent.faith.util.TAG
 import timber.log.Timber
 
+/**
+ * State used for playing audio from an existing detail.
+ * When starting from scratch this state is skipped.
+ */
 class PlayStateInitial(
     context: AudioContext,
     private val audioDetail: AudioDetail
@@ -20,6 +24,11 @@ class PlayStateInitial(
     override val pauseButtonEnabled = false
     override val stopButtonEnabled = false
     override val recordButtonEnabled = false
+
+    init {
+        initialisePlayer()
+    }
+
     /**
      * Initialise the [MediaPlayer].
      * Should only be called the very first time the [MediaPlayer] is made, as this internally
@@ -30,10 +39,11 @@ class PlayStateInitial(
      *
      * More info in the develop documentations.
      */
-    fun initialisePlayer() {
+    private fun initialisePlayer() {
         with(mediaPlayer) {
             try {
                 setDataSource(audioDetail.file.path)
+                prepare()
                 Timber.d("Audio playback prepared")
             } catch (e: IllegalStateException) {
                 Timber.e(TAG, "Continuing with the prepare step")

@@ -83,10 +83,9 @@ class DrawViewTest {
         setupContextWithResources()
         val view = spyk(DrawView(context, mockk()))
         every { view.context } returns context
-        val fakeResourceID = 0
 
         // Act
-        view.addDrawable(fakeResourceID, 0, 0)
+        view.addDrawable(mockk(relaxed = true), 0, 0)
 
         // Assert
         assertEquals(1, view.drawingActions.size)
@@ -98,8 +97,7 @@ class DrawViewTest {
         setupContextWithResources()
         val view = spyk(DrawView(context, mockk()))
         every { view.context } returns context
-        val fakeResourceID = 0
-        view.addDrawable(fakeResourceID, 0, 0)
+        view.addDrawable(mockk(relaxed = true), 0, 0)
 
         // Act
         view.undo()
@@ -198,7 +196,7 @@ class DrawViewTest {
 
     private fun setupContextWithResources() {
         val resources = mockk<Resources>()
-        every { resources.getDrawable(any()) } returns mockk(relaxed = true)
+        every { resources.getDrawable(any(), null) } returns mockk(relaxed = true)
         every { context.resources } returns resources
     }
 }

@@ -24,6 +24,7 @@ abstract class AudioState(
     abstract val pauseButtonEnabled: Boolean
     abstract val stopButtonEnabled: Boolean
     abstract val recordButtonEnabled: Boolean
+    open val saveButtonEnabled: Boolean = false
 
     /**
      * Resets the internal [MediaRecorder] and [MediaPlayer]
