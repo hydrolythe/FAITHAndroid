@@ -75,19 +75,28 @@ class MakeDrawingFragment : DrawFragment() {
         configureDraggableImagesRecyclerView()
         configureDrawView()
 
-        if (drawingArgumentGiven()) {
-            val detailUuid = arguments!!.getSerializable(DRAWING_DETAIL_UUID) as UUID
-            val drawingDetail =
-                eventViewModel.event.value!!.getDetail(detailUuid) as DrawingDetail
-            loadDetailInDrawView(drawingDetail)
-            drawViewModel.loadExistingDrawingDetail(drawingDetail)
+        if (existingDrawingGiven()) {
+            loadExistingDrawing()
         }
 
         startListeners()
     }
 
-    private fun loadDetailInDrawView(drawingDetail: DrawingDetail) {
+    private fun loadExistingDrawing() {
+        val drawingDetail = getGivenDrawingDetail()
+
         drawView.setImageBackground(drawingDetail.file)
+
+        drawViewModel.loadExistingDrawingDetail(drawingDetail)
+    }
+
+    private fun existingDrawingGiven(): Boolean {
+        return arguments?.getSerializable(DRAWING_DETAIL_UUID) != null
+    }
+
+    private fun getGivenDrawingDetail(): DrawingDetail {
+        val detailUuid = arguments!!.getSerializable(DRAWING_DETAIL_UUID) as UUID
+        return eventViewModel.event.value!!.getDetail(detailUuid) as DrawingDetail
     }
 
     override fun onAttach(context: Context) {
@@ -124,10 +133,6 @@ class MakeDrawingFragment : DrawFragment() {
         with(drawView) {
             setOnDragListener(DragListener(this))
         }
-    }
-
-    private fun drawingArgumentGiven(): Boolean {
-        return arguments?.getSerializable(DRAWING_DETAIL_UUID) != null
     }
 
     private fun configureDraggableImagesRecyclerView() {
