@@ -20,7 +20,6 @@ import java.util.UUID
 )
 class AudioDetailEntity(
     file: File,
-    name: String? = null,
     uuid: UUID = UUID.randomUUID(),
     eventUuid: UUID
-) : DetailEntity(file, name, uuid, eventUuid)
+) : DetailEntity(file, uuid, eventUuid)

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
@@ -249,14 +250,13 @@ class EventViewModel(
 
     //region savePhoto
     fun savePhoto(tempPhotoFile: File) {
-        // TODO: remove name from UC when it's not necessary anymore
-        val params = SaveEventPhotoUseCase.Params(tempPhotoFile, event.value!!, "TempPhotoName")
+        val params = SaveEventPhotoUseCase.Params(tempPhotoFile, event.value!!)
         saveEventPhotoUseCase.execute(params, TakeEventPhotoUseCaseHandler())
     }
 
     private inner class TakeEventPhotoUseCaseHandler : DisposableSingleObserver<Detail>() {
-        override fun onSuccess(t: Detail) {
-            _photoSavedSuccessFully.value = t
+        override fun onSuccess(savedDetail: Detail) {
+            _photoSavedSuccessFully.value = savedDetail
         }
 
         override fun onError(e: Throwable) {
@@ -266,13 +266,13 @@ class EventViewModel(
     //endregion
 
     //region saveDrawing
-    fun saveDrawing(bitmap: Bitmap) {
-        val params = SaveEventDrawingUseCase.Params(bitmap, event.value!!)
+    fun saveDrawing(bitmap: Bitmap, existingDetail: DrawingDetail? = null) {
+        val params = SaveEventDrawingUseCase.Params(bitmap, event.value!!, existingDetail)
         saveEventDrawingUseCase.execute(params, SaveEventDrawingUseCaseHandler())
     }
 
-    private inner class SaveEventDrawingUseCaseHandler : DisposableSingleObserver<Detail>() {
-        override fun onSuccess(t: Detail) {
+    private inner class SaveEventDrawingUseCaseHandler : DisposableSingleObserver<DrawingDetail>() {
+        override fun onSuccess(t: DrawingDetail) {
             _drawingSavedSuccessFully.value = t
         }
 

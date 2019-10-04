@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.AsyncTask
 import android.util.AttributeSet
 import android.util.Log
@@ -16,6 +17,7 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
 import androidx.core.graphics.ColorUtils
+import java.io.File
 
 /**
  * Defines how much of the View's height the background may use.
@@ -344,11 +346,24 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         paintedBackground = bitmapDrawable.bitmap
     }
 
-    fun addDrawable(drawableResourceID: Int, x: Int, y: Int) {
-        val drawable = context.resources.getDrawable(drawableResourceID)
+    /**
+     * Add a drawable to the canvas
+     *
+     * @param x: the x-coordinate of the top-left corner
+     * @param y: the y-coordinate of the top-left corner
+     */
+    fun addDrawable(drawable: Drawable, x: Int, y: Int) {
         drawable.bounds = Rect(x, y, x + drawable.intrinsicWidth, y + drawable.intrinsicHeight)
         addDrawingAction(MyDrawable(drawable))
         invalidate()
+    }
+
+    /**
+     * @see [setPaintedBackground]
+     */
+    fun setImageBackground(imageFile: File) {
+        val drawableImage = BitmapDrawable.createFromPath(imageFile.path) as BitmapDrawable
+        setPaintedBackground(drawableImage)
     }
 
     fun toggleEraser() {

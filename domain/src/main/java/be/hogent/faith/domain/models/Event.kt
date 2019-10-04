@@ -43,28 +43,32 @@ data class Event(
         return _details.last()
     }
 
+    fun getDetail(uuid: UUID): Detail? {
+        return details.find { it.uuid == uuid }
+    }
+
     @TestOnly
     fun addDetail(detail: Detail) {
         _details += detail
     }
 
-    fun addNewPhotoDetail(saveFile: File, photoName: String): PhotoDetail {
-        val newDetail = PhotoDetail(saveFile, photoName)
+    fun addNewPhotoDetail(saveFile: File): PhotoDetail {
+        val newDetail = PhotoDetail(saveFile)
         addDetail(newDetail)
         return newDetail
     }
 
-    fun addNewDrawingDetail(saveFile: File, photoName: String): DrawingDetail {
-        val newDetail = DrawingDetail(saveFile, photoName)
+    fun addNewDrawingDetail(saveFile: File): DrawingDetail {
+        val newDetail = DrawingDetail(saveFile)
         addDetail(newDetail)
         return newDetail
     }
 
-    fun addNewAudioDetail(saveFile: File, audioRecordingName: String) {
-        addDetail(AudioDetail(saveFile, audioRecordingName))
+    fun addNewAudioDetail(saveFile: File) {
+        addDetail(AudioDetail(saveFile))
     }
 
-    fun addNewTextDetail(saveFile: File, textDetailName: String) {
-        addDetail(TextDetail(saveFile, textDetailName))
+    fun addNewTextDetail(saveFile: File) {
+        addDetail(TextDetail(saveFile))
     }
 }
