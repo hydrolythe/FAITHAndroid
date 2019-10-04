@@ -3,8 +3,10 @@ package be.hogent.faith.faith.emotionCapture.recordAudio
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioState
+import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.playState.PlayStateInitial
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.recordState.RecordStateInitial
 
 class RecordAudioViewModel : ViewModel(), AudioContext {
@@ -12,6 +14,10 @@ class RecordAudioViewModel : ViewModel(), AudioContext {
     private val _audioState = MutableLiveData<AudioState>()
     val audioState: LiveData<AudioState>
         get() = _audioState
+
+    private val _existingDetail = MutableLiveData<AudioDetail>()
+    val existingDetail: LiveData<AudioDetail>
+        get() = _existingDetail
 
     /**
      *
@@ -26,20 +32,18 @@ class RecordAudioViewModel : ViewModel(), AudioContext {
     val stopButtonEnabled = MutableLiveData<Boolean>()
     val recordButtonEnabled = MutableLiveData<Boolean>()
 
-    init {
-        playButtonEnabled.value = false
-        pauseButtonEnabled.value = false
-        stopButtonEnabled.value = false
-        recordButtonEnabled.value = true
-    }
-
     /**
      * Should be called after Audio permissions are granted in the [RecordAudioFragment].
      * This is because initialising the recording without the correct permissions results
      * in a crash.
      */
     fun initialiseState() {
-        goToNextState(RecordStateInitial(this))
+        if (playingExistingAudioDetail()) {
+            goToNextState(PlayStateInitial(this, existingDetail.value!!))
+        } else {
+            goToNextState(RecordStateInitial(this))
+        }
+        updateButtonVisibilityStates()
     }
 
     override fun goToNextState(audioState: AudioState) {
@@ -51,7 +55,12 @@ class RecordAudioViewModel : ViewModel(), AudioContext {
         playButtonEnabled.value = _audioState.value?.playButtonEnabled
         pauseButtonEnabled.value = _audioState.value?.pauseButtonEnabled
         stopButtonEnabled.value = _audioState.value?.stopButtonEnabled
-        recordButtonEnabled.value = _audioState.value?.recordButtonEnabled
+        recordButtonEnabled.value =
+            if (playingExistingAudioDetail()) {
+                false // Never allow starting a recording when listening to an existing Detail.
+            } else {
+                _audioState.value?.recordButtonEnabled
+            }
     }
 
     fun onRecordButtonClicked() {
@@ -72,5 +81,9 @@ class RecordAudioViewModel : ViewModel(), AudioContext {
 
     override fun onCleared() {
         _audioState.value?.release()
+    }
+
+    private fun playingExistingAudioDetail(): Boolean {
+        return _existingDetail.value != null
     }
 }

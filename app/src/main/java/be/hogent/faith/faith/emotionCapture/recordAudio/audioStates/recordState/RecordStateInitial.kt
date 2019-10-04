@@ -3,6 +3,7 @@ package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.recordState
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
+import timber.log.Timber
 
 class RecordStateInitial(context: AudioContext) : RecordState(context) {
 

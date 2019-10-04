@@ -200,7 +200,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         super.onDraw(canvas)
 
         // Draw the background when one is set and the [Rect] in which it will be drawn has been calculated.
-        if (paintedBackground != null && backgroundRect != null) {
+        if (paintedBackground != null) {
             canvas.drawBitmap(
                 paintedBackground!!,
                 null,
