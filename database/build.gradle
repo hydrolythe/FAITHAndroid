@@ -51,7 +51,10 @@ dependencies {
     implementation commonDependencies.threeTenABP
     implementation commonDependencies.rxjava
     implementation commonDependencies.rxkotlin
+    implementation commonDependencies.timber
+
     implementation androidDependencies.appcompat
+
     implementation injectionDependencies.koin
 
     // Room components

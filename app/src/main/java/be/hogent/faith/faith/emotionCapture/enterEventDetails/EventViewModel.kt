@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -20,13 +19,13 @@ import be.hogent.faith.service.usecases.SaveEventAudioUseCase
 import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
 import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
 import be.hogent.faith.service.usecases.SaveEventTextUseCase
-import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import timber.log.Timber
 import java.io.File
 
 class EventViewModel(
@@ -222,7 +221,7 @@ class EventViewModel(
         }
 
         override fun onError(e: Throwable) {
-            Log.e(TAG, e.localizedMessage)
+            Timber.e(e.localizedMessage)
             _errorMessage.postValue(R.string.error_save_avatar_failed)
         }
     }

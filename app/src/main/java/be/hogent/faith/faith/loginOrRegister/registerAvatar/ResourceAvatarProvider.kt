@@ -2,9 +2,7 @@ package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.core.content.ContextCompat
-import be.hogent.faith.util.TAG
 
 class ResourceAvatarProvider(private val context: Context) :
     AvatarProvider {
@@ -35,7 +33,7 @@ class ResourceAvatarProvider(private val context: Context) :
 
     private fun getDrawable(avatarName: String, type: String? = null): Drawable {
         val avatarResourceName = if (type != null) "${avatarName}_$type" else avatarName
-        Log.d(TAG, avatarResourceName)
+        Timber.d(avatarResourceName)
         val resourceId = context.resources.getIdentifier(avatarResourceName, "drawable", context.packageName)
         return ContextCompat.getDrawable(context, resourceId)!!
     }

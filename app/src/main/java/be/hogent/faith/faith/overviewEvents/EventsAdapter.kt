@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.overviewEvents
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.util.TAG
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import org.threeten.bp.format.DateTimeFormatter
@@ -36,7 +34,8 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private var avatarImage: ImageView = view.findViewById(R.id.img_overviewevents_thumbnailAvatar)
+        private var avatarImage: ImageView =
+            view.findViewById(R.id.img_overviewevents_thumbnailAvatar)
         private var eventTitle: TextView = view.findViewById(R.id.label_overviewevents_title)
         private var eventDate: TextView = view.findViewById(R.id.label_overviewevent_eventDate)
 
@@ -44,7 +43,6 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
             eventTitle.text = event.title
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
             val eventDateString: String = formatter.format(event.dateTime)
-            Log.d(TAG, eventDateString)
             eventDate.text = eventDateString
 
             event.emotionAvatar?.let {

@@ -1,13 +1,12 @@
 package be.hogent.faith.faith.emotionCapture.takePhoto
 
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.util.TAG
+import timber.log.Timber
 import java.io.File
 
 class TakePhotoViewModel : ViewModel() {
@@ -75,23 +74,23 @@ class TakePhotoViewModel : ViewModel() {
 
     internal abstract class PhotoState {
         open fun takePhoto(context: TakePhotoViewModel) {
-            Log.e(TAG, "Take photo not allowed")
+            Timber.e("Take photo not allowed")
         }
 
         open fun setPhotoInCache(context: TakePhotoViewModel, file: File) {
-            Log.e(TAG, "Save photo in cache not allowed")
+            Timber.e("Save photo in cache not allowed")
         }
 
         open fun savePhoto(context: TakePhotoViewModel) {
-            Log.e(TAG, "Save photo not allowed")
+            Timber.e("Save photo not allowed")
         }
 
         open fun setSavedPhoto(context: TakePhotoViewModel, file: File) {
-            Log.e(TAG, "Save photo not allowed")
+            Timber.e("Save photo not allowed")
         }
 
         open fun deletePhoto(context: TakePhotoViewModel) {
-            Log.e(TAG, "Delete photo not allowed")
+            Timber.e("Delete photo not allowed")
         }
     }
 
