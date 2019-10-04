@@ -3,7 +3,6 @@ package be.hogent.faith.faith.emotionCapture.drawing.makeDrawing
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,13 +18,13 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawing.DrawFragment
 import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.util.TAG
 import com.divyanshu.draw.widget.DrawView
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.core.error.ScopeNotCreatedException
 import org.koin.core.qualifier.named
+import timber.log.Timber
 import java.util.UUID
 
 private const val DRAWING_DETAIL_UUID = "uuid of the DrawingDetail"
@@ -33,11 +32,11 @@ private const val DRAWING_DETAIL_UUID = "uuid of the DrawingDetail"
 class MakeDrawingFragment : DrawFragment() {
     override val drawViewModel: DrawViewModel
         get() {
-            Log.d(TAG, "Trying to get Drawing scope in MakeDrawing")
+            Timber.d("Trying to get Drawing scope in MakeDrawing")
             val scope = try {
                 getKoin().getScope(KoinModules.DRAWING_SCOPE_ID)
             } catch (e: ScopeNotCreatedException) {
-                Log.d(TAG, "No Drawing scope available - Creating Drawing scope in MakeDrawing")
+                Timber.d("No Drawing scope available - Creating Drawing scope in MakeDrawing")
                 getKoin().createScope(
                     KoinModules.DRAWING_SCOPE_ID,
                     named(KoinModules.DRAWING_SCOPE_NAME)
