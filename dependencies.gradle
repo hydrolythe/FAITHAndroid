@@ -55,7 +55,8 @@ ext {
 
     // OTHER LIBRARIES
     ktlint_version = '0.31.0'
-    timber = '4.7.1'
+    timber_version = '4.7.1'
+    oss_licenses_version = '17.0.0'
 
     //Version Code
     ext.versionMajor = 1
@@ -75,7 +76,9 @@ ext {
             coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version",
             coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android_version",
 
-            timber            : "com.jakewharton.timber:timber:$timber"
+            timber            : "com.jakewharton.timber:timber:$timber_version",
+
+            licenses          : "com.google.android.gms:play-services-oss-licenses:17.0.0"
     ]
 
     androidDependencies = [
