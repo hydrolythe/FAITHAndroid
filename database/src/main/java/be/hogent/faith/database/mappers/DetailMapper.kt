@@ -7,6 +7,7 @@ import be.hogent.faith.database.models.detail.TextDetailEntity
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import java.util.UUID
 
@@ -38,6 +39,7 @@ object DetailMapper : MapperWithForeignKey<DetailEntity, Detail> {
             is AudioDetail -> AudioDetailEntity(model.file, model.uuid, foreignKey)
             is TextDetail -> TextDetailEntity(model.file, model.uuid, foreignKey)
             is DrawingDetail -> PictureDetailEntity(model.file, model.uuid, foreignKey)
+            is PhotoDetail -> PictureDetailEntity(model.file, model.uuid, foreignKey)
             else -> throw ClassCastException("Unknown Detail subclass encountered")
         }
     }

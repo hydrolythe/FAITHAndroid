@@ -297,6 +297,7 @@ class EventViewModel(
         }
 
         override fun onError(e: Throwable) {
+            Timber.e(e)
             _errorMessage.postValue(R.string.error_save_text_failed)
         }
     }

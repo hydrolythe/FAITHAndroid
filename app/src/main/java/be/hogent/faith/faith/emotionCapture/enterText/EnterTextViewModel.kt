@@ -10,6 +10,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.service.usecases.LoadTextDetailUseCase
 import io.reactivex.observers.DisposableSingleObserver
+import timber.log.Timber
 
 class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCase) : ViewModel() {
 
@@ -95,6 +96,7 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
         }
 
         override fun onError(e: Throwable) {
+            Timber.e(e)
             _errorMessage.postValue(R.string.error_save_text_failed)
         }
     }
