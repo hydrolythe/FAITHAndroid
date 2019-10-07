@@ -88,6 +88,9 @@ dependencies {
     implementation androidDependencies.lifecycle
 
     implementation uiDependencies.glide
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
     implementation uiDependencies.rv_selection
@@ -130,4 +133,3 @@ private String generateVersionName() {
     String versionName = "${globalConfig["versionMajor"]}.${globalConfig["versionMinor"]}.${globalConfig["versionPatch"]}"
     return versionName
 }
-
