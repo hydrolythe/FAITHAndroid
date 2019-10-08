@@ -125,4 +125,7 @@
     <string name="ex_date">07/11/2019</string>
     <string name="ex_beschrijving">Het was vooral voor rust heel sterk. Na rust zijn we wat meer ingezakt, maar kwamen we er gevaarlijk uit en hebben we ook goed voetbal laten zien. Zelf voelde ik me lekker en het is super dat ik er twee heb gemaakt. Ik was bij veel gevaarlijke momenten betrokken, ik voelde me echt lekker vandaag.</string>
     <string name="ex_labeltext">Afbeelding</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
