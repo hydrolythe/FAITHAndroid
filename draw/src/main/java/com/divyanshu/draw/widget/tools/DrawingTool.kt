@@ -9,7 +9,7 @@ import com.divyanshu.draw.widget.MyPath
 import com.divyanshu.draw.widget.PaintOptions
 import com.divyanshu.draw.widget.Point
 
-class DrawingTool(private val drawingContext: DrawingContext) : Tool() {
+class DrawingTool(drawingContext: DrawingContext) : Tool(drawingContext) {
 
     /**
      * The starting point of the drawing Action
