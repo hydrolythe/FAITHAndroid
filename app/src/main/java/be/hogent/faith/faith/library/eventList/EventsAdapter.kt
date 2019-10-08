@@ -3,6 +3,7 @@ package be.hogent.faith.faith.library.eventList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,8 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
         private var eventTitle: TextView = view.findViewById(R.id.lbl_title)
         private var eventDate: TextView = view.findViewById(R.id.lbl_date)
         private var eventDesc: TextView = view.findViewById(R.id.lbl_description)
+        private var expandButton: ImageButton = view.findViewById(R.id.expand_button)
+
 
         fun bind(event: Event) {
             eventTitle.text = event.title
@@ -52,6 +55,16 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
                     .load(it)
                     .apply(RequestOptions.circleCropTransform())
                     .into(avatarImage)
+            }
+
+            eventDesc.text = event.notes
+
+            expandButton.setOnClickListener {
+                if (eventDesc.visibility == View.GONE) {
+                    eventDesc.visibility = View.VISIBLE
+                } else {
+                    eventDesc.visibility = View.GONE
+                }
             }
 
             //itemView.setOnClickListener {
