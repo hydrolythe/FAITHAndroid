@@ -13,11 +13,11 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/media_image"
+            android:id="@+id/img_avatar"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scaleType="centerInside"
-            app:layout_constraintBottom_toTopOf="@+id/primary_text"
+            app:layout_constraintBottom_toTopOf="@+id/lbl_title"
             app:layout_constraintDimensionRatio="H,16:9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +26,7 @@
             app:srcCompat="@drawable/jongen_gamer_gezicht" />
 
         <TextView
-            android:id="@+id/primary_text"
+            android:id="@+id/lbl_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -35,13 +35,13 @@
             android:text="@string/ex_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="#DE000000"
-            app:layout_constraintBottom_toTopOf="@+id/sub_text"
+            app:layout_constraintBottom_toTopOf="@+id/lbl_date"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/media_image" />
+            app:layout_constraintTop_toBottomOf="@+id/img_avatar" />
 
         <TextView
-            android:id="@+id/sub_text"
+            android:id="@+id/lbl_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -49,55 +49,55 @@
             android:text="@string/ex_date"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="#8A000000"
-            app:layout_constraintBottom_toTopOf="@+id/action_button_1"
+            app:layout_constraintBottom_toTopOf="@+id/img_photo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/primary_text" />
+            app:layout_constraintTop_toBottomOf="@+id/lbl_title" />
 
         <ImageView
-            android:id="@+id/action_button_1"
+            android:id="@+id/img_photo"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
             android:layout_marginTop="16dp"
             android:minWidth="0dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/supporting_text"
-            app:layout_constraintEnd_toStartOf="@+id/action_button_2"
+            app:layout_constraintBottom_toTopOf="@+id/lbl_description"
+            app:layout_constraintEnd_toStartOf="@+id/img_draw"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sub_text"
+            app:layout_constraintTop_toBottomOf="@+id/lbl_date"
             app:srcCompat="@drawable/btn_take_picture" />
 
         <ImageView
-            android:id="@+id/action_button_2"
+            android:id="@+id/img_draw"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
             android:minWidth="0dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/action_button_"
+            app:layout_constraintEnd_toStartOf="@+id/img_audio"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/action_button_1"
+            app:layout_constraintStart_toEndOf="@+id/img_photo"
 
-            app:layout_constraintTop_toTopOf="@+id/action_button_1"
+            app:layout_constraintTop_toTopOf="@+id/img_photo"
             app:srcCompat="@drawable/brush_thickline" />
 
         <ImageView
-            android:id="@+id/action_button_"
+            android:id="@+id/img_audio"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
             android:minWidth="0dp"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/action_button_3"
+            app:layout_constraintEnd_toStartOf="@+id/img_text"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/action_button_2"
-            app:layout_constraintTop_toTopOf="@+id/action_button_1"
+            app:layout_constraintStart_toEndOf="@+id/img_draw"
+            app:layout_constraintTop_toTopOf="@+id/img_photo"
             app:srcCompat="@drawable/audio_record" />
 
         <ImageView
-            android:id="@+id/action_button_3"
+            android:id="@+id/img_text"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
             android:minWidth="0dp"
@@ -105,9 +105,9 @@
             android:paddingEnd="8dp"
             app:layout_constraintEnd_toStartOf="@+id/expand_button"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/action_button_"
-            app:layout_constraintTop_toTopOf="@+id/action_button_1"
-            app:srcCompat="@drawable/paintpot_blue" />
+            app:layout_constraintStart_toEndOf="@+id/img_audio"
+            app:layout_constraintTop_toTopOf="@+id/img_photo"
+            app:srcCompat="@drawable/ic_baseline_edit_24px" />
 
         <ImageButton
             android:id="@+id/expand_button"
@@ -117,12 +117,12 @@
             android:layout_marginBottom="0dp"
             android:background="#00FFFFFF"
             android:padding="6dp"
-            app:layout_constraintBottom_toBottomOf="@+id/action_button_1"
+            app:layout_constraintBottom_toBottomOf="@+id/img_photo"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/expand_less" />
 
         <TextView
-            android:id="@+id/supporting_text"
+            android:id="@+id/lbl_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="8dp"
@@ -132,7 +132,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/action_button_1" />
+            app:layout_constraintTop_toBottomOf="@+id/img_photo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
