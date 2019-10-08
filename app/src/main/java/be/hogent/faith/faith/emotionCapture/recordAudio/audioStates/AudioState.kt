@@ -2,6 +2,7 @@ package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates
 
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.view.View
 import be.hogent.faith.faith.util.TempFileProvider
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -25,6 +26,8 @@ abstract class AudioState(
     abstract val stopButtonEnabled: Boolean
     abstract val recordButtonEnabled: Boolean
     open val saveButtonEnabled: Boolean = false
+
+    open val recordingTimeVisibility = View.INVISIBLE
 
     /**
      * Resets the internal [MediaRecorder] and [MediaPlayer]
