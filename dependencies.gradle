@@ -58,6 +58,8 @@ ext {
     timber = '4.7.1'
     nav_version = '2.1.0'
 
+    viewpager_version = '1.0.0-alpha01'
+
     //Version Code
     ext.versionMajor = 1
     ext.versionMinor = 1
@@ -135,7 +137,8 @@ ext {
             texteditor         : "jp.wasabeef:richeditor-android:$textEditor_version",
             material           : "com.google.android.material:material:$material_version",
             materialdrawer     : "co.zsmb:materialdrawer-kt:$materialdrawer_version",
-            design             : "com.android.support:design:$design_version"
+            design             : "com.android.support:design:$design_version",
+            viewpager2         : "androidx.viewpager2:viewpager2:$viewpager_version"
     ]
 
     authdependencies = [
