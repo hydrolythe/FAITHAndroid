@@ -9,7 +9,8 @@ import java.io.Serializable
 import java.util.LinkedList
 
 // TODO: remove redundant paintOptions
-class MyPath(val paintOptions: PaintOptions = PaintOptions()) : Path(), Serializable, DrawingAction {
+class MyPath(val paintOptions: PaintOptions = PaintOptions()) : Path(), Serializable,
+    DrawingAction {
 
     private val paint = Paint().also {
         // Same for every path
