@@ -19,23 +19,30 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.library.eventDetailFragments.TestFragment
-import be.hogent.faith.faith.library.eventDetailFragments.TextDetailFragment
 import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
 import org.koin.android.ext.android.getKoin
 
 
 /**
- * A fragment representing a single Event detail screen.
- * This fragment is either contained in a [EventListActivity]
- * in two-pane mode (on tablets) or a [EventDetailActivity]
- * on handsets.
+ * A fragment representing a single Event detail screen, showing
+ * all the different [Detail] objects for an event.
  */
 class EventDetailFragment : Fragment() {
 
+    /**
+     * The viewpager showing fragments for the different details.
+     */
     private lateinit var mPager: ViewPager2
 
+    /**
+     * The Shared UserViewModel to get the details.
+     * TODO : this should be refactored by creating a new ViewModel managing the details via a repository
+     */
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
+    /**
+     * ViewModel used to monitor the last selected [Event].
+     */
     private lateinit var selectedItemViewModel: SelectedItemViewModel
 
     override fun onCreateView(
@@ -51,6 +58,11 @@ class EventDetailFragment : Fragment() {
     }
 
 
+    /**
+     * Sets up the observers. In this case it will observe the [selectedItemViewModel] and observe
+     * changes of its value. Whenever a new value (i.e. another event has been clicked) is observed
+     * it deletes the pageradapter and set a new one with the desired [Detail] objects of the [Event].
+     */
     private fun setListeners() {
         selectedItemViewModel.selectedItem.observe(this, Observer {
             val pagerAdapter = ScreenSlidePagerAdapter(
@@ -84,8 +96,6 @@ class EventDetailFragment : Fragment() {
                     }
                     is TextDetail -> {
                         Log.i("Tag", "Textdetail")
-                        val detail = details[position] as TextDetail
-                        return TextDetailFragment.newInstance(detail.file.absolutePath)
                     }
                     is AudioDetail -> {
                         Log.i("TAG", "Audiodetail")

@@ -26,12 +26,24 @@ class EventListFragment : Fragment() {
 
     private lateinit var binding: FragmentEventoverviewBinding
 
+    /**
+     * Adapter for the recyclerview showing the events i.e. [rv_EventList]
+     */
     private lateinit var eventsAdapter: EventsAdapter
 
+    /**
+     * Listener used to track items clicked in the Adapter.
+     */
     private lateinit var eventListener: EventListener
 
+    /**
+     * The userViewModel required to get all the information on events and details.
+     */
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
+    /**
+     * The Viewmodel used to track the selected item.
+     */
     private lateinit var selectedItemViewModel: SelectedItemViewModel
 
     override fun onCreateView(
@@ -39,6 +51,8 @@ class EventListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = inflate(inflater, R.layout.fragment_eventoverview, container, false)
+
+        //TODO: change to Koin implementation
         selectedItemViewModel =
             ViewModelProviders.of(activity!!).get(SelectedItemViewModel::class.java)
         if (context!!.resources.getBoolean(R.bool.isTablet)) {
