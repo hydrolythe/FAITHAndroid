@@ -18,7 +18,7 @@ class GetUserUseCase(
     override fun buildUseCaseObservable(params: Void? ): Flowable<User> {
         val currentUser = authManager.getLoggedInUser()
         if (currentUser == null)
-            throw RuntimeException("You are not allowed to access teh user, please log in");
+            return Flowable.error(RuntimeException("You are not allowed to access the user, please log in"));
         return userRepository.get(currentUser)
     }
 

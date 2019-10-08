@@ -1,13 +1,13 @@
 package be.hogent.faith.database.firebase
 
-import be.hogent.faith.database.mappers.UserMapper.mapToEntityWithUUID
+
 import be.hogent.faith.database.models.UserEntity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import java.util.UUID
+import io.reactivex.Single
 
 class FirebaseUserRepository  {
 
@@ -67,6 +67,23 @@ class FirebaseUserRepository  {
             }
         }
     }
+
+     fun isUsernameUnique(username:String): Single<Boolean> {
+         return Single.create{ emitter ->
+             firestore.collection(USERS_KEY)
+                 .whereEqualTo("username", username)
+                 .get()
+                 .addOnSuccessListener { snapshot ->
+                     if (snapshot.isEmpty)
+                         emitter.onSuccess(false)
+                     else
+                         emitter.onSuccess(true)
+                 }
+                 .addOnFailureListener { e ->
+                     emitter.onError(e)
+                 }
+         }
+     }
 
      fun get(uuid: String): Flowable<UserEntity> {
         val currentUser = fbAuth.currentUser
