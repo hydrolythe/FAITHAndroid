@@ -20,7 +20,7 @@ private const val DESCRIPTION = "description"
  * create an instance of this fragment.
  */
 class TextDetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+
     private var description: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
