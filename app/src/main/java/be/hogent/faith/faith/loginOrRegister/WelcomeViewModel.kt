@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.SignInException
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.LoginUserUseCase
@@ -20,6 +21,10 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     val UUID: LiveData<String>
         get() = _uuid
 
+    private val _user = MutableLiveData<User>()
+    val user: LiveData<User>
+        get() = _user
+
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
@@ -33,7 +38,7 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
         get() = _userLoggedInSuccessFully
 
     init {
-        //TODO als reeds aangemeld
+        // TODO als reeds aangemeld
     }
 
     fun registerButtonClicked() {
@@ -87,5 +92,10 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
                 }
             )
         }
+    }
+
+    override fun onCleared() {
+        loginUserUseCase.dispose()
+        super.onCleared()
     }
 }

@@ -12,13 +12,13 @@ class CreateUserUseCase(
 ) : SingleUseCase<User, CreateUserUseCase.Params>(observer) {
 
     override fun buildUseCaseSingle(params: Params): Single<User> {
-        val user = User(params.username, params.avatarName)
+        val user = User(params.username, params.avatarName, params.uuid )
         return userRepository.insert(user).andThen(Single.just(user))
     }
 
     data class Params(
         val username: String,
-        val password: String,
-        val avatarName: String
+        val avatarName: String,
+        val uuid:String
     )
 }

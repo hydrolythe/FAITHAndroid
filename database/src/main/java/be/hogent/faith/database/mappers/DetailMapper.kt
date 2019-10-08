@@ -1,5 +1,5 @@
 package be.hogent.faith.database.mappers
-
+/*
 import be.hogent.faith.database.models.detail.AudioDetailEntity
 import be.hogent.faith.database.models.detail.DetailEntity
 import be.hogent.faith.database.models.detail.PictureDetailEntity
@@ -15,6 +15,7 @@ import java.util.UUID
  *
  * The event is required because we need its uuid to map the foreign key relationship.
  */
+
 object DetailMapper : MapperWithForeignKey<DetailEntity, Detail> {
     override fun mapFromEntities(entities: List<DetailEntity>): List<Detail> {
         return entities.map { mapFromEntity(it) }
@@ -42,3 +43,4 @@ object DetailMapper : MapperWithForeignKey<DetailEntity, Detail> {
         }
     }
 }
+*/

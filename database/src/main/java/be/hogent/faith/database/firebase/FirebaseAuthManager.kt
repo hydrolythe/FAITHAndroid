@@ -1,7 +1,5 @@
 package be.hogent.faith.database.firebase
 
-import android.net.Uri
-import android.util.Log
 import be.hogent.faith.domain.repository.InvalidCredentialsException
 import be.hogent.faith.domain.repository.SignInException
 import be.hogent.faith.domain.repository.SignOutException
@@ -13,7 +11,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
 import durdinapps.rxfirebase2.RxFirebaseAuth
 import io.reactivex.Completable
 import io.reactivex.Maybe
@@ -24,12 +21,12 @@ class FirebaseAuthManager {
         FirebaseAuth.getInstance()
     }
 
-    //TODO:klopt dit wel
-    private var authStateListener: FirebaseAuth.AuthStateListener = FirebaseAuth.AuthStateListener {
+    // TODO:klopt dit wel
+      private var authStateListener: FirebaseAuth.AuthStateListener = FirebaseAuth.AuthStateListener {
         if (it.currentUser != null && it.currentUser is FirebaseUser)
             loggedInUser.onNext((it.currentUser as FirebaseUser).uid)
         else
-            loggedInUser.onNext("")
+            loggedInUser.onNext("emptyUser")
     }
 
     init {
@@ -38,10 +35,15 @@ class FirebaseAuthManager {
 
     var loggedInUser: BehaviorSubject<String> = BehaviorSubject.create()
 
+    fun getLoggedInUser(): String?
+    {
+        return auth.currentUser?.uid
+    }
+
     fun register(email: String, password: String): Maybe<String?> {
         return RxFirebaseAuth.createUserWithEmailAndPassword(auth, email, password)
             .map { mapToUser(it) }
-            //map FirebaseExceptions to domain exceptions
+            // map FirebaseExceptions to domain exceptions
             .onErrorResumeNext { error: Throwable ->
                 when (error) {
                     is FirebaseAuthWeakPasswordException -> Maybe.error(WeakPasswordException(error))
@@ -57,7 +59,6 @@ class FirebaseAuthManager {
                 }
             }
     }
-
 
     fun signIn(email: String, password: String): Maybe<String?> {
         return RxFirebaseAuth.signInWithEmailAndPassword(auth, email, password)
@@ -93,4 +94,6 @@ class FirebaseAuthManager {
     fun disposeAuthListener() {
         auth.removeAuthStateListener(authStateListener)
     }
+
+
 }

@@ -35,12 +35,12 @@ class RegisterUserInfoFragment : Fragment() {
     }
 
     private fun registerListeners() {
-        registerUserInfoViewModel.confirmUserInfoClicked.observe(this, Observer {
+        /*  registerUserInfoViewModel.confirmUserInfoClicked.observe(this, Observer {
             navigation!!.goToRegisterAvatarScreen()
         })
-
+        */
         registerUserInfoViewModel.UserRegisteredSuccessFully.observe(this, Observer {
-            navigation!!.goToRegisterAvatarScreen()
+                 navigation!!.goToRegisterAvatarScreen()
         })
 
         registerUserInfoViewModel.errorMessage.observe(this, Observer { errorMessageID ->

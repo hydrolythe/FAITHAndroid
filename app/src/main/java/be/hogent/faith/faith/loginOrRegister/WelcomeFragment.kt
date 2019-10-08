@@ -20,6 +20,7 @@ import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.error.ScopeAlreadyCreatedException
 import org.koin.core.qualifier.named
+import java.util.UUID
 
 class WelcomeFragment : Fragment() {
 
@@ -58,6 +59,7 @@ class WelcomeFragment : Fragment() {
         welcomeViewModel.userLoggedInSuccessFully.observe(this, Observer {
             onLoginSuccess()
         })
+
         welcomeViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
         })
@@ -82,11 +84,12 @@ class WelcomeFragment : Fragment() {
             getKoin().getScope(KoinModules.USER_SCOPE_ID)
         }
         val userViewModel: UserViewModel = scope.get()
-        //TODO : get the user from Firebase
-        userViewModel.setUser(User("testuser", avatarName = "meisje_stoer"))
-        navigation!!.goToCityScreen()
-    }
+        userViewModel.getLoggedInUserSuccessFully.observe(this, Observer {
+            navigation!!.goToCityScreen()
+        })
+        userViewModel.getLoggedInUser()
 
+    }
 
     companion object {
 

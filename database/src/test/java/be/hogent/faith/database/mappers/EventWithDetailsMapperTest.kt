@@ -13,6 +13,7 @@ import org.junit.Test
 import java.util.UUID
 
 class EventWithDetailsMapperTest {
+    /*
     private val eventWithDetailsMapper = EventWithDetailsMapper()
     private val user = UserFactory.makeUser(0)
 
@@ -89,4 +90,6 @@ class EventWithDetailsMapperTest {
         assertEquals(entity.file, model.file)
         assertEquals(entity.eventUuid, entityUuid)
     }
+
+     */
 }

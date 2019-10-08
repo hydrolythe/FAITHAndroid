@@ -1,7 +1,7 @@
 package be.hogent.faith.database.firebase
 
-import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.UserRepository
+import be.hogent.faith.database.mappers.UserMapper.mapToEntityWithUUID
+import be.hogent.faith.database.models.UserEntity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.BackpressureStrategy
@@ -9,12 +9,12 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import java.util.UUID
 
-class FirebaseUserRepository : UserRepository {
+class FirebaseUserRepository  {
 
     private val fbAuth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
 
-    override fun insert(user: User): Completable {
+     fun insert(item: UserEntity): Completable {
         return Completable.create { emitter ->
             val currentUser = fbAuth.currentUser
             if (currentUser == null) {
@@ -22,20 +22,33 @@ class FirebaseUserRepository : UserRepository {
             } else {
                 val db = firestore
                 val collection = db.collection(USERS_KEY)
-                val saveTask =
-                    collection.document(currentUser.uid).set(user)
+                //explicitly set the document identifier
+                collection.document(currentUser.uid).set(item)
                         .addOnSuccessListener { emitter.onComplete() }
-                        .addOnFailureListener { e -> emitter.onError(e) }
+                        .addOnFailureListener { e -> emitter.onError(RuntimeException("Fail to create user")) }
             }
         }
     }
 
-    override fun getAll(): Flowable<List<User>> {
-        //niet nodig????
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+     fun getAll(): Flowable<List<UserEntity>> {
+        return Flowable.create({ emitter ->
+            firestore.collection(USERS_KEY)
+                .get()
+                //.addSnapShotListener als je realtime updates wenst
+                .addOnSuccessListener { snapshot ->
+                    val users = snapshot?.map { document ->
+                        document.toObject(UserEntity::class.java)}
+                    users?.let { emitter.onNext(it) }
+                }
+                .addOnFailureListener { exception ->
+                    emitter.onError(exception)
+                }
+        }, BackpressureStrategy.LATEST)
     }
 
-    override fun delete(user: User): Completable {
+
+     fun delete(item: UserEntity): Completable {
         return Completable.create { emitter ->
             val db = firestore
             val currentUser = fbAuth.currentUser
@@ -55,7 +68,7 @@ class FirebaseUserRepository : UserRepository {
         }
     }
 
-    override fun get(uuid: UUID): Flowable<User> {
+     fun get(uuid: String): Flowable<UserEntity> {
         val currentUser = fbAuth.currentUser
         if (currentUser == null) {
             return Flowable.error(RuntimeException("Unauthorized used."))
@@ -63,17 +76,18 @@ class FirebaseUserRepository : UserRepository {
         return Flowable.create({ emitter ->
             firestore.collection(USERS_KEY)
                 .document(currentUser.uid)
-                .addSnapshotListener { snapshot, e ->
-                    if (e == null) {
-                        val user = snapshot?.toObject(User::class.java)
-                        user?.let { emitter.onNext(it) }
-                    } else {
-                        emitter.onError(e)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    val user = snapshot?.toObject(UserEntity::class.java)
+                    user?.let {
+                        emitter.onNext(it)
                     }
                 }
-        }, BackpressureStrategy.LATEST)
+                .addOnFailureListener { e ->
+                        emitter.onError(e)
+                  }
+        },BackpressureStrategy.LATEST)
     }
-
 
     companion object {
         const val USERS_KEY = "users"

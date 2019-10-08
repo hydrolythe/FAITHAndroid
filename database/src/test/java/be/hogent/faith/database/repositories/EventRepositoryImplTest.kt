@@ -20,8 +20,7 @@ import org.junit.Before
 import org.junit.Test
 
 class EventRepositoryImplTest {
-    private val detailDao = mockk<DetailDao>()
-    private val eventDao = mockk<EventDao>()
+    /*
     private val database = mockk<EntityDatabase>(relaxed = true)
     private val detailMapper = mockk<DetailMapper>()
     private val eventMapper = mockk<EventMapper>()
@@ -85,4 +84,6 @@ class EventRepositoryImplTest {
     private fun stubMapperToEntity(model: Event, entity: EventEntity) {
         every { eventMapper.mapToEntity(model, user.uuid) } returns entity
     }
+
+     */
 }

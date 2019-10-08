@@ -13,6 +13,8 @@ interface AuthManager {
 
     fun reset()
 
+    fun getLoggedInUser(): String?
+
     val currentUser: BehaviorSubject<String>
 }
 

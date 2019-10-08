@@ -14,7 +14,6 @@ class LoginUserUseCase(
         return authManager.signIn("${params.username}@faith.be", params.password)
     }
 
-
     data class Params(
         val username: String,
         val password: String

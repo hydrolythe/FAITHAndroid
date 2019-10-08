@@ -1,5 +1,6 @@
 package be.hogent.faith.faith
 
+import android.util.Log
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,21 +8,36 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.domain.repository.InvalidCredentialsException
+import be.hogent.faith.domain.repository.UserCollisionException
+import be.hogent.faith.domain.repository.WeakPasswordException
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.GetUserUseCase
+import be.hogent.faith.service.usecases.RegisterUserUseCase
 import be.hogent.faith.service.usecases.SaveEventUseCase
+import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.observers.DisposableMaybeObserver
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.subscribers.DisposableSubscriber
 
 /**
  * Represents the [ViewModel] for the [User] throughout the the application.
  * It should be injected only using the scope specified in the KoinModules file.
  */
 class UserViewModel(
-    private val saveEventUseCase: SaveEventUseCase
+    private val saveEventUseCase: SaveEventUseCase,
+    private val getUserUseCase:GetUserUseCase
 ) : ViewModel() {
 
     private val _eventSavedSuccessFully = SingleLiveEvent<Unit>()
     val eventSavedSuccessFully: LiveData<Unit>
         get() = _eventSavedSuccessFully
+
+    private val _getLoggedInUserSuccessFully = SingleLiveEvent<Unit>()
+    val getLoggedInUserSuccessFully: LiveData<Unit>
+        get() = _getLoggedInUserSuccessFully
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
@@ -37,6 +53,28 @@ class UserViewModel(
 
     fun setUser(user: User) {
         _user.postValue(user)
+    }
+
+    fun getLoggedInUser() {
+           getUserUseCase.execute( null, GetUserUseCaseHandler())
+        }
+
+    private inner class GetUserUseCaseHandler : DisposableSubscriber<User>() {
+
+        override fun onNext(t: User?) {
+            Log.i(TAG, "success $t")
+            _user.postValue(t)
+            _getLoggedInUserSuccessFully.call()
+        }
+
+        override fun onComplete() {
+            Log.i(TAG, "completed")
+        }
+
+        override fun onError(e: Throwable) {
+            Log.e(TAG, e.localizedMessage)
+            _errorMessage.postValue(R.string.register_error_create_user)
+        }
     }
 
     fun saveEvent(eventTitle: String?, event: Event) {
@@ -60,6 +98,7 @@ class UserViewModel(
 
     override fun onCleared() {
         saveEventUseCase.dispose()
+        getUserUseCase.dispose()
         super.onCleared()
     }
 }

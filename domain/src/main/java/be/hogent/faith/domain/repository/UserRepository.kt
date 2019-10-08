@@ -11,7 +11,7 @@ interface UserRepository {
 
     fun insert(item: User): Completable
 
-    fun get(uuid: UUID): Flowable<User>
+    fun get(uuid: String): Flowable<User>
 
     fun getAll(): Flowable<List<User>>
 }

@@ -1,5 +1,5 @@
 package be.hogent.faith.database.mappers
-
+/*
 import be.hogent.faith.database.models.detail.AudioDetailEntity
 import be.hogent.faith.database.models.detail.PictureDetailEntity
 import be.hogent.faith.database.models.detail.TextDetailEntity
@@ -36,3 +36,5 @@ class EventWithDetailsMapper : MapperWithForeignKey<EventWithDetails, Event> {
         return models.map { mapToEntity(it, foreignKey) }
     }
 }
+
+ */

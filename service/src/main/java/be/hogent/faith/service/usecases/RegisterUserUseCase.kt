@@ -12,8 +12,10 @@ class RegisterUserUseCase(
 
     override fun buildUseCaseMaybe(params: Params): Maybe<String?> {
         return authManager.register("${params.username}@faith.be", params.password)
-    }
-
+        /*    .concatMap{
+                userRepository.insert(User(params.username, "geen avatar", it))}
+            .andThen(Maybe.just(User(params.username, "geen avatar",uuid!! )))
+    */ }
 
     data class Params(
         val username: String,

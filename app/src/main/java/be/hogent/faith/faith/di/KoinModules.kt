@@ -64,7 +64,7 @@ val appModule = module(override = true) {
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.
     scope(named(USER_SCOPE_NAME)) {
-        scoped { UserViewModel(get()) }
+        scoped { UserViewModel(get(), get()) }
     }
 
     // Both the normal DrawingFragment and the DrawAvatarFragment need a DrawViewModel.

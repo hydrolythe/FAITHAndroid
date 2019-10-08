@@ -1,6 +1,5 @@
 package be.hogent.faith.service.usecases
 
-
 import be.hogent.faith.domain.repository.AuthManager
 import io.mockk.every
 import io.mockk.mockk
@@ -36,5 +35,4 @@ class LogoutUserUseCaseTest {
         result.test()
             .assertNoErrors()
     }
-
 }

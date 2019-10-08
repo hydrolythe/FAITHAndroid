@@ -2,9 +2,9 @@ package be.hogent.faith.database.repositories
 
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
-import be.hogent.faith.database.daos.UserDao
 import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.factory.EntityFactory
+import be.hogent.faith.database.firebase.FirebaseUserRepository
 import be.hogent.faith.database.mappers.EventWithDetailsMapper
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.models.UserEntity
@@ -20,16 +20,12 @@ import org.junit.Before
 import org.junit.Test
 
 class UserEventRepositoryImplTest {
-    private val detailDao = mockk<DetailDao>()
-    private val eventDao = mockk<EventDao>()
-    private val userDao = mockk<UserDao>()
 
-    private val database = mockk<EntityDatabase>(relaxed = true)
 
-    private val eventWithDetailsMapper = mockk<EventWithDetailsMapper>()
+    private val firebaseUserRepository = mockk<FirebaseUserRepository>(relaxed = true)
     private val userMapper = mockk<UserMapper>()
 
-    private val userRepository = UserRepositoryImpl(database, userMapper, eventWithDetailsMapper)
+    private val userRepository = UserRepositoryImpl( userMapper, firebaseUserRepository )
 
     private val userWithoutEvents = UserFactory.makeUser(0)
     private val userEntity = EntityFactory.makeUserEntity()
@@ -38,22 +34,20 @@ class UserEventRepositoryImplTest {
 
     @Before
     fun setUp() {
-        every { database.userDao() } returns userDao
-        every { database.eventDao() } returns eventDao
-        every { database.detailDao() } returns detailDao
+
     }
 
     @Test
     fun userRepository_deleteUserCompletes() {
-        every { userDao.delete(userEntity) } returns Completable.complete()
+        every { firebaseUserRepository.delete(userEntity) } returns Completable.complete()
         stubUserMapperToEntity(userWithoutEvents, userEntity)
         userRepository.delete(userWithoutEvents).test().assertComplete()
     }
 
     @Test
     fun userRepository_get_nonExistingUser_errors() {
-        every { userDao.getUser(userWithoutEvents.uuid) } returns Flowable.empty()
-        every { eventDao.getAllEventsWithDetails(userEntity.uuid) } returns Flowable.empty()
+        every { firebaseUserRepository.get(userWithoutEvents.uuid) } returns Flowable.empty()
+       // every { firebaseUserRepository.getAllEventsWithDetails(userEntity.uuid) } returns Flowable.empty()
         userRepository.get(userWithoutEvents.uuid)
             .test()
             .assertNoValues()
@@ -61,7 +55,7 @@ class UserEventRepositoryImplTest {
 
     @Test
     fun userRepository_getAll_returnsFlowable() {
-        every { userDao.getAllUsers() } returns Flowable.just(
+        every { firebaseUserRepository.getAll() } returns Flowable.just(
             listOf(userEntity, userEntity2)
         )
         stubUsersMapperFromEntity(listOf(userWithoutEvents, userWithoutEvents2), listOf(userEntity, userEntity2))
@@ -101,8 +95,11 @@ class UserEventRepositoryImplTest {
     private fun stubUserMapperToEntity(model: User, entity: UserEntity) {
         every { userMapper.mapToEntity(model) } returns entity
     }
-
+/*
     private fun stubEventWithDetailsListMapperFromEntity(models: List<Event>, entities: List<EventWithDetails>) {
         every { eventWithDetailsMapper.mapFromEntities(entities) } returns models
+
     }
+      */
+
 }

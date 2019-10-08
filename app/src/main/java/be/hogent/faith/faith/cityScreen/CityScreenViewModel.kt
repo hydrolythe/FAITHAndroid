@@ -54,4 +54,9 @@ class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : Vi
             Log.e(TAG, "logout failed")
         }
     }
+
+    override fun onCleared() {
+        logoutUserUseCase.dispose()
+        super.onCleared()
+    }
 }

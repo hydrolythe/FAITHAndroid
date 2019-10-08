@@ -14,8 +14,8 @@ class AuthManagerImpl(private val firebase: FirebaseAuthManager) : AuthManager {
 
     override fun reset() {}
 
+    override fun getLoggedInUser(): String? = firebase.getLoggedInUser()
+
     override val currentUser: BehaviorSubject<String>
         get() = firebase.loggedInUser
-
 }
-

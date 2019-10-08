@@ -23,6 +23,8 @@ import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.error.ScopeAlreadyCreatedException
+import org.koin.core.qualifier.named
 
 /**
  * A [Fragment] subclass which allows the user to register a new Avatar.
@@ -35,7 +37,6 @@ const val SELECTION_ID = "avatarSelection"
 class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
 
     private var navigation: AvatarFragmentNavigationListener? = null
-
     /**
      * ViewModel used for the avatars.
      */
@@ -59,6 +60,12 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
 
     private fun registerListeners() {
         registerUserViewModel.userRegisteredSuccessFully.observe(this, Observer { newUser ->
+            val scope = try {
+                getKoin().createScope(KoinModules.USER_SCOPE_ID, named(KoinModules.USER_SCOPE_NAME))
+            } catch (e: ScopeAlreadyCreatedException) {
+                getKoin().getScope(KoinModules.USER_SCOPE_ID)
+            }
+            val userViewModel: UserViewModel = scope.get()
             userViewModel.setUser(newUser)
             navigation!!.goToCityScreen()
         })
@@ -71,8 +78,8 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
                         "avatar ${registerAvatarViewModel.selectedAvatar}"
             )
             registerUserViewModel.registerUser(
+                registerUserInfoViewModel.UUID.value!!,
                 registerUserInfoViewModel.userName.value!!,
-                registerUserInfoViewModel.password.value!!,
                 registerAvatarViewModel.selectedAvatar!!
             )
         })

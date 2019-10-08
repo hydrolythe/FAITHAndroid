@@ -5,7 +5,6 @@ import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry
 import be.hogent.faith.database.daos.DetailDao
 import be.hogent.faith.database.daos.EventDao
-import be.hogent.faith.database.daos.UserDao
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.database.models.detail.AudioDetailEntity

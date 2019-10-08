@@ -40,10 +40,11 @@ class RegisterUserInfoViewModel(private val registerUserUseCase: RegisterUserUse
     val errorMessage: LiveData<Int>
         get() = _errorMessage
 
-
+    /*
     private val _confirmUserInfoClicked = SingleLiveEvent<Unit>()
     val confirmUserInfoClicked: LiveData<Unit>
         get() = _confirmUserInfoClicked
+*/
 
     fun onConfirmUserInfoClicked() {
         register()
@@ -52,7 +53,6 @@ class RegisterUserInfoViewModel(private val registerUserUseCase: RegisterUserUse
     private val _userRegisteredSuccessFully = SingleLiveEvent<Unit>()
     val UserRegisteredSuccessFully: LiveData<Unit>
         get() = _userRegisteredSuccessFully
-
 
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
@@ -102,7 +102,7 @@ class RegisterUserInfoViewModel(private val registerUserUseCase: RegisterUserUse
                     R.string.register_error_invalid_username
                 is UserCollisionException ->
                     R.string.register_error_username_already_exists
-                else ->  R.string.register_error_create_user
+                else -> R.string.register_error_create_user
             })
         }
     }
