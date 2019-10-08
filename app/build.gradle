@@ -104,6 +104,9 @@ dependencies {
     implementation uiDependencies.annotation
     implementation uiDependencies.material
 
+    implementation commonDependencies.navktx
+    implementation commonDependencies.navui
+
     //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
     testImplementation(testDependencies.threeTenBP) {
         exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
@@ -121,6 +124,7 @@ dependencies {
 
     androidTestImplementation androidTestDependencies.espressoContrib
     androidTestImplementation androidTestDependencies.uiAutomator
+
 }
 
 private Integer generateVersionCode() {

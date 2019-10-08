@@ -56,12 +56,15 @@ ext {
     // OTHER LIBRARIES
     ktlint_version = '0.31.0'
     timber = '4.7.1'
+    nav_version = '2.1.0'
 
     //Version Code
     ext.versionMajor = 1
     ext.versionMinor = 1
     ext.versionPatch = 1
     ext.versionClassifier = null
+
+
 
     commonDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
@@ -75,7 +78,11 @@ ext {
             coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version",
             coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android_version",
 
-            timber            : "com.jakewharton.timber:timber:$timber"
+            timber            : "com.jakewharton.timber:timber:$timber",
+
+            navktx            : "androidx.navigation:navigation-fragment-ktx:$nav_version",
+            navui             :  "androidx.navigation:navigation-ui-ktx:$nav_version"
+
     ]
 
     androidDependencies = [
