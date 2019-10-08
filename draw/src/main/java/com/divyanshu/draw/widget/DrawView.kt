@@ -11,9 +11,12 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.AsyncTask
 import android.provider.MediaStore.Images.Media.getBitmap
+import android.text.InputType
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
@@ -30,6 +33,9 @@ import java.io.File
 const val BACKGROUND_MAX_HEIGHT_USED = 0.8
 
 class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), DrawingContext {
+
+    override val view: View
+        get() = this
 
     /**
      * Holds all [DrawingAction]s that will be drawn when calling [onDraw].
@@ -54,6 +60,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
      * The currently selected [com.divyanshu.draw.widget.tools.Tool].
      * By default this is the [DrawingTool]
      */
+    // TODO: change back to DrawingTool
     private var currentTool: Tool = TextTool(this)
 
     private var mIsSaving = false
@@ -348,6 +355,11 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
 
     fun pickTextTool() {
         currentTool = TextTool(this)
+    }
+
+    override fun onCreateInputConnection(outAttrs: EditorInfo): InputConnection {
+        outAttrs.inputType = InputType.TYPE_CLASS_TEXT
+        return TextTool.InputConnection(this, true)
     }
 
     override fun openSoftKeyboard() {
