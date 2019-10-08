@@ -10,13 +10,17 @@ import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.AsyncTask
+import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
 import com.divyanshu.draw.widget.tools.DrawingContext
 import com.divyanshu.draw.widget.tools.DrawingTool
+import com.divyanshu.draw.widget.tools.TextTool
+import com.divyanshu.draw.widget.tools.Tool
 import java.io.File
 
 /**
@@ -50,7 +54,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
      * The currently selected [com.divyanshu.draw.widget.tools.Tool].
      * By default this is the [DrawingTool]
      */
-    private var currentTool = DrawingTool(this)
+    private var currentTool: Tool = TextTool(this)
 
     private var mIsSaving = false
 
@@ -72,6 +76,12 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     var fullScreenBackground: Boolean = true
 
     private val drawingListeners = mutableListOf<DrawViewListener>()
+
+    init {
+        // Required to open Soft Keyboard on click
+        // See https://stackoverflow.com/questions/5419766/how-to-capture-soft-keyboard-input-in-a-view
+        isFocusableInTouchMode = true
+    }
 
     fun addDrawViewListener(newListener: DrawViewListener) {
         drawingListeners += newListener
@@ -330,5 +340,18 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
 
     override fun clearUndoneActions() {
         undoneActions.clear()
+    }
+
+    fun pickDrawingTool() {
+        currentTool = DrawingTool(this)
+    }
+
+    fun pickTextTool() {
+        currentTool = TextTool(this)
+    }
+
+    override fun openSoftKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_IMPLICIT_ONLY)
     }
 }
