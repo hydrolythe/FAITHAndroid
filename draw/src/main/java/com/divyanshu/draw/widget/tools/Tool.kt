@@ -4,7 +4,7 @@ import android.graphics.Canvas
 import android.view.MotionEvent
 import androidx.annotation.ColorInt
 
-abstract class Tool {
+abstract class Tool(protected val drawingContext: DrawingContext) {
     /**
      * Handle one of the actions defined in [android.view.MotionEvent].
      */
