@@ -78,6 +78,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="8dp"
+                android:focusableInTouchMode="true"
                 app:layout_constraintBottom_toBottomOf="@+id/guide_draw_drawview_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/container_draw_images"
                 app:layout_constraintStart_toEndOf="@+id/guide_draw_drawview_left"
