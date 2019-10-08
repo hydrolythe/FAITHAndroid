@@ -31,7 +31,7 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(events[position])
+        holder.bind(events[position], position)
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -44,7 +44,7 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
         private var expandButton: ImageButton = view.findViewById(R.id.expand_button)
 
 
-        fun bind(event: Event) {
+        fun bind(event: Event, position: Int) {
             eventTitle.text = event.title
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
             val eventDateString: String = formatter.format(event.dateTime)
@@ -67,9 +67,9 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
                 }
             }
 
-            //itemView.setOnClickListener {
-            //    eventListener.onEventClicked(event.uuid)
-            //}
+            itemView.setOnClickListener {
+                eventListener.onEventClicked(position)
+            }
         }
     }
 }
