@@ -19,6 +19,7 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.library.eventDetailFragments.TestFragment
+import be.hogent.faith.faith.library.eventDetailFragments.TextDetailFragment
 import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
 import org.koin.android.ext.android.getKoin
 
@@ -83,6 +84,8 @@ class EventDetailFragment : Fragment() {
                     }
                     is TextDetail -> {
                         Log.i("Tag", "Textdetail")
+                        val detail = details[position] as TextDetail
+                        return TextDetailFragment.newInstance(detail.file.absolutePath)
                     }
                     is AudioDetail -> {
                         Log.i("TAG", "Audiodetail")
