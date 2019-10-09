@@ -2,9 +2,12 @@ package be.hogent.faith.domain.repository
 
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 
 interface AuthManager {
+    fun checkIfEmailExists(email: String): Single<Boolean>
+
     fun register(email: String, password: String): Maybe<String?>
 
     fun signIn(email: String, password: String): Maybe<String?>

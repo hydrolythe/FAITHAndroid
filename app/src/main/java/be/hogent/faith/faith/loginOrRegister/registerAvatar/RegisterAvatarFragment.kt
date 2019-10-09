@@ -2,7 +2,6 @@ package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,18 +12,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter.OnAvatarClickListener
-import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
-import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
-import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.error.ScopeAlreadyCreatedException
-import org.koin.core.qualifier.named
 
 /**
  * A [Fragment] subclass which allows the user to register a new Avatar.
@@ -41,11 +33,13 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
      * ViewModel used for the avatars.
      */
     private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel()
-    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
-    private val registerUserInfoViewModel by sharedViewModel<RegisterUserInfoViewModel>()
-    private val registerUserViewModel by viewModel<RegisterUserViewModel>()
+    private val registerUserViewModel by sharedViewModel<RegisterUserViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding: be.hogent.faith.databinding.FragmentRegisterAvatarBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_register_avatar, container, false)
         binding.registerAvatarViewModel = registerAvatarViewModel
@@ -59,29 +53,9 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
     }
 
     private fun registerListeners() {
-        registerUserViewModel.userRegisteredSuccessFully.observe(this, Observer { newUser ->
-            val scope = try {
-                getKoin().createScope(KoinModules.USER_SCOPE_ID, named(KoinModules.USER_SCOPE_NAME))
-            } catch (e: ScopeAlreadyCreatedException) {
-                getKoin().getScope(KoinModules.USER_SCOPE_ID)
-            }
-            val userViewModel: UserViewModel = scope.get()
-            userViewModel.setUser(newUser)
-            navigation!!.goToCityScreen()
-        })
-
         registerAvatarViewModel.finishRegistrationClicked.observe(this, Observer {
-            Log.d(
-                TAG, "Registering user with:" +
-                        "username ${registerUserInfoViewModel.userName.value}, " +
-                        "password ${registerUserInfoViewModel.password.value}, " +
-                        "avatar ${registerAvatarViewModel.selectedAvatar}"
-            )
-            registerUserViewModel.registerUser(
-                registerUserInfoViewModel.UUID.value!!,
-                registerUserInfoViewModel.userName.value!!,
-                registerAvatarViewModel.selectedAvatar!!
-            )
+            registerUserViewModel.setAvatar(registerAvatarViewModel.selectedAvatar!!)
+            registerUserViewModel.register()
         })
 
         registerAvatarViewModel.errorMessage.observe(this, Observer { errorMessageID ->
@@ -104,7 +78,8 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
             avatars = registerAvatarViewModel.avatars.value!!
             avatar_rv_avatar.adapter = this
         }
-        avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
+        avatar_rv_avatar.layoutManager =
+            LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
     }
 
     interface AvatarFragmentNavigationListener {

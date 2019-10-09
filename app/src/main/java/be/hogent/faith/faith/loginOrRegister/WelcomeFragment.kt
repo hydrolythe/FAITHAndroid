@@ -10,7 +10,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
@@ -20,7 +19,6 @@ import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.error.ScopeAlreadyCreatedException
 import org.koin.core.qualifier.named
-import java.util.UUID
 
 class WelcomeFragment : Fragment() {
 
@@ -88,7 +86,6 @@ class WelcomeFragment : Fragment() {
             navigation!!.goToCityScreen()
         })
         userViewModel.getLoggedInUser()
-
     }
 
     companion object {

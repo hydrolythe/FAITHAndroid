@@ -13,11 +13,11 @@ class FirebaseEventRepository {
     private val fbAuth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
 
-     fun get(uuid: UUID): Flowable<Event> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun get(uuid: UUID): Flowable<Event> {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-     fun insert(item: Event, user: User): Completable {
+    fun insert(item: Event, user: User): Completable {
         return Completable.create { emitter ->
             val currentUser = fbAuth.currentUser
             if (currentUser == null) {
@@ -25,17 +25,14 @@ class FirebaseEventRepository {
             } else {
                 val db = firestore
                 val collection = db.collection(FirebaseUserRepository.USERS_KEY)
-                //explicitly set the document identifier
-                collection.document(currentUser.uid).collection(EVENTS_KEY).document(item.uuid.toString()).set(item)
+                // explicitly set the document identifier
+                collection.document(currentUser.uid).collection(EVENTS_KEY)
+                    .document(item.uuid.toString()).set(item)
                     .addOnSuccessListener { emitter.onComplete() }
                     .addOnFailureListener { e -> emitter.onError(RuntimeException("Fail to create event")) }
             }
         }
     }
-
-
-
-
 
     companion object {
         const val USERS_KEY = "users"

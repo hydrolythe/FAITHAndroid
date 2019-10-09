@@ -54,11 +54,11 @@ val appModule = module(override = true) {
     viewModel { EditDetailViewModel() }
     viewModel { EnterTextViewModel(get()) }
     viewModel { OverviewEventsViewModel() }
-    viewModel { RegisterAvatarViewModel(get()) }
     viewModel { WelcomeViewModel(get()) }
     viewModel { RecordAudioViewModel() }
     viewModel { RegisterUserViewModel(get()) }
     viewModel { RegisterUserInfoViewModel(get()) }
+    viewModel { RegisterAvatarViewModel(get()) }
     viewModel { TakePhotoViewModel() }
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.

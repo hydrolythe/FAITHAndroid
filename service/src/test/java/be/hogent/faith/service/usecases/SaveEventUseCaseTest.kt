@@ -29,7 +29,7 @@ class SaveEventUseCaseTest {
     @Before
     fun setUp() {
         event = EventFactory.makeEvent(nbrOfDetails = 0)
-        user = spyk(User(DataFactory.randomString(), DataFactory.randomString()))
+        user = spyk(User(DataFactory.randomString(), DataFactory.randomString(), DataFactory.randomUUID().toString()))
         repository = mockk(relaxed = true)
         saveEventUseCase = SaveEventUseCase(repository, mockk())
     }

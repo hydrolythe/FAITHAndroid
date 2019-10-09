@@ -8,18 +8,11 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.InvalidCredentialsException
-import be.hogent.faith.domain.repository.UserCollisionException
-import be.hogent.faith.domain.repository.WeakPasswordException
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.GetUserUseCase
-import be.hogent.faith.service.usecases.RegisterUserUseCase
 import be.hogent.faith.service.usecases.SaveEventUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
-import io.reactivex.observers.DisposableMaybeObserver
-import io.reactivex.observers.DisposableObserver
-import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.subscribers.DisposableSubscriber
 
 /**
@@ -28,8 +21,12 @@ import io.reactivex.subscribers.DisposableSubscriber
  */
 class UserViewModel(
     private val saveEventUseCase: SaveEventUseCase,
-    private val getUserUseCase:GetUserUseCase
+    private val getUserUseCase: GetUserUseCase
 ) : ViewModel() {
+
+    private var userName: String? = null
+    private var password: String? = null
+    private var avatar: String? = null
 
     private val _eventSavedSuccessFully = SingleLiveEvent<Unit>()
     val eventSavedSuccessFully: LiveData<Unit>
@@ -55,9 +52,26 @@ class UserViewModel(
         _user.postValue(user)
     }
 
-    fun getLoggedInUser() {
-           getUserUseCase.execute( null, GetUserUseCaseHandler())
+    private val _userRegisteredSuccessFully = SingleLiveEvent<Unit>()
+    val UserRegisteredSuccessFully: LiveData<Unit>
+        get() = _userRegisteredSuccessFully
+
+    private fun userNameIsValid(): Boolean {
+        if (userName.isNullOrBlank()) {
+            return false
         }
+        return true
+    }
+
+    private fun passwordIsValid(): Boolean {
+        if (password.isNullOrBlank())
+            return false
+        return true
+    }
+
+    fun getLoggedInUser() {
+        getUserUseCase.execute(null, GetUserUseCaseHandler())
+    }
 
     private inner class GetUserUseCaseHandler : DisposableSubscriber<User>() {
 

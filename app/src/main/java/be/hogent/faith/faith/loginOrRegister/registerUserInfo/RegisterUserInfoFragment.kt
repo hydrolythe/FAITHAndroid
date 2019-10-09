@@ -10,7 +10,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class RegisterUserInfoFragment : Fragment() {
 
@@ -19,9 +21,14 @@ class RegisterUserInfoFragment : Fragment() {
     /**
      * ViewModel used for the avatars.
      */
-    private val registerUserInfoViewModel: RegisterUserInfoViewModel by sharedViewModel()
+    private val registerUserViewModel: RegisterUserViewModel by sharedViewModel()
+    private val registerUserInfoViewModel by viewModel<RegisterUserInfoViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding: be.hogent.faith.databinding.FragmentRegisterUserinfoBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_register_userinfo, container, false)
         binding.registerUserInfoViewModel = registerUserInfoViewModel
@@ -35,12 +42,12 @@ class RegisterUserInfoFragment : Fragment() {
     }
 
     private fun registerListeners() {
-        /*  registerUserInfoViewModel.confirmUserInfoClicked.observe(this, Observer {
+        registerUserInfoViewModel.userInfoConfirmedSuccessfully.observe(this, Observer {
+            registerUserViewModel.setRegistrationDetails(
+                registerUserInfoViewModel.userName.value!!,
+                registerUserInfoViewModel.password.value!!
+            )
             navigation!!.goToRegisterAvatarScreen()
-        })
-        */
-        registerUserInfoViewModel.UserRegisteredSuccessFully.observe(this, Observer {
-                 navigation!!.goToRegisterAvatarScreen()
         })
 
         registerUserInfoViewModel.errorMessage.observe(this, Observer { errorMessageID ->

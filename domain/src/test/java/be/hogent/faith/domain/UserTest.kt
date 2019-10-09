@@ -15,7 +15,7 @@ class UserTest {
 
     @Before
     fun setUp() {
-        user = User("username", "avatarName")
+        user = User("username", "avatarName", UUID.randomUUID().toString())
 //        user = User("username", "R.drawable.avatar")
         event = Event(title = eventTitle, uuid = eventUuid)
     }

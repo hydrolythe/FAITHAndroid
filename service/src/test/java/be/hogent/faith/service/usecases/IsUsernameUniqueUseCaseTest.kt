@@ -1,19 +1,18 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.repository.AuthManager
-import be.hogent.faith.domain.repository.SignInException
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import io.reactivex.Maybe
 import io.reactivex.Scheduler
+import io.reactivex.Single
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import java.util.concurrent.Executor
 
-class LoginUserUseCaseTest {
-    private lateinit var loginUserUseCase: LoginUserUseCase
+class IsUsernameUniqueUseCaseTest {
+    private lateinit var isUsernameUniqueUserUseCase: IsUsernameUniqueUseCase
     private lateinit var executor: Executor
     private lateinit var scheduler: Scheduler
     private lateinit var authManager: AuthManager
@@ -23,57 +22,53 @@ class LoginUserUseCaseTest {
         executor = mockk()
         scheduler = mockk()
         authManager = mockk(relaxed = true)
-        loginUserUseCase = LoginUserUseCase(authManager, scheduler)
+        isUsernameUniqueUserUseCase =
+            IsUsernameUniqueUseCase(authManager, scheduler)
     }
 
     @Test
-    fun loginUserUC_existingUser_IsLoggedIn() {
+    fun isUsernameUniqueUC_existingUser_ReturnsFalse() {
         // Arrange
-        val emailArg = slot<String>()
-        val passwordArg = slot<String>()
+        val usernameArg = slot<String>()
         every {
-            authManager.signIn(
-                capture(emailArg),
-                capture(passwordArg)
+            authManager.checkIfEmailExists(
+                capture(usernameArg)
             )
-        } returns Maybe.just("xxxx")
+        } returns Single.just(false)
 
-        val params = LoginUserUseCase.Params("username", "testPassword")
+        val params = IsUsernameUniqueUseCase.Params("an")
 
         // Act
-        val result = loginUserUseCase.buildUseCaseMaybe(params)
+        val result = isUsernameUniqueUserUseCase.buildUseCaseSingle(params)
 
         // Assert
         result.test()
             .assertNoErrors()
-            .assertValue { uuid ->
-                uuid == "xxxx"
-            }
+            .assertValue { it == false }
 
-        Assert.assertEquals(params.username + "@faith.be", emailArg.captured)
-        Assert.assertEquals(params.password, passwordArg.captured)
+        Assert.assertEquals(params.username + "@faith.be", usernameArg.captured)
     }
 
     @Test
-    fun createUserUC_nonExistingUser_IsNotLoggedIn() {
-        val emailArg = slot<String>()
-        val passwordArg = slot<String>()
-        every { authManager.signIn(capture(emailArg), capture(passwordArg)) } returns Maybe.error(
-            SignInException(Exception("error"))
-        )
+    fun isUsernameUniqueUC_nonExistingUser_ReturnsTrue() {
+        // Arrange
+        val usernameArg = slot<String>()
+        every {
+            authManager.checkIfEmailExists(
+                capture(usernameArg)
+            )
+        } returns Single.just(true)
+
+        val params = IsUsernameUniqueUseCase.Params("an")
 
         // Act
-        val params = LoginUserUseCase.Params("username", "testPassword")
-
-        // Act
-        val result = loginUserUseCase.buildUseCaseMaybe(params)
-
-        result.test()
-            .assertError(SignInException::class.java)
-            .assertNoValues()
+        val result = isUsernameUniqueUserUseCase.buildUseCaseSingle(params)
 
         // Assert
-        Assert.assertEquals(params.username + "@faith.be", emailArg.captured)
-        Assert.assertEquals(params.password, passwordArg.captured)
+        result.test()
+            .assertNoErrors()
+            .assertValue { it == true }
+
+        Assert.assertEquals(params.username + "@faith.be", usernameArg.captured)
     }
 }

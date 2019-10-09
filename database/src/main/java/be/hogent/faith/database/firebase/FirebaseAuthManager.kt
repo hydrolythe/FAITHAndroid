@@ -1,10 +1,12 @@
 package be.hogent.faith.database.firebase
 
+import android.util.Log
 import be.hogent.faith.domain.repository.InvalidCredentialsException
 import be.hogent.faith.domain.repository.SignInException
 import be.hogent.faith.domain.repository.SignOutException
 import be.hogent.faith.domain.repository.UserCollisionException
 import be.hogent.faith.domain.repository.WeakPasswordException
+import be.hogent.faith.util.TAG
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -14,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser
 import durdinapps.rxfirebase2.RxFirebaseAuth
 import io.reactivex.Completable
 import io.reactivex.Maybe
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 
 class FirebaseAuthManager {
@@ -22,7 +25,7 @@ class FirebaseAuthManager {
     }
 
     // TODO:klopt dit wel
-      private var authStateListener: FirebaseAuth.AuthStateListener = FirebaseAuth.AuthStateListener {
+    private var authStateListener: FirebaseAuth.AuthStateListener = FirebaseAuth.AuthStateListener {
         if (it.currentUser != null && it.currentUser is FirebaseUser)
             loggedInUser.onNext((it.currentUser as FirebaseUser).uid)
         else
@@ -35,9 +38,24 @@ class FirebaseAuthManager {
 
     var loggedInUser: BehaviorSubject<String> = BehaviorSubject.create()
 
-    fun getLoggedInUser(): String?
-    {
+    fun getLoggedInUser(): String? {
         return auth.currentUser?.uid
+    }
+
+    fun checkIfEmailExists(email: String): Single<Boolean> {
+        return Single.create { emitter ->
+            auth.fetchSignInMethodsForEmail(email)
+                .addOnCompleteListener { task ->
+                    if (task.getResult()?.signInMethods?.size == 0)
+                        emitter.onSuccess(false)
+                    else
+                        emitter.onSuccess(true)
+                }
+                .addOnFailureListener { e ->
+                    Log.i(TAG, e.message)
+                    emitter.onError(e)
+                }
+        }
     }
 
     fun register(email: String, password: String): Maybe<String?> {
@@ -94,6 +112,4 @@ class FirebaseAuthManager {
     fun disposeAuthListener() {
         auth.removeAuthStateListener(authStateListener)
     }
-
-
 }

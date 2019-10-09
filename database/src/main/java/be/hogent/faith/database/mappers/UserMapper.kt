@@ -2,7 +2,6 @@ package be.hogent.faith.database.mappers
 
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.domain.models.User
-import java.util.UUID
 
 object UserMapper : Mapper<UserEntity, User> {
 
@@ -22,7 +21,7 @@ object UserMapper : Mapper<UserEntity, User> {
         )
     }
 
-    fun mapToEntityWithUUID(model: User, uuid:String): UserEntity {
+    fun mapToEntityWithUUID(model: User, uuid: String): UserEntity {
         return UserEntity(
             uuid = uuid,
             username = model.username,

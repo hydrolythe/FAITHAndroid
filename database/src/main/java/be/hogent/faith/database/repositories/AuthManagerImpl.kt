@@ -2,9 +2,13 @@ package be.hogent.faith.database.repositories
 
 import be.hogent.faith.database.firebase.FirebaseAuthManager
 import be.hogent.faith.domain.repository.AuthManager
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 
 class AuthManagerImpl(private val firebase: FirebaseAuthManager) : AuthManager {
+
+    override fun checkIfEmailExists(email: String): Single<Boolean> =
+        firebase.checkIfEmailExists(email)
 
     override fun signIn(email: String, password: String) = firebase.signIn(email, password)
 

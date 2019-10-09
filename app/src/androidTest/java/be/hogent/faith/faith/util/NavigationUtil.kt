@@ -18,9 +18,9 @@ object NavigationUtil {
         closeSoftKeyboard()
         onView(withId(R.id.txt_register_username)).perform(typeText("Jos"))
         closeSoftKeyboard()
-        onView(withId(R.id.txt_register_password)).perform(typeText("ww"))
+        onView(withId(R.id.txt_register_password)).perform(typeText("wwwwww"))
         closeSoftKeyboard()
-        onView(withId(R.id.txt_register_password_repeat)).perform(typeText("ww"))
+        onView(withId(R.id.txt_register_password_repeat)).perform(typeText("wwwwww"))
         closeSoftKeyboard()
         onView(withId(R.id.btn_register_confirmInfo)).perform(click())
         onView(withId(R.id.avatar_rv_avatar)).perform(

@@ -1,15 +1,9 @@
 package be.hogent.faith.database.repositories
 
-import be.hogent.faith.database.daos.DetailDao
-import be.hogent.faith.database.daos.EventDao
-import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.factory.EntityFactory
 import be.hogent.faith.database.firebase.FirebaseUserRepository
-import be.hogent.faith.database.mappers.EventWithDetailsMapper
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.models.UserEntity
-import be.hogent.faith.database.models.relations.EventWithDetails
-import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
@@ -21,11 +15,10 @@ import org.junit.Test
 
 class UserEventRepositoryImplTest {
 
-
     private val firebaseUserRepository = mockk<FirebaseUserRepository>(relaxed = true)
     private val userMapper = mockk<UserMapper>()
 
-    private val userRepository = UserRepositoryImpl( userMapper, firebaseUserRepository )
+    private val userRepository = UserRepositoryImpl(userMapper, firebaseUserRepository)
 
     private val userWithoutEvents = UserFactory.makeUser(0)
     private val userEntity = EntityFactory.makeUserEntity()
@@ -34,7 +27,6 @@ class UserEventRepositoryImplTest {
 
     @Before
     fun setUp() {
-
     }
 
     @Test
@@ -47,7 +39,7 @@ class UserEventRepositoryImplTest {
     @Test
     fun userRepository_get_nonExistingUser_errors() {
         every { firebaseUserRepository.get(userWithoutEvents.uuid) } returns Flowable.empty()
-       // every { firebaseUserRepository.getAllEventsWithDetails(userEntity.uuid) } returns Flowable.empty()
+        // every { firebaseUserRepository.getAllEventsWithDetails(userEntity.uuid) } returns Flowable.empty()
         userRepository.get(userWithoutEvents.uuid)
             .test()
             .assertNoValues()
@@ -58,7 +50,10 @@ class UserEventRepositoryImplTest {
         every { firebaseUserRepository.getAll() } returns Flowable.just(
             listOf(userEntity, userEntity2)
         )
-        stubUsersMapperFromEntity(listOf(userWithoutEvents, userWithoutEvents2), listOf(userEntity, userEntity2))
+        stubUsersMapperFromEntity(
+            listOf(userWithoutEvents, userWithoutEvents2),
+            listOf(userEntity, userEntity2)
+        )
         userRepository.getAll()
             .test()
             .assertValue {
@@ -101,5 +96,4 @@ class UserEventRepositoryImplTest {
 
     }
       */
-
 }

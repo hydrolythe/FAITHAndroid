@@ -97,7 +97,7 @@
     <string name="password">Wachtwoord</string>
     <string name="login_error_noUsername">Je moet je gebruikersnaam ingeven!</string>
     <string name="login_error_noPassword">Je moet je wachtwoord ingeven!</string>
-    <string name="registerOrLogin_password_empty">Je moet een wachtwoord ingeven.</string>
+    <string name="registerOrLogin_password_empty">Je moet een wachtwoord ingeven van minstens 6 posities.</string>
     <string name="register_passwords_nomatch">Wachtwoorden niet gelijk</string>
     <string name="register_password_empty">Wachtwoord ingeven</string>  <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
     <string name="error_no_credentials">No credentials have been stored</string>

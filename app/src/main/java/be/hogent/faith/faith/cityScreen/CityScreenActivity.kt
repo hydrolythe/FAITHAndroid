@@ -4,13 +4,16 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
 import be.hogent.faith.faith.overviewEvents.OverviewEventsActivity
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.builders.footer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
+import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class CityScreenActivity : AppCompatActivity(),
@@ -36,12 +39,16 @@ class CityScreenActivity : AppCompatActivity(),
             footer {
                 primaryItem("Logout") {
                     onClick { _ ->
-                        logOut()
+                        loggingOut()
                         true
                     }
                 }
             }
         }
+
+        cityScreenViewModel.logoutSuccessFull.observe(this, Observer {
+            logOut()
+        })
     }
 
     override fun startEmotionCapture() {
@@ -54,8 +61,12 @@ class CityScreenActivity : AppCompatActivity(),
         startActivity(intent)
     }
 
-    override fun logOut() {
+    fun loggingOut() {
         cityScreenViewModel.onLogOutClicked()
+    }
+
+    override fun logOut() {
+        getKoin().getScope(KoinModules.USER_SCOPE_ID).close()
         navigateUpTo(Intent(applicationContext, LoginOrRegisterActivity::class.java))
     }
 
@@ -65,7 +76,7 @@ class CityScreenActivity : AppCompatActivity(),
                 setTitle(getString(R.string.cityScreen_logOut))
                 setMessage(getString(R.string.cityscreen_stad_verlaten))
                 setPositiveButton(R.string.ok) { _, _ ->
-                    logOut()
+                    loggingOut()
                 }
                 setNegativeButton(R.string.cancel) { dialog, _ ->
                     dialog.cancel()

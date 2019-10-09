@@ -1,6 +1,5 @@
 package be.hogent.faith.database.repositories
 
-
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
@@ -18,7 +17,6 @@ open class EventRepositoryImpl(
     // database and the DAO's, while the latter are made from the former, and are properties of it.
     // It's cleaner to just inject the database and request the daos during construction.
 
-
     override fun delete(item: Event, user: User): Completable {
         TODO("not implemented")
     }
@@ -30,7 +28,6 @@ open class EventRepositoryImpl(
      */
     override fun insert(item: Event, user: User): Completable {
         TODO("not implemented")
-
     }
 
     /**

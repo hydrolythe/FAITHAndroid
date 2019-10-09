@@ -6,23 +6,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.repository.InvalidCredentialsException
-import be.hogent.faith.domain.repository.UserCollisionException
-import be.hogent.faith.domain.repository.WeakPasswordException
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.RegisterUserUseCase
+import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import be.hogent.faith.util.TAG
-import io.reactivex.observers.DisposableMaybeObserver
 
-class RegisterUserInfoViewModel(private val registerUserUseCase: RegisterUserUseCase) :
+import io.reactivex.observers.DisposableSingleObserver
+
+class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameUniqueUseCase) :
     ViewModel() {
+
+    init {
+        Log.i(TAG, "created")
+    }
 
     val userName = MutableLiveData<String>()
     val password = MutableLiveData<String>()
     val passwordRepeated = MutableLiveData<String>()
-    private val _uuid = MutableLiveData<String>()
-    val UUID: LiveData<String>
-        get() = _uuid
 
     private val _userNameErrorMessage = MutableLiveData<Int>()
     val userNameErrorMessage: LiveData<Int>
@@ -40,19 +39,13 @@ class RegisterUserInfoViewModel(private val registerUserUseCase: RegisterUserUse
     val errorMessage: LiveData<Int>
         get() = _errorMessage
 
-    /*
-    private val _confirmUserInfoClicked = SingleLiveEvent<Unit>()
-    val confirmUserInfoClicked: LiveData<Unit>
-        get() = _confirmUserInfoClicked
-*/
-
     fun onConfirmUserInfoClicked() {
-        register()
+        confirmUserInfo()
     }
 
-    private val _userRegisteredSuccessFully = SingleLiveEvent<Unit>()
-    val UserRegisteredSuccessFully: LiveData<Unit>
-        get() = _userRegisteredSuccessFully
+    private val _userInfoConfirmedSuccesFully = SingleLiveEvent<Unit>()
+    val userInfoConfirmedSuccessfully: LiveData<Unit>
+        get() = _userInfoConfirmedSuccesFully
 
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
@@ -63,47 +56,46 @@ class RegisterUserInfoViewModel(private val registerUserUseCase: RegisterUserUse
     }
 
     private fun passwordIsValid(): Boolean {
-        if (password.value.isNullOrBlank()) {
+        val password = password.value
+        if (password.isNullOrBlank() || password.length < 6) {
+            this.password.value = "" // anders wordt de fout niet getoond
+            this.passwordRepeated.value = ""
             _passwordErrorMessage.value = R.string.registerOrLogin_password_empty
             return false
         }
-        if (password.value != passwordRepeated.value) {
+
+        if (password != passwordRepeated.value) {
+            this.passwordRepeated.value = "" // anders wordt de fout niet getoond
             _passwordRepeatErrorMessage.value = R.string.register_passwords_nomatch
             return false
         }
         return true
     }
 
-    fun register() {
+    private fun confirmUserInfo() {
         if (userNameIsValid() && passwordIsValid()) {
-            val params = RegisterUserUseCase.Params(userName.value!!, password.value!!)
-            registerUserUseCase.execute(params, RegisterUserUseCaseHandler())
+            val params = IsUsernameUniqueUseCase.Params(userName.value!!)
+            isUsernameUniqueUseCase.execute(params, IsUsernameUniqueUseCaseHandler())
         }
     }
 
-    private inner class RegisterUserUseCaseHandler : DisposableMaybeObserver<String?>() {
-        override fun onSuccess(t: String) {
-            Log.i(TAG, "success $t")
-            _uuid.postValue(t)
-            _userRegisteredSuccessFully.call()
-        }
+    private inner class IsUsernameUniqueUseCaseHandler : DisposableSingleObserver<Boolean>() {
 
-        override fun onComplete() {
-            Log.i(TAG, "completed")
+        override fun onSuccess(t: Boolean) {
+            if (t)
+                _errorMessage.postValue(R.string.register_error_username_already_exists)
+            else
+                _userInfoConfirmedSuccesFully.call()
         }
 
         override fun onError(e: Throwable) {
             Log.e(TAG, e.localizedMessage)
-            _errorMessage.postValue(
-            when (e) {
-                is WeakPasswordException ->
-                    R.string.register_error_weak_password
-                is InvalidCredentialsException ->
-                    R.string.register_error_invalid_username
-                is UserCollisionException ->
-                    R.string.register_error_username_already_exists
-                else -> R.string.register_error_create_user
-            })
+            _errorMessage.postValue(R.string.register_error_create_user)
         }
+    }
+
+    override fun onCleared() {
+        isUsernameUniqueUseCase.dispose()
+        super.onCleared()
     }
 }

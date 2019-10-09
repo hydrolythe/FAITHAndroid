@@ -4,13 +4,7 @@ import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.converters.LocalDateTimeConverter
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
-import be.hogent.faith.database.models.detail.AudioDetailEntity
-import be.hogent.faith.database.models.detail.DetailEntity
-import be.hogent.faith.database.models.detail.PictureDetailEntity
-import be.hogent.faith.database.models.detail.TextDetailEntity
-import be.hogent.faith.database.models.relations.EventWithDetails
 import be.hogent.faith.util.factory.DataFactory
-import be.hogent.faith.util.factory.DataFactory.randomString
 import java.util.UUID
 
 /**
@@ -19,30 +13,30 @@ import java.util.UUID
 // We can't put these methods here because the util package doesn't know the database package.
 // Making it depend on the database module would introduce a circular dependency.
 object EntityFactory {
- /*
-    fun makeDetailEntity(eventUuid: UUID): DetailEntity {
-        val rand = Math.random()
-        return when {
-            rand < 0.33 ->DetailEntity(
-                DataFactory.randomFile(), randomString(), DataFactory.randomUUID(), 1
-            )
-            rand < 0.66 -> PictureDetailEntity(
-                DataFactory.randomFile(), randomString(), DataFactory.randomUUID(), 2
-            )
-            else -> AudioDetailEntity(
-                DataFactory.randomFile(), randomString(), DataFactory.randomUUID(), 3
-            )
-        }
-    }
+    /*
+       fun makeDetailEntity(eventUuid: UUID): DetailEntity {
+           val rand = Math.random()
+           return when {
+               rand < 0.33 ->DetailEntity(
+                   DataFactory.randomFile(), randomString(), DataFactory.randomUUID(), 1
+               )
+               rand < 0.66 -> PictureDetailEntity(
+                   DataFactory.randomFile(), randomString(), DataFactory.randomUUID(), 2
+               )
+               else -> AudioDetailEntity(
+                   DataFactory.randomFile(), randomString(), DataFactory.randomUUID(), 3
+               )
+           }
+       }
 
-    fun makeDetailEntityList(count: Int, eventUuid: UUID): List<DetailEntity> {
-        val details = mutableListOf<DetailEntity>()
-        repeat(count) {
-            details.add(makeDetailEntity(eventUuid))
-        }
-        return details
-    }
-*/
+       fun makeDetailEntityList(count: Int, eventUuid: UUID): List<DetailEntity> {
+           val details = mutableListOf<DetailEntity>()
+           repeat(count) {
+               details.add(makeDetailEntity(eventUuid))
+           }
+           return details
+       }
+   */
     fun makeEventEntity(
         userUuid: UUID = DataFactory.randomUUID(),
         uuid: UUID = DataFactory.randomUUID()
@@ -75,9 +69,9 @@ object EntityFactory {
 */
     fun makeUserEntity(): UserEntity {
         return UserEntity(
-            DataFactory.randomUUID().toString(), DataFactory.randomString(), DataFactory.randomString()
+            DataFactory.randomUUID().toString(),
+            DataFactory.randomString(),
+            DataFactory.randomString()
         )
     }
-
-
 }

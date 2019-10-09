@@ -13,6 +13,7 @@ import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
 import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
 import be.hogent.faith.service.usecases.SaveEventTextUseCase
 import be.hogent.faith.service.usecases.SaveEventUseCase
+import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import org.koin.dsl.module
 
 /**
@@ -26,7 +27,8 @@ val serviceModule = module {
     factory { CreateUserUseCase(get(), get()) }
     factory { SaveEmotionAvatarUseCase(get(), get()) }
     factory { GetUserUseCase(get(), get(), get()) }
-    factory { RegisterUserUseCase(get(), get()) }
+    factory { RegisterUserUseCase(get(), get(), get()) }
+    factory { IsUsernameUniqueUseCase(get(), get()) }
     factory { LoginUserUseCase(get(), get()) }
     factory { LogoutUserUseCase(get(), get()) }
     factory { SaveEventTextUseCase(get(), get()) }

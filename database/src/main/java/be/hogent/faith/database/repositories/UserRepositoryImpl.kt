@@ -1,6 +1,5 @@
 package be.hogent.faith.database.repositories
 
-
 import be.hogent.faith.database.firebase.FirebaseUserRepository
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.domain.models.Event
@@ -27,7 +26,7 @@ open class UserRepositoryImpl(
     }
 
     override fun get(uuid: String): Flowable<User> {
-        return firebaseUserRepository.get(uuid).map{userMapper.mapFromEntity(it)}
+        return firebaseUserRepository.get(uuid).map { userMapper.mapFromEntity(it) }
         /*
         val user = userDao.getUser(uuid).map { userMapper.mapFromEntity(it) }
             .doOnNext { Log.d(TAG, "uuid of user fetched from database ${it.uuid}") }
@@ -42,10 +41,10 @@ open class UserRepositoryImpl(
          */
     }
 
-    override fun isUsernameUnique(username:String): Single<Boolean> = firebaseUserRepository.isUsernameUnique(username)
+    override fun isUsernameUnique(username: String): Single<Boolean> = firebaseUserRepository.isUsernameUnique(username)
 
     override fun getAll(): Flowable<List<User>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     private fun addEventsToUser(user: User, events: List<Event>): User {

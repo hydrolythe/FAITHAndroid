@@ -38,7 +38,7 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
         get() = _userLoggedInSuccessFully
 
     init {
-        // TODO als reeds aangemeld
+        // TODO als reeds aangemeld : isUserLoggedInUseCase maken en dan user instellen als die reeds is ingelogd, en dan call van userLoggedInSuccessfully
     }
 
     fun registerButtonClicked() {

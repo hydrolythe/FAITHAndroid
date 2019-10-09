@@ -1,24 +1,5 @@
 package be.hogent.faith.database.repositories
 
-import be.hogent.faith.database.daos.DetailDao
-import be.hogent.faith.database.daos.EventDao
-import be.hogent.faith.database.database.EntityDatabase
-import be.hogent.faith.database.factory.EntityFactory
-import be.hogent.faith.database.mappers.DetailMapper
-import be.hogent.faith.database.mappers.EventMapper
-import be.hogent.faith.database.mappers.EventWithDetailsMapper
-import be.hogent.faith.database.models.EventEntity
-import be.hogent.faith.database.models.relations.EventWithDetails
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.util.factory.EventFactory
-import be.hogent.faith.util.factory.UserFactory
-import io.mockk.every
-import io.mockk.mockk
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import org.junit.Before
-import org.junit.Test
-
 class EventRepositoryImplTest {
     /*
     private val database = mockk<EntityDatabase>(relaxed = true)

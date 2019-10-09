@@ -1,17 +1,5 @@
 package be.hogent.faith.database.mappers
 
-import be.hogent.faith.database.factory.EntityFactory
-import be.hogent.faith.database.models.detail.DetailEntity
-import be.hogent.faith.database.models.relations.EventWithDetails
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.util.factory.DataFactory
-import be.hogent.faith.util.factory.EventFactory
-import be.hogent.faith.util.factory.UserFactory
-import org.junit.Assert.assertEquals
-import org.junit.Test
-import java.util.UUID
-
 class EventWithDetailsMapperTest {
     /*
     private val eventWithDetailsMapper = EventWithDetailsMapper()

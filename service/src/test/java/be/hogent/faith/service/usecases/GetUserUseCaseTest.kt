@@ -28,7 +28,7 @@ class GetUserUseCaseTest {
         executor = mockk()
         scheduler = mockk()
         repository = mockk(relaxed = true)
-        authManager =mockk(relaxed=true)
+        authManager = mockk(relaxed = true)
         getUserUC = GetUserUseCase(repository, authManager, scheduler)
     }
 
@@ -39,7 +39,7 @@ class GetUserUseCaseTest {
     }
     @Test
     fun getUserUC_execute_callsRepo() {
-        //val params = GetUserUseCase.Params(DataFactory.randomUUID())
+        // val params = GetUserUseCase.Params(DataFactory.randomUUID())
         getUserUC.buildUseCaseObservable(null)
         verify { repository.get(any()) }
     }
@@ -48,20 +48,20 @@ class GetUserUseCaseTest {
     fun getUserUseCase_userPresent_returnsUser() {
         val userUuidArg = slot<String>()
         val userUuid = DataFactory.randomUUID().toString()
-        every {authManager.getLoggedInUser()} returns userUuid
+        every { authManager.getLoggedInUser() } returns userUuid
         val user = mockk<User>()
         every { repository.get(capture(userUuidArg)) } returns Flowable
             .just(user)
         val result = getUserUC.buildUseCaseObservable(null)
         result.test().assertValues(user)
-        Assert.assertEquals(userUuid , userUuidArg.captured)
+        Assert.assertEquals(userUuid, userUuidArg.captured)
     }
 
     @Test
     fun getUserUseCase_noUserPresent_returnsNothing() {
         val userUuidArg = slot<String>()
         val userUuid = DataFactory.randomUUID().toString()
-        every {authManager.getLoggedInUser()} returns null
+        every { authManager.getLoggedInUser() } returns null
         val result = getUserUC.buildUseCaseObservable(null)
         result.test().assertError(RuntimeException::class.java)
     }
