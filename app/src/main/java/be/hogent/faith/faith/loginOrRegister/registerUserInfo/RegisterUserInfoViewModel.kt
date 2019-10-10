@@ -6,10 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
+import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import be.hogent.faith.util.TAG
-
 import io.reactivex.observers.DisposableSingleObserver
 
 class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameUniqueUseCase) :
@@ -90,7 +90,12 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
 
         override fun onError(e: Throwable) {
             Log.e(TAG, e.localizedMessage)
-            _errorMessage.postValue(R.string.register_error_create_user)
+            _errorMessage.postValue(
+                when (e) {
+                    is NetworkError -> R.string.login_error_internet
+                    else -> R.string.register_error_create_user
+                }
+            )
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.domain.repository.SignInException
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.LoginUserUseCase
@@ -87,6 +88,7 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
             Log.e(TAG, e.localizedMessage)
             _errorMessage.postValue(
                 when (e) {
+                    is NetworkError -> R.string.login_error_internet
                     is SignInException -> R.string.login_error_wrong_username_or_password
                     else -> R.string.login_error
                 }

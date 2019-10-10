@@ -128,4 +128,5 @@
     <string name="register_error_username_already_exists">Gebruikersnaam bestaat reeds. Geef een andere gebruikersnaam in.</string>
     <string name="login_error_wrong_username_or_password">Gebruikersnaam of wachtwoord is fout. Probeer opnieuw.</string>
     <string name="login_error">Inloggen mislukt. Probeer opnieuw.</string>
+    <string name="login_error_internet">Je hebt internet nodig.</string>
 </resources>

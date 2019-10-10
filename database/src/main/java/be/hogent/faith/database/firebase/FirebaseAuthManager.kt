@@ -2,11 +2,13 @@ package be.hogent.faith.database.firebase
 
 import android.util.Log
 import be.hogent.faith.domain.repository.InvalidCredentialsException
+import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.domain.repository.SignInException
 import be.hogent.faith.domain.repository.SignOutException
 import be.hogent.faith.domain.repository.UserCollisionException
 import be.hogent.faith.domain.repository.WeakPasswordException
 import be.hogent.faith.util.TAG
+import com.google.firebase.FirebaseException
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -46,15 +48,20 @@ class FirebaseAuthManager {
         return Single.create { emitter ->
             auth.fetchSignInMethodsForEmail(email)
                 .addOnCompleteListener { task ->
-                    if (task.getResult()?.signInMethods?.size == 0)
-                        emitter.onSuccess(false)
-                    else
-                        emitter.onSuccess(true)
+                    if (task.isSuccessful()) {
+                        if (task.getResult()?.signInMethods?.size == 0)
+                            emitter.onSuccess(false)
+                        else
+                            emitter.onSuccess(true)
+                    } else {
+                        Log.e(TAG, task.exception?.message)
+                        when (task.exception) {
+                            is FirebaseException -> emitter.onError(NetworkError(task.exception!!))
+                            else -> emitter.onError(task.exception!!)
+                        }
+                    }
                 }
-                .addOnFailureListener { e ->
-                    Log.i(TAG, e.message)
-                    emitter.onError(e)
-                }
+
         }
     }
 
@@ -73,6 +80,7 @@ class FirebaseAuthManager {
                     is FirebaseAuthInvalidCredentialsException -> Maybe.error(
                         InvalidCredentialsException(error)
                     )
+                    is FirebaseException -> Maybe.error(NetworkError(error))
                     else -> Maybe.error(Throwable(error))
                 }
             }
@@ -81,7 +89,12 @@ class FirebaseAuthManager {
     fun signIn(email: String, password: String): Maybe<String?> {
         return RxFirebaseAuth.signInWithEmailAndPassword(auth, email, password)
             .map { mapToUser(it) }
-            .onErrorResumeNext { error: Throwable -> Maybe.error(SignInException(error)) }
+            .onErrorResumeNext { error: Throwable ->
+                when (error) {
+                    is FirebaseException -> Maybe.error(NetworkError(error))
+                    else -> Maybe.error(SignInException(error))
+                }
+            }
         /*
         FirebaseAuthInvalidUserException thrown if the user account corresponding to email does not exist or has been disabled
         FirebaseAuthInvalidCredentialsException thrown if the password is wrong

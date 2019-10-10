@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.GetUserUseCase
 import be.hogent.faith.service.usecases.SaveEventUseCase
@@ -87,7 +88,12 @@ class UserViewModel(
 
         override fun onError(e: Throwable) {
             Log.e(TAG, e.localizedMessage)
-            _errorMessage.postValue(R.string.register_error_create_user)
+            _errorMessage.postValue(
+                when (e) {
+                    is NetworkError -> R.string.login_error_internet
+                    else -> R.string.register_error_create_user
+                }
+            )
         }
     }
 
