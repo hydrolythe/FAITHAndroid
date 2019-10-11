@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import com.divyanshu.draw.widget.DrawView
-import com.divyanshu.draw.widget.DrawingAction
+import com.divyanshu.draw.widget.tools.CanvasAction
 
 /**
  * ViewModel for the [DrawEmotionAvatarFragment].
@@ -27,6 +27,11 @@ class DrawViewModel : ViewModel() {
     private val _undoClicked = SingleLiveEvent<Unit>()
     val undoClicked: LiveData<Unit>
         get() = _undoClicked
+
+
+    private val _textClicked = SingleLiveEvent<Unit>()
+    val textClicked: LiveData<Unit>
+        get() = _textClicked
 
     private val _eraserClicked = SingleLiveEvent<Unit>()
     val eraserClicked: LiveData<Unit>
@@ -50,8 +55,8 @@ class DrawViewModel : ViewModel() {
      * again to the new View.
      * If we'd make the actions in the [DrawView] and then push them here, an observer pattern would have been required.
      */
-    private val _drawingActions = MutableLiveData<MutableList<DrawingAction>>()
-    val drawnPaths: LiveData<MutableList<DrawingAction>>
+    private val _drawingActions = MutableLiveData<MutableList<CanvasAction>>()
+    val drawnPaths: LiveData<MutableList<CanvasAction>>
         get() = _drawingActions
 
     init {
@@ -92,6 +97,10 @@ class DrawViewModel : ViewModel() {
 
     fun onSaveButtonClicked() {
         _saveClicked.call()
+    }
+
+    fun onTextClicked() {
+       _textClicked.call()
     }
 
     enum class LineWidth(val width: Float) {

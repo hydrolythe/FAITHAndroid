@@ -9,26 +9,20 @@ import android.graphics.Paint
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.AsyncTask
 import android.provider.MediaStore.Images.Media.getBitmap
-import android.text.Editable
-import android.text.InputType
-import android.text.SpannableStringBuilder
 import android.util.AttributeSet
-import android.util.Log
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
-import android.view.inputmethod.BaseInputConnection
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
+import com.divyanshu.draw.widget.tools.CanvasAction
 import com.divyanshu.draw.widget.tools.DrawingContext
-import com.divyanshu.draw.widget.tools.DrawingTool
-import com.divyanshu.draw.widget.tools.TextTool
 import com.divyanshu.draw.widget.tools.Tool
-import java.io.File
+import com.divyanshu.draw.widget.tools.drawing.DrawingTool
+import com.divyanshu.draw.widget.tools.text.TextTool
 
 
 /**
@@ -43,30 +37,23 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         get() = this
 
     /**
-     * Holds all [DrawingAction]s that will be drawn when calling [onDraw].
+     * Holds all [CanvasAction]s that will be drawn when calling [onDraw].
      */
-    private var _drawingActions = mutableListOf<DrawingAction>()
-    val drawingActions: List<DrawingAction>
+    private var _drawingActions = mutableListOf<CanvasAction>()
+    val canvasActions: List<CanvasAction>
         get() = _drawingActions
 
     /**
      * Holds a copy of all actions that were done before [clear] was called.
      * Used to restore them when calling [undo] after a call to [clear].
      */
-    private var lastDrawingActions = mutableListOf<DrawingAction>()
+    private var lastDrawingActions = mutableListOf<CanvasAction>()
 
     /**
      * Map of all actions that have been undone using the [undo] method.
      * Used to restore them when calling [redo].
      */
-    private var undoneActions = mutableListOf<DrawingAction>()
-
-    /**
-     * The currently selected [com.divyanshu.draw.widget.tools.Tool].
-     * By default this is the [DrawingTool]
-     */
-    // TODO: change back to DrawingTool
-    private var currentTool: Tool = TextTool(this)
+    private var undoneActions = mutableListOf<CanvasAction>()
 
     private var mIsSaving = false
 
@@ -89,11 +76,40 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
 
     private val drawingListeners = mutableListOf<DrawViewListener>()
 
+    /**
+     * The [Paint] that will be shared between the different [Tool]s.
+     * When changing the [Paint] (eg using [setColor]), it will be set here so the same settings
+     * are applied when switching tools, but it should also be set to the current tool directly
+     * because some tools (eg [TextTool] use a subclass of [Paint] and should be updated manually.
+     */
+    private val defaultPaint = Paint().apply {
+        color = Color.BLACK
+        strokeWidth = 30f
+    }
+
+    /**
+     * The currently selected [com.divyanshu.draw.widget.tools.Tool].
+     * By default this is the [DrawingTool].
+     */
+    private var currentTool: Tool = DrawingTool(this, defaultPaint)
+
     init {
         // Required to open Soft Keyboard on click
         // See https://stackoverflow.com/questions/5419766/how-to-capture-soft-keyboard-input-in-a-view
         isFocusableInTouchMode = true
+
+        setOnKeyListener(object : OnKeyListener {
+            override fun onKey(v: View, keyCode: Int, event: KeyEvent): Boolean {
+                if (currentTool is TextTool) {
+                    return (currentTool as TextTool).handleKeyEvent(keyCode, event)
+
+                } else {
+                    return false
+                }
+            }
+        })
     }
+
 
     fun addDrawViewListener(newListener: DrawViewListener) {
         drawingListeners += newListener
@@ -159,7 +175,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
      */
     @WorkerThread
     fun getBitmap(): Bitmap {
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
         mIsSaving = true
@@ -183,21 +199,18 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     }
 
     /**
-     * Add a [DrawingAction] to the list.
+     * Add a [CanvasAction] to the list.
      * Invalidates the View, ensuring the new action gets painted.
      */
-    override fun addDrawingAction(drawingAction: DrawingAction) {
-        _drawingActions.add(drawingAction)
+    override fun addDrawingAction(action: CanvasAction) {
+        _drawingActions.add(action)
         invalidate()
     }
-    private val paint = Paint()
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        paint.color=Color.BLACK
-
         drawBackground(canvas)
-        canvas.drawText(writtenText.toString(), 50f, 50f, paint)
 
         _drawingActions.forEach { it.drawOn(canvas) }
 
@@ -308,7 +321,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
      */
     fun addDrawable(drawable: Drawable, x: Int, y: Int) {
         drawable.bounds = Rect(x, y, x + drawable.intrinsicWidth, y + drawable.intrinsicHeight)
-        addDrawingAction(MyDrawable(drawable))
+        addDrawingAction(DrawableAction(drawable))
         invalidate()
     }
 
@@ -336,7 +349,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
      * Not everything that's part of the UI state should be saved. The other maps containing actions are only
      * there for the undo/redo and clearCanvas functionality.
      */
-    fun setActions(newPaths: MutableList<DrawingAction>) {
+    fun setActions(newPaths: MutableList<CanvasAction>) {
         _drawingActions = newPaths
         invalidate()
     }
@@ -345,12 +358,12 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         currentTool.setColor(color)
     }
 
-    fun setStrokeWidth(newStrokeWidth: Float) {
-        currentTool.setStrokeWidth(newStrokeWidth)
+    fun setStrokeWidth(strokeWidth: Float) {
+        currentTool.setStrokeWidth(strokeWidth)
     }
 
-    fun setAlpha(newAlpha: Int) {
-        currentTool.setAlpha(newAlpha)
+    fun setAlpha(alpha: Int) {
+        currentTool.setAlpha(alpha)
     }
 
     override fun clearUndoneActions() {
@@ -358,39 +371,16 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     }
 
     fun pickDrawingTool() {
-        currentTool = DrawingTool(this)
+        val currentPaint = currentTool.paint
+        currentTool = DrawingTool(this, currentPaint)
     }
 
 
     fun pickTextTool() {
-        currentTool = TextTool(this)
-    }
-
-    private var writtenText = SpannableStringBuilder()
-
-    override fun onCreateInputConnection(outAttrs: EditorInfo): InputConnection {
-        outAttrs.inputType = InputType.TYPE_CLASS_TEXT
-        return InputConnection(this)
-    }
-
-    inner class InputConnection internal constructor(targetView: View) :
-        BaseInputConnection(targetView, false) {
-
-        override fun getEditable(): Editable {
-            return writtenText
-        }
-
-
-        override fun commitText(text: CharSequence, newCursorPosition: Int): Boolean {
-            val returnValue = super.commitText(text, newCursorPosition)
-            Log.i("TAG", "text: $writtenText")
-            return returnValue
-        }
-    }
-
-    override fun openSoftKeyboard() {
-        requestFocus()
+        val currentPaint = currentTool.paint
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+        currentTool = TextTool(this, currentPaint, imm)
     }
+
+
 }
