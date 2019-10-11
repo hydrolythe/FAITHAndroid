@@ -17,6 +17,7 @@ abstract class DrawFragment : Fragment() {
 
     private fun setUpListeners() {
         drawViewModel.selectedColor.observe(this, Observer { newColor ->
+            drawView.pickDrawingTool()
             drawView.setColor(newColor)
         })
         drawViewModel.selectedLineWidth.observe(this, Observer { lineWidth ->
