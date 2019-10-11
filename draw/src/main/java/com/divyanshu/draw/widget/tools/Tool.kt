@@ -1,10 +1,13 @@
 package com.divyanshu.draw.widget.tools
 
 import android.graphics.Canvas
+import android.graphics.Paint
 import android.view.MotionEvent
-import androidx.annotation.ColorInt
 
-abstract class Tool(protected val drawingContext: DrawingContext) {
+abstract class Tool(
+    val paint: Paint,
+    protected val drawingContext: DrawingContext
+) {
     /**
      * Handle one of the actions defined in [android.view.MotionEvent].
      */
@@ -12,9 +15,16 @@ abstract class Tool(protected val drawingContext: DrawingContext) {
 
     abstract fun drawCurrentAction(canvas: Canvas)
 
-    abstract fun setColor(@ColorInt color: Int)
+    open fun setColor(color: Int) {
+        paint.color = color
+    }
 
-    abstract fun setStrokeWidth(strokeWidth: Float)
+    open fun setAlpha(alpha: Int) {
+        paint.alpha = alpha
+    }
 
-    abstract fun setAlpha(alpha: Int)
+    open fun setStrokeWidth(strokeWidth: Float) {
+        paint.strokeWidth = strokeWidth
+    }
+
 }

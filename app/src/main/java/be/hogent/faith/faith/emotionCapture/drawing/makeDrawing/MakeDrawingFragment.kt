@@ -83,6 +83,9 @@ class MakeDrawingFragment : DrawFragment() {
     }
 
     private fun startListeners() {
+        drawViewModel.textClicked.observe(this, Observer {
+            drawView.pickTextTool()
+        })
         drawViewModel.eraserClicked.observe(this, Observer {
             drawView.setColor(Color.WHITE)
         })

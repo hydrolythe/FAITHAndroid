@@ -1,15 +1,16 @@
-package com.divyanshu.draw.widget.tools
+package com.divyanshu.draw.widget.tools.drawing
 
 import android.graphics.Canvas
-import android.util.Log
+import android.graphics.Paint
 import android.view.MotionEvent
-import androidx.annotation.ColorInt
-import androidx.core.graphics.ColorUtils
-import com.divyanshu.draw.widget.MyPath
-import com.divyanshu.draw.widget.PaintOptions
 import com.divyanshu.draw.widget.Point
+import com.divyanshu.draw.widget.tools.DrawingContext
+import com.divyanshu.draw.widget.tools.Tool
 
-class DrawingTool(drawingContext: DrawingContext) : Tool(drawingContext) {
+class DrawingTool(
+    drawingContext: DrawingContext,
+    paint: Paint
+) : Tool(paint, drawingContext) {
 
     /**
      * The starting point of the drawing Action
@@ -24,12 +25,7 @@ class DrawingTool(drawingContext: DrawingContext) : Tool(drawingContext) {
     /**
      * The path currently being drawn
      */
-    private var currentPath: MyPath? = null
-
-    /**
-     * Current settings for painting the [currentPath].
-     */
-    private var currentPaintOptions = PaintOptions()
+    private var currentPath: PathAction? = null
 
     override fun handleMotionEvent(event: MotionEvent) {
         val x = event.x
@@ -65,7 +61,6 @@ class DrawingTool(drawingContext: DrawingContext) : Tool(drawingContext) {
 
     private fun actionUp() {
         currentPath?.let {
-            Log.d("DrawView", "Finishing path")
             it.lineTo(currentPoint.x, currentPoint.y)
 
             // draw a dot on click
@@ -88,13 +83,7 @@ class DrawingTool(drawingContext: DrawingContext) : Tool(drawingContext) {
      * Starts a new Path with the currently chosen PaintOptions
      */
     private fun startNewPath() {
-        currentPaintOptions = PaintOptions(
-            currentPaintOptions.color,
-            currentPaintOptions.strokeWidth,
-            currentPaintOptions.alpha,
-            currentPaintOptions.isEraserOn
-        )
-        currentPath = MyPath(currentPaintOptions)
+        currentPath = PathAction(paint)
     }
 
     /**
@@ -102,18 +91,5 @@ class DrawingTool(drawingContext: DrawingContext) : Tool(drawingContext) {
      */
     override fun drawCurrentAction(canvas: Canvas) {
         currentPath?.drawOn(canvas)
-    }
-
-    override fun setColor(@ColorInt color: Int) {
-        val alphaColor = ColorUtils.setAlphaComponent(color, currentPaintOptions.alpha)
-        currentPaintOptions.color = alphaColor
-    }
-
-    override fun setStrokeWidth(newStrokeWidth: Float) {
-        currentPaintOptions.strokeWidth = newStrokeWidth
-    }
-
-    override fun setAlpha(alpha: Int) {
-        currentPaintOptions.alpha = alpha
     }
 }
