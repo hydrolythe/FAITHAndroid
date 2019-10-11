@@ -44,32 +44,43 @@
                 layout="@layout/panel_drawing_colors"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/btn_draw_setColorWhite"
+                app:layout_constraintBottom_toTopOf="@+id/btn_draw_text"
                 app:layout_constraintStart_toStartOf="@+id/guide_draw_utilities_left"
                 app:layout_constraintTop_toTopOf="@+id/guide_draw_drawview_top"
-                app:layout_constraintVertical_weight="0.65"
+                app:layout_constraintVertical_weight="0.6"
                 bind:drawViewModel="@{drawViewModel}" />
 
             <Button
-                android:id="@+id/btn_draw_setColorWhite"
+                android:id="@+id/btn_draw_text"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:onClick="@{()->drawViewModel.onTextClicked()}"
+                android:text="Text"
+                app:layout_constraintBottom_toTopOf="@+id/btn_draw_eraser"
+                app:layout_constraintVertical_weight="0.1"
+                app:layout_constraintStart_toStartOf="@+id/guide_draw_utilities_left"
+                app:layout_constraintTop_toBottomOf="@+id/container_draw_colors" />
+
+            <Button
+                android:id="@+id/btn_draw_eraser"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:onClick="@{()->drawViewModel.onEraserClicked()}"
                 android:text="Gom"
                 app:layout_constraintBottom_toTopOf="@+id/container_draw_utilities"
+                app:layout_constraintVertical_weight="0.1"
                 app:layout_constraintStart_toStartOf="@+id/guide_draw_utilities_left"
-                app:layout_constraintTop_toBottomOf="@+id/container_draw_colors"
-                app:layout_constraintVertical_weight="0.1" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_draw_text" />
 
             <include
                 android:id="@+id/container_draw_utilities"
                 layout="@layout/panel_drawing_tools"
                 android:layout_width="wrap_content"
+                app:layout_constraintVertical_weight="0.2"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/guide_draw_drawview_bottom"
                 app:layout_constraintStart_toStartOf="@+id/guide_draw_utilities_left"
-                app:layout_constraintTop_toBottomOf="@+id/btn_draw_setColorWhite"
-                app:layout_constraintVertical_weight="0.25"
+                app:layout_constraintTop_toBottomOf="@+id/btn_draw_eraser"
                 bind:drawViewModel="@{drawViewModel}" />
 
 
