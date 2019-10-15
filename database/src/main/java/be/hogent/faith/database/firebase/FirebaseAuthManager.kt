@@ -1,13 +1,11 @@
 package be.hogent.faith.database.firebase
 
-import android.util.Log
 import be.hogent.faith.domain.repository.InvalidCredentialsException
 import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.domain.repository.SignInException
 import be.hogent.faith.domain.repository.SignOutException
 import be.hogent.faith.domain.repository.UserCollisionException
 import be.hogent.faith.domain.repository.WeakPasswordException
-import be.hogent.faith.util.TAG
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -21,10 +19,12 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
 
-class FirebaseAuthManager {
-    private val auth: FirebaseAuth by lazy {
-        FirebaseAuth.getInstance()
-    }
+/**
+ * uses RxFirebaseAuth : https://github.com/FrangSierra/RxFirebase
+ */
+class FirebaseAuthManager(
+    private val auth: FirebaseAuth
+) {
 
     // TODO:klopt dit wel
     private var authStateListener: FirebaseAuth.AuthStateListener = FirebaseAuth.AuthStateListener {
@@ -45,24 +45,15 @@ class FirebaseAuthManager {
     }
 
     fun checkIfEmailExists(email: String): Single<Boolean> {
-        return Single.create { emitter ->
-            auth.fetchSignInMethodsForEmail(email)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful()) {
-                        if (task.getResult()?.signInMethods?.size == 0)
-                            emitter.onSuccess(false)
-                        else
-                            emitter.onSuccess(true)
-                    } else {
-                        Log.e(TAG, task.exception?.message)
-                        when (task.exception) {
-                            is FirebaseException -> emitter.onError(NetworkError(task.exception!!))
-                            else -> emitter.onError(task.exception!!)
-                        }
-                    }
+        return RxFirebaseAuth.fetchSignInMethodsForEmail(auth, email)
+            .map { if (it.signInMethods?.size == 0) true else false }
+            .onErrorResumeNext { e: Throwable ->
+                when (e) {
+                    is FirebaseException -> Maybe.error(NetworkError(e))
+                    else -> Maybe.error(RuntimeException("Error fetching providers for email", e))
                 }
-
-        }
+            }
+            .toSingle()
     }
 
     fun register(email: String, password: String): Maybe<String?> {
@@ -91,14 +82,11 @@ class FirebaseAuthManager {
             .map { mapToUser(it) }
             .onErrorResumeNext { error: Throwable ->
                 when (error) {
+                    is FirebaseAuthInvalidCredentialsException -> Maybe.error(SignInException(error))
                     is FirebaseException -> Maybe.error(NetworkError(error))
                     else -> Maybe.error(SignInException(error))
                 }
             }
-        /*
-        FirebaseAuthInvalidUserException thrown if the user account corresponding to email does not exist or has been disabled
-        FirebaseAuthInvalidCredentialsException thrown if the password is wrong
-         */
     }
 
     fun signOut(): Completable {
@@ -122,7 +110,11 @@ class FirebaseAuthManager {
         return result?.uid
     }
 
-    fun disposeAuthListener() {
+    protected fun finalize() {
+        disposeAuthListener()
+    }
+
+    private fun disposeAuthListener() {
         auth.removeAuthStateListener(authStateListener)
     }
 }

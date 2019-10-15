@@ -8,7 +8,6 @@ import be.hogent.faith.service.usecases.SaveEventUseCase
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.called
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify

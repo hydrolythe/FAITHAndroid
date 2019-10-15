@@ -7,7 +7,6 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.UserRepository
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Single
 
 open class UserRepositoryImpl(
     // Passing the database is required to run transactions across multiple DAO's.
@@ -40,8 +39,6 @@ open class UserRepositoryImpl(
             BiFunction { u, e -> addEventsToUser(u, e) })
          */
     }
-
-    override fun isUsernameUnique(username: String): Single<Boolean> = firebaseUserRepository.isUsernameUnique(username)
 
     override fun getAll(): Flowable<List<User>> {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.

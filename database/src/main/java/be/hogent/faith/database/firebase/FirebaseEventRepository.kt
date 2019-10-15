@@ -1,41 +1,134 @@
 package be.hogent.faith.database.firebase
 
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.User
+import android.content.ContentValues
+import android.net.Uri
+import android.util.Log
+import be.hogent.faith.database.models.DetailEntity
+import be.hogent.faith.database.models.EventEntity
+import be.hogent.faith.database.models.UserEntity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import durdinapps.rxfirebase2.RxFirebaseStorage
+import durdinapps.rxfirebase2.RxFirestore
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import java.util.UUID
+import io.reactivex.Maybe
+import io.reactivex.Single
+import io.reactivex.rxkotlin.toFlowable
+import java.io.File
 
-class FirebaseEventRepository {
+/**
+ * uses RxFirebase: https://github.com/FrangSierra/RxFirebase
+ * document hierarchy in Firestore : users/{userUuid}/projects/{projectUuid}.
+ * storage hierarchy in Firestorage : idem
+ * the ruleset on both storages is so that a user can only CRUD his documents
+ */
+class FirebaseEventRepository(
+    private val fbAuth: FirebaseAuth,
+    private val firestore: FirebaseFirestore,
+    private val firestorage: FirebaseStorage
+) {
 
-    private val fbAuth = FirebaseAuth.getInstance()
-    private val firestore = FirebaseFirestore.getInstance()
+    private val storageRef: StorageReference
+        get() = firestorage.reference.child(USERS_KEY)
 
-    fun get(uuid: UUID): Flowable<Event> {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    fun get(uuid: String): Flowable<EventEntity> {
+        val currentUser = fbAuth.currentUser
+        if (currentUser == null) {
+            return Flowable.error(RuntimeException("Unauthorized used."))
+        }
+        return RxFirestore.observeDocumentRef(
+            firestore.collection(USERS_KEY).document(currentUser.uid).collection(EVENTS_KEY)
+                .document(uuid)
+        )
+            .map { it?.toObject(EventEntity::class.java) }
     }
 
-    fun insert(item: Event, user: User): Completable {
-        return Completable.create { emitter ->
-            val currentUser = fbAuth.currentUser
-            if (currentUser == null) {
-                Completable.error(RuntimeException("Unauthorized used."))
-            } else {
-                val db = firestore
-                val collection = db.collection(FirebaseUserRepository.USERS_KEY)
-                // explicitly set the document identifier
-                collection.document(currentUser.uid).collection(EVENTS_KEY)
-                    .document(item.uuid.toString()).set(item)
-                    .addOnSuccessListener { emitter.onComplete() }
-                    .addOnFailureListener { e -> emitter.onError(RuntimeException("Fail to create event")) }
-            }
+    fun getAll(): Flowable<List<EventEntity>> {
+        val currentUser = fbAuth.currentUser
+        if (currentUser == null) {
+            return Flowable.error(RuntimeException("Unauthorized used."))
         }
+        return RxFirestore.observeQueryRef(
+            firestore.collection(USERS_KEY).document(currentUser!!.uid).collection(
+                EVENTS_KEY
+            )
+        )
+            .map {
+                it?.map { document ->
+                    document.toObject(EventEntity::class.java)
+                }
+            }
+    }
+
+    /**
+     * Inserting an event goes to 3 steps
+     * 1. saving the emotionAvatar file and update the file reference
+     * 2. for each detail : save the corresponding file and update the file reference
+     * 3. insert the event
+     */
+    fun insert(item: EventEntity, user: UserEntity): Maybe<EventEntity?> {
+        val currentUser = fbAuth.currentUser
+        if (currentUser == null || currentUser.uid != user.uuid) {
+            return Maybe.error(RuntimeException("Unauthorized user."))
+        } else {
+            val document =
+                firestore.collection(FirebaseUserRepository.USERS_KEY).document(currentUser.uid)
+                    .collection(EVENTS_KEY)
+                    .document(item.uuid)
+            return Completable.fromSingle(saveAvatarForEvent(item))
+                .andThen(
+                    Completable.fromPublisher(item.details.toFlowable()
+                        .concatMapSingle {
+                            saveFileForEventDetail(item.uuid, it)
+                        }
+                    ))
+                .andThen(RxFirestore.setDocument(document, item))
+                .andThen(RxFirestore.getDocument(document)
+                    .map { it.toObject(EventEntity::class.java) })
+        }
+    }
+
+    /**
+     * Save the avatar in storage and update the file path
+     */
+    fun saveAvatarForEvent(item: EventEntity): Single<File> {
+        return RxFirebaseStorage.putFile(
+            storageRef.child(fbAuth.currentUser!!.uid).child(EVENTS_KEY).child(item.uuid).child(
+                "avatar.png"
+            ),
+            Uri.parse("file://" + item.emotionAvatar)
+        )
+            .map { File(it.storage.downloadUrl.toString()) }
+            .doOnSuccess { storedFile ->
+                Log.i(ContentValues.TAG, "emotion avatar file is saved ${storedFile.path}")
+                item.emotionAvatar = storedFile.path
+            }
+    }
+
+    /**
+     * Save the file for each detail in storage and update the file path
+     */
+    fun saveFileForEventDetail(
+        projectUuid: String,
+        detail: DetailEntity
+    ): Single<File> {
+        return RxFirebaseStorage.putFile(
+            storageRef.child(fbAuth.currentUser!!.uid).child(EVENTS_KEY).child(projectUuid.toString()).child(
+                "${detail.uuid}.png"
+            ),
+            Uri.parse("file://" + detail.file)
+        )
+            .map { File(it.storage.downloadUrl.toString()) }
+            .doOnSuccess { detail.file = it.path }
     }
 
     companion object {
         const val USERS_KEY = "users"
         const val EVENTS_KEY = "events"
+        const val EMOTIONAVATAR_KEY = "emotionAvatar"
+        const val EVENT_DETAILS_KEY = "details"
     }
 }

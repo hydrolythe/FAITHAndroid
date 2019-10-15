@@ -3,8 +3,12 @@ package be.hogent.faith.database.models
 import java.util.UUID
 
 data class DetailEntity(
-    val file: String = "",
+    var file: String = "",
     val name: String? = null,
     val uuid: String = UUID.randomUUID().toString(),
-    val type: Int = 1
+    val type: DetailType? = null
 )
+
+enum class DetailType {
+    TEXT, AUDIO, DRAWING, PHOTO
+}

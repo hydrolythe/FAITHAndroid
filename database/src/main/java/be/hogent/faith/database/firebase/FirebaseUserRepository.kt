@@ -1,89 +1,50 @@
 package be.hogent.faith.database.firebase
 
-import android.util.Log
 import be.hogent.faith.database.models.UserEntity
-import be.hogent.faith.util.TAG
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import io.reactivex.BackpressureStrategy
+import durdinapps.rxfirebase2.RxFirestore
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Single
 
-class FirebaseUserRepository {
-
-    private val fbAuth = FirebaseAuth.getInstance()
-    private val firestore = FirebaseFirestore.getInstance()
+class FirebaseUserRepository(
+    private val fbAuth: FirebaseAuth,
+    private val firestore: FirebaseFirestore
+) {
 
     fun insert(item: UserEntity): Completable {
-        return Completable.create { emitter ->
-            val currentUser = fbAuth.currentUser
-            if (currentUser == null) {
-                Completable.error(RuntimeException("Unauthorized used."))
-            } else {
-                val db = firestore
-                val collection = db.collection(USERS_KEY)
-                // explicitly set the document identifier
-                collection.document(currentUser.uid).set(item)
-                    .addOnSuccessListener { emitter.onComplete() }
-                    .addOnFailureListener { e -> emitter.onError(RuntimeException("Fail to create user")) }
-            }
+        val currentUser = fbAuth.currentUser
+        if (currentUser == null) {
+            return Completable.error(RuntimeException("Unauthorized used."))
         }
+        val document = firestore.collection(USERS_KEY).document(currentUser.uid)
+        return RxFirestore.setDocument(document, item)
+            .onErrorResumeNext { error: Throwable ->
+                Completable.error(
+                    Throwable(
+                        java.lang.RuntimeException(
+                            "Failed to create user"
+                        )
+                    )
+                )
+            }
     }
 
     fun getAll(): Flowable<List<UserEntity>> {
-        return Flowable.create({ emitter ->
-            firestore.collection(USERS_KEY)
-                .get()
-                // .addSnapShotListener als je realtime updates wenst
-                .addOnSuccessListener { snapshot ->
-                    val users = snapshot?.map { document ->
-                        document.toObject(UserEntity::class.java)
-                    }
-                    users?.let { emitter.onNext(it) }
+        return RxFirestore.observeQueryRef(firestore.collection(USERS_KEY))
+            .map {
+                it?.map { document ->
+                    document.toObject(UserEntity::class.java)
                 }
-                .addOnFailureListener { exception ->
-                    emitter.onError(exception)
-                }
-        }, BackpressureStrategy.LATEST)
+            }
     }
 
     fun delete(item: UserEntity): Completable {
-        return Completable.create { emitter ->
-            val db = firestore
-            val currentUser = fbAuth.currentUser
-            if (currentUser == null) {
-                Completable.error(RuntimeException("Unauthorized used."))
-            } else {
-                db.collection(USERS_KEY)
-                    .document(currentUser.uid)
-                    .delete()
-                    .addOnCompleteListener {
-                        emitter.onComplete()
-                    }
-                    .addOnFailureListener { e ->
-                        emitter.onError(e)
-                    }
-            }
+        val currentUser = fbAuth.currentUser
+        if (currentUser == null) {
+            return Completable.error(RuntimeException("Unauthorized used."))
         }
-    }
-
-    fun isUsernameUnique(username: String): Single<Boolean> {
-        return Single.create { emitter ->
-            firestore.collection(USERS_KEY)
-                .whereEqualTo("username", username)
-                .get()
-                .addOnSuccessListener { snapshot ->
-                    if (snapshot.isEmpty)
-                        emitter.onSuccess(false)
-                    else
-                        emitter.onSuccess(true)
-                }
-                .addOnFailureListener { e ->
-                    Log.i(TAG, e.message)
-                    emitter.onError(e)
-                }
-        }
+        return RxFirestore.deleteDocument(firestore.collection(USERS_KEY).document(currentUser.uid))
     }
 
     fun get(uuid: String): Flowable<UserEntity> {
@@ -91,20 +52,8 @@ class FirebaseUserRepository {
         if (currentUser == null) {
             return Flowable.error(RuntimeException("Unauthorized used."))
         }
-        return Flowable.create({ emitter ->
-            firestore.collection(USERS_KEY)
-                .document(currentUser.uid)
-                .get()
-                .addOnSuccessListener { snapshot ->
-                    val user = snapshot?.toObject(UserEntity::class.java)
-                    user?.let {
-                        emitter.onNext(it)
-                    }
-                }
-                .addOnFailureListener { e ->
-                    emitter.onError(e)
-                }
-        }, BackpressureStrategy.LATEST)
+        return RxFirestore.observeDocumentRef(firestore.collection(USERS_KEY).document(currentUser.uid))
+            .map { it?.toObject(UserEntity::class.java) }
     }
 
     companion object {

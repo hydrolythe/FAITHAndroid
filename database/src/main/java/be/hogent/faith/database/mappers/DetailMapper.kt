@@ -1,12 +1,12 @@
 package be.hogent.faith.database.mappers
-/*
-import be.hogent.faith.database.models.detail.AudioDetailEntity
-import be.hogent.faith.database.models.detail.DetailEntity
-import be.hogent.faith.database.models.detail.PictureDetailEntity
-import be.hogent.faith.database.models.detail.TextDetailEntity
+
+import be.hogent.faith.database.converters.FileConverter
+import be.hogent.faith.database.models.DetailEntity
+import be.hogent.faith.database.models.DetailType
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import java.util.UUID
 
@@ -16,31 +16,32 @@ import java.util.UUID
  * The event is required because we need its uuid to map the foreign key relationship.
  */
 
-object DetailMapper : MapperWithForeignKey<DetailEntity, Detail> {
+object DetailMapper : Mapper<DetailEntity, Detail> {
     override fun mapFromEntities(entities: List<DetailEntity>): List<Detail> {
         return entities.map { mapFromEntity(it) }
     }
 
-    override fun mapToEntities(models: List<Detail>, foreignKey: UUID): List<DetailEntity> {
-        return models.map { mapToEntity(it, foreignKey) }
+    override fun mapToEntities(models: List<Detail>): List<DetailEntity> {
+        return models.map { mapToEntity(it) }
     }
 
     override fun mapFromEntity(entity: DetailEntity): Detail {
-        return when (entity) {
-            is AudioDetailEntity -> AudioDetail(entity.file, entity.name, entity.uuid)
-            is TextDetailEntity -> TextDetail(entity.file, entity.name, entity.uuid)
-            is PictureDetailEntity -> DrawingDetail(entity.file, entity.name, entity.uuid)
+        return when (entity.type) {
+            DetailType.AUDIO -> AudioDetail(FileConverter().toFile(entity.file), entity.name, UUID.fromString(entity.uuid))
+            DetailType.TEXT -> TextDetail(FileConverter().toFile(entity.file), entity.name, UUID.fromString(entity.uuid))
+            DetailType.DRAWING -> DrawingDetail(FileConverter().toFile(entity.file), entity.name, UUID.fromString(entity.uuid))
+            DetailType.PHOTO -> PhotoDetail(FileConverter().toFile(entity.file), entity.name, UUID.fromString(entity.uuid))
             else -> throw ClassCastException("Unknown DetailEntity subclass encountered")
         }
     }
 
-    override fun mapToEntity(model: Detail, foreignKey: UUID): DetailEntity {
-        return when (model) {
-            is AudioDetail -> AudioDetailEntity(model.file, model.name, model.uuid, foreignKey)
-            is TextDetail -> TextDetailEntity(model.file, model.name, model.uuid, foreignKey)
-            is DrawingDetail -> PictureDetailEntity(model.file, model.name, model.uuid, foreignKey)
+    override fun mapToEntity(model: Detail): DetailEntity {
+        return DetailEntity(FileConverter().toString(model.file), model.name, model.uuid.toString(), when (model) {
+            is AudioDetail -> DetailType.AUDIO
+            is TextDetail -> DetailType.TEXT
+            is DrawingDetail -> DetailType.DRAWING
+            is PhotoDetail -> DetailType.PHOTO
             else -> throw ClassCastException("Unknown Detail subclass encountered")
-        }
+        })
     }
 }
-*/

@@ -21,13 +21,15 @@ open class SaveEventUseCase(
         }.andThen(
             // Gebruik ( bij andThen ipv { anders problemen.
             // Zie https://stackoverflow.com/questions/45680256/rxjava-completabe-andthen-testing
-            eventRepository.insert(params.event, params.user)
-        )
+            Completable.fromMaybe(
+                eventRepository.insert(params.event, params.user)
+                    .doOnSuccess { params.event = it }))
+        // TODO delete all the local files nu event de reference naar de firestorage bevat
     }
 
     data class Params(
         val eventTitle: String,
-        val event: Event,
+        var event: Event,
         val user: User
     )
 }
