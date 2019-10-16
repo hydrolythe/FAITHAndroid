@@ -10,7 +10,7 @@ import com.divyanshu.draw.widget.Quad
 import com.divyanshu.draw.widget.tools.CanvasAction
 import java.io.ObjectInputStream
 import java.io.Serializable
-import java.util.*
+import java.util.LinkedList
 
 // TODO: remove redundant paintOptions
 class PathAction(private val paint: Paint) : Path(), Serializable,

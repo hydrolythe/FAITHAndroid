@@ -11,12 +11,12 @@ import com.divyanshu.draw.widget.Point
 import com.divyanshu.draw.widget.tools.DrawingContext
 import com.divyanshu.draw.widget.tools.Tool
 
-
 class TextTool(
     drawingContext: DrawingContext,
     paint: Paint,
     private val imm: InputMethodManager
 ) : Tool(paint, drawingContext) {
+
     private var currentTextAction: TextAction? = null
 
     private val textPaint = TextPaint(paint).apply {
@@ -61,7 +61,6 @@ class TextTool(
             }
         }
         return false
-
     }
 
     private fun showSoftKeyboard() {
@@ -86,5 +85,4 @@ class TextTool(
     override fun setStrokeWidth(strokeWidth: Float) {
         textPaint.textSize = strokeWidth * drawingContext.view.resources.displayMetrics.density
     }
-
 }

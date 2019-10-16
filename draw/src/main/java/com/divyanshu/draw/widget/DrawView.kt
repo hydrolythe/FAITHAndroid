@@ -25,7 +25,6 @@ import com.divyanshu.draw.widget.tools.drawing.DrawingTool
 import com.divyanshu.draw.widget.tools.text.TextTool
 import java.io.File
 
-
 /**
  * Defines how much of the View's height the background may use.
  * This is used to provide a margin around the background.
@@ -101,7 +100,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
 
         setOnKeyListener { _, keyCode, event -> currentTool.handleKeyEvent(keyCode, event) }
     }
-
 
     fun addDrawViewListener(newListener: DrawViewListener) {
         drawingListeners += newListener
@@ -367,11 +365,9 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         currentTool = DrawingTool(this, currentPaint)
     }
 
-
     fun pickTextTool() {
         val currentPaint = currentTool.paint
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         currentTool = TextTool(this, currentPaint, imm)
     }
-
 }
