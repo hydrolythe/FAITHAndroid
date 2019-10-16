@@ -2,13 +2,16 @@ package com.divyanshu.draw.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Point
+import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.os.AsyncTask
 import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.AttributeSet
-import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -84,16 +87,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         // See https://stackoverflow.com/questions/5419766/how-to-capture-soft-keyboard-input-in-a-view
         isFocusableInTouchMode = true
 
-        setOnKeyListener(object : OnKeyListener {
-            override fun onKey(v: View, keyCode: Int, event: KeyEvent): Boolean {
-                if (currentTool is TextTool) {
-                    return (currentTool as TextTool).handleKeyEvent(keyCode, event)
-
-                } else {
-                    return false
-                }
-            }
-        })
+        setOnKeyListener { _, keyCode, event -> currentTool.handleKeyEvent(keyCode, event) }
     }
 
 
@@ -138,6 +132,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         if (lastAction != null) {
             undoneActions.add(lastAction)
         }
+
         invalidate()
         callDrawViewListeners()
     }
@@ -207,19 +202,16 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
      * Draw the background when one is set and the [Rect] in which it will be drawn has been calculated.
      */
     private fun drawBackground(canvas: Canvas) {
-        if (paintedBackground != null && mOutlineRect != null) {
-            canvas.drawBitmap(
-                paintedBackground!!,
-                null,
-                mOutlineRect!!,
-                null
-            )
+        assert(mOutlineRect != null)
+        if (paintedBackground != null) {
+            canvas.drawBitmap(paintedBackground!!, null, mOutlineRect!!, null)
         }
     }
 
     fun clearCanvas() {
-        lastDrawingActions = _drawingActions.toMutableList() // copy
-        // TODO: Clear current tool?
+        // Save drawing actions so we can undo the clear
+        lastDrawingActions = _drawingActions.toMutableList()
+
         _drawingActions.clear()
         invalidate()
         callDrawViewListeners()
@@ -229,7 +221,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     override fun onTouchEvent(event: MotionEvent): Boolean {
         currentTool.handleMotionEvent(event)
 
-        // Check if this should be called for every tool
         callDrawViewListeners()
         invalidate()
         return true
@@ -253,7 +244,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     /**
      * Calculates the [Rect] in which the [paintedBackground] will be drawn.
      * The middle of the [Rect] will be in the middle of the canvas.
-     * It will be scaled to fit this view when necessary.
+     * The rect will be scaled to fit this view when necessary.
      */
     private fun calculateOutlineRect() {
         paintedBackground?.let {
@@ -293,6 +284,11 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         paintedBackground = bitmapDrawable.bitmap
     }
 
+    /**
+     * Add a drawable to a specific location on the canvas.
+     * @param x the leftmost point of the drawable
+     * @param y the topmost point of the drawable
+     */
     fun addDrawable(drawableResourceID: Int, x: Int, y: Int) {
         val drawable = context.resources.getDrawable(drawableResourceID)
         drawable.bounds = Rect(x, y, x + drawable.intrinsicWidth, y + drawable.intrinsicHeight)
@@ -303,19 +299,18 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     interface DrawViewListener {
         /**
          * Called every time after the user has performed an action on the drawing, changing it in the process.
-         * This includes drawing a dot, a line, undoing and redoing previous actions.
          */
         fun onDrawingChanged(bitmap: Bitmap)
     }
 
     /**
      * Sets the actions to be drawn.
-     * This is used to save the state in a ViewModel and restore it when the View was destroyed.
-     * Not everything that's part of the UI state should be saved. The other maps containing actions are only
-     * there for the undo/redo and clearCanvas functionality.
      */
-    fun setActions(newPaths: MutableList<CanvasAction>) {
-        _drawingActions = newPaths
+    // This is used to save the state in a ViewModel and restore it when the View was destroyed.
+    // Not everything that's part of the UI state should be saved. The other maps containing actions are only
+    // there for the undo/redo and clearCanvas functionality.
+    fun setActions(newActions: MutableList<CanvasAction>) {
+        _drawingActions = newActions
         invalidate()
     }
 
@@ -346,6 +341,5 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         currentTool = TextTool(this, currentPaint, imm)
     }
-
 
 }

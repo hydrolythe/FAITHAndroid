@@ -51,7 +51,7 @@ class DrawViewModel : ViewModel() {
      * If we'd make the actions in the [DrawView] and then push them here, an observer pattern would have been required.
      */
     private val _drawingActions = MutableLiveData<MutableList<CanvasAction>>()
-    val drawnPaths: LiveData<MutableList<CanvasAction>>
+    val drawingActions: LiveData<MutableList<CanvasAction>>
         get() = _drawingActions
 
     init {

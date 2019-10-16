@@ -46,7 +46,7 @@ class TextTool(
         }
     }
 
-    fun handleKeyEvent(keyCode: Int, event: KeyEvent): Boolean {
+    override fun handleKeyEvent(keyCode: Int, event: KeyEvent): Boolean {
         if (event.action == KeyEvent.ACTION_DOWN) {
             if (event.unicodeChar == 0) { // control character
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
