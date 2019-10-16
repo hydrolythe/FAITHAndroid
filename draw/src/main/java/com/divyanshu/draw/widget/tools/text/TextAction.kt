@@ -9,10 +9,11 @@ import com.divyanshu.draw.widget.Point
 import com.divyanshu.draw.widget.tools.CanvasAction
 
 class TextAction(
-    private var writtenText: SpannableStringBuilder,
     val position: Point,
     private val textPaint: TextPaint
 ) : CanvasAction {
+
+    private var writtenText: SpannableStringBuilder = SpannableStringBuilder()
 
     override fun drawOn(canvas: Canvas) {
         val width = textPaint.measureText(writtenText.toString()).toInt()

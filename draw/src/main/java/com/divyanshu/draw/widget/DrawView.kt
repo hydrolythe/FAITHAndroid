@@ -98,7 +98,13 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         // See https://stackoverflow.com/questions/5419766/how-to-capture-soft-keyboard-input-in-a-view
         isFocusableInTouchMode = true
 
-        setOnKeyListener { _, keyCode, event -> currentTool.handleKeyEvent(keyCode, event) }
+        setOnKeyListener { _, keyCode, event ->
+            val eventHandled = currentTool.handleKeyEvent(keyCode, event)
+            if (eventHandled) {
+                invalidate()
+            }
+            eventHandled
+        }
     }
 
     fun addDrawViewListener(newListener: DrawViewListener) {
@@ -346,14 +352,17 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
 
     fun setColor(@ColorInt color: Int) {
         currentTool.setColor(color)
+        invalidate()
     }
 
     fun setStrokeWidth(strokeWidth: Float) {
         currentTool.setStrokeWidth(strokeWidth)
+        invalidate()
     }
 
     fun setAlpha(alpha: Int) {
         currentTool.setAlpha(alpha)
+        invalidate()
     }
 
     override fun clearUndoneActions() {
