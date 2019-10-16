@@ -34,5 +34,4 @@ abstract class Tool(
     open fun setStrokeWidth(strokeWidth: Float) {
         paint.strokeWidth = strokeWidth
     }
-
 }
