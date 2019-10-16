@@ -25,12 +25,12 @@ class TextAction(
             0f,
             false
         )
-        //Save original canvas state (see https://html5.litten.com/understanding-save-and-restore-for-the-canvas-context/)
+        // Save original canvas state (see https://html5.litten.com/understanding-save-and-restore-for-the-canvas-context/)
         canvas.save()
-        //Do transform
+        // Do transform
         canvas.translate(position.x, position.y)
         textLayout.draw(canvas)
-        //Back to original canvas state
+        // Back to original canvas state
         canvas.restore()
     }
 

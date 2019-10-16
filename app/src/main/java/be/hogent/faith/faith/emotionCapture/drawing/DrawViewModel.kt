@@ -27,7 +27,6 @@ class DrawViewModel : ViewModel() {
     val undoClicked: LiveData<Unit>
         get() = _undoClicked
 
-
     private val _textClicked = SingleLiveEvent<Unit>()
     val textClicked: LiveData<Unit>
         get() = _textClicked
@@ -85,7 +84,7 @@ class DrawViewModel : ViewModel() {
     }
 
     fun onTextClicked() {
-       _textClicked.call()
+        _textClicked.call()
     }
 
     enum class LineWidth(val width: Float) {
