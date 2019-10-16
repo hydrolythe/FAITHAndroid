@@ -9,10 +9,10 @@ import android.graphics.Paint
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.AsyncTask
 import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.AttributeSet
-import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -23,6 +23,7 @@ import com.divyanshu.draw.widget.tools.DrawingContext
 import com.divyanshu.draw.widget.tools.Tool
 import com.divyanshu.draw.widget.tools.drawing.DrawingTool
 import com.divyanshu.draw.widget.tools.text.TextTool
+import java.io.File
 
 
 /**
@@ -98,16 +99,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         // See https://stackoverflow.com/questions/5419766/how-to-capture-soft-keyboard-input-in-a-view
         isFocusableInTouchMode = true
 
-        setOnKeyListener(object : OnKeyListener {
-            override fun onKey(v: View, keyCode: Int, event: KeyEvent): Boolean {
-                if (currentTool is TextTool) {
-                    return (currentTool as TextTool).handleKeyEvent(keyCode, event)
-
-                } else {
-                    return false
-                }
-            }
-        })
+        setOnKeyListener { _, keyCode, event -> currentTool.handleKeyEvent(keyCode, event) }
     }
 
 
@@ -152,6 +144,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         if (lastAction != null) {
             undoneActions.add(lastAction)
         }
+
         invalidate()
         callDrawViewListeners()
     }
@@ -233,8 +226,9 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     }
 
     fun clearCanvas() {
-        lastDrawingActions = _drawingActions.toMutableList() // copy
-        // TODO: Clear current tool?
+        // Save drawing actions so we can undo the clear
+        lastDrawingActions = _drawingActions.toMutableList()
+
         _drawingActions.clear()
         invalidate()
         callDrawViewListeners()
@@ -244,7 +238,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     override fun onTouchEvent(event: MotionEvent): Boolean {
         currentTool.handleMotionEvent(event)
 
-        // Check if this should be called for every tool
         callDrawViewListeners()
         invalidate()
         return true
@@ -273,7 +266,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     /**
      * Calculates the [Rect] in which the [paintedBackground] will be drawn.
      * The middle of the [Rect] will be in the middle of the canvas.
-     * It will be scaled to fit this view when necessary.
+     * The rect will be scaled to fit this view when necessary.
      */
     private fun calculateBackGroundRect() {
         paintedBackground?.let {
@@ -338,19 +331,18 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     interface DrawViewListener {
         /**
          * Called every time after the user has performed an action on the drawing, changing it in the process.
-         * This includes drawing a dot, a line, undoing and redoing previous actions.
          */
         fun onDrawingChanged(bitmap: Bitmap)
     }
 
     /**
      * Sets the actions to be drawn.
-     * This is used to save the state in a ViewModel and restore it when the View was destroyed.
-     * Not everything that's part of the UI state should be saved. The other maps containing actions are only
-     * there for the undo/redo and clearCanvas functionality.
      */
-    fun setActions(newPaths: MutableList<CanvasAction>) {
-        _drawingActions = newPaths
+    // This is used to save the state in a ViewModel and restore it when the View was destroyed.
+    // Not everything that's part of the UI state should be saved. The other maps containing actions are only
+    // there for the undo/redo and clearCanvas functionality.
+    fun setActions(newActions: MutableList<CanvasAction>) {
+        _drawingActions = newActions
         invalidate()
     }
 
@@ -381,6 +373,5 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         currentTool = TextTool(this, currentPaint, imm)
     }
-
 
 }
