@@ -11,4 +11,3 @@ data class PaintOptions(
 ) {
     constructor(paint: Paint) : this(paint.color, paint.strokeWidth, paint.alpha)
 }
-
