@@ -2,7 +2,6 @@ package com.divyanshu.draw.widget.tools.text
 
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -19,9 +18,10 @@ class TextTool(
 
     private var currentTextAction: TextAction? = null
 
-    private val textPaint = TextPaint(paint).apply {
+    private var textPaint = TextPaint(paint).apply {
         isAntiAlias = true
-        strokeWidth = 13f
+        style = Paint.Style.FILL_AND_STROKE
+        strokeWidth = 1f
         textSize = paint.strokeWidth * drawingContext.view.resources.displayMetrics.density
     }
 
@@ -31,14 +31,17 @@ class TextTool(
             if (otherLocationClicked(event)) {
                 drawingContext.addDrawingAction(currentTextAction!!)
             }
+            // We have to create a new TextPaint every time so changes in Paint don't propagate to
+            // other TextActions (as they would all share the same reference)
+            textPaint=TextPaint(textPaint)
             currentTextAction =
-                TextAction(SpannableStringBuilder(), Point(event.x, event.y), textPaint)
+                TextAction(Point(event.x, event.y), textPaint)
             showSoftKeyboard()
         }
     }
 
     private fun otherLocationClicked(event: MotionEvent): Boolean {
-        // At the start there's no [currentTextAction] so we didn't click an other location
+        // At the start there's no [currentTextAction] so we didn't click another location
         if (currentTextAction == null) {
             return false
         } else {
@@ -51,12 +54,10 @@ class TextTool(
             if (event.unicodeChar == 0) { // control character
                 if (keyCode == KeyEvent.KEYCODE_DEL) {
                     currentTextAction?.removeLastCharacter()
-                    drawingContext.view.invalidate()
                     return true
                 }
             } else { // text character
                 currentTextAction?.addCharacter(event.unicodeChar.toChar())
-                drawingContext.view.invalidate()
                 return true
             }
         }
