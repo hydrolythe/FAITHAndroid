@@ -1,11 +1,13 @@
 package be.hogent.faith.domain.models.detail
 
+import kotlinx.android.parcel.Parcelize
 import java.io.File
 import java.util.UUID
 
 /**
  * A detail that can be part of an event, solution,...
  */
+
 sealed class Detail(
     /**
      * The location of this Detail
@@ -15,6 +17,7 @@ sealed class Detail(
     val name: String? = "Detail",
     val uuid: UUID = UUID.randomUUID()
 )
+
 
 class DrawingDetail(
     file: File,
