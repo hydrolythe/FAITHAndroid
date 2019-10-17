@@ -5,6 +5,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.faith.TestUtils
 import be.hogent.faith.service.usecases.LoadTextDetailUseCase
+import be.hogent.faith.util.factory.DetailFactory
 import io.mockk.called
 import io.mockk.mockk
 import io.mockk.slot
@@ -22,7 +23,8 @@ class EnterTextViewModelTest {
 
     private lateinit var viewModel: EnterTextViewModel
 
-    private val text = "Hello world"
+    private val textDetail = DetailFactory.makeTextDetail()
+    private val detailText = "Text in the detail"
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -91,7 +93,6 @@ class EnterTextViewModelTest {
     @Test
     fun enterTextVM_loadTextUC_updatesText() {
         // Arrange
-        val saveFile = File("fake/path")
         val params = slot<LoadTextDetailUseCase.LoadTextParams>()
         val resultObserver = slot<DisposableSingleObserver<String>>()
         val textObserver = mockk<Observer<String>>(relaxed = true)
@@ -99,17 +100,16 @@ class EnterTextViewModelTest {
         viewModel.text.observeForever(textObserver)
 
         // Act
-        viewModel.loadExistingTextDetail(saveFile)
+        viewModel.loadExistingTextDetail(textDetail)
         verify { loadTextDetailUseCase.execute(capture(params), capture(resultObserver)) }
-        resultObserver.captured.onSuccess(text)
+        resultObserver.captured.onSuccess(detailText)
 
         // Assert
-        verify { textObserver.onChanged(text) }
+        verify { textObserver.onChanged(detailText) }
     }
     @Test
     fun enterTextVM_loadTextUseCaseFails_updatesErrorMessage() {
         // Arrange
-        val saveFile = File("fake/path")
         val resultObserver = slot<DisposableSingleObserver<String>>()
         val textObserver = mockk<Observer<String>>(relaxed = true)
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
@@ -118,7 +118,7 @@ class EnterTextViewModelTest {
         viewModel.errorMessage.observeForever(errorObserver)
 
         // Act
-        viewModel.loadExistingTextDetail(saveFile)
+        viewModel.loadExistingTextDetail(textDetail)
         verify { loadTextDetailUseCase.execute(any(), capture(resultObserver)) }
         resultObserver.captured.onError(RuntimeException())
 

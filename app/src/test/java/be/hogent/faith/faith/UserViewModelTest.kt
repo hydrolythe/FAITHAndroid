@@ -34,7 +34,7 @@ class UserViewModelTest {
     fun userViewModel_saveEvent_nullTitle_noUseCaseCall_errorMessage() {
         // Arrange
         val errorMessageObserver = mockk<Observer<Int>>(relaxed = true)
-        userViewModel.errorMessage.observeForever(errorMessageObserver)
+        userViewModel.titleErrorMessage.observeForever(errorMessageObserver)
 
         // Act
         userViewModel.saveEvent(null, mockk())
