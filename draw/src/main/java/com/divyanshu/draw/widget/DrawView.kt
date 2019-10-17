@@ -10,7 +10,6 @@ import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.os.AsyncTask
 import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -22,6 +21,7 @@ import com.divyanshu.draw.widget.tools.CanvasAction
 import com.divyanshu.draw.widget.tools.DrawingContext
 import com.divyanshu.draw.widget.tools.Tool
 import com.divyanshu.draw.widget.tools.drawing.DrawingTool
+import com.divyanshu.draw.widget.tools.drawing.EraserTool
 import com.divyanshu.draw.widget.tools.text.TextTool
 import java.io.File
 
@@ -75,6 +75,11 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     var fullScreenBackground: Boolean = true
 
     private val drawingListeners = mutableListOf<DrawViewListener>()
+    /**
+     * We save the previous tool so that when we select a color after using the eraser we can
+     * return to it.
+     */
+    private var previousTool: Tool? = null
 
     /**
      * The [Paint] that will be shared between the different [Tool]s.
@@ -107,28 +112,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         }
     }
 
-    fun addDrawViewListener(newListener: DrawViewListener) {
-        drawingListeners += newListener
-    }
-
-    private fun callDrawViewListeners() {
-        class SendBitMapToListeners : AsyncTask<Void?, Void?, Void?>() {
-            private lateinit var bitmap: Bitmap
-            override fun doInBackground(vararg params: Void?): Void? {
-                bitmap = getBitmap()
-                return null
-            }
-
-            override fun onPostExecute(result: Void?) {
-                drawingListeners.forEach {
-                    it.onDrawingChanged(bitmap)
-                }
-            }
-        }
-
-        SendBitMapToListeners().execute()
-    }
-
     fun undo() {
         if (_drawingActions.isEmpty() && lastDrawingActions.isNotEmpty()) {
             // Last action was a call to [clearCanvas]
@@ -150,7 +133,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         }
 
         invalidate()
-        callDrawViewListeners()
     }
 
     fun redo() {
@@ -164,7 +146,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         }
 
         invalidate()
-        callDrawViewListeners()
     }
 
     /**
@@ -235,14 +216,12 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
 
         _drawingActions.clear()
         invalidate()
-        callDrawViewListeners()
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         currentTool.handleMotionEvent(event)
 
-        callDrawViewListeners()
         invalidate()
         return true
     }
@@ -370,13 +349,21 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     }
 
     fun pickDrawingTool() {
-        val currentPaint = currentTool.paint
-        currentTool = DrawingTool(this, currentPaint)
+        currentTool.finishCurrentAction()
+        val paintToUse = Paint(currentTool.paint)
+        currentTool = DrawingTool(this, paintToUse)
+    }
+
+    fun pickEraserTool() {
+        currentTool.finishCurrentAction()
+        val paintToUse = Paint(currentTool.paint)
+        currentTool = EraserTool(this, paintToUse)
     }
 
     fun pickTextTool() {
-        val currentPaint = currentTool.paint
+        currentTool.finishCurrentAction()
+        val paintToUse = Paint(currentTool.paint)
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        currentTool = TextTool(this, currentPaint, imm)
+        currentTool = TextTool(this, paintToUse, imm)
     }
 }

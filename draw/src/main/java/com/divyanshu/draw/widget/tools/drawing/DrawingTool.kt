@@ -7,7 +7,7 @@ import com.divyanshu.draw.widget.Point
 import com.divyanshu.draw.widget.tools.DrawingContext
 import com.divyanshu.draw.widget.tools.Tool
 
-class DrawingTool(
+open class DrawingTool(
     drawingContext: DrawingContext,
     paint: Paint
 ) : Tool(paint, drawingContext) {
@@ -25,7 +25,7 @@ class DrawingTool(
     /**
      * The path currently being drawn
      */
-    private var currentPath: PathAction? = null
+    protected var currentPath: PathAction? = null
 
     override fun handleMotionEvent(event: MotionEvent) {
         val x = event.x
@@ -60,30 +60,15 @@ class DrawingTool(
     }
 
     private fun actionUp() {
-        currentPath?.let {
-            it.lineTo(currentPoint.x, currentPoint.y)
-
-            // draw a dot on click
-            if (startingPoint == currentPoint) {
-                it.lineTo(currentPoint.x, currentPoint.y + 2)
-                it.lineTo(currentPoint.x + 1, currentPoint.y + 2)
-                it.lineTo(currentPoint.x + 1, currentPoint.y)
-            }
-
-            // Add finished path to actions
-            drawingContext.addDrawingAction(it)
-
-            // Start a new Path. We have to do this here already so changing PaintOptions after drawing a line
-            // doesn't change the options for that line, but sets up the new line.
-            startNewPath()
-        }
+        finishCurrentAction()
     }
 
     /**
      * Starts a new Path with the currently chosen PaintOptions
      */
-    private fun startNewPath() {
-        currentPath = PathAction(paint)
+    protected open fun startNewPath() {
+        // Create a new Paint object each time so color changes don't propagate to all paths
+        currentPath = PathAction(Paint(paint))
     }
 
     /**
@@ -91,5 +76,27 @@ class DrawingTool(
      */
     override fun drawCurrentAction(canvas: Canvas) {
         currentPath?.drawOn(canvas)
+    }
+
+    override fun finishCurrentAction() {
+        // No need to finish an empty path
+        if (currentPath != null && !currentPath!!.isEmpty)
+            currentPath!!.let {
+                it.lineTo(currentPoint.x, currentPoint.y)
+
+                // draw a dot on click
+                if (startingPoint == currentPoint) {
+                    it.lineTo(currentPoint.x, currentPoint.y + 2)
+                    it.lineTo(currentPoint.x + 1, currentPoint.y + 2)
+                    it.lineTo(currentPoint.x + 1, currentPoint.y)
+                }
+
+                // Add finished path to actions
+                drawingContext.addDrawingAction(it)
+
+                // Start a new Path. We have to do this here already so changing PaintOptions after drawing a line
+                // doesn't change the options for that line, but sets up the new line.
+                startNewPath()
+            }
     }
 }
