@@ -15,7 +15,6 @@ class TextTool(
     paint: Paint,
     private val imm: InputMethodManager
 ) : Tool(paint, drawingContext) {
-
     private var currentTextAction: TextAction? = null
 
     private var textPaint = TextPaint(paint).apply {
@@ -29,11 +28,11 @@ class TextTool(
         if (event.action == MotionEvent.ACTION_UP) {
             // Store the current [TextAction] and create a new one when user clicks somewhere else
             if (otherLocationClicked(event)) {
-                drawingContext.addDrawingAction(currentTextAction!!)
+                finishCurrentAction()
             }
             // We have to create a new TextPaint every time so changes in Paint don't propagate to
             // other TextActions (as they would all share the same reference)
-            textPaint=TextPaint(textPaint)
+            textPaint = TextPaint(textPaint)
             currentTextAction =
                 TextAction(Point(event.x, event.y), textPaint)
             showSoftKeyboard()
@@ -85,5 +84,9 @@ class TextTool(
 
     override fun setStrokeWidth(strokeWidth: Float) {
         textPaint.textSize = strokeWidth * drawingContext.view.resources.displayMetrics.density
+    }
+
+    override fun finishCurrentAction() {
+        drawingContext.addDrawingAction(currentTextAction!!)
     }
 }

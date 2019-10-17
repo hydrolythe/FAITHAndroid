@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.emotionCapture.drawing.drawEmotionAvatar
 
-import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -95,16 +94,11 @@ class DrawEmotionAvatarFragment : DrawFragment() {
                 ) as BitmapDrawable
             )
         }
-
-        drawView.addDrawViewListener(object : DrawView.DrawViewListener {
-            override fun onDrawingChanged(bitmap: Bitmap) {
-                eventViewModel.saveEmotionAvatarImage(bitmap)
-            }
-        })
     }
 
     override fun onStop() {
         super.onStop()
+        eventViewModel.saveEmotionAvatarImage(drawView.getBitmap())
         disposables.clear()
     }
 

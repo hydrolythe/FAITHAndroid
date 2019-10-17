@@ -59,4 +59,8 @@ class PathAction(private val paint: Paint) : Path(), Serializable,
         actions.add(Quad(x1, y1, x2, y2))
         super.quadTo(x1, y1, x2, y2)
     }
+
+    override fun isEmpty(): Boolean {
+        return actions.isEmpty()
+    }
 }
