@@ -6,7 +6,7 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 
 abstract class Tool(
-    val paint: Paint,
+    open val paint: Paint,
     protected val drawingContext: DrawingContext
 ) {
     /**
@@ -22,6 +22,8 @@ abstract class Tool(
     }
 
     abstract fun drawCurrentAction(canvas: Canvas)
+
+    abstract fun finishCurrentAction()
 
     open fun setColor(color: Int) {
         paint.color = color
