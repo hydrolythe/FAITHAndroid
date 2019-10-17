@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="templates_people">
+        <item>@drawable/template_person_running</item>
+        <item>@drawable/template_person_walking</item>
+        <item>@drawable/template_person_running</item>
+        <item>@drawable/template_person_running</item>
+        <item>@drawable/template_person_walking</item>
+        <item>@drawable/template_person_walking</item>
+    </integer-array>
+    <integer-array name="templates_attributes">
+        <item>@drawable/template_buggy</item>
+        <item>@drawable/template_laptop</item>
+    </integer-array>
+    <integer-array name="templates_decor">
+        <item>@drawable/template_mountains</item>
+    </integer-array>
+    <integer-array name="templates_metaphors">
+        <item>@drawable/template_lightbulb</item>
+        <item>@drawable/template_lightbulb</item>
+        <item>@drawable/template_lightbulb</item>
+        <item>@drawable/template_lightbulb</item>
+    </integer-array>
+</resources>
