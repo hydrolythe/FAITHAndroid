@@ -18,9 +18,12 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.emotionCapture.enterText.EnterTextFragment
 import be.hogent.faith.faith.library.eventDetailFragments.TestFragment
+import be.hogent.faith.faith.library.eventDetailFragments.TextDetailFragment
 import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
 import org.koin.android.ext.android.getKoin
+import timber.log.Timber
 
 
 /**
@@ -86,19 +89,27 @@ class EventDetailFragment : Fragment() {
         }
 
         override fun createFragment(position: Int): Fragment {
+            var fragment : Fragment
             if (!details.isEmpty()) {
                 when (details[position]) {
                     is DrawingDetail -> {
                         Log.i("Tag", "Drawing")
+                        return TestFragment.newInstance()
                     }
                     is PhotoDetail -> {
                         Log.i("TAG", "Photo")
+                        return TestFragment.newInstance()
                     }
                     is TextDetail -> {
+                        var detail = details[position].uuid
+                        Timber.i("De detail UUID is : $detail")
+                        fragment = EnterTextFragment.newInstance(details[position].uuid)
+                        return fragment
                         Log.i("Tag", "Textdetail")
                     }
                     is AudioDetail -> {
                         Log.i("TAG", "Audiodetail")
+                        return TestFragment.newInstance()
                     }
                 }
             }
