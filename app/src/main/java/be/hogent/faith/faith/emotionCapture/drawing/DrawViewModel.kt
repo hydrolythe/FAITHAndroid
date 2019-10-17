@@ -39,6 +39,9 @@ class DrawViewModel : ViewModel() {
     val saveClicked: LiveData<Unit>
         get() = _saveClicked
 
+    private val _pencilClicked = SingleLiveEvent<Unit>()
+    val pencilClicked: LiveData<Unit>
+        get() = _pencilClicked
     /**
      * Contains all actions that have been drawn on the [DrawView].
      * This belongs here because it's part of the UI state, just like how you would save text that's already been typed.
@@ -71,12 +74,12 @@ class DrawViewModel : ViewModel() {
         _undoClicked.call()
     }
 
-    // Setting the color to white would work as well, but the colors of the brushes are linked to
-    // the [_selectedColor]. Selecting the color white would mean the brushes are white, making
-    // them invisible. Instead, the listeners of [eraserClicked] should set the DrawViews color
-    // directly, keeping the original [selectedColor].
     fun onEraserClicked() {
         _eraserClicked.call()
+    }
+
+    fun onPencilClicked() {
+        _pencilClicked.call()
     }
 
     fun onSaveButtonClicked() {
