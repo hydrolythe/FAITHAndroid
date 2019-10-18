@@ -15,15 +15,17 @@
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"   >
+        android:background="@color/color_white"
+        android:orientation="vertical">
 
         <!--ACHTERGROND-->
         <ImageView
             android:id="@+id/background_welcome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:src="@drawable/loginscherm"
-            android:contentDescription="@string/descr_loginscreen" />
+            android:contentDescription="@string/descr_loginscreen"
+            android:scaleType="centerInside"
+            tools:src="@drawable/loginscherm" />
 
         <!-- KNOPPEN -->
         <!-- Invisible to make it transparent -->

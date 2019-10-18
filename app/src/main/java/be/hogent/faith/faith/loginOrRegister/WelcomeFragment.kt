@@ -15,7 +15,7 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.fragment_welcome.background_welcome
+import kotlinx.android.synthetic.main.fragment_login.background_welcome
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -35,8 +35,8 @@ class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: be.hogent.faith.databinding.FragmentWelcomeBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_welcome, container, false)
+        val binding: be.hogent.faith.databinding.FragmentLoginBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         binding.welcomeViewModel = welcomeViewModel
 
         loginManager.attachLoginSuccesListener(this)
