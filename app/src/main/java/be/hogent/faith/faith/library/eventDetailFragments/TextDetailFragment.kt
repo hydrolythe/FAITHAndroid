@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.library.eventDetailFragments
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import kotlinx.android.synthetic.main.fragment_text_detail.lbl_text_detail
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val DESCRIPTION = "description"
-
 
 /**
  * A simple [Fragment] subclass.
@@ -27,12 +25,12 @@ class TextDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             description = it.getString(DESCRIPTION)
-
         }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
@@ -40,7 +38,6 @@ class TextDetailFragment : Fragment() {
         lbl_text_detail.text = description
         return root
     }
-
 
     companion object {
         /**
@@ -57,7 +54,6 @@ class TextDetailFragment : Fragment() {
             TextDetailFragment().apply {
                 arguments = Bundle().apply {
                     putString(DESCRIPTION, description)
-
                 }
             }
     }

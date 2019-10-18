@@ -22,7 +22,6 @@ import be.hogent.faith.faith.library.eventDetailFragments.TestFragment
 import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
 import org.koin.android.ext.android.getKoin
 
-
 /**
  * A fragment representing a single Event detail screen, showing
  * all the different [Detail] objects for an event.
@@ -46,7 +45,8 @@ class EventDetailFragment : Fragment() {
     private lateinit var selectedItemViewModel: SelectedItemViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_eventdetails, container, false)
@@ -56,7 +56,6 @@ class EventDetailFragment : Fragment() {
         setListeners()
         return rootView
     }
-
 
     /**
      * Sets up the observers. In this case it will observe the [selectedItemViewModel] and observe
@@ -72,9 +71,7 @@ class EventDetailFragment : Fragment() {
             mPager.adapter = pagerAdapter
             mPager.invalidate()
         })
-
     }
-
 
     /**
      * PagerAdapter which will create the required fragments of the details.
