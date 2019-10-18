@@ -5,11 +5,8 @@ import androidx.lifecycle.ViewModel
 
 class SelectedItemViewModel : ViewModel() {
 
-
     /**
      * The index of the detail selected of the event
      */
     var selectedItem = MutableLiveData<Int>()
-
-
 }

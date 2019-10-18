@@ -47,12 +47,13 @@ class EventListFragment : Fragment() {
     private lateinit var selectedItemViewModel: SelectedItemViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = inflate(inflater, R.layout.fragment_eventoverview, container, false)
 
-        //TODO: change to Koin implementation
+        // TODO: change to Koin implementation
         selectedItemViewModel =
             ViewModelProviders.of(activity!!).get(SelectedItemViewModel::class.java)
         if (context!!.resources.getBoolean(R.bool.isTablet)) {
@@ -67,14 +68,10 @@ class EventListFragment : Fragment() {
     }
 
     private fun displayMasterDetailLayout() {
-
     }
-
 
     private fun displaySingleLayout() {
-
     }
-
 
     private fun setupRecyclerView(recyclerView: RecyclerView) {
         eventListener = object : EventListener {

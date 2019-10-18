@@ -36,13 +36,11 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-
         private var avatarImage: ImageView = view.findViewById(R.id.img_avatar)
         private var eventTitle: TextView = view.findViewById(R.id.lbl_title)
         private var eventDate: TextView = view.findViewById(R.id.lbl_date)
         private var eventDesc: TextView = view.findViewById(R.id.lbl_description)
         private var expandButton: ImageButton = view.findViewById(R.id.expand_button)
-
 
         fun bind(event: Event, position: Int) {
             eventTitle.text = event.title
