@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.emotionCapture.drawing.makeDrawing
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -11,15 +12,15 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.databinding.FragmentDrawBinding
+import be.hogent.faith.databinding.FragmentDrawTabsBinding
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawing.DrawFragment
 import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.util.TAG
 import com.divyanshu.draw.widget.DrawView
+import com.google.android.material.tabs.TabLayout
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -50,7 +51,7 @@ class MakeDrawingFragment : DrawFragment() {
 
     private val premadeImagesProvider by inject<PremadeImagesProvider>()
 
-    private lateinit var drawBinding: FragmentDrawBinding
+    private lateinit var drawBinding: FragmentDrawTabsBinding
 
     private var navigation: DrawingScreenNavigation? = null
 
@@ -59,7 +60,8 @@ class MakeDrawingFragment : DrawFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        drawBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_draw, container, false)
+        drawBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_draw_tabs, container, false)
         drawBinding.drawViewModel = drawViewModel
         drawBinding.lifecycleOwner = this
 
@@ -69,7 +71,7 @@ class MakeDrawingFragment : DrawFragment() {
     override fun onStart() {
         super.onStart()
 
-        configureDraggableImagesRecyclerView()
+        configureTemplatesRecyclerView()
         configureDrawView()
 
         startListeners()
@@ -111,11 +113,52 @@ class MakeDrawingFragment : DrawFragment() {
         }
     }
 
-    private fun configureDraggableImagesRecyclerView() {
-        drawBinding.containerDrawImages.recyclerViewDrawingImages.apply {
+    private fun configureTemplatesRecyclerView() {
+        setUpTemplatesRecyclerView()
+
+        drawBinding.tabsDrawingTemplates.addOnTabSelectedListener(
+            object : TabLayout.OnTabSelectedListener {
+                override fun onTabReselected(tab: TabLayout.Tab) {
+                    //NOP
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab) {
+                    // NOP
+                }
+
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    val imagesAdapter =
+                        drawBinding.recyclerViewDrawingTemplates.adapter as ImagesAdapter
+                    val array = when (tab.position) {
+                        0 -> R.array.templates_people
+                        1 -> R.array.templates_attributes
+                        2 -> R.array.templates_decor
+                        3 -> R.array.templates_metaphors
+                        else -> throw IllegalArgumentException("Unknown templates specifier passed")
+                    }
+                    val imageResArray = requireContext().resources.obtainTypedArray(array)
+                    val imageResList = createListOfImageResources(imageResArray)
+                    imagesAdapter.setNewImages(imageResList)
+                }
+
+            })
+    }
+
+    private fun createListOfImageResources(imageResArray: TypedArray): MutableList<Int> {
+        val imageResList = mutableListOf<Int>()
+        for (i in 0 until imageResArray.length()) {
+            imageResList.add(imageResArray.getResourceId(i, -1))
+        }
+        return imageResList
+    }
+
+    private fun setUpTemplatesRecyclerView() {
+        val imageResArray = requireContext().resources.obtainTypedArray(R.array.templates_people)
+        val imagesAdapter = ImagesAdapter(createListOfImageResources(imageResArray))
+        drawBinding.recyclerViewDrawingTemplates.apply {
+            adapter = imagesAdapter
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = ImagesAdapter(premadeImagesProvider.provideImages())
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
     }
 
