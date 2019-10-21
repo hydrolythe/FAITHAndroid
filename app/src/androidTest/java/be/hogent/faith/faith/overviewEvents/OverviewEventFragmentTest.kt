@@ -24,7 +24,7 @@ class OverviewEventFragmentTest {
     @Before
     fun goToScreen() {
         NavigationUtil.createEvent()
-        onView(withId(R.id.btn_archive)).perform(ViewActions.click())
+        onView(withId(R.id.btn_register)).perform(ViewActions.click())
     }
 
     @Test
