@@ -193,7 +193,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         _drawingActions.forEach { it.drawOn(canvas) }
 
         currentTool.drawCurrentAction(canvas)
-
     }
 
     /**
@@ -309,7 +308,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         drawableImage.bounds = Rect(0, 0, mCanvasWidth, mCanvasHeight)
         setPaintedBackground(drawableImage)
     }
-
 
     interface DrawViewListener {
         /**
