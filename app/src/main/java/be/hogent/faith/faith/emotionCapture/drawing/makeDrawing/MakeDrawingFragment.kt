@@ -3,7 +3,6 @@ package be.hogent.faith.faith.emotionCapture.drawing.makeDrawing
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,27 +13,30 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawBinding
+import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawing.DrawFragment
 import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.util.TAG
 import com.divyanshu.draw.widget.DrawView
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.core.error.ScopeNotCreatedException
 import org.koin.core.qualifier.named
+import timber.log.Timber
+import java.util.UUID
+
+private const val DRAWING_DETAIL_UUID = "uuid of the DrawingDetail"
 
 class MakeDrawingFragment : DrawFragment() {
-
     override val drawViewModel: DrawViewModel
         get() {
-            Log.d(TAG, "Trying to get Drawing scope in MakeDrawing")
+            Timber.d("Trying to get Drawing scope in MakeDrawing")
             val scope = try {
                 getKoin().getScope(KoinModules.DRAWING_SCOPE_ID)
             } catch (e: ScopeNotCreatedException) {
-                Log.d(TAG, "No Drawing scope available - Creating Drawing scope in MakeDrawing")
+                Timber.d("No Drawing scope available - Creating Drawing scope in MakeDrawing")
                 getKoin().createScope(
                     KoinModules.DRAWING_SCOPE_ID,
                     named(KoinModules.DRAWING_SCOPE_NAME)
@@ -72,7 +74,28 @@ class MakeDrawingFragment : DrawFragment() {
         configureDraggableImagesRecyclerView()
         configureDrawView()
 
+        if (existingDrawingGiven()) {
+            loadExistingDrawing()
+        }
+
         startListeners()
+    }
+
+    private fun loadExistingDrawing() {
+        val drawingDetail = getGivenDrawingDetail()
+
+        drawView.setImageBackground(drawingDetail.file)
+
+        drawViewModel.loadExistingDrawingDetail(drawingDetail)
+    }
+
+    private fun existingDrawingGiven(): Boolean {
+        return arguments?.getSerializable(DRAWING_DETAIL_UUID) != null
+    }
+
+    private fun getGivenDrawingDetail(): DrawingDetail {
+        val detailUuid = arguments!!.getSerializable(DRAWING_DETAIL_UUID) as UUID
+        return eventViewModel.event.value!!.getDetail(detailUuid) as DrawingDetail
     }
 
     override fun onAttach(context: Context) {
@@ -90,7 +113,7 @@ class MakeDrawingFragment : DrawFragment() {
         drawViewModel.saveClicked.observe(this, Observer {
             // TODO: move to something async, maybe a coroutine?
             drawView.getBitmap { bitmap ->
-                eventViewModel.saveDrawing(bitmap)
+                eventViewModel.saveDrawing(bitmap, drawViewModel.existingDetail.value)
             }
         })
         eventViewModel.drawingSavedSuccessFully.observe(this, Observer {
@@ -122,6 +145,15 @@ class MakeDrawingFragment : DrawFragment() {
     companion object {
         fun newInstance(): MakeDrawingFragment {
             return MakeDrawingFragment()
+        }
+
+        fun newInstance(detailUuid: UUID): MakeDrawingFragment {
+            val args = Bundle().apply {
+                putSerializable(DRAWING_DETAIL_UUID, detailUuid)
+            }
+            return newInstance().apply {
+                arguments = args
+            }
         }
     }
 

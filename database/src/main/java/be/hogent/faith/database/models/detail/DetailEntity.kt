@@ -10,7 +10,6 @@ import java.util.UUID
 @Entity
 abstract class DetailEntity(
     val file: File,
-    val name: String? = null,
     @PrimaryKey
     val uuid: UUID = UUID.randomUUID(),
 

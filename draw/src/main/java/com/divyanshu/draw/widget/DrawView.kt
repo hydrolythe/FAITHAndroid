@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.AsyncTask
 import android.util.AttributeSet
 import android.util.Log
@@ -16,6 +17,7 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
 import androidx.core.graphics.ColorUtils
+import java.io.File
 
 /**
  * Defines how much of the View's height the background may use.
@@ -60,9 +62,19 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var mCanvasWidth: Int = 0
     private var mCanvasHeight: Int = 0
 
-    private var mOutlineRect: Rect? = null
+    /**
+     * Rect in which a background will be drawn, if a background is present
+     */
+    private val backgroundRect = Rect()
+    private val fullScreenRect = Rect()
 
     private var paintedBackground: Bitmap? = null
+
+    /**
+     * Load a background filling the entire screen (and possibly stretching it) or scale it to fit
+     * with some whitespace around
+     */
+    var fullScreenBackground: Boolean = true
 
     private val drawingListeners = mutableListOf<DrawViewListener>()
 
@@ -188,11 +200,11 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         super.onDraw(canvas)
 
         // Draw the background when one is set and the [Rect] in which it will be drawn has been calculated.
-        if (paintedBackground != null && mOutlineRect != null) {
+        if (paintedBackground != null) {
             canvas.drawBitmap(
                 paintedBackground!!,
                 null,
-                mOutlineRect!!,
+                if (fullScreenBackground) fullScreenRect else backgroundRect,
                 null
             )
         }
@@ -298,7 +310,12 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         super.onSizeChanged(w, h, oldw, oldh)
         mCanvasHeight = h
         mCanvasWidth = w
-        calculateOutlineRect()
+        calculateBackGroundRect()
+        calculateFullScreenRect()
+    }
+
+    private fun calculateFullScreenRect() {
+        fullScreenRect.set(0, 0, mCanvasWidth, mCanvasHeight)
     }
 
     /**
@@ -306,7 +323,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
      * The middle of the [Rect] will be in the middle of the canvas.
      * It will be scaled to fit this view when necessary.
      */
-    private fun calculateOutlineRect() {
+    private fun calculateBackGroundRect() {
         paintedBackground?.let {
             val maxsize = (mCanvasHeight * BACKGROUND_MAX_HEIGHT_USED).toInt()
             val outWidth: Int
@@ -318,7 +335,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 outHeight = maxsize
                 outWidth = it.width * maxsize / it.height
             }
-            mOutlineRect = Rect(
+            backgroundRect.set(
                 middleOfCanvas().x - (outWidth) / 2,
                 middleOfCanvas().y - (outHeight) / 2,
                 middleOfCanvas().x + (outWidth) / 2,
@@ -344,11 +361,25 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         paintedBackground = bitmapDrawable.bitmap
     }
 
-    fun addDrawable(drawableResourceID: Int, x: Int, y: Int) {
-        val drawable = context.resources.getDrawable(drawableResourceID)
+    /**
+     * Add a drawable to the canvas
+     *
+     * @param x: the x-coordinate of the top-left corner
+     * @param y: the y-coordinate of the top-left corner
+     */
+    fun addDrawable(drawable: Drawable, x: Int, y: Int) {
         drawable.bounds = Rect(x, y, x + drawable.intrinsicWidth, y + drawable.intrinsicHeight)
         addDrawingAction(MyDrawable(drawable))
         invalidate()
+    }
+
+    /**
+     * @see [setPaintedBackground]
+     */
+    fun setImageBackground(imageFile: File) {
+        val drawableImage = BitmapDrawable.createFromPath(imageFile.path) as BitmapDrawable
+        drawableImage.bounds = Rect(0, 0, mCanvasWidth, mCanvasHeight)
+        setPaintedBackground(drawableImage)
     }
 
     fun toggleEraser() {

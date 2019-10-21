@@ -4,7 +4,8 @@
 apply from: 'dependencies.gradle'
 buildscript {
     ext.kotlin_version = '1.3.50'
-    ext.gradle_version = '3.5.0'
+    ext.gradle_version = '3.5.1'
+    ext.oss_licenses_version = '0.9.5'
     repositories {
         google()
         jcenter()
@@ -13,6 +14,8 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        classpath "com.google.android.gms:oss-licenses-plugin:$oss_licenses_version"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

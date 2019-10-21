@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import be.hogent.faith.R
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.library.EventListActivity
 import be.hogent.faith.faith.loginOrRegister.LoginManager
@@ -12,6 +11,7 @@ import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.builders.footer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import org.koin.android.ext.android.inject
 
 class CityScreenActivity : AppCompatActivity(),
@@ -21,7 +21,7 @@ class CityScreenActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(be.hogent.faith.R.layout.activity_main)
 
         // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
@@ -29,11 +29,17 @@ class CityScreenActivity : AppCompatActivity(),
         if (savedInstanceState == null) {
             val fragment = CityScreenFragment.newInstance()
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, fragment)
+                .add(be.hogent.faith.R.id.fragment_container, fragment)
                 .commit()
         }
 
         drawer {
+            primaryItem("Licenties") {
+                onClick { _ ->
+                    startLicensesActivbity()
+                    true
+                }
+            }
             footer {
                 primaryItem("Logout") {
                     onClick { _ ->
@@ -43,6 +49,10 @@ class CityScreenActivity : AppCompatActivity(),
                 }
             }
         }
+    }
+
+    private fun startLicensesActivbity() {
+        startActivity(Intent(this, OssLicensesMenuActivity::class.java))
     }
 
     override fun startEmotionCapture() {
@@ -63,9 +73,9 @@ class CityScreenActivity : AppCompatActivity(),
     override fun onBackPressed() {
         val alertDialog: AlertDialog = this.run {
             val builder = AlertDialog.Builder(this).apply {
-                setTitle(getString(R.string.cityScreen_logOut))
-                setMessage(getString(R.string.cityscreen_stad_verlaten))
-                setPositiveButton(R.string.ok) { _, _ ->
+                setTitle(getString(be.hogent.faith.R.string.cityScreen_logOut))
+                setMessage(getString(be.hogent.faith.R.string.cityscreen_stad_verlaten))
+                setPositiveButton(be.hogent.faith.R.string.ok) { _, _ ->
                     logOut()
                 }
                 setNegativeButton(be.hogent.faith.R.string.cancel) { dialog, _ ->
