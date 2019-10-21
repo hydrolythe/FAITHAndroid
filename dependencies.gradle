@@ -55,7 +55,8 @@ ext {
 
     // OTHER LIBRARIES
     ktlint_version = '0.31.0'
-    timber = '4.7.1'
+    timber_version = '4.7.1'
+    oss_licenses_version = '17.0.0'
     nav_version = '2.1.0'
 
     viewpager_version = '1.0.0-alpha01'
@@ -65,8 +66,6 @@ ext {
     ext.versionMinor = 1
     ext.versionPatch = 1
     ext.versionClassifier = null
-
-
 
     commonDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
@@ -80,7 +79,9 @@ ext {
             coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version",
             coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_android_version",
 
-            timber            : "com.jakewharton.timber:timber:$timber",
+            timber            : "com.jakewharton.timber:timber:$timber_version",
+
+            licenses          : "com.google.android.gms:play-services-oss-licenses:17.0.0",
 
             navktx            : "androidx.navigation:navigation-fragment-ktx:$nav_version",
             navui             :  "androidx.navigation:navigation-ui-ktx:$nav_version"

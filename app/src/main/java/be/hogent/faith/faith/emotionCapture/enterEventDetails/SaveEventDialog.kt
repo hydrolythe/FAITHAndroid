@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
-import org.koin.android.ext.android.get
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -28,12 +27,16 @@ class SaveEventDialog : DialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return Dialog(activity, R.style.Dialog_NearlyFullScreen).apply {
-            setStyle(DialogFragment.STYLE_NO_TITLE, 0)
+        return Dialog(requireActivity(), R.style.Dialog_NearlyFullScreen).apply {
+            setStyle(STYLE_NO_TITLE, 0)
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         saveEventBinding =
             DataBindingUtil.inflate(inflater, R.layout.dialog_save_event, container, false)
         saveEventBinding.eventViewModel = eventDetailsViewModel

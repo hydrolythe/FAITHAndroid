@@ -2,9 +2,8 @@ package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.playState
 
 import android.media.MediaPlayer
 import android.media.MediaRecorder
-import android.util.Log
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
-import be.hogent.faith.util.TAG
+import timber.log.Timber
 
 class PlayStatePaused(
     context: AudioContext,
@@ -18,22 +17,22 @@ class PlayStatePaused(
     override val recordButtonEnabled = false
 
     override fun onPlayPressed() {
-        Log.d(TAG, "Paused -> Playing")
+        Timber.d("Paused -> Playing")
         mediaPlayer.start()
         context.goToNextState(PlayStatePlaying(context, mediaPlayer, recorder))
     }
 
     override fun onPausePressed() {
-        Log.d(TAG, "Paused -> Paused: was already paused")
+        Timber.d("Paused -> Paused: was already paused")
     }
 
     override fun onStopPressed() {
-        Log.d(TAG, "Paused -> Stopped")
+        Timber.d("Paused -> Stopped")
         mediaPlayer.stop()
         context.goToNextState(PlayStateStopped(context, mediaPlayer, recorder))
     }
 
     override fun onRecordPressed() {
-        Log.d(TAG, "Paused -> Paused: stop the playback to start a new recording")
+        Timber.d("Paused -> Paused: stop the playback to start a new recording")
     }
 }

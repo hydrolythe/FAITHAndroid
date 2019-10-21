@@ -19,6 +19,5 @@ class LeftArrow(context: Context, attrs: AttributeSet) : LinearLayout(context, a
         imageView.setImageDrawable(attributes.getDrawable(R.styleable.arrow_to_right_image))
         textView.text = attributes.getString(R.styleable.arrow_to_right_text)
         attributes.recycle()
-
     }
 }

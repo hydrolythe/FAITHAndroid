@@ -1,12 +1,33 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.playState
 
 import android.media.MediaPlayer
+import android.media.MediaRecorder
+import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioState
 import be.hogent.faith.util.TAG
 import timber.log.Timber
 
-abstract class PlayState(context: AudioContext) : AudioState(context) {
+/**
+ * State used for playing audio from an existing detail.
+ * When starting from scratch this state is skipped.
+ */
+class PlayStateInitial(
+    context: AudioContext,
+    private val audioDetail: AudioDetail
+) : AudioState(context) {
+
+    override val mediaPlayer: MediaPlayer = MediaPlayer()
+    override val recorder: MediaRecorder = MediaRecorder()
+
+    override val playButtonEnabled = true
+    override val pauseButtonEnabled = false
+    override val stopButtonEnabled = false
+    override val recordButtonEnabled = false
+
+    init {
+        initialisePlayer()
+    }
 
     /**
      * Initialise the [MediaPlayer].
@@ -18,10 +39,11 @@ abstract class PlayState(context: AudioContext) : AudioState(context) {
      *
      * More info in the develop documentations.
      */
-    fun initialisePlayer() {
+    private fun initialisePlayer() {
         with(mediaPlayer) {
             try {
-                setDataSource(tempFileProvider.tempAudioRecordingFile.path)
+                setDataSource(audioDetail.file.path)
+                prepare()
                 Timber.d("Audio playback prepared")
             } catch (e: IllegalStateException) {
                 Timber.e(TAG, "Continuing with the prepare step")
@@ -34,5 +56,23 @@ abstract class PlayState(context: AudioContext) : AudioState(context) {
             mediaPlayer.stop()
             context.goToNextState(PlayStateStopped(context, mediaPlayer, recorder))
         }
+    }
+
+    override fun onPlayPressed() {
+        Timber.d("Initial -> Playing")
+        mediaPlayer.start()
+        context.goToNextState(PlayStatePlaying(context, mediaPlayer, recorder))
+    }
+
+    override fun onPausePressed() {
+        Timber.d("Initial -> Initial: pressing pause does nothing")
+    }
+
+    override fun onStopPressed() {
+        Timber.d("Initial -> Initial: pressing stop does nothing")
+    }
+
+    override fun onRecordPressed() {
+        Timber.d("Initial -> Initial: pressing record does nothing")
     }
 }

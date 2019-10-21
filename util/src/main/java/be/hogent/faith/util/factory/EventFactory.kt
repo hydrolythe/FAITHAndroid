@@ -18,10 +18,10 @@ object EventFactory {
         repeat(nbrOfDetails) {
             DetailFactory.makeRandomDetail().let { detail ->
                 when (detail) {
-                    is AudioDetail -> event.addNewAudioDetail(detail.file, detail.name!!)
-                    is DrawingDetail -> event.addNewPictureDetail(detail.file, detail.name!!)
-                    is TextDetail -> event.addNewTextDetail(detail.file, detail.name!!)
-                    else -> event.addNewAudioDetail(detail.file, detail.name!!)
+                    is AudioDetail -> event.addNewAudioDetail(detail.file)
+                    is DrawingDetail -> event.addNewDrawingDetail(detail.file)
+                    is TextDetail -> event.addNewTextDetail(detail.file)
+                    else -> event.addNewAudioDetail(detail.file)
                 }
             }
         }

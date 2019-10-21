@@ -15,16 +15,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentRecordAudioBinding
+import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.UUID
 
 const val REQUESTCODE_AUDIO = 12
+private const val AUDIO_DETAIL_UUID = "uuid of the audio file"
 
 class RecordAudioFragment : Fragment() {
     private val eventViewModel: EventViewModel by sharedViewModel()
 
-    private val recordAudioViewModel: RecordAudioViewModel by viewModel()
+    private val audioViewModel: AudioViewModel by viewModel()
 
     private lateinit var recordAudioBinding: FragmentRecordAudioBinding
 
@@ -35,7 +38,25 @@ class RecordAudioFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        recordAudioViewModel.pauseSupported.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+        if (existingTextGiven()) {
+            loadExistingAudioDetail()
+        }
+
+        audioViewModel.pauseSupported.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+    }
+
+    private fun loadExistingAudioDetail() {
+        val detailUuid = arguments?.getSerializable(AUDIO_DETAIL_UUID) as UUID
+        val givenDetail = eventViewModel.event.value!!.details.find { it.uuid === detailUuid }
+        if (givenDetail is AudioDetail) {
+            audioViewModel.loadExistingAudioDetail(givenDetail)
+        } else {
+            throw IllegalArgumentException("Got a Detail that wasn't an AudioDetail!")
+        }
+    }
+
+    private fun existingTextGiven(): Boolean {
+        return arguments?.getSerializable(AUDIO_DETAIL_UUID) != null
     }
 
     override fun onCreateView(
@@ -45,7 +66,7 @@ class RecordAudioFragment : Fragment() {
     ): View? {
         recordAudioBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_record_audio, container, false)
-        recordAudioBinding.recordAudioViewModel = recordAudioViewModel
+        recordAudioBinding.audioViewModel = audioViewModel
         recordAudioBinding.eventViewModel = eventViewModel
         recordAudioBinding.lifecycleOwner = this
 
@@ -73,14 +94,14 @@ class RecordAudioFragment : Fragment() {
     }
 
     /**
-     * Checks for audio permissions and initialises the [RecordAudioViewModel] fully once the
+     * Checks for audio permissions and initialises the [AudioViewModel] fully once the
      * required permissions are given.
      */
     private fun checkAudioRecordingPermission() {
         if (!hasRecordingPermissions()) {
             requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
         } else {
-            recordAudioViewModel.initialiseState()
+            audioViewModel.initialiseState()
         }
     }
 
@@ -93,7 +114,7 @@ class RecordAudioFragment : Fragment() {
             if (grantResults[0] == PERMISSION_GRANTED) {
                 hasAudioRecordingPermission = true
                 checkAudioRecordingPermission()
-                recordAudioViewModel.initialiseState()
+                audioViewModel.initialiseState()
             } else {
                 Toast.makeText(
                     this.context,
@@ -108,7 +129,7 @@ class RecordAudioFragment : Fragment() {
         eventViewModel.recordingSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
 
-            recordAudioViewModel.audioState.value?.reset()
+            audioViewModel.audioState.value?.reset()
 
             navigation?.backToEvent()
         })
@@ -118,8 +139,14 @@ class RecordAudioFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): RecordAudioFragment {
-            return RecordAudioFragment()
+        fun newInstance(detailUuid: UUID? = null): RecordAudioFragment {
+            val newInstance = RecordAudioFragment()
+            if (detailUuid != null) {
+                newInstance.arguments = Bundle().apply {
+                    putSerializable(AUDIO_DETAIL_UUID, detailUuid)
+                }
+            }
+            return newInstance
         }
     }
 
