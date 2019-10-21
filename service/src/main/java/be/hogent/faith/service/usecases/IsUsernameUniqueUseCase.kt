@@ -13,7 +13,7 @@ class IsUsernameUniqueUseCase(
     override fun buildUseCaseSingle(params: Params): Single<Boolean> {
         if (params.username.isNullOrBlank())
             return Single.error(RuntimeException("username moet ingevuld zijn"))
-        return authManager.checkIfEmailExists(params.username + "@faith.be")
+        return authManager.isUsernameUnique(params.username + "@faith.be")
     }
 
     data class Params(

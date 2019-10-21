@@ -1,15 +1,18 @@
 package be.hogent.faith.database.firebase
 
+import android.util.Log
 import be.hogent.faith.domain.repository.InvalidCredentialsException
 import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.domain.repository.SignInException
 import be.hogent.faith.domain.repository.SignOutException
 import be.hogent.faith.domain.repository.UserCollisionException
 import be.hogent.faith.domain.repository.WeakPasswordException
+import be.hogent.faith.util.TAG
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.FirebaseUser
@@ -44,7 +47,7 @@ class FirebaseAuthManager(
         return auth.currentUser?.uid
     }
 
-    fun checkIfEmailExists(email: String): Single<Boolean> {
+    fun isUsernameUnique(email: String): Single<Boolean> {
         return RxFirebaseAuth.fetchSignInMethodsForEmail(auth, email)
             .map { if (it.signInMethods?.size == 0) true else false }
             .onErrorResumeNext { e: Throwable ->
@@ -61,6 +64,7 @@ class FirebaseAuthManager(
             .map { mapToUser(it) }
             // map FirebaseExceptions to domain exceptions
             .onErrorResumeNext { error: Throwable ->
+                Log.d(TAG, "error registering ${error.message}")
                 when (error) {
                     is FirebaseAuthWeakPasswordException -> Maybe.error(WeakPasswordException(error))
                     is FirebaseAuthUserCollisionException -> Maybe.error(
@@ -83,6 +87,7 @@ class FirebaseAuthManager(
             .onErrorResumeNext { error: Throwable ->
                 when (error) {
                     is FirebaseAuthInvalidCredentialsException -> Maybe.error(SignInException(error))
+                    is FirebaseAuthInvalidUserException -> Maybe.error(SignInException(error))
                     is FirebaseException -> Maybe.error(NetworkError(error))
                     else -> Maybe.error(SignInException(error))
                 }

@@ -26,7 +26,7 @@ val serviceModule = module {
     factory { SaveEventUseCase(get(), get()) }
     factory { CreateUserUseCase(get(), get()) }
     factory { SaveEmotionAvatarUseCase(get(), get()) }
-    factory { GetUserUseCase(get(), get(), get()) }
+    factory { GetUserUseCase(get(), get(), get(), get()) }
     factory { RegisterUserUseCase(get(), get(), get()) }
     factory { IsUsernameUniqueUseCase(get(), get()) }
     factory { LoginUserUseCase(get(), get()) }

@@ -13,6 +13,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
+
     }
 }
 
@@ -105,6 +106,7 @@ dependencies {
     implementation uiDependencies.material
 
     implementation firebaseDependencies.analytics
+    implementation firebaseDependencies.firebaseui
 
     //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
     testImplementation(testDependencies.threeTenBP) {

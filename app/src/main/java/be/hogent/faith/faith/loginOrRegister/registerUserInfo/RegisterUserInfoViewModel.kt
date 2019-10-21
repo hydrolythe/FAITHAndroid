@@ -83,9 +83,9 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
 
         override fun onSuccess(t: Boolean) {
             if (t)
-                _errorMessage.postValue(R.string.register_error_username_already_exists)
-            else
                 _userInfoConfirmedSuccesFully.call()
+            else
+                _errorMessage.postValue(R.string.register_error_username_already_exists)
         }
 
         override fun onError(e: Throwable) {

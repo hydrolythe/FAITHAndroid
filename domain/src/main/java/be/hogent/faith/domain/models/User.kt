@@ -11,7 +11,7 @@ data class User(
     val avatarName: String,
     val uuid: String
 ) {
-    private val _events = HashMap<UUID, Event>()
+    private var _events = HashMap<UUID, Event>()
     val events: List<Event>
         get() = _events.values.toList()
 
@@ -24,5 +24,9 @@ data class User(
 
     fun getEvent(eventUUID: UUID): Event? {
         return _events[eventUUID]
+    }
+
+    fun clearEvents() {
+        _events = HashMap<UUID, Event>()
     }
 }

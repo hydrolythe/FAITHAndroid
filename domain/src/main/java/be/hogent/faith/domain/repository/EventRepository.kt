@@ -16,5 +16,5 @@ interface EventRepository {
 
     fun get(uuid: UUID): Flowable<Event>
 
-    fun getAll(user: User): Flowable<List<Event>>
+    fun getAll(): Flowable<List<Event>>
 }

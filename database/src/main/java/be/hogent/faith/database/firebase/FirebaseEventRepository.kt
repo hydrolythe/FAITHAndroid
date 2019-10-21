@@ -6,6 +6,7 @@ import android.util.Log
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
+import be.hogent.faith.util.TAG
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -17,7 +18,6 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.reactivex.rxkotlin.toFlowable
-import java.io.File
 
 /**
  * uses RxFirebase: https://github.com/FrangSierra/RxFirebase
@@ -57,7 +57,7 @@ class FirebaseEventRepository(
             )
         )
             .map {
-                it?.map { document ->
+                it.map { document ->
                     document.toObject(EventEntity::class.java)
                 }
             }
@@ -88,23 +88,27 @@ class FirebaseEventRepository(
                 .andThen(RxFirestore.setDocument(document, item))
                 .andThen(RxFirestore.getDocument(document)
                     .map { it.toObject(EventEntity::class.java) })
+                .onErrorResumeNext { error: Throwable ->
+                    Log.e(TAG, "error saving event ${error.message}")
+                    Maybe.error(RuntimeException("Error saving event", error))
+                }
         }
     }
 
     /**
      * Save the avatar in storage and update the file path
      */
-    fun saveAvatarForEvent(item: EventEntity): Single<File> {
+    fun saveAvatarForEvent(item: EventEntity): Single<String> {
         return RxFirebaseStorage.putFile(
             storageRef.child(fbAuth.currentUser!!.uid).child(EVENTS_KEY).child(item.uuid).child(
                 "avatar.png"
             ),
             Uri.parse("file://" + item.emotionAvatar)
         )
-            .map { File(it.storage.downloadUrl.toString()) }
+            .map { it.storage.path } // GlideApp werkt met references, betere UX (File(it.storage.downloadUrl.toString())
             .doOnSuccess { storedFile ->
-                Log.i(ContentValues.TAG, "emotion avatar file is saved ${storedFile.path}")
-                item.emotionAvatar = storedFile.path
+                Log.i(ContentValues.TAG, "emotion avatar file is saved $storedFile")
+                item.emotionAvatar = storedFile
             }
     }
 
@@ -114,21 +118,19 @@ class FirebaseEventRepository(
     fun saveFileForEventDetail(
         projectUuid: String,
         detail: DetailEntity
-    ): Single<File> {
+    ): Single<String> {
         return RxFirebaseStorage.putFile(
             storageRef.child(fbAuth.currentUser!!.uid).child(EVENTS_KEY).child(projectUuid.toString()).child(
                 "${detail.uuid}.png"
             ),
             Uri.parse("file://" + detail.file)
         )
-            .map { File(it.storage.downloadUrl.toString()) }
-            .doOnSuccess { detail.file = it.path }
+            .map { it.storage.path }
+            .doOnSuccess { detail.file = it }
     }
 
     companion object {
         const val USERS_KEY = "users"
         const val EVENTS_KEY = "events"
-        const val EMOTIONAVATAR_KEY = "emotionAvatar"
-        const val EVENT_DETAILS_KEY = "details"
     }
 }

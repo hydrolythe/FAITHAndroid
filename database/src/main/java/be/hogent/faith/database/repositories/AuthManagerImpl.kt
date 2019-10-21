@@ -7,8 +7,8 @@ import io.reactivex.subjects.BehaviorSubject
 
 class AuthManagerImpl(private val firebase: FirebaseAuthManager) : AuthManager {
 
-    override fun checkIfEmailExists(email: String): Single<Boolean> =
-        firebase.checkIfEmailExists(email)
+    override fun isUsernameUnique(email: String): Single<Boolean> =
+        firebase.isUsernameUnique(email)
 
     override fun signIn(email: String, password: String) = firebase.signIn(email, password)
 

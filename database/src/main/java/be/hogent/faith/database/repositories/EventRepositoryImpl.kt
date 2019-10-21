@@ -51,7 +51,7 @@ open class EventRepositoryImpl(
         return firebaseEventRepository.get(uuid.toString()).map { eventMapper.mapFromEntity(it) }
     }
 
-    override fun getAll(user: User): Flowable<List<Event>> {
+    override fun getAll(): Flowable<List<Event>> {
         return firebaseEventRepository.getAll().map { eventMapper.mapFromEntities(it) }
     }
 }

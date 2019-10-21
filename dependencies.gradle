@@ -42,6 +42,12 @@ ext {
 
     design_version = '28.0.0'
 
+    firebaseui_version='6.0.2'
+    rxfirebase_version ='1.5.6'
+    firebaseauth_version ='19.0.0'
+    firestore_version ='21.1.1'
+    firebasestorage_version ='19.1.0'
+
 
     // TESTING LIBRARIES
     test_core_version = '1.2.0'
@@ -111,7 +117,12 @@ ext {
     ]
 
     firebaseDependencies = [
-            analytics : "com.google.firebase:firebase-analytics:$firebase_analytics"
+            analytics : "com.google.firebase:firebase-analytics:$firebase_analytics",
+            firebaseui   :"com.firebaseui:firebase-ui-storage:$firebaseui_version"   ,
+            rxfirebase : "com.github.FrangSierra:RxFirebase:$rxfirebase_version",
+            firebaseauth :"com.google.firebase:firebase-auth:$firebaseauth_version",
+            firestore :"com.google.firebase:firebase-firestore:$firestore_version",
+            firebasestorage :"com.google.firebase:firebase-storage:$firebasestorage_version"
     ]
 
     uiDependencies = [
