@@ -8,7 +8,6 @@ import be.hogent.faith.database.models.detail.PictureDetailEntity
 import be.hogent.faith.database.models.detail.TextDetailEntity
 import be.hogent.faith.database.models.relations.EventWithDetails
 import be.hogent.faith.util.factory.DataFactory
-import be.hogent.faith.util.factory.DataFactory.randomString
 import java.util.UUID
 
 /**
@@ -21,13 +20,13 @@ object EntityFactory {
         val rand = Math.random()
         return when {
             rand < 0.33 -> TextDetailEntity(
-                DataFactory.randomFile(), randomString(), DataFactory.randomUUID(), eventUuid
+                DataFactory.randomFile(), DataFactory.randomUUID(), eventUuid
             )
             rand < 0.66 -> PictureDetailEntity(
-                DataFactory.randomFile(), randomString(), DataFactory.randomUUID(), eventUuid
+                DataFactory.randomFile(), DataFactory.randomUUID(), eventUuid
             )
             else -> AudioDetailEntity(
-                DataFactory.randomFile(), randomString(), DataFactory.randomUUID(), eventUuid
+                DataFactory.randomFile(), DataFactory.randomUUID(), eventUuid
             )
         }
     }
@@ -62,7 +61,10 @@ object EntityFactory {
         return events
     }
 
-    fun makeEventWithDetailsEntity(userUuid: UUID = DataFactory.randomUUID(), nbrOfDetails: Int = 5): EventWithDetails {
+    fun makeEventWithDetailsEntity(
+        userUuid: UUID = DataFactory.randomUUID(),
+        nbrOfDetails: Int = 5
+    ): EventWithDetails {
         return EventWithDetails().also {
             it.eventEntity = makeEventEntity(userUuid)
             it.addDetailEntities(makeDetailEntityList(nbrOfDetails, it.eventEntity.uuid))

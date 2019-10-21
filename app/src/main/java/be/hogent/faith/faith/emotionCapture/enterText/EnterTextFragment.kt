@@ -100,6 +100,7 @@ class EnterTextFragment : Fragment() {
             setOnTextChangeListener {
                 enterTextViewModel.setText(it)
             }
+            // Make sure editor contents are not null so we can save
             focusEditor()
         }
         val inputMethodManager =

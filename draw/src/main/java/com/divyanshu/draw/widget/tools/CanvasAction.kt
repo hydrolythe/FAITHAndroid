@@ -1,7 +1,7 @@
-package com.divyanshu.draw.widget
+package com.divyanshu.draw.widget.tools
 
 import android.graphics.Canvas
 
-interface DrawingAction {
+interface CanvasAction {
     fun drawOn(canvas: Canvas)
 }

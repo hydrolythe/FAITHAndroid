@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.library
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,9 +17,12 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.emotionCapture.enterText.EnterTextFragment
 import be.hogent.faith.faith.library.eventDetailFragments.TestFragment
 import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
 import org.koin.android.ext.android.getKoin
+
+import timber.log.Timber
 
 /**
  * A fragment representing a single Event detail screen, showing
@@ -83,19 +85,27 @@ class EventDetailFragment : Fragment() {
         }
 
         override fun createFragment(position: Int): Fragment {
-            if (!details.isEmpty()) {
+            var fragment: Fragment
+            if (details.isNotEmpty()) {
                 when (details[position]) {
                     is DrawingDetail -> {
-                        Log.i("Tag", "Drawing")
+                        Timber.i("Drawing")
+                        return TestFragment.newInstance()
                     }
                     is PhotoDetail -> {
-                        Log.i("TAG", "Photo")
+                        Timber.i("Photo")
+                        return TestFragment.newInstance()
                     }
                     is TextDetail -> {
-                        Log.i("Tag", "Textdetail")
+                        val detail = details[position].uuid
+                        Timber.i("De detail UUID is : $detail")
+                        fragment = EnterTextFragment.newInstance(details[position].uuid)
+                        Timber.i("Textdetail")
+                        return fragment
                     }
                     is AudioDetail -> {
-                        Log.i("TAG", "Audiodetail")
+                        Timber.i("Audiodetail")
+                        return TestFragment.newInstance()
                     }
                 }
             }

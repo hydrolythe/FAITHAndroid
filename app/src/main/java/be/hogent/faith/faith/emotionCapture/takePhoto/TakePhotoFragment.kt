@@ -3,7 +3,6 @@ package be.hogent.faith.faith.emotionCapture.takePhoto
 import android.Manifest
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,19 +14,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
-import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.util.TempFileProvider
-import be.hogent.faith.util.TAG
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.logcat
 import kotlinx.android.synthetic.main.fragment_take_photo.img_takePhoto_Photo
-import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import timber.log.Timber
 
 /**
  * The requestcode that will be used to request photoTaker permissions
@@ -37,8 +33,6 @@ const val REQUESTCODE_CAMERA = 1
 class TakePhotoFragment : Fragment() {
 
     private val eventViewModel: EventViewModel by sharedViewModel()
-
-    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private val takePhotoViewModel: TakePhotoViewModel by sharedViewModel()
 
@@ -63,8 +57,7 @@ class TakePhotoFragment : Fragment() {
         fotoApparat = Fotoapparat(
             context = this.context!!,
             view = takePhotoBinding.cameraView,
-            logger = logcat(),
-            cameraErrorCallback = { Log.e(TAG, it.message) }
+            logger = logcat()
         )
         return takePhotoBinding.root
     }
@@ -99,14 +92,10 @@ class TakePhotoFragment : Fragment() {
             if (photo != null) {
                 Glide.with(context!!).load(photo).diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).into(img_takePhoto_Photo)
-                Log.d(TAG, "photo saved ${photo.name} ${photo.path}")
+                Timber.d("photo saved ${photo.name} ${photo.path}")
             }
         })
 
-        userViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
-            Log.e(TAG, context!!.getString(errorMessageResourceID))
-            Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
-        })
         eventViewModel.photoSavedSuccessFully.observe(this, Observer {
             Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
                 .show()
@@ -158,7 +147,7 @@ class TakePhotoFragment : Fragment() {
         try {
             fotoApparat.stop()
         } catch (e: IllegalStateException) {
-            Log.i(TAG, "Stopped fotoApparat but wasn't even started.")
+            Timber.i("Stopped fotoApparat but wasn't even started.")
         }
     }
 

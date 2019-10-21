@@ -1,10 +1,10 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.playState
 
 import android.media.MediaPlayer
-import android.util.Log
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioState
 import be.hogent.faith.util.TAG
+import timber.log.Timber
 
 abstract class PlayState(context: AudioContext) : AudioState(context) {
 
@@ -22,14 +22,14 @@ abstract class PlayState(context: AudioContext) : AudioState(context) {
         with(mediaPlayer) {
             try {
                 setDataSource(tempFileProvider.tempAudioRecordingFile.path)
-                Log.d(TAG, "Audio playback prepared")
+                Timber.d("Audio playback prepared")
             } catch (e: IllegalStateException) {
-                Log.e(TAG, "Continuing with the prepare step")
+                Timber.e(TAG, "Continuing with the prepare step")
             }
         }
 
         mediaPlayer.setOnCompletionListener {
-            Log.d(TAG, "Playing -> Stopped: finished playback")
+            Timber.d("Playing -> Stopped: finished playback")
             // Go from PlaybackCompleted to Stopped
             mediaPlayer.stop()
             context.goToNextState(PlayStateStopped(context, mediaPlayer, recorder))
