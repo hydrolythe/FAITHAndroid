@@ -72,7 +72,7 @@
                 app:layout_constraintGuide_percent="0.24" />
 
             <View
-                android:id="@+id/btn_archive"
+                android:id="@+id/btn_register"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:onClick="@{() -> cityScreenViewModel.onArchiveClicked()}"

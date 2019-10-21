@@ -99,6 +99,7 @@
     <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
     <string name="error_no_credentials">No credentials have been stored</string>
     <string name="msg_naar_de_stad">Naar de stad</string>
+    <string name="msg_registreer">Ik ben nieuw</string>
     <string name="avatar_zittend">avatar zittend</string>
     <string name="avatar_inkleuren">avatar inkleuren</string>
     <string name="editor">editor</string>

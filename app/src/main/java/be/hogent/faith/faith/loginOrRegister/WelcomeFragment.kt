@@ -14,8 +14,6 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
-import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.fragment_login.background_welcome
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -47,14 +45,8 @@ class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
     override fun onStart() {
         super.onStart()
         registerListeners()
-        setBackgroundImage()
     }
 
-    private fun setBackgroundImage() {
-        Glide.with(requireContext())
-            .load(R.drawable.loginscherm)
-            .into(background_welcome)
-    }
 
     private fun registerListeners() {
         welcomeViewModel.registerButtonClicked.observe(this, Observer {
