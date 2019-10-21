@@ -13,8 +13,7 @@ class DragListener(private val drawView: DrawView) : OnDragListener {
             DragEvent.ACTION_DROP -> {
                 val drawableResourceId =
                     Integer.parseInt((event.clipData.getItemAt(0).text).toString())
-                val drawable = v.context.resources.getDrawable(drawableResourceId, null)
-                drawView.addDrawable(drawable, event.x.roundToInt(), event.y.roundToInt())
+                drawView.addDrawable(drawableResourceId, event.x.roundToInt(), event.y.roundToInt())
             }
         }
         return true // Keep listening to drag events

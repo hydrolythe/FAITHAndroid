@@ -9,7 +9,6 @@ import android.graphics.Paint
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -194,7 +193,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
 
         currentTool.drawCurrentAction(canvas)
     }
-
     /**
      * Draw the background when one is set and the [Rect] in which it will be drawn has been calculated.
      */
@@ -289,12 +287,12 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     }
 
     /**
-     * Add a drawable to the canvas
-     *
-     * @param x: the x-coordinate of the top-left corner
-     * @param y: the y-coordinate of the top-left corner
+     * Add a drawable to a specific location on the canvas.
+     * @param x the leftmost point of the drawable
+     * @param y the topmost point of the drawable
      */
-    fun addDrawable(drawable: Drawable, x: Int, y: Int) {
+    fun addDrawable(drawableResourceID: Int, x: Int, y: Int) {
+        val drawable = context.resources.getDrawable(drawableResourceID)
         drawable.bounds = Rect(x, y, x + drawable.intrinsicWidth, y + drawable.intrinsicHeight)
         addDrawingAction(DrawableAction(drawable))
         invalidate()
