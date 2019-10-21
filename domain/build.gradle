@@ -1,4 +1,9 @@
 apply plugin: 'kotlin'
+apply plugin: 'kotlin-android-extensions'
+
+
+
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -19,6 +24,9 @@ dependencies {
         exclude group:'com.jakewharton.threetenabp', module:'threetenabp'
     }
 }
+
+
+
 repositories {
     mavenCentral()
 }

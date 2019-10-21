@@ -4,11 +4,10 @@
     package="be.hogent.faith">
 
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.permission.CAMERA" />
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -20,6 +19,7 @@
         android:resizeable="true"
         android:smallScreens="false"
         android:xlargeScreens="true" />
+
     <application
         android:name=".faith.App"
         android:allowBackup="true"
@@ -30,6 +30,19 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
+            android:name=".faith.library.EventListActivity"
+            android:label="@string/title_event_list"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".faith.library.EventDetailActivity"
+            android:label="@string/title_event_detail"
+            android:parentActivityName=".faith.library.EventListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="be.hogent.faith.faith.library.EventListActivity" />
+        </activity>
+        <activity
             android:name=".faith.loginOrRegister.LoginOrRegisterActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
@@ -37,6 +50,7 @@
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

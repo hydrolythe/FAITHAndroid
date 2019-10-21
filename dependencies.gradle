@@ -57,6 +57,9 @@ ext {
     ktlint_version = '0.31.0'
     timber_version = '4.7.1'
     oss_licenses_version = '17.0.0'
+    nav_version = '2.1.0'
+
+    viewpager_version = '1.0.0-alpha01'
 
     //Version Code
     ext.versionMajor = 1
@@ -78,7 +81,11 @@ ext {
 
             timber            : "com.jakewharton.timber:timber:$timber_version",
 
-            licenses          : "com.google.android.gms:play-services-oss-licenses:17.0.0"
+            licenses          : "com.google.android.gms:play-services-oss-licenses:17.0.0",
+
+            navktx            : "androidx.navigation:navigation-fragment-ktx:$nav_version",
+            navui             :  "androidx.navigation:navigation-ui-ktx:$nav_version"
+
     ]
 
     androidDependencies = [
@@ -131,7 +138,8 @@ ext {
             texteditor         : "jp.wasabeef:richeditor-android:$textEditor_version",
             material           : "com.google.android.material:material:$material_version",
             materialdrawer     : "co.zsmb:materialdrawer-kt:$materialdrawer_version",
-            design             : "com.android.support:design:$design_version"
+            design             : "com.android.support:design:$design_version",
+            viewpager2         : "androidx.viewpager2:viewpager2:$viewpager_version"
     ]
 
     authdependencies = [
