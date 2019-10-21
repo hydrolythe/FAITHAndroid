@@ -3,6 +3,7 @@ package com.divyanshu.draw.widget
 import android.content.Context
 import android.content.res.Resources
 import android.view.MotionEvent
+import com.divyanshu.draw.widget.tools.CanvasAction
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
@@ -20,7 +21,7 @@ class DrawViewTest {
         val view = DrawView(context, mockk())
 
         // Assert
-        assert(view.drawingActions.isEmpty())
+        assert(view.canvasActions.isEmpty())
     }
 
     @Test
@@ -32,7 +33,7 @@ class DrawViewTest {
         view.addDrawingAction(mockk())
 
         // Assert
-        assertEquals(1, view.drawingActions.size)
+        assertEquals(1, view.canvasActions.size)
     }
 
     @Test
@@ -74,7 +75,7 @@ class DrawViewTest {
         view.undo()
 
         // Assert
-        assert(view.drawingActions.isEmpty())
+        assert(view.canvasActions.isEmpty())
     }
 
     @Test
@@ -89,7 +90,7 @@ class DrawViewTest {
         view.addDrawable(fakeResourceID, 0, 0)
 
         // Assert
-        assertEquals(1, view.drawingActions.size)
+        assertEquals(1, view.canvasActions.size)
     }
 
     @Test
@@ -105,7 +106,7 @@ class DrawViewTest {
         view.undo()
 
         // Assert
-        assert(view.drawingActions.isEmpty())
+        assert(view.canvasActions.isEmpty())
     }
 
     @Test
@@ -126,7 +127,7 @@ class DrawViewTest {
         view.onTouchEvent(upEvent)
 
         // Assert
-        assertEquals(1, view.drawingActions.size)
+        assertEquals(1, view.canvasActions.size)
     }
 
     @Test
@@ -149,14 +150,14 @@ class DrawViewTest {
         view.undo()
 
         // Assert
-        assert(view.drawingActions.isEmpty())
+        assert(view.canvasActions.isEmpty())
     }
 
     @Test
     fun drawView_redo_undoesLastAction() {
         // Arrange
         val view = DrawView(context, mockk())
-        val action = mockk<DrawingAction>()
+        val action = mockk<CanvasAction>()
         view.addDrawingAction(action)
         view.undo()
 
@@ -164,28 +165,28 @@ class DrawViewTest {
         view.redo()
 
         // Assert
-        assertEquals(action, view.drawingActions.first())
+        assertEquals(action, view.canvasActions.first())
     }
 
     @Test
     fun drawView_clear_clearsAllActions() {
         // Arrange
         val view = DrawView(context, mockk())
-        val action = mockk<DrawingAction>()
+        val action = mockk<CanvasAction>()
         view.addDrawingAction(action)
 
         // Act
         view.clearCanvas()
 
         // Assert
-        assert(view.drawingActions.isEmpty())
+        assert(view.canvasActions.isEmpty())
     }
 
     @Test
     fun drawView_clear_canBeUndone() {
         // Arrange
         val view = DrawView(context, mockk())
-        val action = mockk<DrawingAction>()
+        val action = mockk<CanvasAction>()
         view.addDrawingAction(action)
         view.clearCanvas()
 
@@ -193,7 +194,7 @@ class DrawViewTest {
         view.undo()
 
         // Assert
-        assertEquals(action, view.drawingActions.first())
+        assertEquals(action, view.canvasActions.first())
     }
 
     private fun setupContextWithResources() {
