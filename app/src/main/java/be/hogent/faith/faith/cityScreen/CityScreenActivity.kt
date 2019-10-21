@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
+import be.hogent.faith.faith.library.EventListActivity
 import be.hogent.faith.faith.loginOrRegister.LoginManager
 import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
-import be.hogent.faith.faith.overviewEvents.OverviewEventsActivity
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.builders.footer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
@@ -61,7 +61,7 @@ class CityScreenActivity : AppCompatActivity(),
     }
 
     override fun startOverviewEventsFragment() {
-        val intent = Intent(this, OverviewEventsActivity::class.java)
+        val intent = Intent(this, EventListActivity::class.java)
         startActivity(intent)
     }
 

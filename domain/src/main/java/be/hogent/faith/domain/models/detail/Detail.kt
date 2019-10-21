@@ -6,6 +6,7 @@ import java.util.UUID
 /**
  * A detail that can be part of an event, solution,...
  */
+
 sealed class Detail(
     /**
      * The location of this Detail

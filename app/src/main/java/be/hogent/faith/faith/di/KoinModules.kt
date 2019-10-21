@@ -13,6 +13,7 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.AudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
+import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
 import be.hogent.faith.faith.loginOrRegister.LoginManager
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
@@ -60,6 +61,7 @@ val appModule = module(override = true) {
     viewModel { RegisterUserViewModel(get()) }
     viewModel { RegisterUserInfoViewModel() }
     viewModel { TakePhotoViewModel() }
+    viewModel { SelectedItemViewModel() }
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.

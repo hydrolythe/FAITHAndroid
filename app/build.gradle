@@ -17,6 +17,8 @@ buildscript {
 }
 
 
+
+
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
     compileSdkVersion globalConfig["androidCompileSdkVersion"]
@@ -37,6 +39,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    androidExtensions {
+        experimental = true
     }
 
     testOptions {
@@ -95,6 +101,11 @@ dependencies {
     implementation androidDependencies.lifecycle
 
     implementation uiDependencies.glide
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
     implementation uiDependencies.rv_selection
@@ -107,6 +118,11 @@ dependencies {
     implementation uiDependencies.materialdrawer
     implementation uiDependencies.annotation
     implementation uiDependencies.material
+
+    implementation commonDependencies.navktx
+    implementation commonDependencies.navui
+
+    implementation uiDependencies.viewpager2
 
     //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
     testImplementation(testDependencies.threeTenBP) {
@@ -125,6 +141,7 @@ dependencies {
 
     androidTestImplementation androidTestDependencies.espressoContrib
     androidTestImplementation androidTestDependencies.uiAutomator
+
 }
 
 private Integer generateVersionCode() {
@@ -137,4 +154,3 @@ private String generateVersionName() {
     String versionName = "${globalConfig["versionMajor"]}.${globalConfig["versionMinor"]}.${globalConfig["versionPatch"]}"
     return versionName
 }
-
