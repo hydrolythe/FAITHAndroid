@@ -13,6 +13,7 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.P
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.TextDetailViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.signature.MediaStoreSignature
 
 object DetailViewHolderFactory {
     fun createViewHolder(
@@ -35,11 +36,11 @@ object DetailViewHolderFactory {
                 thumbnailView,
                 existingDetailNavigationListener
             )
-            DetailTypes.TEXT_DETAIL -> createTextDetailViewHolder(
+            // TEXT_DETAIL
+            else -> createTextDetailViewHolder(
                 thumbnailView,
                 existingDetailNavigationListener
             )
-            else -> throw IllegalArgumentException("unknown viewType given")
         }
     }
 
@@ -96,7 +97,10 @@ sealed class DetailViewHolder(
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {
-            return Glide.with(imageView).load(detail.file)
+            return Glide.with(imageView)
+                .load(detail.file)
+                // Signature is required to force Glide to reload overwritten pictures
+                .signature(MediaStoreSignature("", detail.file.lastModified(), 0))
         }
     }
 

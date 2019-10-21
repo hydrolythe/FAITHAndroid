@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "df31979b72148be706d27c00acf53fd5",
+    "identityHash": "75e480021abb5242ca053eb467087602",
     "entities": [
       {
         "tableName": "events",
@@ -85,19 +85,13 @@
       },
       {
         "tableName": "DetailEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `name` TEXT, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`))",
         "fields": [
           {
             "fieldPath": "file",
             "columnName": "file",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": false
           },
           {
             "fieldPath": "uuid",
@@ -123,19 +117,13 @@
       },
       {
         "tableName": "audioDetails",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `name` TEXT, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`eventUuid`) REFERENCES `events`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`eventUuid`) REFERENCES `events`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "file",
             "columnName": "file",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": false
           },
           {
             "fieldPath": "uuid",
@@ -190,19 +178,13 @@
       },
       {
         "tableName": "pictureDetails",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `name` TEXT, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`eventUuid`) REFERENCES `events`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`eventUuid`) REFERENCES `events`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "file",
             "columnName": "file",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": false
           },
           {
             "fieldPath": "uuid",
@@ -257,19 +239,13 @@
       },
       {
         "tableName": "textDetails",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `name` TEXT, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`eventUuid`) REFERENCES `events`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`file` TEXT NOT NULL, `uuid` TEXT NOT NULL, `eventUuid` TEXT NOT NULL, PRIMARY KEY(`uuid`), FOREIGN KEY(`eventUuid`) REFERENCES `events`(`uuid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "file",
             "columnName": "file",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "name",
-            "columnName": "name",
-            "affinity": "TEXT",
-            "notNull": false
           },
           {
             "fieldPath": "uuid",
@@ -367,7 +343,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"df31979b72148be706d27c00acf53fd5\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '75e480021abb5242ca053eb467087602')"
     ]
   }
 }

@@ -2,10 +2,8 @@ package be.hogent.faith.faith.loginOrRegister
 
 import android.app.Activity
 import android.app.Dialog
-import android.util.Log
 import be.hogent.faith.R
 import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.util.TAG
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.authentication.storage.CredentialsManagerException
@@ -16,6 +14,7 @@ import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import org.koin.core.KoinComponent
 import org.koin.core.get
+import timber.log.Timber
 
 class LoginManager : KoinComponent {
 
@@ -39,7 +38,7 @@ class LoginManager : KoinComponent {
     fun login(activity: Activity) {
         // Obtain the existing credentials and move to the next activity
         if (credentialsManager.hasValidCredentials()) {
-            Log.i(TAG, "Still Found credentials")
+            Timber.i("Still Found credentials")
         }
         credentialsManager.getCredentials(object :
             BaseCallback<Credentials, CredentialsManagerException> {
@@ -70,7 +69,7 @@ class LoginManager : KoinComponent {
     fun logout() {
         credentialsManager.clearCredentials()
         getKoin().getScope(KoinModules.USER_SCOPE_ID).close()
-        Log.d(TAG, "Logged the user out")
+        Timber.d("Logged the user out")
     }
 
     private val webCallback = object : AuthCallback {

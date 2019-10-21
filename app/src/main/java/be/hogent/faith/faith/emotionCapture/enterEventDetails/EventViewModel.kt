@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -11,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
@@ -19,13 +19,13 @@ import be.hogent.faith.service.usecases.SaveEventAudioUseCase
 import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
 import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
 import be.hogent.faith.service.usecases.SaveEventTextUseCase
-import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import timber.log.Timber
 import java.io.File
 
 class EventViewModel(
@@ -221,7 +221,7 @@ class EventViewModel(
         }
 
         override fun onError(e: Throwable) {
-            Log.e(TAG, e.localizedMessage)
+            Timber.e(e.localizedMessage)
             _errorMessage.postValue(R.string.error_save_avatar_failed)
         }
     }
@@ -249,14 +249,13 @@ class EventViewModel(
 
     //region savePhoto
     fun savePhoto(tempPhotoFile: File) {
-        // TODO: remove name from UC when it's not necessary anymore
-        val params = SaveEventPhotoUseCase.Params(tempPhotoFile, event.value!!, "TempPhotoName")
+        val params = SaveEventPhotoUseCase.Params(tempPhotoFile, event.value!!)
         saveEventPhotoUseCase.execute(params, TakeEventPhotoUseCaseHandler())
     }
 
     private inner class TakeEventPhotoUseCaseHandler : DisposableSingleObserver<Detail>() {
-        override fun onSuccess(t: Detail) {
-            _photoSavedSuccessFully.value = t
+        override fun onSuccess(savedDetail: Detail) {
+            _photoSavedSuccessFully.value = savedDetail
         }
 
         override fun onError(e: Throwable) {
@@ -266,13 +265,13 @@ class EventViewModel(
     //endregion
 
     //region saveDrawing
-    fun saveDrawing(bitmap: Bitmap) {
-        val params = SaveEventDrawingUseCase.Params(bitmap, event.value!!)
+    fun saveDrawing(bitmap: Bitmap, existingDetail: DrawingDetail? = null) {
+        val params = SaveEventDrawingUseCase.Params(bitmap, event.value!!, existingDetail)
         saveEventDrawingUseCase.execute(params, SaveEventDrawingUseCaseHandler())
     }
 
-    private inner class SaveEventDrawingUseCaseHandler : DisposableSingleObserver<Detail>() {
-        override fun onSuccess(t: Detail) {
+    private inner class SaveEventDrawingUseCaseHandler : DisposableSingleObserver<DrawingDetail>() {
+        override fun onSuccess(t: DrawingDetail) {
             _drawingSavedSuccessFully.value = t
         }
 
@@ -298,6 +297,7 @@ class EventViewModel(
         }
 
         override fun onError(e: Throwable) {
+            Timber.e(e)
             _errorMessage.postValue(R.string.error_save_text_failed)
         }
     }

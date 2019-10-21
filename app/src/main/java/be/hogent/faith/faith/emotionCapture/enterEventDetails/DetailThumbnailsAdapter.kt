@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.AUDIO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.PICTURE_DETAIL
@@ -37,7 +38,7 @@ class DetailThumbnailsAdapter(
             is AudioDetail -> AUDIO_DETAIL
             is DrawingDetail -> PICTURE_DETAIL
             is TextDetail -> TEXT_DETAIL
-            else -> throw IllegalArgumentException("Unknown DetailType found in DetailAdapter")
+            is PhotoDetail -> PICTURE_DETAIL
         }
     }
 
