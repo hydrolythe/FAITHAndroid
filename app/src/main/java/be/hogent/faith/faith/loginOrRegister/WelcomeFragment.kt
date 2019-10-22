@@ -20,28 +20,34 @@ import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.error.ScopeAlreadyCreatedException
-import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 
-class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
+class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
 
     private var navigation: WelcomeNavigationListener? = null
 
     private val welcomeViewModel by viewModel<WelcomeViewModel>()
 
-    private val loginManager: LoginManager by inject { parametersOf(this) }
+    private val loginManager: LoginManager by inject()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding: be.hogent.faith.databinding.FragmentWelcomeBinding =
-            DataBindingUtil.inflate(inflater, be.hogent.faith.R.layout.fragment_welcome, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_welcome, container, false)
         binding.welcomeViewModel = welcomeViewModel
+
+        loginManager.attachLoginSuccesListener(this)
+
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
         registerListeners()
-        //  setBackgroundImage()
+        setBackgroundImage()
     }
 
     private fun setBackgroundImage() {
@@ -74,7 +80,7 @@ class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
         fun goToCityScreen()
     }
 
-    override fun onSuccess() {
+    override fun onLoginSuccess() {
         val scope = try {
             getKoin().createScope(KoinModules.USER_SCOPE_ID, named(USER_SCOPE_NAME))
         } catch (e: ScopeAlreadyCreatedException) {
@@ -86,7 +92,7 @@ class WelcomeFragment : Fragment(), LoginManager.LoginCallback {
         navigation!!.goToCityScreen()
     }
 
-    override fun onFailure(msg: String) {
+    override fun onLoginFailure(msg: String) {
         Toast.makeText(activity, "Log In - Error Occurred : $msg", Toast.LENGTH_SHORT).show()
     }
 

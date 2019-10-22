@@ -10,6 +10,7 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.Avatar
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.CreateUserUseCase
 import io.reactivex.observers.DisposableSingleObserver
+import timber.log.Timber
 
 class RegisterUserViewModel(
     private val createUserUseCase: CreateUserUseCase
@@ -37,6 +38,7 @@ class RegisterUserViewModel(
         }
 
         override fun onError(e: Throwable) {
+            Timber.e(e)
             _errorMessage.postValue(R.string.register_error_create_user)
         }
     }

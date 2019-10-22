@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <data>
@@ -13,17 +14,21 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background_city"
         android:orientation="vertical">
         <!--ACHTERGROND-->
+
+        <!-- KNOPPEN -->
+        <!-- Invisible to make it transparent -->
         <ImageView
             android:id="@+id/background_city_screen"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/frag_main_descr_city_plan"
-            android:background="@drawable/citymap_faith"/>
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/stad"
+            tools:srcCompat="@drawable/stad" />
 
-        <!-- KNOPPEN -->
-        <!-- Invisible to make it transparent -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -70,7 +75,7 @@
                 android:id="@+id/btn_archive"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:onClick="@{() -> cityScreenViewModel.firstLocationClicked()}"
+                android:onClick="@{() -> cityScreenViewModel.onArchiveClicked()}"
                 app:layout_constraintBottom_toTopOf="@id/guide_pole_bottom"
                 app:layout_constraintEnd_toStartOf="@id/guide_pole_right_end"
                 app:layout_constraintStart_toStartOf="@+id/guide_pole_right_start"
@@ -81,7 +86,7 @@
                 android:layout_width="8dp"
                 android:layout_height="12dp"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.39" />
+                app:layout_constraintGuide_percent="0.37" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_loc2_top"
@@ -98,31 +103,31 @@
                 app:layout_constraintGuide_percent="0.63" />
 
             <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide_loc2_bottom"
-            android:layout_width="8dp"
-            android:layout_height="12dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.54" />
+                android:id="@+id/guide_loc2_bottom"
+                android:layout_width="8dp"
+                android:layout_height="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.54" />
 
             <!--AVATAR -->
             <ImageView
                 android:id="@+id/image_main_avatar"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:scaleType="fitXY"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/frag_main_descr_your_avatar"
+                android:scaleType="fitXY"
+                android:src="@drawable/meisje_stoer_staan"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/guide_avatar_top"
                 app:layout_constraintStart_toStartOf="@+id/guide_avatar_left"
-                android:src="@drawable/meisje_stoer_staan"/>
+                app:layout_constraintTop_toBottomOf="@+id/guide_avatar_top" />
 
             <View
-                android:id="@+id/btn_welcome_login"
+                android:id="@+id/btn_city_startNewEvent"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="#00000000"
-                android:onClick="@{() -> cityScreenViewModel.secondLocationClicked()}"
+                android:onClick="@{() -> cityScreenViewModel.onParkClicked()}"
                 app:layout_constraintBottom_toTopOf="@id/guide_loc2_bottom"
                 app:layout_constraintEnd_toStartOf="@id/guide_pole_left_start"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -142,7 +147,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.66" />
+                app:layout_constraintGuide_percent="0.8" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>

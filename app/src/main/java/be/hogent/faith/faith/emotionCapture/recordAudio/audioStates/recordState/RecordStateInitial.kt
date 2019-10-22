@@ -1,41 +1,39 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.recordState
 
-import android.util.Log
-import android.view.View
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
-import be.hogent.faith.util.TAG
-import org.koin.core.KoinComponent
+import timber.log.Timber
 
-class RecordStateInitial(context: AudioContext) : RecordState(context), KoinComponent {
+class RecordStateInitial(context: AudioContext) : RecordState(context) {
 
-    override val playButtonVisible: Int
-        get() = View.INVISIBLE
-    override val pauseButtonVisible: Int
-        get() = View.INVISIBLE
-    override val stopButtonVisible: Int
-        get() = View.INVISIBLE
-    override val recordButtonVisible: Int
-        get() = View.VISIBLE
+    override val mediaPlayer: MediaPlayer = MediaPlayer()
+    override val recorder: MediaRecorder = MediaRecorder()
+
+    override val playButtonEnabled = false
+    override val pauseButtonEnabled = false
+    override val stopButtonEnabled = false
+    override val recordButtonEnabled = true
 
     init {
         initializeRecorder()
     }
 
     override fun onPlayPressed() {
-        Log.d(TAG, "Initial -> Initial: nothing has been recorded yet")
+        Timber.d("Initial -> Initial: nothing has been recorded yet")
     }
 
     override fun onRecordPressed() {
-        Log.d(TAG, "Initial -> Recording")
+        Timber.d("Initial -> Recording")
         recorder.start()
-        context.goToNextState(RecordStateRecording(context))
+        context.goToNextState(RecordStateRecording(context, mediaPlayer, recorder))
     }
 
     override fun onPausePressed() {
-        Log.d(TAG, "Initial -> Initial: Can't pause a recording that hasn't started yet.")
+        Timber.d("Initial -> Initial: Can't pause a recording that hasn't started yet.")
     }
 
     override fun onStopPressed() {
-        Log.d(TAG, "Initial -> Initial: can't stop a recording that hasn't started yet.")
+        Timber.d("Initial -> Initial: can't stop a recording that hasn't started yet.")
     }
 }

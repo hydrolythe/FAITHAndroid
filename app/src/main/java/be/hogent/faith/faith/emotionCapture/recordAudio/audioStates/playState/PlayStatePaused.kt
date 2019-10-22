@@ -1,38 +1,38 @@
 package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.playState
 
-import android.util.Log
-import android.view.View
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
-import be.hogent.faith.util.TAG
+import timber.log.Timber
 
-class PlayStatePaused(context: AudioContext) : PlayState(context) {
+class PlayStatePaused(
+    context: AudioContext,
+    override val mediaPlayer: MediaPlayer,
+    override val recorder: MediaRecorder
+) : PlayState(context) {
 
-    override val playButtonVisible: Int
-        get() = View.VISIBLE
-    override val pauseButtonVisible: Int
-        get() = View.INVISIBLE
-    override val stopButtonVisible: Int
-        get() = View.VISIBLE
-    override val recordButtonVisible: Int
-        get() = View.INVISIBLE
+    override val playButtonEnabled = true
+    override val pauseButtonEnabled = false
+    override val stopButtonEnabled = true
+    override val recordButtonEnabled = false
 
     override fun onPlayPressed() {
-        Log.d(TAG, "Paused -> Playing")
+        Timber.d("Paused -> Playing")
         mediaPlayer.start()
-        context.goToNextState(PlayStatePlaying(context))
+        context.goToNextState(PlayStatePlaying(context, mediaPlayer, recorder))
     }
 
     override fun onPausePressed() {
-        Log.d(TAG, "Paused -> Paused: was already paused")
+        Timber.d("Paused -> Paused: was already paused")
     }
 
     override fun onStopPressed() {
-        Log.d(TAG, "Paused -> Stopped")
+        Timber.d("Paused -> Stopped")
         mediaPlayer.stop()
-        context.goToNextState(PlayStateStopped(context))
+        context.goToNextState(PlayStateStopped(context, mediaPlayer, recorder))
     }
 
     override fun onRecordPressed() {
-        Log.d(TAG, "Paused -> Paused: stop the playback to start a new recording")
+        Timber.d("Paused -> Paused: stop the playback to start a new recording")
     }
 }

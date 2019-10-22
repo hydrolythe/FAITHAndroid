@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.di
 
-import android.media.MediaPlayer
-import android.media.MediaRecorder
+import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
@@ -12,8 +11,9 @@ import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.PremadeImagesPro
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel
-import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioViewModel
+import be.hogent.faith.faith.emotionCapture.recordAudio.AudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
+import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
 import be.hogent.faith.faith.loginOrRegister.LoginManager
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
@@ -33,7 +33,6 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import java.util.UUID
 
 object KoinModules {
     const val USER_SCOPE_NAME = "USER_SCOPE_NAME"
@@ -50,18 +49,19 @@ val appModule = module(override = true) {
 
     // ViewModels
     viewModel { CityScreenViewModel() }
-    viewModel { (eventUuid: UUID?) -> EventViewModel(get(), get(), get(), get(), get(), eventUuid) }
+    viewModel { (event: Event) -> EventViewModel(get(), get(), get(), get(), get(), event) }
     viewModel { EventViewModel(get(), get(), get(), get(), get()) }
     viewModel { DrawViewModel() }
     viewModel { EditDetailViewModel() }
-    viewModel { EnterTextViewModel() }
+    viewModel { EnterTextViewModel(get()) }
     viewModel { OverviewEventsViewModel() }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { WelcomeViewModel() }
-    viewModel { RecordAudioViewModel() }
+    viewModel { AudioViewModel() }
     viewModel { RegisterUserViewModel(get()) }
     viewModel { RegisterUserInfoViewModel() }
     viewModel { TakePhotoViewModel() }
+    viewModel { SelectedItemViewModel() }
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.
@@ -79,10 +79,7 @@ val appModule = module(override = true) {
 
     single { AndroidTempFileProvider(androidContext()) as TempFileProvider }
 
-    single { MediaRecorder() }
-    single { MediaPlayer() }
-
-    single { (callback: LoginManager.LoginCallback) -> LoginManager(callback) }
+    single { LoginManager() }
 
     single { ResourceAvatarProvider(androidContext()) as AvatarProvider }
 

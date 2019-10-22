@@ -1,10 +1,8 @@
 package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
-import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -38,11 +36,7 @@ class EventDetailsFragmentTest {
 
     @Test
     fun eventDetailsFragment_buttonsOpenCorrectScreen() {
-        onView(withId(R.id.btn_event_details_audio)).perform(click())
-        allowPermissionsIfNeeded(uiDevice)
-        onView(withId(R.id.btn_recordAudio_record)).check(matches(isDisplayed()))
-        pressBack()
-
+        // Audio is not tested as emulator don't support audio.
         onView(withId(R.id.btn_event_details_camera)).perform(click())
         allowPermissionsIfNeeded(uiDevice)
         onView(withId(R.id.screen_take_photo)).check(matches(isDisplayed()))
@@ -54,11 +48,5 @@ class EventDetailsFragmentTest {
 
         onView(withId(R.id.btn_event_details_text)).perform(click())
         pressBack()
-    }
-
-    @Test
-    fun eventDetailsFragment_enterEventTitle() {
-        onView(withId(R.id.txt_event_details_title)).perform(typeText("Titel van Event"))
-        closeSoftKeyboard()
     }
 }

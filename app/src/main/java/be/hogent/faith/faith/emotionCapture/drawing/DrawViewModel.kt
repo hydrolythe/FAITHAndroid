@@ -5,9 +5,10 @@ import androidx.annotation.ColorInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import com.divyanshu.draw.widget.DrawView
-import com.divyanshu.draw.widget.DrawingAction
+import com.divyanshu.draw.widget.tools.CanvasAction
 
 /**
  * ViewModel for the [DrawEmotionAvatarFragment].
@@ -27,9 +28,24 @@ class DrawViewModel : ViewModel() {
     val undoClicked: LiveData<Unit>
         get() = _undoClicked
 
+    private val _textClicked = SingleLiveEvent<Unit>()
+    val textClicked: LiveData<Unit>
+        get() = _textClicked
+
+    private val _eraserClicked = SingleLiveEvent<Unit>()
+    val eraserClicked: LiveData<Unit>
+        get() = _eraserClicked
+
     private val _saveClicked = SingleLiveEvent<Unit>()
     val saveClicked: LiveData<Unit>
         get() = _saveClicked
+
+    private val _pencilClicked = SingleLiveEvent<Unit>()
+    val pencilClicked: LiveData<Unit>
+        get() = _pencilClicked
+    private val _existingDetail = MutableLiveData<DrawingDetail>()
+    val existingDetail: LiveData<DrawingDetail>
+        get() = _existingDetail
 
     /**
      * Contains all actions that have been drawn on the [DrawView].
@@ -41,14 +57,24 @@ class DrawViewModel : ViewModel() {
      * again to the new View.
      * If we'd make the actions in the [DrawView] and then push them here, an observer pattern would have been required.
      */
-    private val _drawingActions = MutableLiveData<MutableList<DrawingAction>>()
-    val drawnPaths: LiveData<MutableList<DrawingAction>>
+    private val _drawingActions = MutableLiveData<MutableList<CanvasAction>>()
+    val drawingActions: LiveData<MutableList<CanvasAction>>
         get() = _drawingActions
 
     init {
         _drawingActions.value = mutableListOf()
         _selectedColor.value = Color.BLACK
         _selectedLineWidth.value = LineWidth.MEDIUM
+    }
+
+    fun loadExistingDrawingDetail(drawingDetail: DrawingDetail) {
+        _existingDetail.value = drawingDetail
+        // The approach in the TextViewModel of fetching the existing text  using the UC
+        // and setting it in the VM is not applicable here because we have to interact
+        // directly with an Android-element (DrawView). Instead setting up the DrawView is done in the
+        // [MakeDrawingFragment].
+        // Saving the detail here is still necessary for passing it to the EventVM in order to
+        // overwrite the existing detail.
     }
 
     fun pickColor(@ColorInt color: Int) {
@@ -63,8 +89,20 @@ class DrawViewModel : ViewModel() {
         _undoClicked.call()
     }
 
+    fun onEraserClicked() {
+        _eraserClicked.call()
+    }
+
+    fun onPencilClicked() {
+        _pencilClicked.call()
+    }
+
     fun onSaveButtonClicked() {
         _saveClicked.call()
+    }
+
+    fun onTextClicked() {
+        _textClicked.call()
     }
 
     enum class LineWidth(val width: Float) {

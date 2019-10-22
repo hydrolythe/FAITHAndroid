@@ -15,16 +15,15 @@ class SaveEventPhotoUseCase(
     observeScheduler
 ) {
     override fun buildUseCaseSingle(params: Params): Single<Detail> {
-            return storageRepository.saveEventPhoto(
-                params.tempPhotoFile, params.event
-            ).map { storedFile ->
-                params.event.addNewPictureDetail(storedFile, params.photoName)
-            }
+        return storageRepository.saveEventPhoto(
+            params.tempPhotoFile, params.event
+        ).map { storedFile ->
+            params.event.addNewPhotoDetail(storedFile)
+        }
     }
 
     data class Params(
         val tempPhotoFile: File,
-        val event: Event,
-        val photoName: String
+        val event: Event
     )
 }

@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 buildscript {
     repositories {
@@ -11,9 +12,11 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:3.5.1'
     }
 }
+
+
 
 
 android {
@@ -23,8 +26,8 @@ android {
         applicationId "be.hogent.faith"
         minSdkVersion globalConfig["androidMinSdkVersion"]
         targetSdkVersion globalConfig["androidTargetSdkVersion"]
-        versionCode 1
-        versionName "1.0"
+        versionCode generateVersionCode()
+        versionName generateVersionName()
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         manifestPlaceholders = [auth0Domain: "@string/com_auth0_domain", auth0Scheme: "app"]
@@ -38,6 +41,10 @@ android {
         }
     }
 
+    androidExtensions {
+        experimental = true
+    }
+
     testOptions {
         unitTests.returnDefaultValues = true
     }
@@ -49,6 +56,11 @@ android {
     dataBinding {
         enabled = true
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+    buildToolsVersion = '28.0.3'
 
     kapt {
         generateStubs = true
@@ -78,6 +90,9 @@ dependencies {
     implementation commonDependencies.threeTenABP
     implementation commonDependencies.rxjava
     implementation commonDependencies.rxandroid
+    implementation commonDependencies.licenses
+
+    implementation commonDependencies.timber
 
     implementation injectionDependencies.koin
     implementation injectionDependencies.koin_viewModel
@@ -86,6 +101,11 @@ dependencies {
     implementation androidDependencies.lifecycle
 
     implementation uiDependencies.glide
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
     implementation uiDependencies.rv_selection
@@ -98,6 +118,11 @@ dependencies {
     implementation uiDependencies.materialdrawer
     implementation uiDependencies.annotation
     implementation uiDependencies.material
+
+    implementation commonDependencies.navktx
+    implementation commonDependencies.navui
+
+    implementation uiDependencies.viewpager2
 
     //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
     testImplementation(testDependencies.threeTenBP) {
@@ -116,5 +141,16 @@ dependencies {
 
     androidTestImplementation androidTestDependencies.espressoContrib
     androidTestImplementation androidTestDependencies.uiAutomator
+
 }
 
+private Integer generateVersionCode() {
+    def globalConfig = rootProject.extensions.getByName("ext")
+    return globalConfig["androidMinSdkVersion"] * 10000000 + globalConfig["versionMajor"] * 10000 + globalConfig["versionMinor"] * 100 + globalConfig["versionPatch"]
+}
+
+private String generateVersionName() {
+    def globalConfig = rootProject.extensions.getByName("ext")
+    String versionName = "${globalConfig["versionMajor"]}.${globalConfig["versionMinor"]}.${globalConfig["versionPatch"]}"
+    return versionName
+}

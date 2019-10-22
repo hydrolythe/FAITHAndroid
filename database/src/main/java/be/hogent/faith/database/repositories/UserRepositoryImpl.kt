@@ -1,6 +1,5 @@
 package be.hogent.faith.database.repositories
 
-import android.util.Log
 import be.hogent.faith.database.daos.EventDao
 import be.hogent.faith.database.daos.UserDao
 import be.hogent.faith.database.database.EntityDatabase
@@ -12,6 +11,7 @@ import be.hogent.faith.domain.repository.UserRepository
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.functions.BiFunction
+import timber.log.Timber
 import java.util.UUID
 
 private const val TAG = "UserRepositoryImpl"
@@ -45,11 +45,15 @@ open class UserRepositoryImpl(
 
     override fun get(uuid: UUID): Flowable<User> {
         val user = userDao.getUser(uuid).map { userMapper.mapFromEntity(it) }
-            .doOnNext { Log.d(TAG, "uuid of user fetched from database ${it.uuid}") }
+            .doOnNext { Timber.d("uuid of user fetched from database ${it.uuid}") }
         val eventsWithDetails =
-            eventDao.getAllEventsWithDetails(uuid).map { eventWithDetailsMapper.mapFromEntities(it) }
-                .doOnNext { Log.d(TAG, "Nbr of events for user with $uuid fetched ${it.size}") }
-        return Flowable.combineLatest(user, eventsWithDetails, BiFunction { u, e -> addEventsToUser(u, e) })
+            eventDao.getAllEventsWithDetails(uuid)
+                .map { eventWithDetailsMapper.mapFromEntities(it) }
+                .doOnNext { Timber.d("Nbr of events for user with $uuid fetched ${it.size}") }
+        return Flowable.combineLatest(
+            user,
+            eventsWithDetails,
+            BiFunction { u, e -> addEventsToUser(u, e) })
     }
 
     override fun getAll(): Flowable<List<User>> {

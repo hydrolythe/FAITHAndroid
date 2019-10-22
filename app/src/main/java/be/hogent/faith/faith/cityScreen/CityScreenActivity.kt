@@ -2,21 +2,22 @@ package be.hogent.faith.faith.cityScreen
 
 import android.content.Intent
 import android.os.Bundle
-
 import androidx.appcompat.app.AlertDialog
-
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
-import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
-import android.R
+import be.hogent.faith.faith.library.EventListActivity
 import be.hogent.faith.faith.loginOrRegister.LoginManager
-import be.hogent.faith.faith.overviewEvents.OverviewEventsActivity
+import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.builders.footer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import org.koin.android.ext.android.inject
 
 class CityScreenActivity : AppCompatActivity(),
     CityScreenFragment.CityScreenNavigationListener {
+
+    private val loginManager: LoginManager by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,18 +34,25 @@ class CityScreenActivity : AppCompatActivity(),
         }
 
         drawer {
+            primaryItem("Licenties") {
+                onClick { _ ->
+                    startLicensesActivbity()
+                    true
+                }
+            }
             footer {
                 primaryItem("Logout") {
                     onClick { _ ->
-                        val intent = Intent(applicationContext, LoginOrRegisterActivity::class.java)
-                        intent.putExtra(LoginManager.KEY_CLEAR_CREDENTIALS, true)
-                        startActivity(intent)
-                        finish()
+                        logOut()
                         true
                     }
                 }
             }
         }
+    }
+
+    private fun startLicensesActivbity() {
+        startActivity(Intent(this, OssLicensesMenuActivity::class.java))
     }
 
     override fun startEmotionCapture() {
@@ -53,8 +61,13 @@ class CityScreenActivity : AppCompatActivity(),
     }
 
     override fun startOverviewEventsFragment() {
-        val intent = Intent(this, OverviewEventsActivity::class.java)
+        val intent = Intent(this, EventListActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun logOut() {
+        loginManager.logout()
+        navigateUpTo(Intent(applicationContext, LoginOrRegisterActivity::class.java))
     }
 
     override fun onBackPressed() {
@@ -62,9 +75,8 @@ class CityScreenActivity : AppCompatActivity(),
             val builder = AlertDialog.Builder(this).apply {
                 setTitle(getString(be.hogent.faith.R.string.cityScreen_logOut))
                 setMessage(getString(be.hogent.faith.R.string.cityscreen_stad_verlaten))
-                setPositiveButton(R.string.ok) { _, _ ->
-                    // TODO nog uitloggen
-                    navigateUpTo(Intent(applicationContext, LoginOrRegisterActivity::class.java))
+                setPositiveButton(be.hogent.faith.R.string.ok) { _, _ ->
+                    logOut()
                 }
                 setNegativeButton(be.hogent.faith.R.string.cancel) { dialog, _ ->
                     dialog.cancel()
