@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.library
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +21,7 @@ import be.hogent.faith.faith.emotionCapture.enterText.EnterTextFragment
 import be.hogent.faith.faith.library.eventDetailFragments.TestFragment
 import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
 import org.koin.android.ext.android.getKoin
+
 import timber.log.Timber
 
 /**
@@ -86,25 +86,25 @@ class EventDetailFragment : Fragment() {
 
         override fun createFragment(position: Int): Fragment {
             var fragment: Fragment
-            if (!details.isEmpty()) {
+            if (details.isNotEmpty()) {
                 when (details[position]) {
                     is DrawingDetail -> {
-                        Log.i("Tag", "Drawing")
+                        Timber.i("Drawing")
                         return TestFragment.newInstance()
                     }
                     is PhotoDetail -> {
-                        Log.i("TAG", "Photo")
+                        Timber.i("Photo")
                         return TestFragment.newInstance()
                     }
                     is TextDetail -> {
-                        var detail = details[position].uuid
+                        val detail = details[position].uuid
                         Timber.i("De detail UUID is : $detail")
                         fragment = EnterTextFragment.newInstance(details[position].uuid)
+                        Timber.i("Textdetail")
                         return fragment
-                        Log.i("Tag", "Textdetail")
                     }
                     is AudioDetail -> {
-                        Log.i("TAG", "Audiodetail")
+                        Timber.i("Audiodetail")
                         return TestFragment.newInstance()
                     }
                 }
