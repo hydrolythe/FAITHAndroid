@@ -66,47 +66,25 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.36" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_form_end"
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.61" />
-
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_top_flagpole"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.5" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_login_edittexts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.36" />
 
             <include
                 android:id="@+id/include_login_txts"
                 layout="@layout/view_login_circle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
-                app:layout_constraintStart_toStartOf="@+id/guide_form_start"
-                app:layout_constraintTop_toTopOf="@+id/guide_login_edittexts"
+                app:layout_constraintBottom_toTopOf="@+id/included_arrows"
+                app:layout_constraintEnd_toStartOf="@+id/guideline7"
+                app:layout_constraintStart_toStartOf="@+id/guideline7"
+                app:layout_constraintTop_toTopOf="parent"
                 app:welcomeViewModel="@{welcomeViewModel}" />
 
             <include
                 android:id="@+id/included_arrows"
                 layout="@layout/view_loginarrows"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guide_form_end"
-                app:layout_constraintTop_toTopOf="@+id/guide_top_flagpole"
                 app:welcomeViewModel="@{welcomeViewModel}" />
 
             <ImageView
