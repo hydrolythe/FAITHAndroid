@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.drawing.makeDrawing
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -106,8 +105,14 @@ class MakeDrawingFragment : DrawFragment() {
     }
 
     private fun startListeners() {
+        drawViewModel.textClicked.observe(this, Observer {
+            drawView.pickTextTool()
+        })
         drawViewModel.eraserClicked.observe(this, Observer {
-            drawView.setColor(Color.WHITE)
+            drawView.pickEraserTool()
+        })
+        drawViewModel.pencilClicked.observe(this, Observer {
+            drawView.pickDrawingTool()
         })
 
         drawViewModel.saveClicked.observe(this, Observer {

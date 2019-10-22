@@ -22,7 +22,8 @@ class EnterTextViewModelTest {
 
     private lateinit var viewModel: EnterTextViewModel
 
-    private val text = "Hello world"
+    private val textDetail = DetailFactory.makeTextDetail()
+    private val detailText = "Text in the detail"
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -101,10 +102,10 @@ class EnterTextViewModelTest {
         // Act
         viewModel.loadExistingTextDetail(textDetail)
         verify { loadTextDetailUseCase.execute(capture(params), capture(resultObserver)) }
-        resultObserver.captured.onSuccess(text)
+        resultObserver.captured.onSuccess(detailText)
 
         // Assert
-        verify { textObserver.onChanged(text) }
+        verify { textObserver.onChanged(detailText) }
     }
     @Test
     fun enterTextVM_loadTextUseCaseFails_updatesErrorMessage() {
