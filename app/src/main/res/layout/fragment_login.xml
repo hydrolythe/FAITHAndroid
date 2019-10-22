@@ -28,7 +28,7 @@
         <!-- KNOPPEN -->
         <!-- Invisible to make it transparent -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/guide_top_pole"
+            android:id="@+id/layout_login"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#00000000"
@@ -53,6 +53,13 @@
                 app:layout_constraintGuide_percent="0.43" />
 
             <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_form_start"
                 android:layout_width="1dp"
                 android:layout_height="1dp"
@@ -67,53 +74,29 @@
                 app:layout_constraintGuide_percent="0.61" />
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout_username"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="200dp"
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_top_flagpole"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/username"
-                app:layout_constraintBottom_toTopOf="@+id/textInputLayout_pwd"
-                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/guide_form_start"
-                app:layout_constraintTop_toTopOf="@+id/guide_login_avatars_top">
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txt_welcome_userName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_login_wrap"
-                    android:text="@={welcomeViewModel.userName}" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout_pwd"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="200dp"
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_login_edittexts"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/password"
-                app:layout_constraintBottom_toTopOf="@+id/guide_avatar_top"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.36" />
+
+            <include
+                android:id="@+id/include_login_txts"
+                layout="@layout/view_login_circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/guide_form_start"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout_username">
-
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txt_welcome_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_lock_wrap"
-                    android:inputType="textPassword"
-                    android:text="@={welcomeViewModel.password}"
-                    app:layout_constraintBottom_toTopOf="@+id/guide_password_bottom"
-                    app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="@+id/guide_form_start" />
-            </com.google.android.material.textfield.TextInputLayout>
-
+                app:layout_constraintTop_toTopOf="@+id/guide_login_edittexts"
+                app:welcomeViewModel="@{welcomeViewModel}" />
 
             <include
                 android:id="@+id/included_arrows"
@@ -135,13 +118,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guide_login_avatars_top"
                 app:srcCompat="@drawable/login_avatars" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_top_flagpole"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
