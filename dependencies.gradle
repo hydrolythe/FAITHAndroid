@@ -8,9 +8,9 @@ ext {
     coroutines_version = '1.1.1'
     coroutines_android_version = '1.1.1'
     koin_version = '2.0.1'
-    aac_core_version = '2.0.1'
+    aac_core_version = '2.0.0'
     lifecycle_version = '2.0.0'
-    appcompat_version = '1.0.2'
+    appcompat_version = '1.1.0'
 
     threeTenABP_version = '1.2.1'
     threeTenBP_version = '1.4.0'
@@ -26,11 +26,10 @@ ext {
     annotation_version = '1.1.0'
 
     // UI LIBRARIES
-    constraint_layout_version = '2.0.0-beta1'
-    fragment_version = '1.0.0'
+    constraint_layout_version = '1.1.3'
+    fragment_version = '1.1.0'
 
-    recyclerview_version = '1.1.0-beta03'
-    recyclerview_selection_version = '1.1.0-alpha06'
+    recyclerview_version = '1.0.0'
 
     glide_version = '4.9.0'
     cardview_version = '1.0.0'
@@ -46,12 +45,11 @@ ext {
     espresso_version = '3.2.0'
     espresso_contrib_version = '3.3.0-alpha02'
     android_junit_version = '1.1.1'
-    test_runner_version = '1.2.0'
-    test_rules_version = '1.2.0'
+    test_version = '1.2.0'
 
     uiAutomator_version = '2.2.0'
     junit_version = '4.12'
-    mockk_version = '1.9.3.kotlin12'
+    mockk_version = '1.9.2'
 
     // OTHER LIBRARIES
     ktlint_version = '0.31.0'
@@ -59,7 +57,7 @@ ext {
     oss_licenses_version = '17.0.0'
     nav_version = '2.1.0'
 
-    viewpager_version = '1.0.0-alpha01'
+    viewpager_version = '1.0.0-beta05'
 
     //Version Code
     ext.versionMajor = 1
@@ -84,7 +82,7 @@ ext {
             licenses          : "com.google.android.gms:play-services-oss-licenses:17.0.0",
 
             navktx            : "androidx.navigation:navigation-fragment-ktx:$nav_version",
-            navui             :  "androidx.navigation:navigation-ui-ktx:$nav_version"
+            navui             : "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     ]
 
@@ -106,8 +104,8 @@ ext {
             androidJunit   : "androidx.test.ext:junit:$android_junit_version",
             espresso       : "androidx.test.espresso:espresso-core:$espresso_version",
             aac_core       : "androidx.arch.core:core-testing:$aac_core_version",
-            testRules      : "androidx.test:rules:$test_rules_version",
-            testRunner     : "androidx.test:runner:$test_runner_version",
+            testRules      : "androidx.test:rules:$test_version",
+            testRunner     : "androidx.test:runner:$test_version",
             espressoContrib: "androidx.test.espresso:espresso-contrib:$espresso_contrib_version",
             uiAutomator    : "androidx.test.uiautomator:uiautomator:$uiAutomator_version"
     ]
@@ -133,7 +131,7 @@ ext {
             annotation         : "androidx.annotation:annotation:$annotation_version",
             fotoApparat        : "io.fotoapparat:fotoapparat:$fotoApparat_version",
             fotoApparatAdapters: "io.fotoapparat.fotoapparat:adapter-rxjava2:$fotoApparat_version",
-            rv_selection       : "androidx.recyclerview:recyclerview-selection:$recyclerview_selection_version",
+            rv_selection       : "androidx.recyclerview:recyclerview-selection:$recyclerview_version",
             cardView           : "androidx.cardview:cardview:$cardview_version",
             texteditor         : "jp.wasabeef:richeditor-android:$textEditor_version",
             material           : "com.google.android.material:material:$material_version",
