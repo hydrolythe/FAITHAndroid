@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import com.divyanshu.draw.widget.DrawView
-import com.divyanshu.draw.widget.DrawingAction
+import com.divyanshu.draw.widget.tools.CanvasAction
 
 /**
  * ViewModel for the [DrawEmotionAvatarFragment].
@@ -28,6 +28,10 @@ class DrawViewModel : ViewModel() {
     val undoClicked: LiveData<Unit>
         get() = _undoClicked
 
+    private val _textClicked = SingleLiveEvent<Unit>()
+    val textClicked: LiveData<Unit>
+        get() = _textClicked
+
     private val _eraserClicked = SingleLiveEvent<Unit>()
     val eraserClicked: LiveData<Unit>
         get() = _eraserClicked
@@ -36,6 +40,9 @@ class DrawViewModel : ViewModel() {
     val saveClicked: LiveData<Unit>
         get() = _saveClicked
 
+    private val _pencilClicked = SingleLiveEvent<Unit>()
+    val pencilClicked: LiveData<Unit>
+        get() = _pencilClicked
     private val _existingDetail = MutableLiveData<DrawingDetail>()
     val existingDetail: LiveData<DrawingDetail>
         get() = _existingDetail
@@ -50,8 +57,8 @@ class DrawViewModel : ViewModel() {
      * again to the new View.
      * If we'd make the actions in the [DrawView] and then push them here, an observer pattern would have been required.
      */
-    private val _drawingActions = MutableLiveData<MutableList<DrawingAction>>()
-    val drawnPaths: LiveData<MutableList<DrawingAction>>
+    private val _drawingActions = MutableLiveData<MutableList<CanvasAction>>()
+    val drawingActions: LiveData<MutableList<CanvasAction>>
         get() = _drawingActions
 
     init {
@@ -82,16 +89,20 @@ class DrawViewModel : ViewModel() {
         _undoClicked.call()
     }
 
-    // Setting the color to white would work as well, but the colors of the brushes are linked to
-    // the [_selectedColor]. Selecting the color white would mean the brushes are white, making
-    // them invisible. Instead, the listeners of [eraserClicked] should set the DrawViews color
-    // directly, keeping the original [selectedColor].
     fun onEraserClicked() {
         _eraserClicked.call()
     }
 
+    fun onPencilClicked() {
+        _pencilClicked.call()
+    }
+
     fun onSaveButtonClicked() {
         _saveClicked.call()
+    }
+
+    fun onTextClicked() {
+        _textClicked.call()
     }
 
     enum class LineWidth(val width: Float) {
