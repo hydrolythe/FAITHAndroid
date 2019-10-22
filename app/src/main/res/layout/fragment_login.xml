@@ -9,7 +9,7 @@
             type="be.hogent.faith.faith.loginOrRegister.WelcomeViewModel" />
     </data>
 
-    <FrameLayout xmlns:bind="http://schemas.android.com/apk/res-auto"
+    <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,6 +28,7 @@
         <!-- KNOPPEN -->
         <!-- Invisible to make it transparent -->
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/guide_top_pole"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#00000000"
@@ -45,11 +46,11 @@
                 the device.-->
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_pole_top"
+                android:id="@+id/guide_login_avatars_top"
                 android:layout_width="1dp"
                 android:layout_height="1dp"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.63" />
+                app:layout_constraintGuide_percent="0.43" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_form_start"
@@ -75,8 +76,8 @@
                 app:layout_constraintBottom_toTopOf="@+id/textInputLayout_pwd"
                 app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/guide_form_end"
-                app:layout_constraintTop_toTopOf="@+id/guide_pole_top">
+                app:layout_constraintStart_toStartOf="@+id/guide_form_start"
+                app:layout_constraintTop_toTopOf="@+id/guide_login_avatars_top">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_welcome_userName"
@@ -93,10 +94,10 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
-                app:layout_constraintBottom_toTopOf="@+id/guide_pole_top"
+                app:layout_constraintBottom_toTopOf="@+id/guide_avatar_top"
                 app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/guide_form_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_form_start"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout_username">
 
 
@@ -118,12 +119,12 @@
                 android:id="@+id/included_arrows"
                 layout="@layout/view_loginarrows"
                 android:layout_width="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guide_form_end"
-                bind:welcomeViewModel="@{welcomeViewModel}"
-                app:layout_constraintTop_toTopOf="@+id/guide_pole_top" />
+                app:layout_constraintTop_toTopOf="@+id/guide_top_flagpole"
+                app:welcomeViewModel="@{welcomeViewModel}" />
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -132,8 +133,15 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guide_form_start"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guide_pole_top"
+                app:layout_constraintTop_toTopOf="@+id/guide_login_avatars_top"
                 app:srcCompat="@drawable/login_avatars" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_top_flagpole"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
