@@ -75,7 +75,6 @@
                 app:layout_constraintBottom_toTopOf="@+id/included_arrows"
                 app:layout_constraintEnd_toStartOf="@+id/guideline7"
                 app:layout_constraintStart_toStartOf="@+id/guideline7"
-                app:layout_constraintTop_toTopOf="parent"
                 app:welcomeViewModel="@{welcomeViewModel}" />
 
             <include
