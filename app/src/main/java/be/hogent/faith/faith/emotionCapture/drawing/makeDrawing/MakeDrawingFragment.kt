@@ -12,7 +12,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawBinding
-import be.hogent.faith.databinding.FragmentDrawTabsBinding
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawing.DrawFragment
