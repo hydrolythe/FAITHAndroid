@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/tools"
->
+    xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="drawViewModel"
             type="be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel" />
+
+        <import type="android.graphics.Color" />
 
     </data>
 
@@ -39,13 +40,55 @@
                 app:layout_constraintGuide_percent="0.05" />
 
             <include
+                android:id="@+id/container_draw_colors"
+                layout="@layout/panel_drawing_colors"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/container_tools"
+                app:layout_constraintTop_toTopOf="@id/guide_draw_drawview_top"
+                app:layout_constraintStart_toStartOf="@id/guide_draw_utilities_left"
+                bind:drawViewModel="@{drawViewModel}" />
+
+            <LinearLayout
+                android:id="@+id/container_tools"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/container_draw_utilities"
+                app:layout_constraintStart_toStartOf="@+id/container_draw_colors"
+                app:layout_constraintTop_toBottomOf="@+id/container_draw_colors">
+
+                <Button
+                    android:id="@+id/btn_draw_pencil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->drawViewModel.onPencilClicked()}"
+                    android:text="Penseel" />
+
+                <Button
+                    android:id="@+id/btn_draw_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->drawViewModel.onTextClicked()}"
+                    android:text="Text" />
+
+
+                <Button
+                    android:id="@+id/btn_draw_eraser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->drawViewModel.onEraserClicked()}"
+                    android:text="Gom" />
+            </LinearLayout>
+
+            <include
                 android:id="@+id/container_draw_utilities"
                 layout="@layout/panel_drawing_tools"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="@+id/guide_draw_drawview_bottom"
-                app:layout_constraintStart_toStartOf="@+id/guide_draw_utilities_left"
-                app:layout_constraintTop_toTopOf="@+id/guide_draw_drawview_top"
+                android:layout_height="238dp"
+                app:layout_constraintBottom_toTopOf="@+id/guide_draw_drawview_bottom"
+                app:layout_constraintStart_toStartOf="@+id/container_tools"
+                app:layout_constraintTop_toBottomOf="@+id/container_tools"
                 bind:drawViewModel="@{drawViewModel}" />
 
 
@@ -54,6 +97,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="8dp"
+                android:focusableInTouchMode="true"
                 app:layout_constraintBottom_toBottomOf="@+id/guide_draw_drawview_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/container_draw_images"
                 app:layout_constraintStart_toEndOf="@+id/guide_draw_drawview_left"
@@ -61,16 +105,16 @@
 
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/btn_makeDrawing_save"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="@dimen/material_icon_height"
                 android:layout_gravity="center"
-                android:layout_margin="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/save_btn"
                 android:onClick="@{() -> drawViewModel.onSaveButtonClicked()}"
-                android:text="@string/save"
-                app:layout_constraintBottom_toBottomOf="@+id/guide_draw_drawview_bottom"
-                app:layout_constraintEnd_toEndOf="@+id/guide_draw_drawview_left"
-                app:layout_constraintStart_toEndOf="@+id/container_draw_utilities" />
-
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <include
                 android:id="@+id/container_draw_images"
@@ -94,7 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.04" />
+                app:layout_constraintGuide_percent="0.11" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_draw_drawview_bottom"

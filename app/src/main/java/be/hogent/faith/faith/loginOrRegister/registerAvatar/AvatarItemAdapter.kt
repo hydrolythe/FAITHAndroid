@@ -66,13 +66,13 @@ class AvatarItemAdapter(private val avatarClickListener: OnAvatarClickListener) 
             val avatarDrawable = avatarProvider.getAvatarDrawable(avatarItem.avatarName)
             view.isActivated = isActivated
             Glide.with(this.itemView.context).load(avatarDrawable).into(view.avatar_list_image)
-            view.tag = this
+            view.setTag(R.id.TAG_VIEWHOLDER, this)
             setClickListener()
         }
 
         private fun setClickListener() {
             view.setOnClickListener {
-                val viewHolder = it.tag as RecyclerView.ViewHolder
+                val viewHolder = it.getTag(R.id.TAG_VIEWHOLDER) as RecyclerView.ViewHolder
                 val position = viewHolder.adapterPosition
                 viewHolder.itemView.isActivated = true
                 val oldSelection = selectedItem

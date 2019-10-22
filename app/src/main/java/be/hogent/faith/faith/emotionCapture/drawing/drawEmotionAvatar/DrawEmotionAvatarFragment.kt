@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.emotionCapture.drawing.drawEmotionAvatar
 
-import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -75,8 +74,8 @@ class DrawEmotionAvatarFragment : DrawFragment() {
     }
 
     private fun listenToViewModelEvents() {
-        eventViewModel.errorMessage.observe(this, Observer {
-            Toast.makeText(context, getString(R.string.error_saving_drawing), Toast.LENGTH_SHORT)
+        eventViewModel.errorMessage.observe(this, Observer { errorMessageResId ->
+            Toast.makeText(context, getString(errorMessageResId), Toast.LENGTH_SHORT)
                 .show()
         })
     }
@@ -84,6 +83,8 @@ class DrawEmotionAvatarFragment : DrawFragment() {
     private fun configureDrawingCanvas() {
         // Paint with semi-transparent paint so you can always see the background's outline
         drawView.setAlpha(70)
+        // Leave some whitespace around the avatar
+        drawView.fullScreenBackground = false
 
         if (avatarOutlineResId != NO_AVATAR) {
             drawView.setPaintedBackground(
@@ -93,16 +94,11 @@ class DrawEmotionAvatarFragment : DrawFragment() {
                 ) as BitmapDrawable
             )
         }
-
-        drawView.addDrawViewListener(object : DrawView.DrawViewListener {
-            override fun onDrawingChanged(bitmap: Bitmap) {
-                eventViewModel.saveEmotionAvatarImage(bitmap)
-            }
-        })
     }
 
     override fun onStop() {
         super.onStop()
+        eventViewModel.saveEmotionAvatarImage(drawView.getBitmap())
         disposables.clear()
     }
 

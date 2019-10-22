@@ -77,7 +77,7 @@ class ChooseRegisterAvatarViewModelTest {
         viewModelRegister.nextButtonPressed()
         verify { createUserUseCase.execute(capture(params), capture(observer)) }
         // Make the UC-handler call the success handler
-        observer.captured.onSuccess(mockk())
+        observer.captured.onLoginSuccess(mockk())
 
         // Assert
         verify { successObserver.onChanged(any()) }

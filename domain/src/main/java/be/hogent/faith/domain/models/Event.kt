@@ -2,7 +2,8 @@ package be.hogent.faith.domain.models
 
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.PictureDetail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import org.jetbrains.annotations.TestOnly
 import org.threeten.bp.LocalDateTime
@@ -42,22 +43,32 @@ data class Event(
         return _details.last()
     }
 
+    fun getDetail(uuid: UUID): Detail? {
+        return details.find { it.uuid == uuid }
+    }
+
     @TestOnly
     fun addDetail(detail: Detail) {
         _details += detail
     }
 
-    fun addNewPictureDetail(saveFile: File, photoName: String): Detail {
-        val newDetail = PictureDetail(saveFile, photoName)
+    fun addNewPhotoDetail(saveFile: File): PhotoDetail {
+        val newDetail = PhotoDetail(saveFile)
         addDetail(newDetail)
         return newDetail
     }
 
-    fun addNewAudioDetail(saveFile: File, audioRecordingName: String) {
-        addDetail(AudioDetail(saveFile, audioRecordingName))
+    fun addNewDrawingDetail(saveFile: File): DrawingDetail {
+        val newDetail = DrawingDetail(saveFile)
+        addDetail(newDetail)
+        return newDetail
     }
 
-    fun addNewTextDetail(saveFile: File, textDetailName: String) {
-        addDetail(TextDetail(saveFile, textDetailName))
+    fun addNewAudioDetail(saveFile: File) {
+        addDetail(AudioDetail(saveFile))
+    }
+
+    fun addNewTextDetail(saveFile: File) {
+        addDetail(TextDetail(saveFile))
     }
 }

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -24,30 +22,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-    <!--ACHTERGROND-->
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/editor_horizontal"
-        android:contentDescription="@string/tekenen" />
+        <!--ACHTERGROND-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/editor_horizontal"
+            android:contentDescription="@string/tekenen" />
 
-    <!-- KNOPPEN -->
-    <!-- Invisible to make it transparent -->
+        <!-- KNOPPEN -->
+        <!-- Invisible to make it transparent -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#00000000">
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/btn_enter_text_save"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="@dimen/material_icon_height"
                 android:layout_gravity="center"
-                android:onClick="@{() -> eventViewModel.saveText(enterTextViewModel.text)}"
-                android:text="@string/save"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/save_btn"
+                android:onClick="@{() -> eventViewModel.saveText(enterTextViewModel.text, enterTextViewModel.existingDetail)}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="horizontal"
@@ -265,7 +267,7 @@
 
 
                 <jp.wasabeef.richeditor.RichEditor
-                    android:id="@+id/editor"
+                    android:id="@+id/enterText_editor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
@@ -332,6 +334,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-</FrameLayout>
+    </FrameLayout>
 </layout>

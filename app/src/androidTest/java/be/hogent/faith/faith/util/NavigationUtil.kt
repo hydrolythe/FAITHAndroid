@@ -13,14 +13,14 @@ object NavigationUtil {
     fun goToCityScreen() {
         // Focus is on input field for the name by default, which opens the soft keyboard.
         // It hides the button to go to town so we have to close it.
-        // We have to close the soft keyboard everytime because otherwise it overlaps the textfield.
+        // We have to close the soft keyboard every time because otherwise it overlaps the textfield.
         onView(withId(R.id.btn_archive)).perform(click())
         closeSoftKeyboard()
-        onView(withId(R.id.txt_register_username)).perform(typeText("TestNaam"))
+        onView(withId(R.id.txt_register_username)).perform(typeText("Jos"))
         closeSoftKeyboard()
-        onView(withId(R.id.txt_register_password)).perform(typeText("TestNaam"))
+        onView(withId(R.id.txt_register_password)).perform(typeText("ww"))
         closeSoftKeyboard()
-        onView(withId(R.id.txt_register_password_repeat)).perform(typeText("TestNaam"))
+        onView(withId(R.id.txt_register_password_repeat)).perform(typeText("ww"))
         closeSoftKeyboard()
         onView(withId(R.id.btn_register_confirmInfo)).perform(click())
         onView(withId(R.id.avatar_rv_avatar)).perform(
@@ -51,7 +51,7 @@ object NavigationUtil {
 
     fun goToNewEventScreen() {
         goToCityScreen()
-        onView(withId(R.id.btn_welcome_login)).perform(click())
+        onView(withId(R.id.btn_city_startNewEvent)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }

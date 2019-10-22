@@ -42,15 +42,15 @@
 
         <ImageView
             android:id="@+id/btn_takePhoto_takePhoto"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
             android:layout_margin="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/take_photo_neem_foto"
             android:onClick="@{() -> photoViewModel.onTakePhotoButtonClicked()}"
             android:scaleType="fitXY"
-            android:contentDescription="@string/take_photo_neem_foto"
             android:src="@drawable/btn_take_picture"
             android:text="@string/frag_takePhoto_takePhoto"
             android:visibility="@{safeUnbox(photoViewModel.visibilityTakePhoto)}"
@@ -60,9 +60,11 @@
 
         <ImageButton
             android:id="@+id/btn_takePhoto_Ok"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
             android:layout_margin="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/ok"
             android:onClick="@{() -> photoViewModel.onOkPhotoButtonClicked()}"
             android:text="@string/frag_takePhoto_takePhoto"
@@ -70,15 +72,17 @@
             android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenNotSaved)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btn_takePhoto_NotOk"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_thumb_up"
-            app:layout_constraintHorizontal_chainStyle="packed"/>
+            app:srcCompat="@drawable/ic_thumb_up" />
 
         <ImageButton
             android:id="@+id/btn_takePhoto_NotOk"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
             android:layout_margin="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/colorTransparent"
             android:contentDescription="@string/cancel"
             android:onClick="@{() -> photoViewModel.onNotOkPhotoButtonClicked()}"
             android:tint="@color/colorAccent"

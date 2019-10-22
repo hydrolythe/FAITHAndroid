@@ -41,21 +41,21 @@
     <string name="error_save_avatar_failed">Er ging iets fout bij het opslaan van je avatar</string>
     <string name="error_save_photo_failed">Er ging iets fout bij het opslaan van je foto</string>
     <string name="error_save_text_failed">Er ging iets fout bij het opslaan van je tekst</string>
+    <string name="error_load_text_failed">Er ging iets fout bij het laden van je tekst</string>
     <string name="error_save_drawing_failed">Er ging iets fout bij het opslaan van je tekening</string>
     <string name="error_pause_not_supported">Pauzeren wordt door je apparaat niet ondersteund</string>
     <string name="permission_take_picture">Je moet je toestemming geven om foto\'s te nemen</string>
     <string name="frag_takePhoto_goToEmotionAvatar">Ga naar emotieavatar</string>
     <string name="frag_takePhoto_takePhoto">Neem foto</string>
     <string name="description_thumbnail">Miniatuur</string>
-    <string name="description_addText">Tekst toevoegen</string>
-    <string name="description_addPhoto">Foto toevoegen</string>
-    <string name="description_addAudio">Geluidsopname toevoegen</string>
-    <string name="description_addDrawing">Tekening toevoegen</string>
+    <string name="description_addText">Schrijven</string>
+    <string name="description_addPhoto">Foto maken</string>
+    <string name="description_addAudio">Opnemen</string>
+    <string name="description_addDrawing">Tekenen</string>
     <string name="error_save_photo">Er ging iets mis bij het opslaan van je foto.</string>
     <string name="hint_photo_name">een naam voor je foto</string>
     <string name="lbl_name">Naam:</string>
     <string name="lbl_save">Opslaan</string>
-    <string name="DateTime_no_title">Je moet een titel geven aan je gebeurtenis voordat je ze kan opslaan!</string>
     <string name="toast_save_photo_failed">Er ging iets fout bij het opslaan van je foto.</string>
     <string name="terug_naar_de_stad">Terug naar de stad</string>
     <string name="nav_emotieregulatie">Emotieregulatie</string>
@@ -63,8 +63,8 @@
     <string name="navigation_terugNaarDeStad">Terug naar de stad</string>
     <string name="header_emotie_regulatie">Emotie regulatie</string>
     <string name="frag_viewEvent_notes">notes</string>
-    <string name="dialog_to_the_city_title">"Wil je teruggaan naar de stad</string>
-    <string name="dialog_to_the_city_message">Ben je zeker? Alle wijzigingen worden niet bijgehouden?</string>
+    <string name="dialog_to_the_city_title">"Wil je teruggaan naar de stad?</string>
+    <string name="dialog_to_the_city_message">Ben je zeker? Je gebeurtenis is nog niet opgeslagen!</string>
     <string name="ok">@android:string/ok</string>
     <string name="cancel">@android:string/cancel</string>
     <string name="txt_error_userNameOrAvatarNotSet">Vul je naam in en selecteer een avatar</string>
@@ -94,10 +94,8 @@
     <string name="descr_loginscreen">Loginscherm</string>
     <string name="username">Gebruikersnaam</string>
     <string name="password">Wachtwoord</string>
-    <string name="login_error_noUsername">Je moet je gebruikersnaam ingeven!</string>
-    <string name="login_error_noPassword">Je moet je wachtwoord ingeven!</string>
-    <string name="register_passwords_nomatch">Je ingevulde wachtwoorden zijn niet gelijk aan elkaar.</string>
-    <string name="register_password_empty">Je moet een wachtwoord ingeven.</string>
+    <string name="register_passwords_nomatch">Wachtwoorden niet gelijk</string>
+    <string name="register_password_empty">Wachtwoord ingeven</string>
     <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
     <string name="error_no_credentials">No credentials have been stored</string>
     <string name="msg_naar_de_stad">Naar de stad</string>
@@ -110,7 +108,7 @@
     <string name="choose_bold">kies vetjes</string>
     <string name="take_photo_de_foto">de foto</string>
     <string name="take_photo_neem_foto">neem foto</string>
-    <string name="register_username_empty">Je gebruikersnaam mag niet leeg zijn.</string>
+    <string name="register_username_empty">Gebruikersnaam invullen</string>
     <string name="register_avatar_mustSelect">Je moet nog een avatar selecteren.</string>
     <string name="cityScreen_logOut">Wil je uitloggen?</string>
     <string name="cityscreen_stad_verlaten">Wil je uitloggen en de stad verlaten?</string>
@@ -119,4 +117,15 @@
     <string name="com_auth0_client_id">VRX5hqPAdDhkj5DJJ9df4Q4SMZS06io9</string>
     <string name="com_auth0_domain">e-quality.eu.auth0.com</string>
     <string name="lbl_archive">Je archief</string>
+    <string name="hint_choose_username">Kies een gebruikersnaam</string>
+    <string name="description_arrow_right">Icon for arrow to the right</string>
+    <string name="title_event_list">Events</string>
+    <string name="title_event_detail">Event Detail</string>
+    <string name="ex_title">Een geweldige dag</string>
+    <string name="ex_date">07/11/2019</string>
+    <string name="ex_beschrijving">Het was vooral voor rust heel sterk. Na rust zijn we wat meer ingezakt, maar kwamen we er gevaarlijk uit en hebben we ook goed voetbal laten zien. Zelf voelde ik me lekker en het is super dat ik er twee heb gemaakt. Ik was bij veel gevaarlijke momenten betrokken, ik voelde me echt lekker vandaag.</string>
+    <string name="ex_labeltext">Afbeelding</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

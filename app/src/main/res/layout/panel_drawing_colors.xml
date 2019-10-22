@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="drawViewModel"
+            type="be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel" />
+
+        <import type="android.graphics.Color" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutColors"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/btn_draw_setColorBlack"
+                android:layout_width="70dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@{((int)drawViewModel.selectedColor)==Color.BLACK ? @drawable/background : @drawable/background_noborder}"
+                android:contentDescription="@string/choose_black"
+                android:onClick="@{() -> drawViewModel.pickColor(Color.BLACK)}"
+                android:padding="5dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/paintpot_black" />
+
+            <ImageView
+                android:id="@+id/btn_draw_setColorBlue"
+                android:layout_width="70dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@{((int)drawViewModel.selectedColor)==Color.BLUE ? @drawable/background : @drawable/background_noborder}"
+                android:contentDescription="@string/choose_blue"
+                android:onClick="@{() -> drawViewModel.pickColor(Color.BLUE)}"
+                android:padding="5dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/paintpot_blue" />
+
+            <ImageView
+                android:id="@+id/btn_draw_setColorRed"
+                android:layout_width="70dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@{((int)drawViewModel.selectedColor)==Color.RED ? @drawable/background : @drawable/background_noborder }"
+                android:contentDescription="@string/choose_red"
+                android:onClick="@{() -> drawViewModel.pickColor(Color.RED)}"
+                android:padding="5dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/paintpot_red" />
+
+            <ImageView
+                android:id="@+id/btn_draw_setColorYellow"
+                android:layout_width="70dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@{((int)drawViewModel.selectedColor)==Color.YELLOW ? @drawable/background : @drawable/background_noborder }"
+                android:contentDescription="@string/choose_yellow"
+                android:onClick="@{() -> drawViewModel.pickColor(Color.YELLOW)}"
+                android:padding="5dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/paintpot_yellow" />
+
+            <ImageView
+                android:id="@+id/btn_draw_setColorGreen"
+                android:layout_width="70dp"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@{((int)drawViewModel.selectedColor)==Color.GREEN ? @drawable/background : @drawable/background_noborder}"
+                android:contentDescription="@string/choose_green"
+                android:onClick="@{() -> drawViewModel.pickColor(Color.GREEN)}"
+                android:padding="5dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/paintpot_green" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>
+
+

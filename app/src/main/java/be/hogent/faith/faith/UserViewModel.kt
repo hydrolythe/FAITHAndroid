@@ -10,6 +10,7 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.SaveEventUseCase
 import io.reactivex.observers.DisposableCompletableObserver
+import timber.log.Timber
 
 /**
  * Represents the [ViewModel] for the [User] throughout the the application.
@@ -31,13 +32,17 @@ class UserViewModel(
     val user: LiveData<User>
         get() = _user
 
+    private val _titleErrorMessage = MutableLiveData<Int>()
+    val titleErrorMessage: LiveData<Int>
+        get() = _titleErrorMessage
+
     fun setUser(user: User) {
         _user.postValue(user)
     }
 
     fun saveEvent(eventTitle: String?, event: Event) {
         if (eventTitle.isNullOrEmpty()) {
-            _errorMessage.postValue(R.string.error_event_no_title)
+            _titleErrorMessage.postValue(R.string.error_event_no_title)
             return
         }
         val params = SaveEventUseCase.Params(eventTitle, event, user.value!!)
@@ -50,6 +55,7 @@ class UserViewModel(
         }
 
         override fun onError(e: Throwable) {
+            Timber.e(e)
             _errorMessage.postValue(R.string.error_save_event_failed)
         }
     }

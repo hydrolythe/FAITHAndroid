@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -46,8 +45,6 @@ class DetailsAreAddedToBottom {
         Thread.sleep(3000)
         onView(withId(R.id.btn_takePhoto_Ok)).perform(click())
         Thread.sleep(3000)
-        // back to overview
-        pressBack()
         // Check if thumbnail was added
         onView(withId(R.id.recyclerView_event_details_details)).check(RecyclerViewItemCountAssertion(1))
     }

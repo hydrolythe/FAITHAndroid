@@ -2,7 +2,6 @@ package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,11 +17,11 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter.OnAvatarClickListener
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
-import be.hogent.faith.util.TAG
 import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 /**
  * A [Fragment] subclass which allows the user to register a new Avatar.
@@ -64,8 +63,7 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
         })
 
         registerAvatarViewModel.finishRegistrationClicked.observe(this, Observer {
-            Log.d(
-                TAG, "Registering user with:" +
+            Timber.d("Registering user with:" +
                         "username ${registerUserInfoViewModel.userName.value}, " +
                         "password ${registerUserInfoViewModel.password.value}, " +
                         "avatar ${registerAvatarViewModel.selectedAvatar}"
@@ -75,7 +73,6 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
                 registerUserInfoViewModel.password.value!!,
                 registerAvatarViewModel.selectedAvatar!!
             )
-            navigation!!.goToCityScreen()
         })
 
         registerAvatarViewModel.errorMessage.observe(this, Observer { errorMessageID ->

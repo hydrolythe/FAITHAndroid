@@ -3,6 +3,9 @@ package be.hogent.faith.storage
 import android.content.Context
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.TextDetail
+import io.reactivex.Completable
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
@@ -20,6 +23,14 @@ const val TEXT_EXTENSION = "txt"
 
 class StorageRepository(private val context: Context) {
 
+    fun storeBitmap(bitmap: Bitmap, file: File): Completable {
+        return Completable.fromCallable {
+            file.outputStream().use {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
+            }
+        }
+    }
+
     /**
      * Stores the bitmap on the device's storage.
      * It will be put in the context.filesDir/event.uuid/images/ folder
@@ -28,13 +39,8 @@ class StorageRepository(private val context: Context) {
      * @return a Single<File> with the path derived from the event's dateTime
      */
     fun storeBitmap(bitmap: Bitmap, folder: File, fileName: String): Single<File> {
-        return Single.fromCallable {
-            val storedFile = File(folder, fileName)
-            storedFile.outputStream().use {
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-            }
-            storedFile
-        }
+        val saveFile = File(folder, fileName)
+        return storeBitmap(bitmap, saveFile).andThen(Single.just(saveFile))
     }
 
     private fun getEventImageDirectory(event: Event): File {
@@ -121,19 +127,35 @@ class StorageRepository(private val context: Context) {
     }
 
     /**
-     *  Writes HTML to a text file
+     *  Writes a String to a text file
      *
-     * @param text the html
+     * @param text the String
      * @param event the [Event] this text will be added to as a detail (not by this function).
      *          Used to store the text in a folder specific for the event.
-     * @param fileName Will be used for the filename.
      */
-    fun saveText(text: String, event: Event): Single<File>
-    {
+    fun saveText(text: String, event: Event): Single<File> {
         return Single.fromCallable {
-            val storedFile = File(getEventTextDirectory(event), "${createSaveFileName()}.$TEXT_EXTENSION")
+            val storedFile =
+                File(getEventTextDirectory(event), "${createSaveFileName()}.$TEXT_EXTENSION")
             storedFile.writeText(text)
             storedFile
         }
+    }
+
+    fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String> {
+        return Single.fromCallable {
+            val readString = textDetail.file.readText()
+            readString
+        }
+    }
+
+    fun overwriteTextDetail(text: String, existingDetail: TextDetail): Completable {
+        return Completable.fromCallable {
+            existingDetail.file.writeText(text)
+        }
+    }
+
+    fun overwriteEventDetail(bitmap: Bitmap, existingDetail: DrawingDetail): Completable {
+        return storeBitmap(bitmap, existingDetail.file)
     }
 }

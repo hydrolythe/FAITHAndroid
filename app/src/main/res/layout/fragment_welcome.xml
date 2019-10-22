@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <data>
@@ -21,7 +22,7 @@
             android:id="@+id/background_welcome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/loginscherm"
+            tools:src="@drawable/loginscherm"
             android:contentDescription="@string/descr_loginscreen" />
 
         <!-- KNOPPEN -->
@@ -123,7 +124,7 @@
                 app:layout_constraintGuide_percent="0.73" />
 
             <View
-                android:id="@+id/btn_welcome_login"
+                android:id="@+id/btn_city_startNewEvent"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="#00000000"

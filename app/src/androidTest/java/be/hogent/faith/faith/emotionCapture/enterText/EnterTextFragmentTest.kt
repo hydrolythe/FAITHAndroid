@@ -1,8 +1,11 @@
 package be.hogent.faith.faith.emotionCapture.enterText
 
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.Espresso.closeSoftKeyboard
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import be.hogent.faith.R
@@ -25,21 +28,29 @@ class EnterTextFragmentTest {
         NavigationUtil.goToWriteTextScreen()
     }
 
-    @Test()
+    @Test
     fun enterTextFragment_canClickAllButtons() {
-        Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setBold)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setItalic)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setUnderline)).perform(ViewActions.click())
+        onView(withId(R.id.btn_enter_text_setBold)).perform(click())
+        onView(withId(R.id.btn_enter_text_setItalic)).perform(click())
+        onView(withId(R.id.btn_enter_text_setUnderline)).perform(click())
 
-        Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setColorBlack)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setColorBlue)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setColorYellow)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setColorGreen)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setColorRed)).perform(ViewActions.click())
+        onView(withId(R.id.btn_enter_text_setColorBlack)).perform(click())
+        onView(withId(R.id.btn_enter_text_setColorBlue)).perform(click())
+        onView(withId(R.id.btn_enter_text_setColorYellow)).perform(click())
+        onView(withId(R.id.btn_enter_text_setColorGreen)).perform(click())
+        onView(withId(R.id.btn_enter_text_setColorRed)).perform(click())
 
-        Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setFontLarge)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setFontNormal)).perform(ViewActions.click())
-        Espresso.onView(ViewMatchers.withId(R.id.btn_enter_text_setFontSmall)).perform(ViewActions.click())
+        onView(withId(R.id.btn_enter_text_setFontLarge)).perform(click())
+        onView(withId(R.id.btn_enter_text_setFontNormal)).perform(click())
+        onView(withId(R.id.btn_enter_text_setFontSmall)).perform(click())
+    }
+
+    @Test
+    fun enterTextFragment_saveSuccessful_backToPark() {
+        closeSoftKeyboard()
+        onView(withId(R.id.btn_enter_text_save)).perform(click())
+        Thread.sleep(3000)
+        onView(withId(R.id.screen_new_event)).check(matches(isDisplayed()))
     }
 
     /**
@@ -48,7 +59,6 @@ class EnterTextFragmentTest {
     @Test
     fun enterTextFragment_enterText_OK() {
 
-    val stringToBetyped = "Hello world"
     onWebView(ViewMatchers.withId(R.id.editor)).forceJavascriptEnabled()
     nWebView(ViewMatchers.withId(R.id.editor)).withElement(findElement(Locator.ID, "editor")).perform(webClick())
     onWebView(ViewMatchers.withId(R.id.editor)).withElement(findElement(Locator.ID, "editor")).perform(webKeys(stringToBetyped))
