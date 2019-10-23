@@ -43,6 +43,7 @@ class DrawViewModel : ViewModel() {
     private val _pencilClicked = SingleLiveEvent<Unit>()
     val pencilClicked: LiveData<Unit>
         get() = _pencilClicked
+
     private val _existingDetail = MutableLiveData<DrawingDetail>()
     val existingDetail: LiveData<DrawingDetail>
         get() = _existingDetail
