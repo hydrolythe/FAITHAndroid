@@ -1,7 +1,6 @@
 package com.divyanshu.draw.widget
 
 import android.content.Context
-import android.content.res.Resources
 import android.view.MotionEvent
 import com.divyanshu.draw.widget.tools.CanvasAction
 import io.mockk.every
@@ -9,31 +8,33 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 
 class DrawViewTest {
 
     private val context: Context = mockk()
 
+    private lateinit var subject: DrawView
+
+    @Before
+    fun setUp() {
+        subject = DrawView(context, mockk(relaxed = true))
+    }
+
     @Test
     fun drawView_startsWithEmptyActions() {
-        // Act
-        val view = DrawView(context, mockk())
-
         // Assert
-        assert(view.canvasActions.isEmpty())
+        assert(subject.canvasActions.isEmpty())
     }
 
     @Test
     fun drawView_addDrawingAction_isAdded() {
-        // Arrange
-        val view = DrawView(context, mockk())
-
         // Act
-        view.addDrawingAction(mockk())
+        subject.addDrawingAction(mockk())
 
         // Assert
-        assertEquals(1, view.canvasActions.size)
+        assertEquals(1, subject.canvasActions.size)
     }
 
     @Test
@@ -68,50 +69,18 @@ class DrawViewTest {
     @Test
     fun drawView_undo_removesLastAction() {
         // Arrange
-        val view = DrawView(context, mockk())
-        view.addDrawingAction(mockk())
+        subject.addDrawingAction(mockk())
 
         // Act
-        view.undo()
+        subject.undo()
 
         // Assert
-        assert(view.canvasActions.isEmpty())
-    }
-
-    @Test
-    fun drawView_addDrawable_addedToActions() {
-        // Arrange
-        setupContextWithResources()
-        val view = spyk(DrawView(context, mockk()))
-        every { view.context } returns context
-
-        // Act
-        view.addDrawable(mockk(relaxed = true), 0, 0)
-
-        // Assert
-        assertEquals(1, view.canvasActions.size)
-    }
-
-    @Test
-    fun drawView_addDrawable_canBeUndone() {
-        // Arrange
-        setupContextWithResources()
-        val view = spyk(DrawView(context, mockk()))
-        every { view.context } returns context
-        view.addDrawable(mockk(relaxed = true), 0, 0)
-
-        // Act
-        view.undo()
-
-        // Assert
-        assert(view.canvasActions.isEmpty())
+        assert(subject.canvasActions.isEmpty())
     }
 
     @Test
     fun drawView_drawLine_addedToActions() {
         // Arrange
-        val view = DrawView(context, mockk())
-
         val downEvent = mockk<MotionEvent>(relaxed = true)
         every { downEvent.action } returns MotionEvent.ACTION_DOWN
         val moveEvent = mockk<MotionEvent>(relaxed = true)
@@ -120,19 +89,17 @@ class DrawViewTest {
         every { upEvent.action } returns MotionEvent.ACTION_UP
 
         // Act
-        view.onTouchEvent(downEvent)
-        view.onTouchEvent(moveEvent)
-        view.onTouchEvent(upEvent)
+        subject.onTouchEvent(downEvent)
+        subject.onTouchEvent(moveEvent)
+        subject.onTouchEvent(upEvent)
 
         // Assert
-        assertEquals(1, view.canvasActions.size)
+        assertEquals(1, subject.canvasActions.size)
     }
 
     @Test
     fun drawView_drawLine_canBeUndone() {
         // Arrange
-        val view = DrawView(context, mockk())
-
         val downEvent = mockk<MotionEvent>(relaxed = true)
         every { downEvent.action } returns MotionEvent.ACTION_DOWN
         val moveEvent = mockk<MotionEvent>(relaxed = true)
@@ -140,64 +107,55 @@ class DrawViewTest {
         val upEvent = mockk<MotionEvent>(relaxed = true)
         every { upEvent.action } returns MotionEvent.ACTION_UP
 
-        view.onTouchEvent(downEvent)
-        view.onTouchEvent(moveEvent)
-        view.onTouchEvent(upEvent)
+        subject.onTouchEvent(downEvent)
+        subject.onTouchEvent(moveEvent)
+        subject.onTouchEvent(upEvent)
 
         // Act
-        view.undo()
+        subject.undo()
 
         // Assert
-        assert(view.canvasActions.isEmpty())
+        assert(subject.canvasActions.isEmpty())
     }
 
     @Test
     fun drawView_redo_undoesLastAction() {
         // Arrange
-        val view = DrawView(context, mockk())
         val action = mockk<CanvasAction>()
-        view.addDrawingAction(action)
-        view.undo()
+        subject.addDrawingAction(action)
+        subject.undo()
 
         // Act
-        view.redo()
+        subject.redo()
 
         // Assert
-        assertEquals(action, view.canvasActions.first())
+        assertEquals(action, subject.canvasActions.first())
     }
 
     @Test
     fun drawView_clear_clearsAllActions() {
         // Arrange
-        val view = DrawView(context, mockk())
         val action = mockk<CanvasAction>()
-        view.addDrawingAction(action)
+        subject.addDrawingAction(action)
 
         // Act
-        view.clearCanvas()
+        subject.clearCanvas()
 
         // Assert
-        assert(view.canvasActions.isEmpty())
+        assert(subject.canvasActions.isEmpty())
     }
 
     @Test
     fun drawView_clear_canBeUndone() {
         // Arrange
-        val view = DrawView(context, mockk())
         val action = mockk<CanvasAction>()
-        view.addDrawingAction(action)
-        view.clearCanvas()
+        subject.addDrawingAction(action)
+        subject.clearCanvas()
 
         // Act
-        view.undo()
+        subject.undo()
 
         // Assert
-        assertEquals(action, view.canvasActions.first())
-    }
-
-    private fun setupContextWithResources() {
-        val resources = mockk<Resources>()
-        every { resources.getDrawable(any(), null) } returns mockk(relaxed = true)
-        every { context.resources } returns resources
+        assertEquals(action, subject.canvasActions.first())
     }
 }

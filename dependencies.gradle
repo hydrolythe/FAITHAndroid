@@ -46,6 +46,7 @@ ext {
     espresso_contrib_version = '3.3.0-alpha02'
     android_junit_version = '1.1.1'
     test_version = '1.2.0'
+    robolectric_version = '4.3'
 
     uiAutomator_version = '2.2.0'
     junit_version = '4.12'
@@ -96,7 +97,8 @@ ext {
             mockk      : "io.mockk:mockk:$mockk_version",
             coreTesting: "androidx.arch.core:core-testing:$aac_core_version",
             threeTenBP : "org.threeten:threetenbp:$threeTenBP_version",
-            koinTesting: "org.koin:koin-test:$koin_version"
+            koinTesting: "org.koin:koin-test:$koin_version",
+            robolectric: "org.robolectric:robolectric:$robolectric_version"
     ]
 
     androidTestDependencies = [

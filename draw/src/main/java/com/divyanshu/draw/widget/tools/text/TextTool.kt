@@ -87,6 +87,9 @@ class TextTool(
     }
 
     override fun finishCurrentAction() {
-        drawingContext.addDrawingAction(currentTextAction!!)
+        // If we switch tools before starting the action the [currentTextAction] will still be null.
+        if (currentTextAction != null) {
+            drawingContext.addDrawingAction(currentTextAction!!)
+        }
     }
 }
