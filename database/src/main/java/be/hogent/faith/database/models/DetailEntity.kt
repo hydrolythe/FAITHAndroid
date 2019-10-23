@@ -4,7 +4,6 @@ import java.util.UUID
 
 data class DetailEntity(
     var file: String = "",
-    val name: String? = null,
     val uuid: String = UUID.randomUUID().toString(),
     val type: DetailType? = null
 )

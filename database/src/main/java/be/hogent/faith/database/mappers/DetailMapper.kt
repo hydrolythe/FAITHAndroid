@@ -27,21 +27,35 @@ object DetailMapper : Mapper<DetailEntity, Detail> {
 
     override fun mapFromEntity(entity: DetailEntity): Detail {
         return when (entity.type) {
-            DetailType.AUDIO -> AudioDetail(FileConverter().toFile(entity.file), entity.name, UUID.fromString(entity.uuid))
-            DetailType.TEXT -> TextDetail(FileConverter().toFile(entity.file), entity.name, UUID.fromString(entity.uuid))
-            DetailType.DRAWING -> DrawingDetail(FileConverter().toFile(entity.file), entity.name, UUID.fromString(entity.uuid))
-            DetailType.PHOTO -> PhotoDetail(FileConverter().toFile(entity.file), entity.name, UUID.fromString(entity.uuid))
+            DetailType.AUDIO -> AudioDetail(
+                FileConverter().toFile(entity.file),
+                UUID.fromString(entity.uuid)
+            )
+            DetailType.TEXT -> TextDetail(
+                FileConverter().toFile(entity.file),
+                UUID.fromString(entity.uuid)
+            )
+            DetailType.DRAWING -> DrawingDetail(
+                FileConverter().toFile(entity.file),
+                UUID.fromString(entity.uuid)
+            )
+            DetailType.PHOTO -> PhotoDetail(
+                FileConverter().toFile(entity.file),
+                UUID.fromString(entity.uuid)
+            )
             else -> throw ClassCastException("Unknown DetailEntity subclass encountered")
         }
     }
 
     override fun mapToEntity(model: Detail): DetailEntity {
-        return DetailEntity(FileConverter().toString(model.file), model.name, model.uuid.toString(), when (model) {
-            is AudioDetail -> DetailType.AUDIO
-            is TextDetail -> DetailType.TEXT
-            is DrawingDetail -> DetailType.DRAWING
-            is PhotoDetail -> DetailType.PHOTO
-            else -> throw ClassCastException("Unknown Detail subclass encountered")
-        })
+        return DetailEntity(
+            FileConverter().toString(model.file), model.uuid.toString(), when (model) {
+                is AudioDetail -> DetailType.AUDIO
+                is TextDetail -> DetailType.TEXT
+                is DrawingDetail -> DetailType.DRAWING
+                is PhotoDetail -> DetailType.PHOTO
+                else -> throw ClassCastException("Unknown Detail subclass encountered")
+            }
+        )
     }
 }

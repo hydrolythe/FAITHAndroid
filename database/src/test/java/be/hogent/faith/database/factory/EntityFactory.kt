@@ -7,7 +7,6 @@ import be.hogent.faith.database.models.DetailType
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.util.factory.DataFactory
-import be.hogent.faith.util.factory.DataFactory.randomString
 import java.util.UUID
 
 /**
@@ -22,25 +21,21 @@ object EntityFactory {
         return when {
             rand < 0.25 -> DetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
-                randomString(),
                 DataFactory.randomUUID().toString(),
                 DetailType.PHOTO
             )
             rand < 0.50 -> DetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
-                randomString(),
                 DataFactory.randomUUID().toString(),
                 DetailType.DRAWING
             )
             rand < 0.75 -> DetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
-                randomString(),
                 DataFactory.randomUUID().toString(),
                 DetailType.AUDIO
             )
             else -> DetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
-                randomString(),
                 DataFactory.randomUUID().toString(),
                 DetailType.TEXT
             )

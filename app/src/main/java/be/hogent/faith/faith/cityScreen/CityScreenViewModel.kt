@@ -7,6 +7,7 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.LogoutUserUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
+import timber.log.Timber
 
 /**
  * ViewModel for the [CityScreenFragment].
@@ -22,17 +23,17 @@ class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : Vi
         get() = _logoutSuccessFull
 
     fun onArchiveClicked() {
-        Log.i(TAG, "First location clicked")
+        Timber.i("First location clicked")
         archiveClicked.call()
     }
 
     fun onParkClicked() {
-        Log.i(TAG, "Second location clicked")
+        Timber.i("Second location clicked")
         parkClicked.call()
     }
 
     fun thirdLocationClicked() {
-        Log.i(TAG, "third location clicked")
+        Timber.i("third location clicked")
         thirdLocation.call()
     }
 
@@ -46,12 +47,11 @@ class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : Vi
 
     private inner class LogoutUserUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            Log.i(TAG, "user signed out")
             _logoutSuccessFull.call()
         }
 
         override fun onError(e: Throwable) {
-            Log.e(TAG, "logout failed")
+            Timber.e( "logout failed")
         }
     }
 

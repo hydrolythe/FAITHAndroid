@@ -32,6 +32,17 @@
             android:focusable="true"
             android:focusableInTouchMode="true">
 
+            <ImageView
+                android:id="@+id/img_paal"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guide_middle_vertical_pole"
+                app:layout_constraintHeight_percent="0.50"
+                app:layout_constraintHorizontal_bias="0.491"
+                app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
+                app:srcCompat="@drawable/paal" />
+
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_top_pole"
                 android:layout_width="8dp"
@@ -44,14 +55,14 @@
                 android:layout_width="8dp"
                 android:layout_height="12dp"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.52" />
+                app:layout_constraintGuide_percent="0.58" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_bottom_pole"
                 android:layout_width="8dp"
                 android:layout_height="12dp"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.65" />
+                app:layout_constraintGuide_percent="0.7" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_left_pole"
@@ -84,57 +95,57 @@
 
             <be.hogent.faith.faith.views.RightArrow
                 android:id="@+id/btn_event_details_text"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:image="@drawable/icoon_stad"
-                app:text="@string/description_addText"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginStart="24dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/description_addText"
                 android:onClick="@{() -> eventViewModel.onTextButtonClicked()}"
+                app:image="@drawable/icoon_stad"
                 app:layout_constraintBottom_toTopOf="@+id/guide_bottom_pole"
-                app:layout_constraintEnd_toStartOf="@+id/guide_right_pole"
                 app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
-                app:layout_constraintTop_toTopOf="@+id/guide_middle_horizontal_pole" />
+                app:layout_constraintTop_toTopOf="@+id/guide_middle_horizontal_pole"
+                app:text="@string/description_addText" />
 
             <be.hogent.faith.faith.views.LeftArrow
                 android:id="@+id/btn_event_details_camera"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:image="@drawable/icoon_stad"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginEnd="24dp"
                 android:background="@android:color/transparent"
-                app:text="@string/description_addPhoto"
                 android:contentDescription="@string/description_addPhoto"
                 android:onClick="@{() -> eventViewModel.onCameraButtonClicked()}"
+                app:image="@drawable/icoon_stad"
                 app:layout_constraintBottom_toTopOf="@+id/guide_bottom_pole"
                 app:layout_constraintEnd_toStartOf="@+id/guide_middle_vertical_pole"
-                app:layout_constraintStart_toStartOf="@+id/guide_left_pole"
-                app:layout_constraintTop_toTopOf="@+id/guide_middle_horizontal_pole" />
+                app:layout_constraintTop_toTopOf="@+id/guide_middle_horizontal_pole"
+                app:text="@string/description_addPhoto" />
 
             <be.hogent.faith.faith.views.LeftArrow
                 android:id="@+id/btn_event_details_audio"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:image="@drawable/icoon_stad"
-                app:text="@string/description_addAudio"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginEnd="24dp"
                 android:contentDescription="@string/description_addAudio"
                 android:onClick="@{() -> eventViewModel.onAudioButtonClicked()}"
-                app:layout_constraintBottom_toTopOf="@+id/guide_middle_horizontal_pole"
+                app:image="@drawable/icoon_stad"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guide_middle_vertical_pole"
-                app:layout_constraintStart_toStartOf="@+id/guide_left_pole"
-                app:layout_constraintTop_toTopOf="@+id/guide_top_pole" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_event_details_camera"
+                app:layout_constraintVertical_bias="0.0"
+                app:text="@string/description_addAudio" />
 
             <be.hogent.faith.faith.views.RightArrow
                 android:id="@+id/btn_event_details_drawing"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="100dp"
+                android:layout_marginStart="24dp"
                 android:contentDescription="@string/description_addDrawing"
                 android:onClick="@{() -> eventViewModel.onDrawingButtonClicked()}"
                 app:image="@drawable/icoon_stad"
-                app:layout_constraintBottom_toTopOf="@+id/guide_middle_horizontal_pole"
-                app:layout_constraintEnd_toStartOf="@+id/guide_right_pole"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
-                app:layout_constraintTop_toTopOf="@+id/guide_top_pole"
+                app:layout_constraintTop_toBottomOf="@+id/btn_event_details_text"
                 app:layout_constraintVertical_bias="0.0"
                 app:text="@string/description_addDrawing" />
 
@@ -168,13 +179,14 @@
 
             <ImageButton
                 android:id="@+id/btn_event_send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="@dimen/material_icon_height"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/save_btn"
                 android:minWidth="24dp"
                 android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
-                android:src="@drawable/event_details_send"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/guide_horizontal_details"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
@@ -185,8 +197,10 @@
                 android:onClick="@{() -> eventViewModel.onEmotionAvatarClicked()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guide_vertical_avatar"
-                app:layout_constraintTop_toTopOf="@+id/guide_horizontal_details" />
+                app:layout_constraintTop_toTopOf="@+id/guide_horizontal_details"
+                app:layout_constraintVertical_bias="0.0" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_avatar_left"
@@ -248,8 +262,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_end="366dp"
-                app:layout_constraintGuide_percent="0.50" />
+                app:layout_constraintGuide_end="529dp"
+                app:layout_constraintGuide_percent="0.45" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_avatar_titel_bottom"

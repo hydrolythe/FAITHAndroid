@@ -73,7 +73,6 @@ class EventMapperTest {
     ) {
         assertEquals(entity.uuid, model.uuid.toString())
         assertEquals(entity.file, FileConverter().toString(model.file))
-        assertEquals(entity.name, model.name)
         when (model) {
             is AudioDetail -> assertEquals(DetailType.AUDIO, entity.type)
             is PhotoDetail -> assertEquals(DetailType.PHOTO, entity.type)

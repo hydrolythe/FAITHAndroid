@@ -5,17 +5,24 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
-import android.os.AsyncTask
+import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
-import androidx.core.graphics.ColorUtils
+import com.divyanshu.draw.widget.tools.CanvasAction
+import com.divyanshu.draw.widget.tools.DrawingContext
+import com.divyanshu.draw.widget.tools.Tool
+import com.divyanshu.draw.widget.tools.drawing.DrawingTool
+import com.divyanshu.draw.widget.tools.drawing.EraserTool
+import com.divyanshu.draw.widget.tools.text.TextTool
+import java.io.File
 
 /**
  * Defines how much of the View's height the background may use.
@@ -23,69 +30,72 @@ import androidx.core.graphics.ColorUtils
  */
 const val BACKGROUND_MAX_HEIGHT_USED = 0.8
 
-class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), DrawingContext {
+
+    override val view: View
+    get() = this
+
     /**
-     * Holds all [DrawingAction]s that will be drawn when calling [onDraw].
-     */
-    private var _drawingActions = mutableListOf<DrawingAction>()
-    val drawingActions: List<DrawingAction>
-        get() = _drawingActions
+     * Holds all [CanvasAction]s that will be drawn when calling [onDraw].
+    */
+    private var _drawingActions = mutableListOf<CanvasAction>()
+    val canvasActions: List<CanvasAction>
+    get() = _drawingActions
 
     /**
      * Holds a copy of all actions that were done before [clear] was called.
      * Used to restore them when calling [undo] after a call to [clear].
-     */
-    private var lastDrawingActions = mutableListOf<DrawingAction>()
+    */
+    private var lastDrawingActions = mutableListOf<CanvasAction>()
 
     /**
      * Map of all actions that have been undone using the [undo] method.
      * Used to restore them when calling [redo].
      */
-    private var undoneActions = mutableListOf<DrawingAction>()
+    private var undoneActions = mutableListOf<CanvasAction>()
 
-    private var currentPath: MyPath? = null
-
-    /**
-     * Current settings for painting the [currentPath].
-     */
-    private var currentPaintOptions = PaintOptions()
-
-    private var mCurX = 0f
-    private var mCurY = 0f
-    private var mStartX = 0f
-    private var mStartY = 0f
     private var mIsSaving = false
-    private var mIsStrokeWidthBarEnabled = false
 
     private var mCanvasWidth: Int = 0
     private var mCanvasHeight: Int = 0
 
-    private var mOutlineRect: Rect? = null
+    /**
+     * Rect in which a background will be drawn, if a background is present
+     */
+    private val backgroundRect = Rect()
+    private val fullScreenRect = Rect()
 
     private var paintedBackground: Bitmap? = null
 
-    private val drawingListeners = mutableListOf<DrawViewListener>()
+    /**
+     * Load a background filling the entire screen (and possibly stretching it) or scale it to fit
+     * with some whitespace around
+     */
+    var fullScreenBackground: Boolean = true
 
-    fun addDrawViewListener(newListener: DrawViewListener) {
-        drawingListeners += newListener
+    private val defaultPaint = Paint().apply {
+        color = Color.BLACK
+        strokeWidth = 30f
     }
 
-    private fun callDrawViewListeners() {
-        class SendBitMapToListeners : AsyncTask<Void?, Void?, Void?>() {
-            private lateinit var bitmap: Bitmap
-            override fun doInBackground(vararg params: Void?): Void? {
-                bitmap = getBitmap()
-                return null
-            }
+    /**
+     * The currently selected [com.divyanshu.draw.widget.tools.Tool].
+     * By default this is the [DrawingTool].
+     */
+    private var currentTool: Tool = DrawingTool(this, defaultPaint)
 
-            override fun onPostExecute(result: Void?) {
-                drawingListeners.forEach {
-                    it.onDrawingChanged(bitmap)
-                }
+    init {
+        // Required to open Soft Keyboard on click
+        // See https://stackoverflow.com/questions/5419766/how-to-capture-soft-keyboard-input-in-a-view
+        isFocusableInTouchMode = true
+
+        setOnKeyListener { _, keyCode, event ->
+            val eventHandled = currentTool.handleKeyEvent(keyCode, event)
+            if (eventHandled) {
+                invalidate()
             }
+            eventHandled
         }
-
-        SendBitMapToListeners().execute()
     }
 
     fun undo() {
@@ -107,8 +117,8 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         if (lastAction != null) {
             undoneActions.add(lastAction)
         }
+
         invalidate()
-        callDrawViewListeners()
     }
 
     fun redo() {
@@ -122,29 +132,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         }
 
         invalidate()
-        callDrawViewListeners()
-    }
-
-    fun setColor(newColor: Int) {
-        @ColorInt
-        val alphaColor = ColorUtils.setAlphaComponent(newColor, currentPaintOptions.alpha)
-        currentPaintOptions.color = alphaColor
-        if (mIsStrokeWidthBarEnabled) {
-            invalidate()
-        }
-    }
-
-    fun setAlpha(newAlpha: Int) {
-        val alpha = (newAlpha * 255) / 100
-        currentPaintOptions.alpha = alpha
-        setColor(currentPaintOptions.color)
-    }
-
-    fun setStrokeWidth(newStrokeWidth: Float) {
-        currentPaintOptions.strokeWidth = newStrokeWidth
-        if (mIsStrokeWidthBarEnabled) {
-            invalidate()
-        }
     }
 
     /**
@@ -152,7 +139,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
      */
     @WorkerThread
     fun getBitmap(): Bitmap {
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
         mIsSaving = true
@@ -176,111 +163,49 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     /**
-     * Add a [DrawingAction] to the list.
+     * Add a [CanvasAction] to the list.
      * Invalidates the View, ensuring the new action gets painted.
      */
-    fun addDrawingAction(drawingAction: DrawingAction) {
-        _drawingActions.add(drawingAction)
+    override fun addDrawingAction(action: CanvasAction) {
+        _drawingActions.add(action)
         invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        // Draw the background when one is set and the [Rect] in which it will be drawn has been calculated.
-        if (paintedBackground != null && mOutlineRect != null) {
-            canvas.drawBitmap(
-                paintedBackground!!,
-                null,
-                mOutlineRect!!,
-                null
-            )
-        }
-        _drawingActions.forEach { action ->
-            action.drawOn(canvas)
-        }
+        drawBackground(canvas)
 
-        currentPath?.drawOn(canvas)
-    }
+        _drawingActions.forEach { it.drawOn(canvas) }
 
-    fun changePaint(paintOptions: PaintOptions) {
-        currentPaintOptions.color = if (paintOptions.isEraserOn) Color.WHITE else paintOptions.color
-        currentPaintOptions.strokeWidth = paintOptions.strokeWidth
-    }
-
-    fun clearCanvas() {
-        lastDrawingActions = _drawingActions.toMutableList() // copy
-        currentPath?.reset()
-        _drawingActions.clear()
-        invalidate()
-        callDrawViewListeners()
-    }
-
-    private fun actionDown(x: Float, y: Float) {
-        startNewPath()
-
-        currentPath!!.moveTo(x, y)
-        mCurX = x
-        mCurY = y
-    }
-
-    private fun actionMove(x: Float, y: Float) {
-        currentPath?.quadTo(mCurX, mCurY, (x + mCurX) / 2, (y + mCurY) / 2)
-        mCurX = x
-        mCurY = y
-    }
-
-    private fun actionUp() {
-        currentPath?.let {
-            Log.d("DrawView", "Finishing path")
-            it.lineTo(mCurX, mCurY)
-
-            // draw a dot on click
-            if (mStartX == mCurX && mStartY == mCurY) {
-                it.lineTo(mCurX, mCurY + 2)
-                it.lineTo(mCurX + 1, mCurY + 2)
-                it.lineTo(mCurX + 1, mCurY)
-            }
-
-            // Add finished path to actions
-            _drawingActions.add(it)
-
-            // Start a new Path. We have to do this here already so changing PaintOptions after drawing a line
-            // doesn't change the options for that line, but sets up the new line.
-            startNewPath()
-
-            callDrawViewListeners()
-        }
+        currentTool.drawCurrentAction(canvas)
     }
 
     /**
-     * Starts a new Path with the currently chosen PaintOptions
+     * Draw the background when one is set and the [Rect] in which it will be drawn has been calculated.
      */
-    private fun startNewPath() {
-        currentPaintOptions = PaintOptions(
-            currentPaintOptions.color,
-            currentPaintOptions.strokeWidth,
-            currentPaintOptions.alpha,
-            currentPaintOptions.isEraserOn
-        )
-        currentPath = MyPath(currentPaintOptions)
+    private fun drawBackground(canvas: Canvas) {
+        if (paintedBackground != null) {
+            canvas.drawBitmap(
+                paintedBackground!!,
+                null,
+                if (fullScreenBackground) fullScreenRect else backgroundRect,
+                null
+            )
+        }
+    }
+
+    fun clearCanvas() {
+        // Save drawing actions so we can undo the clear
+        lastDrawingActions = _drawingActions.toMutableList()
+
+        _drawingActions.clear()
+        invalidate()
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val x = event.x
-        val y = event.y
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                mStartX = x
-                mStartY = y
-                actionDown(x, y)
-                undoneActions.clear()
-            }
-            MotionEvent.ACTION_MOVE -> actionMove(x, y)
-            MotionEvent.ACTION_UP -> actionUp()
-        }
+        currentTool.handleMotionEvent(event)
 
         invalidate()
         return true
@@ -298,15 +223,20 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         super.onSizeChanged(w, h, oldw, oldh)
         mCanvasHeight = h
         mCanvasWidth = w
-        calculateOutlineRect()
+        calculateBackGroundRect()
+        calculateFullScreenRect()
+    }
+
+    private fun calculateFullScreenRect() {
+        fullScreenRect.set(0, 0, mCanvasWidth, mCanvasHeight)
     }
 
     /**
      * Calculates the [Rect] in which the [paintedBackground] will be drawn.
      * The middle of the [Rect] will be in the middle of the canvas.
-     * It will be scaled to fit this view when necessary.
+     * The rect will be scaled to fit this view when necessary.
      */
-    private fun calculateOutlineRect() {
+    private fun calculateBackGroundRect() {
         paintedBackground?.let {
             val maxsize = (mCanvasHeight * BACKGROUND_MAX_HEIGHT_USED).toInt()
             val outWidth: Int
@@ -318,7 +248,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                 outHeight = maxsize
                 outWidth = it.width * maxsize / it.height
             }
-            mOutlineRect = Rect(
+            backgroundRect.set(
                 middleOfCanvas().x - (outWidth) / 2,
                 middleOfCanvas().y - (outHeight) / 2,
                 middleOfCanvas().x + (outWidth) / 2,
@@ -344,34 +274,80 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         paintedBackground = bitmapDrawable.bitmap
     }
 
+    /**
+     * Add a drawable to a specific location on the canvas.
+     * @param x the leftmost point of the drawable
+     * @param y the topmost point of the drawable
+     */
     fun addDrawable(drawableResourceID: Int, x: Int, y: Int) {
         val drawable = context.resources.getDrawable(drawableResourceID)
         drawable.bounds = Rect(x, y, x + drawable.intrinsicWidth, y + drawable.intrinsicHeight)
-        addDrawingAction(MyDrawable(drawable))
+        addDrawingAction(DrawableAction(drawable))
         invalidate()
     }
 
-    fun toggleEraser() {
-        currentPaintOptions.isEraserOn = currentPaintOptions.isEraserOn.not()
-        invalidate()
+    /**
+     * @see [setPaintedBackground]
+     */
+    fun setImageBackground(imageFile: File) {
+        val drawableImage = BitmapDrawable.createFromPath(imageFile.path) as BitmapDrawable
+        drawableImage.bounds = Rect(0, 0, mCanvasWidth, mCanvasHeight)
+        setPaintedBackground(drawableImage)
     }
 
     interface DrawViewListener {
         /**
          * Called every time after the user has performed an action on the drawing, changing it in the process.
-         * This includes drawing a dot, a line, undoing and redoing previous actions.
          */
         fun onDrawingChanged(bitmap: Bitmap)
     }
 
     /**
      * Sets the actions to be drawn.
-     * This is used to save the state in a ViewModel and restore it when the View was destroyed.
-     * Not everything that's part of the UI state should be saved. The other maps containing actions are only
-     * there for the undo/redo and clearCanvas functionality.
      */
-    fun setActions(newPaths: MutableList<DrawingAction>) {
-        _drawingActions = newPaths
+    // This is used to save the state in a ViewModel and restore it when the View was destroyed.
+    // Not everything that's part of the UI state should be saved. The other maps containing actions are only
+    // there for the undo/redo and clearCanvas functionality.
+    fun setActions(newActions: MutableList<CanvasAction>) {
+        _drawingActions = newActions
         invalidate()
+    }
+
+    fun setColor(@ColorInt color: Int) {
+        currentTool.setColor(color)
+        invalidate()
+    }
+
+    fun setStrokeWidth(strokeWidth: Float) {
+        currentTool.setStrokeWidth(strokeWidth)
+        invalidate()
+    }
+
+    fun setAlpha(alpha: Int) {
+        currentTool.setAlpha(alpha)
+        invalidate()
+    }
+
+    override fun clearUndoneActions() {
+        undoneActions.clear()
+    }
+
+    fun pickDrawingTool() {
+        currentTool.finishCurrentAction()
+        val paintToUse = Paint(currentTool.paint)
+        currentTool = DrawingTool(this, paintToUse)
+    }
+
+    fun pickEraserTool() {
+        currentTool.finishCurrentAction()
+        val paintToUse = Paint(currentTool.paint)
+        currentTool = EraserTool(this, paintToUse)
+    }
+
+    fun pickTextTool() {
+        currentTool.finishCurrentAction()
+        val paintToUse = Paint(currentTool.paint)
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        currentTool = TextTool(this, paintToUse, imm)
     }
 }

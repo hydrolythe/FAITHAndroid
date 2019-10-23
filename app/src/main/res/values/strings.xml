@@ -123,10 +123,18 @@
     <string name="lbl_archive">Je archief</string>
     <string name="hint_choose_username">Kies een gebruikersnaam</string>
     <string name="description_arrow_right">Icon for arrow to the right</string>
+    <string name="title_event_list">Events</string>
+    <string name="title_event_detail">Event Detail</string>
+    <string name="ex_title">Een geweldige dag</string>
+    <string name="ex_date">07/11/2019</string>
+    <string name="ex_beschrijving">Het was vooral voor rust heel sterk. Na rust zijn we wat meer ingezakt, maar kwamen we er gevaarlijk uit en hebben we ook goed voetbal laten zien. Zelf voelde ik me lekker en het is super dat ik er twee heb gemaakt. Ik was bij veel gevaarlijke momenten betrokken, ik voelde me echt lekker vandaag.</string>
+    <string name="ex_labeltext">Afbeelding</string>
     <string name="register_error_weak_password">Wachtwoord moet bestaan uit minstens 6 karakters</string>
     <string name="register_error_invalid_username">Gebruikersnaam moet beginnen met een letter, gevolgd door 1 of meerdere letters, getallen, -, _ of .</string>
     <string name="register_error_username_already_exists">Gebruikersnaam bestaat reeds. Geef een andere gebruikersnaam in.</string>
     <string name="login_error_wrong_username_or_password">Gebruikersnaam of wachtwoord is fout. Probeer opnieuw.</string>
     <string name="login_error">Inloggen mislukt. Probeer opnieuw.</string>
     <string name="login_error_internet">Je hebt internet nodig.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

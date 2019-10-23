@@ -2,7 +2,6 @@ package be.hogent.faith.faith.loginOrRegister
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
@@ -13,11 +12,11 @@ import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarFragment
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoFragment
 import be.hogent.faith.faith.util.replaceFragment
-import be.hogent.faith.util.TAG
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.error.ScopeAlreadyCreatedException
 import org.koin.core.qualifier.named
+import timber.log.Timber
 
 class LoginOrRegisterActivity : AppCompatActivity(),
     WelcomeFragment.WelcomeNavigationListener,
@@ -64,20 +63,18 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     }
 
     private fun createScopedUserViewModel() {
-        Log.i(TAG, "Creating USER SCOPE")
+        Timber.i("Creating USER SCOPE")
         // Don't create SCOPE twice
         // This sometimes happens when running tests that reuse the same Activity twice
         try {
             val scope = getKoin().createScope(KoinModules.USER_SCOPE_ID, named(USER_SCOPE_NAME))
             userViewModel = scope.get()
         } catch (e: ScopeAlreadyCreatedException) {
-            Log.e(TAG, "User scope already existed, not recreating")
-        } finally {
+            Timber.i("User scope already existed, not recreating")
         }
     }
 
     override fun goToCityScreen() {
-
         val intent = Intent(this, CityScreenActivity::class.java)
         startActivity(intent)
     }

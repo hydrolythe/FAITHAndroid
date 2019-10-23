@@ -31,17 +31,16 @@ class EventTest {
 
     @Test
     fun `Event addDetail correctly adds the detail`() {
-        event.addNewAudioDetail(mockk(), "test")
+        event.addNewAudioDetail(mockk())
 
         assertEquals(1, event.details.size)
         assertEquals(AudioDetail::class.java, event.details.first().javaClass)
-        assertEquals("test", event.details.first().name)
     }
 
     @Test
     fun `Event getDetails returns all details`() {
         for (i in 1..10) {
-            event.addNewTextDetail(mockk(), "name_$i")
+            event.addNewTextDetail(mockk())
         }
 
         assertEquals(10, event.details.size)

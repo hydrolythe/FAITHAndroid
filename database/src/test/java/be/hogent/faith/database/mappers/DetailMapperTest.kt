@@ -10,7 +10,7 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.util.factory.DetailFactory
 import be.hogent.faith.util.factory.EventFactory
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class DetailMapperTest {
@@ -38,7 +38,6 @@ class DetailMapperTest {
     ) {
         assertEquals(entity.uuid, model.uuid.toString())
         assertEquals(entity.file, FileConverter().toString(model.file))
-        assertEquals(entity.name, model.name)
         when (model) {
             is AudioDetail -> assertEquals(DetailType.AUDIO, entity.type)
             is PhotoDetail -> assertEquals(DetailType.PHOTO, entity.type)

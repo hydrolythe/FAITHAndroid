@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- We have to give the include an ID so we can reference it in the generated binding -->
+        <include
+            android:id="@+id/eventlist_layout"
+            layout="@layout/event_list" />
+    </LinearLayout>
+</layout>

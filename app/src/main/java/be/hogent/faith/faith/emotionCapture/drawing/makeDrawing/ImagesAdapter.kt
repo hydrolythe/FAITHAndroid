@@ -7,8 +7,20 @@ import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 
-class ImagesAdapter(@IdRes private val imageDrawableIDs: List<Int>) :
+class ImagesAdapter(@IdRes imageDrawableIDs: List<Int>) :
     RecyclerView.Adapter<ImageViewHolder>() {
+
+    private val imageResources = mutableListOf<Int>()
+
+    init {
+        imageResources.addAll(imageDrawableIDs)
+    }
+
+    fun setNewImages(newImages: List<Int>) {
+        imageResources.clear()
+        imageResources.addAll(newImages)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val thumbnail = LayoutInflater.from(parent.context).inflate(
@@ -20,13 +32,13 @@ class ImagesAdapter(@IdRes private val imageDrawableIDs: List<Int>) :
     }
 
     override fun getItemCount(): Int {
-        return imageDrawableIDs.size
+        return imageResources.size
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        holder.imageView.setImageResource(imageDrawableIDs[position])
+        holder.imageView.setImageResource(imageResources[position])
         // The ID of the Drawable is set as the tag so the [DragOnTouchListener] can use it for the DragShadow.
-        holder.imageView.tag = imageDrawableIDs[position]
+        holder.imageView.tag = imageResources[position]
         holder.imageView.setOnLongClickListener(DragOnTouchListener())
     }
 }

@@ -4,7 +4,7 @@ import be.hogent.faith.database.factory.EntityFactory
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.util.factory.UserFactory
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class UserMapperTest {

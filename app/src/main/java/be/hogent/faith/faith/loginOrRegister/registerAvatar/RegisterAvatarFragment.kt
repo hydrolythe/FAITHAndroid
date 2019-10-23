@@ -17,6 +17,7 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter.On
 import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 /**
  * A [Fragment] subclass which allows the user to register a new Avatar.

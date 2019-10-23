@@ -8,11 +8,12 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
+import be.hogent.faith.faith.library.EventListActivity
 import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
-import be.hogent.faith.faith.overviewEvents.OverviewEventsActivity
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.builders.footer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -36,6 +37,12 @@ class CityScreenActivity : AppCompatActivity(),
         }
 
         drawer {
+            primaryItem("Licenties") {
+                onClick { _ ->
+                    startLicensesActivbity()
+                    true
+                }
+            }
             footer {
                 primaryItem("Logout") {
                     onClick { _ ->
@@ -51,13 +58,17 @@ class CityScreenActivity : AppCompatActivity(),
         })
     }
 
+    private fun startLicensesActivbity() {
+        startActivity(Intent(this, OssLicensesMenuActivity::class.java))
+    }
+
     override fun startEmotionCapture() {
         val intent = Intent(this, EmotionCaptureMainActivity::class.java)
         startActivity(intent)
     }
 
     override fun startOverviewEventsFragment() {
-        val intent = Intent(this, OverviewEventsActivity::class.java)
+        val intent = Intent(this, EventListActivity::class.java)
         startActivity(intent)
     }
 

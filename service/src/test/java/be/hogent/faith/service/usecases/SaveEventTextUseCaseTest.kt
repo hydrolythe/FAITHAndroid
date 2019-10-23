@@ -88,7 +88,7 @@ class SaveEventTextUseCaseTest {
         event.addDetail(existingDetail)
 
         every {
-            repository.overWriteTextDetail(
+            repository.overwriteTextDetail(
                 text,
                 existingDetail
             )
@@ -101,7 +101,7 @@ class SaveEventTextUseCaseTest {
             .assertNoErrors()
             .assertComplete()
 
-        verify { repository.overWriteTextDetail(text, existingDetail) }
+        verify { repository.overwriteTextDetail(text, existingDetail) }
     }
 
     @Test
@@ -111,7 +111,7 @@ class SaveEventTextUseCaseTest {
         event.addDetail(existingDetail)
 
         every {
-            repository.overWriteTextDetail(
+            repository.overwriteTextDetail(
                 text,
                 existingDetail
             )

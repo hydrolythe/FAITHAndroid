@@ -10,11 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.di.KoinModules
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.fragments_overview_events.rv_events
-import org.koin.android.ext.android.get
+import kotlinx.android.synthetic.main.event_list.rv_eventlist
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.getViewModel
 import java.util.UUID
@@ -45,7 +44,7 @@ class OverviewEventsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragments_overview_events, container, false)
+        return inflater.inflate(R.layout.fragment_eventoverview, container, false)
     }
 
     override fun onAttach(context: Context) {
@@ -78,8 +77,9 @@ class OverviewEventsFragment : Fragment() {
                 navigation?.startEventDetailsFragment(eventUuid)
             }
         }
+
         eventsAdapter = EventsAdapter(eventListener, Glide.with(this))
-        rv_events.apply {
+        rv_eventlist.apply {
             layoutManager = LinearLayoutManager(activity)
             this.adapter = eventsAdapter
         }

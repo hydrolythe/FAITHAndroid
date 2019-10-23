@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.loginOrRegister
 
-import android.util.Log
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,8 +11,8 @@ import be.hogent.faith.domain.repository.WeakPasswordException
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.Avatar
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.RegisterUserUseCase
-import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
+import timber.log.Timber
 
 /**
  * Represents the [ViewModel] for the user during the registering process.
@@ -73,7 +72,7 @@ class RegisterUserViewModel(
         }
 
         override fun onError(e: Throwable) {
-            Log.e(TAG, e.localizedMessage)
+            Timber.e( e.localizedMessage)
             _errorMessage.postValue(
                 when (e) {
                     is WeakPasswordException ->

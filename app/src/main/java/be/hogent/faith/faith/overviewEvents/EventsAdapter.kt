@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.loadFirestorageImage
 import be.hogent.faith.util.TAG
@@ -22,7 +23,7 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
         return ViewHolder(
             LayoutInflater
                 .from(parent.context)
-                .inflate(be.hogent.faith.R.layout.event_card, parent, false)
+                .inflate(R.layout.event_card, parent, false)
         )
     }
 
@@ -46,7 +47,6 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
             eventTitle.text = event.title
             val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
             val eventDateString: String = formatter.format(event.dateTime)
-            Log.d(TAG, eventDateString)
             eventDate.text = eventDateString
 
             event.emotionAvatar?.let {
@@ -56,7 +56,6 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
                     .load(FirebaseStorage.getInstance().reference.child(it.path)) // storagereference
                     .apply(RequestOptions.circleCropTransform())
                     .into(avatarImage)
-
                  */
             }
 
