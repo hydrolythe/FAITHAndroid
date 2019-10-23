@@ -16,9 +16,9 @@ import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
 
 /**
- * Represents the [ViewModel] for the user during teh registering process.
+ * Represents the [ViewModel] for the user during the registering process.
  * It is shared by the fragments needed for the workflow of registering
- * If all the information is available, the user will be registered
+ * If all the information (username, password and avatar) is available, the user will be registered
  */
 class RegisterUserViewModel(
     private val registerUserUseCase: RegisterUserUseCase
@@ -36,25 +36,35 @@ class RegisterUserViewModel(
     val userRegisteredSuccessFully: LiveData<Unit>
         get() = _userRegisteredSuccessFully
 
+    /**
+     * part 1 of the register workflow sets the username and password
+     */
     fun setRegistrationDetails(userName: String, password: String) {
         _userName.value = userName
         _password.value = password
     }
 
+    /**
+     * part2 of the register workflow sets the avatar
+     */
     fun setAvatar(avatar: Avatar) {
         _avatar.value = avatar
     }
 
+    /**
+     * register the user if all information is given
+     */
     fun register() {
         if (_userName.value.isNullOrBlank() || _password.value.isNullOrBlank() || _avatar.value == null)
             _errorMessage.postValue(R.string.register_error_create_user)
-
-        val params = RegisterUserUseCase.Params(
-            _userName.value!!,
-            _password.value!!,
-            _avatar.value!!.avatarName
-        )
-        registerUserUseCase.execute(params, RegisterUserUseCaseHandler())
+        else {
+            val params = RegisterUserUseCase.Params(
+                _userName.value!!,
+                _password.value!!,
+                _avatar.value!!.avatarName
+            )
+            registerUserUseCase.execute(params, RegisterUserUseCaseHandler())
+        }
     }
 
     private inner class RegisterUserUseCaseHandler : DisposableCompletableObserver() {

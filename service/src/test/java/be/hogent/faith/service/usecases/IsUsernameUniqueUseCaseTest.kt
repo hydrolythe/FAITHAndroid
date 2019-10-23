@@ -28,20 +28,17 @@ class IsUsernameUniqueUseCaseTest {
 
     @Test
     fun isUsernameUniqueUC_existingUser_ReturnsFalse() {
-        // Arrange
         val usernameArg = slot<String>()
         every {
-            authManager.checkIfEmailExists(
+            authManager.isUsernameUnique(
                 capture(usernameArg)
             )
         } returns Single.just(false)
 
         val params = IsUsernameUniqueUseCase.Params("an")
 
-        // Act
         val result = isUsernameUniqueUserUseCase.buildUseCaseSingle(params)
 
-        // Assert
         result.test()
             .assertNoErrors()
             .assertValue { it == false }
@@ -51,20 +48,17 @@ class IsUsernameUniqueUseCaseTest {
 
     @Test
     fun isUsernameUniqueUC_nonExistingUser_ReturnsTrue() {
-        // Arrange
         val usernameArg = slot<String>()
         every {
-            authManager.checkIfEmailExists(
+            authManager.isUsernameUnique(
                 capture(usernameArg)
             )
         } returns Single.just(true)
 
         val params = IsUsernameUniqueUseCase.Params("an")
 
-        // Act
         val result = isUsernameUniqueUserUseCase.buildUseCaseSingle(params)
 
-        // Assert
         result.test()
             .assertNoErrors()
             .assertValue { it == true }

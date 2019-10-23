@@ -59,7 +59,7 @@ class LoginUserUseCaseTest {
         val emailArg = slot<String>()
         val passwordArg = slot<String>()
         every { authManager.signIn(capture(emailArg), capture(passwordArg)) } returns Maybe.error(
-            SignInException(Exception("error"))
+            SignInException(mockk())
         )
 
         // Act

@@ -23,7 +23,7 @@ import org.koin.dsl.module
 val serviceModule = module {
     // Use cases
     factory { GetEventsUseCase(get(), get()) }
-    factory { SaveEventUseCase(get(), get()) }
+    factory { SaveEventUseCase(get(), get(), get()) }
     factory { CreateUserUseCase(get(), get()) }
     factory { SaveEmotionAvatarUseCase(get(), get()) }
     factory { GetUserUseCase(get(), get(), get(), get()) }

@@ -51,4 +51,11 @@ class UserTest {
         val result = user.getEvent(UUID.randomUUID())
         Assert.assertNull(result)
     }
+
+    @Test
+    fun user_clearEventsclearsAllEvents() {
+        user.addEvent(event)
+        user.clearEvents()
+        Assert.assertEquals(0, user.events.count())
+    }
 }

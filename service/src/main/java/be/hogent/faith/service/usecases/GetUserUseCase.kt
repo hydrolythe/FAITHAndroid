@@ -1,7 +1,5 @@
 package be.hogent.faith.service.usecases
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.AuthManager
@@ -26,7 +24,6 @@ class GetUserUseCase(
             return Flowable.error(RuntimeException("You are not allowed to access the user, please log in"))
         return combineLatest(userRepository.get(currentUser), eventRepository.getAll())
             .map { pair: Pair<User, List<Event>> -> addEventsToUser(pair.first, pair.second) }
-            .doOnNext { Log.d(TAG, "user ${it.username} heeft ${it.events.count()} events") }
     }
 }
 

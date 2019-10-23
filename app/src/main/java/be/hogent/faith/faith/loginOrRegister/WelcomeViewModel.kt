@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.domain.repository.SignInException
 import be.hogent.faith.faith.util.SingleLiveEvent
@@ -18,13 +17,10 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
 
     val userName = MutableLiveData<String>()
     val password = MutableLiveData<String>()
+
     private val _uuid = MutableLiveData<String>()
     val UUID: LiveData<String>
         get() = _uuid
-
-    private val _user = MutableLiveData<User>()
-    val user: LiveData<User>
-        get() = _user
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
@@ -39,13 +35,19 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
         get() = _userLoggedInSuccessFully
 
     init {
-        // TODO als reeds aangemeld : isUserLoggedInUseCase maken en dan user instellen als die reeds is ingelogd, en dan call van userLoggedInSuccessfully
+        // TODO Moet er gecontrolleerd worden of de user reeds aangemeld is: eerst nagaan of user reeds is aangemeld (isUserLoggedInUseCase), dan user ophalen en dan call van userLoggedInSuccessfully
     }
 
+    /**
+     * user is new and wants to register
+     */
     fun registerButtonClicked() {
         _registerButtonClicked.call()
     }
 
+    /**
+     * logs in a user
+     */
     fun loginButtonClicked() {
         login()
     }
@@ -59,14 +61,18 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     }
 
     private fun passwordIsValid(): Boolean {
-        if (password.value.isNullOrBlank()) {
+        val pwd = password.value
+        if (pwd.isNullOrBlank() || pwd.length < 6) {
             _errorMessage.postValue(R.string.registerOrLogin_password_empty)
             return false
         }
         return true
     }
 
-    fun login() {
+    /**
+     * validates username and pssword. Logs in the user
+     */
+    private fun login() {
         if (userNameIsValid() && passwordIsValid()) {
             val params = LoginUserUseCase.Params(userName.value!!, password.value!!)
             loginUserUseCase.execute(params, LoginUserUseCaseHandler())
@@ -74,14 +80,13 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     }
 
     private inner class LoginUserUseCaseHandler : DisposableMaybeObserver<String?>() {
+        // returns uuid when successfully logged in
         override fun onSuccess(t: String) {
-            Log.i(TAG, "success $t")
             _uuid.postValue(t)
             _userLoggedInSuccessFully.call()
         }
 
         override fun onComplete() {
-            Log.i(TAG, "completed")
         }
 
         override fun onError(e: Throwable) {

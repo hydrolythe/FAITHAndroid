@@ -39,6 +39,10 @@ class StorageRepository(private val context: Context) {
         }
     }
 
+    fun deleteFile(file: File): Boolean {
+        return file.delete()
+    }
+
     private fun getEventImageDirectory(event: Event): File {
         val imageDirectory = File(getEventDirectory(event), "images")
         imageDirectory.mkdirs()

@@ -9,14 +9,15 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 
 open class UserRepositoryImpl(
-    // Passing the database is required to run transactions across multiple DAO's.
-    // This is required to insert an event together with all its details.
     private val userMapper: UserMapper,
     private val firebaseUserRepository: FirebaseUserRepository
 ) : UserRepository {
 
+    /**
+     * deletes the currentUser
+     */
     override fun delete(item: User): Completable {
-        TODO("not implemented")
+        return firebaseUserRepository.delete()
     }
 
     // een gebruiker heeft bij creatie nog geen events
@@ -25,19 +26,7 @@ open class UserRepositoryImpl(
     }
 
     override fun get(uuid: String): Flowable<User> {
-        return firebaseUserRepository.get(uuid).map { userMapper.mapFromEntity(it) }
-        /*
-        val user = userDao.getUser(uuid).map { userMapper.mapFromEntity(it) }
-            .doOnNext { Log.d(TAG, "uuid of user fetched from database ${it.uuid}") }
-        val eventsWithDetails =
-            eventDao.getAllEventsWithDetails(uuid)
-                .map { eventWithDetailsMapper.mapFromEntities(it) }
-                .doOnNext { Log.d(TAG, "Nbr of events for user with $uuid fetched ${it.size}") }
-        return Flowable.combineLatest(
-            user,
-            eventsWithDetails,
-            BiFunction { u, e -> addEventsToUser(u, e) })
-         */
+        return firebaseUserRepository.get().map { userMapper.mapFromEntity(it) }
     }
 
     override fun getAll(): Flowable<List<User>> {

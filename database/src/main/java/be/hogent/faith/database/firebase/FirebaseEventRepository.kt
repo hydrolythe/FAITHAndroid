@@ -3,6 +3,7 @@ package be.hogent.faith.database.firebase
 import android.content.ContentValues
 import android.net.Uri
 import android.util.Log
+import be.hogent.faith.database.firebase.FirebaseUserRepository.Companion.USERS_KEY
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
@@ -34,6 +35,9 @@ class FirebaseEventRepository(
     private val storageRef: StorageReference
         get() = firestorage.reference.child(USERS_KEY)
 
+    /**
+     * gets event with uuid for the current user, also listens for changes
+     */
     fun get(uuid: String): Flowable<EventEntity> {
         val currentUser = fbAuth.currentUser
         if (currentUser == null) {
@@ -43,16 +47,19 @@ class FirebaseEventRepository(
             firestore.collection(USERS_KEY).document(currentUser.uid).collection(EVENTS_KEY)
                 .document(uuid)
         )
-            .map { it?.toObject(EventEntity::class.java) }
+            .map { it.toObject(EventEntity::class.java) }
     }
 
+    /**
+     * gets all events for current user, also listens for changes
+     */
     fun getAll(): Flowable<List<EventEntity>> {
         val currentUser = fbAuth.currentUser
         if (currentUser == null) {
             return Flowable.error(RuntimeException("Unauthorized used."))
         }
         return RxFirestore.observeQueryRef(
-            firestore.collection(USERS_KEY).document(currentUser!!.uid).collection(
+            firestore.collection(USERS_KEY).document(currentUser.uid).collection(
                 EVENTS_KEY
             )
         )
@@ -64,7 +71,7 @@ class FirebaseEventRepository(
     }
 
     /**
-     * Inserting an event goes to 3 steps
+     * Inserting an event in 3 steps
      * 1. saving the emotionAvatar file and update the file reference
      * 2. for each detail : save the corresponding file and update the file reference
      * 3. insert the event
@@ -74,19 +81,20 @@ class FirebaseEventRepository(
         if (currentUser == null || currentUser.uid != user.uuid) {
             return Maybe.error(RuntimeException("Unauthorized user."))
         } else {
+            // sets the document reference for saving the event in firestore
             val document =
                 firestore.collection(FirebaseUserRepository.USERS_KEY).document(currentUser.uid)
                     .collection(EVENTS_KEY)
                     .document(item.uuid)
-            return Completable.fromSingle(saveAvatarForEvent(item))
+            return Completable.fromSingle(saveAvatarForEvent(item)) // save avatar in firestorage
                 .andThen(
-                    Completable.fromPublisher(item.details.toFlowable()
+                    Completable.fromPublisher(item.details.toFlowable() // save all detail files in firestorage
                         .concatMapSingle {
                             saveFileForEventDetail(item.uuid, it)
                         }
                     ))
-                .andThen(RxFirestore.setDocument(document, item))
-                .andThen(RxFirestore.getDocument(document)
+                .andThen(RxFirestore.setDocument(document, item)) // stores the event in firestore
+                .andThen(RxFirestore.getDocument(document) // gets the just stored event from firestore
                     .map { it.toObject(EventEntity::class.java) })
                 .onErrorResumeNext { error: Throwable ->
                     Log.e(TAG, "error saving event ${error.message}")

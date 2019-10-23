@@ -65,7 +65,7 @@ class OverviewEventsFragment : Fragment() {
         userViewModel.user.observe(this, Observer<User> { user ->
             user?.let {
                 eventsAdapter.apply {
-                    events = user.events
+                    events = user.events.sortedByDescending { it.dateTime }
                     notifyDataSetChanged()
                 }
             }

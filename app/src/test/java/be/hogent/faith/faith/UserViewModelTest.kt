@@ -17,7 +17,6 @@ import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers.any
 
 class UserViewModelTest {
     private lateinit var userViewModel: UserViewModel
@@ -39,7 +38,7 @@ class UserViewModelTest {
     fun userViewModel_saveEvent_nullTitle_noUseCaseCall_errorMessage() {
         // Arrange
         val errorMessageObserver = mockk<Observer<Int>>(relaxed = true)
-        userViewModel.errorMessage.observeForever(errorMessageObserver)
+        userViewModel.titleErrorMessage.observeForever(errorMessageObserver)
 
         // Act
         userViewModel.saveEvent(null, mockk())

@@ -7,7 +7,7 @@ class FileConverter {
 
     @TypeConverter
     fun toString(file: File): String {
-        return "file://" + file.path
+        return file.path
     }
 
     @TypeConverter

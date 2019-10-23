@@ -12,29 +12,43 @@ import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableSingleObserver
 
+/**
+ * Represents the [ViewModel] for the user during the registering process - Part 1
+ * Namely the part where the user enters username and password
+ * It validates the userinfo and checks if username is unique
+ * If all the information is available, the user will be registered
+ */
 class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameUniqueUseCase) :
     ViewModel() {
-
-    init {
-        Log.i(TAG, "created")
-    }
 
     val userName = MutableLiveData<String>()
     val password = MutableLiveData<String>()
     val passwordRepeated = MutableLiveData<String>()
 
+    /**
+     * reports errors with username
+     */
     private val _userNameErrorMessage = MutableLiveData<Int>()
     val userNameErrorMessage: LiveData<Int>
         get() = _userNameErrorMessage
 
+    /**
+     * reports errors with password
+     */
     private val _passwordErrorMessage = MutableLiveData<Int>()
     val passwordErrorMessage: LiveData<Int>
         get() = _passwordErrorMessage
 
+    /**
+     * reports errors with passwordrepeat
+     */
     private val _passwordRepeatErrorMessage = MutableLiveData<Int>()
     val passwordRepeatErrorMessage: LiveData<Int>
         get() = _passwordRepeatErrorMessage
 
+    /**
+     * reports errors with calling use case IsUniqueEmail
+     */
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
@@ -43,6 +57,9 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
         confirmUserInfo()
     }
 
+    /**
+     * when username and password is entered and username is unique
+     */
     private val _userInfoConfirmedSuccesFully = SingleLiveEvent<Unit>()
     val userInfoConfirmedSuccessfully: LiveData<Unit>
         get() = _userInfoConfirmedSuccesFully
@@ -72,6 +89,10 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
         return true
     }
 
+    /**
+     * user entered username, password and passwordrepeat.
+     * Validates input and checks if username is unique
+     */
     private fun confirmUserInfo() {
         if (userNameIsValid() && passwordIsValid()) {
             val params = IsUsernameUniqueUseCase.Params(userName.value!!)
