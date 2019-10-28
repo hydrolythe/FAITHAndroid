@@ -38,17 +38,17 @@
     <style name="AppTheme.PopupOverlay" parent="Theme.MaterialComponents.Light" />
 
     <style name="arrow_style.toLeft" parent="Widget.MaterialComponents.Button.Icon">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">150dp</item>
         <item name="android:layout_height">@dimen/arrow_height</item>
         <item name="android:textColor">@color/color_black</item>
         <item name="android:backgroundTint">@color/color_white</item>
         <item name="iconTint">@null</item>
         <item name="iconGravity">end</item>
+        <item name="android:paddingLeft">24dp</item>
         <item name="shapeAppearanceOverlay">@style/arrow_button_to_left</item>
     </style>
 
     <style name="arrow_style.toRight" parent="arrow_style.toLeft">
-        <item name="android:layout_width">200dp</item>
         <item name="android:layout_height">@dimen/arrow_height</item>
         <item name="android:textColor">@color/color_black</item>
         <item name="iconGravity">start</item>
