@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.overviewEvents
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.loadFirestorageImage
-import be.hogent.faith.util.TAG
 import com.bumptech.glide.RequestManager
 import org.threeten.bp.format.DateTimeFormatter
 

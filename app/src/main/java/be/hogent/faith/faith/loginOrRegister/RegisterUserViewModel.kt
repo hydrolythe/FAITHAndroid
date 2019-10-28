@@ -72,7 +72,7 @@ class RegisterUserViewModel(
         }
 
         override fun onError(e: Throwable) {
-            Timber.e( e.localizedMessage)
+            Timber.e(e.localizedMessage)
             _errorMessage.postValue(
                 when (e) {
                     is WeakPasswordException ->

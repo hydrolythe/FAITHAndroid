@@ -1,11 +1,9 @@
 package be.hogent.faith.faith.cityScreen
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.LogoutUserUseCase
-import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
 import timber.log.Timber
 
@@ -51,7 +49,7 @@ class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : Vi
         }
 
         override fun onError(e: Throwable) {
-            Timber.e( "logout failed")
+            Timber.e("logout failed")
         }
     }
 
