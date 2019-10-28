@@ -27,13 +27,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppTheme.FullScreen"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
             android:name=".faith.library.EventListActivity"
             android:label="@string/title_event_detail"
-            android:parentActivityName=".faith.library.EventListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".faith.library.EventListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="be.hogent.faith.faith.library.EventListActivity" />
@@ -41,8 +40,8 @@
         <activity
             android:name=".faith.loginOrRegister.LoginOrRegisterActivity"
             android:label="@string/app_name"
+            android:theme="@style/AppTheme.FullScreen"
             android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,8 +52,7 @@
         <activity
             android:name=".faith.cityScreen.CityScreenActivity"
             android:label="@string/lbl_activity_city"
-            android:screenOrientation="landscape"
-            android:theme="@style/AppTheme.FullScreen" />
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".faith.emotionCapture.EmotionCaptureMainActivity"
             android:label="@string/lbl_activity_emotionCapture"
