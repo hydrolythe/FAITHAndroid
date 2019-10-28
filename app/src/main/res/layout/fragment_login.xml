@@ -36,16 +36,6 @@
             android:focusable="true"
             android:focusableInTouchMode="true">
 
-            <!--Every button is set by using two intersecting guidelines.
-                The top left corner of the button is located at the intersection.
-                It might be better to use four guidelines so that we get 2 points (top-left and bottom-right),
-                and let the Views decide their dimensions solely through their constrains.
-                This will however produce a large amount of Guidelines.
-
-                Why use guidelines, and not a kind of map? Because maps inherently use pixels, and those won't work
-                on screens of different resolutions. Guidelines can be set using percentages which will scale with
-                the device.-->
-
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_login_arrows_top"
                 android:layout_width="1dp"
@@ -54,18 +44,18 @@
                 app:layout_constraintGuide_percent="0.47" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline7"
+                android:id="@+id/guide_center_circle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_form_start"
+                android:id="@+id/guide_avatars_end"
                 android:layout_width="1dp"
                 android:layout_height="1dp"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.36" />
+                app:layout_constraintGuide_percent="0.3" />
 
 
             <include
@@ -74,50 +64,43 @@
                 android:layout_width="300dp"
                 android:layout_height="300dp"
                 app:layout_constraintBottom_toTopOf="@+id/guide_login_center_circle"
-                app:layout_constraintEnd_toStartOf="@+id/guideline7"
-                app:layout_constraintStart_toStartOf="@+id/guideline7"
+                app:layout_constraintEnd_toStartOf="@+id/guide_center_circle"
+                app:layout_constraintStart_toStartOf="@+id/guide_center_circle"
                 app:layout_constraintTop_toTopOf="@+id/guide_login_center_circle"
                 app:welcomeViewModel="@{welcomeViewModel}" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_register"
+                android:id="@+id/btn_loginfragment_register"
                 style="@style/arrow_style.toRight"
                 android:onClick="@{() -> welcomeViewModel.registerButtonClicked()}"
 
                 android:text="@string/msg_registreer"
                 app:icon="@drawable/icoon_stad"
-                app:layout_constraintStart_toStartOf="@+id/guideline10"
+                app:layout_constraintStart_toStartOf="@+id/guide_right_arrow"
                 app:layout_constraintTop_toTopOf="@+id/guide_login_arrows_top" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_city_startNewEvent"
+                android:id="@+id/btn_loginfragment_startNewEvent"
                 style="@style/arrow_style.toLeft"
                 android:onClick="@{() -> welcomeViewModel.loginButtonClicked()}"
                 android:text="@string/msg_naar_de_stad"
                 app:icon="@drawable/icoon_stad"
-                app:layout_constraintEnd_toStartOf="@+id/guideline9"
+                app:layout_constraintEnd_toStartOf="@+id/guide_left_arrow"
                 app:layout_constraintTop_toTopOf="@+id/guide_login_arrows_top" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline9"
+                android:id="@+id/guide_left_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.79" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline10"
+                android:id="@+id/guide_right_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.84" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_horiz_circle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="277dp" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_login_center_circle"
@@ -127,11 +110,11 @@
                 app:layout_constraintGuide_percent="0.54" />
 
             <ImageView
-                android:id="@+id/fragment_login_avatars"
+                android:id="@+id/img_loginfragment_avatars"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guide_form_start"
+                app:layout_constraintEnd_toStartOf="@+id/guide_avatars_end"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guide_login_arrows_top"
                 app:srcCompat="@drawable/login_avatars" />

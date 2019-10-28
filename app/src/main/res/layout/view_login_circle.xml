@@ -26,7 +26,7 @@
                 android:id="@+id/txt_welcome_userName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_login_wrap"
+                android:drawableStart="@drawable/ic_login_wrap"
                 android:text="@={welcomeViewModel.userName}" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -43,7 +43,7 @@
                 android:id="@+id/txt_welcome_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_lock_wrap"
+                android:drawableStart="@drawable/ic_lock_wrap"
                 android:inputType="textPassword"
                 android:text="@={welcomeViewModel.password}" />
         </com.google.android.material.textfield.TextInputLayout>
