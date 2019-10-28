@@ -15,6 +15,7 @@ object NavigationUtil {
         // It hides the button to go to town so we have to close it.
         // We have to close the soft keyboard everytime because otherwise it overlaps the textfield.
         onView(withId(R.id.btn_loginfragment_register)).perform(click())
+
         closeSoftKeyboard()
         onView(withId(R.id.txt_register_username)).perform(typeText("Jos"))
         closeSoftKeyboard()

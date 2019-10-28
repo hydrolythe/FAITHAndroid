@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.library
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,11 +19,10 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterText.EnterTextFragment
 import be.hogent.faith.faith.library.eventDetailFragments.TestFragment
-import be.hogent.faith.faith.library.eventDetailFragments.TextDetailFragment
 import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
 import org.koin.android.ext.android.getKoin
-import timber.log.Timber
 
+import timber.log.Timber
 
 /**
  * A fragment representing a single Event detail screen, showing
@@ -49,7 +47,8 @@ class EventDetailFragment : Fragment() {
     private lateinit var selectedItemViewModel: SelectedItemViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_eventdetails, container, false)
@@ -59,7 +58,6 @@ class EventDetailFragment : Fragment() {
         setListeners()
         return rootView
     }
-
 
     /**
      * Sets up the observers. In this case it will observe the [selectedItemViewModel] and observe
@@ -75,9 +73,7 @@ class EventDetailFragment : Fragment() {
             mPager.adapter = pagerAdapter
             mPager.invalidate()
         })
-
     }
-
 
     /**
      * PagerAdapter which will create the required fragments of the details.
@@ -89,26 +85,26 @@ class EventDetailFragment : Fragment() {
         }
 
         override fun createFragment(position: Int): Fragment {
-            var fragment : Fragment
-            if (!details.isEmpty()) {
+            var fragment: Fragment
+            if (details.isNotEmpty()) {
                 when (details[position]) {
                     is DrawingDetail -> {
-                        Log.i("Tag", "Drawing")
+                        Timber.i("Drawing")
                         return TestFragment.newInstance()
                     }
                     is PhotoDetail -> {
-                        Log.i("TAG", "Photo")
+                        Timber.i("Photo")
                         return TestFragment.newInstance()
                     }
                     is TextDetail -> {
-                        var detail = details[position].uuid
+                        val detail = details[position].uuid
                         Timber.i("De detail UUID is : $detail")
                         fragment = EnterTextFragment.newInstance(details[position].uuid)
+                        Timber.i("Textdetail")
                         return fragment
-                        Log.i("Tag", "Textdetail")
                     }
                     is AudioDetail -> {
-                        Log.i("TAG", "Audiodetail")
+                        Timber.i("Audiodetail")
                         return TestFragment.newInstance()
                     }
                 }

@@ -44,32 +44,51 @@
                 layout="@layout/panel_drawing_colors"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/btn_draw_setColorWhite"
-                app:layout_constraintStart_toStartOf="@+id/guide_draw_utilities_left"
-                app:layout_constraintTop_toTopOf="@+id/guide_draw_drawview_top"
-                app:layout_constraintVertical_weight="0.65"
+                app:layout_constraintBottom_toTopOf="@+id/container_tools"
+                app:layout_constraintTop_toTopOf="@id/guide_draw_drawview_top"
+                app:layout_constraintStart_toStartOf="@id/guide_draw_utilities_left"
                 bind:drawViewModel="@{drawViewModel}" />
 
-            <Button
-                android:id="@+id/btn_draw_setColorWhite"
+            <LinearLayout
+                android:id="@+id/container_tools"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:onClick="@{()->drawViewModel.onEraserClicked()}"
-                android:text="Gom"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 app:layout_constraintBottom_toTopOf="@+id/container_draw_utilities"
-                app:layout_constraintStart_toStartOf="@+id/guide_draw_utilities_left"
-                app:layout_constraintTop_toBottomOf="@+id/container_draw_colors"
-                app:layout_constraintVertical_weight="0.1" />
+                app:layout_constraintStart_toStartOf="@+id/container_draw_colors"
+                app:layout_constraintTop_toBottomOf="@+id/container_draw_colors">
+
+                <Button
+                    android:id="@+id/btn_draw_pencil"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->drawViewModel.onPencilClicked()}"
+                    android:text="Penseel" />
+
+                <Button
+                    android:id="@+id/btn_draw_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->drawViewModel.onTextClicked()}"
+                    android:text="Text" />
+
+
+                <Button
+                    android:id="@+id/btn_draw_eraser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{()->drawViewModel.onEraserClicked()}"
+                    android:text="Gom" />
+            </LinearLayout>
 
             <include
                 android:id="@+id/container_draw_utilities"
                 layout="@layout/panel_drawing_tools"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="238dp"
                 app:layout_constraintBottom_toTopOf="@+id/guide_draw_drawview_bottom"
-                app:layout_constraintStart_toStartOf="@+id/guide_draw_utilities_left"
-                app:layout_constraintTop_toBottomOf="@+id/btn_draw_setColorWhite"
-                app:layout_constraintVertical_weight="0.25"
+                app:layout_constraintStart_toStartOf="@+id/container_tools"
+                app:layout_constraintTop_toBottomOf="@+id/container_tools"
                 bind:drawViewModel="@{drawViewModel}" />
 
 
@@ -78,8 +97,9 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/guide_draw_drawview_bottom"
-                app:layout_constraintEnd_toStartOf="@+id/container_draw_images"
+                android:focusableInTouchMode="true"
+                app:layout_constraintBottom_toTopOf="@+id/tabs_drawing_templates"
+                app:layout_constraintEnd_toStartOf="@+id/btn_makeDrawing_save"
                 app:layout_constraintStart_toEndOf="@+id/guide_draw_drawview_left"
                 app:layout_constraintTop_toTopOf="@+id/guide_draw_drawview_top" />
 
@@ -95,16 +115,6 @@
                 android:onClick="@{() -> drawViewModel.onSaveButtonClicked()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <include
-                android:id="@+id/container_draw_images"
-                layout="@layout/panel_drawing_images"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_margin="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/guide_draw_drawview_bottom"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guide_draw_drawview_top" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_draw_drawview_left"
@@ -126,6 +136,48 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.93" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabs_drawing_templates"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                app:layout_constraintBottom_toTopOf="@+id/recyclerView_drawing_templates"
+                app:layout_constraintEnd_toEndOf="@+id/recyclerView_drawing_templates"
+                app:layout_constraintStart_toStartOf="@+id/recyclerView_drawing_templates">
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_drawing_people"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Personen" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_drawing_attributes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Attributen" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_drawing_decor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Decors" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tab_drawing_metaphors"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Metaforen" />
+            </com.google.android.material.tabs.TabLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_drawing_templates"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_makeDrawing_save"
+                app:layout_constraintStart_toStartOf="@+id/drawView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

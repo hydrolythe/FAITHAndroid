@@ -18,7 +18,8 @@ class ViewTextDetailFragment : Fragment() {
     private lateinit var viewModel: ViewTextDetailViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.view_text_detail_fragment, container, false)
@@ -29,5 +30,4 @@ class ViewTextDetailFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(ViewTextDetailViewModel::class.java)
         // TODO: Use the ViewModel
     }
-
 }

@@ -19,7 +19,7 @@ class SaveEventAudioUseCase(
                 params.event
             ).doOnSuccess { storedFile ->
                 // TODO: remove once detail names are removed
-                params.event.addNewAudioDetail(storedFile, "audioRecordingName")
+                params.event.addNewAudioDetail(storedFile)
             })
     }
 
