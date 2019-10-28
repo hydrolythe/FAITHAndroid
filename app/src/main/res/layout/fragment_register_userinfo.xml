@@ -76,7 +76,7 @@
                 app:layout_constraintGuide_percent="0.47" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_form_start"
+                android:id="@+id/guide_avatars_end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
