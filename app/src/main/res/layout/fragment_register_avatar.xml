@@ -63,7 +63,6 @@
                 android:layout_height="100dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/ic_pijl"
                 android:onClick="@{() -> registerAvatarViewModel.onFinishRegistrationClicked()}"
                 android:text="@string/msg_naar_de_stad"
                 app:layout_constraintBottom_toTopOf="@+id/avatar_rv_avatar"
