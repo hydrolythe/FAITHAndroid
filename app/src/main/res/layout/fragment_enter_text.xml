@@ -36,7 +36,7 @@
             android:layout_height="match_parent"
             android:background="#00000000">
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_enter_text_save"
                 android:layout_width="@dimen/material_icon_width"
                 android:layout_height="@dimen/material_icon_height"
@@ -262,14 +262,16 @@
                 android:scrollbars="vertical"
                 app:layout_constraintBottom_toBottomOf="@+id/guide_editor_editor_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/guide_editor_editor_right"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/guide_editor_editor_left"
-                app:layout_constraintTop_toTopOf="@+id/guide_editor_editor_top">
+                app:layout_constraintTop_toTopOf="@+id/guide_editor_editor_top"
+                app:layout_constraintVertical_bias="0.0">
 
 
                 <jp.wasabeef.richeditor.RichEditor
                     android:id="@+id/enterText_editor"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_margin="20dp"
                     android:focusable="true"
                     android:focusableInTouchMode="true" />

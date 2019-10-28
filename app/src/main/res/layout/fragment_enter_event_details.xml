@@ -83,7 +83,7 @@
                 android:layout_width="8dp"
                 android:layout_height="12dp"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.68" />
+                app:layout_constraintGuide_percent="0.69" />
 
 
             <androidx.constraintlayout.widget.Guideline
