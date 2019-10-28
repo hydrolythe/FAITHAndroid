@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -20,18 +19,16 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.MakeDrawingFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.enterText.EnterTextFragment
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
+import be.hogent.faith.faith.emotionCapture.takePhoto.ReviewPhotoFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.util.replaceChildFragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_edit_detail.image_editDetail_avatar
-import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.UUID
@@ -51,8 +48,6 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
     private val editDetailViewModel: EditDetailViewModel by viewModel()
     private lateinit var editDetailBinding: be.hogent.faith.databinding.FragmentEditDetailBinding
     private var avatarOutlineResId: Int = NO_AVATAR
-
-    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -94,10 +89,6 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
         editDetailViewModel.emotionAvatarButtonClicked.observe(this, Observer {
             navigation?.startDrawEmotionAvatarFragment()
         })
-
-        userViewModel.errorMessage.observe(this, Observer { errorMessage ->
-            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-        })
     }
 
     private fun loadAvatarImage(event: Event) {
@@ -130,13 +121,18 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
         private const val DETAIL_UUID = "UUID of the Detail"
         fun newInstance(detail: Detail, @DrawableRes avatarOutLineId: Int): DetailFragmentWithEmotionAvatar {
             return when (detail) {
-                is AudioDetail -> AudioFragmentWithEmotionAvatar()
-                is TextDetail -> TextFragmentWithEmotionAvatar.newInstance(
-                    avatarOutLineId,
-                    detail.uuid
+                is AudioDetail -> AudioFragmentWithEmotionAvatar.newInstance(
+                    avatarOutLineId, detail.uuid
                 )
-                is DrawingDetail -> DrawingFragmentWithEmotionAvatar()
-                is PhotoDetail -> PhotoFragmentWithEmotionAvatar()
+                is TextDetail -> TextFragmentWithEmotionAvatar.newInstance(
+                    avatarOutLineId, detail.uuid
+                )
+                is DrawingDetail -> DrawingFragmentWithEmotionAvatar.newInstance(
+                    avatarOutLineId, detail.uuid
+                )
+                is PhotoDetail -> PhotoFragmentWithEmotionAvatar.newInstance(
+                    avatarOutLineId, detail.uuid
+                )
             }
         }
 
@@ -156,12 +152,27 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                     arguments = getBundleForAvatarOutline(avatarOutLineId)
                 }
             }
+
+            fun newInstance(@DrawableRes avatarOutLineId: Int, detailUUID: UUID): PhotoFragmentWithEmotionAvatar {
+                return PhotoFragmentWithEmotionAvatar().apply {
+                    arguments = getBundleForAvatarOutline(avatarOutLineId).apply {
+                        putSerializable(DETAIL_UUID, detailUUID)
+                    }
+                }
+            }
         }
 
         override fun setChildFragment() {
-            replaceChildFragment(
-                TakePhotoFragment.newInstance(), R.id.fragment_container_editDetail
-            )
+            val detailUuid = arguments?.getSerializable(DETAIL_UUID) as UUID?
+            if (detailUuid == null) {
+                replaceChildFragment(
+                    TakePhotoFragment.newInstance(), R.id.fragment_container_editDetail
+                )
+            } else {
+                replaceChildFragment(
+                    ReviewPhotoFragment.newInstance(detailUuid), R.id.fragment_container_editDetail
+                )
+            }
         }
     }
 
@@ -172,12 +183,27 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                     arguments = getBundleForAvatarOutline(avatarOutLineId)
                 }
             }
+
+            fun newInstance(@DrawableRes avatarOutLineId: Int, detailUUID: UUID): DrawingFragmentWithEmotionAvatar {
+                return DrawingFragmentWithEmotionAvatar().apply {
+                    arguments = getBundleForAvatarOutline(avatarOutLineId).apply {
+                        putSerializable(DETAIL_UUID, detailUUID)
+                    }
+                }
+            }
         }
 
         override fun setChildFragment() {
-            replaceChildFragment(
-                MakeDrawingFragment.newInstance(), R.id.fragment_container_editDetail
-            )
+            val detailUuid = arguments?.getSerializable(DETAIL_UUID) as UUID?
+            if (detailUuid == null) {
+                replaceChildFragment(
+                    MakeDrawingFragment.newInstance(), R.id.fragment_container_editDetail
+                )
+            } else {
+                replaceChildFragment(
+                    MakeDrawingFragment.newInstance(detailUuid), R.id.fragment_container_editDetail
+                )
+            }
         }
     }
 
@@ -215,16 +241,19 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
 
     class AudioFragmentWithEmotionAvatar : DetailFragmentWithEmotionAvatar() {
         companion object {
-            fun newInstance(@DrawableRes avatarOutLineId: Int): AudioFragmentWithEmotionAvatar {
+            fun newInstance(@DrawableRes avatarOutLineId: Int, detailUUID: UUID? = null): AudioFragmentWithEmotionAvatar {
                 return AudioFragmentWithEmotionAvatar().apply {
-                    arguments = getBundleForAvatarOutline(avatarOutLineId)
+                    arguments = getBundleForAvatarOutline(avatarOutLineId).apply {
+                        putSerializable(DETAIL_UUID, detailUUID)
+                    }
                 }
             }
         }
 
         override fun setChildFragment() {
+            val detailUuid = arguments?.getSerializable(DETAIL_UUID) as UUID?
             replaceChildFragment(
-                RecordAudioFragment.newInstance(), R.id.fragment_container_editDetail
+                RecordAudioFragment.newInstance(detailUuid), R.id.fragment_container_editDetail
             )
         }
     }

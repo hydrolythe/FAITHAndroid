@@ -14,12 +14,12 @@ class SaveEventTextUseCase(
 
     override fun buildUseCaseObservable(params: SaveTextParams): Completable {
         return if (params.existingDetail != null) {
-            storageRepository.overWriteTextDetail(params.text, params.existingDetail)
+            storageRepository.overwriteTextDetail(params.text, params.existingDetail)
         } else {
             Completable.fromSingle(
                 storageRepository.saveText(params.text, params.event)
                     .doOnSuccess { storedFile ->
-                        params.event.addNewTextDetail(storedFile, "textName")
+                        params.event.addNewTextDetail(storedFile)
                     })
         }
     }

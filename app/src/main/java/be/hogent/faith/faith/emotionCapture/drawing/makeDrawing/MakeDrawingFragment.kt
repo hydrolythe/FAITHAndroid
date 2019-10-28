@@ -1,9 +1,8 @@
 package be.hogent.faith.faith.emotionCapture.drawing.makeDrawing
 
 import android.content.Context
-import android.graphics.Color
+import android.content.res.TypedArray
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,30 +10,33 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawBinding
+import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawing.DrawFragment
 import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.util.TAG
 import com.divyanshu.draw.widget.DrawView
+import com.google.android.material.tabs.TabLayout
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.core.error.ScopeNotCreatedException
 import org.koin.core.qualifier.named
+import timber.log.Timber
+import java.util.UUID
+
+private const val DRAWING_DETAIL_UUID = "uuid of the DrawingDetail"
 
 class MakeDrawingFragment : DrawFragment() {
-
     override val drawViewModel: DrawViewModel
         get() {
-            Log.d(TAG, "Trying to get Drawing scope in MakeDrawing")
+            Timber.d("Trying to get Drawing scope in MakeDrawing")
             val scope = try {
                 getKoin().getScope(KoinModules.DRAWING_SCOPE_ID)
             } catch (e: ScopeNotCreatedException) {
-                Log.d(TAG, "No Drawing scope available - Creating Drawing scope in MakeDrawing")
+                Timber.d("No Drawing scope available - Creating Drawing scope in MakeDrawing")
                 getKoin().createScope(
                     KoinModules.DRAWING_SCOPE_ID,
                     named(KoinModules.DRAWING_SCOPE_NAME)
@@ -59,7 +61,8 @@ class MakeDrawingFragment : DrawFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        drawBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_draw, container, false)
+        drawBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_draw, container, false)
         drawBinding.drawViewModel = drawViewModel
         drawBinding.lifecycleOwner = this
 
@@ -69,10 +72,31 @@ class MakeDrawingFragment : DrawFragment() {
     override fun onStart() {
         super.onStart()
 
-        configureDraggableImagesRecyclerView()
+        configureTemplatesRecyclerView()
         configureDrawView()
 
+        if (existingDrawingGiven()) {
+            loadExistingDrawing()
+        }
+
         startListeners()
+    }
+
+    private fun loadExistingDrawing() {
+        val drawingDetail = getGivenDrawingDetail()
+
+        drawView.setImageBackground(drawingDetail.file)
+
+        drawViewModel.loadExistingDrawingDetail(drawingDetail)
+    }
+
+    private fun existingDrawingGiven(): Boolean {
+        return arguments?.getSerializable(DRAWING_DETAIL_UUID) != null
+    }
+
+    private fun getGivenDrawingDetail(): DrawingDetail {
+        val detailUuid = arguments!!.getSerializable(DRAWING_DETAIL_UUID) as UUID
+        return eventViewModel.event.value!!.getDetail(detailUuid) as DrawingDetail
     }
 
     override fun onAttach(context: Context) {
@@ -83,14 +107,20 @@ class MakeDrawingFragment : DrawFragment() {
     }
 
     private fun startListeners() {
+        drawViewModel.textClicked.observe(this, Observer {
+            drawView.pickTextTool()
+        })
         drawViewModel.eraserClicked.observe(this, Observer {
-            drawView.setColor(Color.WHITE)
+            drawView.pickEraserTool()
+        })
+        drawViewModel.pencilClicked.observe(this, Observer {
+            drawView.pickDrawingTool()
         })
 
         drawViewModel.saveClicked.observe(this, Observer {
             // TODO: move to something async, maybe a coroutine?
             drawView.getBitmap { bitmap ->
-                eventViewModel.saveDrawing(bitmap)
+                eventViewModel.saveDrawing(bitmap, drawViewModel.existingDetail.value)
             }
         })
         eventViewModel.drawingSavedSuccessFully.observe(this, Observer {
@@ -111,17 +141,61 @@ class MakeDrawingFragment : DrawFragment() {
         }
     }
 
-    private fun configureDraggableImagesRecyclerView() {
-        drawBinding.containerDrawImages.recyclerViewDrawingImages.apply {
+    private fun configureTemplatesRecyclerView() {
+        setUpTemplatesRecyclerView()
+
+        drawBinding.tabsDrawingTemplates.addOnTabSelectedListener(
+            object : TabLayout.OnTabSelectedListener {
+                override fun onTabReselected(tab: TabLayout.Tab) {}
+                override fun onTabUnselected(tab: TabLayout.Tab) {}
+
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    val imagesAdapter =
+                        drawBinding.recyclerViewDrawingTemplates.adapter as ImagesAdapter
+                    val array = when (tab.position) {
+                        0 -> R.array.templates_people
+                        1 -> R.array.templates_attributes
+                        2 -> R.array.templates_decor
+                        3 -> R.array.templates_metaphors
+                        else -> throw IllegalArgumentException("Unknown templates specifier passed")
+                    }
+                    val imageResArray = requireContext().resources.obtainTypedArray(array)
+                    val imageResList = createListOfImageResources(imageResArray)
+                    imagesAdapter.setNewImages(imageResList)
+                }
+            })
+    }
+
+    private fun createListOfImageResources(imageResArray: TypedArray): MutableList<Int> {
+        val imageResList = mutableListOf<Int>()
+        for (i in 0 until imageResArray.length()) {
+            imageResList.add(imageResArray.getResourceId(i, -1))
+        }
+        return imageResList
+    }
+
+    private fun setUpTemplatesRecyclerView() {
+        val imageResArray = requireContext().resources.obtainTypedArray(R.array.templates_people)
+        val imagesAdapter = ImagesAdapter(createListOfImageResources(imageResArray))
+        drawBinding.recyclerViewDrawingTemplates.apply {
+            adapter = imagesAdapter
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            adapter = ImagesAdapter(premadeImagesProvider.provideImages())
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
     }
 
     companion object {
         fun newInstance(): MakeDrawingFragment {
             return MakeDrawingFragment()
+        }
+
+        fun newInstance(detailUuid: UUID): MakeDrawingFragment {
+            val args = Bundle().apply {
+                putSerializable(DRAWING_DETAIL_UUID, detailUuid)
+            }
+            return newInstance().apply {
+                arguments = args
+            }
         }
     }
 

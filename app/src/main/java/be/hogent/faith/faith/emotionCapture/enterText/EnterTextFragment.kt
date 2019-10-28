@@ -17,7 +17,6 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import kotlinx.android.synthetic.main.fragment_enter_text.enterText_editor
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import java.util.UUID
 
 // uses https://github.com/wasabeef/richeditor-android
@@ -101,6 +100,7 @@ class EnterTextFragment : Fragment() {
             setOnTextChangeListener {
                 enterTextViewModel.setText(it)
             }
+            // Make sure editor contents are not null so we can save
             focusEditor()
         }
         val inputMethodManager =

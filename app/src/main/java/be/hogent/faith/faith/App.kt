@@ -14,7 +14,6 @@ import org.koin.core.context.startKoin
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
-
 class App : Application() {
 
     override fun onCreate() {
