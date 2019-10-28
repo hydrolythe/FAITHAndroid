@@ -245,7 +245,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             // Add finished path to actions
             _drawingActions.add(it)
 
-            // Start a new txt_login_background. We have to do this here already so changing PaintOptions after drawing a line
+            // Start a new Path. We have to do this here already so changing PaintOptions after drawing a line
             // doesn't change the options for that line, but sets up the new line.
             startNewPath()
 
