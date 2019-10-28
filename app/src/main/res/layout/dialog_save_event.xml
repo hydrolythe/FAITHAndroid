@@ -111,53 +111,70 @@
                 app:layout_constraintGuide_percent="0.77" />
 
 
-            <EditText
-                android:id="@+id/txt_save_event_title"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_eventtitle"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:hint="titel"
-                android:singleLine="true"
-                android:text="@={eventViewModel.eventTitle}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                app:errorMessageResId="@{userViewModel.titleErrorMessage}"
                 app:layout_constraintBottom_toTopOf="@+id/guide_title_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
                 app:layout_constraintStart_toStartOf="@+id/guide_avatars_end"
-                tools:text="Titel van event" />
+                android:hint="titel">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_save_event_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={eventViewModel.eventTitle}" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            <EditText
-                android:id="@+id/btn_save_event_open_datepicker"
-                style="@style/TextAppearance.AppCompat.Small"
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_date"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:background="#00000000"
-                android:inputType="date"
-                android:onClick="@{() -> eventViewModel.onDateButtonClicked()}"
-                android:text="@{eventViewModel.eventDateString}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintBottom_toTopOf="@+id/guide_date_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/guide_save_start"
                 app:layout_constraintStart_toStartOf="@+id/guide_avatars_end"
+                android:hint="@string/datum">
+
+                <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/btn_save_event_open_datepicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:inputType="date"
+                android:onClick="@{() -> eventViewModel.onDateButtonClicked()}"
+                android:text="@{eventViewModel.eventDateString}"
                 tools:text="@tools:sample/date/ddmmyy" />
 
-            <EditText
-                android:id="@+id/txt_save_event_notes"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_notes"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:background="#00000000"
-                android:hint="notities"
-                android:inputType="textMultiLine"
-                android:singleLine="false"
-                android:text="@={eventViewModel.eventNotes}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintBottom_toTopOf="@+id/guide_notes_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
                 app:layout_constraintStart_toStartOf="@+id/guide_avatars_end"
                 app:layout_constraintTop_toBottomOf="@+id/guide_date_bottom"
+                android:hint="@string/hier_kan_je_de_notities_kwijt">
+
+                <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/txt_save_event_notes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="textMultiLine"
+                android:singleLine="false"
+                android:text="@={eventViewModel.eventNotes}"
                 tools:text="@tools:sample/lorem/random" />
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <View
                 android:id="@+id/btn_save_event_cancel"
