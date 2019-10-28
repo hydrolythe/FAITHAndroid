@@ -11,7 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
 
@@ -23,6 +23,7 @@ android {
     }
     testOptions {
         unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
     }
 
 }
@@ -30,20 +31,12 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     def commonDependencies = rootProject.ext.commonDependencies
-    def androidTestDependencies = rootProject.ext.androidTestDependencies
     def androidDependencies = rootProject.ext.androidDependencies
-    def uiDependencies = rootProject.ext.uiDependencies
 
     implementation commonDependencies.kotlin
-    implementation commonDependencies.coroutines_core
-    implementation commonDependencies.coroutines_android
     implementation androidDependencies.appcompat
-    implementation uiDependencies.constraintLayout
-    implementation uiDependencies.design
 
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
-
-    androidTestImplementation androidTestDependencies.testRunner
-    androidTestImplementation androidTestDependencies.espresso
+    testImplementation testDependencies.robolectric
 }
