@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
-import be.hogent.faith.databinding.FragmentDrawTabsBinding
+import be.hogent.faith.databinding.FragmentDrawBinding
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawing.DrawFragment
@@ -52,7 +52,7 @@ class MakeDrawingFragment : DrawFragment() {
 
     private val premadeImagesProvider by inject<PremadeImagesProvider>()
 
-    private lateinit var drawBinding: FragmentDrawTabsBinding
+    private lateinit var drawBinding: FragmentDrawBinding
 
     private var navigation: DrawingScreenNavigation? = null
 
@@ -62,7 +62,7 @@ class MakeDrawingFragment : DrawFragment() {
         savedInstanceState: Bundle?
     ): View {
         drawBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_draw_tabs, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_draw, container, false)
         drawBinding.drawViewModel = drawViewModel
         drawBinding.lifecycleOwner = this
 

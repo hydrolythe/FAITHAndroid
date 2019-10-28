@@ -33,19 +33,19 @@ const val BACKGROUND_MAX_HEIGHT_USED = 0.8
 class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), DrawingContext {
 
     override val view: View
-        get() = this
+    get() = this
 
     /**
      * Holds all [CanvasAction]s that will be drawn when calling [onDraw].
-     */
+    */
     private var _drawingActions = mutableListOf<CanvasAction>()
     val canvasActions: List<CanvasAction>
-        get() = _drawingActions
+    get() = _drawingActions
 
     /**
      * Holds a copy of all actions that were done before [clear] was called.
      * Used to restore them when calling [undo] after a call to [clear].
-     */
+    */
     private var lastDrawingActions = mutableListOf<CanvasAction>()
 
     /**
@@ -73,19 +73,6 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
      */
     var fullScreenBackground: Boolean = true
 
-    private val drawingListeners = mutableListOf<DrawViewListener>()
-    /**
-     * We save the previous tool so that when we select a color after using the eraser we can
-     * return to it.
-     */
-    private var previousTool: Tool? = null
-
-    /**
-     * The [Paint] that will be shared between the different [Tool]s.
-     * When changing the [Paint] (eg using [setColor]), it will be set here so the same settings
-     * are applied when switching tools, but it should also be set to the current tool directly
-     * because some tools (eg [TextTool] use a subclass of [Paint] and should be updated manually.
-     */
     private val defaultPaint = Paint().apply {
         color = Color.BLACK
         strokeWidth = 30f
@@ -193,6 +180,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
 
         currentTool.drawCurrentAction(canvas)
     }
+
     /**
      * Draw the background when one is set and the [Rect] in which it will be drawn has been calculated.
      */
