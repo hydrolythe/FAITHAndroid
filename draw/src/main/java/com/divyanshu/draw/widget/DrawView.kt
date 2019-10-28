@@ -254,7 +254,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     /**
-     * Starts a new txt_login_background with the currently chosen PaintOptions
+     * Starts a new Path with the currently chosen PaintOptions
      */
     private fun startNewPath() {
         currentPaintOptions = PaintOptions(
