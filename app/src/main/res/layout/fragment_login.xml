@@ -21,9 +21,9 @@
             android:id="@+id/background_welcome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/login_background"
+            android:background="@drawable/back_login"
             android:contentDescription="@string/descr_loginscreen"
-            android:scaleType="centerInside" />
+            android:scaleType="fitCenter" />
 
         <!-- KNOPPEN -->
         <!-- Invisible to make it transparent -->
@@ -50,7 +50,7 @@
                 android:layout_width="1dp"
                 android:layout_height="1dp"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.43" />
+                app:layout_constraintGuide_percent="0.5" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline7"
@@ -70,31 +70,60 @@
             <include
                 android:id="@+id/include_login_txts"
                 layout="@layout/view_login_circle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/included_arrows"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                app:layout_constraintBottom_toTopOf="@+id/guide_login_avatars_top"
                 app:layout_constraintEnd_toStartOf="@+id/guideline7"
                 app:layout_constraintStart_toStartOf="@+id/guideline7"
+                app:layout_constraintTop_toTopOf="@+id/guide_horiz_circle"
                 app:welcomeViewModel="@{welcomeViewModel}" />
 
-            <include
-                android:id="@+id/included_arrows"
-                layout="@layout/view_loginarrows"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_register"
+                style="@style/arrow_style.toRight"
+                android:onClick="@{() -> welcomeViewModel.registerButtonClicked()}"
+
+                android:text="@string/msg_registreer"
+                app:icon="@drawable/icoon_stad"
+                app:layout_constraintStart_toStartOf="@+id/guideline10"
+                app:layout_constraintTop_toTopOf="@+id/guide_login_avatars_top" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_city_startNewEvent"
+                style="@style/arrow_style.toLeft"
+                android:onClick="@{() -> welcomeViewModel.loginButtonClicked()}"
+                android:text="@string/msg_naar_de_stad"
+                app:icon="@drawable/icoon_stad"
+                app:layout_constraintEnd_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toTopOf="@+id/guide_login_avatars_top" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:welcomeViewModel="@{welcomeViewModel}" />
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.79" />
 
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guide_form_start"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guide_login_avatars_top"
-                app:srcCompat="@drawable/login_avatars" />
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.84" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_horiz_circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="277dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.60444444" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
