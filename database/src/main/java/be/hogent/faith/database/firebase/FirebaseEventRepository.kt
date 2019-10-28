@@ -3,7 +3,7 @@ package be.hogent.faith.database.firebase
 import android.content.ContentValues
 import android.net.Uri
 import android.util.Log
-import be.hogent.faith.database.firebase.FirebaseUserRepository.Companion.USERS_KEY
+import android.webkit.MimeTypeMap
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
@@ -107,6 +107,8 @@ class FirebaseEventRepository(
      * Save the avatar in storage and update the file path
      */
     fun saveAvatarForEvent(item: EventEntity): Single<String> {
+        if (item.emotionAvatar == null)
+            return Single.just("")
         return RxFirebaseStorage.putFile(
             storageRef.child(fbAuth.currentUser!!.uid).child(EVENTS_KEY).child(item.uuid).child(
                 "avatar.png"
@@ -127,9 +129,10 @@ class FirebaseEventRepository(
         projectUuid: String,
         detail: DetailEntity
     ): Single<String> {
+        val fileExt = MimeTypeMap.getFileExtensionFromUrl(detail.file)
         return RxFirebaseStorage.putFile(
             storageRef.child(fbAuth.currentUser!!.uid).child(EVENTS_KEY).child(projectUuid.toString()).child(
-                "${detail.uuid}.png"
+                "${detail.uuid}.{fileExt}"
             ),
             Uri.parse("file://" + detail.file)
         )
