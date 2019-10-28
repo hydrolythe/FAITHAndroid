@@ -31,7 +31,7 @@
             android:layout_height="match_parent"
             android:background="#00000000">
 
-            <Button
+            <ImageButton
                 android:layout_width="@dimen/material_icon_width"
                 android:layout_height="@dimen/material_icon_height"
                 android:layout_gravity="center"
@@ -42,7 +42,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_recordAudio_play"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
@@ -56,7 +56,7 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/guide_recordAudio_top" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_recordAudio_pause"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
@@ -73,7 +73,7 @@
                 app:layout_constraintStart_toEndOf="@+id/btn_recordAudio_play"
                 app:layout_constraintTop_toTopOf="@+id/guide_recordAudio_top" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_recordAudio_record"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
@@ -90,7 +90,7 @@
                 app:layout_constraintStart_toEndOf="@+id/btn_recordAudio_pause"
                 app:layout_constraintTop_toTopOf="@+id/guide_recordAudio_top" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_recordAudio_stop"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
