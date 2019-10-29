@@ -83,7 +83,6 @@
                         android:scaleType="centerInside"
                         android:src="@drawable/bold"
                         android:text="B"
-                        android:textFontWeight="bold"
                         android:textSize="@dimen/font_size_enter_text"
                         android:textStyle="bold" />
 
@@ -102,7 +101,6 @@
                         android:scaleType="centerInside"
                         android:src="@drawable/italic"
                         android:text="I"
-                        android:textFontWeight="italic"
                         android:textSize="@dimen/font_size_enter_text"
                         android:textStyle="italic" />
 
