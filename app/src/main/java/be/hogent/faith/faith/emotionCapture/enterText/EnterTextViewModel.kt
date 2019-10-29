@@ -18,6 +18,10 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
     val text: LiveData<String>
         get() = _text
 
+    private val _initialText = MutableLiveData<String>()
+    val initialText: LiveData<String>
+        get() = _initialText
+
     private val _existingDetail = MutableLiveData<TextDetail>()
     val existingDetail: LiveData<TextDetail>
         get() = _existingDetail
@@ -79,7 +83,6 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
 
     fun loadExistingTextDetail(textDetail: TextDetail) {
         _existingDetail.value = textDetail
-
         val params = LoadTextDetailUseCase.LoadTextParams(textDetail)
         loadTextDetailUseCase.execute(params, LoadTextUseCaseHandler())
     }
@@ -92,7 +95,8 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
 
     private inner class LoadTextUseCaseHandler : DisposableSingleObserver<String>() {
         override fun onSuccess(loadedString: String) {
-            _text.value = loadedString
+            _initialText.value = loadedString
+
         }
 
         override fun onError(e: Throwable) {
