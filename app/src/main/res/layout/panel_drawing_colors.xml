@@ -21,14 +21,15 @@
             android:id="@+id/linearLayoutColors"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|center_vertical"
             android:layout_margin="8dp"
+            android:gravity="center"
             android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/btn_draw_setColorBlack"
-                android:layout_width="70dp"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@{((int)drawViewModel.selectedColor)==Color.BLACK ? @drawable/background : @drawable/background_noborder}"
@@ -40,9 +41,8 @@
 
             <ImageView
                 android:id="@+id/btn_draw_setColorBlue"
-                android:layout_width="70dp"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@{((int)drawViewModel.selectedColor)==Color.BLUE ? @drawable/background : @drawable/background_noborder}"
@@ -54,9 +54,8 @@
 
             <ImageView
                 android:id="@+id/btn_draw_setColorRed"
-                android:layout_width="70dp"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@{((int)drawViewModel.selectedColor)==Color.RED ? @drawable/background : @drawable/background_noborder }"
@@ -68,9 +67,8 @@
 
             <ImageView
                 android:id="@+id/btn_draw_setColorYellow"
-                android:layout_width="70dp"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@{((int)drawViewModel.selectedColor)==Color.YELLOW ? @drawable/background : @drawable/background_noborder }"
@@ -82,9 +80,8 @@
 
             <ImageView
                 android:id="@+id/btn_draw_setColorGreen"
-                android:layout_width="70dp"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:background="@{((int)drawViewModel.selectedColor)==Color.GREEN ? @drawable/background : @drawable/background_noborder}"
