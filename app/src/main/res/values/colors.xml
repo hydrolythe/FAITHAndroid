@@ -25,6 +25,7 @@
     <color name="onBackground">#000000</color>
     <color name="onSurface">#000000</color>
     <color name="onError">#FFFFFF</color>
+    <color name="background_register_info_color">#A7FFEB</color>
 </resources>
 
 

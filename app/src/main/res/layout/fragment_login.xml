@@ -51,7 +51,7 @@
                 app:layout_constraintGuide_percent="0.5" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_avatars_end"
+                android:id="@+id/guide_frame_hor"
                 android:layout_width="1dp"
                 android:layout_height="1dp"
                 android:orientation="vertical"
@@ -114,7 +114,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guide_avatars_end"
+                app:layout_constraintEnd_toStartOf="@+id/guide_frame_hor"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guide_login_arrows_top"
                 app:srcCompat="@drawable/login_avatars" />
