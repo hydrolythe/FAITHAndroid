@@ -19,8 +19,9 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
-import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_inkleuren
+
 import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_zittend
+import kotlinx.android.synthetic.main.view_button_color_avatar.img_event_details_avatar_inkleuren
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
