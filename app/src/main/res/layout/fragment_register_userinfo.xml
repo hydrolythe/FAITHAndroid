@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -12,6 +13,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background_register_info_color"
         android:focusable="true"
         android:focusableInTouchMode="true">
 
@@ -20,7 +22,8 @@
             android:id="@+id/background_register_userinfo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/register_background_userinfo" />
+            android:scaleType="fitEnd"
+            app:srcCompat="@drawable/register_background_info" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -45,21 +48,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.525" />
+                app:layout_constraintGuide_percent="0.42" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_city_bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.573" />
+                app:layout_constraintGuide_percent="0.62" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_city_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.78" />
+                app:layout_constraintGuide_percent="0.72" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_city_end"
@@ -76,11 +79,11 @@
                 app:layout_constraintGuide_percent="0.47" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_avatars_end"
+                android:id="@+id/guide_frame_hor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.462" />
+                app:layout_constraintGuide_percent="0.5" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_form_end"
@@ -89,54 +92,26 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.553" />
 
-            <EditText
-                android:id="@+id/txt_register_username"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:hint="@string/hint_choose_username"
-                android:inputType="textPersonName"
-                android:text="@={registerUserInfoViewModel.userName}"
-                app:errorMessageResId="@{registerUserInfoViewModel.userNameErrorMessage}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/guide_avatarRecyclerView_top"
-                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
-                app:layout_constraintStart_toStartOf="@+id/guide_form_start" />
 
-            <EditText
-                android:id="@+id/txt_register_password"
-                android:layout_width="0dp"
+            <include
+                android:id="@+id/include_register_frame"
+                layout="@layout/view_register_frame"
+                app:registerUserInfoViewModel="@{registerUserInfoViewModel}"
+                android:layout_width="400dp"
                 android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:hint="Kies een wachtwoord"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                app:errorMessageResId="@{registerUserInfoViewModel.passwordErrorMessage}"
-                android:inputType="textPassword"
-                android:text="@={registerUserInfoViewModel.password}"
-                app:layout_constraintBottom_toTopOf="@+id/guide_password_bottom"
-                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
-                app:layout_constraintStart_toStartOf="@+id/guide_form_start" />
-
-            <EditText
-                android:id="@+id/txt_register_password_repeat"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:hint="Herhaal je wachtwoord"
-                android:inputType="textPassword"
-                app:errorMessageResId="@{registerUserInfoViewModel.passwordRepeatErrorMessage}"
-                android:text="@={registerUserInfoViewModel.passwordRepeated}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 app:layout_constraintBottom_toTopOf="@+id/guide_city_top"
-                app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
-                app:layout_constraintStart_toStartOf="@+id/guide_form_start" />
+                app:layout_constraintEnd_toStartOf="@+id/guide_frame_hor"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/guide_frame_hor"
+                app:layout_constraintTop_toTopOf="@+id/guide_city_top" />
 
-            <View
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_register_confirmInfo"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                style="@style/arrow_style.toRight"
+                android:layout_width="200dp"
                 android:onClick="@{()->registerUserInfoViewModel.onConfirmUserInfoClicked()}"
+                android:text="@string/ga_verder"
+                app:icon="@drawable/icoon_stad"
                 app:layout_constraintBottom_toTopOf="@+id/guide_city_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/guide_city_end"
                 app:layout_constraintHorizontal_bias="0.0"

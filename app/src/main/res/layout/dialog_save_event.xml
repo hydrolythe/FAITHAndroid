@@ -97,7 +97,7 @@
                 app:layout_constraintGuide_percent="0.5" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_avatars_end"
+                android:id="@+id/guide_frame_hor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@+id/guide_title_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
-                app:layout_constraintStart_toStartOf="@+id/guide_avatars_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_frame_hor"
                 android:hint="titel">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@+id/guide_date_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/guide_save_start"
-                app:layout_constraintStart_toStartOf="@+id/guide_avatars_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_frame_hor"
                 android:hint="@string/datum">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -161,7 +161,7 @@
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/guide_notes_bottom"
                 app:layout_constraintEnd_toStartOf="@+id/guide_form_end"
-                app:layout_constraintStart_toStartOf="@+id/guide_avatars_end"
+                app:layout_constraintStart_toStartOf="@+id/guide_frame_hor"
                 app:layout_constraintTop_toBottomOf="@+id/guide_date_bottom"
                 android:hint="@string/hier_kan_je_de_notities_kwijt">
 
