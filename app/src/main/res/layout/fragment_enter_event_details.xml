@@ -275,23 +275,37 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.93" />
 
-            <ImageView
-                android:id="@+id/img_event_details_avatar_inkleuren"
-                android:layout_width="wrap_content"
+
+            <include
+                layout="@layout/view_button_color_avatar"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/avatar_inkleuren"
-                android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/btn_event_details_gotoEmotionAvatar"
                 app:layout_constraintHorizontal_bias="0.515"
                 app:layout_constraintStart_toStartOf="@+id/guide_avatar_inkleuren_left"
-                app:layout_constraintTop_toBottomOf="@+id/btn_event_details_drawing"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/meisje_stoer_gezicht" />
+                app:layout_constraintTop_toTopOf="@+id/guide_avatar_inkleuren_top">
+
+            </include>
+
+            <!--            <ImageView-->
+<!--                android:id="@+id/img_event_details_avatar_inkleuren"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_marginEnd="8dp"-->
+<!--                android:layout_marginBottom="8dp"-->
+<!--                android:adjustViewBounds="true"-->
+<!--                android:contentDescription="@string/avatar_inkleuren"-->
+<!--                android:scaleType="fitXY"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="@+id/btn_event_details_gotoEmotionAvatar"-->
+<!--                app:layout_constraintHorizontal_bias="0.515"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/guide_avatar_inkleuren_left"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/guide_avatar_inkleuren_top"-->
+<!--                app:layout_constraintVertical_bias="0.0"-->
+<!--                app:srcCompat="@drawable/meisje_stoer_gezicht" />-->
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline3"
