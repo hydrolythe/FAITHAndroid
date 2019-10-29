@@ -14,4 +14,5 @@
     <dimen name="arrow_height">85dp</dimen>
     <dimen name="arrow_width">210dp</dimen>
     <dimen name="panel_corner_radius">40dp</dimen>
+    <dimen name="font_size_enter_text">50sp</dimen>
 </resources>
