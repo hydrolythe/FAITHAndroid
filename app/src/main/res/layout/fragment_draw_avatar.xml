@@ -17,16 +17,11 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <!--ACHTERGROND-->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/draw_emotion"
-            android:contentDescription="@string/tekenen" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#00000000">
+            android:background="@color/background_register_info_color">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_draw_utilities_left"
@@ -39,12 +34,13 @@
                 android:id="@+id/container_draw_colors"
                 layout="@layout/panel_drawing_colors"
                 android:layout_width="0dp"
-                app:layout_constraintVertical_weight="0.75"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@id/container_draw_utilities"
                 app:layout_constraintEnd_toEndOf="@+id/guide_drawView_drawTools_left"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guide_drawView_drawUtilities_left"
                 app:layout_constraintTop_toTopOf="@+id/guide_drawView_drawTools_top"
+                app:layout_constraintVertical_weight="0.75"
                 bind:drawViewModel="@{drawViewModel}" />
 
             <include
@@ -52,35 +48,47 @@
                 layout="@layout/panel_drawing_tools"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/guide_drawView_drawTools_bottom"
                 app:layout_constraintEnd_toEndOf="@+id/guide_drawView_drawTools_left"
-                app:layout_constraintVertical_weight="0.25"
                 app:layout_constraintStart_toStartOf="@+id/guide_drawView_drawUtilities_left"
                 app:layout_constraintTop_toBottomOf="@id/container_draw_colors"
+                app:layout_constraintVertical_weight="0.25"
                 bind:drawViewModel="@{drawViewModel}" />
 
-            <com.divyanshu.draw.widget.DrawView
-                android:id="@+id/drawView"
+            <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                app:cardCornerRadius="@dimen/panel_corner_radius"
                 app:layout_constraintBottom_toBottomOf="@+id/guide_drawView_drawTools_bottom"
                 app:layout_constraintEnd_toEndOf="@+id/guide_drawView_drawTools_right"
                 app:layout_constraintStart_toEndOf="@+id/guide_drawView_drawTools_left"
-                app:layout_constraintTop_toTopOf="@+id/guide_drawView_drawTools_top" />
+                app:layout_constraintTop_toTopOf="@+id/guide_drawView_drawTools_top" >
+
+
+                <com.divyanshu.draw.widget.DrawView
+                    android:id="@+id/drawView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+            </androidx.cardview.widget.CardView>
+
+
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_drawView_drawUtilities_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.05" />
+                app:layout_constraintGuide_percent="0.04" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_drawView_drawTools_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.18" />
+                app:layout_constraintGuide_percent="0.15" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_drawView_drawTools_right"
