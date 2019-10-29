@@ -15,7 +15,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="@dimen/panel_corner_radius">
 
         <LinearLayout
             android:id="@+id/linearLayoutColors"
