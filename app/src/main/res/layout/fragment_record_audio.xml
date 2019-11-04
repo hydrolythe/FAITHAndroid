@@ -61,7 +61,7 @@
             <ImageButton
                 android:id="@+id/btn_recordAudio_pause"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="@drawable/audio_pause"
                 android:contentDescription="@string/description_pause_recording"
@@ -78,7 +78,7 @@
             <ImageButton
                 android:id="@+id/btn_recordAudio_record"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="@drawable/audio_record"
                 android:contentDescription="@string/description_start_recording"
@@ -95,7 +95,7 @@
             <ImageButton
                 android:id="@+id/btn_recordAudio_stop"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:background="@drawable/audio_stop"
                 android:contentDescription="@string/description_stop_recording"
