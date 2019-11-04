@@ -75,7 +75,7 @@
                 android:onClick="@{() -> welcomeViewModel.registerButtonClicked()}"
 
                 android:text="@string/msg_registreer"
-                app:icon="@drawable/icoon_stad"
+                app:icon="@drawable/ic_nieuw"
                 app:layout_constraintStart_toStartOf="@+id/guide_right_arrow"
                 app:layout_constraintTop_toTopOf="@+id/guide_login_arrows_top" />
 
