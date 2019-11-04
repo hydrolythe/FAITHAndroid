@@ -7,9 +7,9 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
-import be.hogent.faith.faith.emotionCapture.drawing.drawEmotionAvatar.DrawEmotionAvatarFragment
-import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.MakeDrawingFragment
+import be.hogent.faith.faith.details.drawing.create.DrawViewModel
+import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionAvatarFragment
+import be.hogent.faith.faith.details.drawing.create.MakeDrawingFragment
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailFragmentWithEmotionAvatar
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment

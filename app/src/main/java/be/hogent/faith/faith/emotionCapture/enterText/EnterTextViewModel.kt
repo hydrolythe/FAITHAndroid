@@ -96,7 +96,6 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
     private inner class LoadTextUseCaseHandler : DisposableSingleObserver<String>() {
         override fun onSuccess(loadedString: String) {
             _initialText.value = loadedString
-
         }
 
         override fun onError(e: Throwable) {

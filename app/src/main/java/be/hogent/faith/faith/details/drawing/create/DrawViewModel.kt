@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.drawing
+package be.hogent.faith.faith.details.drawing.create
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
@@ -65,7 +65,8 @@ class DrawViewModel : ViewModel() {
     init {
         _drawingActions.value = mutableListOf()
         _selectedColor.value = Color.BLACK
-        _selectedLineWidth.value = LineWidth.MEDIUM
+        _selectedLineWidth.value =
+            LineWidth.MEDIUM
     }
 
     fun loadExistingDrawingDetail(drawingDetail: DrawingDetail) {

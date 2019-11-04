@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.drawing.makeDrawing
+package be.hogent.faith.faith.details.drawing.create
 
 import android.content.Context
 import android.content.res.TypedArray
@@ -13,9 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawBinding
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.faith.details.drawing.create.draggableImages.DragListener
+import be.hogent.faith.faith.details.drawing.create.draggableImages.ImagesAdapter
+import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
 import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.faith.emotionCapture.drawing.DrawFragment
-import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import com.divyanshu.draw.widget.DrawView
 import com.google.android.material.tabs.TabLayout
@@ -137,7 +138,11 @@ class MakeDrawingFragment : DrawFragment() {
 
     private fun configureDrawView() {
         with(drawView) {
-            setOnDragListener(DragListener(this))
+            setOnDragListener(
+                DragListener(
+                    this
+                )
+            )
         }
     }
 
@@ -176,7 +181,10 @@ class MakeDrawingFragment : DrawFragment() {
 
     private fun setUpTemplatesRecyclerView() {
         val imageResArray = requireContext().resources.obtainTypedArray(R.array.templates_people)
-        val imagesAdapter = ImagesAdapter(createListOfImageResources(imageResArray))
+        val imagesAdapter =
+            ImagesAdapter(
+                createListOfImageResources(imageResArray)
+            )
         drawBinding.recyclerViewDrawingTemplates.apply {
             adapter = imagesAdapter
             setHasFixedSize(true)
@@ -193,7 +201,8 @@ class MakeDrawingFragment : DrawFragment() {
             val args = Bundle().apply {
                 putSerializable(DRAWING_DETAIL_UUID, detailUuid)
             }
-            return newInstance().apply {
+            return newInstance()
+                .apply {
                 arguments = args
             }
         }

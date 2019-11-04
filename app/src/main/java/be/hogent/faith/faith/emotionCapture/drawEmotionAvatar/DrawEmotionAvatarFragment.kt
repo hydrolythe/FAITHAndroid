@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.drawing.drawEmotionAvatar
+package be.hogent.faith.faith.emotionCapture.drawEmotionAvatar
 
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -12,8 +12,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
-import be.hogent.faith.faith.emotionCapture.drawing.DrawFragment
-import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
+import be.hogent.faith.faith.details.drawing.create.DrawFragment
+import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import com.divyanshu.draw.widget.DrawView
 import io.reactivex.disposables.CompositeDisposable

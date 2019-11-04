@@ -1,8 +1,9 @@
-package be.hogent.faith.faith.emotionCapture.drawing.makeDrawing
+package be.hogent.faith.faith.details.drawing.create.draggableImages
 
 import be.hogent.faith.R
 
-class PremadeImagesProviderFromResources : PremadeImagesProvider {
+class PremadeImagesProviderFromResources :
+    PremadeImagesProvider {
     override fun provideImages(): List<Int> {
         return listOf(
             R.drawable.image_auto,

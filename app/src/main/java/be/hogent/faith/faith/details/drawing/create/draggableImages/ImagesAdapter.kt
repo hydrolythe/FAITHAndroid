@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.drawing.makeDrawing
+package be.hogent.faith.faith.details.drawing.create.draggableImages
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -28,7 +28,9 @@ class ImagesAdapter(@IdRes imageDrawableIDs: List<Int>) :
             parent,
             false
         ) as ImageView
-        return ImageViewHolder(thumbnail)
+        return ImageViewHolder(
+            thumbnail
+        )
     }
 
     override fun getItemCount(): Int {

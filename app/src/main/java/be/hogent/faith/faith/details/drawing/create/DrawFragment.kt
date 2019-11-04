@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.drawing
+package be.hogent.faith.faith.details.drawing.create
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer

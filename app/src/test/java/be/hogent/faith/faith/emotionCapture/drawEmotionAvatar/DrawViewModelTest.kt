@@ -1,10 +1,10 @@
-package be.hogent.faith.faith.emotionCapture.drawing.drawEmotionAvatar
+package be.hogent.faith.faith.emotionCapture.drawEmotionAvatar
 
 import android.graphics.Color
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import be.hogent.faith.faith.TestUtils.getValue
-import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
-import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel.LineWidth
+import be.hogent.faith.faith.details.drawing.create.DrawViewModel
+import be.hogent.faith.faith.details.drawing.create.DrawViewModel.LineWidth
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule

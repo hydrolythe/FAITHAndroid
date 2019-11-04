@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.drawing.drawEmotionAvatar
+package be.hogent.faith.faith.emotionCapture.drawEmotionAvatar
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click

@@ -37,7 +37,6 @@ class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
             DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         binding.welcomeViewModel = welcomeViewModel
 
-
         loginManager.attachLoginSuccesListener(this)
 
         return binding.root
@@ -47,7 +46,6 @@ class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
         super.onStart()
         registerListeners()
     }
-
 
     private fun registerListeners() {
         welcomeViewModel.registerButtonClicked.observe(this, Observer {

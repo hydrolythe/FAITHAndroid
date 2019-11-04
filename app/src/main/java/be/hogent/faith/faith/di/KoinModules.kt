@@ -5,9 +5,9 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
-import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
-import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.PremadeImagesProvider
-import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.PremadeImagesProviderFromResources
+import be.hogent.faith.faith.details.drawing.create.DrawViewModel
+import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
+import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProviderFromResources
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel
