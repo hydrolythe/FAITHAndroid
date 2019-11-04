@@ -52,8 +52,6 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     // They all require the same event object so it has to be shared.
     private lateinit var eventViewModel: EventViewModel
 
-    private lateinit var takePhotoViewModel: TakePhotoViewModel
-
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private val avatarProvider: AvatarProvider by inject()
 
@@ -62,7 +60,6 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_emotion_capture)
 
         eventViewModel = getViewModel()
-        takePhotoViewModel = getViewModel()
 
         // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
