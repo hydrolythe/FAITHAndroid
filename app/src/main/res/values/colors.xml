@@ -26,6 +26,12 @@
     <color name="onSurface">#000000</color>
     <color name="onError">#FFFFFF</color>
     <color name="background_register_info_color">#A7FFEB</color>
+
+    <color name="blue">#00FFFF</color>
+    <color name="red">#DA1D45</color>
+    <color name="green">#16F48A</color>
+    <color name="black">#3F3E3E</color>
+    <color name="yellow">#FFFF00</color>
 </resources>
 
 

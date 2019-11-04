@@ -2,6 +2,7 @@ package be.hogent.faith.faith.emotionCapture.enterText
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -26,7 +27,7 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
     val existingDetail: LiveData<TextDetail>
         get() = _existingDetail
 
-    private val _selectedTextColor = MutableLiveData<@ColorInt Int>()
+    private val _selectedTextColor = MutableLiveData<@ColorRes Int>()
     val selectedTextColor: LiveData<Int>
         get() = _selectedTextColor
 
@@ -69,7 +70,7 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
         _underlineClicked.value = !(_underlineClicked.value ?: false)
     }
 
-    fun pickTextColor(@ColorInt color: Int) {
+    fun pickTextColor(@ColorRes color: Int) {
         _selectedTextColor.value = color
     }
 
