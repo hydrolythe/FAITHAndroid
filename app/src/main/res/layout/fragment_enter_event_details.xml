@@ -101,7 +101,7 @@
                 android:contentDescription="@string/description_addText"
                 android:onClick="@{() -> eventViewModel.onTextButtonClicked()}"
                 android:text="@string/description_addText"
-                app:icon="@drawable/icoon_stad"
+                app:icon="@drawable/ic_schrijven"
                 app:layout_constraintBottom_toTopOf="@+id/guide_bottom_pole"
                 app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
                 app:layout_constraintTop_toTopOf="@+id/guide_middle_horizontal_pole" />
@@ -113,7 +113,7 @@
                 android:contentDescription="@string/description_addPhoto"
                 android:onClick="@{() -> eventViewModel.onCameraButtonClicked()}"
                 android:text="@string/description_addPhoto"
-                app:icon="@drawable/icoon_stad"
+                app:icon="@drawable/ic_camera"
                 app:layout_constraintBottom_toTopOf="@+id/guide_bottom_pole"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintTop_toTopOf="@+id/guide_middle_horizontal_pole" />
@@ -125,7 +125,7 @@
                 android:contentDescription="@string/description_addAudio"
                 android:onClick="@{() -> eventViewModel.onAudioButtonClicked()}"
                 android:text="@string/description_addAudio"
-                app:icon="@drawable/icoon_stad"
+                app:icon="@drawable/ic_micro"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintTop_toBottomOf="@+id/btn_event_details_camera"
@@ -139,7 +139,7 @@
                 android:onClick="@{() -> eventViewModel.onDrawingButtonClicked()}"
 
                 android:text="@string/description_addDrawing"
-                app:icon="@drawable/icoon_stad"
+                app:icon="@drawable/ic_tekenen"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guide_middle_vertical_pole"
                 app:layout_constraintTop_toBottomOf="@+id/btn_event_details_text"
