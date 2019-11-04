@@ -2,6 +2,7 @@ package be.hogent.faith.faith.emotionCapture.drawing
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,7 +17,7 @@ import com.divyanshu.draw.widget.tools.CanvasAction
  */
 class DrawViewModel : ViewModel() {
 
-    private val _selectedColor = MutableLiveData<@ColorInt Int>()
+    private val _selectedColor = MutableLiveData<@ColorRes Int>()
     val selectedColor: LiveData<Int>
         get() = _selectedColor
 
@@ -78,7 +79,7 @@ class DrawViewModel : ViewModel() {
         // overwrite the existing detail.
     }
 
-    fun pickColor(@ColorInt color: Int) {
+    fun pickColor(@ColorRes color: Int) {
         _selectedColor.value = color
     }
 
