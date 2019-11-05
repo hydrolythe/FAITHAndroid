@@ -2,6 +2,7 @@ package be.hogent.faith.faith.loginOrRegister.registerUserInfo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.faith.util.SingleLiveEvent
@@ -11,6 +12,12 @@ class RegisterUserInfoViewModel : ViewModel() {
     val userName = MutableLiveData<String>()
     val password = MutableLiveData<String>()
     val passwordRepeated = MutableLiveData<String>()
+
+
+
+
+
+
 
     private val _userNameErrorMessage = MutableLiveData<Int>()
     val userNameErrorMessage: LiveData<Int>
@@ -34,11 +41,14 @@ class RegisterUserInfoViewModel : ViewModel() {
         }
     }
 
+
+
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
             _userNameErrorMessage.value = R.string.register_username_empty
             return false
         }
+        _userNameErrorMessage.value = R.string.empty
         return true
     }
 
