@@ -113,13 +113,15 @@
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_weight="1">
+                        app:layout_constraintVertical_weight="1"
+                        >
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/txt_save_event_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@={eventViewModel.eventTitle}" />
+                            android:text="@={eventViewModel.eventTitle}"
+                            app:errorMessageResId='@{userViewModel.titleErrorMessage}'/>
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -169,6 +171,7 @@
                             android:id="@+id/txt_save_event_notes"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:gravity="top|left"
                             android:inputType="textMultiLine"
                             android:singleLine="false"
                             android:text="@={eventViewModel.eventNotes}"
