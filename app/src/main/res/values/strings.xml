@@ -135,4 +135,8 @@
     <string name="underline"><u>U</u></string>
     <string name="audio_opnemen">opnemen</string>
     <string name="description_play_recording">speel opname af</string>
+
+    <string name="empty">""</string>
+    <string name="kies_een_wachtwoord">Kies een wachtwoord</string>
+    <string name="herhaal_je_wachtwoord">Herhaal je wachtwoord</string>
 </resources>

@@ -26,7 +26,7 @@ import be.hogent.faith.database.models.detail.TextDetailEntity
         PictureDetailEntity::class,
         TextDetailEntity::class,
         UserEntity::class],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters(
@@ -55,7 +55,7 @@ abstract class EntityDatabase : RoomDatabase() {
                     context.applicationContext,
                     EntityDatabase::class.java,
                     DATABASE_NAME
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 return instance
             }
