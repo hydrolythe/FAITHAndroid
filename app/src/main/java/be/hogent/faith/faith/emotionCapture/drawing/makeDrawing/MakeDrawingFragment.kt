@@ -19,9 +19,6 @@ import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import com.divyanshu.draw.widget.DrawView
 import com.google.android.material.tabs.TabLayout
-import kotlinx.android.synthetic.main.fragment_draw.btn_draw_eraser
-import kotlinx.android.synthetic.main.fragment_draw.btn_draw_pencil
-import kotlinx.android.synthetic.main.fragment_draw.btn_draw_text
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -111,21 +108,12 @@ class MakeDrawingFragment : DrawFragment() {
 
     private fun startListeners() {
         drawViewModel.textClicked.observe(this, Observer {
-            btn_draw_eraser.isActivated = false
-            btn_draw_pencil.isActivated = false
-            btn_draw_text.isActivated = true
             drawView.pickTextTool()
         })
         drawViewModel.eraserClicked.observe(this, Observer {
-            btn_draw_eraser.isActivated = true
-            btn_draw_pencil.isActivated = false
-            btn_draw_text.isActivated = false
             drawView.pickEraserTool()
         })
         drawViewModel.pencilClicked.observe(this, Observer {
-            btn_draw_eraser.isActivated = false
-            btn_draw_pencil.isActivated = true
-            btn_draw_text.isActivated = false
             drawView.pickDrawingTool()
         })
 

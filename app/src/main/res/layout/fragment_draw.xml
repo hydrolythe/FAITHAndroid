@@ -79,7 +79,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:onClick="@{()->drawViewModel.onPencilClicked()}"
-                        android:background="@drawable/btn_background_selected"
                         android:text="Penseel" />
 
                     <Button
@@ -87,7 +86,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:onClick="@{()->drawViewModel.onTextClicked()}"
-                        android:background="@drawable/btn_background_selected"
                         android:text="Text" />
 
 
@@ -96,7 +94,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:onClick="@{()->drawViewModel.onEraserClicked()}"
-                        android:background="@drawable/btn_background_selected"
                         android:text="Gom" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
