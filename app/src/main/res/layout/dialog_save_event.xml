@@ -50,7 +50,7 @@
                 app:layout_constraintGuide_percent="0.2" />
 
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/btn_save_event_cancel"
                 android:layout_width="@dimen/material_icon_width"
                 android:layout_height="@dimen/material_icon_height"
