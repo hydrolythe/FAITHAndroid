@@ -67,6 +67,7 @@ class DrawViewModel : ViewModel() {
         _drawingActions.value = mutableListOf()
         _selectedColor.value = Color.BLACK
         _selectedLineWidth.value = LineWidth.MEDIUM
+        _pencilClicked.call()
     }
 
     fun loadExistingDrawingDetail(drawingDetail: DrawingDetail) {
