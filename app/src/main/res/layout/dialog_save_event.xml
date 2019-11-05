@@ -114,14 +114,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_weight="1"
+                        app:errorResId='@{userViewModel.titleErrorMessage}'
                         >
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/txt_save_event_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@={eventViewModel.eventTitle}"
-                            app:errorMessageResId='@{userViewModel.titleErrorMessage}'/>
+                            android:text="@={eventViewModel.eventTitle}" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
