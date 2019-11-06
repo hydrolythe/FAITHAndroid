@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,36 +16,21 @@ import be.hogent.faith.faith.details.drawing.create.draggableImages.DragListener
 import be.hogent.faith.faith.details.drawing.create.draggableImages.ImagesAdapter
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
 import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import com.divyanshu.draw.widget.DrawView
 import com.google.android.material.tabs.TabLayout
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.core.error.ScopeNotCreatedException
 import org.koin.core.qualifier.named
 import timber.log.Timber
-import java.util.UUID
 
-private const val DRAWING_DETAIL_UUID = "uuid of the DrawingDetail"
+private const val DRAWING_DETAIL = "uuid of the DrawingDetail"
 
 class MakeDrawingFragment : DrawFragment() {
     override val drawViewModel: DrawViewModel
-        get() {
-            Timber.d("Trying to get Drawing scope in MakeDrawing")
-            val scope = try {
-                getKoin().getScope(KoinModules.DRAWING_SCOPE_ID)
-            } catch (e: ScopeNotCreatedException) {
-                Timber.d("No Drawing scope available - Creating Drawing scope in MakeDrawing")
-                getKoin().createScope(
-                    KoinModules.DRAWING_SCOPE_ID,
-                    named(KoinModules.DRAWING_SCOPE_NAME)
-                )
-            }
-            return scope.get()
-        }
+        get() = drawingDetailViewModel
 
-    private val eventViewModel: EventViewModel by sharedViewModel()
+    private lateinit var drawingDetailViewModel: DrawingDetailViewModel
 
     override val drawView: DrawView
         get() = drawBinding.drawView
@@ -56,6 +40,7 @@ class MakeDrawingFragment : DrawFragment() {
     private lateinit var drawBinding: FragmentDrawBinding
 
     private var navigation: DrawingScreenNavigation? = null
+    private var drawingDetailListener: DrawingDetailListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,10 +49,33 @@ class MakeDrawingFragment : DrawFragment() {
     ): View {
         drawBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_draw, container, false)
-        drawBinding.drawViewModel = drawViewModel
+        drawBinding.drawViewModel = drawingDetailViewModel
         drawBinding.lifecycleOwner = this
 
         return drawBinding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setUpViewModel()
+
+        if (existingDrawingGiven()) {
+            loadExistingDrawing()
+        }
+    }
+
+    private fun setUpViewModel() {
+        Timber.d("Trying to get Drawing scope in MakeDrawing")
+        val scope = try {
+            getKoin().getScope(KoinModules.DRAWING_SCOPE_ID)
+        } catch (e: ScopeNotCreatedException) {
+            Timber.d("No Drawing scope available - Creating Drawing scope in MakeDrawing")
+            getKoin().createScope(
+                KoinModules.DRAWING_SCOPE_ID,
+                named(KoinModules.DRAWING_SCOPE_NAME)
+            )
+        }
+        drawingDetailViewModel = scope.get()
     }
 
     override fun onStart() {
@@ -76,28 +84,17 @@ class MakeDrawingFragment : DrawFragment() {
         configureTemplatesRecyclerView()
         configureDrawView()
 
-        if (existingDrawingGiven()) {
-            loadExistingDrawing()
-        }
-
         startListeners()
     }
 
     private fun loadExistingDrawing() {
-        val drawingDetail = getGivenDrawingDetail()
-
-        drawView.setImageBackground(drawingDetail.file)
-
-        drawViewModel.loadExistingDrawingDetail(drawingDetail)
+        val existingDetail = arguments!!.getSerializable(DRAWING_DETAIL) as DrawingDetail
+        drawView.setImageBackground(existingDetail.file)
+        drawingDetailViewModel.loadExistingDetail(existingDetail)
     }
 
     private fun existingDrawingGiven(): Boolean {
-        return arguments?.getSerializable(DRAWING_DETAIL_UUID) != null
-    }
-
-    private fun getGivenDrawingDetail(): DrawingDetail {
-        val detailUuid = arguments!!.getSerializable(DRAWING_DETAIL_UUID) as UUID
-        return eventViewModel.event.value!!.getDetail(detailUuid) as DrawingDetail
+        return arguments?.getSerializable(DRAWING_DETAIL) != null
     }
 
     override fun onAttach(context: Context) {
@@ -105,27 +102,33 @@ class MakeDrawingFragment : DrawFragment() {
         if (context is DrawingScreenNavigation) {
             navigation = context
         }
+        if (context is DrawingDetailListener) {
+            drawingDetailListener = context
+        }
     }
 
     private fun startListeners() {
-        drawViewModel.textClicked.observe(this, Observer {
+        drawingDetailViewModel.textClicked.observe(this, Observer {
             drawView.pickTextTool()
         })
-        drawViewModel.eraserClicked.observe(this, Observer {
+        drawingDetailViewModel.eraserClicked.observe(this, Observer {
             drawView.pickEraserTool()
         })
-        drawViewModel.pencilClicked.observe(this, Observer {
+        drawingDetailViewModel.pencilClicked.observe(this, Observer {
             drawView.pickDrawingTool()
         })
 
-        drawViewModel.saveClicked.observe(this, Observer {
+        drawingDetailViewModel.saveClicked.observe(this, Observer {
             // TODO: move to something async, maybe a coroutine?
             drawView.getBitmap { bitmap ->
-                eventViewModel.saveDrawing(bitmap, drawViewModel.existingDetail.value)
+                drawingDetailViewModel.onBitMapAvailable(bitmap)
             }
         })
-        eventViewModel.drawingSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, R.string.save_drawing_success, Toast.LENGTH_SHORT).show()
+        drawingDetailViewModel.detailAvailable.observe(this, Observer { detail ->
+            if (detail == null) {
+                return@Observer
+            }
+            drawingDetailListener?.onDrawingDetailUpdated(detail)
 
             // Close the scope so when we start a new drawing we start with an empty canvas.
             kotlin.runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {
@@ -138,11 +141,7 @@ class MakeDrawingFragment : DrawFragment() {
 
     private fun configureDrawView() {
         with(drawView) {
-            setOnDragListener(
-                DragListener(
-                    this
-                )
-            )
+            setOnDragListener(DragListener(this))
         }
     }
 
@@ -166,6 +165,7 @@ class MakeDrawingFragment : DrawFragment() {
                     }
                     val imageResArray = requireContext().resources.obtainTypedArray(array)
                     val imageResList = createListOfImageResources(imageResArray)
+                    imageResArray.recycle()
                     imagesAdapter.setNewImages(imageResList)
                 }
             })
@@ -197,15 +197,20 @@ class MakeDrawingFragment : DrawFragment() {
             return MakeDrawingFragment()
         }
 
-        fun newInstance(detailUuid: UUID): MakeDrawingFragment {
-            val args = Bundle().apply {
-                putSerializable(DRAWING_DETAIL_UUID, detailUuid)
-            }
-            return newInstance()
-                .apply {
-                arguments = args
-            }
+        fun newInstance(detail: DrawingDetail): MakeDrawingFragment {
+            val args = Bundle()
+            args.putSerializable(DRAWING_DETAIL, detail)
+
+            return newInstance().apply { arguments = args }
         }
+    }
+
+    /**
+     * Callback for listeners that want to be notified every time changes in the Drawing are saved,
+     * resulting in an updated [DrawingDetail].
+     */
+    interface DrawingDetailListener {
+        fun onDrawingDetailUpdated(drawingDetail: DrawingDetail)
     }
 
     interface DrawingScreenNavigation {

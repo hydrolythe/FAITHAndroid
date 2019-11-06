@@ -119,6 +119,7 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
 
     companion object {
         private const val DETAIL_UUID = "UUID of the Detail"
+        private const val DETAIL = "The detail to show"
         fun newInstance(detail: Detail, @DrawableRes avatarOutLineId: Int): DetailFragmentWithEmotionAvatar {
             return when (detail) {
                 is AudioDetail -> AudioFragmentWithEmotionAvatar.newInstance(
@@ -128,7 +129,7 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                     avatarOutLineId, detail.uuid
                 )
                 is DrawingDetail -> DrawingFragmentWithEmotionAvatar.newInstance(
-                    avatarOutLineId, detail.uuid
+                    avatarOutLineId, detail
                 )
                 is PhotoDetail -> PhotoFragmentWithEmotionAvatar.newInstance(
                     avatarOutLineId, detail.uuid
@@ -184,26 +185,23 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                 }
             }
 
-            fun newInstance(@DrawableRes avatarOutLineId: Int, detailUUID: UUID): DrawingFragmentWithEmotionAvatar {
+            fun newInstance(@DrawableRes avatarOutLineId: Int, drawingDetail: DrawingDetail): DrawingFragmentWithEmotionAvatar {
                 return DrawingFragmentWithEmotionAvatar().apply {
                     arguments = getBundleForAvatarOutline(avatarOutLineId).apply {
-                        putSerializable(DETAIL_UUID, detailUUID)
+                        putSerializable(DETAIL, drawingDetail)
                     }
                 }
             }
         }
 
         override fun setChildFragment() {
-            val detailUuid = arguments?.getSerializable(DETAIL_UUID) as UUID?
-            if (detailUuid == null) {
-                replaceChildFragment(
-                    MakeDrawingFragment.newInstance(), R.id.fragment_container_editDetail
-                )
+            val detail = arguments?.getSerializable(DETAIL) as DrawingDetail?
+            val childFragment = if (detail == null) {
+                MakeDrawingFragment.newInstance()
             } else {
-                replaceChildFragment(
-                    MakeDrawingFragment.newInstance(detailUuid), R.id.fragment_container_editDetail
-                )
+                MakeDrawingFragment.newInstance(detail)
             }
+            replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }
     }
 

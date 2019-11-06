@@ -69,8 +69,8 @@ class EventViewModel(
     val photoSavedSuccessFully: LiveData<Detail>
         get() = _photoSavedSuccessFully
 
-    private val _drawingSavedSuccessFully = SingleLiveEvent<Detail>()
-    val drawingSavedSuccessFully: LiveData<Detail>
+    private val _drawingSavedSuccessFully = SingleLiveEvent<Unit>()
+    val drawingSavedSuccessFully: LiveData<Unit>
         get() = _drawingSavedSuccessFully
 
     private val _recordingSavedSuccessFully = SingleLiveEvent<Unit>()
@@ -265,14 +265,14 @@ class EventViewModel(
     //endregion
 
     //region saveDrawing
-    fun saveDrawing(bitmap: Bitmap, existingDetail: DrawingDetail? = null) {
-        val params = SaveEventDrawingUseCase.Params(bitmap, event.value!!, existingDetail)
+    fun saveDrawing(detail: DrawingDetail) {
+        val params = SaveEventDrawingUseCase.Params(detail, event.value!!)
         saveEventDrawingUseCase.execute(params, SaveEventDrawingUseCaseHandler())
     }
 
-    private inner class SaveEventDrawingUseCaseHandler : DisposableSingleObserver<DrawingDetail>() {
-        override fun onSuccess(t: DrawingDetail) {
-            _drawingSavedSuccessFully.value = t
+    private inner class SaveEventDrawingUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _drawingSavedSuccessFully.call()
         }
 
         override fun onError(e: Throwable) {

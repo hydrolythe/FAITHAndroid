@@ -6,7 +6,6 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.faith.TestUtils
 import be.hogent.faith.service.usecases.LoadTextDetailUseCase
 import be.hogent.faith.util.factory.DetailFactory
-import io.mockk.called
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
@@ -22,7 +21,6 @@ class EnterTextViewModelTest {
 
     private lateinit var viewModel: EnterTextViewModel
 
-    private val textDetail = DetailFactory.makeTextDetail()
     private val detailText = "Text in the detail"
 
     @get:Rule
@@ -97,7 +95,7 @@ class EnterTextViewModelTest {
         val resultObserver = slot<DisposableSingleObserver<String>>()
         val textObserver = mockk<Observer<String>>(relaxed = true)
 
-        viewModel.text.observeForever(textObserver)
+        viewModel.initialText.observeForever(textObserver)
 
         // Act
         viewModel.loadExistingTextDetail(textDetail)
@@ -112,10 +110,8 @@ class EnterTextViewModelTest {
         // Arrange
         val textDetail = DetailFactory.makeTextDetail()
         val resultObserver = slot<DisposableSingleObserver<String>>()
-        val textObserver = mockk<Observer<String>>(relaxed = true)
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
 
-        viewModel.text.observeForever(textObserver)
         viewModel.errorMessage.observeForever(errorObserver)
 
         // Act
@@ -124,7 +120,6 @@ class EnterTextViewModelTest {
         resultObserver.captured.onError(RuntimeException())
 
         // Assert
-        verify { textObserver wasNot called }
         verify { errorObserver.onChanged(any()) }
     }
 }

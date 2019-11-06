@@ -6,6 +6,7 @@ import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
+import be.hogent.faith.faith.details.drawing.create.DrawingDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProviderFromResources
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
@@ -51,7 +52,7 @@ val appModule = module(override = true) {
     viewModel { CityScreenViewModel() }
     viewModel { (event: Event) -> EventViewModel(get(), get(), get(), get(), get(), event) }
     viewModel { EventViewModel(get(), get(), get(), get(), get()) }
-    viewModel { DrawViewModel() }
+    viewModel { DrawingDetailViewModel(null, get(), get()) }
     viewModel { EditDetailViewModel() }
     viewModel { EnterTextViewModel(get()) }
     viewModel { OverviewEventsViewModel() }

@@ -10,6 +10,7 @@ import io.reactivex.Single
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import java.io.File
+import java.util.UUID
 
 const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
 
@@ -23,8 +24,17 @@ const val TEXT_EXTENSION = "txt"
 
 class StorageRepository(private val context: Context) {
 
-    fun storeBitmap(bitmap: Bitmap, file: File): Completable {
+    /**
+     * Stores the bitmap in the given file
+     *
+     * @return a Single<File> pointing to the file where the bitmap was saved
+     */
+    private fun storeBitmap(bitmap: Bitmap, file: File): Completable {
         return Completable.fromCallable {
+            require(!file.isDirectory) {
+                "Must provide a file, not a directory, in which to store the bitmap." +
+                        "${file.path} is a directory."
+            }
             file.outputStream().use {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
             }
@@ -32,21 +42,31 @@ class StorageRepository(private val context: Context) {
     }
 
     /**
-     * Stores the bitmap on the device's storage.
-     * It will be put in the context.filesDir/event.uuid/images/ folder
+     * Stores the bitmap in the given file in the given folder.
      *
-     * @param fileName under which the bitmap will be saved
-     * @return a Single<File> with the path derived from the event's dateTime
+     * @return a Single<File> pointing to the file where the bitmap was saved
      */
-    fun storeBitmap(bitmap: Bitmap, folder: File, fileName: String): Single<File> {
+    private fun storeBitmap(bitmap: Bitmap, folder: File, fileName: String): Single<File> {
+        require(folder.isDirectory) {
+            "Must provide a directory, not a file, in which to store the bitmap.\n" +
+                    "${folder.path} is not a directory."
+        }
+        require(!fileName.isNullOrBlank()) { "Empty filenames are not allowed when storing bitmaps" }
+
         val saveFile = File(folder, fileName)
         return storeBitmap(bitmap, saveFile).andThen(Single.just(saveFile))
     }
 
-    private fun getEventImageDirectory(event: Event): File {
-        val imageDirectory = File(getEventDirectory(event), "images")
+    private fun getEventPhotoDirectory(event: Event): File {
+        val imageDirectory = File(getEventDirectory(event), "photos")
         imageDirectory.mkdirs()
         return imageDirectory
+    }
+
+    private fun getEventDrawingDirectory(event: Event): File {
+        val audioDir = File(getEventDirectory(event), "drawings")
+        audioDir.mkdirs()
+        return audioDir
     }
 
     private fun getEventAudioDirectory(event: Event): File {
@@ -75,18 +95,24 @@ class StorageRepository(private val context: Context) {
         )
     }
 
-    fun saveEventDrawing(bitmap: Bitmap, event: Event): Single<File> {
-        return storeBitmap(
-            bitmap,
-            getEventImageDirectory(event),
-            createSaveFileName()
-        )
+    /**
+     * Saves a given [DrawingDetail] to permanent storage.
+     * This will change the [detail]'s file property to the new location.
+     * It will be found in appDir/events/[eventUuid]/detailUuid
+     */
+    fun saveEventDrawing(detail: DrawingDetail, event: Event): Completable {
+        return moveFileFromTempStorageToPermanentStorage(
+            detail.file,
+            getEventDrawingDirectory(event),
+            detail.uuid.toString()
+        ).map { newLocation -> detail.file = newLocation }
+            .ignoreElement()
     }
 
     fun saveEventPhoto(tempStorageFile: File, event: Event): Single<File> {
         return moveFileFromTempStorageToPermanentStorage(
             tempStorageFile,
-            getEventImageDirectory(event),
+            getEventPhotoDirectory(event),
             createSaveFileName()
         )
     }
@@ -109,6 +135,7 @@ class StorageRepository(private val context: Context) {
 
     /**
      * Stores a file  by moving it from a temporary file in the device's cache directory to permanent storage.
+     * The temporary file will be deleted.
      *
      * @param tempStorageFile the (cache) file in which the recording is currently stored
      * @param folder the folder where the file should be stored
@@ -121,7 +148,7 @@ class StorageRepository(private val context: Context) {
         return Single.fromCallable {
             val storedFile = File(folder, fileName)
             tempStorageFile.copyTo(target = storedFile, overwrite = true)
-//            tempStorageFile.delete()
+            tempStorageFile.delete()
             storedFile
         }
     }
@@ -142,6 +169,16 @@ class StorageRepository(private val context: Context) {
         }
     }
 
+    fun overwriteExistingDrawingDetail(bitmap: Bitmap, drawingDetail: DrawingDetail): Completable {
+        return storeBitmap(bitmap, drawingDetail.file)
+    }
+
+    fun saveDrawing(bitmap: Bitmap): Single<File> {
+        val saveDirectory = File(context.filesDir, "drawings")
+        saveDirectory.mkdirs()
+        return storeBitmap(bitmap, saveDirectory, UUID.randomUUID().toString())
+    }
+
     fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String> {
         return Single.fromCallable {
             val readString = textDetail.file.readText()
@@ -153,9 +190,5 @@ class StorageRepository(private val context: Context) {
         return Completable.fromCallable {
             existingDetail.file.writeText(text)
         }
-    }
-
-    fun overwriteEventDetail(bitmap: Bitmap, existingDetail: DrawingDetail): Completable {
-        return storeBitmap(bitmap, existingDetail.file)
     }
 }
