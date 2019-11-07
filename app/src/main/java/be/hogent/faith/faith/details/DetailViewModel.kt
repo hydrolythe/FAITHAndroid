@@ -14,4 +14,9 @@ interface DetailViewModel<T : Detail> {
      * given detail are shown.
      */
     fun loadExistingDetail(existingDetail: T)
+
+    /**
+     * Trigger when the user clicks the Save button
+     */
+    fun onSaveClicked()
 }

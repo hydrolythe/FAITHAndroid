@@ -3,7 +3,7 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.faith.di.appModule
-import be.hogent.faith.service.usecases.SaveEventTextUseCase
+import be.hogent.faith.service.usecases.CreateTextDetailUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.Called
 import io.mockk.called
@@ -22,7 +22,7 @@ import org.koin.test.KoinTest
 
 class EventViewModelSaveTextTest : KoinTest {
     private lateinit var viewModel: EventViewModel
-    private val saveTextUseCase = mockk<SaveEventTextUseCase>(relaxed = true)
+    private val saveTextUseCase = mockk<CreateTextDetailUseCase>(relaxed = true)
 
     private val eventTitle = DataFactory.randomString()
     private val eventNotes = DataFactory.randomString()
@@ -63,7 +63,7 @@ class EventViewModelSaveTextTest : KoinTest {
 
     @Test
     fun enterTextVM_saveText_callsUseCase() {
-        val params = slot<SaveEventTextUseCase.SaveTextParams>()
+        val params = slot<CreateTextDetailUseCase.SaveTextParams>()
 
         viewModel.saveText(text)
         verify { saveTextUseCase.execute(capture(params), any()) }
@@ -75,7 +75,7 @@ class EventViewModelSaveTextTest : KoinTest {
     @Test
     fun enterTextVM_saveText_callUseCaseAndNotifiesSuccess() {
         // Arrange
-        val params = slot<SaveEventTextUseCase.SaveTextParams>()
+        val params = slot<CreateTextDetailUseCase.SaveTextParams>()
         val observer = slot<DisposableCompletableObserver>()
 
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
@@ -96,7 +96,7 @@ class EventViewModelSaveTextTest : KoinTest {
     @Test
     fun enterTextViewModel_saveText_notifiesWhenSaveFails() {
         // Arrange
-        val params = slot<SaveEventTextUseCase.SaveTextParams>()
+        val params = slot<CreateTextDetailUseCase.SaveTextParams>()
         val observer = slot<DisposableCompletableObserver>()
 
         val errorObserver = mockk<Observer<Int>>(relaxed = true)

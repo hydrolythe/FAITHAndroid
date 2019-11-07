@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.faith.TestUtils
+import be.hogent.faith.faith.details.text.create.EnterTextViewModel
 import be.hogent.faith.service.usecases.LoadTextDetailUseCase
 import be.hogent.faith.util.factory.DetailFactory
 import io.mockk.mockk
@@ -28,7 +29,8 @@ class EnterTextViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = EnterTextViewModel(loadTextDetailUseCase)
+        viewModel =
+            EnterTextViewModel(loadTextDetailUseCase)
 
         viewModel.text.observeForever(mockk(relaxed = true))
     }
@@ -98,7 +100,7 @@ class EnterTextViewModelTest {
         viewModel.initialText.observeForever(textObserver)
 
         // Act
-        viewModel.loadExistingTextDetail(textDetail)
+        viewModel.loadExistingDetail(textDetail)
         verify { loadTextDetailUseCase.execute(capture(params), capture(resultObserver)) }
         resultObserver.captured.onSuccess(detailText)
 
@@ -115,7 +117,7 @@ class EnterTextViewModelTest {
         viewModel.errorMessage.observeForever(errorObserver)
 
         // Act
-        viewModel.loadExistingTextDetail(textDetail)
+        viewModel.loadExistingDetail(textDetail)
         verify { loadTextDetailUseCase.execute(any(), capture(resultObserver)) }
         resultObserver.captured.onError(RuntimeException())
 

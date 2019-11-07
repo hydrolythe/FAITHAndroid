@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.enterText
+package be.hogent.faith.faith.details.text.create
 
 import android.content.Context
 import android.os.Bundle
@@ -56,7 +56,7 @@ class EnterTextFragment : Fragment() {
         val detailUuid = arguments?.getSerializable(TEXT_DETAIL_UUID) as UUID
         val givenDetail = eventViewModel.event.value!!.details.find { it.uuid === detailUuid }
         if (givenDetail is TextDetail) {
-            enterTextViewModel.loadExistingTextDetail(givenDetail)
+            enterTextViewModel.loadExistingDetail(givenDetail)
         } else {
             throw IllegalArgumentException("Got a Detail that wasn't a TextDetail!")
         }

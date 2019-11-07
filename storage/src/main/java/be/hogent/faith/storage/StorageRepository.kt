@@ -22,7 +22,7 @@ const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
  */
 const val TEXT_EXTENSION = "txt"
 
-class StorageRepository(private val context: Context) {
+class StorageRepository(private val context: Context) :StorageRepositoryInterface {
 
     /**
      * Stores the bitmap in the given file

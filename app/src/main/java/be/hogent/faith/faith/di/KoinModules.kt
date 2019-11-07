@@ -11,7 +11,7 @@ import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImage
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProviderFromResources
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel
+import be.hogent.faith.faith.details.text.create.EnterTextViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.AudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel

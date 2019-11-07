@@ -11,11 +11,12 @@
 
         <variable
             name="enterTextViewModel"
-            type="be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel" />
+            type="be.hogent.faith.faith.details.text.create.EnterTextViewModel" />
 
         <import type="android.graphics.Color" />
+        <import type="be.hogent.faith.faith.details.text.create.EnterTextViewModel.FontSize"/>
 
-        <import type="be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel.FontSize" />
+        <import type="be.hogent.faith.faith.details.text.create.EnterTextViewModel" />
 
     </data>
 

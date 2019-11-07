@@ -88,7 +88,7 @@ open class DrawViewModel : ViewModel() {
         _pencilClicked.call()
     }
 
-    fun onSaveButtonClicked() {
+    fun onSaveClicked() {
         // We expect the listener to create a bitmap from the DrawView and call [onBitMapAvailable]
         // afterwards.
         _saveClicked.call()

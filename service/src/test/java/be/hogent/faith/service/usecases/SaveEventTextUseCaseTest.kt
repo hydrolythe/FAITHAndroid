@@ -18,7 +18,7 @@ import org.junit.Test
 import java.io.IOException
 
 class SaveEventTextUseCaseTest {
-    private lateinit var saveEventTextUseCase: SaveEventTextUseCase
+    private lateinit var createTextDetailUseCase: CreateTextDetailUseCase
     private val scheduler: Scheduler = mockk()
     private val repository: StorageRepository = mockk(relaxed = true)
 
@@ -27,7 +27,7 @@ class SaveEventTextUseCaseTest {
 
     @Before
     fun setUp() {
-        saveEventTextUseCase = SaveEventTextUseCase(repository, scheduler)
+        createTextDetailUseCase = CreateTextDetailUseCase(repository, scheduler)
         event = EventFactory.makeEvent(nbrOfDetails = 0)
     }
 
@@ -37,8 +37,8 @@ class SaveEventTextUseCaseTest {
         every { repository.saveText(text, event) } returns Single.just(mockk())
 
         // Act
-        saveEventTextUseCase.buildUseCaseObservable(
-            SaveEventTextUseCase.SaveTextParams(event, text)
+        createTextDetailUseCase.buildUseCaseObservable(
+            CreateTextDetailUseCase.SaveTextParams(event, text)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -53,8 +53,8 @@ class SaveEventTextUseCaseTest {
         every { repository.saveText(text, event) } returns Single.just(mockk())
 
         // Act
-        saveEventTextUseCase.buildUseCaseObservable(
-            SaveEventTextUseCase.SaveTextParams(event, text)
+        createTextDetailUseCase.buildUseCaseObservable(
+            CreateTextDetailUseCase.SaveTextParams(event, text)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -72,8 +72,8 @@ class SaveEventTextUseCaseTest {
         every { repository.saveText(text, event) } returns Single.error(IOException())
 
         // Act
-        saveEventTextUseCase.buildUseCaseObservable(
-            SaveEventTextUseCase.SaveTextParams(event, text)
+        createTextDetailUseCase.buildUseCaseObservable(
+            CreateTextDetailUseCase.SaveTextParams(event, text)
         ).test()
             .assertError(IOException::class.java)
 
@@ -95,8 +95,8 @@ class SaveEventTextUseCaseTest {
         } returns Completable.complete()
 
         // Act
-        saveEventTextUseCase.buildUseCaseObservable(
-            SaveEventTextUseCase.SaveTextParams(event, text, existingDetail)
+        createTextDetailUseCase.buildUseCaseObservable(
+            CreateTextDetailUseCase.SaveTextParams(event, text, existingDetail)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -118,8 +118,8 @@ class SaveEventTextUseCaseTest {
         } returns Completable.complete()
 
         // Act
-        saveEventTextUseCase.buildUseCaseObservable(
-            SaveEventTextUseCase.SaveTextParams(event, text, existingDetail)
+        createTextDetailUseCase.buildUseCaseObservable(
+            CreateTextDetailUseCase.SaveTextParams(event, text, existingDetail)
         ).test()
 
         assertEquals(existingDetail, event.details.first())

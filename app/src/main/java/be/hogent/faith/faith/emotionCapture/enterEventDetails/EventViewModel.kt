@@ -11,14 +11,13 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
 import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
 import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
-import be.hogent.faith.service.usecases.SaveEventTextUseCase
+import be.hogent.faith.service.usecases.CreateTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import org.koin.core.KoinComponent
@@ -33,7 +32,7 @@ class EventViewModel(
     private val saveEventPhotoUseCase: SaveEventPhotoUseCase,
     private val saveEventAudioUseCase: SaveEventAudioUseCase,
     private val saveEventDrawingUseCase: SaveEventDrawingUseCase,
-    private val saveEventTextUseCase: SaveEventTextUseCase,
+    private val createTextDetailUseCase: CreateTextDetailUseCase,
     givenEvent: Event? = null
 ) : ViewModel(), KoinComponent {
 
@@ -281,34 +280,12 @@ class EventViewModel(
     }
     //endregion
 
-    //region saveText
-    /**
-     * Saves a text Detail. If an [existingDetail] is given then the contents of that Detail will
-     * be overwritten
-     */
-    fun saveText(text: String, existingDetail: TextDetail? = null) {
-        val params = SaveEventTextUseCase.SaveTextParams(event.value!!, text, existingDetail)
-        saveEventTextUseCase.execute(params, SaveTextUseCaseHandler())
-    }
-
-    private inner class SaveTextUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _textSavedSuccessFully.value = Unit
-        }
-
-        override fun onError(e: Throwable) {
-            Timber.e(e)
-            _errorMessage.postValue(R.string.error_save_text_failed)
-        }
-    }
-    //endregion
-
     override fun onCleared() {
         saveEventAudioUseCase.dispose()
         saveEventPhotoUseCase.dispose()
         saveEmotionAvatarUseCase.dispose()
         saveEventDrawingUseCase.dispose()
-        saveEventTextUseCase.dispose()
+        createTextDetailUseCase.dispose()
         super.onCleared()
     }
 }
