@@ -19,8 +19,8 @@ class DrawingDetailViewModel(
     private val overwriteDrawingDetailUseCase: OverwriteDrawingDetailUseCase
 ) : DrawViewModel(), DetailViewModel<DrawingDetail> {
 
-    private val _detailAvailable = MutableLiveData<DrawingDetail>()
-    override val savedDetail: LiveData<DrawingDetail> = _detailAvailable
+    private val _savedDetail = MutableLiveData<DrawingDetail>()
+    override val savedDetail: LiveData<DrawingDetail> = _savedDetail
 
     private var detail: DrawingDetail? = null
 
@@ -55,7 +55,7 @@ class DrawingDetailViewModel(
         DisposableCompletableObserver() {
         override fun onComplete() {
             Timber.i("Successfully overwrote existing detail $detail with new bitmap")
-            _detailAvailable.value = detail
+            _savedDetail.value = detail
         }
 
         override fun onError(e: Throwable) {
@@ -67,7 +67,7 @@ class DrawingDetailViewModel(
     private inner class CreateDrawingDetailUseCaseHandler :
         DisposableSingleObserver<DrawingDetail>() {
         override fun onSuccess(createdDetail: DrawingDetail) {
-            _detailAvailable.value = createdDetail
+            _savedDetail.value = createdDetail
         }
 
         override fun onError(e: Throwable) {
