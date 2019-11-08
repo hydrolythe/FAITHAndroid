@@ -20,6 +20,6 @@ interface StorageRepositoryInterface {
      */
     fun storeBitmapTemporarily(bitmap: Bitmap): Single<File>
 
-    fun storeTextDetailWithEvent(textDetail: TextDetail, event: Event) : Completable
-    fun storeDrawingDetailWithEvent(drawingDetail: DrawingDetail, event: Event) : Completable
+    fun storeTextDetailWithEvent(textDetail: TextDetail, event: Event): Completable
+    fun storeDrawingDetailWithEvent(drawingDetail: DrawingDetail, event: Event): Completable
 }
