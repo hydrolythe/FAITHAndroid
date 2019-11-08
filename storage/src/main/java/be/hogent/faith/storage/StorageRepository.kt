@@ -22,7 +22,24 @@ const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
  */
 const val TEXT_EXTENSION = "txt"
 
-class StorageRepository(private val context: Context) :StorageRepositoryInterface {
+class StorageRepository(private val context: Context) : StorageRepositoryInterface {
+    override fun storeTextTemporarily(text: String): Single<File> {
+        return Single.fromCallable {
+            val saveDirectory = File(context.cacheDir, "text")
+            saveDirectory.mkdirs()
+            val saveFile = File(saveDirectory, UUID.randomUUID().toString())
+            saveFile.writeText(text)
+            saveFile
+        }
+    }
+
+    override fun storeTextDetailWithEvent(textDetail: TextDetail, event: Event): Completable {
+        val saveFile = File(getEventTextDirectory(event), textDetail.uuid.toString())
+        return moveFile(textDetail.file, saveFile)
+            .doOnComplete {
+                textDetail.file = saveFile
+            }
+    }
 
     /**
      * Stores the bitmap in the given file
@@ -88,11 +105,11 @@ class StorageRepository(private val context: Context) :StorageRepositoryInterfac
     }
 
     fun saveEventAudio(tempStorageFile: File, event: Event): Single<File> {
-        return moveFileFromTempStorageToPermanentStorage(
-            tempStorageFile,
-            getEventAudioDirectory(event),
-            createSaveFileName()
-        )
+        return Single.fromCallable {
+            val saveFile = File(getEventAudioDirectory(event), createSaveFileName())
+            moveFile(tempStorageFile, saveFile)
+            saveFile
+        }
     }
 
     /**
@@ -100,21 +117,20 @@ class StorageRepository(private val context: Context) :StorageRepositoryInterfac
      * This will change the [detail]'s file property to the new location.
      * It will be found in appDir/events/[eventUuid]/detailUuid
      */
-    fun saveEventDrawing(detail: DrawingDetail, event: Event): Completable {
-        return moveFileFromTempStorageToPermanentStorage(
-            detail.file,
-            getEventDrawingDirectory(event),
-            detail.uuid.toString()
-        ).map { newLocation -> detail.file = newLocation }
-            .ignoreElement()
+    override fun storeDrawingDetailWithEvent(detail: DrawingDetail, event: Event): Completable {
+        val saveFile = File(getEventDrawingDirectory(event), detail.uuid.toString())
+        return moveFile(detail.file, saveFile)
+            .doOnComplete {
+                detail.file = saveFile
+            }
     }
 
     fun saveEventPhoto(tempStorageFile: File, event: Event): Single<File> {
-        return moveFileFromTempStorageToPermanentStorage(
-            tempStorageFile,
-            getEventPhotoDirectory(event),
-            createSaveFileName()
-        )
+        return Single.fromCallable {
+            val saveFile = File(getEventPhotoDirectory(event), createSaveFileName())
+            moveFile(tempStorageFile, saveFile)
+            saveFile
+        }
     }
 
     fun saveEventEmotionAvatar(bitmap: Bitmap, event: Event): Single<File> {
@@ -133,23 +149,10 @@ class StorageRepository(private val context: Context) :StorageRepositoryInterfac
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("d_M_y_k_m_s_A"))
     }
 
-    /**
-     * Stores a file  by moving it from a temporary file in the device's cache directory to permanent storage.
-     * The temporary file will be deleted.
-     *
-     * @param tempStorageFile the (cache) file in which the recording is currently stored
-     * @param folder the folder where the file should be stored
-     */
-    private fun moveFileFromTempStorageToPermanentStorage(
-        tempStorageFile: File,
-        folder: File,
-        fileName: String
-    ): Single<File> {
-        return Single.fromCallable {
-            val storedFile = File(folder, fileName)
-            tempStorageFile.copyTo(target = storedFile, overwrite = true)
-            tempStorageFile.delete()
-            storedFile
+    private fun moveFile(sourceFile: File, destinationFile: File): Completable {
+        return Completable.fromCallable {
+            sourceFile.copyTo(target = destinationFile, overwrite = true)
+            sourceFile.delete()
         }
     }
 
@@ -173,8 +176,8 @@ class StorageRepository(private val context: Context) :StorageRepositoryInterfac
         return storeBitmap(bitmap, drawingDetail.file)
     }
 
-    fun saveDrawing(bitmap: Bitmap): Single<File> {
-        val saveDirectory = File(context.filesDir, "drawings")
+    override fun storeBitmapTemporarily(bitmap: Bitmap): Single<File> {
+        val saveDirectory = File(context.cacheDir, "drawings")
         saveDirectory.mkdirs()
         return storeBitmap(bitmap, saveDirectory, UUID.randomUUID().toString())
     }
