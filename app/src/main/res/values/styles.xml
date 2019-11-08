@@ -34,7 +34,7 @@
     <style name="AppTheme.PopupOverlay" parent="Theme.MaterialComponents.Light" />
 
     <style name="arrow_style.toLeft" parent="Widget.MaterialComponents.Button.Icon">
-        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_width">170dp</item>
         <item name="android:layout_height">@dimen/arrow_height</item>
         <item name="android:textColor">@color/color_black</item>
         <item name="android:backgroundTint">@color/color_white</item>
