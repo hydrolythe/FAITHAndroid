@@ -32,7 +32,7 @@ class CreateDrawingDetailUseCaseTest {
     fun createDrawingDetailUC_normal_createsDetailWithCorrectFile() {
         // Arrange
         val saveFile = File("location")
-        every { storageRepository.saveDrawing(any()) } returns Single.just(saveFile)
+        every { storageRepository.storeBitmapTemporarily(any()) } returns Single.just(saveFile)
 
         val params = CreateDrawingDetailUseCase.Params(bitmap)
 
