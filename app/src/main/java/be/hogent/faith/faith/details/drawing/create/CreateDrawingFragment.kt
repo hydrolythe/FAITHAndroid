@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawBinding
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.faith.DetailFinishedListener
+import be.hogent.faith.faith.DetailFragment
 import be.hogent.faith.faith.details.drawing.create.draggableImages.DragListener
 import be.hogent.faith.faith.details.drawing.create.draggableImages.ImagesAdapter
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
@@ -26,7 +28,7 @@ import timber.log.Timber
 
 private const val DRAWING_DETAIL = "uuid of the DrawingDetail"
 
-class MakeDrawingFragment : DrawFragment() {
+class MakeDrawingFragment : DrawFragment(), DetailFragment<DrawingDetail> {
     override val drawViewModel: DrawViewModel
         get() = drawingDetailViewModel
 
@@ -40,7 +42,7 @@ class MakeDrawingFragment : DrawFragment() {
     private lateinit var drawBinding: FragmentDrawBinding
 
     private var navigation: DrawingScreenNavigation? = null
-    private var drawingDetailListener: DrawingDetailListener? = null
+    override var detailFinishedListener: DetailFinishedListener<DrawingDetail>? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -102,8 +104,8 @@ class MakeDrawingFragment : DrawFragment() {
         if (context is DrawingScreenNavigation) {
             navigation = context
         }
-        if (context is DrawingDetailListener) {
-            drawingDetailListener = context
+        if (context is DetailFinishedListener<*>) {
+            detailFinishedListener = context as DetailFinishedListener<DrawingDetail>
         }
     }
 
@@ -124,11 +126,11 @@ class MakeDrawingFragment : DrawFragment() {
                 drawingDetailViewModel.onBitMapAvailable(bitmap)
             }
         })
-        drawingDetailViewModel.detailAvailable.observe(this, Observer { detail ->
+        drawingDetailViewModel.savedDetail.observe(this, Observer { detail ->
             if (detail == null) {
                 return@Observer
             }
-            drawingDetailListener?.onDrawingDetailUpdated(detail)
+            detailFinishedListener?.onDetailFinished(detail)
 
             // Close the scope so when we start a new drawing we start with an empty canvas.
             kotlin.runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {
@@ -203,14 +205,6 @@ class MakeDrawingFragment : DrawFragment() {
 
             return newInstance().apply { arguments = args }
         }
-    }
-
-    /**
-     * Callback for listeners that want to be notified every time changes in the Drawing are saved,
-     * resulting in an updated [DrawingDetail].
-     */
-    interface DrawingDetailListener {
-        fun onDrawingDetailUpdated(drawingDetail: DrawingDetail)
     }
 
     interface DrawingScreenNavigation {
