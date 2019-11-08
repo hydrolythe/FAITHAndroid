@@ -20,7 +20,7 @@ class DrawingDetailViewModel(
 ) : DrawViewModel(), DetailViewModel<DrawingDetail> {
 
     private val _detailAvailable = MutableLiveData<DrawingDetail>()
-    override val detailAvailable: LiveData<DrawingDetail> = _detailAvailable
+    override val savedDetail: LiveData<DrawingDetail> = _detailAvailable
 
     private var detail: DrawingDetail? = null
 

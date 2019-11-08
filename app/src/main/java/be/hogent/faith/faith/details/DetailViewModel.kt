@@ -7,7 +7,7 @@ interface DetailViewModel<T : Detail> {
     /**
      * Updates with a new version of the [Detail] every time it is saved.
      */
-    val detailAvailable: LiveData<T>
+    val savedDetail: LiveData<T>
 
     /**
      * Load an existing detail into this ViewModel. This will ensure the contents of the

@@ -52,7 +52,7 @@ class DrawingDetailViewModelTest {
             DrawingDetailViewModel(null, createDrawingDetailUseCase, overwriteDrawingDetailUseCase)
 
         // Assert
-        assertNull(getValue(viewModel.detailAvailable))
+        assertNull(getValue(viewModel.savedDetail))
     }
 
     @Test
@@ -64,7 +64,7 @@ class DrawingDetailViewModelTest {
         val detailObserver = mockk<Observer<DrawingDetail>>(relaxed = true)
         val resultingDetailObserver = slot<DisposableSingleObserver<DrawingDetail>>()
 
-        viewModel.detailAvailable.observeForever(detailObserver)
+        viewModel.savedDetail.observeForever(detailObserver)
 
         // Act
         viewModel.onBitMapAvailable(bitmap)
@@ -73,7 +73,7 @@ class DrawingDetailViewModelTest {
 
         // Assert
         verify { detailObserver.onChanged(drawingDetail) }
-        assertNotNull(getValue(viewModel.detailAvailable))
+        assertNotNull(getValue(viewModel.savedDetail))
     }
 
     @Test
@@ -90,7 +90,7 @@ class DrawingDetailViewModelTest {
         val detailObserver = mockk<Observer<DrawingDetail>>(relaxed = true)
         val completableObserver = slot<DisposableCompletableObserver>()
 
-        viewModel.detailAvailable.observeForever(detailObserver)
+        viewModel.savedDetail.observeForever(detailObserver)
 
         // Act
         viewModel.onBitMapAvailable(bitmap)
@@ -99,7 +99,7 @@ class DrawingDetailViewModelTest {
 
         // Assert
         verify { detailObserver.onChanged(drawingDetail) }
-        val updatedDetail = getValue(viewModel.detailAvailable)
+        val updatedDetail = getValue(viewModel.savedDetail)
         assertEquals(drawingDetail, updatedDetail)
     }
 }
