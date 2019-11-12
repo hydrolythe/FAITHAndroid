@@ -20,7 +20,7 @@ import be.hogent.faith.faith.emotionCapture.editDetail.DetailFragmentWithEmotion
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
+import be.hogent.faith.faith.details.audio.create.RecordAudioFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment

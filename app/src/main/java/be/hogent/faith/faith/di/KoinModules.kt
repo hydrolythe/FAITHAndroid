@@ -12,7 +12,7 @@ import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImage
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.details.text.create.TextDetailViewModel
-import be.hogent.faith.faith.emotionCapture.recordAudio.AudioViewModel
+import be.hogent.faith.faith.details.audio.create.AudioViewModel
 import be.hogent.faith.faith.details.photo.create.TakePhotoViewModel
 import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
 import be.hogent.faith.faith.loginOrRegister.LoginManager

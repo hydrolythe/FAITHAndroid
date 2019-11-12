@@ -9,7 +9,7 @@
 
         <variable
             name="audioViewModel"
-            type="be.hogent.faith.faith.emotionCapture.recordAudio.AudioViewModel" />
+            type="be.hogent.faith.faith.details.audio.create.AudioViewModel" />
 
         <variable
             name="eventViewModel"

@@ -1,10 +1,10 @@
-package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.playState
+package be.hogent.faith.faith.details.audio.audioStates.playState
 
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
-import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioState
+import be.hogent.faith.faith.details.audio.audioStates.AudioContext
+import be.hogent.faith.faith.details.audio.audioStates.AudioState
 import be.hogent.faith.util.TAG
 import timber.log.Timber
 

@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates
+package be.hogent.faith.faith.details.audio.audioStates
 
 import android.media.MediaPlayer
 import android.media.MediaRecorder

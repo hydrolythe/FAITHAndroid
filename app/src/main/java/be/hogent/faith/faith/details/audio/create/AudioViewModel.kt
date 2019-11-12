@@ -1,14 +1,14 @@
-package be.hogent.faith.faith.emotionCapture.recordAudio
+package be.hogent.faith.faith.details.audio.create
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
-import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioState
-import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.playState.PlayStateInitial
-import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.recordState.RecordStateInitial
+import be.hogent.faith.faith.details.audio.audioStates.AudioContext
+import be.hogent.faith.faith.details.audio.audioStates.AudioState
+import be.hogent.faith.faith.details.audio.audioStates.playState.PlayStateInitial
+import be.hogent.faith.faith.details.audio.audioStates.recordState.RecordStateInitial
 import java.util.Timer
 import kotlin.concurrent.timer
 

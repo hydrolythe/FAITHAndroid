@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates
+package be.hogent.faith.faith.details.audio.audioStates
 
 interface AudioContext {
     fun goToNextState(audioState: AudioState)

@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.recordAudio
+package be.hogent.faith.faith.details.audio.create
 
 import android.Manifest
 import android.content.Context
@@ -99,7 +99,9 @@ class RecordAudioFragment : Fragment() {
      */
     private fun checkAudioRecordingPermission() {
         if (!hasRecordingPermissions()) {
-            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), REQUESTCODE_AUDIO)
+            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO),
+                REQUESTCODE_AUDIO
+            )
         } else {
             audioViewModel.initialiseState()
         }
