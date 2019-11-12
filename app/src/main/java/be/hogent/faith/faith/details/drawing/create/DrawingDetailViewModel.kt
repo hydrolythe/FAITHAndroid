@@ -14,7 +14,6 @@ import io.reactivex.observers.DisposableSingleObserver
 import timber.log.Timber
 
 class DrawingDetailViewModel(
-    existingDetail: DrawingDetail? = null,
     private val createDrawingDetailUseCase: CreateDrawingDetailUseCase,
     private val overwriteDrawingDetailUseCase: OverwriteDrawingDetailUseCase
 ) : DrawViewModel(), DetailViewModel<DrawingDetail> {
