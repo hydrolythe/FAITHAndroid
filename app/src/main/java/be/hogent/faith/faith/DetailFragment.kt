@@ -3,9 +3,9 @@ package be.hogent.faith.faith
 import be.hogent.faith.domain.models.detail.Detail
 
 interface DetailFragment<T : Detail> {
-    var detailFinishedListener: DetailFinishedListener<T>?
+    var detailFinishedListener: DetailFinishedListener
 }
 
-interface DetailFinishedListener<T : Detail> {
-    fun onDetailFinished(detail: T)
+interface DetailFinishedListener {
+    fun onDetailFinished(detail: Detail)
 }

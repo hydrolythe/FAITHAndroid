@@ -11,13 +11,14 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
 import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
 import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
-import be.hogent.faith.service.usecases.CreateTextDetailUseCase
+import be.hogent.faith.service.usecases.SaveEventTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import org.koin.core.KoinComponent
@@ -32,7 +33,7 @@ class EventViewModel(
     private val saveEventPhotoUseCase: SaveEventPhotoUseCase,
     private val saveEventAudioUseCase: SaveEventAudioUseCase,
     private val saveEventDrawingUseCase: SaveEventDrawingUseCase,
-    private val createTextDetailUseCase: CreateTextDetailUseCase,
+    private val saveEventTextDetailUseCase: SaveEventTextDetailUseCase,
     givenEvent: Event? = null
 ) : ViewModel(), KoinComponent {
 
@@ -263,8 +264,22 @@ class EventViewModel(
     }
     //endregion
 
-    //region saveDrawing
-    fun saveDrawing(detail: DrawingDetail) {
+    fun saveTextDetail(detail: TextDetail) {
+        val params = SaveEventTextDetailUseCase.Params(detail, event.value!!)
+        saveEventTextDetailUseCase.execute(params, SaveEventTextDetailUseCaseHandler())
+    }
+
+    private inner class SaveEventTextDetailUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _textSavedSuccessFully.call()
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_text_failed)
+        }
+    }
+
+    fun saveDrawingDetail(detail: DrawingDetail) {
         val params = SaveEventDrawingUseCase.Params(detail, event.value!!)
         saveEventDrawingUseCase.execute(params, SaveEventDrawingUseCaseHandler())
     }
@@ -278,14 +293,13 @@ class EventViewModel(
             _errorMessage.postValue(R.string.error_save_drawing_failed)
         }
     }
-    //endregion
 
     override fun onCleared() {
         saveEventAudioUseCase.dispose()
         saveEventPhotoUseCase.dispose()
         saveEmotionAvatarUseCase.dispose()
         saveEventDrawingUseCase.dispose()
-        createTextDetailUseCase.dispose()
+        saveEventTextDetailUseCase.dispose()
         super.onCleared()
     }
 }

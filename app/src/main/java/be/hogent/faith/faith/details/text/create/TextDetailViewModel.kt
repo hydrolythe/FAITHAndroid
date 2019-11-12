@@ -9,18 +9,21 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.details.DetailViewModel
-import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.LoadTextDetailUseCase
 import be.hogent.faith.service.usecases.CreateTextDetailUseCase
+import be.hogent.faith.service.usecases.LoadTextDetailUseCase
+import be.hogent.faith.service.usecases.OverwriteTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import timber.log.Timber
 
-class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCase) : ViewModel(),
-    DetailViewModel<TextDetail> {
+class TextDetailViewModel(
+    private val loadTextDetailUseCase: LoadTextDetailUseCase,
+    private val createTextDetailUseCase: CreateTextDetailUseCase,
+    private val overwriteTextDetailUseCase: OverwriteTextDetailUseCase
+) : ViewModel(), DetailViewModel<TextDetail> {
 
-    override val detailAvailable: LiveData<TextDetail>
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    private val _savedDetail = MutableLiveData<TextDetail>()
+    override val savedDetail: LiveData<TextDetail> = _savedDetail
 
     override fun loadExistingDetail(existingDetail: TextDetail) {
         _existingDetail.value = existingDetail
@@ -29,17 +32,20 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
     }
 
     private val _text = MutableLiveData<String>()
+    /**
+     * The text being written into the editor. Will change over time as the user writes.
+     */
     val text: LiveData<String> = _text
 
     private val _initialText = MutableLiveData<String>()
     /**
      * Will be updated with the text from an existing detail once it is loaded.
      * May be used to place this initial text in an editor when opening the existing detail.
+     * Will not change afterwards.
      */
     val initialText: LiveData<String> = _initialText
 
     private val _existingDetail = MutableLiveData<TextDetail>()
-    val existingDetail: LiveData<TextDetail> = _existingDetail
 
     private val _selectedTextColor = MutableLiveData<@ColorInt Int>()
     val selectedTextColor: LiveData<Int> = _selectedTextColor
@@ -58,9 +64,6 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int> = _errorMessage
-
-    private val _saveClicked = SingleLiveEvent<Unit>()
-    val saveClicked: LiveData<Unit> = _saveClicked
 
     init {
         _selectedTextColor.value = Color.BLACK
@@ -95,20 +98,21 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
     }
 
     override fun onSaveClicked() {
-        val params = CreateTextDetailUseCase.SaveTextParams(event.value!!, text, existingDetail)
-        saveEventTextUseCase.execute(params, SaveTextUseCaseHandler())
+        if (!_text.value.isNullOrEmpty()) {
+            if (_existingDetail.value == null) {
+                val params = CreateTextDetailUseCase.Params(text.value!!)
+                createTextDetailUseCase.execute(params, CreateTextDetailUseCaseHandler())
+            } else {
+                val params =
+                    OverwriteTextDetailUseCase.Params(_text.value!!, _existingDetail.value!!)
+                overwriteTextDetailUseCase.execute(params, OverwriteTextDetailUseCaseHandler())
+            }
+        }
     }
 
-    /**
-     * Saves a text Detail. If an [existingDetail] is given then the contents of that Detail will
-     * be overwritten
-     */
-    fun saveText(text: String, existingDetail: TextDetail? = null) {
-    }
-
-    private inner class SaveTextUseCaseHandler : DisposableCompletableObserver() {
+    private inner class OverwriteTextDetailUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            _textSavedSuccessFully.value = Unit
+            _savedDetail.value = _existingDetail.value
         }
 
         override fun onError(e: Throwable) {
@@ -117,6 +121,16 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
         }
     }
 
+    private inner class CreateTextDetailUseCaseHandler : DisposableSingleObserver<TextDetail>() {
+        override fun onSuccess(createdDetail: TextDetail) {
+            _savedDetail.value = createdDetail
+        }
+
+        override fun onError(e: Throwable) {
+            Timber.e(e)
+            _errorMessage.postValue(R.string.error_save_text_failed)
+        }
+    }
 
     enum class FontSize(val size: Int) {
         SMALL(3),

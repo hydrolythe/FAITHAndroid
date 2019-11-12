@@ -63,7 +63,7 @@ class EventViewModelSaveTextTest : KoinTest {
 
     @Test
     fun enterTextVM_saveText_callsUseCase() {
-        val params = slot<CreateTextDetailUseCase.SaveTextParams>()
+        val params = slot<CreateTextDetailUseCase.Params>()
 
         viewModel.saveText(text)
         verify { saveTextUseCase.execute(capture(params), any()) }
@@ -75,7 +75,7 @@ class EventViewModelSaveTextTest : KoinTest {
     @Test
     fun enterTextVM_saveText_callUseCaseAndNotifiesSuccess() {
         // Arrange
-        val params = slot<CreateTextDetailUseCase.SaveTextParams>()
+        val params = slot<CreateTextDetailUseCase.Params>()
         val observer = slot<DisposableCompletableObserver>()
 
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
@@ -96,7 +96,7 @@ class EventViewModelSaveTextTest : KoinTest {
     @Test
     fun enterTextViewModel_saveText_notifiesWhenSaveFails() {
         // Arrange
-        val params = slot<CreateTextDetailUseCase.SaveTextParams>()
+        val params = slot<CreateTextDetailUseCase.Params>()
         val observer = slot<DisposableCompletableObserver>()
 
         val errorObserver = mockk<Observer<Int>>(relaxed = true)

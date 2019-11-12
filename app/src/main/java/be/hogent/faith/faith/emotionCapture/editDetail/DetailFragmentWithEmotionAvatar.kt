@@ -19,9 +19,9 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.details.drawing.create.MakeDrawingFragment
+import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
+import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.details.text.create.EnterTextFragment
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.ReviewPhotoFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
@@ -126,7 +126,7 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                     avatarOutLineId, detail.uuid
                 )
                 is TextDetail -> TextFragmentWithEmotionAvatar.newInstance(
-                    avatarOutLineId, detail.uuid
+                    avatarOutLineId, detail
                 )
                 is DrawingDetail -> DrawingFragmentWithEmotionAvatar.newInstance(
                     avatarOutLineId, detail
@@ -197,9 +197,9 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
         override fun setChildFragment() {
             val detail = arguments?.getSerializable(DETAIL) as DrawingDetail?
             val childFragment = if (detail == null) {
-                MakeDrawingFragment.newInstance()
+                DrawingDetailFragment.newInstance()
             } else {
-                MakeDrawingFragment.newInstance(detail)
+                DrawingDetailFragment.newInstance(detail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }
@@ -213,27 +213,23 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                 }
             }
 
-            fun newInstance(@DrawableRes avatarOutLineId: Int, detailUUID: UUID): TextFragmentWithEmotionAvatar {
+            fun newInstance(@DrawableRes avatarOutLineId: Int, textDetail: TextDetail): TextFragmentWithEmotionAvatar {
                 return TextFragmentWithEmotionAvatar().apply {
                     arguments = getBundleForAvatarOutline(avatarOutLineId).apply {
-                        putSerializable(DETAIL_UUID, detailUUID)
+                        putSerializable(DETAIL, textDetail)
                     }
                 }
             }
         }
 
         override fun setChildFragment() {
-            val detailUuid = arguments?.getSerializable(DETAIL_UUID) as UUID?
-            if (detailUuid == null) {
-                replaceChildFragment(
-                    EnterTextFragment.newInstance(), R.id.fragment_container_editDetail
-                )
+            val detail = arguments?.getSerializable(DETAIL) as TextDetail?
+            val childFragment = if (detail == null) {
+                TextDetailFragment.newInstance()
             } else {
-                replaceChildFragment(
-                    EnterTextFragment.newInstance(detailUuid),
-                    R.id.fragment_container_editDetail
-                )
+                TextDetailFragment.newInstance(detail)
             }
+            replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }
     }
 

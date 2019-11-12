@@ -13,33 +13,32 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterTextBinding
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
+import be.hogent.faith.faith.DetailFinishedListener
+import be.hogent.faith.faith.DetailFragment
 import kotlinx.android.synthetic.main.fragment_enter_text.enterText_editor
-import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.util.UUID
 
 // uses https://github.com/wasabeef/richeditor-android
-private const val TEXT_DETAIL_UUID = "uuid of the text file"
+private const val TEXT_DETAIL = "uuid of the text file"
 
-class EnterTextFragment : Fragment() {
+class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
+    override lateinit var detailFinishedListener: DetailFinishedListener
 
-    private val enterTextViewModel: EnterTextViewModel by viewModel()
-    private val eventViewModel: EventViewModel by sharedViewModel()
+    private val textDetailDetailViewModel: TextDetailViewModel by viewModel()
 
     private lateinit var enterTextBinding: FragmentEnterTextBinding
 
     private var navigation: TextScreenNavigation? = null
 
     companion object {
-        fun newInstance(): EnterTextFragment {
-            return EnterTextFragment()
+        fun newInstance(): TextDetailFragment {
+            return TextDetailFragment()
         }
 
-        fun newInstance(detailUuid: UUID): EnterTextFragment {
-            return EnterTextFragment().apply {
+        fun newInstance(textDetail: TextDetail): TextDetailFragment {
+            return TextDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(TEXT_DETAIL_UUID, detailUuid)
+                    putSerializable(TEXT_DETAIL, textDetail)
                 }
             }
         }
@@ -53,17 +52,12 @@ class EnterTextFragment : Fragment() {
     }
 
     private fun loadExistingTextDetail() {
-        val detailUuid = arguments?.getSerializable(TEXT_DETAIL_UUID) as UUID
-        val givenDetail = eventViewModel.event.value!!.details.find { it.uuid === detailUuid }
-        if (givenDetail is TextDetail) {
-            enterTextViewModel.loadExistingDetail(givenDetail)
-        } else {
-            throw IllegalArgumentException("Got a Detail that wasn't a TextDetail!")
-        }
+        val existingDetail = arguments!!.getSerializable(TEXT_DETAIL) as TextDetail
+        textDetailDetailViewModel.loadExistingDetail(existingDetail)
     }
 
     private fun existingTextGiven(): Boolean {
-        return arguments?.getSerializable(TEXT_DETAIL_UUID) != null
+        return arguments?.getSerializable(TEXT_DETAIL) != null
     }
 
     override fun onCreateView(
@@ -73,8 +67,7 @@ class EnterTextFragment : Fragment() {
     ): View? {
         enterTextBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_enter_text, container, false)
-        enterTextBinding.enterTextViewModel = enterTextViewModel
-        enterTextBinding.eventViewModel = eventViewModel
+        enterTextBinding.textDetailViewModel = textDetailDetailViewModel
         enterTextBinding.lifecycleOwner = this
         return enterTextBinding.root
     }
@@ -83,6 +76,11 @@ class EnterTextFragment : Fragment() {
         super.onAttach(context)
         if (context is TextScreenNavigation) {
             navigation = context
+        }
+        if (context is DetailFinishedListener) {
+            detailFinishedListener = context
+        } else {
+            throw AssertionError("A detailFragment has to be started with a DetailFinishedListener")
         }
     }
 
@@ -98,7 +96,7 @@ class EnterTextFragment : Fragment() {
             setEditorFontSize(30)
             setPadding(10, 10, 10, 10)
             setOnTextChangeListener {
-                enterTextViewModel.setText(it)
+                textDetailDetailViewModel.setText(it)
             }
             // Make sure editor contents are not null so we can save
             focusEditor()
@@ -109,29 +107,30 @@ class EnterTextFragment : Fragment() {
     }
 
     private fun setUpListeners() {
-        enterTextViewModel.initialText.observe(this, Observer { text ->
+        textDetailDetailViewModel.initialText.observe(this, Observer { text ->
             enterText_editor.html = text
         })
-        enterTextViewModel.selectedTextColor.observe(this, Observer { newColor ->
+        textDetailDetailViewModel.selectedTextColor.observe(this, Observer { newColor ->
             enterText_editor.setTextColor(newColor)
         })
-        enterTextViewModel.boldClicked.observe(this, Observer {
+        textDetailDetailViewModel.boldClicked.observe(this, Observer {
             enterText_editor.setBold()
         })
-        enterTextViewModel.italicClicked.observe(this, Observer {
+        textDetailDetailViewModel.italicClicked.observe(this, Observer {
             enterText_editor.setItalic()
         })
-        enterTextViewModel.underlineClicked.observe(this, Observer {
+        textDetailDetailViewModel.underlineClicked.observe(this, Observer {
             enterText_editor.setUnderline()
         })
-        enterTextViewModel.selectedFontSize.observe(this, Observer { newSize ->
+        textDetailDetailViewModel.selectedFontSize.observe(this, Observer { newSize ->
             enterText_editor.setFontSize(newSize.size)
         })
-        eventViewModel.errorMessage.observe(this, Observer { errorMessageResourceId ->
+        textDetailDetailViewModel.errorMessage.observe(this, Observer { errorMessageResourceId ->
             Toast.makeText(context, errorMessageResourceId, Toast.LENGTH_SHORT).show()
         })
-        eventViewModel.textSavedSuccessFully.observe(this, Observer {
+        textDetailDetailViewModel.savedDetail.observe(this, Observer { savedTextDetail ->
             Toast.makeText(context, R.string.save_text_success, Toast.LENGTH_SHORT).show()
+            detailFinishedListener.onDetailFinished(savedTextDetail)
             navigation?.backToEvent()
         })
     }

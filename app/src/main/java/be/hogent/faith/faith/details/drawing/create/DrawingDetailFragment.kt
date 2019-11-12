@@ -28,7 +28,7 @@ import timber.log.Timber
 
 private const val DRAWING_DETAIL = "uuid of the DrawingDetail"
 
-class MakeDrawingFragment : DrawFragment(), DetailFragment<DrawingDetail> {
+class DrawingDetailFragment : DrawFragment(), DetailFragment<DrawingDetail> {
     override val drawViewModel: DrawViewModel
         get() = drawingDetailViewModel
 
@@ -42,7 +42,7 @@ class MakeDrawingFragment : DrawFragment(), DetailFragment<DrawingDetail> {
     private lateinit var drawBinding: FragmentDrawBinding
 
     private var navigation: DrawingScreenNavigation? = null
-    override var detailFinishedListener: DetailFinishedListener<DrawingDetail>? = null
+    override lateinit var detailFinishedListener: DetailFinishedListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,16 +54,16 @@ class MakeDrawingFragment : DrawFragment(), DetailFragment<DrawingDetail> {
         drawBinding.drawViewModel = drawingDetailViewModel
         drawBinding.lifecycleOwner = this
 
+        if (existingDrawingGiven()) {
+            loadExistingDrawing()
+        }
+
         return drawBinding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpViewModel()
-
-        if (existingDrawingGiven()) {
-            loadExistingDrawing()
-        }
     }
 
     private fun setUpViewModel() {
@@ -104,8 +104,10 @@ class MakeDrawingFragment : DrawFragment(), DetailFragment<DrawingDetail> {
         if (context is DrawingScreenNavigation) {
             navigation = context
         }
-        if (context is DetailFinishedListener<*>) {
-            detailFinishedListener = context as DetailFinishedListener<DrawingDetail>
+        if (context is DetailFinishedListener) {
+            detailFinishedListener = context
+        } else {
+            throw AssertionError("A detailFragment has to be started with a DetailFinishedListener")
         }
     }
 
@@ -130,7 +132,7 @@ class MakeDrawingFragment : DrawFragment(), DetailFragment<DrawingDetail> {
             if (detail == null) {
                 return@Observer
             }
-            detailFinishedListener?.onDetailFinished(detail)
+            detailFinishedListener.onDetailFinished(detail)
 
             // Close the scope so when we start a new drawing we start with an empty canvas.
             kotlin.runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {
@@ -195,11 +197,11 @@ class MakeDrawingFragment : DrawFragment(), DetailFragment<DrawingDetail> {
     }
 
     companion object {
-        fun newInstance(): MakeDrawingFragment {
-            return MakeDrawingFragment()
+        fun newInstance(): DrawingDetailFragment {
+            return DrawingDetailFragment()
         }
 
-        fun newInstance(detail: DrawingDetail): MakeDrawingFragment {
+        fun newInstance(detail: DrawingDetail): DrawingDetailFragment {
             val args = Bundle()
             args.putSerializable(DRAWING_DETAIL, detail)
 

@@ -4,7 +4,8 @@ import android.graphics.Color
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.faith.TestUtils
-import be.hogent.faith.faith.details.text.create.EnterTextViewModel
+import be.hogent.faith.faith.details.text.create.TextDetailViewModel
+import be.hogent.faith.service.usecases.CreateTextDetailUseCase
 import be.hogent.faith.service.usecases.LoadTextDetailUseCase
 import be.hogent.faith.util.factory.DetailFactory
 import io.mockk.mockk
@@ -15,12 +16,12 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.RuntimeException
 
-class EnterTextViewModelTest {
+class TextDetailViewModelTest {
     private val loadTextDetailUseCase = mockk<LoadTextDetailUseCase>(relaxed = true)
+    private val createTextDetailUseCase = mockk<CreateTextDetailUseCase>(relaxed = true)
 
-    private lateinit var viewModel: EnterTextViewModel
+    private lateinit var detailViewModel: TextDetailViewModel
 
     private val detailText = "Text in the detail"
 
@@ -29,42 +30,42 @@ class EnterTextViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel =
-            EnterTextViewModel(loadTextDetailUseCase)
+        detailViewModel =
+            TextDetailViewModel(loadTextDetailUseCase, createTextDetailUseCase)
 
-        viewModel.text.observeForever(mockk(relaxed = true))
+        detailViewModel.text.observeForever(mockk(relaxed = true))
     }
 
     @Test
     fun enterTextVM_pickNewTextColor_isSelected() {
-        viewModel.pickTextColor(Color.BLACK)
-        Assert.assertEquals(Color.BLACK, TestUtils.getValue(viewModel.selectedTextColor))
+        detailViewModel.pickTextColor(Color.BLACK)
+        Assert.assertEquals(Color.BLACK, TestUtils.getValue(detailViewModel.selectedTextColor))
 
-        viewModel.pickTextColor(Color.RED)
-        Assert.assertEquals(Color.RED, TestUtils.getValue(viewModel.selectedTextColor))
+        detailViewModel.pickTextColor(Color.RED)
+        Assert.assertEquals(Color.RED, TestUtils.getValue(detailViewModel.selectedTextColor))
     }
 
     @Test
     fun enterTextVM_pickNewFontSize_isSelected() {
-        viewModel.pickFontSize(EnterTextViewModel.FontSize.NORMAL)
+        detailViewModel.pickFontSize(TextDetailViewModel.FontSize.NORMAL)
         Assert.assertEquals(
-            EnterTextViewModel.FontSize.NORMAL,
-            TestUtils.getValue(viewModel.selectedFontSize)
+            TextDetailViewModel.FontSize.NORMAL,
+            TestUtils.getValue(detailViewModel.selectedFontSize)
         )
 
-        viewModel.pickFontSize(EnterTextViewModel.FontSize.LARGE)
+        detailViewModel.pickFontSize(TextDetailViewModel.FontSize.LARGE)
         Assert.assertEquals(
-            EnterTextViewModel.FontSize.LARGE,
-            TestUtils.getValue(viewModel.selectedFontSize)
+            TextDetailViewModel.FontSize.LARGE,
+            TestUtils.getValue(detailViewModel.selectedFontSize)
         )
     }
 
     @Test
     fun enterTextVM_onBoldClicked_callsListeners() {
         val observer = mockk<Observer<Boolean?>>(relaxed = true)
-        viewModel.boldClicked.observeForever(observer)
+        detailViewModel.boldClicked.observeForever(observer)
 
-        viewModel.onBoldClicked()
+        detailViewModel.onBoldClicked()
 
         verify { observer.onChanged(any()) }
     }
@@ -72,9 +73,9 @@ class EnterTextViewModelTest {
     @Test
     fun enterTextVM_onItalicClicked_callsListeners() {
         val observer = mockk<Observer<Boolean?>>(relaxed = true)
-        viewModel.italicClicked.observeForever(observer)
+        detailViewModel.italicClicked.observeForever(observer)
 
-        viewModel.onItalicClicked()
+        detailViewModel.onItalicClicked()
 
         verify { observer.onChanged(any()) }
     }
@@ -82,9 +83,9 @@ class EnterTextViewModelTest {
     @Test
     fun enterTextVM_onUnderlineClicked_callsListeners() {
         val observer = mockk<Observer<Boolean?>>(relaxed = true)
-        viewModel.underlineClicked.observeForever(observer)
+        detailViewModel.underlineClicked.observeForever(observer)
 
-        viewModel.onUnderlineClicked()
+        detailViewModel.onUnderlineClicked()
 
         verify { observer.onChanged(any()) }
     }
@@ -97,16 +98,17 @@ class EnterTextViewModelTest {
         val resultObserver = slot<DisposableSingleObserver<String>>()
         val textObserver = mockk<Observer<String>>(relaxed = true)
 
-        viewModel.initialText.observeForever(textObserver)
+        detailViewModel.initialText.observeForever(textObserver)
 
         // Act
-        viewModel.loadExistingDetail(textDetail)
+        detailViewModel.loadExistingDetail(textDetail)
         verify { loadTextDetailUseCase.execute(capture(params), capture(resultObserver)) }
         resultObserver.captured.onSuccess(detailText)
 
         // Assert
         verify { textObserver.onChanged(detailText) }
     }
+
     @Test
     fun enterTextVM_loadTextUseCaseFails_updatesErrorMessage() {
         // Arrange
@@ -114,10 +116,10 @@ class EnterTextViewModelTest {
         val resultObserver = slot<DisposableSingleObserver<String>>()
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
 
-        viewModel.errorMessage.observeForever(errorObserver)
+        detailViewModel.errorMessage.observeForever(errorObserver)
 
         // Act
-        viewModel.loadExistingDetail(textDetail)
+        detailViewModel.loadExistingDetail(textDetail)
         verify { loadTextDetailUseCase.execute(any(), capture(resultObserver)) }
         resultObserver.captured.onError(RuntimeException())
 

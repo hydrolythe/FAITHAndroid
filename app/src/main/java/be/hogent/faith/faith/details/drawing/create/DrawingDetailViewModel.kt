@@ -22,7 +22,7 @@ class DrawingDetailViewModel(
     private val _savedDetail = MutableLiveData<DrawingDetail>()
     override val savedDetail: LiveData<DrawingDetail> = _savedDetail
 
-    private var detail: DrawingDetail? = null
+    private var existingDetail: DrawingDetail? = null
 
     init {
         existingDetail?.let {
@@ -34,16 +34,16 @@ class DrawingDetailViewModel(
     }
 
     override fun loadExistingDetail(existingDetail: DrawingDetail) {
-        detail = existingDetail
+        this.existingDetail = existingDetail
         // The approach in the TextViewModel of fetching the existing text  using the UC
         // and setting it in the VM is not applicable here because we have to interact
         // directly with an Android-element (DrawView). Instead setting up the DrawView is done in the
-        // [MakeDrawingFragment].
+        // [DrawingDetailFragment].
     }
 
     fun onBitMapAvailable(bitmap: Bitmap) {
-        if (detail != null) {
-            val params = OverwriteDrawingDetailUseCase.Params(bitmap, detail!!)
+        if (existingDetail != null) {
+            val params = OverwriteDrawingDetailUseCase.Params(bitmap, existingDetail!!)
             overwriteDrawingDetailUseCase.execute(params, OverwriteDrawingDetailUseCaseHandler())
         } else {
             val params = CreateDrawingDetailUseCase.Params(bitmap)
@@ -54,8 +54,8 @@ class DrawingDetailViewModel(
     private inner class OverwriteDrawingDetailUseCaseHandler :
         DisposableCompletableObserver() {
         override fun onComplete() {
-            Timber.i("Successfully overwrote existing detail $detail with new bitmap")
-            _savedDetail.value = detail
+            Timber.i("Successfully overwrote existing existingDetail $existingDetail with new bitmap")
+            _savedDetail.value = existingDetail
         }
 
         override fun onError(e: Throwable) {

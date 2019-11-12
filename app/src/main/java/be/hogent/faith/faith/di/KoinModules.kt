@@ -11,7 +11,7 @@ import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImage
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProviderFromResources
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.details.text.create.EnterTextViewModel
+import be.hogent.faith.faith.details.text.create.TextDetailViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.AudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
@@ -54,7 +54,7 @@ val appModule = module(override = true) {
     viewModel { EventViewModel(get(), get(), get(), get(), get()) }
     viewModel { DrawingDetailViewModel(null, get(), get()) }
     viewModel { EditDetailViewModel() }
-    viewModel { EnterTextViewModel(get()) }
+    viewModel { TextDetailViewModel(get(), get(), get()) }
     viewModel { OverviewEventsViewModel() }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { WelcomeViewModel() }

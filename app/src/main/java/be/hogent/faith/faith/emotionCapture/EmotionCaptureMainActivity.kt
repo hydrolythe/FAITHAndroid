@@ -7,16 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.faith.DetailFinishedListener
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
-import be.hogent.faith.faith.details.drawing.create.MakeDrawingFragment
+import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
+import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailFragmentWithEmotionAvatar
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.details.text.create.EnterTextFragment
 import be.hogent.faith.faith.emotionCapture.recordAudio.RecordAudioFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoFragment
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
@@ -36,9 +38,9 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     OverviewEventsFragment.OverviewEventsNavigationListener,
     DetailFragmentWithEmotionAvatar.EditDetailNavigationListener,
     RecordAudioFragment.AudioScreenNavigation,
-    MakeDrawingFragment.DrawingScreenNavigation,
-    MakeDrawingFragment.DrawingDetailListener,
-    EnterTextFragment.TextScreenNavigation,
+    DrawingDetailFragment.DrawingScreenNavigation,
+    DetailFinishedListener,
+    TextDetailFragment.TextScreenNavigation,
     TakePhotoFragment.PhotoScreenNavigation,
     DetailViewHolder.ExistingDetailNavigationListener {
 
@@ -166,9 +168,21 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         )
     }
 
-    override fun onDrawingDetailUpdated(drawingDetail: DrawingDetail) {
-        eventViewModel.saveDrawing(drawingDetail)
+    override fun onDetailFinished(detail: Detail) {
+        when (detail) {
+            is DrawingDetail -> save(detail)
+            is TextDetail -> save(detail)
+        }
+    }
+
+    private fun save(drawingDetail: DrawingDetail) {
+        eventViewModel.saveDrawingDetail(drawingDetail)
         Toast.makeText(this, R.string.save_drawing_success, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun save(textDetail: TextDetail) {
+        eventViewModel.saveTextDetail(textDetail)
+        Toast.makeText(this, R.string.save_text_success, Toast.LENGTH_SHORT).show()
     }
 
     override fun startTextDetailFragment() {

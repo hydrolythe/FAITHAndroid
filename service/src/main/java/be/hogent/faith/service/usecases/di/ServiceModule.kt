@@ -11,6 +11,8 @@ import be.hogent.faith.service.usecases.SaveEventAudioUseCase
 import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
 import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
 import be.hogent.faith.service.usecases.CreateTextDetailUseCase
+import be.hogent.faith.service.usecases.OverwriteTextDetailUseCase
+import be.hogent.faith.service.usecases.SaveEventTextDetailUseCase
 import be.hogent.faith.service.usecases.SaveEventUseCase
 import org.koin.dsl.module
 
@@ -32,4 +34,6 @@ val serviceModule = module {
     factory { LoadTextDetailUseCase(get(), get()) }
     factory { CreateDrawingDetailUseCase(get(), get()) }
     factory { OverwriteDrawingDetailUseCase(get(), get()) }
+    factory { SaveEventTextDetailUseCase(get(), get()) }
+    factory { OverwriteTextDetailUseCase(get(), get()) }
 }

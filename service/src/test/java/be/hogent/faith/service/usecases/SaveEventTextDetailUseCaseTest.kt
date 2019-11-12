@@ -17,7 +17,7 @@ import org.junit.Before
 import org.junit.Test
 import java.io.IOException
 
-class SaveEventTextUseCaseTest {
+class SaveEventTextDetailUseCaseTest {
     private lateinit var createTextDetailUseCase: CreateTextDetailUseCase
     private val scheduler: Scheduler = mockk()
     private val repository: StorageRepository = mockk(relaxed = true)
@@ -38,7 +38,7 @@ class SaveEventTextUseCaseTest {
 
         // Act
         createTextDetailUseCase.buildUseCaseObservable(
-            CreateTextDetailUseCase.SaveTextParams(event, text)
+            CreateTextDetailUseCase.Params(event, text)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -54,7 +54,7 @@ class SaveEventTextUseCaseTest {
 
         // Act
         createTextDetailUseCase.buildUseCaseObservable(
-            CreateTextDetailUseCase.SaveTextParams(event, text)
+            CreateTextDetailUseCase.Params(event, text)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -73,7 +73,7 @@ class SaveEventTextUseCaseTest {
 
         // Act
         createTextDetailUseCase.buildUseCaseObservable(
-            CreateTextDetailUseCase.SaveTextParams(event, text)
+            CreateTextDetailUseCase.Params(event, text)
         ).test()
             .assertError(IOException::class.java)
 
@@ -96,7 +96,7 @@ class SaveEventTextUseCaseTest {
 
         // Act
         createTextDetailUseCase.buildUseCaseObservable(
-            CreateTextDetailUseCase.SaveTextParams(event, text, existingDetail)
+            CreateTextDetailUseCase.Params(event, text, existingDetail)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -119,7 +119,7 @@ class SaveEventTextUseCaseTest {
 
         // Act
         createTextDetailUseCase.buildUseCaseObservable(
-            CreateTextDetailUseCase.SaveTextParams(event, text, existingDetail)
+            CreateTextDetailUseCase.Params(event, text, existingDetail)
         ).test()
 
         assertEquals(existingDetail, event.details.first())
