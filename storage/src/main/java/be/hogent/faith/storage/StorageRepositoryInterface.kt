@@ -3,6 +3,7 @@ package be.hogent.faith.storage
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -22,4 +23,5 @@ interface StorageRepositoryInterface {
 
     fun storeTextDetailWithEvent(textDetail: TextDetail, event: Event): Completable
     fun storeDrawingDetailWithEvent(drawingDetail: DrawingDetail, event: Event): Completable
+    fun storePhotoDetailWithEvent(photoDetail: PhotoDetail, event: Event): Completable
 }

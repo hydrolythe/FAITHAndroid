@@ -5,7 +5,7 @@ import be.hogent.faith.service.usecases.GetEventsUseCase
 import be.hogent.faith.service.usecases.GetUserUseCase
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
-import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
+import be.hogent.faith.service.usecases.SaveEventPhotoDetailUseCase
 import be.hogent.faith.service.usecases.SaveEventUseCase
 import be.hogent.faith.service.usecases.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.drawingDetail.OverwriteDrawingDetailUseCase
@@ -29,7 +29,7 @@ val serviceModule = module {
     factory { SaveEmotionAvatarUseCase(get(), get()) }
     factory { GetUserUseCase(get(), get()) }
     factory { CreateTextDetailUseCase(get(), get()) }
-    factory { SaveEventPhotoUseCase(get(), get()) }
+    factory { SaveEventPhotoDetailUseCase(get(), get()) }
     factory { SaveEventAudioUseCase(get(), get()) }
     factory { SaveEventDrawingUseCase(get(), get()) }
     factory { LoadTextDetailUseCase(get(), get()) }

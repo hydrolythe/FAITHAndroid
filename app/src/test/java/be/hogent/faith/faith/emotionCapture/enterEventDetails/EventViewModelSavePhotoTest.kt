@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.di.appModule
-import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
+import be.hogent.faith.service.usecases.SaveEventPhotoDetailUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.Called
 import io.mockk.mockk
@@ -22,7 +22,7 @@ import org.koin.test.KoinTest
 
 class EventViewModelSavePhotoTest : KoinTest {
     private lateinit var viewModel: EventViewModel
-    private val savePhotoUseCase = mockk<SaveEventPhotoUseCase>(relaxed = true)
+    private val savePhotoUseCase = mockk<SaveEventPhotoDetailUseCase>(relaxed = true)
 
     private val eventTitle = DataFactory.randomString()
     private val eventNotes = DataFactory.randomString()
@@ -62,7 +62,7 @@ class EventViewModelSavePhotoTest : KoinTest {
     fun eventViewModel_savePhoto_usesCorrectParams() {
         // Arrange
         val observer = slot<DisposableSingleObserver<Detail>>()
-        val params = slot<SaveEventPhotoUseCase.Params>()
+        val params = slot<SaveEventPhotoDetailUseCase.Params>()
 
         // Act
         viewModel.savePhoto(mockk())

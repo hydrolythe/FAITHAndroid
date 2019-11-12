@@ -11,26 +11,25 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
+import be.hogent.faith.service.usecases.SaveEventPhotoDetailUseCase
 import be.hogent.faith.service.usecases.drawingDetail.SaveEventDrawingUseCase
-import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
 import be.hogent.faith.service.usecases.textDetail.SaveEventTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
-import io.reactivex.observers.DisposableSingleObserver
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
-import java.io.File
 
 class EventViewModel(
     private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase,
-    private val saveEventPhotoUseCase: SaveEventPhotoUseCase,
+    private val saveEventPhotoDetailUseCase: SaveEventPhotoDetailUseCase,
     private val saveEventAudioUseCase: SaveEventAudioUseCase,
     private val saveEventDrawingUseCase: SaveEventDrawingUseCase,
     private val saveEventTextDetailUseCase: SaveEventTextDetailUseCase,
@@ -248,14 +247,14 @@ class EventViewModel(
     //endregion
 
     //region savePhoto
-    fun savePhoto(tempPhotoFile: File) {
-        val params = SaveEventPhotoUseCase.Params(tempPhotoFile, event.value!!)
-        saveEventPhotoUseCase.execute(params, TakeEventPhotoUseCaseHandler())
+    fun savePhotoDetail(photoDetail: PhotoDetail) {
+        val params = SaveEventPhotoDetailUseCase.Params(photoDetail, event.value!!)
+        saveEventPhotoDetailUseCase.execute(params, TakeEventPhotoUseCaseHandler())
     }
 
-    private inner class TakeEventPhotoUseCaseHandler : DisposableSingleObserver<Detail>() {
-        override fun onSuccess(savedDetail: Detail) {
-            _photoSavedSuccessFully.value = savedDetail
+    private inner class TakeEventPhotoUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _photoSavedSuccessFully.call()
         }
 
         override fun onError(e: Throwable) {
@@ -296,7 +295,7 @@ class EventViewModel(
 
     override fun onCleared() {
         saveEventAudioUseCase.dispose()
-        saveEventPhotoUseCase.dispose()
+        saveEventPhotoDetailUseCase.dispose()
         saveEmotionAvatarUseCase.dispose()
         saveEventDrawingUseCase.dispose()
         saveEventTextDetailUseCase.dispose()

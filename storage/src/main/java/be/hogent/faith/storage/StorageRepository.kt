@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -23,6 +24,14 @@ const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
 const val TEXT_EXTENSION = "txt"
 
 class StorageRepository(private val context: Context) : StorageRepositoryInterface {
+    override fun storePhotoDetailWithEvent(photoDetail: PhotoDetail, event: Event): Completable {
+        val saveFile = File(getEventPhotoDirectory(event), photoDetail.uuid.toString())
+        return moveFile(photoDetail.file, saveFile)
+            .doOnComplete {
+                photoDetail.file = saveFile
+            }
+    }
+
     override fun storeTextTemporarily(text: String): Single<File> {
         return Single.fromCallable {
             val saveDirectory = File(context.cacheDir, "text")

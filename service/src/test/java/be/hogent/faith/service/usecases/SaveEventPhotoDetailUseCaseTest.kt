@@ -15,18 +15,18 @@ import org.junit.Test
 import java.io.File
 import java.io.IOException
 
-class SaveEventPhotoUseCaseTest {
+class SaveEventPhotoDetailUseCaseTest {
     private val observer = mockk<Scheduler>()
     private val tempRecordingFile = mockk<File>()
     private val storageRepository = mockk<StorageRepository>(relaxed = true)
 
     private lateinit var event: Event
-    private lateinit var saveEventPhotoUseCase: SaveEventPhotoUseCase
+    private lateinit var saveEventPhotoDetailUseCase: SaveEventPhotoDetailUseCase
 
     @Before
     fun setUp() {
         event = EventFactory.makeEvent(nbrOfDetails = 0)
-        saveEventPhotoUseCase = SaveEventPhotoUseCase(storageRepository, observer)
+        saveEventPhotoDetailUseCase = SaveEventPhotoDetailUseCase(storageRepository, observer)
     }
 
     @Test
@@ -37,8 +37,8 @@ class SaveEventPhotoUseCaseTest {
         } returns Single.just(mockk())
 
         // Act
-        saveEventPhotoUseCase.buildUseCaseSingle(
-            SaveEventPhotoUseCase.Params(tempRecordingFile, event)
+        saveEventPhotoDetailUseCase.buildUseCaseSingle(
+            SaveEventPhotoDetailUseCase.Params(tempRecordingFile, event)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -55,8 +55,8 @@ class SaveEventPhotoUseCaseTest {
         } returns Single.just(mockk())
 
         // Act
-        val result = saveEventPhotoUseCase.buildUseCaseSingle(
-            SaveEventPhotoUseCase.Params(tempRecordingFile, event)
+        val result = saveEventPhotoDetailUseCase.buildUseCaseSingle(
+            SaveEventPhotoDetailUseCase.Params(tempRecordingFile, event)
         )
 
         result.test()
@@ -78,8 +78,8 @@ class SaveEventPhotoUseCaseTest {
         } returns Single.error(IOException())
 
         // Act
-        saveEventPhotoUseCase.buildUseCaseSingle(
-            SaveEventPhotoUseCase.Params(tempRecordingFile, event)
+        saveEventPhotoDetailUseCase.buildUseCaseSingle(
+            SaveEventPhotoDetailUseCase.Params(tempRecordingFile, event)
         ).test()
             .assertError(IOException::class.java)
 

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.UserViewModel
@@ -168,6 +169,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         when (detail) {
             is DrawingDetail -> save(detail)
             is TextDetail -> save(detail)
+            is PhotoDetail -> save(detail)
         }
     }
 
@@ -178,6 +180,11 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
 
     private fun save(textDetail: TextDetail) {
         eventViewModel.saveTextDetail(textDetail)
+        Toast.makeText(this, R.string.save_text_success, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun save(photoDetail: PhotoDetail) {
+        eventViewModel.savePhotoDetail(photoDetail)
         Toast.makeText(this, R.string.save_text_success, Toast.LENGTH_SHORT).show()
     }
 
