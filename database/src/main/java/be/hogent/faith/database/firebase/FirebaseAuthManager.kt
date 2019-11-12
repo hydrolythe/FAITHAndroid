@@ -1,6 +1,6 @@
 package be.hogent.faith.database.firebase
 
-import android.util.Log
+import timber.log.Timber
 import be.hogent.faith.domain.repository.InvalidCredentialsException
 import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.domain.repository.SignInException
@@ -15,12 +15,10 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
-import com.google.firebase.auth.FirebaseUser
 import durdinapps.rxfirebase2.RxFirebaseAuth
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
 
 /**
  * uses RxFirebaseAuth : https://github.com/FrangSierra/RxFirebase
@@ -29,31 +27,23 @@ class FirebaseAuthManager(
     private val auth: FirebaseAuth
 ) {
 
-    // TODO:klopt dit wel
-    private var authStateListener: FirebaseAuth.AuthStateListener = FirebaseAuth.AuthStateListener {
-        if (it.currentUser != null && it.currentUser is FirebaseUser)
-            loggedInUser.onNext((it.currentUser as FirebaseUser).uid)
-        else
-            loggedInUser.onNext("emptyUser")
-    }
-
-    init {
-        auth.addAuthStateListener { authStateListener }
-    }
-
-    var loggedInUser: BehaviorSubject<String> = BehaviorSubject.create()
-
     fun getLoggedInUser(): String? {
         return auth.currentUser?.uid
     }
 
     fun isUsernameUnique(email: String): Single<Boolean> {
         return RxFirebaseAuth.fetchSignInMethodsForEmail(auth, email)
-            .map { if (it.signInMethods?.size == 0) true else false }
-            .onErrorResumeNext { e: Throwable ->
-                when (e) {
-                    is FirebaseException -> Maybe.error(NetworkError(e))
-                    else -> Maybe.error(RuntimeException("Error fetching providers for email", e))
+            .map { it.signInMethods?.size == 0 }
+            .onErrorResumeNext { error: Throwable ->
+                Timber.e("$TAG: error when looking up if username is unique ${error.message}")
+                when (error) {
+                    is FirebaseException -> Maybe.error(NetworkError(error))
+                    else -> Maybe.error(
+                        RuntimeException(
+                            "Error fetching providers for email",
+                            error
+                        )
+                    )
                 }
             }
             .toSingle()
@@ -61,10 +51,10 @@ class FirebaseAuthManager(
 
     fun register(email: String, password: String): Maybe<String?> {
         return RxFirebaseAuth.createUserWithEmailAndPassword(auth, email, password)
-            .map { mapToUser(it) }
+            .map { mapToUserUUID(it) }
             // map FirebaseExceptions to domain exceptions
             .onErrorResumeNext { error: Throwable ->
-                Log.d(TAG, "error registering ${error.message}")
+                Timber.e("$TAG: error registering ${error.message}")
                 when (error) {
                     is FirebaseAuthWeakPasswordException -> Maybe.error(WeakPasswordException(error))
                     is FirebaseAuthUserCollisionException -> Maybe.error(
@@ -83,8 +73,9 @@ class FirebaseAuthManager(
 
     fun signIn(email: String, password: String): Maybe<String?> {
         return RxFirebaseAuth.signInWithEmailAndPassword(auth, email, password)
-            .map { mapToUser(it) }
+            .map { mapToUserUUID(it) }
             .onErrorResumeNext { error: Throwable ->
+                Timber.e("$TAG: signIn error ${error.message}")
                 when (error) {
                     is FirebaseAuthInvalidCredentialsException -> Maybe.error(SignInException(error))
                     is FirebaseAuthInvalidUserException -> Maybe.error(SignInException(error))
@@ -107,19 +98,7 @@ class FirebaseAuthManager(
         throw NotImplementedError()
     }
 
-    private fun mapToUser(result: AuthResult): String? {
+    private fun mapToUserUUID(result: AuthResult): String? {
         return result.user?.uid
-    }
-
-    private fun mapToUser(result: FirebaseUser?): String? {
-        return result?.uid
-    }
-
-    protected fun finalize() {
-        disposeAuthListener()
-    }
-
-    private fun disposeAuthListener() {
-        auth.removeAuthStateListener(authStateListener)
     }
 }

@@ -19,7 +19,7 @@ class GetUserUseCase(
 ) : FlowableUseCase<User, Void?>(observeScheduler) {
 
     override fun buildUseCaseObservable(params: Void?): Flowable<User> {
-        val currentUser = authManager.getLoggedInUser()
+        val currentUser = authManager.getLoggedInUserUUID()
         if (currentUser == null)
             return Flowable.error(RuntimeException("You are not allowed to access the user, please log in"))
         return combineLatest(userRepository.get(currentUser), eventRepository.getAll())

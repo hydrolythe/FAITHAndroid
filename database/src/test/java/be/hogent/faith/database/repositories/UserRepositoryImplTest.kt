@@ -10,7 +10,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import org.junit.Before
 import org.junit.Test
 
 class UserRepositoryImplTest {
@@ -23,20 +22,16 @@ class UserRepositoryImplTest {
     private val userWithoutEvents = UserFactory.makeUser(0)
     private val userEntity = EntityFactory.makeUserEntity()
 
-    @Before
-    fun setUp() {
-    }
-
     @Test
     fun userRepository_delete_authenticatedUser_Completes() {
-        every { firebaseUserRepository.delete() } returns Completable.complete()
+        every { firebaseUserRepository.delete(userEntity) } returns Completable.complete()
         stubUserMapperToEntity(userWithoutEvents, userEntity)
         userRepository.delete(userWithoutEvents).test().assertComplete()
     }
 
     @Test
     fun userRepository_delete_nonAuthenticatedUser_Fails() {
-        every { firebaseUserRepository.delete() } returns Completable.error(RuntimeException("Unauthorized used."))
+        every { firebaseUserRepository.delete(userEntity) } returns Completable.error(RuntimeException("Unauthorized used."))
         stubUserMapperToEntity(userWithoutEvents, userEntity)
         userRepository.delete(userWithoutEvents).test().assertNotComplete()
     }
@@ -59,7 +54,7 @@ class UserRepositoryImplTest {
 
     @Test
     fun userRepository_get_nonAuthenticatedUser_errors() {
-        every { firebaseUserRepository.get() } returns Flowable.error(RuntimeException("Unauthorized used."))
+        every { firebaseUserRepository.get(userWithoutEvents.uuid) } returns Flowable.error(RuntimeException("Unauthorized used."))
         userRepository.get(userWithoutEvents.uuid)
             .test()
             .assertNoValues()
@@ -67,7 +62,7 @@ class UserRepositoryImplTest {
 
     @Test
     fun userRepository_get_authenticatedUser_succeeds() {
-        every { firebaseUserRepository.get() } returns Flowable.just(
+        every { firebaseUserRepository.get(userEntity.uuid) } returns Flowable.just(
             userEntity
         )
 

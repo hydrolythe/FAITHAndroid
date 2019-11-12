@@ -18,10 +18,10 @@ class FirebaseUserRepository(
     /**
      * get User for currentUser, observe changes
      */
-    fun get(): Flowable<UserEntity> {
+    fun get(uid: String): Flowable<UserEntity> {
         val currentUser = fbAuth.currentUser
-        if (currentUser == null) {
-            return Flowable.error(RuntimeException("Unauthorized used."))
+        if (currentUser == null || currentUser.uid != uid) {
+            return Flowable.error(RuntimeException("Unauthorized user."))
         }
         return RxFirestore.observeDocumentRef(firestore.collection(USERS_KEY).document(currentUser.uid))
             .map { it.toObject(UserEntity::class.java) }
@@ -32,8 +32,8 @@ class FirebaseUserRepository(
      */
     fun insert(item: UserEntity): Completable {
         val currentUser = fbAuth.currentUser
-        if (currentUser == null) {
-            return Completable.error(RuntimeException("Unauthorized used."))
+        if (currentUser == null || currentUser.uid != item.uuid) {
+            return Completable.error(RuntimeException("Unauthorized user."))
         }
         val document = firestore.collection(USERS_KEY).document(currentUser.uid)
         return RxFirestore.setDocument(document, item)
@@ -51,10 +51,10 @@ class FirebaseUserRepository(
     /**
      * delete the user corresponding the currentUser in firestore
      */
-    fun delete(): Completable {
+    fun delete(item: UserEntity): Completable {
         val currentUser = fbAuth.currentUser
-        if (currentUser == null) {
-            return Completable.error(RuntimeException("Unauthorized used."))
+        if (currentUser == null || currentUser.uid != item.uuid) {
+            return Completable.error(RuntimeException("Unauthorized user."))
         }
         return RxFirestore.deleteDocument(firestore.collection(USERS_KEY).document(currentUser.uid))
     }
@@ -63,7 +63,7 @@ class FirebaseUserRepository(
      * get all users from Firestorage
      */
     fun getAll(): Flowable<List<UserEntity>> {
-        TODO("not implemented, because rules in firestore not set") // if used, set the rules on the database
+        TODO("not implemented, because rules for an admin in firestore not set") // if used, set the rules on the database
         /*
         return RxFirestore.observeQueryRef(firestore.collection(USERS_KEY))
             .map {

@@ -14,25 +14,33 @@ open class UserRepositoryImpl(
 ) : UserRepository {
 
     /**
-     * deletes the currentUser
+     * deletes the user. item must be the authenticated user
      */
     override fun delete(item: User): Completable {
-        return firebaseUserRepository.delete()
+        return firebaseUserRepository.delete(userMapper.mapToEntity(item))
     }
 
-    // een gebruiker heeft bij creatie nog geen events
+    /**
+     * registers a user. A new user has no events yet
+     */
     override fun insert(item: User): Completable {
         return firebaseUserRepository.insert(userMapper.mapToEntity(item))
     }
 
+    /**
+     * gets the current user. This must be the uuid of the authenticated user
+     */
     override fun get(uuid: String): Flowable<User> {
-        return firebaseUserRepository.get().map { userMapper.mapFromEntity(it) }
+        return firebaseUserRepository.get(uuid).map { userMapper.mapFromEntity(it) }
     }
 
     override fun getAll(): Flowable<List<User>> {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // not possible because no admin user defined in Firebase
     }
 
+    /**
+     * Add events to the user
+     */
     private fun addEventsToUser(user: User, events: List<Event>): User {
         events.forEach { user.addEvent(it) }
         return user

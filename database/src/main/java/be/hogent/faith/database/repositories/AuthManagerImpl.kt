@@ -3,7 +3,6 @@ package be.hogent.faith.database.repositories
 import be.hogent.faith.database.firebase.FirebaseAuthManager
 import be.hogent.faith.domain.repository.AuthManager
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
 
 class AuthManagerImpl(private val firebase: FirebaseAuthManager) : AuthManager {
 
@@ -20,8 +19,5 @@ class AuthManagerImpl(private val firebase: FirebaseAuthManager) : AuthManager {
         // TODO ("not implemented")
     }
 
-    override fun getLoggedInUser(): String? = firebase.getLoggedInUser()
-
-    override val currentUser: BehaviorSubject<String>
-        get() = firebase.loggedInUser
+    override fun getLoggedInUserUUID(): String? = firebase.getLoggedInUser()
 }

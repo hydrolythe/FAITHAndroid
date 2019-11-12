@@ -14,7 +14,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Flowable
 import io.reactivex.Maybe
-import org.junit.Before
 import org.junit.Test
 import java.util.UUID
 
@@ -32,10 +31,6 @@ class EventRepositoryImplTest {
     private val eventEntity = EntityFactory.makeEventEntityWithDetails(2)
     private val event = EventFactory.makeEvent(2)
     private val uuid = eventEntity.uuid
-
-    @Before
-    fun setUp() {
-    }
 
     @Test
     fun eventRepository_get_existingEvent_succeeds() {
@@ -114,15 +109,6 @@ class EventRepositoryImplTest {
             .test()
             .assertValueCount(2)
     }
-
-    /*
-    @Test
-    fun eventRepository_deleteExistingEventCompletes() {
-        every { eventDao.delete(eventWithDetails.eventEntity) } returns Completable.complete()
-        stubMapperToEntity(event, eventWithDetails.eventEntity)
-        eventRepository.delete(event, user).test().assertComplete()
-    }
-      */
 
     private fun stubMapperFromEntity(model: Event, entity: EventEntity) {
         every { eventMapper.mapFromEntity(entity) } returns model

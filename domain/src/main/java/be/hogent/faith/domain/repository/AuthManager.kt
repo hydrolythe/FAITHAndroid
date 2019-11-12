@@ -3,7 +3,6 @@ package be.hogent.faith.domain.repository
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
-import io.reactivex.subjects.BehaviorSubject
 
 interface AuthManager {
     fun isUsernameUnique(email: String): Single<Boolean>
@@ -16,9 +15,7 @@ interface AuthManager {
 
     fun reset()
 
-    fun getLoggedInUser(): String?
-
-    val currentUser: BehaviorSubject<String>
+    fun getLoggedInUserUUID(): String?
 }
 
 class WeakPasswordException(error: Throwable) : RuntimeException(error)

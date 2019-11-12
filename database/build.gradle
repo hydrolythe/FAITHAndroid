@@ -68,6 +68,7 @@ dependencies {
     implementation firebaseDependencies.firebaseauth
     implementation firebaseDependencies.firestore
     implementation firebaseDependencies.firebasestorage
+    implementation 'com.github.FrangSierra:RxFirebase:1.5.6'
 
     //test
     testImplementation testDependencies.junit
