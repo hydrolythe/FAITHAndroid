@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
@@ -70,14 +68,6 @@ class DrawEmotionAvatarFragment : DrawFragment() {
         super.onStart()
 
         configureDrawingCanvas()
-        listenToViewModelEvents()
-    }
-
-    private fun listenToViewModelEvents() {
-        eventViewModel.errorMessage.observe(this, Observer { errorMessageResId ->
-            Toast.makeText(context, getString(errorMessageResId), Toast.LENGTH_SHORT)
-                .show()
-        })
     }
 
     private fun configureDrawingCanvas() {

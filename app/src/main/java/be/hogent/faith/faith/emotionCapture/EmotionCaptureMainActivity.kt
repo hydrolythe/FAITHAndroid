@@ -4,15 +4,19 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.details.DetailFinishedListener
+import be.hogent.faith.faith.details.audio.create.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
+import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionAvatarFragment
@@ -20,8 +24,6 @@ import be.hogent.faith.faith.emotionCapture.editDetail.DetailFragmentWithEmotion
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.details.audio.create.RecordAudioFragment
-import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.util.replaceFragment
@@ -90,6 +92,25 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        eventViewModel.audioDetailSavedSuccessFully.observe(this, Observer { messageResId ->
+            Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+        })
+        eventViewModel.drawingDetailSavedSuccessFully.observe(this, Observer { messageResId ->
+            Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+        })
+        eventViewModel.textDetailSavedSuccessFully.observe(this, Observer { messageResId ->
+            Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+        })
+        eventViewModel.photoDetailSavedSuccessFully.observe(this, Observer { messageResId ->
+            Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show()
+        })
+        eventViewModel.errorMessage.observe(this, Observer { errorMessageResId ->
+            Toast.makeText(this, errorMessageResId, Toast.LENGTH_SHORT).show()
+        })
+    }
+
     private fun showExitAlert() {
         val alertDialog: AlertDialog = this.run {
             val builder = AlertDialog.Builder(this).apply {
@@ -119,7 +140,8 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         val avatar =
             avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
         replaceFragment(
-            DrawEmotionAvatarFragment.newInstance(avatar), R.id.emotionCapture_fragment_container
+            DrawEmotionAvatarFragment.newInstance(avatar),
+            R.id.emotionCapture_fragment_container
         )
     }
 
@@ -170,22 +192,24 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
             is DrawingDetail -> save(detail)
             is TextDetail -> save(detail)
             is PhotoDetail -> save(detail)
+            is AudioDetail -> save(detail)
         }
     }
 
     private fun save(drawingDetail: DrawingDetail) {
         eventViewModel.saveDrawingDetail(drawingDetail)
-        Toast.makeText(this, R.string.save_drawing_success, Toast.LENGTH_SHORT).show()
     }
 
     private fun save(textDetail: TextDetail) {
         eventViewModel.saveTextDetail(textDetail)
-        Toast.makeText(this, R.string.save_text_success, Toast.LENGTH_SHORT).show()
     }
 
     private fun save(photoDetail: PhotoDetail) {
         eventViewModel.savePhotoDetail(photoDetail)
-        Toast.makeText(this, R.string.save_text_success, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun save(audioDetail: AudioDetail) {
+        eventViewModel.saveAudioDetail(audioDetail)
     }
 
     override fun startTextDetailFragment() {

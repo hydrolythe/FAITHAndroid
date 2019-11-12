@@ -19,19 +19,18 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.faith.details.audio.create.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
+import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
+import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.details.audio.create.RecordAudioFragment
-import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
-import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.util.replaceChildFragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_edit_detail.image_editDetail_avatar
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.util.UUID
 
 /**
  * Key for this Fragment's [Bundle] to hold the resource ID pointing to the outline drawing of the avatarName.
@@ -118,12 +117,11 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
     }
 
     companion object {
-        private const val DETAIL_UUID = "UUID of the Detail"
         private const val DETAIL = "The detail to show"
         fun newInstance(detail: Detail, @DrawableRes avatarOutLineId: Int): DetailFragmentWithEmotionAvatar {
             return when (detail) {
                 is AudioDetail -> AudioFragmentWithEmotionAvatar.newInstance(
-                    avatarOutLineId, detail.uuid
+                    avatarOutLineId, detail
                 )
                 is TextDetail -> TextFragmentWithEmotionAvatar.newInstance(
                     avatarOutLineId, detail
@@ -132,7 +130,7 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                     avatarOutLineId, detail
                 )
                 is PhotoDetail -> PhotoFragmentWithEmotionAvatar.newInstance(
-                    avatarOutLineId, detail.uuid
+                    avatarOutLineId, detail
                 )
             }
         }
@@ -154,26 +152,23 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                 }
             }
 
-            fun newInstance(@DrawableRes avatarOutLineId: Int, detailUUID: UUID): PhotoFragmentWithEmotionAvatar {
+            fun newInstance(@DrawableRes avatarOutLineId: Int, existingDetail: PhotoDetail): PhotoFragmentWithEmotionAvatar {
                 return PhotoFragmentWithEmotionAvatar().apply {
                     arguments = getBundleForAvatarOutline(avatarOutLineId).apply {
-                        putSerializable(DETAIL_UUID, detailUUID)
+                        putSerializable(DETAIL, existingDetail)
                     }
                 }
             }
         }
 
         override fun setChildFragment() {
-            val detailUuid = arguments?.getSerializable(DETAIL_UUID) as UUID?
-            if (detailUuid == null) {
-                replaceChildFragment(
-                    TakePhotoFragment.newInstance(), R.id.fragment_container_editDetail
-                )
+            val detail = arguments?.getSerializable(DETAIL) as PhotoDetail?
+            val childFragment = if (detail == null) {
+                TakePhotoFragment.newInstance()
             } else {
-                replaceChildFragment(
-                    ReviewPhotoFragment.newInstance(detailUuid), R.id.fragment_container_editDetail
-                )
+                ReviewPhotoFragment.newInstance(detail)
             }
+            replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }
     }
 
@@ -235,20 +230,23 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
 
     class AudioFragmentWithEmotionAvatar : DetailFragmentWithEmotionAvatar() {
         companion object {
-            fun newInstance(@DrawableRes avatarOutLineId: Int, detailUUID: UUID? = null): AudioFragmentWithEmotionAvatar {
+            fun newInstance(@DrawableRes avatarOutLineId: Int, existingDetail: AudioDetail? = null): AudioFragmentWithEmotionAvatar {
                 return AudioFragmentWithEmotionAvatar().apply {
                     arguments = getBundleForAvatarOutline(avatarOutLineId).apply {
-                        putSerializable(DETAIL_UUID, detailUUID)
+                        putSerializable(DETAIL, existingDetail)
                     }
                 }
             }
         }
 
         override fun setChildFragment() {
-            val detailUuid = arguments?.getSerializable(DETAIL_UUID) as UUID?
-            replaceChildFragment(
-                RecordAudioFragment.newInstance(detailUuid), R.id.fragment_container_editDetail
-            )
+            val existingDetail = arguments?.getSerializable(DETAIL) as AudioDetail?
+            val childFragment = if (existingDetail == null) {
+                RecordAudioFragment.newInstance()
+            } else {
+                RecordAudioFragment.newInstance(existingDetail)
+            }
+            replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }
     }
 

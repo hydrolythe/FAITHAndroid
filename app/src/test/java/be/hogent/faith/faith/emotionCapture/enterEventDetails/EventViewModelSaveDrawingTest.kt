@@ -1,7 +1,7 @@
 package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import be.hogent.faith.service.usecases.drawingDetail.SaveEventDrawingUseCase
+import be.hogent.faith.service.usecases.drawingDetail.SaveEventDrawingDetailUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.mockk
 import org.junit.Before
@@ -9,7 +9,7 @@ import org.junit.Rule
 
 class EventViewModelSaveDrawingTest {
     private lateinit var viewModel: EventViewModel
-    private val saveDrawingUseCase = mockk<SaveEventDrawingUseCase>(relaxed = true)
+    private val saveDrawingUseCase = mockk<SaveEventDrawingDetailUseCase>(relaxed = true)
 
     private val eventTitle = DataFactory.randomString()
     private val eventNotes = DataFactory.randomString()

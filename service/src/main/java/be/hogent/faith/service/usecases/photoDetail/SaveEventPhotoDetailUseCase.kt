@@ -1,4 +1,4 @@
-package be.hogent.faith.service.usecases
+package be.hogent.faith.service.usecases.photoDetail
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.PhotoDetail

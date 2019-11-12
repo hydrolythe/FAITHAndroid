@@ -58,7 +58,7 @@ val appModule = module(override = true) {
     viewModel { OverviewEventsViewModel() }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { WelcomeViewModel() }
-    viewModel { AudioViewModel() }
+    viewModel { AudioViewModel(get(), get()) }
     viewModel { RegisterUserViewModel(get()) }
     viewModel { RegisterUserInfoViewModel() }
     viewModel { TakePhotoViewModel(get()) }

@@ -7,10 +7,10 @@ import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
-class SaveEventDrawingUseCase(
+class SaveEventDrawingDetailUseCase(
     private val storageRepository: StorageRepository,
     observeScheduler: Scheduler
-) : CompletableUseCase<SaveEventDrawingUseCase.Params>(
+) : CompletableUseCase<SaveEventDrawingDetailUseCase.Params>(
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {

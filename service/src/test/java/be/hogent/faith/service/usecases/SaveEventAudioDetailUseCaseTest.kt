@@ -2,6 +2,7 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.service.usecases.audioDetail.SaveEventAudioDetailUseCase
 import be.hogent.faith.storage.StorageRepository
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
@@ -15,8 +16,8 @@ import org.junit.Before
 import org.junit.Test
 import java.io.IOException
 
-class SaveEventAudioUseCaseTest {
-    private lateinit var saveEventAudioUseCase: SaveEventAudioUseCase
+class SaveEventAudioDetailUseCaseTest {
+    private lateinit var saveEventAudioDetailUseCase: SaveEventAudioDetailUseCase
     private val scheduler: Scheduler = mockk()
     private val repository: StorageRepository = mockk(relaxed = true)
 
@@ -26,7 +27,10 @@ class SaveEventAudioUseCaseTest {
 
     @Before
     fun setUp() {
-        saveEventAudioUseCase = SaveEventAudioUseCase(repository, scheduler)
+        saveEventAudioDetailUseCase = SaveEventAudioDetailUseCase(
+            repository,
+            scheduler
+        )
         event = EventFactory.makeEvent(nbrOfDetails = 0)
     }
 
@@ -36,8 +40,8 @@ class SaveEventAudioUseCaseTest {
         every { repository.saveEventAudio(any(), any()) } returns Single.just(mockk())
 
         // Act
-        saveEventAudioUseCase.buildUseCaseObservable(
-            SaveEventAudioUseCase.Params(tempStorageFile, event)
+        saveEventAudioDetailUseCase.buildUseCaseObservable(
+            SaveEventAudioDetailUseCase.Params(tempStorageFile, event)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -52,8 +56,8 @@ class SaveEventAudioUseCaseTest {
         every { repository.saveEventAudio(any(), any()) } returns Single.just(mockk())
 
         // Act
-        saveEventAudioUseCase.buildUseCaseObservable(
-            SaveEventAudioUseCase.Params(tempStorageFile, event)
+        saveEventAudioDetailUseCase.buildUseCaseObservable(
+            SaveEventAudioDetailUseCase.Params(tempStorageFile, event)
         ).test()
             .assertNoErrors()
             .assertComplete()
@@ -71,8 +75,8 @@ class SaveEventAudioUseCaseTest {
         every { repository.saveEventAudio(any(), any()) } returns Single.error(IOException())
 
         // Act
-        saveEventAudioUseCase.buildUseCaseObservable(
-            SaveEventAudioUseCase.Params(tempStorageFile, event)
+        saveEventAudioDetailUseCase.buildUseCaseObservable(
+            SaveEventAudioDetailUseCase.Params(tempStorageFile, event)
         ).test()
             .assertError(IOException::class.java)
 

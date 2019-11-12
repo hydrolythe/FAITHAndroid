@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.faith.testModule
-import be.hogent.faith.service.usecases.SaveEventAudioUseCase
+import be.hogent.faith.service.usecases.audioDetail.SaveEventAudioDetailUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.Called
 import io.mockk.mockk
@@ -22,7 +22,7 @@ import org.koin.test.KoinTest
 
 class EventViewModelSaveAudioTest : KoinTest {
     private lateinit var viewModel: EventViewModel
-    private val saveAudioUseCase = mockk<SaveEventAudioUseCase>(relaxed = true)
+    private val saveAudioUseCase = mockk<SaveEventAudioDetailUseCase>(relaxed = true)
 
     private val eventTitle = DataFactory.randomString()
     private val eventNotes = DataFactory.randomString()
@@ -61,7 +61,7 @@ class EventViewModelSaveAudioTest : KoinTest {
     @Test
     fun eventViewModel_saveAudio_callsUseCase() {
         // Arrange
-        val params = slot<SaveEventAudioUseCase.Params>()
+        val params = slot<SaveEventAudioDetailUseCase.Params>()
         val observer = slot<DisposableCompletableObserver>()
 
         // Act
@@ -82,7 +82,7 @@ class EventViewModelSaveAudioTest : KoinTest {
         val failedObserver = mockk<Observer<Int>>(relaxed = true)
         val observer = slot<DisposableCompletableObserver>()
 
-        viewModel.recordingSavedSuccessFully.observeForever(successObserver)
+        viewModel.audioDetailSavedSuccessFully.observeForever(successObserver)
         viewModel.errorMessage.observeForever(failedObserver)
 
         // Act
@@ -103,7 +103,7 @@ class EventViewModelSaveAudioTest : KoinTest {
         val failedObserver = mockk<Observer<Int>>(relaxed = true)
         val observer = slot<DisposableCompletableObserver>()
 
-        viewModel.recordingSavedSuccessFully.observeForever(successObserver)
+        viewModel.audioDetailSavedSuccessFully.observeForever(successObserver)
         viewModel.errorMessage.observeForever(failedObserver)
 
         // Act

@@ -3,6 +3,7 @@ package be.hogent.faith.storage
 import android.content.Context
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
@@ -24,6 +25,15 @@ const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
 const val TEXT_EXTENSION = "txt"
 
 class StorageRepository(private val context: Context) : StorageRepositoryInterface {
+
+    override fun storeAudioDetailWithEvent(audioDetail: AudioDetail, event: Event): Completable {
+        val saveFile = File(getEventAudioDirectory(event), audioDetail.uuid.toString())
+        return moveFile(audioDetail.file, saveFile)
+            .doOnComplete {
+                audioDetail.file = saveFile
+            }
+    }
+
     override fun storePhotoDetailWithEvent(photoDetail: PhotoDetail, event: Event): Completable {
         val saveFile = File(getEventPhotoDirectory(event), photoDetail.uuid.toString())
         return moveFile(photoDetail.file, saveFile)
@@ -123,14 +133,14 @@ class StorageRepository(private val context: Context) : StorageRepositoryInterfa
 
     /**
      * Saves a given [DrawingDetail] to permanent storage.
-     * This will change the [detail]'s file property to the new location.
+     * This will change the [drawingDetail]'s file property to the new location.
      * It will be found in appDir/events/[eventUuid]/detailUuid
      */
-    override fun storeDrawingDetailWithEvent(detail: DrawingDetail, event: Event): Completable {
-        val saveFile = File(getEventDrawingDirectory(event), detail.uuid.toString())
-        return moveFile(detail.file, saveFile)
+    override fun storeDrawingDetailWithEvent(drawingDetail: DrawingDetail, event: Event): Completable {
+        val saveFile = File(getEventDrawingDirectory(event), drawingDetail.uuid.toString())
+        return moveFile(drawingDetail.file, saveFile)
             .doOnComplete {
-                detail.file = saveFile
+                drawingDetail.file = saveFile
             }
     }
 

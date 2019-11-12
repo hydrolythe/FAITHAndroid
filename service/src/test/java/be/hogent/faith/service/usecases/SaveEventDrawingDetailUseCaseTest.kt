@@ -2,7 +2,7 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.service.usecases.drawingDetail.SaveEventDrawingUseCase
+import be.hogent.faith.service.usecases.drawingDetail.SaveEventDrawingDetailUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -13,9 +13,9 @@ import org.junit.Before
 import org.junit.Test
 import java.util.concurrent.Executor
 
-class SaveEventDrawingUseCaseTest {
+class SaveEventDrawingDetailUseCaseTest {
 
-    private lateinit var useCase: SaveEventDrawingUseCase
+    private lateinit var detailUseCase: SaveEventDrawingDetailUseCase
     private lateinit var executor: Executor
     private lateinit var scheduler: Scheduler
     private lateinit var storageRepository: StorageRepository
@@ -29,7 +29,7 @@ class SaveEventDrawingUseCaseTest {
         executor = mockk()
         scheduler = mockk()
         storageRepository = mockk(relaxed = true)
-        useCase = SaveEventDrawingUseCase(
+        detailUseCase = SaveEventDrawingDetailUseCase(
             storageRepository,
             scheduler
         )
@@ -40,13 +40,13 @@ class SaveEventDrawingUseCaseTest {
         // Arrange
         event = Event()
 
-        val params = SaveEventDrawingUseCase.Params(drawingDetail, event)
+        val params = SaveEventDrawingDetailUseCase.Params(drawingDetail, event)
         every {
             storageRepository.saveEventDrawing(params.detail, params.event)
         } returns Completable.complete()
 
         // Act
-        val result = useCase.buildUseCaseObservable(params)
+        val result = detailUseCase.buildUseCaseObservable(params)
 
         // Assert
         result.test()
@@ -63,13 +63,13 @@ class SaveEventDrawingUseCaseTest {
         event = Event()
         event.addDetail(drawingDetail)
 
-        val params = SaveEventDrawingUseCase.Params(drawingDetail, event)
+        val params = SaveEventDrawingDetailUseCase.Params(drawingDetail, event)
         every {
             storageRepository.saveEventDrawing(params.detail, params.event)
         } returns Completable.complete()
 
         // Act
-        val result = useCase.buildUseCaseObservable(params)
+        val result = detailUseCase.buildUseCaseObservable(params)
 
         // Assert
         result.test()

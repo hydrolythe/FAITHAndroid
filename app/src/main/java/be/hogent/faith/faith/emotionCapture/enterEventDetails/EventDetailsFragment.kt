@@ -142,10 +142,6 @@ class EventDetailsFragment : Fragment() {
             navigation?.startDrawingDetailFragment()
         })
 
-        eventViewModel.errorMessage.observe(this, Observer { errorMessage ->
-            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-        })
-
         eventViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
             saveDialog.show(fragmentManager!!, null)

@@ -9,20 +9,18 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
-import be.hogent.faith.service.usecases.SaveEventAudioUseCase
-import be.hogent.faith.service.usecases.SaveEventPhotoDetailUseCase
-import be.hogent.faith.service.usecases.drawingDetail.SaveEventDrawingUseCase
+import be.hogent.faith.service.usecases.audioDetail.SaveEventAudioDetailUseCase
+import be.hogent.faith.service.usecases.drawingDetail.SaveEventDrawingDetailUseCase
+import be.hogent.faith.service.usecases.photoDetail.SaveEventPhotoDetailUseCase
 import be.hogent.faith.service.usecases.textDetail.SaveEventTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
@@ -30,13 +28,12 @@ import timber.log.Timber
 class EventViewModel(
     private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase,
     private val saveEventPhotoDetailUseCase: SaveEventPhotoDetailUseCase,
-    private val saveEventAudioUseCase: SaveEventAudioUseCase,
-    private val saveEventDrawingUseCase: SaveEventDrawingUseCase,
+    private val saveEventAudioDetailUseCase: SaveEventAudioDetailUseCase,
+    private val saveEventDrawingDetailUseCase: SaveEventDrawingDetailUseCase,
     private val saveEventTextDetailUseCase: SaveEventTextDetailUseCase,
     givenEvent: Event? = null
 ) : ViewModel(), KoinComponent {
 
-    private val fileProvider: TempFileProvider by inject()
     /**
      * The event that will be discussed and explained using audio, video, drawings,...
      * Updates to the [eventTitle], [eventDate] and [eventNotes] are automatically applied to the event.
@@ -64,29 +61,23 @@ class EventViewModel(
      */
     val eventNotes = MutableLiveData<String>()
 
-    private val _photoSavedSuccessFully = SingleLiveEvent<Detail>()
-    val photoSavedSuccessFully: LiveData<Detail>
-        get() = _photoSavedSuccessFully
+    private val _photoSavedSuccessFully = SingleLiveEvent<Int>()
+    val photoDetailSavedSuccessFully: LiveData<Int> = _photoSavedSuccessFully
 
-    private val _drawingSavedSuccessFully = SingleLiveEvent<Unit>()
-    val drawingSavedSuccessFully: LiveData<Unit>
-        get() = _drawingSavedSuccessFully
+    private val _drawingSavedSuccessFully = SingleLiveEvent<Int>()
+    val drawingDetailSavedSuccessFully: LiveData<Int> = _drawingSavedSuccessFully
 
-    private val _recordingSavedSuccessFully = SingleLiveEvent<Unit>()
-    val recordingSavedSuccessFully: LiveData<Unit>
-        get() = _recordingSavedSuccessFully
+    private val _audioSavedSuccessFully = SingleLiveEvent<Int>()
+    val audioDetailSavedSuccessFully: LiveData<Int> = _audioSavedSuccessFully
 
-    private val _textSavedSuccessFully = SingleLiveEvent<Unit>()
-    val textSavedSuccessFully: LiveData<Unit>
-        get() = _textSavedSuccessFully
+    private val _textSavedSuccessFully = SingleLiveEvent<Int>()
+    val textDetailSavedSuccessFully: LiveData<Int> = _textSavedSuccessFully
 
-    private val _avatarSavedSuccessFully = SingleLiveEvent<Unit>()
-    val avatarSavedSuccessFully: LiveData<Unit>
-        get() = _avatarSavedSuccessFully
+    private val _avatarSavedSuccessFully = SingleLiveEvent<Int>()
+    val avatarSavedSuccessFully: LiveData<Int> = _avatarSavedSuccessFully
 
     private val _sendButtonClicked = SingleLiveEvent<Unit>()
-    val sendButtonClicked: LiveData<Unit>
-        get() = _sendButtonClicked
+    val sendButtonClicked: LiveData<Unit> = _sendButtonClicked
 
     fun onSendButtonClicked() {
         _sendButtonClicked.call()
@@ -119,39 +110,25 @@ class EventViewModel(
     }
 
     private val _cameraButtonClicked = SingleLiveEvent<Unit>()
-    val cameraButtonClicked: LiveData<Unit>
-        get() = _cameraButtonClicked
+    val cameraButtonClicked: LiveData<Unit> = _cameraButtonClicked
 
     private val _textButtonClicked = SingleLiveEvent<Unit>()
-    val textButtonClicked: LiveData<Unit>
-        get() = _textButtonClicked
+    val textButtonClicked: LiveData<Unit> = _textButtonClicked
 
     private val _audioButtonClicked = SingleLiveEvent<Unit>()
-    val audioButtonClicked: LiveData<Unit>
-        get() = _audioButtonClicked
+    val audioButtonClicked: LiveData<Unit> = _audioButtonClicked
 
     private val _drawingButtonClicked = SingleLiveEvent<Unit>()
-    val drawingButtonClicked: LiveData<Unit>
-        get() = _drawingButtonClicked
-
-    /**
-     * verhuisd naar EditDetail
-    private val _sendButtonClicked = SingleLiveEvent<Unit>()
-    val sendButtonClicked: LiveData<Unit>
-    get() = _sendButtonClicked
-     */
+    val drawingButtonClicked: LiveData<Unit> = _drawingButtonClicked
 
     private val _emotionAvatarClicked = SingleLiveEvent<Unit>()
-    val emotionAvatarClicked: LiveData<Unit>
-        get() = _emotionAvatarClicked
+    val emotionAvatarClicked: LiveData<Unit> = _emotionAvatarClicked
 
     private val _cancelButtonClicked = SingleLiveEvent<Unit>()
-    val cancelButtonClicked: LiveData<Unit>
-        get() = _cancelButtonClicked
+    val cancelButtonClicked: LiveData<Unit> = _cancelButtonClicked
 
     private val _dateButtonClicked = SingleLiveEvent<Unit>()
-    val dateButtonClicked: LiveData<Unit>
-        get() = _dateButtonClicked
+    val dateButtonClicked: LiveData<Unit> = _dateButtonClicked
 
     /**
      * Helper method to be called when changing one of the properties of the [Event].
@@ -185,18 +162,6 @@ class EventViewModel(
         _dateButtonClicked.call()
     }
 
-    /**
-     * Used to reset the ViewModel once an Event is saved.
-     * This will allow the ViewModel to be reused for a new event.
-     */
-    // TODO: check if still needed?
-    fun resetViewModel() {
-        event.postValue(Event())
-        eventDate.postValue(LocalDateTime.now())
-        eventTitle.postValue(null)
-        eventNotes.postValue(null)
-    }
-
     fun onEmotionAvatarClicked() {
         _emotionAvatarClicked.call()
     }
@@ -216,7 +181,7 @@ class EventViewModel(
     private inner class SaveEmotionAvatarUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
             updateEvent()
-            _avatarSavedSuccessFully.value = Unit
+            _avatarSavedSuccessFully.postValue(R.string.avatar_save_successfull)
         }
 
         override fun onError(e: Throwable) {
@@ -227,17 +192,14 @@ class EventViewModel(
     //endregion
 
     //region saveAudio
-    fun saveAudio() {
-        val params = SaveEventAudioUseCase.Params(
-            fileProvider.tempAudioRecordingFile,
-            event.value!!
-        )
-        saveEventAudioUseCase.execute(params, SaveAudioUseCaseHandler())
+    fun saveAudioDetail(audioDetail: AudioDetail) {
+        val params = SaveEventAudioDetailUseCase.Params(audioDetail, event.value!!)
+        saveEventAudioDetailUseCase.execute(params, SaveEventAudioUseCaseHandler())
     }
 
-    private inner class SaveAudioUseCaseHandler : DisposableCompletableObserver() {
+    private inner class SaveEventAudioUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            _recordingSavedSuccessFully.call()
+            _audioSavedSuccessFully.postValue(R.string.save_audio_success)
         }
 
         override fun onError(e: Throwable) {
@@ -254,7 +216,7 @@ class EventViewModel(
 
     private inner class TakeEventPhotoUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            _photoSavedSuccessFully.call()
+            _photoSavedSuccessFully.postValue(R.string.save_photo_success)
         }
 
         override fun onError(e: Throwable) {
@@ -270,7 +232,7 @@ class EventViewModel(
 
     private inner class SaveEventTextDetailUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            _textSavedSuccessFully.call()
+            _textSavedSuccessFully.postValue(R.string.save_text_success)
         }
 
         override fun onError(e: Throwable) {
@@ -279,13 +241,13 @@ class EventViewModel(
     }
 
     fun saveDrawingDetail(detail: DrawingDetail) {
-        val params = SaveEventDrawingUseCase.Params(detail, event.value!!)
-        saveEventDrawingUseCase.execute(params, SaveEventDrawingUseCaseHandler())
+        val params = SaveEventDrawingDetailUseCase.Params(detail, event.value!!)
+        saveEventDrawingDetailUseCase.execute(params, SaveEventDrawingUseCaseHandler())
     }
 
     private inner class SaveEventDrawingUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            _drawingSavedSuccessFully.call()
+            _drawingSavedSuccessFully.postValue(R.string.save_drawing_success)
         }
 
         override fun onError(e: Throwable) {
@@ -294,10 +256,10 @@ class EventViewModel(
     }
 
     override fun onCleared() {
-        saveEventAudioUseCase.dispose()
+        saveEventAudioDetailUseCase.dispose()
         saveEventPhotoDetailUseCase.dispose()
         saveEmotionAvatarUseCase.dispose()
-        saveEventDrawingUseCase.dispose()
+        saveEventDrawingDetailUseCase.dispose()
         saveEventTextDetailUseCase.dispose()
         super.onCleared()
     }

@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.di.appModule
-import be.hogent.faith.service.usecases.SaveEventPhotoDetailUseCase
+import be.hogent.faith.service.usecases.photoDetail.SaveEventPhotoDetailUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.Called
 import io.mockk.mockk
@@ -80,7 +80,7 @@ class EventViewModelSavePhotoTest : KoinTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val observer = slot<DisposableSingleObserver<Detail>>()
 
-        viewModel.photoSavedSuccessFully.observeForever(successObserver)
+        viewModel.photoDetailSavedSuccessFully.observeForever(successObserver)
         viewModel.errorMessage.observeForever(errorObserver)
 
         // Act
@@ -100,7 +100,7 @@ class EventViewModelSavePhotoTest : KoinTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val observer = slot<DisposableSingleObserver<Detail>>()
 
-        viewModel.photoSavedSuccessFully.observeForever(successObserver)
+        viewModel.photoDetailSavedSuccessFully.observeForever(successObserver)
         viewModel.errorMessage.observeForever(errorObserver)
 
         // Act

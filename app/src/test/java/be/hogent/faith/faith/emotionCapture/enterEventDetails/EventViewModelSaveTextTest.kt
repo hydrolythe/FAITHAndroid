@@ -81,7 +81,7 @@ class EventViewModelSaveTextTest : KoinTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val successObserver = mockk<Observer<Unit>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.textSavedSuccessFully.observeForever(successObserver)
+        viewModel.textDetailSavedSuccessFully.observeForever(successObserver)
 
         // Act
         viewModel.saveText(text)
@@ -102,7 +102,7 @@ class EventViewModelSaveTextTest : KoinTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val successObserver = mockk<Observer<Unit>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.textSavedSuccessFully.observeForever(successObserver)
+        viewModel.textDetailSavedSuccessFully.observeForever(successObserver)
 
         // Act
         viewModel.saveText(text)

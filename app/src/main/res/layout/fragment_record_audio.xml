@@ -10,10 +10,6 @@
         <variable
             name="audioViewModel"
             type="be.hogent.faith.faith.details.audio.create.AudioViewModel" />
-
-        <variable
-            name="eventViewModel"
-            type="be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel" />
     </data>
 
     <FrameLayout
@@ -39,7 +35,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/save_btn"
-                android:onClick="@{() -> eventViewModel.saveAudio()}"
+                android:onClick="@{() -> audioViewModel.onSaveClicked()}"
                 android:visibility="@{audioViewModel.saveButtonVisible? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
