@@ -13,8 +13,8 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterTextBinding
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.DetailFinishedListener
-import be.hogent.faith.faith.DetailFragment
+import be.hogent.faith.faith.details.DetailFinishedListener
+import be.hogent.faith.faith.details.DetailFragment
 import kotlinx.android.synthetic.main.fragment_enter_text.enterText_editor
 import org.koin.android.viewmodel.ext.android.viewModel
 

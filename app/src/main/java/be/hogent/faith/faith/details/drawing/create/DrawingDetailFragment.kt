@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawBinding
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.faith.DetailFinishedListener
-import be.hogent.faith.faith.DetailFragment
+import be.hogent.faith.faith.details.DetailFinishedListener
+import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.details.drawing.create.draggableImages.DragListener
 import be.hogent.faith.faith.details.drawing.create.draggableImages.ImagesAdapter
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
@@ -28,7 +28,8 @@ import timber.log.Timber
 
 private const val DRAWING_DETAIL = "uuid of the DrawingDetail"
 
-class DrawingDetailFragment : DrawFragment(), DetailFragment<DrawingDetail> {
+class DrawingDetailFragment : DrawFragment(),
+    DetailFragment<DrawingDetail> {
     override val drawViewModel: DrawViewModel
         get() = drawingDetailViewModel
 

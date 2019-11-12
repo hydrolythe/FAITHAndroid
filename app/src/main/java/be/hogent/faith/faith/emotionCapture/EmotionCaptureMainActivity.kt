@@ -8,7 +8,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.DetailFinishedListener
+import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
