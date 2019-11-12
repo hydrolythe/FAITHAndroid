@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.details.DetailViewModel
-import be.hogent.faith.service.usecases.CreateTextDetailUseCase
-import be.hogent.faith.service.usecases.LoadTextDetailUseCase
-import be.hogent.faith.service.usecases.OverwriteTextDetailUseCase
+import be.hogent.faith.service.usecases.textDetail.CreateTextDetailUseCase
+import be.hogent.faith.service.usecases.textDetail.LoadTextDetailUseCase
+import be.hogent.faith.service.usecases.textDetail.OverwriteTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import timber.log.Timber

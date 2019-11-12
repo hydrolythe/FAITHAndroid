@@ -1,4 +1,4 @@
-package be.hogent.faith.service.usecases
+package be.hogent.faith.service.usecases.drawingDetail
 
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.detail.DrawingDetail

@@ -1,18 +1,18 @@
 package be.hogent.faith.service.usecases.di
 
-import be.hogent.faith.service.usecases.CreateDrawingDetailUseCase
+import be.hogent.faith.service.usecases.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.CreateUserUseCase
 import be.hogent.faith.service.usecases.GetEventsUseCase
 import be.hogent.faith.service.usecases.GetUserUseCase
-import be.hogent.faith.service.usecases.LoadTextDetailUseCase
-import be.hogent.faith.service.usecases.OverwriteDrawingDetailUseCase
+import be.hogent.faith.service.usecases.textDetail.LoadTextDetailUseCase
+import be.hogent.faith.service.usecases.drawingDetail.OverwriteDrawingDetailUseCase
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
-import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
+import be.hogent.faith.service.usecases.drawingDetail.SaveEventDrawingUseCase
 import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
-import be.hogent.faith.service.usecases.CreateTextDetailUseCase
-import be.hogent.faith.service.usecases.OverwriteTextDetailUseCase
-import be.hogent.faith.service.usecases.SaveEventTextDetailUseCase
+import be.hogent.faith.service.usecases.textDetail.CreateTextDetailUseCase
+import be.hogent.faith.service.usecases.textDetail.OverwriteTextDetailUseCase
+import be.hogent.faith.service.usecases.textDetail.SaveEventTextDetailUseCase
 import be.hogent.faith.service.usecases.SaveEventUseCase
 import org.koin.dsl.module
 
@@ -32,8 +32,18 @@ val serviceModule = module {
     factory { SaveEventAudioUseCase(get(), get()) }
     factory { SaveEventDrawingUseCase(get(), get()) }
     factory { LoadTextDetailUseCase(get(), get()) }
-    factory { CreateDrawingDetailUseCase(get(), get()) }
-    factory { OverwriteDrawingDetailUseCase(get(), get()) }
+    factory {
+        CreateDrawingDetailUseCase(
+            get(),
+            get()
+        )
+    }
+    factory {
+        OverwriteDrawingDetailUseCase(
+            get(),
+            get()
+        )
+    }
     factory { SaveEventTextDetailUseCase(get(), get()) }
     factory { OverwriteTextDetailUseCase(get(), get()) }
 }

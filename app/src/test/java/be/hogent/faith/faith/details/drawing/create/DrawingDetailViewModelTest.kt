@@ -5,8 +5,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.TestUtils.getValue
-import be.hogent.faith.service.usecases.CreateDrawingDetailUseCase
-import be.hogent.faith.service.usecases.OverwriteDrawingDetailUseCase
+import be.hogent.faith.service.usecases.drawingDetail.CreateDrawingDetailUseCase
+import be.hogent.faith.service.usecases.drawingDetail.OverwriteDrawingDetailUseCase
 import be.hogent.faith.util.factory.DetailFactory
 import io.mockk.clearAllMocks
 import io.mockk.mockk

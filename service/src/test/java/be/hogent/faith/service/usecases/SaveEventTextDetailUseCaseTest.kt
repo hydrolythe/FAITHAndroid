@@ -2,6 +2,7 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.service.usecases.textDetail.CreateTextDetailUseCase
 import be.hogent.faith.storage.StorageRepository
 import be.hogent.faith.util.factory.DetailFactory
 import be.hogent.faith.util.factory.EventFactory
@@ -27,7 +28,11 @@ class SaveEventTextDetailUseCaseTest {
 
     @Before
     fun setUp() {
-        createTextDetailUseCase = CreateTextDetailUseCase(repository, scheduler)
+        createTextDetailUseCase =
+            CreateTextDetailUseCase(
+                repository,
+                scheduler
+            )
         event = EventFactory.makeEvent(nbrOfDetails = 0)
     }
 

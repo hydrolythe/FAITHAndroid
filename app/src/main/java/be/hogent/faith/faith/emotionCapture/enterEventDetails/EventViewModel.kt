@@ -16,9 +16,9 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.SaveEventAudioUseCase
-import be.hogent.faith.service.usecases.SaveEventDrawingUseCase
+import be.hogent.faith.service.usecases.drawingDetail.SaveEventDrawingUseCase
 import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
-import be.hogent.faith.service.usecases.SaveEventTextDetailUseCase
+import be.hogent.faith.service.usecases.textDetail.SaveEventTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import org.koin.core.KoinComponent

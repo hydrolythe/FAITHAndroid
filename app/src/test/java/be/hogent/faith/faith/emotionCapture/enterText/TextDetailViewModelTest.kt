@@ -5,8 +5,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.faith.TestUtils
 import be.hogent.faith.faith.details.text.create.TextDetailViewModel
-import be.hogent.faith.service.usecases.CreateTextDetailUseCase
-import be.hogent.faith.service.usecases.LoadTextDetailUseCase
+import be.hogent.faith.service.usecases.textDetail.CreateTextDetailUseCase
+import be.hogent.faith.service.usecases.textDetail.LoadTextDetailUseCase
 import be.hogent.faith.util.factory.DetailFactory
 import io.mockk.mockk
 import io.mockk.slot

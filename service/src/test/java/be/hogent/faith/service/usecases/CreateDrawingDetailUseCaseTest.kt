@@ -1,6 +1,7 @@
 package be.hogent.faith.service.usecases
 
 import android.graphics.Bitmap
+import be.hogent.faith.service.usecases.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -25,7 +26,11 @@ class CreateDrawingDetailUseCaseTest {
         executor = mockk()
         scheduler = mockk()
         storageRepository = mockk(relaxed = true)
-        createDrawingDetailUseCase = CreateDrawingDetailUseCase(storageRepository, scheduler)
+        createDrawingDetailUseCase =
+            CreateDrawingDetailUseCase(
+                storageRepository,
+                scheduler
+            )
     }
 
     @Test
