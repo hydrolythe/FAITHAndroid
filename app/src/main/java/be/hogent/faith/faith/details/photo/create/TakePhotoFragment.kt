@@ -14,7 +14,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.faith.details.DetailFinishedListener
+import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -22,7 +24,7 @@ import io.fotoapparat.Fotoapparat
 import io.fotoapparat.log.logcat
 import kotlinx.android.synthetic.main.fragment_take_photo.img_takePhoto_Photo
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 /**
@@ -30,11 +32,11 @@ import timber.log.Timber
  */
 const val REQUESTCODE_CAMERA = 1
 
-class TakePhotoFragment : Fragment() {
+class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
 
-    private val eventViewModel: EventViewModel by sharedViewModel()
+    override lateinit var detailFinishedListener: DetailFinishedListener
 
-    private val takePhotoViewModel: TakePhotoViewModel by sharedViewModel()
+    private val takePhotoViewModel: TakePhotoViewModel by viewModel()
 
     private lateinit var takePhotoBinding: FragmentTakePhotoBinding
 
@@ -55,7 +57,7 @@ class TakePhotoFragment : Fragment() {
         takePhotoBinding.lifecycleOwner = this
 
         fotoApparat = Fotoapparat(
-            context = this.context!!,
+            context = requireContext(),
             view = takePhotoBinding.cameraView,
             logger = logcat()
         )
@@ -67,6 +69,9 @@ class TakePhotoFragment : Fragment() {
         if (context is PhotoScreenNavigation) {
             navigation = context
         }
+        if (context is DetailFinishedListener) {
+            detailFinishedListener = context
+        }
     }
 
     override fun onStart() {
@@ -74,7 +79,8 @@ class TakePhotoFragment : Fragment() {
         if (hasCameraPermissions()) {
             fotoApparat.start()
         } else {
-            requestPermissions(arrayOf(Manifest.permission.CAMERA),
+            requestPermissions(
+                arrayOf(Manifest.permission.CAMERA),
                 REQUESTCODE_CAMERA
             )
         }
@@ -86,38 +92,30 @@ class TakePhotoFragment : Fragment() {
             takeAndSavePictureToCache()
         })
 
-        takePhotoViewModel.okPhotoButtonClicked.observe(this, Observer {
-            addPhotoDetail()
-        })
-
-        takePhotoViewModel.photo.observe(this, Observer { photo ->
+        takePhotoViewModel.photoSaveFile.observe(this, Observer { photo ->
             if (photo != null) {
                 Glide.with(context!!).load(photo).diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).into(img_takePhoto_Photo)
-                Timber.d("photo saved ${photo.name} ${photo.path}")
+                Timber.d("photoSaveFile saved ${photo.name} ${photo.path}")
             }
         })
 
-        eventViewModel.photoSavedSuccessFully.observe(this, Observer {
+        takePhotoViewModel.savedDetail.observe(this, Observer { newPhotoDetail ->
             Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
                 .show()
-            takePhotoViewModel.setSavedPhoto(it.file)
+            detailFinishedListener.onDetailFinished(newPhotoDetail)
             navigation?.backToEvent()
         })
-    }
-
-    private fun addPhotoDetail() {
-        eventViewModel.savePhoto(takePhotoViewModel.photo.value!!)
     }
 
     private fun takeAndSavePictureToCache() {
         val saveFile = tempFileProvider.tempPhotoFile
         /**
-         * Saving the photo is triggered here instead of from the VM because then it would need to hold
+         * Saving the photoSaveFile is triggered here instead of from the VM because then it would need to hold
          * the tempPhotoFile.
          */
         fotoApparat.takePicture().saveToFile(saveFile).whenAvailable {
-            takePhotoViewModel.setPhotoInCache(saveFile)
+            takePhotoViewModel.photoTaken(saveFile)
         }
     }
 

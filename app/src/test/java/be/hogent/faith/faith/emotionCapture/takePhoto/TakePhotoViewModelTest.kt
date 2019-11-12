@@ -43,7 +43,7 @@ class TakePhotoViewModelTest {
         viewModel.visibilityTakePhoto.observeForever(observer)
         viewModel.visibilityPhotoTakenNotSaved.observeForever(observer)
         viewModel.visibilityPhotoTakenOrSaved.observeForever(observer)
-        viewModel.setPhotoInCache(mockk())
+        viewModel.photoTaken(mockk())
         Assert.assertEquals(View.GONE, viewModel.visibilityTakePhoto.value!!)
         Assert.assertEquals(View.VISIBLE, viewModel.visibilityPhotoTakenNotSaved.value!!)
         Assert.assertEquals(View.VISIBLE, viewModel.visibilityPhotoTakenOrSaved.value!!)
@@ -58,7 +58,7 @@ class TakePhotoViewModelTest {
         viewModel.okPhotoButtonClicked.observeForever(observer)
 
         // Act
-        viewModel.setPhotoInCache(mockk())
+        viewModel.photoTaken(mockk())
         viewModel.onOkPhotoButtonClicked()
 
         // Assert
@@ -71,7 +71,7 @@ class TakePhotoViewModelTest {
         viewModel.visibilityTakePhoto.observeForever(observer)
         viewModel.visibilityPhotoTakenNotSaved.observeForever(observer)
         viewModel.visibilityPhotoTakenOrSaved.observeForever(observer)
-        viewModel.setPhotoInCache(mockk())
+        viewModel.photoTaken(mockk())
         viewModel.setSavedPhoto(mockk())
         Assert.assertEquals(View.GONE, viewModel.visibilityTakePhoto.value!!)
         Assert.assertEquals(View.GONE, viewModel.visibilityPhotoTakenNotSaved.value!!)
@@ -86,7 +86,7 @@ class TakePhotoViewModelTest {
         viewModel.notOkPhotoButtonClicked.observeForever(observer)
 
         // Act
-        viewModel.setPhotoInCache(mockk())
+        viewModel.photoTaken(mockk())
         viewModel.onNotOkPhotoButtonClicked()
 
         // Assert
@@ -99,7 +99,7 @@ class TakePhotoViewModelTest {
         viewModel.visibilityTakePhoto.observeForever(observer)
         viewModel.visibilityPhotoTakenNotSaved.observeForever(observer)
         viewModel.visibilityPhotoTakenOrSaved.observeForever(observer)
-        viewModel.setPhotoInCache(mockk())
+        viewModel.photoTaken(mockk())
         viewModel.onNotOkPhotoButtonClicked()
         Assert.assertEquals(View.VISIBLE, viewModel.visibilityTakePhoto.value!!)
         Assert.assertEquals(View.GONE, viewModel.visibilityPhotoTakenNotSaved.value!!)

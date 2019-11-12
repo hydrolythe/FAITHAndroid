@@ -177,7 +177,7 @@ class StorageRepository(private val context: Context) : StorageRepositoryInterfa
     }
 
     override fun storeBitmapTemporarily(bitmap: Bitmap): Single<File> {
-        val saveDirectory = File(context.cacheDir, "drawings")
+        val saveDirectory = File(context.cacheDir, "pictures")
         saveDirectory.mkdirs()
         return storeBitmap(bitmap, saveDirectory, UUID.randomUUID().toString())
     }
