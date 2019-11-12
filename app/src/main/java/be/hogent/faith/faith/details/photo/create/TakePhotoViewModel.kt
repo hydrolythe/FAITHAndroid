@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.takePhoto
+package be.hogent.faith.faith.details.photo.create
 
 import android.view.View
 import androidx.lifecycle.LiveData
@@ -45,7 +45,8 @@ class TakePhotoViewModel : ViewModel() {
         }
 
     init {
-        _currentState.value = TakePhotoState()
+        _currentState.value =
+            TakePhotoState()
     }
 
     internal fun setState(state: PhotoState) {

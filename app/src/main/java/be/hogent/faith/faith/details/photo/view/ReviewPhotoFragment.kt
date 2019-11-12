@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.takePhoto
+package be.hogent.faith.faith.details.photo.view
 
 import android.os.Bundle
 import android.view.LayoutInflater

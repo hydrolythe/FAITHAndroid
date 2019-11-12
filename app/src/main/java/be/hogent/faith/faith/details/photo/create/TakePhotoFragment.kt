@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.takePhoto
+package be.hogent.faith.faith.details.photo.create
 
 import android.Manifest
 import android.content.Context
@@ -40,7 +40,7 @@ class TakePhotoFragment : Fragment() {
 
     private lateinit var fotoApparat: Fotoapparat
 
-    private var navigation: TakePhotoFragment.PhotoScreenNavigation? = null
+    private var navigation: PhotoScreenNavigation? = null
 
     private val tempFileProvider by inject<TempFileProvider>()
 
@@ -74,7 +74,9 @@ class TakePhotoFragment : Fragment() {
         if (hasCameraPermissions()) {
             fotoApparat.start()
         } else {
-            requestPermissions(arrayOf(Manifest.permission.CAMERA), REQUESTCODE_CAMERA)
+            requestPermissions(arrayOf(Manifest.permission.CAMERA),
+                REQUESTCODE_CAMERA
+            )
         }
         startListeners()
     }
