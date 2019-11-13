@@ -31,6 +31,7 @@ class AudioDetailViewModelUseCaseTests : KoinTest {
     fun setUp() {
         startKoin { modules(listOf(appModule, testModule)) }
         detailViewModel = AudioDetailViewModel(createAudioDetailUseCase, get())
+        detailViewModel.initialiseState()
     }
 
     @After

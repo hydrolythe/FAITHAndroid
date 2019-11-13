@@ -27,9 +27,9 @@ class AudioDetailViewModel(
     private val _savedDetail = MutableLiveData<AudioDetail>()
     override val savedDetail: LiveData<AudioDetail> = _savedDetail
 
-    private val audioState = MutableLiveData<AudioState>()
+    private lateinit var audioState: AudioState
 
-    private val existingDetail = MutableLiveData<AudioDetail>()
+    private var existingDetail: AudioDetail? = null
 
     override var finishedRecording = false
 
@@ -43,16 +43,20 @@ class AudioDetailViewModel(
      */
     val pauseSupported = MutableLiveData<Boolean>()
 
-    val playButtonEnabled = MutableLiveData<Boolean>()
-    val pauseButtonEnabled = MutableLiveData<Boolean>()
-    val stopButtonEnabled = MutableLiveData<Boolean>()
-    val recordButtonEnabled = MutableLiveData<Boolean>()
+    private val _playButtonEnabled = MutableLiveData<Boolean>()
+    val playButtonEnabled: LiveData<Boolean> = _playButtonEnabled
 
+    private val _pauseButtonEnabled = MutableLiveData<Boolean>()
+    val pauseButtonEnabled: LiveData<Boolean> = _pauseButtonEnabled
+    private val _stopButtonEnabled = MutableLiveData<Boolean>()
+    val stopButtonEnabled: LiveData<Boolean> = _stopButtonEnabled
+    private val _recordButtonEnabled = MutableLiveData<Boolean>()
+    val recordButtonEnabled: LiveData<Boolean> = _recordButtonEnabled
     private val _saveButtonVisible = MutableLiveData<Boolean>()
-    val saveButtonVisible: LiveData<Boolean>
-        get() = _saveButtonVisible
+    val saveButtonVisible: LiveData<Boolean> = _saveButtonVisible
 
-    val recordingTimeVisibility = MutableLiveData<Int>()
+    private val _recordingTimeVisibility = MutableLiveData<Int>()
+    val recordingTimeVisibility: LiveData<Int> = _recordingTimeVisibility
 
     private val _recordingTime = MutableLiveData<Int>()
     val recordingTimeString: LiveData<String> = Transformations.map(_recordingTime) { time ->
@@ -62,8 +66,7 @@ class AudioDetailViewModel(
     }
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
-    val errorMessage: LiveData<Int>
-        get() = _errorMessage
+    val errorMessage: LiveData<Int> = _errorMessage
 
     init {
         // Can be set to false once an existing Detail is added
@@ -78,7 +81,7 @@ class AudioDetailViewModel(
      */
     fun initialiseState() {
         if (playingExistingAudioDetail()) {
-            goToNextState(PlayStateInitial(this, existingDetail.value!!))
+            goToNextState(PlayStateInitial(this, existingDetail!!))
         } else {
             goToNextState(RecordStateInitial(this))
         }
@@ -86,45 +89,45 @@ class AudioDetailViewModel(
     }
 
     override fun goToNextState(audioState: AudioState) {
-        this.audioState.value = audioState
+        this.audioState = audioState
         updateButtonVisibilityStates()
     }
 
     private fun updateButtonVisibilityStates() {
-        playButtonEnabled.value = audioState.value?.playButtonEnabled
-        pauseButtonEnabled.value = audioState.value?.pauseButtonEnabled
-        stopButtonEnabled.value = audioState.value?.stopButtonEnabled
-        recordButtonEnabled.value =
+        _playButtonEnabled.value = audioState.playButtonEnabled
+        _pauseButtonEnabled.value = audioState.pauseButtonEnabled
+        _stopButtonEnabled.value = audioState.stopButtonEnabled
+        _recordButtonEnabled.value =
             if (playingExistingAudioDetail()) {
                 false // Never allow starting a recording when listening to an existing Detail.
             } else {
-                audioState.value?.recordButtonEnabled
+                audioState.recordButtonEnabled
             }
         _saveButtonVisible.value = finishedRecording
 
-        recordingTimeVisibility.value = audioState.value?.recordingTimeVisibility
+        _recordingTimeVisibility.value = audioState.recordingTimeVisibility
     }
 
     fun onRecordButtonClicked() {
-        audioState.value?.onRecordPressed()
+        audioState.onRecordPressed()
         recordingTimer = timer(initialDelay = 1000, period = 1000) {
             _recordingTime.postValue(_recordingTime.value!! + 1)
         }
     }
 
     fun onStopButtonClicked() {
-        audioState.value?.onStopPressed()
+        audioState.onStopPressed()
         recordingTimer?.cancel()
         _recordingTime.postValue(0)
     }
 
     fun onPauseButtonClicked() {
-        audioState.value?.onPausePressed()
+        audioState.onPausePressed()
         recordingTimer?.cancel()
     }
 
     fun onPlayButtonClicked() {
-        audioState.value?.onPlayPressed()
+        audioState.onPlayPressed()
         recordingTimer?.cancel()
     }
 
@@ -137,7 +140,7 @@ class AudioDetailViewModel(
         DisposableSingleObserver<AudioDetail>() {
         override fun onSuccess(createdDetail: AudioDetail) {
             _savedDetail.value = createdDetail
-            audioState.value?.reset()
+            audioState.reset()
         }
 
         override fun onError(e: Throwable) {
@@ -147,15 +150,16 @@ class AudioDetailViewModel(
     }
 
     override fun onCleared() {
-        audioState.value?.release()
+        audioState.release()
     }
 
     private fun playingExistingAudioDetail(): Boolean {
-        return existingDetail.value != null
+        return existingDetail != null
     }
 
     override fun loadExistingDetail(existingDetail: AudioDetail) {
-        this.existingDetail.value = existingDetail
+        this.existingDetail = existingDetail
         _saveButtonVisible.value = false
+        _recordButtonEnabled.value = false
     }
 }
