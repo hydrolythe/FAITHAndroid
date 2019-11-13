@@ -45,7 +45,6 @@ class AudioDetailViewModel(
 
     private val _playButtonEnabled = MutableLiveData<Boolean>()
     val playButtonEnabled: LiveData<Boolean> = _playButtonEnabled
-
     private val _pauseButtonEnabled = MutableLiveData<Boolean>()
     val pauseButtonEnabled: LiveData<Boolean> = _pauseButtonEnabled
     private val _stopButtonEnabled = MutableLiveData<Boolean>()

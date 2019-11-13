@@ -42,7 +42,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             loadExistingAudioDetail()
         }
 
-        audioDetailViewModel.pauseSupported.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+        audioDetailViewModel.pauseSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
     }
 
     private fun loadExistingAudioDetail() {

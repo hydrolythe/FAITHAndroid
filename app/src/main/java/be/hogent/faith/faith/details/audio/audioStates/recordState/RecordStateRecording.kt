@@ -32,7 +32,8 @@ class RecordStateRecording(
     override val playButtonEnabled = false
     override val stopButtonEnabled = true
     override val recordButtonEnabled = false
-    override val pauseButtonEnabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+    // True by default, but [AudioDetailVM] has final decision because it can know if pause is supported
+    override val pauseButtonEnabled = true
 
     override val recordingTimeVisibility = View.VISIBLE
 
