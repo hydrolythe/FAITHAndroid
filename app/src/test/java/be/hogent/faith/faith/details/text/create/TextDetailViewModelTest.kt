@@ -1,12 +1,12 @@
-package be.hogent.faith.faith.emotionCapture.enterText
+package be.hogent.faith.faith.details.text.create
 
 import android.graphics.Color
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.faith.TestUtils
-import be.hogent.faith.faith.details.text.create.TextDetailViewModel
 import be.hogent.faith.service.usecases.textDetail.CreateTextDetailUseCase
 import be.hogent.faith.service.usecases.textDetail.LoadTextDetailUseCase
+import be.hogent.faith.service.usecases.textDetail.OverwriteTextDetailUseCase
 import be.hogent.faith.util.factory.DetailFactory
 import io.mockk.mockk
 import io.mockk.slot
@@ -20,6 +20,7 @@ import org.junit.Test
 class TextDetailViewModelTest {
     private val loadTextDetailUseCase = mockk<LoadTextDetailUseCase>(relaxed = true)
     private val createTextDetailUseCase = mockk<CreateTextDetailUseCase>(relaxed = true)
+    private val overwriteTextDetailUseCase = mockk<OverwriteTextDetailUseCase>(relaxed = true)
 
     private lateinit var detailViewModel: TextDetailViewModel
 
@@ -31,7 +32,11 @@ class TextDetailViewModelTest {
     @Before
     fun setUp() {
         detailViewModel =
-            TextDetailViewModel(loadTextDetailUseCase, createTextDetailUseCase)
+            TextDetailViewModel(
+                loadTextDetailUseCase,
+                createTextDetailUseCase,
+                overwriteTextDetailUseCase
+            )
 
         detailViewModel.text.observeForever(mockk(relaxed = true))
     }

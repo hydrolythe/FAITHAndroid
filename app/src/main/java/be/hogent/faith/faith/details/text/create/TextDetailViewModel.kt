@@ -107,6 +107,8 @@ class TextDetailViewModel(
                     OverwriteTextDetailUseCase.Params(_text.value!!, _existingDetail.value!!)
                 overwriteTextDetailUseCase.execute(params, OverwriteTextDetailUseCaseHandler())
             }
+        } else {
+            _errorMessage.postValue(R.string.text_save_error_emptyinput)
         }
     }
 

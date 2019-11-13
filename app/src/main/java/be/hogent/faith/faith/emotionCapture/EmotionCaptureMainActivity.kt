@@ -13,7 +13,7 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.DetailFinishedListener
-import be.hogent.faith.faith.details.audio.create.RecordAudioFragment
+import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment

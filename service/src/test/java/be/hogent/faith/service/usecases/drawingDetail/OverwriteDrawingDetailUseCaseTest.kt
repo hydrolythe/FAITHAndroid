@@ -1,8 +1,7 @@
-package be.hogent.faith.service.usecases
+package be.hogent.faith.service.usecases.drawingDetail
 
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.service.usecases.drawingDetail.OverwriteDrawingDetailUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.mockk.every
 import io.mockk.mockk

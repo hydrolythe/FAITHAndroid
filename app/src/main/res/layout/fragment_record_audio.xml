@@ -9,7 +9,7 @@
 
         <variable
             name="audioViewModel"
-            type="be.hogent.faith.faith.details.audio.create.AudioViewModel" />
+            type="be.hogent.faith.faith.details.audio.AudioViewModel" />
     </data>
 
     <FrameLayout

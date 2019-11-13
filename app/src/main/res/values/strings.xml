@@ -134,4 +134,6 @@
     <string name="ga_verder">Ga verder</string>
     <string name="underline"><u>U</u></string>
     <string name="avatar_save_successfull">Je avatar werd succesvol opgeslagen.</string>
+    <string name="create_photo_failed">Er ging iets fout bij het aanmaken van je foto.</string>
+    <string name="text_save_error_emptyinput">Je hebt nog geen tekst geschreven!</string>
 </resources>

@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.emotionCapture.drawEmotionAvatar
+package be.hogent.faith.faith.details.drawing
 
 import android.graphics.Color
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule

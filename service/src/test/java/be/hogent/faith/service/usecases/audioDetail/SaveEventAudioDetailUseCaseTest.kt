@@ -1,8 +1,7 @@
-package be.hogent.faith.service.usecases
+package be.hogent.faith.service.usecases.audioDetail
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.service.usecases.audioDetail.SaveEventAudioDetailUseCase
 import be.hogent.faith.storage.StorageRepository
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory

@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.details.audio.create
+package be.hogent.faith.faith.details.audio
 
 import android.Manifest
 import android.content.Context

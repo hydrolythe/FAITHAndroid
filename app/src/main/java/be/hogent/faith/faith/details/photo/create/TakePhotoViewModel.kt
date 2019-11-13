@@ -43,7 +43,7 @@ class TakePhotoViewModel(
         }
 
         override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_drawing_failed)
+            _errorMessage.postValue(R.string.create_photo_failed)
             Timber.e(e)
         }
     }
@@ -103,7 +103,8 @@ class TakePhotoViewModel(
     }
 
     /**
-     * Call when a photo was taken
+     * Call when a photo was taken.
+     *
      * @param file the file where the taken photo was saved
      */
     fun photoTaken(file: File) {
@@ -148,6 +149,7 @@ class TakePhotoViewModel(
         }
 
         override fun savePhoto(context: TakePhotoViewModel) {
+            context._okPhotoButtonClicked.call()
             context.onSaveClicked()
         }
     }

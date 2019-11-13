@@ -175,22 +175,6 @@ class StorageRepository(private val context: Context) : StorageRepositoryInterfa
         }
     }
 
-    /**
-     *  Writes a String to a text file
-     *
-     * @param text the String
-     * @param event the [Event] this text will be added to as a detail (not by this function).
-     *          Used to store the text in a folder specific for the event.
-     */
-    fun saveText(text: String, event: Event): Single<File> {
-        return Single.fromCallable {
-            val storedFile =
-                File(getEventTextDirectory(event), "${createSaveFileName()}.$TEXT_EXTENSION")
-            storedFile.writeText(text)
-            storedFile
-        }
-    }
-
     fun overwriteExistingDrawingDetail(bitmap: Bitmap, drawingDetail: DrawingDetail): Completable {
         return storeBitmap(bitmap, drawingDetail.file)
     }

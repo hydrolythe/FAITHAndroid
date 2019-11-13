@@ -1,7 +1,6 @@
-package be.hogent.faith.service.usecases
+package be.hogent.faith.service.usecases.textDetail
 
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.service.usecases.textDetail.LoadTextDetailUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.mockk.every
 import io.mockk.mockk

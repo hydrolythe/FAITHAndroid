@@ -22,7 +22,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class DrawingDetailViewModelTest {
+class DrawingDetailViewModelUseCaseTests {
 
     private lateinit var viewModel: DrawingDetailViewModel
 
@@ -49,7 +49,7 @@ class DrawingDetailViewModelTest {
     fun drawingDetailVM_noDetailGiven_constructs() {
         // Act
         viewModel =
-            DrawingDetailViewModel(null, createDrawingDetailUseCase, overwriteDrawingDetailUseCase)
+            DrawingDetailViewModel(createDrawingDetailUseCase, overwriteDrawingDetailUseCase)
 
         // Assert
         assertNull(getValue(viewModel.savedDetail))
@@ -60,7 +60,7 @@ class DrawingDetailViewModelTest {
         // Arrange
         val bitmap: Bitmap = mockk()
         viewModel =
-            DrawingDetailViewModel(null, createDrawingDetailUseCase, overwriteDrawingDetailUseCase)
+            DrawingDetailViewModel(createDrawingDetailUseCase, overwriteDrawingDetailUseCase)
         val detailObserver = mockk<Observer<DrawingDetail>>(relaxed = true)
         val resultingDetailObserver = slot<DisposableSingleObserver<DrawingDetail>>()
 
@@ -83,12 +83,12 @@ class DrawingDetailViewModelTest {
         val drawingDetail = DetailFactory.makeDrawingDetail()
         viewModel =
             DrawingDetailViewModel(
-                drawingDetail,
                 createDrawingDetailUseCase,
                 overwriteDrawingDetailUseCase
             )
         val detailObserver = mockk<Observer<DrawingDetail>>(relaxed = true)
         val completableObserver = slot<DisposableCompletableObserver>()
+        viewModel.loadExistingDetail(drawingDetail)
 
         viewModel.savedDetail.observeForever(detailObserver)
 

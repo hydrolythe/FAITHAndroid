@@ -2,8 +2,10 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import be.hogent.faith.R
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.di.appModule
-import be.hogent.faith.service.usecases.textDetail.CreateTextDetailUseCase
+import be.hogent.faith.service.usecases.textDetail.SaveEventTextDetailUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.Called
 import io.mockk.called
@@ -22,13 +24,13 @@ import org.koin.test.KoinTest
 
 class EventViewModelSaveTextTest : KoinTest {
     private lateinit var viewModel: EventViewModel
-    private val saveTextUseCase = mockk<CreateTextDetailUseCase>(relaxed = true)
+    private val saveTextUseCase = mockk<SaveEventTextDetailUseCase>(relaxed = true)
 
     private val eventTitle = DataFactory.randomString()
     private val eventNotes = DataFactory.randomString()
     private val eventDateTime = DataFactory.randomDateTime()
 
-    private val text = "Hello World!"
+    private val detail = mockk<TextDetail>()
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -63,50 +65,48 @@ class EventViewModelSaveTextTest : KoinTest {
 
     @Test
     fun enterTextVM_saveText_callsUseCase() {
-        val params = slot<CreateTextDetailUseCase.Params>()
+        val params = slot<SaveEventTextDetailUseCase.Params>()
 
-        viewModel.saveText(text)
+        viewModel.saveTextDetail(detail)
         verify { saveTextUseCase.execute(capture(params), any()) }
 
-        assertEquals(text, params.captured.text)
+        assertEquals(detail, params.captured.detail)
         assertEquals(event, params.captured.event)
     }
 
     @Test
-    fun enterTextVM_saveText_callUseCaseAndNotifiesSuccess() {
+    fun enterTextVM_saveText_notifiesUseCaseSuccess() {
         // Arrange
-        val params = slot<CreateTextDetailUseCase.Params>()
         val observer = slot<DisposableCompletableObserver>()
 
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
+        val successObserver = mockk<Observer<Int>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
         viewModel.textDetailSavedSuccessFully.observeForever(successObserver)
 
         // Act
-        viewModel.saveText(text)
-        verify { saveTextUseCase.execute(capture(params), capture(observer)) }
+        viewModel.saveTextDetail(detail)
+        verify { saveTextUseCase.execute(any(), capture(observer)) }
         observer.captured.onComplete()
 
         // Assert
-        verify { successObserver.onChanged(any()) }
+        verify { successObserver.onChanged(R.string.save_text_success) }
         verify { errorObserver wasNot called }
     }
 
     @Test
-    fun enterTextViewModel_saveText_notifiesWhenSaveFails() {
+    fun enterTextViewModel_saveText_notifiesUseCaseFailure() {
         // Arrange
-        val params = slot<CreateTextDetailUseCase.Params>()
         val observer = slot<DisposableCompletableObserver>()
 
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
+        val successObserver = mockk<Observer<Int>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
         viewModel.textDetailSavedSuccessFully.observeForever(successObserver)
 
         // Act
-        viewModel.saveText(text)
-        verify { saveTextUseCase.execute(capture(params), capture(observer)) }
+        viewModel.saveTextDetail(detail)
+        verify { saveTextUseCase.execute(any(), capture(observer)) }
         observer.captured.onError(mockk(relaxed = true))
 
         // Assert

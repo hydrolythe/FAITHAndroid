@@ -3,7 +3,7 @@ package be.hogent.faith.faith.di
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
-import be.hogent.faith.faith.details.audio.create.AudioViewModel
+import be.hogent.faith.faith.details.audio.AudioViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider

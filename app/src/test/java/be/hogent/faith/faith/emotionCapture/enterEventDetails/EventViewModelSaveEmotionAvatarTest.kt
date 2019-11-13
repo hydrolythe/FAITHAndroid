@@ -74,7 +74,7 @@ class EventViewModelSaveEmotionAvatarTest : KoinTest {
     fun eventViewModel_saveEmotionAvatar_notifiesWhenSaveCompletes() {
         // Arrange
         val observer = slot<DisposableCompletableObserver>()
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
+        val successObserver = mockk<Observer<Int>>(relaxed = true)
         val failedObserver = mockk<Observer<Int>>(relaxed = true)
 
         viewModel.avatarSavedSuccessFully.observeForever(successObserver)
@@ -95,7 +95,7 @@ class EventViewModelSaveEmotionAvatarTest : KoinTest {
     fun eventViewModel_saveEmotionAvatar_notifiesWhenSaveFails() {
         // Arrange
         val observer = slot<DisposableCompletableObserver>()
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
+        val successObserver = mockk<Observer<Int>>(relaxed = true)
         val failedObserver = mockk<Observer<Int>>(relaxed = true)
 
         viewModel.avatarSavedSuccessFully.observeForever(successObserver)
