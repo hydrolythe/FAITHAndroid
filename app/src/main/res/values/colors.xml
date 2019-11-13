@@ -8,4 +8,30 @@
     <color name="park_sky">#C1FCEE</color>
     <color name="park_gras">#16F48A</color>
     <color name="background_city">#009688</color>
+
+
+    <color name="primary">#00BFA5</color>
+    <color name="primary_variant">#00BFA5</color>
+    <color name="secondary">#FF1744</color>
+    <color name="secondary_variant">#C61040</color>
+
+    <color name="background">#FFFFFF</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="error">#4A148C</color>
+
+    <color name="onPrimary">#FFFFFF</color>
+    <color name="onSecondary">#FFFFFF</color>
+
+    <color name="onBackground">#000000</color>
+    <color name="onSurface">#000000</color>
+    <color name="onError">#FFFFFF</color>
+    <color name="background_register_info_color">#A7FFEB</color>
+
+    <color name="blue">#00FFFF</color>
+    <color name="red">#DA1D45</color>
+    <color name="green">#16F48A</color>
+    <color name="black">#3F3E3E</color>
+    <color name="yellow">#FFFF00</color>
 </resources>
+
+

@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.loginOrRegister
 
-import android.util.Log
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +11,7 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.LoginUserUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableMaybeObserver
+import timber.log.Timber
 
 class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewModel() {
 
@@ -25,6 +25,21 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
+
+    /**
+     * reports errors with username
+     */
+    private val _userNameErrorMessage = MutableLiveData<Int>()
+    val userNameErrorMessage: LiveData<Int>
+        get() = _userNameErrorMessage
+
+    /**
+     * reports errors with password
+     */
+    private val _passwordErrorMessage = MutableLiveData<Int>()
+    val passwordErrorMessage: LiveData<Int>
+        get() = _passwordErrorMessage
+
 
     private val _registerButtonClicked = SingleLiveEvent<Unit>()
     val registerButtonClicked: LiveData<Unit>
@@ -54,23 +69,27 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
 
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
-            _errorMessage.postValue(R.string.registerOrLogin_username_empty)
+            userName.value=""
+            _userNameErrorMessage.value = R.string.registerOrLogin_username_empty
             return false
         }
+        _userNameErrorMessage.value = R.string.empty
         return true
     }
 
     private fun passwordIsValid(): Boolean {
         val pwd = password.value
         if (pwd.isNullOrBlank() || pwd.length < 6) {
-            _errorMessage.postValue(R.string.registerOrLogin_password_empty)
+            this.password.value = ""
+            _passwordErrorMessage.value = R.string.registerOrLogin_password_empty
             return false
         }
+        _passwordErrorMessage.value = R.string.empty
         return true
     }
 
     /**
-     * validates username and pssword. Logs in the user
+     * validates username and password. Logs in the user
      */
     private fun login() {
         if (userNameIsValid() && passwordIsValid()) {
@@ -90,7 +109,7 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
         }
 
         override fun onError(e: Throwable) {
-            Log.e(TAG, e.localizedMessage)
+            Timber.e("${TAG}: e.localizedMessage")
             _errorMessage.postValue(
                 when (e) {
                     is NetworkError -> R.string.login_error_internet

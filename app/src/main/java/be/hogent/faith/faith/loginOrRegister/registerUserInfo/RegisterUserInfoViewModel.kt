@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.loginOrRegister.registerUserInfo
 
-import android.util.Log
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,6 +10,7 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableSingleObserver
+import timber.log.Timber
 
 /**
  * Represents the [ViewModel] for the user during the registering process - Part 1
@@ -69,10 +69,13 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
             _userNameErrorMessage.value = R.string.registerOrLogin_username_empty
             return false
         }
+        _userNameErrorMessage.value = R.string.empty
         return true
     }
 
     private fun passwordIsValid(): Boolean {
+        _passwordErrorMessage.value = R.string.empty
+        _passwordRepeatErrorMessage.value = R.string.empty
         val password = password.value
         if (password.isNullOrBlank() || password.length < 6) {
             this.password.value = "" // anders wordt de fout niet getoond
@@ -110,7 +113,7 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
         }
 
         override fun onError(e: Throwable) {
-            Log.e(TAG, e.localizedMessage)
+            Timber.e("${TAG}: e.localizedMessage")
             _errorMessage.postValue(
                 when (e) {
                     is NetworkError -> R.string.login_error_internet

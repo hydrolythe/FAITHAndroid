@@ -14,7 +14,6 @@ import be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel
 import be.hogent.faith.faith.emotionCapture.recordAudio.AudioViewModel
 import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
-import be.hogent.faith.faith.loginOrRegister.LoginManager
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
@@ -78,8 +77,6 @@ val appModule = module(override = true) {
     }
 
     single { AndroidTempFileProvider(androidContext()) as TempFileProvider }
-
-    single { LoginManager() }
 
     single { ResourceAvatarProvider(androidContext()) as AvatarProvider }
 

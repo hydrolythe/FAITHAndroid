@@ -13,8 +13,6 @@ import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
-import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.fragment_welcome.background_welcome
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.error.ScopeAlreadyCreatedException
@@ -31,8 +29,8 @@ class WelcomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: be.hogent.faith.databinding.FragmentWelcomeBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_welcome, container, false)
+        val binding: be.hogent.faith.databinding.FragmentLoginBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         binding.welcomeViewModel = welcomeViewModel
 
         return binding.root
@@ -41,14 +39,8 @@ class WelcomeFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         registerListeners()
-        setBackgroundImage()
     }
 
-    private fun setBackgroundImage() {
-        Glide.with(requireContext())
-            .load(R.drawable.loginscherm)
-            .into(background_welcome)
-    }
 
     private fun registerListeners() {
         welcomeViewModel.registerButtonClicked.observe(this, Observer {

@@ -61,6 +61,7 @@ class AvatarItemAdapter(private val avatarClickListener: OnAvatarClickListener) 
         /**
          * Executes the binding of the data to the [ViewHolder].
          * Uses Glide to load the image.
+         * I have set the width to 200dp, because otherwise on notifyItemChanged the item is rebinded, the item width is 0 and then set to wrap-content, which flickers
          */
         fun bind(avatarItem: Avatar, isActivated: Boolean) {
             val avatarDrawable = avatarProvider.getAvatarDrawable(avatarItem.avatarName)
@@ -77,8 +78,9 @@ class AvatarItemAdapter(private val avatarClickListener: OnAvatarClickListener) 
                 viewHolder.itemView.isActivated = true
                 val oldSelection = selectedItem
                 selectedItem = position
-                if (oldSelection != -1)
+                if (oldSelection != -1) {
                     notifyItemChanged(oldSelection)
+                }
                 notifyItemChanged(position)
                 avatarClickListener.onAvatarClicked(position)
             }

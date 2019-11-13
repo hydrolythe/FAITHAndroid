@@ -23,6 +23,7 @@ import io.fotoapparat.log.logcat
 import kotlinx.android.synthetic.main.fragment_take_photo.img_takePhoto_Photo
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 /**
@@ -34,13 +35,13 @@ class TakePhotoFragment : Fragment() {
 
     private val eventViewModel: EventViewModel by sharedViewModel()
 
-    private val takePhotoViewModel: TakePhotoViewModel by sharedViewModel()
+    private val takePhotoViewModel: TakePhotoViewModel by viewModel()
 
     private lateinit var takePhotoBinding: FragmentTakePhotoBinding
 
     private lateinit var fotoApparat: Fotoapparat
 
-    private var navigation: TakePhotoFragment.PhotoScreenNavigation? = null
+    private var navigation: PhotoScreenNavigation? = null
 
     private val tempFileProvider by inject<TempFileProvider>()
 

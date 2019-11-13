@@ -109,7 +109,7 @@ class EnterTextFragment : Fragment() {
     }
 
     private fun setUpListeners() {
-        enterTextViewModel.text.observe(this, Observer { text ->
+        enterTextViewModel.initialText.observe(this, Observer { text ->
             enterText_editor.html = text
         })
         enterTextViewModel.selectedTextColor.observe(this, Observer { newColor ->

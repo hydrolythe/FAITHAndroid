@@ -19,92 +19,28 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <!--ACHTERGROND-->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/draw_emotion"
-            android:contentDescription="@string/tekenen" />
 
         <!-- KNOPPEN -->
         <!-- Invisible to make it transparent -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#00000000">
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_draw_utilities_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.05" />
+            android:background="@color/background_register_info_color">
 
             <include
                 android:id="@+id/container_draw_colors"
                 layout="@layout/panel_drawing_colors"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toTopOf="@+id/container_tools"
-                app:layout_constraintTop_toTopOf="@id/guide_draw_drawview_top"
-                app:layout_constraintStart_toStartOf="@id/guide_draw_utilities_left"
-                bind:drawViewModel="@{drawViewModel}" />
-
-            <LinearLayout
-                android:id="@+id/container_tools"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toTopOf="@+id/container_draw_utilities"
-                app:layout_constraintStart_toStartOf="@+id/container_draw_colors"
-                app:layout_constraintTop_toBottomOf="@+id/container_draw_colors">
-
-                <Button
-                    android:id="@+id/btn_draw_pencil"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{()->drawViewModel.onPencilClicked()}"
-                    android:text="Penseel" />
-
-                <Button
-                    android:id="@+id/btn_draw_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{()->drawViewModel.onTextClicked()}"
-                    android:text="Text" />
-
-
-                <Button
-                    android:id="@+id/btn_draw_eraser"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="@{()->drawViewModel.onEraserClicked()}"
-                    android:text="Gom" />
-            </LinearLayout>
-
-            <include
-                android:id="@+id/container_draw_utilities"
-                layout="@layout/panel_drawing_tools"
-                android:layout_width="wrap_content"
-                android:layout_height="238dp"
-                app:layout_constraintBottom_toTopOf="@+id/guide_draw_drawview_bottom"
-                app:layout_constraintStart_toStartOf="@+id/container_tools"
-                app:layout_constraintTop_toBottomOf="@+id/container_tools"
-                bind:drawViewModel="@{drawViewModel}" />
-
-
-            <com.divyanshu.draw.widget.DrawView
-                android:id="@+id/drawView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_margin="8dp"
-                android:focusableInTouchMode="true"
-                app:layout_constraintBottom_toTopOf="@+id/tabs_drawing_templates"
-                app:layout_constraintEnd_toStartOf="@+id/btn_makeDrawing_save"
-                app:layout_constraintStart_toEndOf="@+id/guide_draw_drawview_left"
-                app:layout_constraintTop_toTopOf="@+id/guide_draw_drawview_top" />
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/container_tools"
+                app:layout_constraintEnd_toStartOf="@+id/guide_draw_drawview_left"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                bind:drawViewModel="@{drawViewModel}" />
 
 
-            <Button
+            <ImageButton
                 android:id="@+id/btn_makeDrawing_save"
                 android:layout_width="@dimen/material_icon_width"
                 android:layout_height="@dimen/material_icon_height"
@@ -112,38 +48,110 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/save_btn"
+                android:elevation="2dp"
                 android:onClick="@{() -> drawViewModel.onSaveButtonClicked()}"
+                android:translationZ="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/container_tools"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="@dimen/panel_corner_radius"
+                app:layout_constraintBottom_toTopOf="@+id/container_draw_utilities"
+                app:layout_constraintEnd_toStartOf="@+id/guide_draw_drawview_left"
+                app:layout_constraintStart_toStartOf="@+id/container_draw_colors"
+                app:layout_constraintTop_toBottomOf="@+id/container_draw_colors">
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_vertical">
+
+                    <Button
+                        android:id="@+id/btn_draw_pencil"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{()->drawViewModel.onPencilClicked()}"
+                        android:text="Penseel" />
+
+                    <Button
+                        android:id="@+id/btn_draw_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{()->drawViewModel.onTextClicked()}"
+                        android:text="Text" />
+
+
+                    <Button
+                        android:id="@+id/btn_draw_eraser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{()->drawViewModel.onEraserClicked()}"
+                        android:text="Gom" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <include
+                android:id="@+id/container_draw_utilities"
+                layout="@layout/panel_drawing_tools"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/cardView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/container_tools"
+                bind:drawViewModel="@{drawViewModel}" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="@dimen/panel_corner_radius"
+                app:layout_constraintBottom_toTopOf="@+id/tabs_drawing_templates"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/guide_draw_drawview_left"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.divyanshu.draw.widget.DrawView
+                    android:id="@+id/drawView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusableInTouchMode="true" />
+
+            </androidx.cardview.widget.CardView>
+
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_draw_drawview_left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.24" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_draw_drawview_top"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.11" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_draw_drawview_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.93" />
+                app:layout_constraintGuide_percent="0.1" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs_drawing_templates"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
+                android:layout_marginTop="8dp"
+                android:background="@android:drawable/screen_background_light_transparent"
                 app:layout_constraintBottom_toTopOf="@+id/recyclerView_drawing_templates"
                 app:layout_constraintEnd_toEndOf="@+id/recyclerView_drawing_templates"
-                app:layout_constraintStart_toStartOf="@+id/recyclerView_drawing_templates">
+                app:layout_constraintStart_toStartOf="@+id/recyclerView_drawing_templates"
+                app:layout_constraintTop_toBottomOf="@+id/cardView">
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_drawing_people"
@@ -174,10 +182,13 @@
                 android:id="@+id/recyclerView_drawing_templates"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btn_makeDrawing_save"
-                app:layout_constraintStart_toStartOf="@+id/drawView" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guide_draw_drawview_left" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

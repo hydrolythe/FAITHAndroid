@@ -19,20 +19,22 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#91C6A8"
         android:orientation="vertical">
         <!--ACHTERGROND-->
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/record_audio"
-            android:contentDescription="@string/tekenen" />
+            android:background="@drawable/audio_opnemen"
+            android:contentDescription="@string/audio_opnemen"
+            android:scaleType="fitCenter" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#00000000">
 
-            <Button
+            <ImageButton
                 android:layout_width="@dimen/material_icon_width"
                 android:layout_height="@dimen/material_icon_height"
                 android:layout_gravity="center"
@@ -44,111 +46,111 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/btn_recordAudio_play"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:background="@drawable/audio_play"
-                android:enabled="@{audioViewModel.playButtonEnabled}"
-                android:onClick="@{() -> audioViewModel.onPlayButtonClicked()}"
-                android:padding="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
-                app:layout_constraintEnd_toStartOf="@+id/btn_recordAudio_pause"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="@+id/guide_recordAudio_top" />
-
-            <Button
-                android:id="@+id/btn_recordAudio_pause"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/audio_pause"
-                android:contentDescription="@string/description_pause_recording"
-                android:enabled="@{audioViewModel.pauseButtonEnabled}"
-                android:onClick="@{() -> audioViewModel.onPauseButtonClicked()}"
-                android:padding="8dp"
-                android:scaleType="centerInside"
-                app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
-                app:layout_constraintEnd_toStartOf="@+id/btn_recordAudio_record"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/btn_recordAudio_play"
-                app:layout_constraintTop_toTopOf="@+id/guide_recordAudio_top" />
-
-            <Button
-                android:id="@+id/btn_recordAudio_record"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/audio_record"
-                android:contentDescription="@string/description_start_recording"
-                android:enabled="@{audioViewModel.recordButtonEnabled}"
-                android:onClick="@{() -> audioViewModel.onRecordButtonClicked()}"
-                android:padding="8dp"
-                android:scaleType="centerInside"
-                app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
-                app:layout_constraintEnd_toStartOf="@+id/btn_recordAudio_stop"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/btn_recordAudio_pause"
-                app:layout_constraintTop_toTopOf="@+id/guide_recordAudio_top" />
-
-            <Button
-                android:id="@+id/btn_recordAudio_stop"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:adjustViewBounds="true"
-                android:background="@drawable/audio_stop"
-                android:contentDescription="@string/description_stop_recording"
-                android:enabled="@{audioViewModel.stopButtonEnabled}"
-                android:onClick="@{() -> audioViewModel.onStopButtonClicked()}"
-                android:padding="8dp"
-                android:scaleType="centerInside"
-                app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/btn_recordAudio_record"
-                app:layout_constraintTop_toTopOf="@+id/guide_recordAudio_top" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_recordAudio_top"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_record"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.22" />
+                app:cardCornerRadius="15dp"
+                app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_margin="8dp">
+
+                    <ImageButton
+                        android:id="@+id/btn_recordAudio_play"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginEnd="24dp"
+                        android:background="@drawable/audio_play"
+                        android:contentDescription="@string/description_play_recording"
+                        android:enabled="@{audioViewModel.playButtonEnabled}"
+                        android:onClick="@{() -> audioViewModel.onPlayButtonClicked()}"
+                        android:padding="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_recordAudio_pause"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/btn_recordAudio_pause"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="24dp"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/audio_pause"
+                        android:contentDescription="@string/description_pause_recording"
+                        android:enabled="@{audioViewModel.pauseButtonEnabled}"
+                        android:onClick="@{() -> audioViewModel.onPauseButtonClicked()}"
+                        android:padding="16dp"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_recordAudio_record"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/btn_recordAudio_play" />
+
+                    <ImageButton
+                        android:id="@+id/btn_recordAudio_record"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="24dp"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/audio_record"
+                        android:contentDescription="@string/description_start_recording"
+                        android:enabled="@{audioViewModel.recordButtonEnabled}"
+                        android:onClick="@{() -> audioViewModel.onRecordButtonClicked()}"
+                        android:padding="16dp"
+                        android:scaleType="centerInside"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_recordAudio_stop"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/btn_recordAudio_pause" />
+
+                    <ImageButton
+                        android:id="@+id/btn_recordAudio_stop"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="24dp"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/audio_stop"
+                        android:contentDescription="@string/description_stop_recording"
+                        android:enabled="@{audioViewModel.stopButtonEnabled}"
+                        android:onClick="@{() -> audioViewModel.onStopButtonClicked()}"
+                        android:padding="16dp"
+                        android:scaleType="centerInside"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/btn_recordAudio_record" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_recordAudio_bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.36" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.23" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.79" />
+                app:layout_constraintGuide_percent="0.47" />
 
             <TextView
                 android:id="@+id/lbl_recordAudio_recordingTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 android:text="@{String.valueOf(audioViewModel.recordingTimeString)}"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:visibility="@{audioViewModel.recordingTimeVisibility}"
-                app:layout_constraintEnd_toEndOf="@+id/btn_recordAudio_record"
-                app:layout_constraintStart_toStartOf="@+id/btn_recordAudio_pause"
-                app:layout_constraintTop_toTopOf="@+id/guide_recordAudio_bottom"
+                app:layout_constraintEnd_toEndOf="@+id/cardView_record"
+                app:layout_constraintStart_toStartOf="@+id/cardView_record"
+                app:layout_constraintTop_toBottomOf="@+id/cardView_record"
                 tools:text="0:00" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

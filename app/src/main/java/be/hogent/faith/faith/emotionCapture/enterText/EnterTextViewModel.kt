@@ -2,6 +2,7 @@ package be.hogent.faith.faith.emotionCapture.enterText
 
 import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,11 +19,15 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
     val text: LiveData<String>
         get() = _text
 
+    private val _initialText = MutableLiveData<String>()
+    val initialText: LiveData<String>
+        get() = _initialText
+
     private val _existingDetail = MutableLiveData<TextDetail>()
     val existingDetail: LiveData<TextDetail>
         get() = _existingDetail
 
-    private val _selectedTextColor = MutableLiveData<@ColorInt Int>()
+    private val _selectedTextColor = MutableLiveData<@ColorRes Int>()
     val selectedTextColor: LiveData<Int>
         get() = _selectedTextColor
 
@@ -65,7 +70,7 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
         _underlineClicked.value = !(_underlineClicked.value ?: false)
     }
 
-    fun pickTextColor(@ColorInt color: Int) {
+    fun pickTextColor(@ColorRes color: Int) {
         _selectedTextColor.value = color
     }
 
@@ -79,7 +84,6 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
 
     fun loadExistingTextDetail(textDetail: TextDetail) {
         _existingDetail.value = textDetail
-
         val params = LoadTextDetailUseCase.LoadTextParams(textDetail)
         loadTextDetailUseCase.execute(params, LoadTextUseCaseHandler())
     }
@@ -92,7 +96,8 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
 
     private inner class LoadTextUseCaseHandler : DisposableSingleObserver<String>() {
         override fun onSuccess(loadedString: String) {
-            _text.value = loadedString
+            _initialText.value = loadedString
+
         }
 
         override fun onError(e: Throwable) {

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="welcomeViewModel"
+            type="be.hogent.faith.faith.loginOrRegister.WelcomeViewModel" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_white"
+        android:orientation="vertical">
+
+        <!--ACHTERGROND-->
+        <ImageView
+            android:id="@+id/background_welcome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/back_login"
+            android:contentDescription="@string/descr_loginscreen"
+            android:scaleType="fitCenter" />
+
+        <!-- KNOPPEN -->
+        <!-- Invisible to make it transparent -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_login"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00000000"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_login_arrows_top"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.47" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_center_circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_frame_hor"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.3" />
+
+
+            <include
+                android:id="@+id/include_login_txts"
+                layout="@layout/view_login_circle"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                app:layout_constraintBottom_toTopOf="@+id/guide_login_center_circle"
+                app:layout_constraintEnd_toStartOf="@+id/guide_center_circle"
+                app:layout_constraintStart_toStartOf="@+id/guide_center_circle"
+                app:layout_constraintTop_toTopOf="@+id/guide_login_center_circle"
+                app:welcomeViewModel="@{welcomeViewModel}" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_loginfragment_register"
+                style="@style/arrow_style.toRight"
+                android:onClick="@{() -> welcomeViewModel.registerButtonClicked()}"
+
+                android:text="@string/msg_registreer"
+                app:icon="@drawable/ic_nieuw"
+                app:layout_constraintStart_toStartOf="@+id/guide_right_arrow"
+                app:layout_constraintTop_toTopOf="@+id/guide_login_arrows_top" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_loginfragment_startNewEvent"
+                style="@style/arrow_style.toLeft"
+                android:onClick="@{() -> welcomeViewModel.loginButtonClicked()}"
+                android:text="@string/msg_naar_de_stad"
+                app:icon="@drawable/icoon_stad"
+                app:layout_constraintEnd_toStartOf="@+id/guide_left_arrow"
+                app:layout_constraintTop_toTopOf="@+id/guide_login_arrows_top" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_left_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.79" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_right_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.84" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_login_center_circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.54" />
+
+            <ImageView
+                android:id="@+id/img_loginfragment_avatars"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guide_frame_hor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guide_login_arrows_top"
+                app:srcCompat="@drawable/login_avatars" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+</layout>

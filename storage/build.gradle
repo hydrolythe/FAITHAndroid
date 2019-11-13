@@ -33,6 +33,12 @@ dependencies {
     def androidTestDependencies = rootProject.ext.androidTestDependencies
     def androidDependencies = rootProject.ext.androidDependencies
 
+    //firebase components
+    implementation firebaseDependencies.rxfirebase
+    implementation firebaseDependencies.firebaseauth
+    implementation firebaseDependencies.firebasestorage
+    implementation 'com.github.FrangSierra:RxFirebase:1.5.6'
+
     implementation commonDependencies.kotlin
     implementation commonDependencies.rxjava
     implementation commonDependencies.threeTenABP
