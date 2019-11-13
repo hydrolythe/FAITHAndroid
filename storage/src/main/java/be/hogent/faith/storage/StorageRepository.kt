@@ -3,8 +3,11 @@ package be.hogent.faith.storage
 import android.content.Context
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.storage.storage.IStorage
+import be.hogent.faith.storage.storage.StorageFactory
 import io.reactivex.Completable
 import io.reactivex.Single
 import org.threeten.bp.LocalDateTime
@@ -21,14 +24,13 @@ const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
  */
 const val TEXT_EXTENSION = "txt"
 
-class StorageRepository(private val context: Context) {
+class StorageRepository(private val storageFactory: StorageFactory) {
+
+    val storage: IStorage
+        get() = storageFactory.getCacheStorage()
 
     fun storeBitmap(bitmap: Bitmap, file: File): Completable {
-        return Completable.fromCallable {
-            file.outputStream().use {
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-            }
-        }
+        return storageFactory.getCacheStorage().storeBitmap(bitmap, file)
     }
 
     /**
@@ -39,127 +41,54 @@ class StorageRepository(private val context: Context) {
      * @return a Single<File> with the path derived from the event's dateTime
      */
     fun storeBitmap(bitmap: Bitmap, folder: File, fileName: String): Single<File> {
-        val saveFile = File(folder, fileName)
-        return storeBitmap(bitmap, saveFile).andThen(Single.just(saveFile))
+        return storageFactory.getCacheStorage().storeBitmap(bitmap, folder, fileName)
     }
 
     fun deleteFile(file: File): Boolean {
-        return file.delete()
-    }
-
-    private fun getEventImageDirectory(event: Event): File {
-        val imageDirectory = File(getEventDirectory(event), "images")
-        imageDirectory.mkdirs()
-        return imageDirectory
-    }
-
-    private fun getEventAudioDirectory(event: Event): File {
-        val audioDir = File(getEventDirectory(event), "audio")
-        audioDir.mkdirs()
-        return audioDir
-    }
-
-    private fun getEventDirectory(event: Event): File {
-        val eventDir = File(context.filesDir, "events/${event.uuid}")
-        eventDir.mkdirs()
-        return eventDir
-    }
-
-    private fun getEventTextDirectory(event: Event): File {
-        val textDir = File(context.filesDir, "text/${event.uuid}")
-        textDir.mkdirs()
-        return textDir
+        return storageFactory.getCacheStorage().deleteFile(file)
     }
 
     fun saveEventAudio(tempStorageFile: File, event: Event): Single<File> {
-        return moveFileFromTempStorageToPermanentStorage(
-            tempStorageFile,
-            getEventAudioDirectory(event),
-            createSaveFileName()
-        )
+        return storageFactory.getCacheStorage().saveEventAudio(tempStorageFile, event)
     }
 
     fun saveEventDrawing(bitmap: Bitmap, event: Event): Single<File> {
-        return storeBitmap(
-            bitmap,
-            getEventImageDirectory(event),
-            createSaveFileName()
-        )
+        return storageFactory.getCacheStorage().saveEventDrawing(bitmap, event)
     }
 
     fun saveEventPhoto(tempStorageFile: File, event: Event): Single<File> {
-        return moveFileFromTempStorageToPermanentStorage(
-            tempStorageFile,
-            getEventImageDirectory(event),
-            createSaveFileName()
-        )
+        return storageFactory.getCacheStorage().saveEventPhoto(tempStorageFile, event)
     }
 
     fun saveEventEmotionAvatar(bitmap: Bitmap, event: Event): Single<File> {
-        return storeBitmap(
-            bitmap,
-            getEventDirectory(event),
-            EMOTION_AVATAR_FILENAME
-        )
+        return storageFactory.getCacheStorage().saveEventEmotionAvatar(bitmap, event)
     }
 
-    /**
-     * Returns a saveFile with the name in the following format:
-     * day_month_year_hour_minute_second_millis
-     */
-    private fun createSaveFileName(): String {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("d_M_y_k_m_s_A"))
-    }
-
-    /**
-     * Stores a file  by moving it from a temporary file in the device's cache directory to permanent storage.
-     *
-     * @param tempStorageFile the (cache) file in which the recording is currently stored
-     * @param folder the folder where the file should be stored
-     */
-    private fun moveFileFromTempStorageToPermanentStorage(
-        tempStorageFile: File,
-        folder: File,
-        fileName: String
-    ): Single<File> {
-        return Single.fromCallable {
-            val storedFile = File(folder, fileName)
-            tempStorageFile.copyTo(target = storedFile, overwrite = true)
-//            tempStorageFile.delete()
-            storedFile
-        }
-    }
-
-    /**
-     *  Writes a String to a text file
-     *
-     * @param text the String
-     * @param event the [Event] this text will be added to as a detail (not by this function).
-     *          Used to store the text in a folder specific for the event.
-     */
     fun saveText(text: String, event: Event): Single<File> {
-        return Single.fromCallable {
-            val storedFile =
-                File(getEventTextDirectory(event), "${createSaveFileName()}.$TEXT_EXTENSION")
-            storedFile.writeText(text)
-            storedFile
-        }
+        return storageFactory.getCacheStorage().saveText(text, event)
     }
 
     fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String> {
-        return Single.fromCallable {
-            val readString = textDetail.file.readText()
-            readString
-        }
+        return storageFactory.getCacheStorage().loadTextFromExistingDetail(textDetail)
     }
 
     fun overwriteTextDetail(text: String, existingDetail: TextDetail): Completable {
-        return Completable.fromCallable {
-            existingDetail.file.writeText(text)
-        }
+        return storageFactory.getCacheStorage().overwriteTextDetail(text, existingDetail)
     }
 
     fun overwriteEventDetail(bitmap: Bitmap, existingDetail: DrawingDetail): Completable {
-        return storeBitmap(bitmap, existingDetail.file)
+        return storageFactory.getCacheStorage().overwriteEventDetail(bitmap, existingDetail)
+    }
+
+    fun saveEventEmotionAvatar(event: Event): Single<File> {
+        return storageFactory.getRemoteDataStore().saveEventEmotionAvatar(event)
+    }
+
+    fun saveDetailFile(event: Event, detail: Detail): Single<File> {
+        return storageFactory.getRemoteDataStore().saveDetailFile(event, detail)
+    }
+
+    fun moveFilesFromRemoteStorageToCacheStorage(event: Event): Completable {
+        return storageFactory.getRemoteDataStore().moveFilesFromRemoteStorageToCacheStorage(event)
     }
 }
