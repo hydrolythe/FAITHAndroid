@@ -19,7 +19,7 @@ import timber.log.Timber
 import java.util.Timer
 import kotlin.concurrent.timer
 
-class AudioViewModel(
+class AudioDetailViewModel(
     private val createAudioDetailUseCase: CreateAudioDetailUseCase,
     private val tempFileProvider: TempFileProvider
 ) : ViewModel(), AudioContext, DetailViewModel<AudioDetail> {

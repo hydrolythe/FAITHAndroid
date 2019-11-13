@@ -27,7 +27,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     override lateinit var detailFinishedListener: DetailFinishedListener
 
-    private val audioViewModel: AudioViewModel by viewModel()
+    private val audioDetailViewModel: AudioDetailViewModel by viewModel()
 
     private lateinit var recordAudioBinding: FragmentRecordAudioBinding
 
@@ -42,12 +42,12 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             loadExistingAudioDetail()
         }
 
-        audioViewModel.pauseSupported.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+        audioDetailViewModel.pauseSupported.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
     }
 
     private fun loadExistingAudioDetail() {
         val existingDetail = arguments?.getSerializable(AUDIO_DETAIL) as AudioDetail
-        audioViewModel.loadExistingDetail(existingDetail)
+        audioDetailViewModel.loadExistingDetail(existingDetail)
     }
 
     private fun existingTextGiven(): Boolean {
@@ -61,7 +61,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
     ): View? {
         recordAudioBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_record_audio, container, false)
-        recordAudioBinding.audioViewModel = audioViewModel
+        recordAudioBinding.audioDetailViewModel = audioDetailViewModel
         recordAudioBinding.lifecycleOwner = this
 
         return recordAudioBinding.root
@@ -91,7 +91,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
     }
 
     /**
-     * Checks for audio permissions and initialises the [AudioViewModel] fully once the
+     * Checks for audio permissions and initialises the [AudioDetailViewModel] fully once the
      * required permissions are given.
      */
     private fun checkAudioRecordingPermission() {
@@ -101,7 +101,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
                 REQUESTCODE_AUDIO
             )
         } else {
-            audioViewModel.initialiseState()
+            audioDetailViewModel.initialiseState()
         }
     }
 
@@ -114,7 +114,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             if (grantResults[0] == PERMISSION_GRANTED) {
                 hasAudioRecordingPermission = true
                 checkAudioRecordingPermission()
-                audioViewModel.initialiseState()
+                audioDetailViewModel.initialiseState()
             } else {
                 Toast.makeText(
                     this.context,
@@ -126,14 +126,14 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
     }
 
     private fun startListeners() {
-        audioViewModel.savedDetail.observe(this, Observer { finishedDetail ->
+        audioDetailViewModel.savedDetail.observe(this, Observer { finishedDetail ->
             Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
 
             detailFinishedListener.onDetailFinished(finishedDetail)
 
             navigation?.backToEvent()
         })
-        audioViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
+        audioDetailViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
         })
     }

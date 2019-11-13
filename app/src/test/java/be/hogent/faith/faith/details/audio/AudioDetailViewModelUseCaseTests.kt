@@ -20,8 +20,8 @@ import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest
 import org.koin.test.get
 
-class AudioViewModelUseCaseTests : KoinTest {
-    private lateinit var viewModel: AudioViewModel
+class AudioDetailViewModelUseCaseTests : KoinTest {
+    private lateinit var detailViewModel: AudioDetailViewModel
     private val createAudioDetailUseCase = mockk<CreateAudioDetailUseCase>(relaxed = true)
 
     @get:Rule
@@ -30,7 +30,7 @@ class AudioViewModelUseCaseTests : KoinTest {
     @Before
     fun setUp() {
         startKoin { modules(listOf(appModule, testModule)) }
-        viewModel = AudioViewModel(createAudioDetailUseCase, get())
+        detailViewModel = AudioDetailViewModel(createAudioDetailUseCase, get())
     }
 
     @After
@@ -45,7 +45,7 @@ class AudioViewModelUseCaseTests : KoinTest {
         val observer = slot<DisposableSingleObserver<AudioDetail>>()
 
         // Act
-        viewModel.onSaveClicked()
+        detailViewModel.onSaveClicked()
 
         verify { createAudioDetailUseCase.execute(capture(params), capture(observer)) }
     }
@@ -58,11 +58,11 @@ class AudioViewModelUseCaseTests : KoinTest {
         val observer = slot<DisposableSingleObserver<AudioDetail>>()
         val createdDetail = mockk<AudioDetail>()
 
-        viewModel.savedDetail.observeForever(detailObserver)
-        viewModel.errorMessage.observeForever(errorObserver)
+        detailViewModel.savedDetail.observeForever(detailObserver)
+        detailViewModel.errorMessage.observeForever(errorObserver)
 
         // Act
-        viewModel.onSaveClicked()
+        detailViewModel.onSaveClicked()
         verify { createAudioDetailUseCase.execute(any(), capture(observer)) }
         // Make the UC-handler call the success handler
         observer.captured.onSuccess(createdDetail)
@@ -79,11 +79,11 @@ class AudioViewModelUseCaseTests : KoinTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val observer = slot<DisposableSingleObserver<AudioDetail>>()
 
-        viewModel.savedDetail.observeForever(detailObserver)
-        viewModel.errorMessage.observeForever(errorObserver)
+        detailViewModel.savedDetail.observeForever(detailObserver)
+        detailViewModel.errorMessage.observeForever(errorObserver)
 
         // Act
-        viewModel.onSaveClicked()
+        detailViewModel.onSaveClicked()
         verify { createAudioDetailUseCase.execute(any(), capture(observer)) }
         // Make the UC-handler call the success handler
         observer.captured.onError(mockk(relaxed = true))
