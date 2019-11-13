@@ -11,17 +11,15 @@ import io.reactivex.Scheduler
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import java.util.concurrent.Executor
 
 class SaveEventDrawingDetailUseCaseTest {
 
     private lateinit var saveEventDrawingUC: SaveEventDrawingDetailUseCase
-    private val executor = mockk<Executor>()
     private val scheduler = mockk<Scheduler>()
     private lateinit var storageRepository: StorageRepository
 
     private val drawingDetail = mockk<DrawingDetail>()
-    private val event = mockk<Event>()
+    private val event = Event()
 
     @Before
     fun setUp() {

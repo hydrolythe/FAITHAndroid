@@ -123,33 +123,20 @@ class StorageRepository(private val context: Context) : StorageRepositoryInterfa
         return textDir
     }
 
-    fun saveEventAudio(tempStorageFile: File, event: Event): Single<File> {
-        return Single.fromCallable {
-            val saveFile = File(getEventAudioDirectory(event), createSaveFileName())
-            moveFile(tempStorageFile, saveFile)
-            saveFile
-        }
-    }
-
     /**
      * Saves a given [DrawingDetail] to permanent storage.
      * This will change the [drawingDetail]'s file property to the new location.
      * It will be found in appDir/events/[eventUuid]/detailUuid
      */
-    override fun storeDrawingDetailWithEvent(drawingDetail: DrawingDetail, event: Event): Completable {
+    override fun storeDrawingDetailWithEvent(
+        drawingDetail: DrawingDetail,
+        event: Event
+    ): Completable {
         val saveFile = File(getEventDrawingDirectory(event), drawingDetail.uuid.toString())
         return moveFile(drawingDetail.file, saveFile)
             .doOnComplete {
                 drawingDetail.file = saveFile
             }
-    }
-
-    fun saveEventPhoto(tempStorageFile: File, event: Event): Single<File> {
-        return Single.fromCallable {
-            val saveFile = File(getEventPhotoDirectory(event), createSaveFileName())
-            moveFile(tempStorageFile, saveFile)
-            saveFile
-        }
     }
 
     fun saveEventEmotionAvatar(bitmap: Bitmap, event: Event): Single<File> {

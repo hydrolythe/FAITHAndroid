@@ -19,7 +19,7 @@ class SaveEventTextDetailUseCaseTest {
     private val scheduler: Scheduler = mockk()
     private val repository: StorageRepository = mockk(relaxed = true)
 
-    private val event = mockk<Event>()
+    private val event = Event()
     private val detail = mockk<TextDetail>()
 
     @Before
