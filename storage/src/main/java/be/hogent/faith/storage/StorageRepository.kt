@@ -88,7 +88,7 @@ class StorageRepository(private val storageFactory: StorageFactory) {
         return storageFactory.getRemoteDataStore().saveDetailFile(event, detail)
     }
 
-    fun moveFilesFromRemoteStorageToCacheStorage(event: Event): Completable {
+    fun moveFilesFromRemoteStorageToLocalStorage(event: Event): Completable {
         return storageFactory.getRemoteDataStore().moveFilesFromRemoteStorageToCacheStorage(event)
     }
 }

@@ -1,21 +1,21 @@
 package be.hogent.faith.storage.storage
 
 class StorageFactory(
-    private val cacheStorage: CacheStorage,
+    private val localStorage: LocalStorage,
     private val remoteStorage: RemoteStorage
 ) {
 
     fun getDataStore(cached: Boolean): IStorage {
 
         return if (cached) {
-            cacheStorage
+            localStorage
         } else {
             remoteStorage
         }
     }
 
-    fun getCacheStorage(): CacheStorage {
-        return cacheStorage
+    fun getCacheStorage(): LocalStorage {
+        return localStorage
     }
 
     fun getRemoteDataStore(): RemoteStorage {

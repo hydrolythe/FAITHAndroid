@@ -12,11 +12,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import durdinapps.rxfirebase2.RxFirebaseStorage
 import durdinapps.rxfirebase2.RxFirestore
-import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single
-import io.reactivex.rxkotlin.toFlowable
 import timber.log.Timber
 
 /**
@@ -40,7 +38,7 @@ class FirebaseEventRepository(
     fun get(eventUid: String): Flowable<EventEntity> {
         val currentUser = fbAuth.currentUser
         if (currentUser == null) {
-            return Flowable.error(RuntimeException("Unauthorized used."))
+            return Flowable.error(RuntimeException("Unauthorized user."))
         }
         return RxFirestore.observeDocumentRef(
             firestore.collection(USERS_KEY).document(currentUser.uid).collection(EVENTS_KEY)
@@ -55,7 +53,7 @@ class FirebaseEventRepository(
     fun getAll(): Flowable<List<EventEntity>> {
         val currentUser = fbAuth.currentUser
         if (currentUser == null) {
-            return Flowable.error(RuntimeException("Unauthorized used."))
+            return Flowable.error(RuntimeException("Unauthorized user."))
         }
         return RxFirestore.observeQueryRef(
             firestore.collection(USERS_KEY).document(currentUser.uid).collection(
@@ -85,14 +83,7 @@ class FirebaseEventRepository(
                 firestore.collection(FirebaseUserRepository.USERS_KEY).document(currentUser.uid)
                     .collection(EVENTS_KEY)
                     .document(item.uuid)
-            return Completable.fromSingle(saveAvatarForEvent(item)) // save avatar in firestorage
-                .andThen(
-                    Completable.fromPublisher(item.details.toFlowable() // save all detail files in firestorage
-                        .concatMapSingle {
-                            saveFileForEventDetail(item.uuid, it)
-                        }
-                    ))
-                .andThen(RxFirestore.setDocument(document, item)) // stores the event in firestore
+            return RxFirestore.setDocument(document, item) //) // stores the event in firestore
                 .andThen(RxFirestore.getDocument(document) // gets the just stored event from firestore
                     .map { it.toObject(EventEntity::class.java) })
                 .onErrorResumeNext { error: Throwable ->
@@ -129,7 +120,7 @@ class FirebaseEventRepository(
     ): Single<String> {
         val fileExt = MimeTypeMap.getFileExtensionFromUrl(detail.file)
         return RxFirebaseStorage.putFile(
-            storageRef.child(fbAuth.currentUser!!.uid).child(EVENTS_KEY).child(eventUuid.toString()).child(
+            storageRef.child(fbAuth.currentUser!!.uid).child(EVENTS_KEY).child(eventUuid).child(
                 "${detail.uuid}.$fileExt"
             ),
             Uri.parse("file://" + detail.file)

@@ -1,9 +1,12 @@
 package be.hogent.faith.storage.firebase
 
+import android.content.ContentValues.TAG
 import android.net.Uri
+import android.util.Log
 import android.webkit.MimeTypeMap
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.storage.storage.IStorage
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.storage.FirebaseStorage
@@ -12,13 +15,24 @@ import durdinapps.rxfirebase2.RxFirebaseStorage
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
+import java.lang.RuntimeException
 
 
 class FirebaseStorageImpl(
     private val fbAuth: FirebaseAuth,
     private val firestorage: FirebaseStorage
 ) : IFirebaseStorage {
+
+    private val storageRef: StorageReference
+        get() = firestorage.reference.child(USERS_KEY)
+
+    private val currentUser: FirebaseUser?
+        get() = fbAuth.currentUser
+
     override fun saveEventEmotionAvatar(event: Event): Single<File> {
+        Log.d(TAG, "saving event : saves emotionavatar ${event.emotionAvatar?.path}")
+        if (currentUser==null)
+            return Single.error(RuntimeException("not authorized"))
         if (event.emotionAvatar == null)
             return Single.just(null)
         return RxFirebaseStorage.putFile(
@@ -27,13 +41,12 @@ class FirebaseStorageImpl(
             ),
             Uri.parse("file://" + event.emotionAvatar)
         )
-            .map { File(it.storage.path) } // GlideApp werkt met references, betere UX (File(it.storage.downloadUrl.toString())
-        //  .doOnSuccess { storedFile ->
-        //      item.emotionAvatar = storedFile
-        //  }
+            .map { File(it.storage.path) }
     }
 
     override fun saveDetailFile(event: Event, detail: Detail): Single<File> {
+        if (currentUser==null)
+            return Single.error(RuntimeException("not authorized"))
         val fileExt = MimeTypeMap.getFileExtensionFromUrl(detail.file.path)
         return RxFirebaseStorage.putFile(
             storageRef.child(fbAuth.currentUser!!.uid).child(EVENTS_KEY).child(event.uuid.toString()).child(
@@ -42,18 +55,41 @@ class FirebaseStorageImpl(
             Uri.parse("file://" + detail.file)
         )
             .map { File(it.storage.path) }
-        // .doOnSuccess { detail.file = File(it) }
     }
 
-    override fun moveFilesFromRemoteStorageToCacheStorage(event: Event): Completable {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun moveFilesFromRemoteStorageToLocalStorage(event: Event): Completable {
+        if (currentUser==null)
+            return Completable.error(RuntimeException("not authorized"))
+        val eventStorageRef =
+                storageRef.child(fbAuth.currentUser!!.uid).child(EVENTS_KEY).child(event.uuid.toString())
+            //download all files for the event if not yet in local storage
+        eventStorageRef.listAll().addOnSuccessListener { listResult ->
+            listResult.items.forEach { item ->
+
+                //eerst controleren of local file bestaat. Indien niet dan downloaden van firestorage
+                // All the items-storagereference under listRef.
+                val localFile =
+                    File.createTempFile(
+                        "images",
+                        "jpg"
+                    ) // the local file where it will be saved
+                //download the file to local storage
+                item.getFile(localFile)
+                    .addOnSuccessListener {
+                        // Local temp file has been created
+                    }
+                    .addOnFailureListener {
+                        Completable.error(RuntimeException(it.localizedMessage))
+                    }
+            }
+        }
+
+                .addOnFailureListener {
+                    Completable.error(RuntimeException(it.localizedMessage))
+                }
+        return Completable.complete()
+        TODO("save to local storage")
     }
-
-    private val storageRef: StorageReference
-        get() = firestorage.reference.child(USERS_KEY)
-
-    private val currentUser: FirebaseUser?
-        get() = fbAuth.currentUser
 
 
     companion object {

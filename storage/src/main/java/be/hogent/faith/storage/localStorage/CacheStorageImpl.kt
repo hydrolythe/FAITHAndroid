@@ -1,4 +1,4 @@
-package be.hogent.faith.storage.cache
+package be.hogent.faith.storage.localStorage
 
 import android.content.Context
 import android.graphics.Bitmap

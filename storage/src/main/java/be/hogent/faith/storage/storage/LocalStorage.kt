@@ -5,12 +5,12 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.storage.cache.ICacheStorage
+import be.hogent.faith.storage.localStorage.ICacheStorage
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
 
-class CacheStorage(private val cacheStorageImpl: ICacheStorage) : IStorage {
+class LocalStorage(private val cacheStorageImpl: ICacheStorage) : IStorage {
     override fun saveEventEmotionAvatar(event: Event): Single<File> {
         throw UnsupportedOperationException("saving emotionAvatar isn't supported here...")
     }

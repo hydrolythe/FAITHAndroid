@@ -10,5 +10,5 @@ import java.io.File
 interface IFirebaseStorage {
     fun saveEventEmotionAvatar(event: Event): Single<File>
     fun saveDetailFile(event: Event, detail: Detail): Single<File>
-    fun moveFilesFromRemoteStorageToCacheStorage(event: Event): Completable
+    fun moveFilesFromRemoteStorageToLocalStorage(event: Event): Completable
 }
