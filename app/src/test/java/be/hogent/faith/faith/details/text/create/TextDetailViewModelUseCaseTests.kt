@@ -10,12 +10,15 @@ import be.hogent.faith.service.usecases.textDetail.CreateTextDetailUseCase
 import be.hogent.faith.service.usecases.textDetail.LoadTextDetailUseCase
 import be.hogent.faith.service.usecases.textDetail.OverwriteTextDetailUseCase
 import io.mockk.Called
+import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
+import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -26,8 +29,10 @@ import org.koin.test.KoinTest
 class TextDetailViewModelUseCaseTests : KoinTest {
     private lateinit var viewModel: TextDetailViewModel
     private val createTextUseCase = mockk<CreateTextDetailUseCase>(relaxed = true)
-    private val loadTextUseCase = mockk<LoadTextDetailUseCase>(relaxed = true)
+    private val loadTextDetailUseCase = mockk<LoadTextDetailUseCase>(relaxed = true)
     private val overwriteTextDetailUseCase = mockk<OverwriteTextDetailUseCase>(relaxed = true)
+
+    private val detailText = "Text in the detail"
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -36,12 +41,57 @@ class TextDetailViewModelUseCaseTests : KoinTest {
     fun setUp() {
         startKoin { modules(listOf(appModule, testModule)) }
         viewModel =
-            TextDetailViewModel(loadTextUseCase, createTextUseCase, overwriteTextDetailUseCase)
+            TextDetailViewModel(
+                loadTextDetailUseCase,
+                createTextUseCase,
+                overwriteTextDetailUseCase
+            )
     }
 
     @After
     fun takeDown() {
         stopKoin()
+    }
+
+    @Test
+    fun enterTextVM_loadTextUC_updatesText() {
+        // Arrange
+        val existingDetail = mockk<TextDetail>()
+        val useCaseParams = slot<LoadTextDetailUseCase.LoadTextParams>()
+        val useCaseObserver = slot<DisposableSingleObserver<String>>()
+        val textObserver = mockk<Observer<String>>(relaxed = true)
+
+        viewModel.initialText.observeForever(textObserver)
+
+        // Act
+        viewModel.loadExistingDetail(existingDetail)
+        verify { loadTextDetailUseCase.execute(capture(useCaseParams), capture(useCaseObserver)) }
+        useCaseObserver.captured.onSuccess(detailText)
+
+        // Assert
+        assertEquals(existingDetail, useCaseParams.captured.textDetail)
+        verify { textObserver.onChanged(detailText) }
+    }
+
+    @Test
+    fun enterTextVM_loadTextUseCaseFails_updatesErrorMessage() {
+        // Arrange
+        val existingDetail = mockk<TextDetail>()
+        val resultObserver = slot<DisposableSingleObserver<String>>()
+        val errorObserver = mockk<Observer<Int>>(relaxed = true)
+        val initialTextObserver = mockk<Observer<String>>(relaxed = true)
+
+        viewModel.initialText.observeForever(initialTextObserver)
+        viewModel.errorMessage.observeForever(errorObserver)
+
+        // Act
+        viewModel.loadExistingDetail(existingDetail)
+        verify { loadTextDetailUseCase.execute(any(), capture(resultObserver)) }
+        resultObserver.captured.onError(RuntimeException())
+
+        // Assert
+        verify { errorObserver.onChanged(any()) }
+        verify { initialTextObserver wasNot called }
     }
 
     @Test
@@ -59,7 +109,7 @@ class TextDetailViewModelUseCaseTests : KoinTest {
     }
 
     @Test
-    fun textDetailViewModel_onSaveClicked_callsUseCase() {
+    fun textDetailViewModel_onSaveClicked_noExistingDetail_callsCreateUseCase() {
         // Arrange
         val params = slot<CreateTextDetailUseCase.Params>()
         val observer = slot<DisposableSingleObserver<TextDetail>>()
@@ -72,7 +122,26 @@ class TextDetailViewModelUseCaseTests : KoinTest {
     }
 
     @Test
-    fun textDetailViewModel_onSaveClicked_updatesDetailWhenUseCaseCompletes() {
+    fun textDetailViewModel_onSaveClicked_existingDetail_callsOverwriteUseCase() {
+        // Arrange
+        val params = slot<OverwriteTextDetailUseCase.Params>()
+        val observer = slot<DisposableCompletableObserver>()
+        val existingDetail = mockk<TextDetail>()
+        viewModel.loadExistingDetail(existingDetail)
+        viewModel.setText(detailText)
+
+        // Act
+        viewModel.onSaveClicked()
+
+        // Assert
+        verify { overwriteTextDetailUseCase.execute(capture(params), capture(observer)) }
+        assertEquals(existingDetail, params.captured.detail)
+        assertEquals(detailText, params.captured.text)
+    }
+
+
+    @Test
+    fun textDetailViewModel_onSaveClicked_noExistingDetail_updatesDetailOnUseCaseCompleted() {
         // Arrange
         val detailObserver = mockk<Observer<TextDetail>>(relaxed = true)
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
@@ -91,6 +160,30 @@ class TextDetailViewModelUseCaseTests : KoinTest {
 
         // Assert
         verify { detailObserver.onChanged(createdDetail) }
+        verify { errorObserver wasNot Called }
+    }
+
+    @Test
+    fun textDetailViewModel_onSaveClicked_existingDetail_updatesDetailOnUseCaseCompleted() {
+        // Arrange
+        val detailObserver = mockk<Observer<TextDetail>>(relaxed = true)
+        val errorObserver = mockk<Observer<Int>>(relaxed = true)
+        val useCaseObserver = slot<DisposableCompletableObserver>()
+        val existingDetail = mockk<TextDetail>()
+        viewModel.loadExistingDetail(existingDetail)
+        viewModel.setText("We need to input text so we can save")
+
+        viewModel.savedDetail.observeForever(detailObserver)
+        viewModel.errorMessage.observeForever(errorObserver)
+
+        // Act
+        viewModel.onSaveClicked()
+        verify { overwriteTextDetailUseCase.execute(any(), capture(useCaseObserver)) }
+        // Make the UC-handler call the success handler
+        useCaseObserver.captured.onComplete()
+
+        // Assert
+        verify { detailObserver.onChanged(existingDetail) }
         verify { errorObserver wasNot Called }
     }
 
