@@ -10,9 +10,11 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.observers.DisposableSingleObserver
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.File
 
 class TakePhotoViewModelUseCaseTests {
     private lateinit var viewModel: TakePhotoViewModel
@@ -43,19 +45,27 @@ class TakePhotoViewModelUseCaseTests {
         val detailObserver = mockk<Observer<PhotoDetail>>(relaxed = true)
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val useCaseObserver = slot<DisposableSingleObserver<PhotoDetail>>()
+        val useCaseParams = slot<CreatePhotoDetailUseCase.Params>()
         val createdDetail = mockk<PhotoDetail>()
         // We need to save a picture before we can call the use case
-        viewModel.photoTaken(mockk())
+        val photoSaveFile = mockk<File>()
+        viewModel.photoTaken(photoSaveFile)
 
         viewModel.savedDetail.observeForever(detailObserver)
         viewModel.errorMessage.observeForever(errorObserver)
 
         // Act
         viewModel.onSaveClicked()
-        verify { createPhotoDetailUseCase.execute(any(), capture(useCaseObserver)) }
+        verify {
+            createPhotoDetailUseCase.execute(
+                capture(useCaseParams),
+                capture(useCaseObserver)
+            )
+        }
         useCaseObserver.captured.onSuccess(createdDetail)
 
         // Assert
+        assertEquals(photoSaveFile, useCaseParams.captured.tempPhotoSaveFile)
         verify { detailObserver.onChanged(createdDetail) }
         verify { errorObserver wasNot Called }
     }
