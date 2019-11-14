@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.service.usecases.textDetail.SaveEventTextDetailUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.Called
@@ -18,11 +17,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.test.KoinTest
 
-class EventViewModelSaveTextTest : KoinTest {
+class EventViewModelSaveTextTest {
     private lateinit var viewModel: EventViewModel
     private val saveTextUseCase = mockk<SaveEventTextDetailUseCase>(relaxed = true)
 
@@ -40,8 +37,6 @@ class EventViewModelSaveTextTest : KoinTest {
 
     @Before
     fun setUp() {
-        startKoin { modules(appModule) }
-
         viewModel = EventViewModel(
             mockk(),
             mockk(),
@@ -56,11 +51,6 @@ class EventViewModelSaveTextTest : KoinTest {
         viewModel.eventTitle.value = eventTitle
         viewModel.eventNotes.value = eventNotes
         viewModel.eventDate.value = eventDateTime
-    }
-
-    @After
-    fun takeDown() {
-        stopKoin()
     }
 
     @Test
