@@ -1,8 +1,8 @@
 package be.hogent.faith.faith.details.audio.audioStates.recordState
 
+import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.media.MediaRecorder
-import android.os.Build
 import android.view.View
 import be.hogent.faith.faith.details.audio.audioStates.AudioContext
 import timber.log.Timber
@@ -45,8 +45,9 @@ class RecordStateRecording(
         Timber.d("Recording -> Recording: recorder was already recording")
     }
 
+    @SuppressLint("NewApi") // Checked by AudioDetailVM
     override fun onPausePressed() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (pauseButtonEnabled) {
             Timber.d("Recording -> Paused")
             recorder.pause()
             context.goToNextState(RecordStatePaused(context, mediaPlayer, recorder))

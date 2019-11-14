@@ -41,7 +41,7 @@ class AudioDetailViewModel(
      * Support starts at SDK 24.
      * Default false, users of this ViewModel should change this to be true when supported.
      */
-    var pauseSupported: Boolean = true
+    var pauseSupported: Boolean = false
 
     private val _playButtonEnabled = MutableLiveData<Boolean>()
     val playButtonEnabled: LiveData<Boolean> = _playButtonEnabled
