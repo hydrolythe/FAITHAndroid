@@ -13,7 +13,7 @@ import be.hogent.faith.faith.details.audio.audioStates.AudioState
 import be.hogent.faith.faith.details.audio.audioStates.playState.PlayStateInitial
 import be.hogent.faith.faith.details.audio.audioStates.recordState.RecordStateInitial
 import be.hogent.faith.faith.util.TempFileProvider
-import be.hogent.faith.service.usecases.audioDetail.CreateAudioDetailUseCase
+import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import io.reactivex.observers.DisposableSingleObserver
 import timber.log.Timber
 import java.util.Timer

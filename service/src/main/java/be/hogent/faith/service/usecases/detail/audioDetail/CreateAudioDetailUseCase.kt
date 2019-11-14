@@ -1,4 +1,4 @@
-package be.hogent.faith.service.usecases.audioDetail
+package be.hogent.faith.service.usecases.detail.audioDetail
 
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.service.usecases.base.SingleUseCase

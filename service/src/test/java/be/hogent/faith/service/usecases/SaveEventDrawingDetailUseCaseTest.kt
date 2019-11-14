@@ -2,7 +2,7 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.service.usecases.drawingDetail.SaveEventDrawingDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventDrawingDetailUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -24,7 +24,10 @@ class SaveEventDrawingDetailUseCaseTest {
     @Before
     fun setUp() {
         storageRepository = mockk(relaxed = true)
-        saveEventDrawingUC = SaveEventDrawingDetailUseCase(storageRepository, scheduler)
+        saveEventDrawingUC = SaveEventDrawingDetailUseCase(
+            storageRepository,
+            scheduler
+        )
     }
 
     @Test

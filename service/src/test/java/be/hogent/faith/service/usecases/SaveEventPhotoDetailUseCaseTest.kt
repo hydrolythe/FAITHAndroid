@@ -2,7 +2,7 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.service.usecases.photoDetail.SaveEventPhotoDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventPhotoDetailUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -25,7 +25,11 @@ class SaveEventPhotoDetailUseCaseTest {
 
     @Before
     fun setUp() {
-        saveEventPhotoDetailUseCase = SaveEventPhotoDetailUseCase(storageRepository, observer)
+        saveEventPhotoDetailUseCase =
+            SaveEventPhotoDetailUseCase(
+                storageRepository,
+                observer
+            )
     }
 
     @Test

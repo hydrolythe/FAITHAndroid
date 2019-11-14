@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.service.usecases.audioDetail.SaveEventAudioDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventAudioDetailUseCase
 import io.mockk.Called
 import io.mockk.called
 import io.mockk.mockk

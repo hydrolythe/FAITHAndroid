@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.service.usecases.textDetail.SaveEventTextDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventTextDetailUseCase
 import io.mockk.Called
 import io.mockk.called
 import io.mockk.mockk

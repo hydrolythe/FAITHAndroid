@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import be.hogent.faith.faith.TestUtils.getValue
 import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.faith.testModule
-import be.hogent.faith.service.usecases.audioDetail.CreateAudioDetailUseCase
+import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert.assertFalse

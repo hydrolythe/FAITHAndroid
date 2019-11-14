@@ -2,7 +2,7 @@ package be.hogent.faith.faith
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import be.hogent.faith.service.usecases.SaveEventUseCase
+import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.called

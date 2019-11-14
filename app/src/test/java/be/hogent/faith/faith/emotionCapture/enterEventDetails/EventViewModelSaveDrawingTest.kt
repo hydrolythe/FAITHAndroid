@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.service.usecases.drawingDetail.SaveEventDrawingDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventDrawingDetailUseCase
 import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk

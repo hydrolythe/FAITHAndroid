@@ -3,6 +3,7 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.called
@@ -31,7 +32,8 @@ class SaveEventUseCaseTest {
         event = EventFactory.makeEvent(nbrOfDetails = 0)
         user = spyk(User(DataFactory.randomString(), DataFactory.randomString()))
         repository = mockk(relaxed = true)
-        saveEventUseCase = SaveEventUseCase(repository, mockk())
+        saveEventUseCase =
+            SaveEventUseCase(repository, mockk())
     }
 
     @Test

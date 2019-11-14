@@ -1,4 +1,4 @@
-package be.hogent.faith.service.usecases.drawingDetail
+package be.hogent.faith.service.usecases.event
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.DrawingDetail

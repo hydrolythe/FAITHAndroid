@@ -1,4 +1,4 @@
-package be.hogent.faith.service.usecases.textDetail
+package be.hogent.faith.service.usecases.detail.textDetail
 
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.storage.StorageRepository
@@ -10,7 +10,7 @@ import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
 
-class LoadTextUseCaseTest {
+class LoadTextDetailUseCaseTest {
     private lateinit var loadTextUseCase: LoadTextDetailUseCase
     private val scheduler: Scheduler = mockk()
     private val repository: StorageRepository = mockk(relaxed = true)

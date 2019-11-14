@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.details.DetailViewModel
-import be.hogent.faith.service.usecases.drawingDetail.CreateDrawingDetailUseCase
-import be.hogent.faith.service.usecases.drawingDetail.OverwriteDrawingDetailUseCase
+import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
+import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import timber.log.Timber

@@ -1,7 +1,8 @@
-package be.hogent.faith.service.usecases.audioDetail
+package be.hogent.faith.service.usecases.detail.audioDetail
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.service.usecases.event.SaveEventAudioDetailUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -24,10 +25,11 @@ class SaveEventAudioDetailUseCaseTest {
 
     @Before
     fun setUp() {
-        saveEventAudioDetailUseCase = SaveEventAudioDetailUseCase(
-            repository,
-            scheduler
-        )
+        saveEventAudioDetailUseCase =
+            SaveEventAudioDetailUseCase(
+                repository,
+                scheduler
+            )
     }
 
     @Test

@@ -2,6 +2,7 @@ package be.hogent.faith.service.usecases
 
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
 import be.hogent.faith.storage.StorageRepository
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.every
@@ -26,7 +27,10 @@ class SaveEmotionAvatarUseCaseTest {
     fun setUp() {
         observer = mockk()
         storageRepository = mockk(relaxed = true)
-        saveEmotionAvatarUseCase = SaveEmotionAvatarUseCase(storageRepository, observer)
+        saveEmotionAvatarUseCase = SaveEmotionAvatarUseCase(
+            storageRepository,
+            observer
+        )
         event = EventFactory.makeEvent(nbrOfDetails = 0)
     }
 

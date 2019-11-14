@@ -14,11 +14,11 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
-import be.hogent.faith.service.usecases.audioDetail.SaveEventAudioDetailUseCase
-import be.hogent.faith.service.usecases.drawingDetail.SaveEventDrawingDetailUseCase
-import be.hogent.faith.service.usecases.photoDetail.SaveEventPhotoDetailUseCase
-import be.hogent.faith.service.usecases.textDetail.SaveEventTextDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
+import be.hogent.faith.service.usecases.event.SaveEventAudioDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventDrawingDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventPhotoDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import org.koin.core.KoinComponent
 import org.threeten.bp.LocalDateTime

@@ -2,7 +2,7 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.service.usecases.textDetail.SaveEventTextDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventTextDetailUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.mockk.every
 import io.mockk.mockk

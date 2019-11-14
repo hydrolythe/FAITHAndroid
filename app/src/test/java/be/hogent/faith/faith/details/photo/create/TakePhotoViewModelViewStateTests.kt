@@ -3,7 +3,7 @@ package be.hogent.faith.faith.details.photo.create
 import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import be.hogent.faith.service.usecases.photoDetail.CreatePhotoDetailUseCase
+import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

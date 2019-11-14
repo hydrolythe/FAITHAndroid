@@ -1,4 +1,4 @@
-package be.hogent.faith.service.usecases.textDetail
+package be.hogent.faith.service.usecases.detail.textDetail
 
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.service.usecases.base.CompletableUseCase

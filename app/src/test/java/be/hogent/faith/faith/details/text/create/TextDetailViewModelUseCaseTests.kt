@@ -6,9 +6,9 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.faith.testModule
-import be.hogent.faith.service.usecases.textDetail.CreateTextDetailUseCase
-import be.hogent.faith.service.usecases.textDetail.LoadTextDetailUseCase
-import be.hogent.faith.service.usecases.textDetail.OverwriteTextDetailUseCase
+import be.hogent.faith.service.usecases.detail.textDetail.CreateTextDetailUseCase
+import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
+import be.hogent.faith.service.usecases.detail.textDetail.OverwriteTextDetailUseCase
 import io.mockk.Called
 import io.mockk.called
 import io.mockk.every

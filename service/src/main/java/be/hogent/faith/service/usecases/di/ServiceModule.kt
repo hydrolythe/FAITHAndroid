@@ -1,21 +1,21 @@
 package be.hogent.faith.service.usecases.di
 
 import be.hogent.faith.service.usecases.CreateUserUseCase
-import be.hogent.faith.service.usecases.GetEventsUseCase
+import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import be.hogent.faith.service.usecases.GetUserUseCase
-import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
-import be.hogent.faith.service.usecases.SaveEventUseCase
-import be.hogent.faith.service.usecases.audioDetail.CreateAudioDetailUseCase
-import be.hogent.faith.service.usecases.audioDetail.SaveEventAudioDetailUseCase
-import be.hogent.faith.service.usecases.drawingDetail.CreateDrawingDetailUseCase
-import be.hogent.faith.service.usecases.drawingDetail.OverwriteDrawingDetailUseCase
-import be.hogent.faith.service.usecases.drawingDetail.SaveEventDrawingDetailUseCase
-import be.hogent.faith.service.usecases.photoDetail.CreatePhotoDetailUseCase
-import be.hogent.faith.service.usecases.photoDetail.SaveEventPhotoDetailUseCase
-import be.hogent.faith.service.usecases.textDetail.CreateTextDetailUseCase
-import be.hogent.faith.service.usecases.textDetail.LoadTextDetailUseCase
-import be.hogent.faith.service.usecases.textDetail.OverwriteTextDetailUseCase
-import be.hogent.faith.service.usecases.textDetail.SaveEventTextDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
+import be.hogent.faith.service.usecases.event.SaveEventUseCase
+import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventAudioDetailUseCase
+import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
+import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventDrawingDetailUseCase
+import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventPhotoDetailUseCase
+import be.hogent.faith.service.usecases.detail.textDetail.CreateTextDetailUseCase
+import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
+import be.hogent.faith.service.usecases.detail.textDetail.OverwriteTextDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventTextDetailUseCase
 import org.koin.dsl.module
 
 /**

@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.service.usecases.photoDetail.CreatePhotoDetailUseCase
+import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
 import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.slot

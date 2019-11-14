@@ -8,7 +8,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.SaveEventUseCase
+import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import timber.log.Timber
 

@@ -1,4 +1,4 @@
-package be.hogent.faith.service.usecases.drawingDetail
+package be.hogent.faith.service.usecases.detail.drawingDetail
 
 import android.graphics.Bitmap
 import be.hogent.faith.storage.StorageRepository
