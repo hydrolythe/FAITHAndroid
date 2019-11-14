@@ -23,7 +23,7 @@ import org.koin.test.KoinTest
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 
-class EventViewModelTest : KoinTest {
+class EventViewModelTest {
     private lateinit var viewModel: EventViewModel
 
     private val eventTitle = DataFactory.randomString()
@@ -35,8 +35,6 @@ class EventViewModelTest : KoinTest {
 
     @Before
     fun setUp() {
-        startKoin { modules(appModule) }
-
         viewModel = EventViewModel(
             mockk(),
             mockk(),
@@ -51,11 +49,6 @@ class EventViewModelTest : KoinTest {
         viewModel.eventTitle.value = eventTitle
         viewModel.eventNotes.value = eventNotes
         viewModel.eventDate.value = eventDateTime
-    }
-
-    @After
-    fun takeDown() {
-        stopKoin()
     }
 
     @Test
