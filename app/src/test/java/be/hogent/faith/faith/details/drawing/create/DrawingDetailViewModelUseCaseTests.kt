@@ -16,7 +16,6 @@ import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
@@ -29,8 +28,6 @@ class DrawingDetailViewModelUseCaseTests {
     private lateinit var createDrawingDetailUseCase: CreateDrawingDetailUseCase
     private lateinit var overwriteDrawingDetailUseCase: OverwriteDrawingDetailUseCase
 
-    private val drawingDetail: DrawingDetail = mockk()
-
     @get:Rule
     val testRule = InstantTaskExecutorRule()
 
@@ -38,6 +35,8 @@ class DrawingDetailViewModelUseCaseTests {
     fun setUp() {
         createDrawingDetailUseCase = mockk(relaxed = true)
         overwriteDrawingDetailUseCase = mockk(relaxed = true)
+        viewModel =
+            DrawingDetailViewModel(createDrawingDetailUseCase, overwriteDrawingDetailUseCase)
     }
 
     @After
@@ -46,60 +45,74 @@ class DrawingDetailViewModelUseCaseTests {
     }
 
     @Test
-    fun drawingDetailVM_noDetailGiven_constructs() {
-        // Act
-        viewModel =
-            DrawingDetailViewModel(createDrawingDetailUseCase, overwriteDrawingDetailUseCase)
+    fun drawingDetailVM_existingDetailGiven_noSavedDetailYet() {
+        // Arrange
+        viewModel.loadExistingDetail(mockk())
 
         // Assert
         assertNull(getValue(viewModel.savedDetail))
     }
 
     @Test
-    fun drawingDetailVM_noDetailGiven_onBitmapAvailable_savesDetail() {
+    fun drawingDetailVM_noDetailGiven_noSavedDetailYet() {
+        // Assert
+        assertNull(getValue(viewModel.savedDetail))
+    }
+
+    @Test
+    fun drawingDetailVM_noDetailGiven_onBitmapAvailable_savesNewDetail() {
         // Arrange
         val bitmap: Bitmap = mockk()
-        viewModel =
-            DrawingDetailViewModel(createDrawingDetailUseCase, overwriteDrawingDetailUseCase)
+        val createdDetail: DrawingDetail = mockk()
         val detailObserver = mockk<Observer<DrawingDetail>>(relaxed = true)
+        val params = slot<CreateDrawingDetailUseCase.Params>()
         val resultingDetailObserver = slot<DisposableSingleObserver<DrawingDetail>>()
 
         viewModel.savedDetail.observeForever(detailObserver)
 
         // Act
         viewModel.onBitMapAvailable(bitmap)
-        verify { createDrawingDetailUseCase.execute(any(), capture(resultingDetailObserver)) }
-        resultingDetailObserver.captured.onSuccess(drawingDetail)
+        verify {
+            createDrawingDetailUseCase.execute(
+                capture(params),
+                capture(resultingDetailObserver)
+            )
+        }
+        resultingDetailObserver.captured.onSuccess(createdDetail)
 
         // Assert
-        verify { detailObserver.onChanged(drawingDetail) }
-        assertNotNull(getValue(viewModel.savedDetail))
+        assertEquals(bitmap, params.captured.bitmap)
+        assertEquals(createdDetail, getValue(viewModel.savedDetail))
     }
 
     @Test
     fun drawingDetailVM_detailGiven_onBitmapAvailable_detailStaysSame() {
         // Arrange
         val bitmap: Bitmap = mockk()
-        val drawingDetail = DetailFactory.makeDrawingDetail()
-        viewModel =
-            DrawingDetailViewModel(
-                createDrawingDetailUseCase,
-                overwriteDrawingDetailUseCase
-            )
+        val existingDetail = DetailFactory.makeDrawingDetail()
         val detailObserver = mockk<Observer<DrawingDetail>>(relaxed = true)
+        val useCaseParams = slot<OverwriteDrawingDetailUseCase.Params>()
         val completableObserver = slot<DisposableCompletableObserver>()
-        viewModel.loadExistingDetail(drawingDetail)
+        viewModel.loadExistingDetail(existingDetail)
 
         viewModel.savedDetail.observeForever(detailObserver)
 
         // Act
         viewModel.onBitMapAvailable(bitmap)
-        verify { overwriteDrawingDetailUseCase.execute(any(), capture(completableObserver)) }
+        verify {
+            overwriteDrawingDetailUseCase.execute(
+                capture(useCaseParams),
+                capture(completableObserver)
+            )
+        }
         completableObserver.captured.onComplete()
 
         // Assert
-        verify { detailObserver.onChanged(drawingDetail) }
+        assertEquals(bitmap, useCaseParams.captured.bitmap)
+        assertEquals(existingDetail, useCaseParams.captured.detail)
+
+        verify { detailObserver.onChanged(existingDetail) }
         val updatedDetail = getValue(viewModel.savedDetail)
-        assertEquals(drawingDetail, updatedDetail)
+        assertEquals(existingDetail, updatedDetail)
     }
 }
