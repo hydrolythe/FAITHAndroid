@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.loginOrRegister
 
-import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,8 @@ import be.hogent.faith.domain.repository.InvalidCredentialsException
 import be.hogent.faith.domain.repository.UserCollisionException
 import be.hogent.faith.domain.repository.WeakPasswordException
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.Avatar
-import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
 import be.hogent.faith.service.usecases.RegisterUserUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import timber.log.Timber
@@ -27,13 +27,9 @@ class RegisterUserViewModel(
     private val _password = MutableLiveData<String>()
     private val _avatar = MutableLiveData<Avatar>()
 
-    private val _errorMessage = MutableLiveData<@IdRes Int>()
-    val errorMessage: LiveData<Int>
-        get() = _errorMessage
-
-    private val _userRegisteredSuccessFully = SingleLiveEvent<Unit>()
-    val userRegisteredSuccessFully: LiveData<Unit>
-        get() = _userRegisteredSuccessFully
+    private val _userRegisteredState = MutableLiveData<Resource<Unit>>()
+    val userRegisteredState: LiveData<Resource<Unit>>
+        get() = _userRegisteredState
 
     /**
      * part 1 of the register workflow sets the username and password
@@ -54,8 +50,15 @@ class RegisterUserViewModel(
      * register the user if all information is given
      */
     fun register() {
+        _userRegisteredState.postValue(Resource(ResourceState.LOADING, Unit, null))
         if (_userName.value.isNullOrBlank() || _password.value.isNullOrBlank() || _avatar.value == null)
-            _errorMessage.postValue(R.string.register_error_create_user)
+            _userRegisteredState.postValue(
+                Resource(
+                    ResourceState.SUCCESS,
+                    Unit,
+                    R.string.register_error_create_user
+                )
+            )
         else {
             val params = RegisterUserUseCase.Params(
                 _userName.value!!,
@@ -68,21 +71,24 @@ class RegisterUserViewModel(
 
     private inner class RegisterUserUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            _userRegisteredSuccessFully.call()
+            _userRegisteredState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
         }
 
         override fun onError(e: Throwable) {
             Timber.e(e.localizedMessage)
-            _errorMessage.postValue(
-                when (e) {
-                    is WeakPasswordException ->
-                        R.string.register_error_weak_password
-                    is InvalidCredentialsException ->
-                        R.string.register_error_invalid_username
-                    is UserCollisionException ->
-                        R.string.register_error_username_already_exists
-                    else -> R.string.register_error_create_user
-                }
+            _userRegisteredState.postValue(
+                Resource(
+                    ResourceState.ERROR, Unit,
+                    when (e) {
+                        is WeakPasswordException ->
+                            R.string.register_error_weak_password
+                        is InvalidCredentialsException ->
+                            R.string.register_error_invalid_username
+                        is UserCollisionException ->
+                            R.string.register_error_username_already_exists
+                        else -> R.string.register_error_create_user
+                    }
+                )
             )
         }
     }

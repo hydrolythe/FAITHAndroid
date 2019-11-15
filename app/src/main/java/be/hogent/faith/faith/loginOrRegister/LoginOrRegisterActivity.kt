@@ -2,6 +2,7 @@ package be.hogent.faith.faith.loginOrRegister
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
@@ -11,6 +12,8 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarFragment
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoFragment
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
 import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -31,8 +34,6 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //   registerUserInfoViewModel = getViewModel()
-
         // Must happen before creating the RegisterFragment because it uses the scope
         createScopedUserViewModel()
         registerListeners()
@@ -49,17 +50,47 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     }
 
     private fun registerListeners() {
-        userViewModel.getLoggedInUserSuccessFully.observe(this, Observer {
-            goToCityScreen()
+        //user is registering, on success get the corresponding user object from the database
+        //other states : loading and error are handled in the WelcomeFragment
+        registerUserViewModel.userRegisteredState.observe(this, Observer {
+            it?.let{
+                if (it.status == ResourceState.SUCCESS)
+                    onLoginSuccess()
+            }
         })
 
-        registerUserViewModel.userRegisteredSuccessFully.observe(this, Observer {
-            userViewModel.getLoggedInUser()
+        //user is logging in, on success get the corresponding user object from the database
+        //other states : loading and error are handled in the WelcomeFragment
+        welcomeViewModel.userLoggedInState.observe(this, Observer {
+            it?.let{
+                if (it.status == ResourceState.SUCCESS)
+                    onLoginSuccess()
+            }
         })
 
-        welcomeViewModel.userLoggedInSuccessFully.observe(this, Observer {
-            userViewModel.getLoggedInUser()
+        //once registered or logged in, get the user object...
+        userViewModel.getLoggedInUserState.observe(this, Observer {
+            it?.let {
+                handleDataStateGetLoggedInUser(it)
+            }
         })
+    }
+
+    private fun onLoginSuccess() {
+        userViewModel.getLoggedInUser()
+    }
+
+    private fun handleDataStateGetLoggedInUser(resource: Resource<Unit>) {
+        when (resource.status) {
+            ResourceState.SUCCESS -> {
+                goToCityScreen()
+            }
+            ResourceState.LOADING -> {
+
+            }
+            ResourceState.ERROR -> {
+                Toast.makeText(this, resource.message!!, Toast.LENGTH_LONG).show()}
+        }
     }
 
     private fun createScopedUserViewModel() {
@@ -69,7 +100,9 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         try {
             val scope = getKoin().createScope(KoinModules.USER_SCOPE_ID, named(USER_SCOPE_NAME))
             userViewModel = scope.get()
+
         } catch (e: ScopeAlreadyCreatedException) {
+            getKoin().getScope(KoinModules.USER_SCOPE_ID)
             Timber.i("User scope already existed, not recreating")
         }
     }

@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
+import be.hogent.faith.faith.state.ResourceState
+import kotlinx.android.synthetic.main.fragment_login.progress
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -42,17 +44,27 @@ class RegisterUserInfoFragment : Fragment() {
     }
 
     private fun registerListeners() {
-        registerUserInfoViewModel.userInfoConfirmedSuccessfully.observe(this, Observer {
-            registerUserViewModel.setRegistrationDetails(
-                registerUserInfoViewModel.userName.value!!,
-                registerUserInfoViewModel.password.value!!
-            )
-            navigation!!.goToRegisterAvatarScreen()
-        })
-
-        registerUserInfoViewModel.errorMessage.observe(this, Observer { errorMessageID ->
-            Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
-        })
+        registerUserInfoViewModel.userConfirmedState.observe(this, Observer {
+            it?.let {
+                when (it.status) {
+                    ResourceState.SUCCESS -> {
+                            registerUserViewModel.setRegistrationDetails(
+                                registerUserInfoViewModel.userName.value!!,
+                                registerUserInfoViewModel.password.value!!
+                            )
+                            progress.visibility = View.GONE
+                            navigation!!.goToRegisterAvatarScreen()
+                     }
+                    ResourceState.LOADING -> {
+                        progress.visibility = View.VISIBLE
+                    }
+                    ResourceState.ERROR -> {
+                        progress.visibility = View.GONE
+                        Toast.makeText(context, it.message!!, Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+    })
     }
 
     override fun onAttach(context: Context) {

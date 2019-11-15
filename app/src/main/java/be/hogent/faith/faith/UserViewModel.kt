@@ -9,6 +9,8 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.NetworkError
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.GetUserUseCase
 import be.hogent.faith.service.usecases.SaveEventUseCase
@@ -34,9 +36,9 @@ class UserViewModel(
     val eventSavedSuccessFully: LiveData<Unit>
         get() = _eventSavedSuccessFully
 
-    private val _getLoggedInUserSuccessFully = SingleLiveEvent<Unit>()
-    val getLoggedInUserSuccessFully: LiveData<Unit>
-        get() = _getLoggedInUserSuccessFully
+    private val _getLoggedInUserState = MutableLiveData<Resource<Unit>>()
+    val getLoggedInUserState: LiveData<Resource<Unit>>
+        get() = _getLoggedInUserState
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
@@ -54,10 +56,11 @@ class UserViewModel(
         _user.postValue(user)
     }
 
+    /*
     private val _userRegisteredSuccessFully = SingleLiveEvent<Unit>()
     val UserRegisteredSuccessFully: LiveData<Unit>
         get() = _userRegisteredSuccessFully
-
+*/
     private fun userNameIsValid(): Boolean {
         if (userName.isNullOrBlank()) {
             return false
@@ -72,6 +75,7 @@ class UserViewModel(
     }
 
     fun getLoggedInUser() {
+        _getLoggedInUserState.postValue(Resource(ResourceState.LOADING, null, null))
         getUserUseCase.execute(null, GetUserUseCaseHandler())
     }
 
@@ -80,7 +84,7 @@ class UserViewModel(
         override fun onNext(t: User?) {
             Log.i(TAG, "success $t")
             _user.postValue(t)
-            _getLoggedInUserSuccessFully.call()
+            _getLoggedInUserState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
         }
 
         override fun onComplete() {
@@ -89,11 +93,11 @@ class UserViewModel(
 
         override fun onError(e: Throwable) {
             Log.e(TAG, e.localizedMessage)
-            _errorMessage.postValue(
+            _getLoggedInUserState.postValue(Resource(ResourceState.ERROR, null,
                 when (e) {
                     is NetworkError -> R.string.login_error_internet
                     else -> R.string.register_error_create_user
-                }
+                })
             )
         }
     }

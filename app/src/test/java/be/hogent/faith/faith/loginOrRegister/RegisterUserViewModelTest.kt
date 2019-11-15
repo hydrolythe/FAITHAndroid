@@ -72,7 +72,7 @@ class RegisterUserViewModelTest {
         val successObserver = mockk<Observer<Unit>>(relaxed = true)
 
         registerUserViewModel.errorMessage.observeForever(errorObserver)
-        registerUserViewModel.userRegisteredSuccessFully.observeForever(successObserver)
+        registerUserViewModel.userRegisteredState.observeForever(successObserver)
 
         // Act
         registerUserViewModel.register()
@@ -96,7 +96,7 @@ class RegisterUserViewModelTest {
         val successObserver = mockk<Observer<Unit>>(relaxed = true)
 
         registerUserViewModel.errorMessage.observeForever(errorObserver)
-        registerUserViewModel.userRegisteredSuccessFully.observeForever(successObserver)
+        registerUserViewModel.userRegisteredState.observeForever(successObserver)
 
         // Act
         registerUserViewModel.register()
@@ -119,7 +119,7 @@ class RegisterUserViewModelTest {
         val successObserver = mockk<Observer<Unit>>(relaxed = true)
 
         registerUserViewModel.errorMessage.observeForever(errorObserver)
-        registerUserViewModel.userRegisteredSuccessFully.observeForever(successObserver)
+        registerUserViewModel.userRegisteredState.observeForever(successObserver)
 
         // Act
         registerUserViewModel.register()

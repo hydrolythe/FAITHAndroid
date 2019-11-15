@@ -64,6 +64,6 @@ class RemoteStorage(private val firebaseStorage: IFirebaseStorage) : IStorage {
     }
 
     override fun moveFilesFromRemoteStorageToCacheStorage(event: Event): Completable {
-        return firebaseStorage.moveFilesFromRemoteStorageToCacheStorage(event)
+        return firebaseStorage.moveFilesFromRemoteStorageToLocalStorage(event)
     }
 }

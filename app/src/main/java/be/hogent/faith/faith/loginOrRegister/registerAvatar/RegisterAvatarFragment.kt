@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter.OnAvatarClickListener
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
+import kotlinx.android.synthetic.main.fragment_login.progress
 import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -61,11 +64,27 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
         registerAvatarViewModel.errorMessage.observe(this, Observer { errorMessageID ->
             Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
         })
-        registerUserViewModel.errorMessage.observe(this, Observer { errorMessageID ->
-            Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
+        registerUserViewModel.userRegisteredState.observe(this, Observer {
+            it?.let {
+                handleDataState(it)
+            }
         })
     }
 
+    private fun handleDataState(resource: Resource<Unit>) {
+        when (resource.status) {
+            ResourceState.SUCCESS -> {
+                //wordt afgehandeld door de LOginOrRegisterActivity
+                //of gotoCityScreen en de viewmodel hoeft dan niet meer gedeeld te worden!! ANders mag deze interface weg!!
+            }
+            ResourceState.LOADING -> {
+                progress.visibility = View.VISIBLE
+            }
+            ResourceState.ERROR -> {
+                progress.visibility = View.GONE
+                Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()}
+        }
+    }
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is AvatarFragmentNavigationListener) {

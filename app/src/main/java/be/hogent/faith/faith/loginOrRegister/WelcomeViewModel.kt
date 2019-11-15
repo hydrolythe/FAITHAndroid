@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.domain.repository.SignInException
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.LoginUserUseCase
 import be.hogent.faith.util.TAG
@@ -18,14 +20,9 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     val userName = MutableLiveData<String>()
     val password = MutableLiveData<String>()
 
-    private val _uuid = MutableLiveData<String>()
-    val UUID: LiveData<String>
-        get() = _uuid
-
-    private val _errorMessage = MutableLiveData<@IdRes Int>()
-    val errorMessage: LiveData<Int>
-        get() = _errorMessage
-
+    private val _userLoggedInState = MutableLiveData<Resource<Unit>>()
+    val userLoggedInState: LiveData<Resource<Unit>>
+        get() = _userLoggedInState
     /**
      * reports errors with username
      */
@@ -44,10 +41,6 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     private val _registerButtonClicked = SingleLiveEvent<Unit>()
     val registerButtonClicked: LiveData<Unit>
         get() = _registerButtonClicked
-
-    private val _userLoggedInSuccessFully = SingleLiveEvent<Unit>()
-    val userLoggedInSuccessFully: LiveData<Unit>
-        get() = _userLoggedInSuccessFully
 
     init {
         // TODO Moet er gecontrolleerd worden of de user reeds aangemeld is: eerst nagaan of user reeds is aangemeld (isUserLoggedInUseCase), dan user ophalen en dan call van userLoggedInSuccessfully
@@ -70,7 +63,8 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
             userName.value=""
-            _userNameErrorMessage.value = R.string.registerOrLogin_username_empty
+         //   _userNameErrorMessage.value = R.string.registerOrLogin_username_empty
+            _userLoggedInState.postValue(Resource(ResourceState.ERROR, null,   R.string.registerOrLogin_username_empty))
             return false
         }
         _userNameErrorMessage.value = R.string.empty
@@ -81,7 +75,8 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
         val pwd = password.value
         if (pwd.isNullOrBlank() || pwd.length < 6) {
             this.password.value = ""
-            _passwordErrorMessage.value = R.string.registerOrLogin_password_empty
+            //_passwordErrorMessage.value = R.string.registerOrLogin_password_empty
+            _userLoggedInState.postValue(Resource(ResourceState.ERROR, null,  R.string.registerOrLogin_password_empty))
             return false
         }
         _passwordErrorMessage.value = R.string.empty
@@ -92,6 +87,7 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
      * validates username and password. Logs in the user
      */
     private fun login() {
+        _userLoggedInState.postValue(Resource(ResourceState.LOADING, null, null))
         if (userNameIsValid() && passwordIsValid()) {
             val params = LoginUserUseCase.Params(userName.value!!, password.value!!)
             loginUserUseCase.execute(params, LoginUserUseCaseHandler())
@@ -101,8 +97,7 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     private inner class LoginUserUseCaseHandler : DisposableMaybeObserver<String?>() {
         // returns uuid when successfully logged in
         override fun onSuccess(t: String) {
-            _uuid.postValue(t)
-            _userLoggedInSuccessFully.call()
+            _userLoggedInState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
         }
 
         override fun onComplete() {
@@ -110,13 +105,12 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
 
         override fun onError(e: Throwable) {
             Timber.e("${TAG}: e.localizedMessage")
-            _errorMessage.postValue(
-                when (e) {
+            _userLoggedInState.postValue(Resource(ResourceState.ERROR, null, when (e) {
                     is NetworkError -> R.string.login_error_internet
                     is SignInException -> R.string.login_error_wrong_username_or_password
                     else -> R.string.login_error
                 }
-            )
+            ))
         }
     }
 

@@ -29,6 +29,9 @@ open class SaveEventUseCase(
                 .flatMap { saveDetailFiles(it) }
                 .flatMap { saveEvent(it) }
                 .flatMap { deleteLocalFiles((it)) })
+            .onErrorComplete{ error ->
+                TODO("urls local storage in entity terugzetten??? maar dan mogen de files nog niet verwijderd zijn?")
+            }
     }
 
     fun addEventToUser(event: Event): Single<Event> = Single.fromCallable {

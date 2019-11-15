@@ -6,7 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.repository.NetworkError
-import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
 import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableSingleObserver
@@ -46,12 +47,6 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
     val passwordRepeatErrorMessage: LiveData<Int>
         get() = _passwordRepeatErrorMessage
 
-    /**
-     * reports errors with calling use case IsUniqueEmail
-     */
-    private val _errorMessage = MutableLiveData<@IdRes Int>()
-    val errorMessage: LiveData<Int>
-        get() = _errorMessage
 
     fun onConfirmUserInfoClicked() {
         confirmUserInfo()
@@ -60,9 +55,9 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
     /**
      * when username and password is entered and username is unique
      */
-    private val _userInfoConfirmedSuccesFully = SingleLiveEvent<Unit>()
-    val userInfoConfirmedSuccessfully: LiveData<Unit>
-        get() = _userInfoConfirmedSuccesFully
+    private val _userConfirmedState = MutableLiveData<Resource<Unit>>()
+    val userConfirmedState : LiveData<Resource<Unit>>
+        get() = _userConfirmedState
 
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
@@ -98,6 +93,7 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
      */
     private fun confirmUserInfo() {
         if (userNameIsValid() && passwordIsValid()) {
+            _userConfirmedState.postValue(Resource(ResourceState.LOADING, Unit, null))
             val params = IsUsernameUniqueUseCase.Params(userName.value!!)
             isUsernameUniqueUseCase.execute(params, IsUsernameUniqueUseCaseHandler())
         }
@@ -107,19 +103,18 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
 
         override fun onSuccess(t: Boolean) {
             if (t)
-                _userInfoConfirmedSuccesFully.call()
+                _userConfirmedState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
             else
-                _errorMessage.postValue(R.string.register_error_username_already_exists)
+                _userConfirmedState.postValue(Resource(ResourceState.ERROR, Unit, R.string.register_error_username_already_exists))
         }
 
         override fun onError(e: Throwable) {
             Timber.e("${TAG}: e.localizedMessage")
-            _errorMessage.postValue(
+            _userConfirmedState.postValue(Resource(ResourceState.LOADING, Unit,
                 when (e) {
                     is NetworkError -> R.string.login_error_internet
                     else -> R.string.register_error_create_user
-                }
-            )
+                }))
         }
     }
 

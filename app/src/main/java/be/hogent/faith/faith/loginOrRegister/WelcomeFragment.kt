@@ -13,7 +13,11 @@ import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
+import kotlinx.android.synthetic.main.fragment_login.progress
 import org.koin.android.ext.android.getKoin
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.error.ScopeAlreadyCreatedException
 import org.koin.core.qualifier.named
@@ -22,7 +26,7 @@ class WelcomeFragment : Fragment() {
 
     private var navigation: WelcomeNavigationListener? = null
 
-    private val welcomeViewModel by viewModel<WelcomeViewModel>()
+    private val welcomeViewModel by sharedViewModel<WelcomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,16 +47,33 @@ class WelcomeFragment : Fragment() {
 
 
     private fun registerListeners() {
+        //user wants to register
         welcomeViewModel.registerButtonClicked.observe(this, Observer {
             navigation!!.goToRegistrationScreen()
         })
-        welcomeViewModel.userLoggedInSuccessFully.observe(this, Observer {
-            onLoginSuccess()
-        })
 
-        welcomeViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
-            Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
+        //user is logging in....
+        welcomeViewModel.userLoggedInState.observe(this, Observer {
+            it?.let {
+                handleDataStateLogIn(it)
+            }
         })
+    }
+
+    //handle state when user is logging in
+    private fun handleDataStateLogIn(resource: Resource<Unit>) {
+        when (resource.status) {
+            ResourceState.SUCCESS -> {
+                //wordt afgehandeld door de LoginOrRegisterActivity
+             //   of gotoCityScreen en daar moet dan de user worden opgehaald, anders mag dit weg en geen shared model meer
+            }
+            ResourceState.LOADING -> {
+                progress.visibility = View.VISIBLE
+            }
+            ResourceState.ERROR -> {
+                progress.visibility = View.GONE
+                Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()}
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -65,19 +86,6 @@ class WelcomeFragment : Fragment() {
     interface WelcomeNavigationListener {
         fun goToRegistrationScreen()
         fun goToCityScreen()
-    }
-
-    private fun onLoginSuccess() {
-        val scope = try {
-            getKoin().createScope(KoinModules.USER_SCOPE_ID, named(USER_SCOPE_NAME))
-        } catch (e: ScopeAlreadyCreatedException) {
-            getKoin().getScope(KoinModules.USER_SCOPE_ID)
-        }
-        val userViewModel: UserViewModel = scope.get()
-        userViewModel.getLoggedInUserSuccessFully.observe(this, Observer {
-            navigation!!.goToCityScreen()
-        })
-        userViewModel.getLoggedInUser()
     }
 
     companion object {
