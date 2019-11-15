@@ -56,7 +56,7 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
      * when username and password is entered and username is unique
      */
     private val _userConfirmedState = MutableLiveData<Resource<Unit>>()
-    val userConfirmedState : LiveData<Resource<Unit>>
+    val userConfirmedState: LiveData<Resource<Unit>>
         get() = _userConfirmedState
 
     private fun userNameIsValid(): Boolean {
@@ -105,16 +105,26 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
             if (t)
                 _userConfirmedState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
             else
-                _userConfirmedState.postValue(Resource(ResourceState.ERROR, Unit, R.string.register_error_username_already_exists))
+                _userConfirmedState.postValue(
+                    Resource(
+                        ResourceState.ERROR,
+                        Unit,
+                        R.string.register_error_username_already_exists
+                    )
+                )
         }
 
         override fun onError(e: Throwable) {
             Timber.e("${TAG}: e.localizedMessage")
-            _userConfirmedState.postValue(Resource(ResourceState.LOADING, Unit,
-                when (e) {
-                    is NetworkError -> R.string.login_error_internet
-                    else -> R.string.register_error_create_user
-                }))
+            _userConfirmedState.postValue(
+                Resource(
+                    ResourceState.ERROR, Unit,
+                    when (e) {
+                        is NetworkError -> R.string.login_error_internet
+                        else -> R.string.register_error_create_user
+                    }
+                )
+            )
         }
     }
 

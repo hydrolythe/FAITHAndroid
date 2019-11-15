@@ -7,11 +7,7 @@ import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertFalse
-import junit.framework.Assert.assertNotNull
-import junit.framework.Assert.assertNull
-import junit.framework.Assert.assertTrue
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,36 +29,36 @@ class RegisterAvatarViewModelTest {
 
     @Test
     fun registerAvatarViewModel_OnConstruction_fetchesAvatars() {
-        assertEquals(listOfAvatars, registerAvatarViewModel.avatars.value)
-        assertEquals(-1, registerAvatarViewModel.selectedAvatarPosition.value)
+        Assert.assertEquals(listOfAvatars, registerAvatarViewModel.avatars.value)
+        Assert.assertEquals(-1, registerAvatarViewModel.selectedAvatarPosition.value)
     }
 
     @Test
     fun registerAvatarViewModel_setsSelectedAvatar() {
         registerAvatarViewModel.setSelectedAvatar(selection)
-        assertEquals(selection, registerAvatarViewModel.selectedAvatarPosition.value)
+        Assert.assertEquals(selection, registerAvatarViewModel.selectedAvatarPosition.value)
     }
 
     @Test
     fun registerAvatarViewModel_selectedAvatar_WhenNoAvatarIsSelected_ReturnsNull() {
-        assertNull(registerAvatarViewModel.selectedAvatar)
+        Assert.assertNull(registerAvatarViewModel.selectedAvatar)
     }
 
     @Test
     fun registerAvatarViewModel_selectedAvatar_WhenAvatarIsSelected_ReturnsAvatar() {
         registerAvatarViewModel.setSelectedAvatar(selection)
-        assertNotNull(registerAvatarViewModel.selectedAvatar)
+        Assert.assertNotNull(registerAvatarViewModel.selectedAvatar)
     }
 
     @Test
     fun registerAvatarViewModel_avatarWasSelectedWhenNoAvatarIsSelected_ReturnsFalse() {
-        assertFalse(registerAvatarViewModel.avatarWasSelected())
+        Assert.assertFalse(registerAvatarViewModel.avatarWasSelected())
     }
 
     @Test
     fun registerAvatarViewModel_avatarWasSelectedWhenAvatarIsSelected_ReturnsTrue() {
         registerAvatarViewModel.setSelectedAvatar(selection)
-        assertTrue(registerAvatarViewModel.avatarWasSelected())
+        Assert.assertTrue(registerAvatarViewModel.avatarWasSelected())
     }
 
     @Test

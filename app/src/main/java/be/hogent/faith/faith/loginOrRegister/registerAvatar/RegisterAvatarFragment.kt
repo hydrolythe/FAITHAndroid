@@ -74,17 +74,18 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
     private fun handleDataState(resource: Resource<Unit>) {
         when (resource.status) {
             ResourceState.SUCCESS -> {
-                //wordt afgehandeld door de LOginOrRegisterActivity
-                //of gotoCityScreen en de viewmodel hoeft dan niet meer gedeeld te worden!! ANders mag deze interface weg!!
+                navigation!!.userIsRegistered() //progress bar must stay visible
             }
             ResourceState.LOADING -> {
                 progress.visibility = View.VISIBLE
             }
             ResourceState.ERROR -> {
                 progress.visibility = View.GONE
-                Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()}
+                Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()
+            }
         }
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is AvatarFragmentNavigationListener) {
@@ -102,7 +103,7 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
     }
 
     interface AvatarFragmentNavigationListener {
-        fun goToCityScreen()
+        fun userIsRegistered()
     }
 
     override fun onAvatarClicked(index: Int) {

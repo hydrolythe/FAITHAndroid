@@ -2,6 +2,8 @@ package be.hogent.faith.faith.loginOrRegister.registerUserInfo
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
 import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.called
@@ -9,6 +11,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.observers.DisposableSingleObserver
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -103,10 +106,8 @@ class RegisterUserInfoViewModelTest {
         val params = slot<IsUsernameUniqueUseCase.Params>()
         val observer = slot<DisposableSingleObserver<Boolean>>()
 
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        registerUserInfoViewModel.errorMessage.observeForever(errorObserver)
-        registerUserInfoViewModel.userInfoConfirmedSuccessfully.observeForever(successObserver)
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        registerUserInfoViewModel.userConfirmedState.observeForever(successObserver)
 
         // Act
         registerUserInfoViewModel.onConfirmUserInfoClicked()
@@ -114,8 +115,11 @@ class RegisterUserInfoViewModelTest {
         observer.captured.onSuccess(true)
 
         // Assert
-        verify { successObserver.onChanged(any()) }
-        verify { errorObserver wasNot called }
+        Assert.assertEquals(
+            ResourceState.SUCCESS,
+            registerUserInfoViewModel.userConfirmedState.value?.status
+        )
+        verify(atLeast = 2) { successObserver.onChanged(any()) }
     }
 
     @Test
@@ -127,10 +131,8 @@ class RegisterUserInfoViewModelTest {
         val params = slot<IsUsernameUniqueUseCase.Params>()
         val observer = slot<DisposableSingleObserver<Boolean>>()
 
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        registerUserInfoViewModel.errorMessage.observeForever(errorObserver)
-        registerUserInfoViewModel.userInfoConfirmedSuccessfully.observeForever(successObserver)
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        registerUserInfoViewModel.userConfirmedState.observeForever(successObserver)
 
         // Act
         registerUserInfoViewModel.onConfirmUserInfoClicked()
@@ -138,8 +140,11 @@ class RegisterUserInfoViewModelTest {
         observer.captured.onSuccess(false)
 
         // Assert
-        verify { errorObserver.onChanged(any()) }
-        verify { successObserver wasNot called }
+        Assert.assertEquals(
+            ResourceState.ERROR,
+            registerUserInfoViewModel.userConfirmedState.value?.status
+        )
+        verify(atLeast = 2) { successObserver.onChanged(any()) }
     }
 
     @Test
@@ -151,10 +156,8 @@ class RegisterUserInfoViewModelTest {
         val params = slot<IsUsernameUniqueUseCase.Params>()
         val observer = slot<DisposableSingleObserver<Boolean>>()
 
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        registerUserInfoViewModel.errorMessage.observeForever(errorObserver)
-        registerUserInfoViewModel.userInfoConfirmedSuccessfully.observeForever(successObserver)
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        registerUserInfoViewModel.userConfirmedState.observeForever(successObserver)
 
         // Act
         registerUserInfoViewModel.onConfirmUserInfoClicked()
@@ -162,7 +165,10 @@ class RegisterUserInfoViewModelTest {
         observer.captured.onError(mockk(relaxed = true))
 
         // Assert
-        verify { errorObserver.onChanged(any()) }
-        verify { successObserver wasNot called }
+        Assert.assertEquals(
+            ResourceState.ERROR,
+            registerUserInfoViewModel.userConfirmedState.value?.status
+        )
+        verify(atLeast = 2) { successObserver.onChanged(any()) }
     }
 }

@@ -54,7 +54,7 @@ class RegisterUserViewModel(
         if (_userName.value.isNullOrBlank() || _password.value.isNullOrBlank() || _avatar.value == null)
             _userRegisteredState.postValue(
                 Resource(
-                    ResourceState.SUCCESS,
+                    ResourceState.ERROR,
                     Unit,
                     R.string.register_error_create_user
                 )

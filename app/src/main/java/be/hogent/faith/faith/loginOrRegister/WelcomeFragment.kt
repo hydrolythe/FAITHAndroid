@@ -64,15 +64,15 @@ class WelcomeFragment : Fragment() {
     private fun handleDataStateLogIn(resource: Resource<Unit>) {
         when (resource.status) {
             ResourceState.SUCCESS -> {
-                //wordt afgehandeld door de LoginOrRegisterActivity
-             //   of gotoCityScreen en daar moet dan de user worden opgehaald, anders mag dit weg en geen shared model meer
+                navigation!!.userIsLoggedIn()
             }
             ResourceState.LOADING -> {
                 progress.visibility = View.VISIBLE
             }
             ResourceState.ERROR -> {
                 progress.visibility = View.GONE
-                Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()}
+                Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -85,7 +85,7 @@ class WelcomeFragment : Fragment() {
 
     interface WelcomeNavigationListener {
         fun goToRegistrationScreen()
-        fun goToCityScreen()
+        fun userIsLoggedIn()
     }
 
     companion object {

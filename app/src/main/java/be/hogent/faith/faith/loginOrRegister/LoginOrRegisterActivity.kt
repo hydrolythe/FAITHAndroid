@@ -50,24 +50,6 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     }
 
     private fun registerListeners() {
-        //user is registering, on success get the corresponding user object from the database
-        //other states : loading and error are handled in the WelcomeFragment
-        registerUserViewModel.userRegisteredState.observe(this, Observer {
-            it?.let{
-                if (it.status == ResourceState.SUCCESS)
-                    onLoginSuccess()
-            }
-        })
-
-        //user is logging in, on success get the corresponding user object from the database
-        //other states : loading and error are handled in the WelcomeFragment
-        welcomeViewModel.userLoggedInState.observe(this, Observer {
-            it?.let{
-                if (it.status == ResourceState.SUCCESS)
-                    onLoginSuccess()
-            }
-        })
-
         //once registered or logged in, get the user object...
         userViewModel.getLoggedInUserState.observe(this, Observer {
             it?.let {
@@ -76,9 +58,6 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         })
     }
 
-    private fun onLoginSuccess() {
-        userViewModel.getLoggedInUser()
-    }
 
     private fun handleDataStateGetLoggedInUser(resource: Resource<Unit>) {
         when (resource.status) {
@@ -89,7 +68,8 @@ class LoginOrRegisterActivity : AppCompatActivity(),
 
             }
             ResourceState.ERROR -> {
-                Toast.makeText(this, resource.message!!, Toast.LENGTH_LONG).show()}
+                Toast.makeText(this, resource.message!!, Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -107,9 +87,17 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         }
     }
 
-    override fun goToCityScreen() {
+    private fun goToCityScreen() {
         val intent = Intent(this, CityScreenActivity::class.java)
         startActivity(intent)
+    }
+
+    override fun userIsRegistered() {
+        userViewModel.getLoggedInUser()
+    }
+
+    override fun userIsLoggedIn() {
+        userViewModel.getLoggedInUser()
     }
 
     override fun goToRegistrationScreen() {

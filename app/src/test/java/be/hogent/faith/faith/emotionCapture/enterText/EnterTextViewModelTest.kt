@@ -97,7 +97,7 @@ class EnterTextViewModelTest {
         val resultObserver = slot<DisposableSingleObserver<String>>()
         val textObserver = mockk<Observer<String>>(relaxed = true)
 
-        viewModel.text.observeForever(textObserver)
+        viewModel.initialText.observeForever(textObserver)
 
         // Act
         viewModel.loadExistingTextDetail(textDetail)
@@ -107,6 +107,7 @@ class EnterTextViewModelTest {
         // Assert
         verify { textObserver.onChanged(detailText) }
     }
+
     @Test
     fun enterTextVM_loadTextUseCaseFails_updatesErrorMessage() {
         // Arrange
@@ -115,7 +116,7 @@ class EnterTextViewModelTest {
         val textObserver = mockk<Observer<String>>(relaxed = true)
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
 
-        viewModel.text.observeForever(textObserver)
+        viewModel.initialText.observeForever(textObserver)
         viewModel.errorMessage.observeForever(errorObserver)
 
         // Act

@@ -3,6 +3,8 @@ package be.hogent.faith.faith
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
 import be.hogent.faith.service.usecases.GetUserUseCase
 import be.hogent.faith.service.usecases.SaveEventUseCase
 import be.hogent.faith.util.factory.DataFactory
@@ -106,44 +108,47 @@ class UserViewModelTest {
         verify { successObserver wasNot called }
     }
 
-@Test
+    @Test
     fun userViewModel_getUser_callUseCaseAndNotifiesSuccess() {
         // Arrange
         val observer = slot<DisposableSubscriber<User>>()
-
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        userViewModel.errorMessage.observeForever(errorObserver)
-        userViewModel.getLoggedInUserSuccessFully.observeForever(successObserver)
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        userViewModel.getLoggedInUserState.observeForever(successObserver)
 
         // Act
         userViewModel.getLoggedInUser()
+
         verify { getUserUseCase.execute(any(), capture(observer)) }
         // Make the UC-handler call the success handler
         observer.captured.onNext(mockk(relaxed = true))
 
         // Assert
+        assertEquals(
+            ResourceState.SUCCESS,
+            userViewModel.getLoggedInUserState.value?.status
+        )
         verify { successObserver.onChanged(any()) }
-        verify { errorObserver wasNot called }
+
     }
 
     @Test
     fun userViewModel_getUser_callUseCaseAndNotifiesFailure() {
         val observer = slot<DisposableSubscriber<User>>()
-
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        userViewModel.errorMessage.observeForever(errorObserver)
-        userViewModel.getLoggedInUserSuccessFully.observeForever(successObserver)
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        userViewModel.getLoggedInUserState.observeForever(successObserver)
 
         // Act
         userViewModel.getLoggedInUser()
+
         verify { getUserUseCase.execute(any(), capture(observer)) }
         // Make the UC-handler call the success handler
         observer.captured.onError(mockk(relaxed = true))
 
         // Assert
-        verify { errorObserver.onChanged(any()) }
-        verify { successObserver wasNot called }
+        assertEquals(
+            ResourceState.ERROR,
+            userViewModel.getLoggedInUserState.value?.status
+        )
+        verify { successObserver.onChanged(any()) }
     }
 }

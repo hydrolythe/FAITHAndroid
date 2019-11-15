@@ -2,6 +2,8 @@ package be.hogent.faith.faith.loginOrRegister
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
 import be.hogent.faith.service.usecases.LoginUserUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.called
@@ -9,7 +11,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.observers.DisposableMaybeObserver
-import junit.framework.Assert.assertEquals
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -34,45 +36,59 @@ class WelcomeViewModelTest {
     fun welcomeViewModel_login_nullUsername_noUseCaseCall_errorMessage() {
         // Arrange
         welcomeViewModel.password.postValue(password)
-        val errorMessageObserver = mockk<Observer<Int>>(relaxed = true)
-        welcomeViewModel.errorMessage.observeForever(errorMessageObserver)
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        welcomeViewModel.userLoggedInState.observeForever(successObserver)
 
         // Act
         welcomeViewModel.loginButtonClicked()
 
         // Assert
         verify { loginUserUseCase wasNot called }
-        verify { errorMessageObserver.onChanged(any()) }
+        Assert.assertEquals(
+            ResourceState.ERROR,
+            welcomeViewModel.userLoggedInState.value?.status
+        )
+        verify(atLeast = 2) { successObserver.onChanged(any()) }
+
     }
 
     @Test
     fun welcomeViewModel_login_nullPassword_noUseCaseCall_errorMessage() {
         // Arrange
         welcomeViewModel.userName.postValue(username)
-        val errorMessageObserver = mockk<Observer<Int>>(relaxed = true)
-        welcomeViewModel.errorMessage.observeForever(errorMessageObserver)
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        welcomeViewModel.userLoggedInState.observeForever(successObserver)
 
         // Act
         welcomeViewModel.loginButtonClicked()
 
         // Assert
         verify { loginUserUseCase wasNot called }
-        verify { errorMessageObserver.onChanged(any()) }
+        Assert.assertEquals(
+            ResourceState.ERROR,
+            welcomeViewModel.userLoggedInState.value?.status
+        )
+        verify(atLeast = 2) { successObserver.onChanged(any()) }
     }
 
     @Test
-    fun welcomeViewModel_login_Password_noUseCaseCall_errorMessage() {
+    fun welcomeViewModel_login_PasswordToShort_noUseCaseCall_errorMessage() {
         // Arrange
         welcomeViewModel.userName.postValue(username)
-        val errorMessageObserver = mockk<Observer<Int>>(relaxed = true)
-        welcomeViewModel.errorMessage.observeForever(errorMessageObserver)
+        welcomeViewModel.password.postValue("abc")
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        welcomeViewModel.userLoggedInState.observeForever(successObserver)
 
         // Act
         welcomeViewModel.loginButtonClicked()
 
         // Assert
         verify { loginUserUseCase wasNot called }
-        verify { errorMessageObserver.onChanged(any()) }
+        Assert.assertEquals(
+            ResourceState.ERROR,
+            welcomeViewModel.userLoggedInState.value?.status
+        )
+        verify(atLeast = 2) { successObserver.onChanged(any()) }
     }
 
     @Test
@@ -83,10 +99,8 @@ class WelcomeViewModelTest {
         val params = slot<LoginUserUseCase.Params>()
         val observer = slot<DisposableMaybeObserver<String?>>()
 
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        welcomeViewModel.errorMessage.observeForever(errorObserver)
-        welcomeViewModel.userLoggedInSuccessFully.observeForever(successObserver)
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        welcomeViewModel.userLoggedInState.observeForever(successObserver)
 
         // Act
         welcomeViewModel.loginButtonClicked()
@@ -94,33 +108,11 @@ class WelcomeViewModelTest {
         observer.captured.onSuccess(uuid)
 
         // Assert
-        verify { successObserver.onChanged(any()) }
-        verify { errorObserver wasNot called }
-    }
-
-    @Test
-    fun welcomeViewModel_login_callUseCaseAndSetsUUID() {
-        // Arrange
-        welcomeViewModel.userName.postValue(username)
-        welcomeViewModel.password.postValue(password)
-        val params = slot<LoginUserUseCase.Params>()
-        val observer = slot<DisposableMaybeObserver<String?>>()
-
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        welcomeViewModel.errorMessage.observeForever(errorObserver)
-        welcomeViewModel.userLoggedInSuccessFully.observeForever(successObserver)
-
-        // Act
-        welcomeViewModel.loginButtonClicked()
-        verify { loginUserUseCase.execute(capture(params), capture(observer)) }
-        observer.captured.onSuccess(uuid)
-
-        // Assert
-        verify { successObserver.onChanged(any()) }
-        verify { errorObserver wasNot called }
-
-        assertEquals(uuid, welcomeViewModel.UUID.value)
+        verify(atLeast = 2) { successObserver.onChanged(any()) }
+        Assert.assertEquals(
+            ResourceState.SUCCESS,
+            welcomeViewModel.userLoggedInState.value?.status
+        )
     }
 
     @Test
@@ -130,10 +122,8 @@ class WelcomeViewModelTest {
         welcomeViewModel.password.postValue(password)
         val observer = slot<DisposableMaybeObserver<String?>>()
 
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        welcomeViewModel.errorMessage.observeForever(errorObserver)
-        welcomeViewModel.userLoggedInSuccessFully.observeForever(successObserver)
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        welcomeViewModel.userLoggedInState.observeForever(successObserver)
 
         // Act
         welcomeViewModel.loginButtonClicked()
@@ -142,7 +132,10 @@ class WelcomeViewModelTest {
         observer.captured.onError(mockk(relaxed = true))
 
         // Assert
-        verify { errorObserver.onChanged(any()) }
-        verify { successObserver wasNot called }
+        Assert.assertEquals(
+            ResourceState.ERROR,
+            welcomeViewModel.userLoggedInState.value?.status
+        )
+        verify(atLeast = 2) { successObserver.onChanged(any()) }
     }
 }
