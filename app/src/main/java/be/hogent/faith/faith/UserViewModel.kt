@@ -11,7 +11,6 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
-import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.GetUserUseCase
 import be.hogent.faith.service.usecases.SaveEventUseCase
 import be.hogent.faith.util.TAG
@@ -32,9 +31,9 @@ class UserViewModel(
     private var password: String? = null
     private var avatar: String? = null
 
-    private val _eventSavedSuccessFully = SingleLiveEvent<Unit>()
-    val eventSavedSuccessFully: LiveData<Unit>
-        get() = _eventSavedSuccessFully
+    private val _eventSavedState = MutableLiveData<Resource<Unit>>()
+    val eventSavedState: LiveData<Resource<Unit>>
+        get() = _eventSavedState
 
     private val _getLoggedInUserState = MutableLiveData<Resource<Unit>>()
     val getLoggedInUserState: LiveData<Resource<Unit>>
@@ -82,22 +81,25 @@ class UserViewModel(
     private inner class GetUserUseCaseHandler : DisposableSubscriber<User>() {
 
         override fun onNext(t: User?) {
-            Log.i(TAG, "success $t")
+            Timber.i(TAG, "success $t")
             _user.postValue(t)
             _getLoggedInUserState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
         }
 
         override fun onComplete() {
-            Log.i(TAG, "completed")
+            Timber.i(TAG, "completed")
         }
 
         override fun onError(e: Throwable) {
-            Log.e(TAG, e.localizedMessage)
-            _getLoggedInUserState.postValue(Resource(ResourceState.ERROR, null,
-                when (e) {
-                    is NetworkError -> R.string.login_error_internet
-                    else -> R.string.register_error_create_user
-                })
+            Timber.e(TAG, e.localizedMessage)
+            _getLoggedInUserState.postValue(
+                Resource(
+                    ResourceState.ERROR, null,
+                    when (e) {
+                        is NetworkError -> R.string.login_error_internet
+                        else -> R.string.register_error_create_user
+                    }
+                )
             )
         }
     }
@@ -107,18 +109,25 @@ class UserViewModel(
             _titleErrorMessage.postValue(R.string.error_event_no_title)
             return
         }
+        _eventSavedState.postValue(Resource(ResourceState.LOADING, null, null))
         val params = SaveEventUseCase.Params(eventTitle, event, user.value!!)
         saveEventUseCase.execute(params, SaveEventUseCaseHandler())
     }
 
     private inner class SaveEventUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            _eventSavedSuccessFully.call()
+            _eventSavedState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
         }
 
         override fun onError(e: Throwable) {
             Timber.e(e)
-            _errorMessage.postValue(R.string.error_save_event_failed)
+            _eventSavedState.postValue(
+                Resource(
+                    ResourceState.ERROR,
+                    null,
+                    R.string.error_save_event_failed
+                )
+            )
         }
     }
 

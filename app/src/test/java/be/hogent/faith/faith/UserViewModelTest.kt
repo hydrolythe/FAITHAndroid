@@ -70,10 +70,8 @@ class UserViewModelTest {
         val params = slot<SaveEventUseCase.Params>()
         val observer = slot<DisposableCompletableObserver>()
 
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        userViewModel.errorMessage.observeForever(errorObserver)
-        userViewModel.eventSavedSuccessFully.observeForever(successObserver)
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        userViewModel.eventSavedState.observeForever(successObserver)
 
         // Act
         userViewModel.saveEvent(eventTitle, event)
@@ -82,8 +80,11 @@ class UserViewModelTest {
         observer.captured.onComplete()
 
         // Assert
-        verify { successObserver.onChanged(any()) }
-        verify { errorObserver wasNot called }
+        verify(atLeast = 2) { successObserver.onChanged(any()) }
+        assertEquals(
+            ResourceState.SUCCESS,
+            userViewModel.eventSavedState.value?.status
+        )
     }
 
     @Test
@@ -92,10 +93,8 @@ class UserViewModelTest {
         val params = slot<SaveEventUseCase.Params>()
         val observer = slot<DisposableCompletableObserver>()
 
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        userViewModel.errorMessage.observeForever(errorObserver)
-        userViewModel.eventSavedSuccessFully.observeForever(successObserver)
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        userViewModel.eventSavedState.observeForever(successObserver)
 
         // Act
         userViewModel.saveEvent(eventTitle, event)
@@ -104,8 +103,11 @@ class UserViewModelTest {
         observer.captured.onError(mockk(relaxed = true))
 
         // Assert
-        verify { errorObserver.onChanged(any()) }
-        verify { successObserver wasNot called }
+        verify(atLeast = 2) { successObserver.onChanged(any()) }
+        assertEquals(
+            ResourceState.ERROR,
+            userViewModel.eventSavedState.value?.status
+        )
     }
 
     @Test

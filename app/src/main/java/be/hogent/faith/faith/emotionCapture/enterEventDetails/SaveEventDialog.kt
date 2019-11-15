@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import kotlinx.android.synthetic.main.dialog_save_event.progress
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -48,6 +49,14 @@ class SaveEventDialog : DialogFragment() {
     override fun onStart() {
         super.onStart()
         startListeners()
+    }
+
+    fun showProgressBar() {
+        progress.visibility = View.VISIBLE
+    }
+
+    fun hideProgressBar() {
+        progress.visibility = View.GONE
     }
 
     private fun startListeners() {
