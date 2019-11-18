@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.drawing
 
 import android.graphics.Color
-import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.enterText
 
 import android.graphics.Color
-import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
@@ -97,7 +96,6 @@ class EnterTextViewModel(private val loadTextDetailUseCase: LoadTextDetailUseCas
     private inner class LoadTextUseCaseHandler : DisposableSingleObserver<String>() {
         override fun onSuccess(loadedString: String) {
             _initialText.value = loadedString
-
         }
 
         override fun onError(e: Throwable) {
