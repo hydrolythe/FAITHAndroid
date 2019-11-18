@@ -23,5 +23,5 @@ interface IStorage {
     fun overwriteEventDetail(bitmap: Bitmap, existingDetail: DrawingDetail): Completable
     fun saveEventEmotionAvatar(event: Event): Single<File>
     fun saveDetailFile(event: Event, detail: Detail): Single<File>
-    fun moveFilesFromRemoteStorageToCacheStorage(event: Event): Completable
+    fun moveFileFromRemoteStorageToLocalStorage(event: Event): Completable
 }

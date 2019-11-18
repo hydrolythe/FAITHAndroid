@@ -21,8 +21,8 @@ const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
  */
 const val TEXT_EXTENSION = "txt"
 
-class CacheStorageImpl(private val context: Context) :
-    ICacheStorage {
+class LocalStorageImpl(private val context: Context) :
+    ILocalStorage {
 
     override fun storeBitmap(bitmap: Bitmap, file: File): Completable {
         return Completable.fromCallable {

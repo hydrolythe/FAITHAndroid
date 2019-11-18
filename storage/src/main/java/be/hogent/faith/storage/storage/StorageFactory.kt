@@ -14,7 +14,7 @@ class StorageFactory(
         }
     }
 
-    fun getCacheStorage(): LocalStorage {
+    fun getLocalStorage(): LocalStorage {
         return localStorage
     }
 

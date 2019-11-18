@@ -1,17 +1,13 @@
 package be.hogent.faith.storage
 
-import android.content.Context
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.storage.storage.IStorage
 import be.hogent.faith.storage.storage.StorageFactory
 import io.reactivex.Completable
 import io.reactivex.Single
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
 import java.io.File
 
 const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
@@ -26,11 +22,8 @@ const val TEXT_EXTENSION = "txt"
 
 class StorageRepository(private val storageFactory: StorageFactory) {
 
-    val storage: IStorage
-        get() = storageFactory.getCacheStorage()
-
     fun storeBitmap(bitmap: Bitmap, file: File): Completable {
-        return storageFactory.getCacheStorage().storeBitmap(bitmap, file)
+        return storageFactory.getLocalStorage().storeBitmap(bitmap, file)
     }
 
     /**
@@ -41,43 +34,43 @@ class StorageRepository(private val storageFactory: StorageFactory) {
      * @return a Single<File> with the path derived from the event's dateTime
      */
     fun storeBitmap(bitmap: Bitmap, folder: File, fileName: String): Single<File> {
-        return storageFactory.getCacheStorage().storeBitmap(bitmap, folder, fileName)
+        return storageFactory.getLocalStorage().storeBitmap(bitmap, folder, fileName)
     }
 
     fun deleteFile(file: File): Boolean {
-        return storageFactory.getCacheStorage().deleteFile(file)
+        return storageFactory.getLocalStorage().deleteFile(file)
     }
 
     fun saveEventAudio(tempStorageFile: File, event: Event): Single<File> {
-        return storageFactory.getCacheStorage().saveEventAudio(tempStorageFile, event)
+        return storageFactory.getLocalStorage().saveEventAudio(tempStorageFile, event)
     }
 
     fun saveEventDrawing(bitmap: Bitmap, event: Event): Single<File> {
-        return storageFactory.getCacheStorage().saveEventDrawing(bitmap, event)
+        return storageFactory.getLocalStorage().saveEventDrawing(bitmap, event)
     }
 
     fun saveEventPhoto(tempStorageFile: File, event: Event): Single<File> {
-        return storageFactory.getCacheStorage().saveEventPhoto(tempStorageFile, event)
+        return storageFactory.getLocalStorage().saveEventPhoto(tempStorageFile, event)
     }
 
     fun saveEventEmotionAvatar(bitmap: Bitmap, event: Event): Single<File> {
-        return storageFactory.getCacheStorage().saveEventEmotionAvatar(bitmap, event)
+        return storageFactory.getLocalStorage().saveEventEmotionAvatar(bitmap, event)
     }
 
     fun saveText(text: String, event: Event): Single<File> {
-        return storageFactory.getCacheStorage().saveText(text, event)
+        return storageFactory.getLocalStorage().saveText(text, event)
     }
 
     fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String> {
-        return storageFactory.getCacheStorage().loadTextFromExistingDetail(textDetail)
+        return storageFactory.getLocalStorage().loadTextFromExistingDetail(textDetail)
     }
 
     fun overwriteTextDetail(text: String, existingDetail: TextDetail): Completable {
-        return storageFactory.getCacheStorage().overwriteTextDetail(text, existingDetail)
+        return storageFactory.getLocalStorage().overwriteTextDetail(text, existingDetail)
     }
 
     fun overwriteEventDetail(bitmap: Bitmap, existingDetail: DrawingDetail): Completable {
-        return storageFactory.getCacheStorage().overwriteEventDetail(bitmap, existingDetail)
+        return storageFactory.getLocalStorage().overwriteEventDetail(bitmap, existingDetail)
     }
 
     fun saveEventEmotionAvatar(event: Event): Single<File> {
@@ -89,6 +82,6 @@ class StorageRepository(private val storageFactory: StorageFactory) {
     }
 
     fun moveFilesFromRemoteStorageToLocalStorage(event: Event): Completable {
-        return storageFactory.getRemoteDataStore().moveFilesFromRemoteStorageToCacheStorage(event)
+        return storageFactory.getRemoteDataStore().moveFileFromRemoteStorageToLocalStorage(event)
     }
 }

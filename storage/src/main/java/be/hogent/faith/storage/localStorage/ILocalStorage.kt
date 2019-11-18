@@ -8,7 +8,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
 
-interface ICacheStorage {
+interface ILocalStorage {
     fun storeBitmap(bitmap: Bitmap, file: File): Completable
     fun storeBitmap(bitmap: Bitmap, folder: File, fileName: String): Single<File>
     fun deleteFile(file: File): Boolean
