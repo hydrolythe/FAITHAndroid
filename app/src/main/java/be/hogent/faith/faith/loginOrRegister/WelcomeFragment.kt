@@ -36,10 +36,7 @@ class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
         val binding: be.hogent.faith.databinding.FragmentLoginBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         binding.welcomeViewModel = welcomeViewModel
-
-
         loginManager.attachLoginSuccesListener(this)
-
         return binding.root
     }
 
@@ -47,7 +44,6 @@ class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
         super.onStart()
         registerListeners()
     }
-
 
     private fun registerListeners() {
         welcomeViewModel.registerButtonClicked.observe(this, Observer {
