@@ -58,7 +58,7 @@ open class SaveEventUseCase(
             .concatMapSingle { detail ->
                 filesToRemove.add(detail.file)
                 storageRepository.saveDetailFile(event, detail).map { file ->
-                    event.getDetail(detail.uuid)?.file = file
+                    event.getDetail(detail.uuid)!!.file = file
                     event
                 }
             }
