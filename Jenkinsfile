@@ -14,30 +14,21 @@ pipeline {
         '''
             }
         }
-       /** stage('Linting') {
-            steps {
-                sh './gradlew ktlint'
-            }
-        }
-        **/
+        /** stage('Linting') {steps {sh './gradlew ktlint'}}**/
         stage('Build') {
             steps {
                 sh './gradlew :app:assembleDebug'
                 sh './gradlew :app:assembleDebugAndroidTest'
             }
         }
-        /**stage('Unit Test') {
+        /**stage('Unit Test') {steps {sh './gradlew testDebugUnitTest testDebugUnitTest'}}*/
+        stage('Integration tests') {
             steps {
-                sh './gradlew testDebugUnitTest testDebugUnitTest'
+                sh 'gcloud firebase test android run --app app/build/outputs/apk/debug/app-debug.apk' +
+                        '--test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk'
             }
         }
-         */
-         stage('Integration tests') {
-             steps {}
-             sh 'gcloud firebase test android run --app app/build/outputs/apk/debug/app-debug.apk' +
-                     '--test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk'
-         }
-         }
+    }
 
     /**post {
         always {
