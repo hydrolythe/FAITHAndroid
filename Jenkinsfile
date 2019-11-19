@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            label 'android-test-slave2'
+            label 'android-test-slave'
         }
 
     }
@@ -25,6 +25,7 @@ pipeline {
         stage('Integration tests') {
             steps {
                 sh 'gcloud auth activate-service-account --key-file=/key/firekey.json'
+                sh 'gcloud config set project jenkins-server-250512'
                 sh 'gcloud firebase test android run --app app/build/outputs/apk/debug/app-debug.apk' +
                         '--test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk'
             }
