@@ -26,7 +26,7 @@ pipeline {
             steps {
                 sh 'gcloud auth activate-service-account --key-file=/key/firekey.json'
                 sh 'gcloud config set project jenkins-server-250512'
-                sh 'gcloud firebase test android run --app app/build/outputs/apk/debug/app-debug.apk' +
+                sh 'gcloud firebase test android run --app app/build/outputs/apk/debug/app-debug.apk ' +
                         '--test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk'
             }
         }
