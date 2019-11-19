@@ -32,11 +32,13 @@ pipeline {
             }
         }
          */
-         stage('Integration tests'){
-         sh 'gcloud firebase test android run --app app/build/outputs/apk/debug/app-debug.apk' +
-                 '--test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk'
+         stage('Integration tests') {
+             steps {}
+             sh 'gcloud firebase test android run --app app/build/outputs/apk/debug/app-debug.apk' +
+                     '--test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk'
          }
-    }
+         }
+
     /**post {
         always {
             echo 'Getting the test results'
