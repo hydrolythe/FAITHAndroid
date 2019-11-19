@@ -14,14 +14,19 @@ pipeline {
         '''
             }
         }
-        /** stage('Linting') {steps {sh './gradlew ktlint'}}**/
+        stage('Linting') {
+            steps {sh './gradlew ktlint'}
+        }
+
         stage('Build') {
             steps {
                 sh './gradlew :app:assembleDebug'
                 sh './gradlew :app:assembleDebugAndroidTest'
             }
         }
-        /**stage('Unit Test') {steps {sh './gradlew testDebugUnitTest testDebugUnitTest'}}*/
+        stage('Unit Test') {
+            steps {sh './gradlew testDebugUnitTest testDebugUnitTest'}
+        }
         stage('Integration tests') {
             steps {
                 sh 'gcloud auth activate-service-account --key-file=/key/firekey.json'
