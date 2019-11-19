@@ -24,6 +24,7 @@ pipeline {
         /**stage('Unit Test') {steps {sh './gradlew testDebugUnitTest testDebugUnitTest'}}*/
         stage('Integration tests') {
             steps {
+                sh 'gcloud auth login'
                 sh 'gcloud firebase test android run --app app/build/outputs/apk/debug/app-debug.apk' +
                         '--test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk'
             }
