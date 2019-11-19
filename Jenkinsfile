@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            label 'android-test-slave'
+            label 'android-test-slave2'
         }
 
     }
