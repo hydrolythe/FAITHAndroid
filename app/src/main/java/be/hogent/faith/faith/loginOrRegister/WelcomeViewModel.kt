@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.loginOrRegister
 
-import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -37,7 +36,6 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     val passwordErrorMessage: LiveData<Int>
         get() = _passwordErrorMessage
 
-
     private val _registerButtonClicked = SingleLiveEvent<Unit>()
     val registerButtonClicked: LiveData<Unit>
         get() = _registerButtonClicked
@@ -62,9 +60,15 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
 
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
-            userName.value=""
-         //   _userNameErrorMessage.value = R.string.registerOrLogin_username_empty
-            _userLoggedInState.postValue(Resource(ResourceState.ERROR, null,   R.string.registerOrLogin_username_empty))
+            userName.value = ""
+            //   _userNameErrorMessage.value = R.string.registerOrLogin_username_empty
+            _userLoggedInState.postValue(
+                Resource(
+                    ResourceState.ERROR,
+                    null,
+                    R.string.registerOrLogin_username_empty
+                )
+            )
             return false
         }
         _userNameErrorMessage.value = R.string.empty
@@ -75,8 +79,14 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
         val pwd = password.value
         if (pwd.isNullOrBlank() || pwd.length < 6) {
             this.password.value = ""
-            //_passwordErrorMessage.value = R.string.registerOrLogin_password_empty
-            _userLoggedInState.postValue(Resource(ResourceState.ERROR, null,  R.string.registerOrLogin_password_empty))
+            // _passwordErrorMessage.value = R.string.registerOrLogin_password_empty
+            _userLoggedInState.postValue(
+                Resource(
+                    ResourceState.ERROR,
+                    null,
+                    R.string.registerOrLogin_password_empty
+                )
+            )
             return false
         }
         _passwordErrorMessage.value = R.string.empty
@@ -104,13 +114,16 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
         }
 
         override fun onError(e: Throwable) {
-            Timber.e("${TAG}: e.localizedMessage")
-            _userLoggedInState.postValue(Resource(ResourceState.ERROR, null, when (e) {
-                    is NetworkError -> R.string.login_error_internet
-                    is SignInException -> R.string.login_error_wrong_username_or_password
-                    else -> R.string.login_error
-                }
-            ))
+            Timber.e("$TAG: e.localizedMessage")
+            _userLoggedInState.postValue(
+                Resource(
+                    ResourceState.ERROR, null, when (e) {
+                        is NetworkError -> R.string.login_error_internet
+                        is SignInException -> R.string.login_error_wrong_username_or_password
+                        else -> R.string.login_error
+                    }
+                )
+            )
         }
     }
 

@@ -1,6 +1,7 @@
 package be.hogent.faith.domain.models.detail
 
 import java.io.File
+import java.io.Serializable
 import java.util.UUID
 
 /**
@@ -13,7 +14,7 @@ sealed class Detail(
      */
     var file: File,
     val uuid: UUID = UUID.randomUUID()
-)
+) : Serializable
 
 class DrawingDetail(
     file: File,

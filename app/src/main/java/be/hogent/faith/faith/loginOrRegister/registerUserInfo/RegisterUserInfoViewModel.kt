@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.loginOrRegister.registerUserInfo
 
-import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,7 +45,6 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
     private val _passwordRepeatErrorMessage = MutableLiveData<Int>()
     val passwordRepeatErrorMessage: LiveData<Int>
         get() = _passwordRepeatErrorMessage
-
 
     fun onConfirmUserInfoClicked() {
         confirmUserInfo()
@@ -115,7 +113,7 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
         }
 
         override fun onError(e: Throwable) {
-            Timber.e("${TAG}: e.localizedMessage")
+            Timber.e("$TAG: e.localizedMessage")
             _userConfirmedState.postValue(
                 Resource(
                     ResourceState.ERROR, Unit,

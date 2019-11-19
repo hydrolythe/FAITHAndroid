@@ -1,6 +1,5 @@
 package be.hogent.faith.faith
 
-import android.util.Log
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +11,7 @@ import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
 import be.hogent.faith.service.usecases.GetUserUseCase
-import be.hogent.faith.service.usecases.SaveEventUseCase
+import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.subscribers.DisposableSubscriber
@@ -55,27 +54,9 @@ class UserViewModel(
         _user.postValue(user)
     }
 
-    /*
-    private val _userRegisteredSuccessFully = SingleLiveEvent<Unit>()
-    val UserRegisteredSuccessFully: LiveData<Unit>
-        get() = _userRegisteredSuccessFully
-*/
-    private fun userNameIsValid(): Boolean {
-        if (userName.isNullOrBlank()) {
-            return false
-        }
-        return true
-    }
-
-    private fun passwordIsValid(): Boolean {
-        if (password.isNullOrBlank())
-            return false
-        return true
-    }
-
     fun getLoggedInUser() {
         _getLoggedInUserState.postValue(Resource(ResourceState.LOADING, null, null))
-        getUserUseCase.execute(null, GetUserUseCaseHandler())
+        getUserUseCase.execute(GetUserUseCase.Params(), GetUserUseCaseHandler())
     }
 
     private inner class GetUserUseCaseHandler : DisposableSubscriber<User>() {

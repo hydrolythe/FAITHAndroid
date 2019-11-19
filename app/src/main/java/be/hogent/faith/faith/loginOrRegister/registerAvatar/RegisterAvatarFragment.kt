@@ -74,7 +74,7 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
     private fun handleDataState(resource: Resource<Unit>) {
         when (resource.status) {
             ResourceState.SUCCESS -> {
-                navigation!!.userIsRegistered() //progress bar must stay visible
+                navigation!!.userIsRegistered() // progress bar must stay visible
             }
             ResourceState.LOADING -> {
                 progress.visibility = View.VISIBLE

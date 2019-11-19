@@ -3,16 +3,17 @@ package be.hogent.faith.faith.di
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
+import be.hogent.faith.faith.details.audio.AudioDetailViewModel
+import be.hogent.faith.faith.details.drawing.create.DrawViewModel
+import be.hogent.faith.faith.details.drawing.create.DrawingDetailViewModel
+import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
+import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProviderFromResources
+import be.hogent.faith.faith.details.photo.create.TakePhotoViewModel
+import be.hogent.faith.faith.details.text.create.TextDetailViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
-import be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel
-import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.PremadeImagesProvider
-import be.hogent.faith.faith.emotionCapture.drawing.makeDrawing.PremadeImagesProviderFromResources
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel
-import be.hogent.faith.faith.emotionCapture.recordAudio.AudioViewModel
-import be.hogent.faith.faith.emotionCapture.takePhoto.TakePhotoViewModel
 import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
@@ -51,15 +52,20 @@ val appModule = module(override = true) {
     viewModel { (event: Event) -> EventViewModel(get(), get(), get(), get(), get(), event) }
     viewModel { EventViewModel(get(), get(), get(), get(), get()) }
     viewModel { DrawViewModel() }
+    viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }
-    viewModel { EnterTextViewModel(get()) }
+    viewModel { TextDetailViewModel(get(), get(), get()) }
     viewModel { OverviewEventsViewModel() }
+    viewModel { RegisterAvatarViewModel(get()) }
     viewModel { WelcomeViewModel(get()) }
-    viewModel { AudioViewModel() }
+    viewModel { AudioDetailViewModel(get(), get()) }
+    viewModel { WelcomeViewModel(get()) }
     viewModel { RegisterUserViewModel(get()) }
     viewModel { RegisterUserInfoViewModel(get()) }
+    viewModel { TakePhotoViewModel(get()) }
+    viewModel { RegisterUserInfoViewModel(get()) }
     viewModel { RegisterAvatarViewModel(get()) }
-    viewModel { TakePhotoViewModel() }
+    viewModel { TakePhotoViewModel(get()) }
     viewModel { SelectedItemViewModel() }
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.

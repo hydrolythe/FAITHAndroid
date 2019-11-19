@@ -87,7 +87,6 @@ class RegisterUserViewModelTest {
         Assert.assertEquals(avatar.avatarName, params.captured.avatar)
     }
 
-
     @Test
     fun registerUserViewModel_register_callUseCaseAndNotifiesSuccess() {
         // Arrange

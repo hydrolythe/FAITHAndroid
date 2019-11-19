@@ -49,7 +49,6 @@ class WelcomeViewModelTest {
             welcomeViewModel.userLoggedInState.value?.status
         )
         verify(atLeast = 2) { successObserver.onChanged(any()) }
-
     }
 
     @Test

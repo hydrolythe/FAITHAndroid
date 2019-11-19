@@ -83,7 +83,7 @@ class FirebaseEventRepository(
                 firestore.collection(FirebaseUserRepository.USERS_KEY).document(currentUser.uid)
                     .collection(EVENTS_KEY)
                     .document(item.uuid)
-            return RxFirestore.setDocument(document, item) //) // stores the event in firestore
+            return RxFirestore.setDocument(document, item) // ) // stores the event in firestore
                 .andThen(RxFirestore.getDocument(document) // gets the just stored event from firestore
                     .map { it.toObject(EventEntity::class.java) })
                 .onErrorResumeNext { error: Throwable ->

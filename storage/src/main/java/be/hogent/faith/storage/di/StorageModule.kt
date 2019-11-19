@@ -1,10 +1,10 @@
 package be.hogent.faith.storage.di
 
 import be.hogent.faith.storage.StorageRepository
-import be.hogent.faith.storage.localStorage.LocalStorageImpl
-import be.hogent.faith.storage.localStorage.ILocalStorage
-import be.hogent.faith.storage.firebase.FirebaseStorageImpl
-import be.hogent.faith.storage.firebase.IFirebaseStorage
+import be.hogent.faith.storage.localStorage.LocalStorageRepository
+import be.hogent.faith.storage.localStorage.TemporaryStorageInterface
+import be.hogent.faith.storage.firebase.FireBaseStorage
+import be.hogent.faith.storage.firebase.IRemoteStorage
 import be.hogent.faith.storage.storage.LocalStorage
 import be.hogent.faith.storage.storage.RemoteStorage
 import be.hogent.faith.storage.storage.StorageFactory
@@ -18,9 +18,9 @@ val storageModule = module {
     factory { StorageFactory(get(), get()) }
     factory { RemoteStorage(get()) }
     factory { LocalStorage(get()) }
-    factory<ILocalStorage> { LocalStorageImpl(androidContext()) }
-    single<IFirebaseStorage> {
-        FirebaseStorageImpl(
+    factory<TemporaryStorageInterface> { LocalStorageRepository(androidContext()) }
+    single<IRemoteStorage> {
+        FireBaseStorage(
             constructFirebaseAuthInstance(),
             constructFirebaseStorageInstance()
         )
@@ -34,4 +34,3 @@ fun constructFirebaseStorageInstance(): FirebaseStorage {
 fun constructFirebaseAuthInstance(): FirebaseAuth {
     return FirebaseAuth.getInstance()
 }
-

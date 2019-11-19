@@ -1,6 +1,7 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every

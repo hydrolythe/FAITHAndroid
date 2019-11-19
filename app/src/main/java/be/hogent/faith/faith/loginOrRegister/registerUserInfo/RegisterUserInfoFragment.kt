@@ -48,13 +48,13 @@ class RegisterUserInfoFragment : Fragment() {
             it?.let {
                 when (it.status) {
                     ResourceState.SUCCESS -> {
-                            registerUserViewModel.setRegistrationDetails(
-                                registerUserInfoViewModel.userName.value!!,
-                                registerUserInfoViewModel.password.value!!
-                            )
-                            progress.visibility = View.GONE
-                            navigation!!.goToRegisterAvatarScreen()
-                     }
+                        registerUserViewModel.setRegistrationDetails(
+                            registerUserInfoViewModel.userName.value!!,
+                            registerUserInfoViewModel.password.value!!
+                        )
+                        progress.visibility = View.GONE
+                        navigation!!.goToRegisterAvatarScreen()
+                    }
                     ResourceState.LOADING -> {
                         progress.visibility = View.VISIBLE
                     }
@@ -64,7 +64,7 @@ class RegisterUserInfoFragment : Fragment() {
                     }
                 }
             }
-    })
+        })
     }
 
     override fun onAttach(context: Context) {

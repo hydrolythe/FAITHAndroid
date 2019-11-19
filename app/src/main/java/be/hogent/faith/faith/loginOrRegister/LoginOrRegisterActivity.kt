@@ -50,7 +50,7 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     }
 
     private fun registerListeners() {
-        //once registered or logged in, get the user object...
+        // once registered or logged in, get the user object...
         userViewModel.getLoggedInUserState.observe(this, Observer {
             it?.let {
                 handleDataStateGetLoggedInUser(it)
@@ -58,14 +58,12 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         })
     }
 
-
     private fun handleDataStateGetLoggedInUser(resource: Resource<Unit>) {
         when (resource.status) {
             ResourceState.SUCCESS -> {
                 goToCityScreen()
             }
             ResourceState.LOADING -> {
-
             }
             ResourceState.ERROR -> {
                 Toast.makeText(this, resource.message!!, Toast.LENGTH_LONG).show()
@@ -80,7 +78,6 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         try {
             val scope = getKoin().createScope(KoinModules.USER_SCOPE_ID, named(USER_SCOPE_NAME))
             userViewModel = scope.get()
-
         } catch (e: ScopeAlreadyCreatedException) {
             getKoin().getScope(KoinModules.USER_SCOPE_ID)
             Timber.i("User scope already existed, not recreating")

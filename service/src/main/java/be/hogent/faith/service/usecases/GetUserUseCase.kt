@@ -9,22 +9,23 @@ import be.hogent.faith.service.usecases.base.FlowableUseCase
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.Flowables.combineLatest
-import java.lang.RuntimeException
 
 class GetUserUseCase(
     private val userRepository: UserRepository,
     private val eventRepository: EventRepository,
     private val authManager: AuthManager,
     observeScheduler: Scheduler
-) : FlowableUseCase<User, Void?>(observeScheduler) {
+) : FlowableUseCase<User, GetUserUseCase.Params>(observeScheduler) {
 
-    override fun buildUseCaseObservable(params: Void?): Flowable<User> {
+    override fun buildUseCaseObservable(params: Params): Flowable<User> {
         val currentUser = authManager.getLoggedInUserUUID()
         if (currentUser == null)
             return Flowable.error(RuntimeException("You are not allowed to access the user, please log in"))
         return combineLatest(userRepository.get(currentUser), eventRepository.getAll())
             .map { pair: Pair<User, List<Event>> -> addEventsToUser(pair.first, pair.second) }
     }
+
+    class Params
 }
 
 private fun addEventsToUser(user: User, events: List<Event>): User {

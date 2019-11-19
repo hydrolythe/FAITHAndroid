@@ -1,8 +1,10 @@
 package be.hogent.faith.faith.state
 
-class Resource<out T> constructor(val status: ResourceState,
-                                  val data: T?,
-                                  val message: Int?) {
+class Resource<out T> constructor(
+    val status: ResourceState,
+    val data: T?,
+    val message: Int?
+) {
 
     fun <T> success(data: T): Resource<T> {
         return Resource(ResourceState.SUCCESS, data, null)
@@ -15,5 +17,4 @@ class Resource<out T> constructor(val status: ResourceState,
     fun <T> loading(): Resource<T> {
         return Resource(ResourceState.LOADING, null, null)
     }
-
 }

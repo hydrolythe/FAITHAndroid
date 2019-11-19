@@ -3,6 +3,7 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.storage.StorageRepository
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
@@ -40,14 +41,17 @@ class SaveEventUseCaseTest {
         )
         eventRepository = mockk(relaxed = true)
         storageRepository = mockk(relaxed = true)
-        saveEventUseCase = SaveEventUseCase(eventRepository, storageRepository, mockk(relaxed = true))
+        saveEventUseCase =
+            SaveEventUseCase(eventRepository, storageRepository, mockk(relaxed = true))
     }
 
     @Test
     fun execute_normal_eventCorrectlyPassedToRepo() {
         val eventArg = slot<Event>()
         val userArg = slot<User>()
-        every { eventRepository.insert(capture(eventArg), capture(userArg)) } returns Maybe.just(event)
+        every { eventRepository.insert(capture(eventArg), capture(userArg)) } returns Maybe.just(
+            event
+        )
         every { storageRepository.deleteFile(any()) } returns true
 
         val params = SaveEventUseCase.Params(eventTitle, event, user)
