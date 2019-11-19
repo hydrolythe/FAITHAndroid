@@ -24,7 +24,7 @@ pipeline {
         /**stage('Unit Test') {steps {sh './gradlew testDebugUnitTest testDebugUnitTest'}}*/
         stage('Integration tests') {
             steps {
-                sh 'gcloud auth login'
+                sh 'gcloud auth activate-service-account --key-file=/keys/fireKey.json'
                 sh 'gcloud firebase test android run --app app/build/outputs/apk/debug/app-debug.apk' +
                         '--test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk'
             }
