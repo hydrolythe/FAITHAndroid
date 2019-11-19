@@ -163,7 +163,7 @@ class TemporaryStorageRepository(
         return storeBitmap(bitmap, drawingDetail.file)
     }
 
-    fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String> {
+    override fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String> {
         return Single.fromCallable {
             val readString = textDetail.file.readText()
             readString

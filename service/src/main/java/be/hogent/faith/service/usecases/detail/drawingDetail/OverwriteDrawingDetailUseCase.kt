@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.storage.localStorage.TemporaryStorageInterface
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
@@ -12,7 +13,7 @@ import io.reactivex.Scheduler
  * with a new bitmap. This means the location of the file in the [DrawingDetail] is not changed.
  */
 class OverwriteDrawingDetailUseCase(
-    private val storageRepository: StorageRepository,
+    private val storageRepository: TemporaryStorageInterface,
     observeScheduler: Scheduler
 ) : CompletableUseCase<OverwriteDrawingDetailUseCase.Params>(
     observeScheduler

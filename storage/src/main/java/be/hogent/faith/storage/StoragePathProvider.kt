@@ -1,12 +1,13 @@
 package be.hogent.faith.storage
 
+import android.content.Context
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import java.io.File
 
-class StoragePathProvider(
+class StoragePathProvider(private val context: Context,
     private val fbAuth: FirebaseAuth
 ) {
 
@@ -23,5 +24,13 @@ class StoragePathProvider(
 
     fun getEmotionAvatarPath(event: Event): File {
         return File("${getEventFolder(event).path}/avatar")
+    }
+
+    fun getLocalEmotionAvatarPath(event:Event) : File{
+        return  File(context.filesDir, getEmotionAvatarPath(event).path)
+    }
+
+    fun getLocalDetailPath(detail:Detail) : File{
+        return  File(context.filesDir, detail.file.path)
     }
 }

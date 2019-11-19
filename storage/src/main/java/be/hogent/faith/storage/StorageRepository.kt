@@ -1,7 +1,12 @@
 package be.hogent.faith.storage
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.storage.firebase.FireBaseStorage
+import be.hogent.faith.storage.localStorage.LocalStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
@@ -12,18 +17,21 @@ import java.io.File
  *
  */
 class StorageRepository(
-    private val localStorage: IStorage,
-    private val remoteStorage: IStorage
+    private val localStorage: LocalStorageRepository,
+    private val remoteStorage: FireBaseStorage
 ) : IStorage {
+
+
     override fun saveEvent(event: Event): Completable {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+       return localStorage.saveEvent(event).andThen(remoteStorage.saveEvent(event))
     }
 
     override fun getFile(detail: Detail): Single<File> {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        return localStorage.getFile(detail)
+            .onErrorResumeNext{remoteStorage.getFile(detail) }
     }
 
     override fun getEmotionAvatar(event: Event): Single<File> {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        return localStorage.getEmotionAvatar(event).onErrorResumeNext{remoteStorage.getEmotionAvatar(event) }
     }
 }

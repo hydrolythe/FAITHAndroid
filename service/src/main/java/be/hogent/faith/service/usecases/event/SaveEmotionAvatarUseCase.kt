@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.storage.localStorage.TemporaryStorageInterface
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
@@ -12,16 +13,15 @@ import io.reactivex.Scheduler
  * Will overwrite a previously stored avatarName.
  */
 class SaveEmotionAvatarUseCase(
-    private val storageRepository: StorageRepository,
+    private val storageRepository: TemporaryStorageInterface,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEmotionAvatarUseCase.Params>(
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {
         return Completable.fromSingle(
-            storageRepository.saveEventEmotionAvatar(
-                params.bitmap,
-                params.event
+            storageRepository.storeBitmapTemporarily(
+                params.bitmap
             ).doOnSuccess {
                 params.event.emotionAvatar = it
             }

@@ -1,9 +1,6 @@
 package be.hogent.faith.storage.firebase
 
-import android.content.ContentValues.TAG
 import android.net.Uri
-import android.util.Log
-import android.webkit.MimeTypeMap
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.IStorage
@@ -13,90 +10,55 @@ import durdinapps.rxfirebase2.RxFirebaseStorage
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
+import io.reactivex.rxkotlin.toFlowable
 
 class FireBaseStorage(
     private val pathProvider: StoragePathProvider,
     private val firestorage: FirebaseStorage
 ) : IStorage {
 
+    var storageRef = firestorage.reference
+
     override fun saveEvent(event: Event): Completable {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        return saveEventEmotionAvatar(event) // save avatar in firestorage
+            .andThen(
+               event.details.toFlowable()// save all detail files in firestorage
+                    .concatMapCompletable{
+                        saveDetailFile(event, it)
+                    }
+                )
     }
 
     override fun getFile(detail: Detail): Single<File> {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        val fileToDownloadReference = storageRef.child(detail.file.path)
+        val localFile : File = pathProvider.getLocalDetailPath(detail)
+        return RxFirebaseStorage.getFile(fileToDownloadReference, localFile)
+            .map { localFile}
     }
 
     override fun getEmotionAvatar(event: Event): Single<File> {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
-
-    private fun getStorageEventReference(event: Event) =
-        firestorage.reference.child(USERS_KEY).child(fbAuth.currentUser!!.uid)
-            .child(EVENTS_KEY).child(event.uuid.toString())
-
-    override fun saveEventEmotionAvatar(event: Event): Single<File> {
-        Log.d(TAG, "saving event : saves emotionavatar ${event.emotionAvatar?.path}")
-        if (currentUser == null)
-            return Single.error(RuntimeException("not authorized"))
-        if (event.emotionAvatar == null)
+        if (event.emotionAvatar==null)
             return Single.just(null)
-        return RxFirebaseStorage.putFile(
-            getStorageEventReference(event).child(
-                "avatar.png"
-            ),
-            Uri.parse("file://" + event.emotionAvatar)
-        )
-            .map { File(it.storage.path) }
+        val fileToDownloadReference = storageRef.child(pathProvider.getEmotionAvatarPath(event).path)
+        val localFile : File = pathProvider.getLocalEmotionAvatarPath(event)
+        return RxFirebaseStorage.getFile(fileToDownloadReference, localFile)
+            .map { localFile}
     }
 
-    override fun saveDetailFile(event: Event, detail: Detail): Single<File> {
-        if (currentUser == null)
-            return Single.error(RuntimeException("not authorized"))
-        val fileExt = MimeTypeMap.getFileExtensionFromUrl(detail.file.path)
-        return RxFirebaseStorage.putFile(
-            getStorageEventReference(event).child(
-                "${detail.uuid}.$fileExt"
-            ),
-            Uri.parse("file://" + detail.file)
-        )
-            .map { File(it.storage.path) }
+
+    fun saveEventEmotionAvatar(event: Event): Completable {
+        if (event.emotionAvatar == null)
+            return Completable.complete()
+        return Completable.fromSingle(RxFirebaseStorage.putFile(
+          storageRef.child(pathProvider.getEmotionAvatarPath(event).path),
+            Uri.parse("file://${pathProvider.getLocalEmotionAvatarPath(event).path}")
+        ))
     }
 
-    override fun moveFilesFromRemoteStorageToLocalStorage(event: Event): Completable {
-        if (currentUser == null)
-            return Completable.error(RuntimeException("not authorized"))
-        // download all files for the event if not yet in local storage
-        getStorageEventReference(event).listAll().addOnSuccessListener { listResult ->
-            listResult.items.forEach { item ->
-
-                // eerst controleren of local file bestaat. Indien niet dan downloaden van firestorage
-                // All the items-storagereference under listRef.
-                val localFile =
-                    File.createTempFile(
-                        "images",
-                        "jpg"
-                    ) // the local file where it will be saved
-                // download the file to local storage
-                item.getFile(localFile)
-                    .addOnSuccessListener {
-                        // Local temp file has been created
-                    }
-                    .addOnFailureListener {
-                        Completable.error(RuntimeException(it.localizedMessage))
-                    }
-            }
-        }
-
-            .addOnFailureListener {
-                Completable.error(RuntimeException(it.localizedMessage))
-            }
-        return Completable.complete()
-        TODO("save to local storage")
+    fun saveDetailFile(event:Event, detail: Detail): Completable {
+        return Completable.fromSingle(RxFirebaseStorage.putFile(
+            storageRef.child(pathProvider.getDetailPath(event, detail).path),
+            Uri.parse("file://${pathProvider.getLocalDetailPath(detail).path}")))
     }
 
-    companion object {
-        const val USERS_KEY = "users"
-        const val EVENTS_KEY = "events"
-    }
 }

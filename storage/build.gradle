@@ -42,6 +42,7 @@ dependencies {
 
     implementation commonDependencies.kotlin
     implementation commonDependencies.rxjava
+    implementation commonDependencies.rxkotlin
     implementation commonDependencies.threeTenABP
 
     implementation injectionDependencies.koin

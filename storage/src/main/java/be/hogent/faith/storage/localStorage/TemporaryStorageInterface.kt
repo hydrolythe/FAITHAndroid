@@ -26,4 +26,8 @@ interface TemporaryStorageInterface {
     fun storeDrawingDetailWithEvent(drawingDetail: DrawingDetail, event: Event): Completable
     fun storePhotoDetailWithEvent(photoDetail: PhotoDetail, event: Event): Completable
     fun storeAudioDetailWithEvent(audioDetail: AudioDetail, event: Event): Completable
+
+    //toegevoegd??
+    fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String>
+
 }

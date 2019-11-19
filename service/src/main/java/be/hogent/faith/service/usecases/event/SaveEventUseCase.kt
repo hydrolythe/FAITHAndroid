@@ -17,63 +17,68 @@ open class SaveEventUseCase(
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEventUseCase.Params>(observeScheduler) {
 
-    private val filesToRemove = mutableListOf<File>()
+    //private val filesToRemove = mutableListOf<File>()
     private var params: Params? = null
+
 
     override fun buildUseCaseObservable(params: Params): Completable {
         this.params = params
-        return Completable.fromSingle(
-            addEventToUser(params.event)
-                .flatMap { saveEmotionAvatar(it) }
-                .flatMap { saveDetailFiles(it) }
-                .flatMap { saveEvent(it) }
-                .flatMap { deleteLocalFiles((it)) })
-            .onErrorComplete { error ->
-                TODO("urls local storage in entity terugzetten??? maar dan mogen de files nog niet verwijderd zijn?")
-            }
+        return addEventToUser(params.event)
+            .andThen(
+                Completable.fromMaybe(eventRepository.insert(params.event, params!!.user))
+                    .andThen(storageRepository.saveEvent(params.event))
+            )
     }
 
-    fun addEventToUser(event: Event): Single<Event> = Single.fromCallable {
+    fun addEventToUser(event: Event): Completable = Completable.fromCallable {
         event.title = params!!.eventTitle
         // First add in domain so we can do business logic
         // If this fails the event won't get added to the Repo.
         params!!.user.addEvent(event)
-        event
     }
 
-    fun saveEmotionAvatar(event: Event): Single<Event> =
-        storageRepository.saveEventEmotionAvatar(event)
-            .doOnSuccess {
-                event.emotionAvatar?.let { filesToRemove.add(it) }
-            }
-            .map {
-                event.emotionAvatar = it
-                event
-            }
+    /*
+     fun addEventToUser(event: Event): Single<Event> = Single.fromCallable {
+         event.title = params!!.eventTitle
+         // First add in domain so we can do business logic
+         // If this fails the event won't get added to the Repo.
+         params!!.user.addEvent(event)
+         event
+     }
 
-    fun saveDetailFiles(event: Event): Single<Event> =
-        event.details.toFlowable()
-            .concatMapSingle { detail ->
-                filesToRemove.add(detail.file)
-                storageRepository.saveDetailFile(event, detail).map { file ->
-                    event.getDetail(detail.uuid)!!.file = file
-                    event
-                }
-            }
-            .last(event)
+     fun saveEmotionAvatar(event: Event): Single<Event> =
+         storageRepository.saveEventEmotionAvatar(event)
+             .doOnSuccess {
+                 event.emotionAvatar?.let { filesToRemove.add(it) }
+             }
+             .map {
+                 event.emotionAvatar = it
+                 event
+             }
 
-    fun saveEvent(event: Event): Single<Event> = eventRepository.insert(event, params!!.user)
-        .doOnSuccess {
-            params!!.event = it
-        }.toSingle()
+     fun saveDetailFiles(event: Event): Single<Event> =
+         event.details.toFlowable()
+             .concatMapSingle { detail ->
+                 filesToRemove.add(detail.file)
+                 storageRepository.saveDetailFile(event, detail).map { file ->
+                     event.getDetail(detail.uuid)!!.file = file
+                     event
+                 }
+             }
+             .last(event)
 
-    fun deleteLocalFiles(event: Event): Single<Event> =
-        Single.fromCallable {
-            filesToRemove.forEach {
-                storageRepository.deleteFile(it)
-            }
-        }.map { event }
+     fun saveEvent(event: Event): Single<Event> = eventRepository.insert(event, params!!.user)
+         .doOnSuccess {
+             params!!.event = it
+         }.toSingle()
 
+     fun deleteLocalFiles(event: Event): Single<Event> =
+         Single.fromCallable {
+             filesToRemove.forEach {
+                 storageRepository.deleteFile(it)
+             }
+         }.map { event }
+ */
     data class Params(
         val eventTitle: String,
         var event: Event,
