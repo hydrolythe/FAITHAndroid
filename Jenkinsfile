@@ -29,7 +29,6 @@ pipeline {
             }
         }
     }
-
     /**post {
         always {
             echo 'Getting the test results'
