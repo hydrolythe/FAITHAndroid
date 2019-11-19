@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            label 'ubuntu-1604-android-slave'
+            label 'android-test-slave'
         }
 
     }
@@ -14,26 +14,33 @@ pipeline {
         '''
             }
         }
-        stage('Linting') {
+       /** stage('Linting') {
             steps {
                 sh './gradlew ktlint'
             }
         }
+        **/
         stage('Build') {
             steps {
-                sh './gradlew --refresh-dependencies clean assemble'
+                sh './gradlew :app:assembleDebug'
+                sh './gradlew :app:assembleDebugAndroidTest'
             }
         }
-        stage('Unit Test') {
+        /**stage('Unit Test') {
             steps {
                 sh './gradlew testDebugUnitTest testDebugUnitTest'
             }
         }
+         */
+         stage('Integration tests'){
+         sh 'gcloud firebase test android run --app app/build/outputs/apk/debug/app-debug.apk' +
+                 '--test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk'
+         }
     }
-    post {
+    /**post {
         always {
             echo 'Getting the test results'
-            junit '**/TEST-*.xml'
+            junit '/TEST-*.xml'
         }
-    }
+    }*/
 }
