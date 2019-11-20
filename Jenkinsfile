@@ -46,7 +46,7 @@ pipeline {
                             '--type instrumentation ' +
                             '--app app/build/outputs/apk/debug/app-debug.apk ' +
                             '--test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk ' +
-                            '--device model=Nexus9,version=19,locale=en,orientation=landscape'
+                            '--device model=Nexus9,version=21,locale=nl_BE,orientation=landscape'
                 }
             }
         }
