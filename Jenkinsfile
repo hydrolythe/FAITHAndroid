@@ -38,6 +38,9 @@ pipeline {
             }
         }
         stage('Integration tests') {
+            when{
+                branch 'dev'
+            }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     sh 'gcloud auth activate-service-account --key-file=/key/firekey.json'
