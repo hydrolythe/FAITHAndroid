@@ -11,7 +11,8 @@ interface IStorageRepository {
 
     /**
      *  Gets the file in which a detail is saved.
-     *  If not locally available, it will first download it and save locally.
+     *
+     *  @throws NoSuchElementException when no file for this detail could be retrieved
      */
     fun getFile(detail: Detail): Single<File>
 
@@ -20,6 +21,4 @@ interface IStorageRepository {
      *  If not locally available, it will first download it and save locally.
      */
     fun getEmotionAvatar(event: Event): Single<File>
-
-    fun deleteFile(file: File) : Completable
 }

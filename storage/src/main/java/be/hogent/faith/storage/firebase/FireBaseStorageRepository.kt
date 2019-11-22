@@ -29,6 +29,10 @@ class FireBaseStorageRepository(
             )
     }
 
+    /**
+     * Gets a detail's file from [firestorage] and stores it into the path provided for it by the
+     * [pathProvider].
+     */
     override fun getFile(detail: Detail): Single<File> {
         val fileToDownloadReference = storageRef.child(detail.file.path)
         val localFile: File = pathProvider.getLocalDetailPath(detail)
@@ -44,10 +48,6 @@ class FireBaseStorageRepository(
         val localFile: File = pathProvider.getLocalEmotionAvatarPath(event)
         return RxFirebaseStorage.getFile(fileToDownloadReference, localFile)
             .map { localFile }
-    }
-
-    override fun deleteFile(file: File): Completable {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     fun saveEventEmotionAvatar(event: Event): Completable {

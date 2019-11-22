@@ -22,20 +22,16 @@ class StorageRepository(
         return localStorage.saveEvent(event).andThen(remoteStorage.saveEvent(event))
     }
 
-    // Used by eg Glide to get a file reference for a detail
+    // TODO: nakijken: niet alles zit direct in een file. Bij het laden van een textDetail werd
+    //  er tot nu toe bvb de string teruggegeven die in de file zat. Voor audio en beeld is een file wel nog ok.
+    //  Maken we hier dan een uitbreiding voor?
     override fun getFile(detail: Detail): Single<File> {
-        // Eerst kijken of het er lokaal is, indien niet downloaden en de remotestorage slaat die lokaal op
         return localStorage.getFile(detail)
             .onErrorResumeNext { remoteStorage.getFile(detail) }
     }
 
     override fun getEmotionAvatar(event: Event): Single<File> {
-        // Zelfde als bij getFile
         return localStorage.getEmotionAvatar(event)
             .onErrorResumeNext { remoteStorage.getEmotionAvatar(event) }
     }
-
-//    override fun deleteFile(file: File): Completable {
-//        return localStorage.deleteFile(file).andThen(remoteStorage.deleteFile(file))
-//    }
 }

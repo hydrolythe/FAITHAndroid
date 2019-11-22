@@ -17,11 +17,17 @@ class TemporaryStorageRepository(
     private val storagePathProvider: StoragePathProvider
 ) : ITemporaryStorage {
 
+    /**
+     * Stores a detail in its event's folder, and sets the **relative** path in the detail
+     * (the path without context.cachedir)
+     */
     override fun storeDetailWithEvent(detail: Detail, event: Event): Completable {
+        val relativePath =
+            File(storagePathProvider.getEventFolder(event).path, detail.uuid.toString())
         val saveFile = File(getEventDirectory(event), detail.uuid.toString())
         return moveFile(detail.file, saveFile)
             .doOnComplete {
-                detail.file = saveFile
+                detail.file = relativePath
             }
     }
 

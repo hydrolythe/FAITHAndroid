@@ -13,7 +13,6 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
-import io.reactivex.Completable
 import io.reactivex.Maybe
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -91,25 +90,24 @@ class SaveEventUseCaseTest {
         assertTrue(user.events.isNotEmpty())
     }
 
-    @Test
-    fun execute_normal_deletesLocalFiles() {
-        every { eventRepository.insert(any(), any()) } returns Maybe.just(event)
-        every { storageRepository.deleteFile(any()) } returns Completable.complete()
-
-        val params = SaveEventUseCase.Params(eventTitle, event, user)
-
-        val result = saveEventUseCase.buildUseCaseObservable(params)
-        result.test()
-            .assertNoErrors()
-            .assertComplete()
-
-        verify(exactly = 3) { storageRepository.deleteFile(any()) }
-    }
+//    @Test
+//    fun execute_normal_deletesLocalFiles() {
+//        every { eventRepository.insert(any(), any()) } returns Maybe.just(event)
+//        every { storageRepository.deleteFile(any()) } returns Completable.complete()
+//
+//        val params = SaveEventUseCase.Params(eventTitle, event, user)
+//
+//        val result = saveEventUseCase.buildUseCaseObservable(params)
+//        result.test()
+//            .assertNoErrors()
+//            .assertComplete()
+//
+//        verify(exactly = 3) { storageRepository.dleteFile(any()) }
+//    }
 
     @Test
     fun execute_repoFails_showsError() {
         every { eventRepository.insert(any(), any()) } returns Maybe.error(RuntimeException())
-        every { storageRepository.deleteFile(any()) } returns Completable.complete()
 
         val params = SaveEventUseCase.Params(eventTitle, event, user)
 
@@ -124,7 +122,6 @@ class SaveEventUseCaseTest {
     @Test
     fun execute_addEventToUserFails_notSavedToRepoAndNoLocalFilesDeleted() {
         every { user.addEvent(any()) } throws RuntimeException()
-        every { storageRepository.deleteFile(any()) } returns Completable.complete()
 
         val params = SaveEventUseCase.Params(eventTitle, event, user)
 
@@ -136,6 +133,5 @@ class SaveEventUseCaseTest {
             .dispose()
 
         verify { eventRepository.insert(any(), any()) wasNot called }
-        verify(exactly = 0) { storageRepository.deleteFile(any()) }
     }
 }
