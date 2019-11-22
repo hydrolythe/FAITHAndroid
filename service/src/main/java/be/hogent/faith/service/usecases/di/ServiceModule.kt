@@ -42,7 +42,6 @@ val serviceModule = module {
     factory { LoadTextDetailUseCase(get(), get()) }
     factory { CreateDrawingDetailUseCase(get(), get()) }
     factory { OverwriteDrawingDetailUseCase(get(), get()) }
-    factory { SaveEventTextDetailUseCase(get(), get()) }
     factory { OverwriteTextDetailUseCase(get(), get()) }
     factory { CreatePhotoDetailUseCase(get()) }
     factory { CreateAudioDetailUseCase(get()) }
