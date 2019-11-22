@@ -2,7 +2,7 @@ package be.hogent.faith.service.usecases.detail.drawingDetail
 
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.storage.localStorage.ITemporaryStorage
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -19,7 +19,7 @@ class OverwriteDrawingDetailUseCaseTest {
     private lateinit var overwriteDrawingDetailUseCase: OverwriteDrawingDetailUseCase
     private lateinit var executor: Executor
     private lateinit var scheduler: Scheduler
-    private lateinit var storageRepository: StorageRepository
+    private lateinit var storageRepository: ITemporaryStorage
 
     private val bitmap = mockk<Bitmap>()
 

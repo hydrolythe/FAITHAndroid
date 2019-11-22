@@ -1,7 +1,7 @@
 package be.hogent.faith.service.usecases.detail.textDetail
 
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.storage.localStorage.ITemporaryStorage
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -13,7 +13,7 @@ import org.junit.Test
 class LoadTextDetailUseCaseTest {
     private lateinit var loadTextUseCase: LoadTextDetailUseCase
     private val scheduler: Scheduler = mockk()
-    private val repository: StorageRepository = mockk(relaxed = true)
+    private val repository: ITemporaryStorage = mockk(relaxed = true)
 
     private val text = "<font size='5'>Hello <b>World</b></font>"
     private val existingDetail = mockk<TextDetail>()

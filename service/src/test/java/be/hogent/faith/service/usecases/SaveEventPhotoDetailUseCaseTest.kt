@@ -4,6 +4,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.service.usecases.event.SaveEventPhotoDetailUseCase
 import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.storage.localStorage.ITemporaryStorage
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -17,7 +18,7 @@ import java.io.IOException
 
 class SaveEventPhotoDetailUseCaseTest {
     private val observer = mockk<Scheduler>()
-    private val storageRepository = mockk<StorageRepository>(relaxed = true)
+    private val storageRepository = mockk<ITemporaryStorage>(relaxed = true)
 
     private val event = Event()
     private val photoDetail = mockk<PhotoDetail>()
@@ -36,7 +37,7 @@ class SaveEventPhotoDetailUseCaseTest {
     fun saveEventPhotoUC_executeNormally_savedToStorage() {
         // Arrange
         every {
-            storageRepository.storePhotoDetailWithEvent(photoDetail, event)
+            storageRepository.storeDetailWithEvent(photoDetail, event)
         } returns Completable.complete()
         val params = SaveEventPhotoDetailUseCase.Params(photoDetail, event)
 
@@ -46,14 +47,14 @@ class SaveEventPhotoDetailUseCaseTest {
             .assertComplete()
 
         // Assert
-        verify { storageRepository.storePhotoDetailWithEvent(photoDetail, event) }
+        verify { storageRepository.storeDetailWithEvent(photoDetail, event) }
     }
 
     @Test
     fun saveEventPhotoUC_executeNormally_addedToEvent() {
         // Arrange
         every {
-            storageRepository.storePhotoDetailWithEvent(photoDetail, event)
+            storageRepository.storeDetailWithEvent(photoDetail, event)
         } returns Completable.complete()
         val params = SaveEventPhotoDetailUseCase.Params(photoDetail, event)
 
@@ -72,7 +73,7 @@ class SaveEventPhotoDetailUseCaseTest {
     fun saveEventPhotoUC_errorInRepo_notAddedToEvent() {
         // Arrange
         every {
-            storageRepository.storePhotoDetailWithEvent(photoDetail, event)
+            storageRepository.storeDetailWithEvent(photoDetail, event)
         } returns Completable.error(mockk<IOException>())
         val params = SaveEventPhotoDetailUseCase.Params(photoDetail, event)
 

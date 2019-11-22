@@ -3,12 +3,12 @@ package be.hogent.faith.service.usecases.event
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.storage.localStorage.ITemporaryStorage
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
 class SaveEventDrawingDetailUseCase(
-    private val storageRepository: StorageRepository,
+    private val tempStorageRepo: ITemporaryStorage,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEventDrawingDetailUseCase.Params>(
     observeScheduler
@@ -18,7 +18,7 @@ class SaveEventDrawingDetailUseCase(
             // The detail's file should contain the latest bitmap so no changes are needed
             return Completable.complete()
         } else {
-            return storageRepository.storeDrawingDetailWithEvent(params.detail, params.event)
+            return tempStorageRepo.storeDetailWithEvent(params.detail, params.event)
                 .doOnComplete { params.event.addDetail(params.detail) }
         }
     }

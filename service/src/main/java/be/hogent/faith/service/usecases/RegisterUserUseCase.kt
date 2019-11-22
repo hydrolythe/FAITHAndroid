@@ -13,8 +13,7 @@ class RegisterUserUseCase(
     observer: Scheduler
 ) : CompletableUseCase<RegisterUserUseCase.Params>(observer) {
 
-    override fun buildUseCaseObservable(params: RegisterUserUseCase.Params): Completable {
-        // return Completable.fromCallable {
+    override fun buildUseCaseObservable(params: Params): Completable {
         return authManager.register("${params.username}@faith.be", params.password)
             .flatMapCompletable { userRepository.insert(User(params.username, params.avatar, it)) }
     }

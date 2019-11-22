@@ -3,7 +3,7 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.service.usecases.event.SaveEventDrawingDetailUseCase
-import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.storage.localStorage.ITemporaryStorage
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
@@ -16,7 +16,7 @@ class SaveEventDrawingDetailUseCaseTest {
 
     private lateinit var saveEventDrawingUC: SaveEventDrawingDetailUseCase
     private val scheduler = mockk<Scheduler>()
-    private lateinit var storageRepository: StorageRepository
+    private lateinit var storageRepository: ITemporaryStorage
 
     private val drawingDetail = mockk<DrawingDetail>()
     private val event = Event()
@@ -35,7 +35,7 @@ class SaveEventDrawingDetailUseCaseTest {
         // Arrange
         val params = SaveEventDrawingDetailUseCase.Params(drawingDetail, event)
         every {
-            storageRepository.storeDrawingDetailWithEvent(drawingDetail, event)
+            storageRepository.storeDetailWithEvent(drawingDetail, event)
         } returns Completable.complete()
 
         // Act
@@ -57,7 +57,7 @@ class SaveEventDrawingDetailUseCaseTest {
 
         val params = SaveEventDrawingDetailUseCase.Params(drawingDetail, event)
         every {
-            storageRepository.storeDrawingDetailWithEvent(drawingDetail, event)
+            storageRepository.storeDetailWithEvent(drawingDetail, event)
         } returns Completable.complete()
 
         // Act

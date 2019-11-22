@@ -6,7 +6,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
 
-interface IStorage {
+interface IStorageRepository {
     fun saveEvent(event: Event): Completable
 
     /**
@@ -20,4 +20,6 @@ interface IStorage {
      *  If not locally available, it will first download it and save locally.
      */
     fun getEmotionAvatar(event: Event): Single<File>
+
+    fun deleteFile(file: File) : Completable
 }
