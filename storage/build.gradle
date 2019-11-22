@@ -45,6 +45,8 @@ dependencies {
     implementation commonDependencies.rxkotlin
     implementation commonDependencies.threeTenABP
 
+    implementation commonDependencies.timber
+
     implementation injectionDependencies.koin
 
     testImplementation testDependencies.junit
