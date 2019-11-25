@@ -7,9 +7,6 @@ import be.hogent.faith.service.usecases.base.CompletableUseCase
 import be.hogent.faith.storage.StorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
-import io.reactivex.Single
-import io.reactivex.rxkotlin.toFlowable
-import java.io.File
 
 open class SaveEventUseCase(
     private val eventRepository: EventRepository,
@@ -17,15 +14,14 @@ open class SaveEventUseCase(
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEventUseCase.Params>(observeScheduler) {
 
-    //private val filesToRemove = mutableListOf<File>()
+    // private val filesToRemove = mutableListOf<File>()
     private var params: Params? = null
-
 
     override fun buildUseCaseObservable(params: Params): Completable {
         this.params = params
         return addEventToUser(params.event)
             .andThen(
-                Completable.fromMaybe(eventRepository.insert(params.event, params!!.user))
+                Completable.fromMaybe(eventRepository.insert(params.event, params.user))
                     .andThen(storageRepository.saveEvent(params.event))
             )
     }

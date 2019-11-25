@@ -3,18 +3,18 @@ package be.hogent.faith.service.usecases.event
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.storage.localStorage.ITemporaryStorage
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
 class SaveEventPhotoDetailUseCase(
-    private val storageRepository: StorageRepository,
+    private val tempStorageRepo: ITemporaryStorage,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEventPhotoDetailUseCase.Params>(
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {
-        return storageRepository.storePhotoDetailWithEvent(params.photoDetail, params.event)
+        return tempStorageRepo.storeDetailWithEvent(params.photoDetail, params.event)
             .doOnComplete {
                 params.event.addDetail(params.photoDetail)
             }

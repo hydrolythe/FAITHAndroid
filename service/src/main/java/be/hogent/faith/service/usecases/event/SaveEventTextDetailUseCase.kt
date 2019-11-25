@@ -3,12 +3,12 @@ package be.hogent.faith.service.usecases.event
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.storage.localStorage.ITemporaryStorage
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
 class SaveEventTextDetailUseCase(
-    private val storageRepository: StorageRepository,
+    private val tempStorageRepo: ITemporaryStorage,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEventTextDetailUseCase.Params>(
     observeScheduler
@@ -17,7 +17,7 @@ class SaveEventTextDetailUseCase(
         if (params.event.details.contains(params.detail)) {
             return Completable.complete()
         } else {
-            return storageRepository.storeTextDetailWithEvent(params.detail, params.event)
+            return tempStorageRepo.storeDetailWithEvent(params.detail, params.event)
                 .doOnComplete { params.event.addDetail(params.detail) }
         }
     }

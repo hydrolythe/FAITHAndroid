@@ -17,7 +17,6 @@ import org.junit.Before
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
 import java.io.File
-import java.lang.RuntimeException
 import java.util.UUID
 import java.util.concurrent.Executor
 
@@ -41,21 +40,21 @@ class GetUserUseCaseTest {
 
     @Test
     fun getUserUC_execute_callsAuthManager() {
-        getUserUC.buildUseCaseObservable(null)
+        getUserUC.buildUseCaseObservable(mockk())
         verify { authManager.getLoggedInUserUUID() }
     }
 
     @Test
     fun getUserUC_execute_callsUserRepo() {
         // val params = GetUserUseCase.Params(DataFactory.randomUUID())
-        getUserUC.buildUseCaseObservable(null)
+        getUserUC.buildUseCaseObservable(mockk())
         verify { userRepository.get(any()) }
     }
 
     @Test
     fun getUserUC_execute_callsEventRepo() {
         // val params = GetUserUseCase.Params(DataFactory.randomUUID())
-        getUserUC.buildUseCaseObservable(null)
+        getUserUC.buildUseCaseObservable(mockk())
         verify { eventRepository.getAll() }
     }
 
@@ -70,7 +69,7 @@ class GetUserUseCaseTest {
             .just(user)
         every { eventRepository.getAll() } returns Flowable
             .just(events)
-        val result = getUserUC.buildUseCaseObservable(null)
+        val result = getUserUC.buildUseCaseObservable(mockk())
         result.test().assertValue { newUser ->
             newUser.username == "username"
             newUser.events.count() == events.count()
@@ -83,7 +82,7 @@ class GetUserUseCaseTest {
         val userUuidArg = slot<String>()
         val userUuid = DataFactory.randomUUID().toString()
         every { authManager.getLoggedInUserUUID() } returns null
-        val result = getUserUC.buildUseCaseObservable(null)
+        val result = getUserUC.buildUseCaseObservable(mockk())
         result.test().assertError(RuntimeException::class.java)
     }
 }

@@ -6,12 +6,13 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
 
-interface IStorage {
+interface IStorageRepository {
     fun saveEvent(event: Event): Completable
 
     /**
      *  Gets the file in which a detail is saved.
-     *  If not locally available, it will first download it and save locally.
+     *
+     *  @throws NoSuchElementException when no file for this detail could be retrieved
      */
     fun getFile(detail: Detail): Single<File>
 

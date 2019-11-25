@@ -1,24 +1,5 @@
 package be.hogent.faith.storage
 
-import android.graphics.Bitmap
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.storage.storage.LocalStorage
-import be.hogent.faith.storage.storage.RemoteStorage
-import be.hogent.faith.storage.storage.StorageFactory
-import be.hogent.faith.util.factory.DataFactory
-import be.hogent.faith.util.factory.DetailFactory
-import be.hogent.faith.util.factory.EventFactory
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.slot
-import io.reactivex.Completable
-import io.reactivex.Single
-import org.junit.Assert
-import org.junit.Test
-import java.io.File
-
 class StorageRepositoryTest {
 /*
     val storageFactory = mockk<StorageFactory>(relaxed = true)
@@ -195,5 +176,4 @@ class StorageRepositoryTest {
         result.assertComplete()
     }
     */
-
 }

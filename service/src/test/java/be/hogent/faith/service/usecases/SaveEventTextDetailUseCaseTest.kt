@@ -3,7 +3,7 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.service.usecases.event.SaveEventTextDetailUseCase
-import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.storage.localStorage.ITemporaryStorage
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -17,7 +17,7 @@ import org.junit.Test
 class SaveEventTextDetailUseCaseTest {
     private lateinit var saveEventTextDetailUseCase: SaveEventTextDetailUseCase
     private val scheduler: Scheduler = mockk()
-    private val repository: StorageRepository = mockk(relaxed = true)
+    private val repository: ITemporaryStorage = mockk(relaxed = true)
 
     private val event = Event()
     private val detail = mockk<TextDetail>()
@@ -34,7 +34,7 @@ class SaveEventTextDetailUseCaseTest {
     @Test
     fun saveTextUC_saveTextNormal_savedToStorage() {
         // Arrange
-        every { repository.storeTextDetailWithEvent(detail, event) } returns Completable.complete()
+        every { repository.storeDetailWithEvent(detail, event) } returns Completable.complete()
         val params = SaveEventTextDetailUseCase.Params(detail, event)
 
         // Act
@@ -43,13 +43,13 @@ class SaveEventTextDetailUseCaseTest {
             .assertComplete()
 
         // Assert
-        verify { repository.storeTextDetailWithEvent(detail, event) }
+        verify { repository.storeDetailWithEvent(detail, event) }
     }
 
     @Test
     fun saveTextUC_saveTextNormal_addedToEvent() {
         // Arrange
-        every { repository.storeTextDetailWithEvent(detail, event) } returns Completable.complete()
+        every { repository.storeDetailWithEvent(detail, event) } returns Completable.complete()
         val params = SaveEventTextDetailUseCase.Params(detail, event)
 
         // Act
@@ -63,7 +63,7 @@ class SaveEventTextDetailUseCaseTest {
     @Test
     fun saveTextUC_errorInRepo_notAddedToEvent() {
         // Arrange
-        every { repository.storeTextDetailWithEvent(detail, event) } returns Completable.error(
+        every { repository.storeDetailWithEvent(detail, event) } returns Completable.error(
             RuntimeException()
         )
         val params = SaveEventTextDetailUseCase.Params(detail, event)

@@ -3,33 +3,31 @@ package be.hogent.faith.storage.localStorage
 import android.content.Context
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.storage.StoragePathProvider
 import io.reactivex.Completable
 import io.reactivex.Single
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
 import java.io.File
 import java.util.UUID
 
 class TemporaryStorageRepository(
-    private val context: Context
-) : TemporaryStorageInterface {
-    override fun storeAudioDetailWithEvent(audioDetail: AudioDetail, event: Event): Completable {
-        val saveFile = File(getEventAudioDirectory(event), audioDetail.uuid.toString())
-        return moveFile(audioDetail.file, saveFile)
-            .doOnComplete {
-                audioDetail.file = saveFile
-            }
-    }
+    private val context: Context,
+    private val storagePathProvider: StoragePathProvider
+) : ITemporaryStorage {
 
-    override fun storePhotoDetailWithEvent(photoDetail: PhotoDetail, event: Event): Completable {
-        val saveFile = File(getEventPhotoDirectory(event), photoDetail.uuid.toString())
-        return moveFile(photoDetail.file, saveFile)
+    /**
+     * Stores a detail in its event's folder, and sets the **relative** path in the detail
+     * (the path without context.cachedir)
+     */
+    override fun storeDetailWithEvent(detail: Detail, event: Event): Completable {
+        val relativePath =
+            File(storagePathProvider.getEventFolder(event).path, detail.uuid.toString())
+        val saveFile = File(getEventDirectory(event), detail.uuid.toString())
+        return moveFile(detail.file, saveFile)
             .doOnComplete {
-                photoDetail.file = saveFile
+                detail.file = relativePath
             }
     }
 
@@ -43,30 +41,6 @@ class TemporaryStorageRepository(
         }
     }
 
-    override fun storeTextDetailWithEvent(textDetail: TextDetail, event: Event): Completable {
-        val saveFile = File(getEventTextDirectory(event), textDetail.uuid.toString())
-        return moveFile(textDetail.file, saveFile)
-            .doOnComplete {
-                textDetail.file = saveFile
-            }
-    }
-
-    /**
-     * Saves a given [DrawingDetail] to permanent storage.
-     * This will change the [drawingDetail]'s file property to the new location.
-     * It will be found in appDir/events/[eventUuid]/detailUuid
-     */
-    override fun storeDrawingDetailWithEvent(
-        drawingDetail: DrawingDetail,
-        event: Event
-    ): Completable {
-        val saveFile = File(getEventDrawingDirectory(event), drawingDetail.uuid.toString())
-        return moveFile(drawingDetail.file, saveFile)
-            .doOnComplete {
-                drawingDetail.file = saveFile
-            }
-    }
-
     override fun storeBitmapTemporarily(bitmap: Bitmap): Single<File> {
         val saveDirectory = File(context.cacheDir, "pictures")
         saveDirectory.mkdirs()
@@ -75,8 +49,6 @@ class TemporaryStorageRepository(
 
     /**
      * Stores the bitmap in the given file
-     *
-     * @return a Single<File> pointing to the file where the bitmap was saved
      */
     private fun storeBitmap(bitmap: Bitmap, file: File): Completable {
         return Completable.fromCallable {
@@ -106,50 +78,10 @@ class TemporaryStorageRepository(
         return storeBitmap(bitmap, saveFile).andThen(Single.just(saveFile))
     }
 
-    private fun getEventPhotoDirectory(event: Event): File {
-        val imageDirectory = File(getEventDirectory(event), "photos")
-        imageDirectory.mkdirs()
-        return imageDirectory
-    }
-
-    private fun getEventDrawingDirectory(event: Event): File {
-        val audioDir = File(getEventDirectory(event), "drawings")
-        audioDir.mkdirs()
-        return audioDir
-    }
-
-    private fun getEventAudioDirectory(event: Event): File {
-        val audioDir = File(getEventDirectory(event), "audio")
-        audioDir.mkdirs()
-        return audioDir
-    }
-
     private fun getEventDirectory(event: Event): File {
-        val eventDir = File(context.cacheDir, "events/${event.uuid}")
+        val eventDir = File(context.cacheDir, storagePathProvider.getEventFolder(event).path)
         eventDir.mkdirs()
         return eventDir
-    }
-
-    private fun getEventTextDirectory(event: Event): File {
-        val textDir = File(getEventDirectory(event), "text/${event.uuid}")
-        textDir.mkdirs()
-        return textDir
-    }
-
-    fun saveEventEmotionAvatar(bitmap: Bitmap, event: Event): Single<File> {
-        return storeBitmap(
-            bitmap,
-            getEventDirectory(event),
-            EMOTION_AVATAR_FILENAME
-        )
-    }
-
-    /**
-     * Returns a saveFile with the name in the following format:
-     * day_month_year_hour_minute_second_millis
-     */
-    private fun createSaveFileName(): String {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("d_M_y_k_m_s_A"))
     }
 
     private fun moveFile(sourceFile: File, destinationFile: File): Completable {
@@ -159,7 +91,10 @@ class TemporaryStorageRepository(
         }
     }
 
-    fun overwriteExistingDrawingDetail(bitmap: Bitmap, drawingDetail: DrawingDetail): Completable {
+    override fun overwriteExistingDrawingDetail(
+        bitmap: Bitmap,
+        drawingDetail: DrawingDetail
+    ): Completable {
         return storeBitmap(bitmap, drawingDetail.file)
     }
 
@@ -170,7 +105,7 @@ class TemporaryStorageRepository(
         }
     }
 
-    fun overwriteTextDetail(text: String, existingDetail: TextDetail): Completable {
+    override fun overwriteTextDetail(text: String, existingDetail: TextDetail): Completable {
         return Completable.fromCallable {
             existingDetail.file.writeText(text)
         }
