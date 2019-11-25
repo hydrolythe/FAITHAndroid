@@ -24,7 +24,9 @@ class LocalStorageRepository(
         return Completable.fromCallable {
             event.details.map { detail ->
                 getFile(detail).doOnSuccess { currentLocation ->
-                    moveFile(currentLocation, pathProvider.getLocalDetailPath(detail))
+                    moveFile(currentLocation, pathProvider.getLocalDetailPath(detail)).andThen{
+                        detail.file = pathProvider.getLocalDetailPath(detail)
+                    }
                 }
             }
         }
@@ -32,7 +34,12 @@ class LocalStorageRepository(
 
     private fun saveEmotionAvatar(event: Event): Completable {
         if (event.emotionAvatar != null) {
-            return moveFile(event.emotionAvatar!!, pathProvider.getLocalEmotionAvatarPath(event))
+            return moveFile(
+                event.emotionAvatar!!,
+                pathProvider.getLocalEmotionAvatarPath(event)
+            ).andThen {
+                event.emotionAvatar = pathProvider.getLocalEmotionAvatarPath(event)
+            }
         } else {
             return Completable.complete()
         }
