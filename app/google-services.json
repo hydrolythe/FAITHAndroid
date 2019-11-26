@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "140386572456",
+    "firebase_url": "https://faith-dev-38aa1.firebaseio.com",
+    "project_id": "faith-dev-38aa1",
+    "storage_bucket": "faith-dev-38aa1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:140386572456:android:34f8d548a6b5cf73468a9d",
+        "android_client_info": {
+          "package_name": "be.hogent.faith"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "140386572456-ej614c7tl8vuthi8nji3isc6g3mo9tv7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHfT9Yr9waamMoeQsOcy0gWIDOWMP5OGY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "140386572456-ej614c7tl8vuthi8nji3isc6g3mo9tv7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
