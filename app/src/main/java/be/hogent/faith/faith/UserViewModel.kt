@@ -101,7 +101,7 @@ class UserViewModel(
         }
 
         override fun onError(e: Throwable) {
-            Timber.e(e)
+            Timber.e("error saving event ${e.localizedMessage}")
             _eventSavedState.postValue(
                 Resource(
                     ResourceState.ERROR,

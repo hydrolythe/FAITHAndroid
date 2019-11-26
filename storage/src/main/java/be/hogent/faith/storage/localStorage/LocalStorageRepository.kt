@@ -12,51 +12,66 @@ import java.io.File
 class LocalStorageRepository(
     private val pathProvider: StoragePathProvider,
     private val context: Context
-) : IStorageRepository {
+) : ILocalStorageRepository {
 
-    override fun saveEvent(event: Event): Completable {
-        val saveAvatar = saveEmotionAvatar(event)
-        val saveDetails = saveEventDetails(event)
-        return Completable.mergeArray(saveAvatar, saveDetails)
+
+    /**
+     * moves the files from tempory storage to local storage
+     */
+    override fun saveEvent(event: Event): Single<Event> {
+        return saveEmotionAvatar(event).mergeWith( saveEventDetails(event)).toSingle{event}
     }
 
+    /**
+     * moves all detail files of an event from tempory storage to local storage
+     * and updates the path
+     */
     private fun saveEventDetails(event: Event): Completable {
         return Completable.fromCallable {
             event.details.map { detail ->
-                getFile(detail).doOnSuccess { currentLocation ->
-                    moveFile(currentLocation, pathProvider.getLocalDetailPath(detail)).andThen{
-                        detail.file = pathProvider.getLocalDetailPath(detail)
-                    }
+                moveFile(detail.file, pathProvider.getLocalDetailPath(event, detail))
+                detail.file = pathProvider.getDetailPath(event, detail)}
                 }
             }
-        }
-    }
 
-    private fun saveEmotionAvatar(event: Event): Completable {
-        if (event.emotionAvatar != null) {
-            return moveFile(
-                event.emotionAvatar!!,
-                pathProvider.getLocalEmotionAvatarPath(event)
-            ).andThen {
-                event.emotionAvatar = pathProvider.getLocalEmotionAvatarPath(event)
-            }
-        } else {
-            return Completable.complete()
-        }
-    }
 
-    private fun moveFile(from: File, to: File): Completable {
+    /**
+     * moves the emotion avatar of an event from tempory storage to local storage
+     * and updates the path
+     */
+    private fun saveEmotionAvatar(event: Event) : Completable{
         return Completable.fromCallable {
+            if (event.emotionAvatar != null) {
+                moveFile(
+                    event.emotionAvatar!!,
+                    pathProvider.getLocalEmotionAvatarPath(event)
+                )
+                event.emotionAvatar = pathProvider.getEmotionAvatarPath(event)
+            }
+        }
+    }
+
+    /**
+     * moves a file from tempory storage to local storage and deletes the file in tempory storage
+     */
+    private fun moveFile(from: File, to: File) {
             from.copyTo(target = to, overwrite = true)
             from.delete()
-        }
     }
 
-    override fun getFile(detail: Detail): Single<File> {
-        return Single.just(File(context.filesDir, detail.file.path))
+    /**
+     * checks if file is present in localStorage
+     */
+    override fun isFilePresent(detail:Detail):Boolean {
+        return File(context.filesDir, detail.file.path).exists()
     }
 
-    override fun getEmotionAvatar(event: Event): Single<File> {
-        return Single.just(pathProvider.getLocalEmotionAvatarPath(event))
+    /**
+     * checks if emotion avatar is present in localStorage
+     */
+    override fun isEmotionAvatarPresent(event: Event):Boolean {
+        if (event.emotionAvatar == null)
+            return true
+        return File(context.filesDir, event.emotionAvatar!!.path).exists()
     }
 }

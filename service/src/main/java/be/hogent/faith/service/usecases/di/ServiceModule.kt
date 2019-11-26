@@ -10,8 +10,10 @@ import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseC
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
+import be.hogent.faith.service.usecases.detail.textDetail.CreateTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.OverwriteTextDetailUseCase
+import be.hogent.faith.service.usecases.event.GetEventFilesUseCase
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.event.SaveEventAudioDetailUseCase
@@ -45,4 +47,6 @@ val serviceModule = module {
     factory { OverwriteTextDetailUseCase(get(), get()) }
     factory { CreatePhotoDetailUseCase(get()) }
     factory { CreateAudioDetailUseCase(get()) }
+    factory { CreateTextDetailUseCase(get(), get()) }
+    factory { GetEventFilesUseCase(get(), get()) }
 }

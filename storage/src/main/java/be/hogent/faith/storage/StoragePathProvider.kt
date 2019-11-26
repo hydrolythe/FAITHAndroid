@@ -43,6 +43,10 @@ class StoragePathProvider(
     /**
      * Returns the local path where one would save an event's detail for an event.
      */
+    fun getLocalDetailPath(event:Event, detail: Detail): File {
+        return File(context.filesDir, getDetailPath(event, detail).path)
+    }
+
     fun getLocalDetailPath(detail: Detail): File {
         return File(context.filesDir, detail.file.path)
     }

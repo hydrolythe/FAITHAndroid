@@ -4,13 +4,13 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.EventRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.storage.StorageRepository
+import be.hogent.faith.storage.IStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
 open class SaveEventUseCase(
     private val eventRepository: EventRepository,
-    private val storageRepository: StorageRepository,
+    private val storageRepository: IStorageRepository,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEventUseCase.Params>(observeScheduler) {
 
@@ -20,9 +20,9 @@ open class SaveEventUseCase(
     override fun buildUseCaseObservable(params: Params): Completable {
         this.params = params
         return addEventToUser(params.event)
-            .andThen(
+            .concatWith(
                 Completable.fromMaybe(eventRepository.insert(params.event, params.user))
-                    .andThen(storageRepository.saveEvent(params.event))
+                    .concatWith(Completable.fromSingle(storageRepository.saveEvent(params.event)))
             )
     }
 
