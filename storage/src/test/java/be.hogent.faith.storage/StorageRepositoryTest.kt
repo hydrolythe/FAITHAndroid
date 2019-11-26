@@ -5,6 +5,7 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
 import be.hogent.faith.storage.localStorage.ILocalStorageRepository
 import be.hogent.faith.util.factory.EventFactory
+import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -22,14 +23,36 @@ class StorageRepositoryTest {
     private val storageRepository = StorageRepository(localStorage, remoteStorage)
 
     @Test
-    fun saveEvent_savesFilesinLocalAndRemoteStorageAndReturnsEvent() {
+    fun saveEvent_eventCorrectlyPassedToLocalStorage() {
         val eventArg = slot<Event>()
         val event = EventFactory.makeEvent(nbrOfDetails = 2, hasEmotionAvatar = true )
         every { localStorage.saveEvent(capture(eventArg))} returns Single.just(
-                event)
+            event)
+        every { remoteStorage.saveEvent(any())} returns Single.just(event)
+        val result = storageRepository.saveEvent(event).test()
+        Assert.assertEquals(event, eventArg.captured)
+        result.assertValue(event)
+    }
+
+    @Test
+    fun saveEvent_eventCorrectlyPassedToRemoteStorage() {
+        val eventArg = slot<Event>()
+        val event = EventFactory.makeEvent(nbrOfDetails = 2, hasEmotionAvatar = true )
+        every { localStorage.saveEvent(any())} returns Single.just(
+            event)
         every { remoteStorage.saveEvent(capture(eventArg))} returns Single.just(event)
         val result = storageRepository.saveEvent(event).test()
         Assert.assertEquals(event, eventArg.captured)
+        result.assertValue(event)
+    }
+
+    @Test
+    fun saveEvent_savesFilesinLocalAndRemoteStorageAndReturnsEvent() {
+        val event = EventFactory.makeEvent(nbrOfDetails = 2, hasEmotionAvatar = true )
+        every { localStorage.saveEvent(any())} returns Single.just(
+                event)
+        every { remoteStorage.saveEvent(any())} returns Single.just(event)
+        val result = storageRepository.saveEvent(event).test()
         verify(exactly = 1) { localStorage.saveEvent(event) }
         verify(exactly = 1) { remoteStorage.saveEvent(event) }
         result.assertValue(event)
@@ -37,49 +60,57 @@ class StorageRepositoryTest {
 
     @Test
     fun saveEvent_whenSavingInLocalStorageFails_returnsErrorAndDoesntSaveInRemoteStorage() {
-        val eventArg = slot<Event>()
         val event = EventFactory.makeEvent(nbrOfDetails = 2, hasEmotionAvatar = true )
-        val error = mockk<Throwable>()
-        every { localStorage.saveEvent(capture(eventArg))} returns Single.error(error)
-        every { remoteStorage.saveEvent(capture(eventArg))} returns Single.just(event)
+        every { localStorage.saveEvent(any())} returns Single.error(RuntimeException())
+        every { remoteStorage.saveEvent(any())} returns Single.just(event)
         val result = storageRepository.saveEvent(event).test()
 
         verify(exactly = 1) { localStorage.saveEvent(event) }
-        verify(exactly = 0) { remoteStorage.saveEvent(event) }
-        result.assertError(error)
+        verify { remoteStorage.saveEvent(any()) wasNot called }
+
+        result.assertError(RuntimeException::class.java)
     }
 
+
     @Test
-    fun getEvent_downloadsNothingIfAllFilesAlreadyInLocalStorage() {
+    fun getEvent_passesEventAndDetailCorrectlyToLocalAndRemoteStorage() {
         val eventArg = slot<Event>()
         val detailArg = slot<Detail>()
         val event = EventFactory.makeEvent(nbrOfDetails = 1, hasEmotionAvatar = true )
         every { localStorage.isEmotionAvatarPresent(capture(eventArg))} returns true
         every { localStorage.isFilePresent(capture(detailArg))} returns true
-        every { remoteStorage.getEmotionAvatar(any())} returns Completable.complete()
-        every { remoteStorage.getFile(any())} returns Completable.complete()
+        every { remoteStorage.getEmotionAvatar(capture(eventArg))} returns Completable.complete()
+        every { remoteStorage.getFile(capture(detailArg))} returns Completable.complete()
         val result = storageRepository.getEvent(event).test()
         Assert.assertEquals(event, eventArg.captured)
         Assert.assertEquals(event.details[0], detailArg.captured)
+        result.assertComplete()
+    }
+
+    @Test
+    fun getEvent_downloadsNothingIfAllFilesAlreadyInLocalStorage() {
+        val event = EventFactory.makeEvent(nbrOfDetails = 1, hasEmotionAvatar = true )
+        every { localStorage.isEmotionAvatarPresent(any())} returns true
+        every { localStorage.isFilePresent(any())} returns true
+        every { remoteStorage.getEmotionAvatar(any())} returns Completable.complete()
+        every { remoteStorage.getFile(any())} returns Completable.complete()
+        val result = storageRepository.getEvent(event).test()
+
         verify(exactly = 1) { localStorage.isEmotionAvatarPresent(event)}
         verify(exactly = 1) { localStorage.isFilePresent(event.details[0])}
-        verify(exactly = 0) { remoteStorage.getEmotionAvatar(any())}
-        verify(exactly = 0) { remoteStorage.getFile(any()) }
+        verify { remoteStorage.getEmotionAvatar(any()) wasNot called }
+        verify { remoteStorage.getFile(any()) wasNot called }
         result.assertComplete()
     }
 
     @Test
     fun getEvent_downloadsFilesIfNotInLocalStorage() {
-        val eventArg = slot<Event>()
-        val detailArg = slot<Detail>()
         val event = EventFactory.makeEvent(nbrOfDetails = 1, hasEmotionAvatar = true )
-        every { localStorage.isEmotionAvatarPresent(capture(eventArg))} returns false
-        every { localStorage.isFilePresent(capture(detailArg))} returns false
+        every { localStorage.isEmotionAvatarPresent(any())} returns false
+        every { localStorage.isFilePresent(any())} returns false
         every { remoteStorage.getEmotionAvatar(any())} returns Completable.complete()
         every { remoteStorage.getFile(any())} returns Completable.complete()
         val result = storageRepository.getEvent(event).test()
-        Assert.assertEquals(event, eventArg.captured)
-        Assert.assertEquals(event.details[0], detailArg.captured)
         verify(exactly = 1) { localStorage.isEmotionAvatarPresent(event)}
         verify(exactly = 1) { localStorage.isFilePresent(event.details[0])}
         verify(exactly = 1) { remoteStorage.getEmotionAvatar(event)}
