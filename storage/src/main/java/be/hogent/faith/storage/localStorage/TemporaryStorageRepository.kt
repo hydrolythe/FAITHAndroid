@@ -25,7 +25,7 @@ class TemporaryStorageRepository(
         val saveFile = File(getEventDirectory(event), detail.uuid.toString())
         return moveFile(detail.file, saveFile)
             .doOnComplete {
-                detail.file = saveFile //relativePath
+                detail.file = saveFile // relativePath
             }
     }
 

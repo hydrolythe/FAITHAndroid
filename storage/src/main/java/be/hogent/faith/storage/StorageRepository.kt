@@ -2,14 +2,11 @@ package be.hogent.faith.storage
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.storage.firebase.FireBaseStorageRepository
 import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
 import be.hogent.faith.storage.localStorage.ILocalStorageRepository
-import be.hogent.faith.storage.localStorage.LocalStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.toFlowable
-import java.io.File
 
 /**
  * Repository providing access to both the internal and remote storage.
@@ -31,14 +28,13 @@ class StorageRepository(
     /**
      * download file from firebase to localStorage if not present yet
      */
-    //TODO ("Timestamp checking? What als de file op een andere tablet werd aangepast?")
+    // TODO ("Timestamp checking? What als de file op een andere tablet werd aangepast?")
     private fun getFile(detail: Detail): Completable {
         if (localStorage.isFilePresent(detail))
-                return Completable.complete()
-            else
-                return remoteStorage.getFile(detail)
+            return Completable.complete()
+        else
+            return remoteStorage.getFile(detail)
     }
-
 
     /**
      * download emotion avatar from firebase to localStorage if not present yet
@@ -47,7 +43,7 @@ class StorageRepository(
         if (event.emotionAvatar == null || localStorage.isEmotionAvatarPresent(event))
             return Completable.complete()
         else
-           return remoteStorage.getEmotionAvatar(event)
+            return remoteStorage.getEmotionAvatar(event)
     }
 
     /**

@@ -99,7 +99,7 @@ sealed class DetailViewHolder(
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
-        val androidTempFileProvider:TempFileProvider by inject()
+        val androidTempFileProvider: TempFileProvider by inject()
         override fun load(detail: Detail): RequestBuilder<Drawable> {
             return Glide.with(imageView)
                 .load(androidTempFileProvider.getFile(detail))
@@ -122,4 +122,3 @@ sealed class DetailViewHolder(
         fun openDetailScreenFor(detail: Detail)
     }
 }
-

@@ -1,39 +1,28 @@
 package be.hogent.faith.database.firebase
 
-import android.net.Uri
-import android.webkit.MimeTypeMap
-import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.util.TAG
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import durdinapps.rxfirebase2.RxFirebaseStorage
 import durdinapps.rxfirebase2.RxFirestore
 import io.reactivex.Flowable
 import io.reactivex.Maybe
-import io.reactivex.Single
 import timber.log.Timber
 
 /**
  * uses RxFirebase: https://github.com/FrangSierra/RxFirebase
- * document hierarchy in Firestore : users/{userUuid}/projects/{projectUuid}.
+ * document hierarchy in Firestore : users/{userUid}/events/{eventUuid}.
  * storage hierarchy in Firestorage : idem
  * the ruleset on both storages is so that a user can only CRUD his documents
  */
 class FirebaseEventRepository(
     private val fbAuth: FirebaseAuth,
-    private val firestore: FirebaseFirestore,
-    private val firestorage: FirebaseStorage
+    private val firestore: FirebaseFirestore
 ) {
 
-    private val storageRef: StorageReference
-        get() = firestorage.reference.child(USERS_KEY)
-
     /**
-     * gets event with uuid for the current user, also listens for changes
+     * get event with eventUid for the current authenticated user, also listens for changes
      */
     fun get(eventUid: String): Flowable<EventEntity> {
         val currentUser = fbAuth.currentUser
@@ -48,7 +37,7 @@ class FirebaseEventRepository(
     }
 
     /**
-     * gets all events for current user, also listens for changes
+     * get all events for current authenticated user, also listens for changes
      */
     fun getAll(): Flowable<List<EventEntity>> {
         val currentUser = fbAuth.currentUser
@@ -91,42 +80,6 @@ class FirebaseEventRepository(
                     Maybe.error(RuntimeException("Error saving event", error))
                 }
         }
-    }
-
-    /**
-     * Save the avatar in storage and update the file path
-     */
-    private fun saveAvatarForEvent(item: EventEntity): Single<String> {
-        if (item.emotionAvatar == null)
-            return Single.just("")
-        return RxFirebaseStorage.putFile(
-            storageRef.child(fbAuth.currentUser!!.uid).child(EVENTS_KEY).child(item.uuid).child(
-                "avatar.png"
-            ),
-            Uri.parse("file://" + item.emotionAvatar)
-        )
-            .map { it.storage.path } // GlideApp werkt met references, betere UX (File(it.storage.downloadUrl.toString())
-            .doOnSuccess { storedFile ->
-                item.emotionAvatar = storedFile
-            }
-    }
-
-    /**
-     * Save the file for each detail in storage and update the file path
-     */
-    private fun saveFileForEventDetail(
-        eventUuid: String,
-        detail: DetailEntity
-    ): Single<String> {
-        val fileExt = MimeTypeMap.getFileExtensionFromUrl(detail.file)
-        return RxFirebaseStorage.putFile(
-            storageRef.child(fbAuth.currentUser!!.uid).child(EVENTS_KEY).child(eventUuid).child(
-                "${detail.uuid}.$fileExt"
-            ),
-            Uri.parse("file://" + detail.file)
-        )
-            .map { it.storage.path }
-            .doOnSuccess { detail.file = it }
     }
 
     companion object {

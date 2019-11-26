@@ -19,28 +19,27 @@ class FireBaseStorageRepository(
 
     private var storageRef = firestorage.reference
 
-     override fun saveEvent(event: Event): Single<Event> {
+    override fun saveEvent(event: Event): Single<Event> {
         return saveEventEmotionAvatar(event) // save avatar in firestorage
             .concatWith(
                 event.details.toFlowable() // save all detail files in firestorage
                     .concatMapCompletable {
                         saveDetailFile(event, it)
                     }
-            ).toSingle {event}
+            ).toSingle { event }
     }
 
     /**
      * Gets a detail's file from [firestorage] and stores it into the path provided for it by the
      * [pathProvider].
      */
-    override fun getFile(detail: Detail): Completable{
+    override fun getFile(detail: Detail): Completable {
         val fileToDownloadReference = storageRef.child(detail.file.path)
         val localFile: File = pathProvider.getLocalDetailPath(detail)
         return Completable.fromSingle(RxFirebaseStorage.getFile(fileToDownloadReference, localFile))
-
     }
 
-     override fun getEmotionAvatar(event: Event): Completable {
+    override fun getEmotionAvatar(event: Event): Completable {
         if (event.emotionAvatar == null)
             return Completable.complete()
         val fileToDownloadReference =

@@ -26,10 +26,10 @@ class GetUserUseCase(
     }
 
     class Params
-}
 
-private fun addEventsToUser(user: User, events: List<Event>): User {
-    user.clearEvents()
-    events.forEach { user.addEvent(it) }
-    return user
+    private fun addEventsToUser(user: User, events: List<Event>): User {
+        user.clearEvents()
+        events.forEach { user.addEvent(it) }
+        return user
+    }
 }

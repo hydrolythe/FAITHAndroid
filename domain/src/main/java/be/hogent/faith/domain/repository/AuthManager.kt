@@ -13,8 +13,6 @@ interface AuthManager {
 
     fun signOut(): Completable
 
-    fun reset()
-
     fun getLoggedInUserUUID(): String?
 }
 

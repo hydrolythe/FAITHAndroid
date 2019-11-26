@@ -32,7 +32,6 @@ open class SaveEventUseCase(
         params!!.user.addEvent(event)
     }
 
-
     data class Params(
         val eventTitle: String,
         var event: Event,

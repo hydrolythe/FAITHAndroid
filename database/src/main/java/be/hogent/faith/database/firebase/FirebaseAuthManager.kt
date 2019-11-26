@@ -27,10 +27,16 @@ class FirebaseAuthManager(
     private val auth: FirebaseAuth
 ) {
 
-    fun getLoggedInUser(): String? {
+    /**
+     * uid of authenticated user
+     */
+    fun getLoggedInUserUid(): String? {
         return auth.currentUser?.uid
     }
 
+    /**
+     * check if email is unique when user wants to register
+     */
     fun isUsernameUnique(email: String): Single<Boolean> {
         return RxFirebaseAuth.fetchSignInMethodsForEmail(auth, email)
             .map { it.signInMethods?.size == 0 }
@@ -49,9 +55,12 @@ class FirebaseAuthManager(
             .toSingle()
     }
 
+    /**
+     * register the user
+     */
     fun register(email: String, password: String): Maybe<String?> {
         return RxFirebaseAuth.createUserWithEmailAndPassword(auth, email, password)
-            .map { mapToUserUUID(it) }
+            .map { mapToUserUID(it) }
             // map FirebaseExceptions to domain exceptions
             .onErrorResumeNext { error: Throwable ->
                 Timber.e("$TAG: error registering ${error.message}")
@@ -71,9 +80,12 @@ class FirebaseAuthManager(
             }
     }
 
+    /**
+     * sign in the user
+     */
     fun signIn(email: String, password: String): Maybe<String?> {
         return RxFirebaseAuth.signInWithEmailAndPassword(auth, email, password)
-            .map { mapToUserUUID(it) }
+            .map { mapToUserUID(it) }
             .onErrorResumeNext { error: Throwable ->
                 Timber.e("$TAG: signIn error ${error.message}")
                 when (error) {
@@ -85,6 +97,9 @@ class FirebaseAuthManager(
             }
     }
 
+    /**
+     * sign out the user
+     */
     fun signOut(): Completable {
         return try {
             auth.signOut()
@@ -94,11 +109,7 @@ class FirebaseAuthManager(
         }
     }
 
-    fun reset() {
-        throw NotImplementedError()
-    }
-
-    private fun mapToUserUUID(result: AuthResult): String? {
+    private fun mapToUserUID(result: AuthResult): String? {
         return result.user?.uid
     }
 }

@@ -7,7 +7,7 @@ import java.io.File
 
 class AndroidTempFileProvider(private val context: Context) : TempFileProvider {
     override fun getEmotionAvatar(event: Event): File? {
-        if (event.emotionAvatar?.path?.startsWith("users")==true)
+        if (event.emotionAvatar?.path?.startsWith("users") == true)
             return File(context.filesDir, event.emotionAvatar!!.path)
         return event.emotionAvatar
     }
