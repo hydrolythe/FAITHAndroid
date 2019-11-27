@@ -7,22 +7,22 @@ import be.hogent.faith.faith.TestUtils
 import be.hogent.faith.service.usecases.LoadTextDetailUseCase
 import be.hogent.faith.util.factory.DetailFactory
 import io.mockk.called
+import io.mockk.clearAllMocks
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.observers.DisposableSingleObserver
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.RuntimeException
 
 class EnterTextViewModelTest {
     private val loadTextDetailUseCase = mockk<LoadTextDetailUseCase>(relaxed = true)
 
     private lateinit var viewModel: EnterTextViewModel
 
-    private val textDetail = DetailFactory.makeTextDetail()
     private val detailText = "Text in the detail"
 
     @get:Rule
@@ -33,6 +33,11 @@ class EnterTextViewModelTest {
         viewModel = EnterTextViewModel(loadTextDetailUseCase)
 
         viewModel.text.observeForever(mockk(relaxed = true))
+    }
+
+    @After
+    fun tearDown() {
+        clearAllMocks()
     }
 
     @Test
@@ -96,9 +101,9 @@ class EnterTextViewModelTest {
         val params = slot<LoadTextDetailUseCase.LoadTextParams>()
         val resultObserver = slot<DisposableSingleObserver<String>>()
         val textObserver = mockk<Observer<String>>(relaxed = true)
-
-        //  TODO: Fix this issue
-        //  viewModel.text.observeForever(textObserver)
+        val initialTextObserver = mockk<Observer<String>>(relaxed = true)
+        viewModel.text.observeForever(textObserver)
+        viewModel.initialText.observeForever(initialTextObserver)
 
         // Act
         viewModel.loadExistingTextDetail(textDetail)
@@ -106,9 +111,10 @@ class EnterTextViewModelTest {
         resultObserver.captured.onSuccess(detailText)
 
         // Assert
-        // TODO: fix this issue
-        // verify { textObserver.onChanged(detailText) }
+        verify { textObserver.onChanged(detailText) }
+        verify { initialTextObserver.onChanged(detailText) }
     }
+
     @Test
     fun enterTextVM_loadTextUseCaseFails_updatesErrorMessage() {
         // Arrange
@@ -117,7 +123,7 @@ class EnterTextViewModelTest {
         val textObserver = mockk<Observer<String>>(relaxed = true)
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
 
-        viewModel.text.observeForever(textObserver)
+        viewModel.initialText.observeForever(textObserver)
         viewModel.errorMessage.observeForever(errorObserver)
 
         // Act
@@ -126,8 +132,7 @@ class EnterTextViewModelTest {
         resultObserver.captured.onError(RuntimeException())
 
         // Assert
-        // TODO: Fix this issue
-//        verify { textObserver wasNot called }
+        verify { textObserver wasNot called }
         verify { errorObserver.onChanged(any()) }
     }
 }
