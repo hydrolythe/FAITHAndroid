@@ -2,6 +2,7 @@ package be.hogent.faith.storage
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.storage.encryption.EncryptionMapper
 import be.hogent.faith.storage.firebase.FireBaseStorageRepository
 import be.hogent.faith.storage.localStorage.LocalStorageRepository
 import io.reactivex.Completable
@@ -15,10 +16,12 @@ import java.io.File
  */
 class StorageRepository(
     private val localStorage: LocalStorageRepository,
-    private val remoteStorage: FireBaseStorageRepository
+    private val remoteStorage: FireBaseStorageRepository,
+    private val encryptionMapper: EncryptionMapper
 ) : IStorageRepository {
 
     override fun saveEvent(event: Event): Completable {
+        val encryptedEvent = encryptionMapper.encrypt(event)
         return localStorage.saveEvent(event).andThen(remoteStorage.saveEvent(event))
     }
 
