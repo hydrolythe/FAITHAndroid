@@ -6,7 +6,9 @@ import io.reactivex.Single
 
 interface IStorageRepository {
     /**
-     * saves all files of an [event] in Firebase: emotion avatar and all detail files
+     * Saves the event in storage.
+     *
+     * Returns the event after it is done so calls can be chained.
      */
     fun saveEvent(event: Event): Single<Event>
 

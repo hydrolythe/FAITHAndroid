@@ -7,7 +7,7 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 
 /**
- * Places all event files inlocal storage
+ * Places all event files in local storage
  */
 class GetEventFilesUseCase(
     private val storageRepo: IStorageRepository,

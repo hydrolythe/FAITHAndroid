@@ -7,15 +7,21 @@ import java.io.File
 
 class AndroidTempFileProvider(private val context: Context) : TempFileProvider {
     override fun getEmotionAvatar(event: Event): File? {
-        if (event.emotionAvatar?.path?.startsWith("users") == true)
+        // Because the path is a relative path we should prepend it with the context.filesDir
+        if (event.emotionAvatar?.path?.startsWith("users") == true) {
             return File(context.filesDir, event.emotionAvatar!!.path)
-        return event.emotionAvatar
+        } else {
+            return event.emotionAvatar
+        }
     }
 
     override fun getFile(detail: Detail): File {
-        if (detail.file.path.startsWith("users"))
+        // Because the path is a relative path we should prepend it with the context.filesDir
+        if (detail.file.path.startsWith("users")) {
             return File(context.filesDir, detail.file.path)
-        return detail.file
+        } else {
+            return detail.file
+        }
     }
 
     override val tempPhotoFile: File

@@ -13,29 +13,21 @@ class LocalStorageRepository(
     private val context: Context
 ) : ILocalStorageRepository {
 
-    /**
-     * moves the files from tempory storage to local storage
-     */
     override fun saveEvent(event: Event): Single<Event> {
-        return saveEmotionAvatar(event).mergeWith(saveEventDetails(event)).toSingle { event }
+        return saveEmotionAvatar(event)
+            .mergeWith(saveEventDetails(event))
+            .toSingle { event }
     }
 
-    /**
-     * moves all detail files of an event from tempory storage to local storage
-     * and updates the path
-     */
     private fun saveEventDetails(event: Event): Completable {
         return Completable.fromCallable {
             event.details.map { detail ->
                 moveFile(detail.file, pathProvider.getLocalDetailPath(event, detail))
-                detail.file = pathProvider.getDetailPath(event, detail) }
-                }
+                detail.file = pathProvider.getDetailPath(event, detail)
             }
+        }
+    }
 
-    /**
-     * moves the emotion avatar of an event from tempory storage to local storage
-     * and updates the path
-     */
     private fun saveEmotionAvatar(event: Event): Completable {
         return Completable.fromCallable {
             if (event.emotionAvatar != null) {
@@ -48,24 +40,15 @@ class LocalStorageRepository(
         }
     }
 
-    /**
-     * moves a file from tempory storage to local storage and deletes the file in tempory storage
-     */
     private fun moveFile(from: File, to: File) {
-            from.copyTo(target = to, overwrite = true)
-            from.delete()
+        from.copyTo(target = to, overwrite = true)
+        from.delete()
     }
 
-    /**
-     * checks if file is present in localStorage
-     */
     override fun isFilePresent(detail: Detail): Boolean {
         return File(context.filesDir, detail.file.path).exists()
     }
 
-    /**
-     * checks if emotion avatar is present in localStorage
-     */
     override fun isEmotionAvatarPresent(event: Event): Boolean {
         if (event.emotionAvatar == null)
             return true
