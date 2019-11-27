@@ -1,6 +1,7 @@
 package be.hogent.faith.storage.encryption
 
 import be.hogent.faith.domain.models.Event
+import java.io.File
 
 class EncryptionMapper(
     private val encrypter: Encrypter
@@ -21,9 +22,13 @@ class EncryptionMapper(
         with(encryptedEvent) {
             return Event(
                 dateTime = encrypter.decryptLocalDateTime(dateTime),
-                title = encrypter.decryptString(title),
-                emotionAvatar = encrypter.decryptFile(emotionAvatar),
-                notes = encrypter.decryptString(notes),
+                title = encrypter.decrypt(title),
+                emotionAvatar = if (emotionAvatar == null) {
+                    null
+                } else {
+                    File(encrypter.decrypt(emotionAvatar))
+                },
+                notes = encrypter.decrypt(notes),
                 uuid = uuid
             )
         }

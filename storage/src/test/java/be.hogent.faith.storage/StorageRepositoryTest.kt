@@ -19,7 +19,7 @@ class StorageRepositoryTest {
 
     private val localStorage = mockk<ILocalStorageRepository>()
     private val remoteStorage = mockk<IFireBaseStorageRepository>()
-    private val storageRepository = StorageRepository(localStorage, remoteStorage)
+    private val storageRepository = StorageRepository(localStorage, remoteStorage, mockk())
 
     @Test
     fun saveEvent_eventCorrectlyPassedToLocalStorage() {

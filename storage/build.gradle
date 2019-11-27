@@ -57,4 +57,7 @@ dependencies {
     androidTestImplementation androidTestDependencies.androidJunit
     androidTestImplementation androidTestDependencies.espresso
 
+
+    compile 'com.github.simbiose:Encryption:2.0.1'
+
 }
