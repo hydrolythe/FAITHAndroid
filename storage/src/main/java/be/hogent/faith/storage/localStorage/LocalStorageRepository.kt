@@ -3,7 +3,6 @@ package be.hogent.faith.storage.localStorage
 import android.content.Context
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.storage.IStorageRepository
 import be.hogent.faith.storage.StoragePathProvider
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -12,51 +11,47 @@ import java.io.File
 class LocalStorageRepository(
     private val pathProvider: StoragePathProvider,
     private val context: Context
-) : IStorageRepository {
+) : ILocalStorageRepository {
 
-    override fun saveEvent(event: Event): Completable {
-        val saveAvatar = saveEmotionAvatar(event)
-        val saveDetails = saveEventDetails(event)
-        return Completable.mergeArray(saveAvatar, saveDetails)
+    override fun saveEvent(event: Event): Single<Event> {
+        return saveEmotionAvatar(event)
+            .mergeWith(saveEventDetails(event))
+            .toSingle { event }
     }
 
     private fun saveEventDetails(event: Event): Completable {
         return Completable.fromCallable {
             event.details.map { detail ->
-                getFile(detail).doOnSuccess { currentLocation ->
-                    moveFile(currentLocation, pathProvider.getLocalDetailPath(detail)).andThen{
-                        detail.file = pathProvider.getLocalDetailPath(detail)
-                    }
-                }
+                moveFile(detail.file, pathProvider.getLocalDetailPath(event, detail))
+                detail.file = pathProvider.getDetailPath(event, detail)
             }
         }
     }
 
     private fun saveEmotionAvatar(event: Event): Completable {
-        if (event.emotionAvatar != null) {
-            return moveFile(
-                event.emotionAvatar!!,
-                pathProvider.getLocalEmotionAvatarPath(event)
-            ).andThen {
-                event.emotionAvatar = pathProvider.getLocalEmotionAvatarPath(event)
-            }
-        } else {
-            return Completable.complete()
-        }
-    }
-
-    private fun moveFile(from: File, to: File): Completable {
         return Completable.fromCallable {
-            from.copyTo(target = to, overwrite = true)
-            from.delete()
+            if (event.emotionAvatar != null) {
+                moveFile(
+                    event.emotionAvatar!!,
+                    pathProvider.getLocalEmotionAvatarPath(event)
+                )
+                event.emotionAvatar = pathProvider.getEmotionAvatarPath(event)
+            }
         }
     }
 
-    override fun getFile(detail: Detail): Single<File> {
-        return Single.just(File(context.filesDir, detail.file.path))
+    private fun moveFile(from: File, to: File) {
+        from.copyTo(target = to, overwrite = true)
+        from.delete()
     }
 
-    override fun getEmotionAvatar(event: Event): Single<File> {
-        return Single.just(pathProvider.getLocalEmotionAvatarPath(event))
+    override fun isFilePresent(detail: Detail): Boolean {
+        return File(context.filesDir, detail.file.path).exists()
+    }
+
+    override fun isEmotionAvatarPresent(event: Event): Boolean {
+        if (event.emotionAvatar == null)
+            return true
+        return File(context.filesDir, event.emotionAvatar!!.path).exists()
     }
 }

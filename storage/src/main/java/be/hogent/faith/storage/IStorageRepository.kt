@@ -1,24 +1,20 @@
 package be.hogent.faith.storage
 
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Completable
 import io.reactivex.Single
-import java.io.File
 
 interface IStorageRepository {
-    fun saveEvent(event: Event): Completable
-
     /**
-     *  Gets the file in which a detail is saved.
+     * Saves the event in storage.
      *
-     *  @throws NoSuchElementException when no file for this detail could be retrieved
+     * Returns the event after it is done so calls can be chained.
      */
-    fun getFile(detail: Detail): Single<File>
+    fun saveEvent(event: Event): Single<Event>
 
     /**
-     * Gets the file in which an [event]'s emotion avatar is saved.
-     *  If not locally available, it will first download it and save locally.
+     * Saves all files of an [event] in localStorage : emotion avatar and all detail files
+     * If not locally available, it will download it from firebase and save locally.
      */
-    fun getEmotionAvatar(event: Event): Single<File>
+    fun getEvent(event: Event): Completable
 }

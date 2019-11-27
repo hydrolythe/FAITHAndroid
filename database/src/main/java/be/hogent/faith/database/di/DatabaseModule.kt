@@ -13,7 +13,6 @@ import be.hogent.faith.domain.repository.EventRepository
 import be.hogent.faith.domain.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import org.koin.dsl.module
 
 val databaseModule = module {
@@ -37,18 +36,13 @@ val databaseModule = module {
     single {
         FirebaseEventRepository(
             constructFirebaseAuthInstance(),
-            constructFireStoreInstance(),
-            constructFirebaseStorageInstance()
+            constructFireStoreInstance()
         )
     }
 }
 
 fun constructFireStoreInstance(): FirebaseFirestore {
     return FirebaseFirestore.getInstance()
-}
-
-fun constructFirebaseStorageInstance(): FirebaseStorage {
-    return FirebaseStorage.getInstance()
 }
 
 fun constructFirebaseAuthInstance(): FirebaseAuth {

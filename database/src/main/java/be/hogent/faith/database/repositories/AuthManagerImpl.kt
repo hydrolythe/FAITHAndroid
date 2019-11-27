@@ -15,9 +15,5 @@ class AuthManagerImpl(private val firebase: FirebaseAuthManager) : AuthManager {
 
     override fun signOut() = firebase.signOut()
 
-    override fun reset() {
-        // TODO ("not implemented")
-    }
-
-    override fun getLoggedInUserUUID(): String? = firebase.getLoggedInUser()
+    override fun getLoggedInUserUUID(): String? = firebase.getLoggedInUserUid()
 }
