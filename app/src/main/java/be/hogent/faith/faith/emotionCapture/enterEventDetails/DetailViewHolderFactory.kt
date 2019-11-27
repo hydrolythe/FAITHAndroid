@@ -11,9 +11,12 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.A
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExistingDetailNavigationListener
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.PictureDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.TextDetailViewHolder
+import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.signature.MediaStoreSignature
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
 object DetailViewHolderFactory {
     fun createViewHolder(
@@ -69,7 +72,7 @@ object DetailViewHolderFactory {
 sealed class DetailViewHolder(
     val imageView: ImageView,
     private val existingDetailNavigationListener: ExistingDetailNavigationListener
-) : RecyclerView.ViewHolder(imageView) {
+) : RecyclerView.ViewHolder(imageView), KoinComponent {
 
     fun bind(detail: Detail) {
         load(detail).into(imageView)
@@ -96,9 +99,10 @@ sealed class DetailViewHolder(
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
+        val androidTempFileProvider: TempFileProvider by inject()
         override fun load(detail: Detail): RequestBuilder<Drawable> {
             return Glide.with(imageView)
-                .load(detail.file)
+                .load(androidTempFileProvider.getFile(detail))
                 // Signature is required to force Glide to reload overwritten pictures
                 .signature(MediaStoreSignature("", detail.file.lastModified(), 0))
         }

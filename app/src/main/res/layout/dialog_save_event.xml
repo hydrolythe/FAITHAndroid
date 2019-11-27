@@ -120,6 +120,8 @@
                             android:id="@+id/txt_save_event_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:nextFocusDown = "@+id/txt_save_event_notes"
                             android:text="@={eventViewModel.eventTitle}" />
                     </com.google.android.material.textfield.TextInputLayout>
 

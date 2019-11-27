@@ -1,8 +1,7 @@
 pipeline {
     agent {
         node {
-
-            label 'ubuntu-1604-android-slave'
+            label 'android-test-slave'
         }
 
     }
@@ -15,49 +14,42 @@ pipeline {
         '''
             }
         }
-        stage('Setup Emulator') {
-            when {
-                branch 'master'
-            }
-            steps {
-                sh '''
-                export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
-                echo $PATH
-                EMULATOR_API_LEVEL=24
-                ANDROID_ABI="default;armeabi-v7a"
-                sdkmanager "system-images;android-$EMULATOR_API_LEVEL;$ANDROID_ABI"
-                yes | sdkmanager --licenses
-                touch ~/.android/repositories.cfg
-                sdkmanager --update
-                echo no | avdmanager create avd --force -n test -k "system-images;android-$EMULATOR_API_LEVEL;$ANDROID_ABI"
-                emulator -avd test -no-audio -no-window -no-snapshot -gpu auto &
-                chmod u+rwx waitForEmulator.sh
-                ./waitForEmulator.sh
-        '''
-            }
-        }
         stage('Linting') {
             steps {
-                sh './gradlew ktlint'
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh './gradlew ktlint'
+                }
             }
         }
+
         stage('Build') {
             steps {
-                sh './gradlew --refresh-dependencies clean assemble'
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh './gradlew :app:assembleDebug'
+                    sh './gradlew :app:assembleDebugAndroidTest'
+                }
             }
         }
         stage('Unit Test') {
             steps {
-                sh './gradlew testDebugUnitTest testDebugUnitTest'
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh './gradlew testDebugUnitTest testDebugUnitTest'
+                }
             }
         }
-        stage('Run integration tests') {
-            when {
-                branch 'master'
+        stage('Integration tests') {
+            when{
+                branch 'dev'
             }
             steps {
-                lock('emulator') {
-                    sh './gradlew connectedCheck'
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'gcloud auth activate-service-account --key-file=/key/firekey.json'
+                    sh 'gcloud config set project jenkins-server-250512'
+                    sh 'gcloud firebase test android run ' +
+                            '--type instrumentation ' +
+                            '--app app/build/outputs/apk/debug/app-debug.apk ' +
+                            '--test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk ' +
+                            '--device model=Nexus9,version=21,locale=nl_BE,orientation=landscape'
                 }
             }
         }

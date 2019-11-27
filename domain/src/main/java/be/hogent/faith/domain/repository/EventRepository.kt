@@ -12,8 +12,6 @@ interface EventRepository {
 
     fun insert(item: Event, user: User): Maybe<Event>
 
-    fun insertAll(items: List<Event>, user: User): Completable
-
     fun get(uuid: UUID): Flowable<Event>
 
     fun getAll(): Flowable<List<Event>>

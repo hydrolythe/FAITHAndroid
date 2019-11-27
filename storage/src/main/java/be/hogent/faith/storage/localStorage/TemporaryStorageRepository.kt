@@ -17,11 +17,15 @@ class TemporaryStorageRepository(
     private val storagePathProvider: StoragePathProvider
 ) : ITemporaryStorage {
 
+    /**
+     * Stores a detail in its event's folder, and sets the **relative** path in the detail
+     * (the path without context.cachedir)
+     */
     override fun storeDetailWithEvent(detail: Detail, event: Event): Completable {
         val saveFile = File(getEventDirectory(event), detail.uuid.toString())
         return moveFile(detail.file, saveFile)
             .doOnComplete {
-                detail.file = saveFile
+                detail.file = saveFile // relativePath
             }
     }
 
@@ -66,7 +70,7 @@ class TemporaryStorageRepository(
             "Must provide a directory, not a file, in which to store the bitmap.\n" +
                     "${folder.path} is not a directory."
         }
-        require(!fileName.isNullOrBlank()) { "Empty filenames are not allowed when storing bitmaps" }
+        require(!fileName.isBlank()) { "Empty filenames are not allowed when storing bitmaps" }
 
         val saveFile = File(folder, fileName)
         return storeBitmap(bitmap, saveFile).andThen(Single.just(saveFile))

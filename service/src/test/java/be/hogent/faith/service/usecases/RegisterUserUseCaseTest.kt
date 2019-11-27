@@ -75,7 +75,6 @@ class RegisterUserUseCaseTest {
         val passwordArg = slot<String>()
         val userArg = slot<User>()
 
-        val uid = UUID.randomUUID().toString()
         every { authManager.register(capture(emailArg), capture(passwordArg)) } returns Maybe.error(
             UserCollisionException(Exception("error"))
         )

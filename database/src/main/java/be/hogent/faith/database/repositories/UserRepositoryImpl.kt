@@ -28,19 +28,15 @@ open class UserRepositoryImpl(
     }
 
     /**
-     * gets the current user. This must be the uuid of the authenticated user
+     * gets the current user. This must be the uid of the authenticated user
      */
-    override fun get(uuid: String): Flowable<User> {
-        return firebaseUserRepository.get(uuid).map { userMapper.mapFromEntity(it) }
-    }
-
-    override fun getAll(): Flowable<List<User>> {
-        TODO("not implemented") // not possible because no admin user defined in Firebase
+    override fun get(uid: String): Flowable<User> {
+        return firebaseUserRepository.get(uid).map { userMapper.mapFromEntity(it) }
     }
 
     /**
-     * Add events to the user
-     */
+    * Add events to the user
+    */
     private fun addEventsToUser(user: User, events: List<Event>): User {
         events.forEach { user.addEvent(it) }
         return user

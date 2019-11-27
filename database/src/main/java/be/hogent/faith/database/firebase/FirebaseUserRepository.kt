@@ -59,23 +59,7 @@ class FirebaseUserRepository(
         return RxFirestore.deleteDocument(firestore.collection(USERS_KEY).document(currentUser.uid))
     }
 
-    /**
-     * get all users from Firestorage
-     */
-    fun getAll(): Flowable<List<UserEntity>> {
-        TODO("not implemented, because rules for an admin in firestore not set") // if used, set the rules on the database
-        /*
-        return RxFirestore.observeQueryRef(firestore.collection(USERS_KEY))
-            .map {
-                it?.map { document ->
-                    document.toObject(UserEntity::class.java)
-                }
-            }
-         */
-    }
-
     companion object {
         const val USERS_KEY = "users"
-        const val USER_ID_KEY = "uuid"
     }
 }

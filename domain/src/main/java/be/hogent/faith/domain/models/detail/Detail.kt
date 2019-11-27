@@ -10,7 +10,9 @@ import java.util.UUID
 
 sealed class Detail(
     /**
-     * The location of this Detail
+     * A relative path of where the actual content of the detail is saved.
+     * Relative because when getting it from local storage the necessary directory structure is
+     * added before the path.
      */
     var file: File,
     val uuid: UUID = UUID.randomUUID()

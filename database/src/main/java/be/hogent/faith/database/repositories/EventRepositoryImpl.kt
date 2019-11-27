@@ -45,13 +45,4 @@ open class EventRepositoryImpl(
     override fun delete(item: Event, user: User): Completable {
         TODO("not implemented")
     }
-
-    /**
-     * Adds all items associated with a user as well as their details
-     *
-     * @return A [Completable] that only succeeds when all events and their details were inserted successfully.
-     */
-    override fun insertAll(items: List<Event>, user: User): Completable {
-        TODO("not implemented")
-    }
 }

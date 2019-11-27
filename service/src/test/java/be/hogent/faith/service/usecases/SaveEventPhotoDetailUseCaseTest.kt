@@ -3,7 +3,6 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.service.usecases.event.SaveEventPhotoDetailUseCase
-import be.hogent.faith.storage.StorageRepository
 import be.hogent.faith.storage.localStorage.ITemporaryStorage
 import io.mockk.every
 import io.mockk.mockk
