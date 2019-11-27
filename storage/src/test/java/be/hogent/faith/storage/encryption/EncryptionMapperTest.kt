@@ -7,10 +7,10 @@ import org.junit.Test
 class EncryptionMapperTest {
 
     private val event = EventFactory.makeEvent(3)
-    private val mapper = EncryptionMapper(Encrypter())
+    private val mapper = EventEncryptor(Encrypter())
 
     @Test
     fun encryptionMapper_encryptDecryptIdempotent() {
-        assertEquals(event,mapper.decrypt(mapper.encrypt(event)))
+        assertEquals(event, mapper.decrypt(mapper.encrypt(event)))
     }
 }

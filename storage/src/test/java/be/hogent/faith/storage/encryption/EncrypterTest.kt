@@ -3,7 +3,6 @@ package be.hogent.faith.storage.encryption
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.threeten.bp.LocalDateTime
-import java.io.File
 
 class EncrypterTest {
 

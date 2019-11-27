@@ -3,7 +3,7 @@ package be.hogent.faith.storage.encryption
 import be.hogent.faith.domain.models.Event
 import java.io.File
 
-class EncryptionMapper(
+class EventEncryptor(
     private val encrypter: Encrypter
 ) {
     fun encrypt(event: Event): EncryptedEvent {

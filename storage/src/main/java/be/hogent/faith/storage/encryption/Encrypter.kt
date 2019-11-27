@@ -14,11 +14,11 @@ class Encrypter {
     private val encryption = Encryption.getDefault(key, salt, iv)
 
     fun encrypt(string: String?): String? {
-        return encryption.encryptOrNull(string)
+        return encryption.encrypt(string)
     }
 
     fun decrypt(string: String?): String? {
-        return encryption.decryptOrNull(string)
+        return encryption.decrypt(string)
     }
 
     fun encrypt(localDateTime: LocalDateTime): String {
