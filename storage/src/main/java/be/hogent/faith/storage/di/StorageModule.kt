@@ -5,6 +5,7 @@ import be.hogent.faith.storage.StoragePathProvider
 import be.hogent.faith.storage.StorageRepository
 import be.hogent.faith.storage.encryption.Encrypter
 import be.hogent.faith.storage.encryption.EventEncryptor
+import be.hogent.faith.storage.encryption.FileEncryptor
 import be.hogent.faith.storage.firebase.FireBaseStorageRepository
 import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
 import be.hogent.faith.storage.localStorage.ILocalStorageRepository
@@ -29,6 +30,7 @@ val storageModule = module {
     }
 
     factory { EventEncryptor(Encrypter()) }
+    factory { FileEncryptor(Encrypter()) }
 }
 
 fun constructFirebaseStorageInstance(): FirebaseStorage {
