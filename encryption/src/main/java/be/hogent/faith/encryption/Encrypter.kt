@@ -1,8 +1,7 @@
-package be.hogent.faith.storage.encryption
+package be.hogent.faith.encryption
 
 import org.threeten.bp.LocalDateTime
 import se.simbio.encryption.Encryption
-import java.io.File
 
 class Encrypter {
 
@@ -13,16 +12,16 @@ class Encrypter {
 
     private val encryption = Encryption.getDefault(key, salt, iv)
 
-    fun encrypt(string: String?): String? {
+    fun encrypt(string: String): String {
         return encryption.encrypt(string)
     }
 
-    fun decrypt(string: String?): String? {
+    fun decrypt(string: String): String {
         return encryption.decrypt(string)
     }
 
     fun encrypt(localDateTime: LocalDateTime): String {
-        return encrypt(localDateTime.toString())!!
+        return encrypt(localDateTime.toString())
     }
 
     fun decryptLocalDateTime(localDateTimeString: String): LocalDateTime {

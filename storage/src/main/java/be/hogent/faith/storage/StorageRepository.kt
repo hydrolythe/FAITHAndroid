@@ -2,8 +2,7 @@ package be.hogent.faith.storage
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.storage.encryption.EventEncryptor
-import be.hogent.faith.storage.encryption.FileEncryptor
+import be.hogent.faith.storage.encryption.IFileEncryptor
 import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
 import be.hogent.faith.storage.localStorage.ILocalStorageRepository
 import io.reactivex.Completable
@@ -18,7 +17,7 @@ import io.reactivex.rxkotlin.toFlowable
 class StorageRepository(
     private val localStorage: ILocalStorageRepository,
     private val remoteStorage: IFireBaseStorageRepository,
-    private val fileEncryptor: FileEncryptor
+    private val fileEncryptor: IFileEncryptor
 ) : IStorageRepository {
 
     /**

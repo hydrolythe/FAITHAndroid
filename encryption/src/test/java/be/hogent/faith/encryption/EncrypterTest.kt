@@ -1,4 +1,4 @@
-package be.hogent.faith.storage.encryption
+package be.hogent.faith.encryption
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -6,7 +6,7 @@ import org.threeten.bp.LocalDateTime
 
 class EncrypterTest {
 
-    private val encrypter = be.hogent.faith.encryption.Encrypter()
+    private val encrypter = Encrypter()
 
     @Test
     fun encrypter_localDateTime_encryptDecryptIdempotent() {

@@ -1,4 +1,4 @@
-package be.hogent.faith.storage.encryption
+package be.hogent.faith.encryption
 
 import be.hogent.faith.util.factory.EventFactory
 import org.junit.Assert.assertEquals
@@ -7,7 +7,7 @@ import org.junit.Test
 class EncryptionMapperTest {
 
     private val event = EventFactory.makeEvent(3)
-    private val mapper = EventEncryptor(be.hogent.faith.encryption.Encrypter())
+    private val mapper = EventEncryptor(Encrypter())
 
     @Test
     fun encryptionMapper_encryptDecryptIdempotent() {
