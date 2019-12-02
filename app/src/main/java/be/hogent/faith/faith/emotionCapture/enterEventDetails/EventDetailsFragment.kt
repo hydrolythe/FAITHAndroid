@@ -28,9 +28,6 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 import java.util.UUID
 import androidx.recyclerview.widget.DividerItemDecoration
 
-
-
-
 private const val ARG_EVENTUUID = "eventUUID"
 
 class EventDetailsFragment : Fragment() {
@@ -101,17 +98,12 @@ class EventDetailsFragment : Fragment() {
                 emptyList(),
                 requireNotNull(activity) as EmotionCaptureMainActivity
             )
-            val divider = DividerItemDecoration(this.context,this.layoutManager!!.layoutDirection)
+            val divider = DividerItemDecoration(this.context, this.layoutManager!!.layoutDirection)
             addItemDecoration(divider)
         }
         detailThumbnailsAdapter =
             eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
-        if(detailThumbnailsAdapter!!.itemCount > 0){
-            eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.VISIBLE
-        }else{
-            eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.GONE
-        }
-
+        determineRVVisibility()
     }
 
     private fun setBackgroundImage() {
@@ -120,14 +112,24 @@ class EventDetailsFragment : Fragment() {
             .into(background_event_details)
     }
 
+    /**
+     * Determines whether the Recyclerview showing the details is visible or not. Will set status
+     * to gone when no items are shown, will set visible when at least one detail is present.
+     */
+    private fun determineRVVisibility() {
+        if (detailThumbnailsAdapter!!.itemCount > 0) {
+            eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.VISIBLE
+        } else {
+            eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.GONE
+        }
+    }
+
     private fun startListeners() {
         // Update adapter when event changes
         eventViewModel.event.observe(this, Observer { event ->
             detailThumbnailsAdapter?.updateDetailsList(event.details)
             // check whether there are detail in de adapter. If so, show the RV, of not leave hidden
-            if(detailThumbnailsAdapter!!.itemCount > 0){
-                eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.VISIBLE
-            }
+            determineRVVisibility()
         })
 
         userViewModel.user.observe(this, Observer { user ->
