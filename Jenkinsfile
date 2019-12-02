@@ -19,7 +19,7 @@ pipeline {
                 }
             }
         }
-        /**stage('Linting') {
+        stage('Linting') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     sh './gradlew ktlint'
@@ -48,8 +48,6 @@ pipeline {
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'gcloud auth activate-service-account --key-file=/key/firekey.json'
-                    sh 'gcloud config set project jenkins-server-250512'
                     sh 'gcloud firebase test android run ' +
                             '--type instrumentation ' +
                             '--app app/build/outputs/apk/debug/app-debug.apk ' +
@@ -58,7 +56,6 @@ pipeline {
                 }
             }
         }
-    */
     }
     post {
         always {
