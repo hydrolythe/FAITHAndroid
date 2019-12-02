@@ -171,9 +171,10 @@
                 android:clipToPadding="false"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHeight_default="wrap"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.806"
+                tools:itemCount="9"
                 tools:listitem="@layout/item_event_detail_thumbnail" />
 
             <ImageButton

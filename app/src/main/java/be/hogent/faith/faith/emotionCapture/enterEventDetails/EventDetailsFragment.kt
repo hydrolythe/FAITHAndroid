@@ -106,7 +106,11 @@ class EventDetailsFragment : Fragment() {
         }
         detailThumbnailsAdapter =
             eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
-
+        if(detailThumbnailsAdapter!!.itemCount > 0){
+            eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.VISIBLE
+        }else{
+            eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.GONE
+        }
 
     }
 
@@ -120,6 +124,10 @@ class EventDetailsFragment : Fragment() {
         // Update adapter when event changes
         eventViewModel.event.observe(this, Observer { event ->
             detailThumbnailsAdapter?.updateDetailsList(event.details)
+            // check whether there are detail in de adapter. If so, show the RV, of not leave hidden
+            if(detailThumbnailsAdapter!!.itemCount > 0){
+                eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.VISIBLE
+            }
         })
 
         userViewModel.user.observe(this, Observer { user ->
