@@ -47,6 +47,9 @@ ext {
     android_junit_version = '1.1.1'
     test_version = '1.2.0'
     robolectric_version = '4.3'
+    firebase_test_version = '17.2.1'
+    crashlytics_dep_version = '2.10.1'
+
 
     uiAutomator_version = '2.2.0'
     junit_version = '4.12'
@@ -98,7 +101,10 @@ ext {
             coreTesting: "androidx.arch.core:core-testing:$aac_core_version",
             threeTenBP : "org.threeten:threetenbp:$threeTenBP_version",
             koinTesting: "org.koin:koin-test:$koin_version",
-            robolectric: "org.robolectric:robolectric:$robolectric_version"
+            robolectric: "org.robolectric:robolectric:$robolectric_version",
+            //Add Analytics
+            firebase_analytics: "com.google.firebase:firebase-analytics:$firebase_test_version",
+            crashlytics: "com.crashlytics.sdk.android:crashlytics:$crashlytics_dep_version"
     ]
 
     androidTestDependencies = [
