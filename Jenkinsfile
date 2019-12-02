@@ -13,12 +13,11 @@ pipeline {
                         export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
                         echo $PATH
                         cp $googlejson app/google-services.json
-                        ls app
                     '''
                 }
             }
         }
-        /**stage('Linting') {
+        stage('Linting') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     sh './gradlew ktlint'
@@ -57,7 +56,7 @@ pipeline {
                 }
             }
         }
-         */
+
     }
     post {
         always {
