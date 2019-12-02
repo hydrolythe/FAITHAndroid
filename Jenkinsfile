@@ -8,13 +8,16 @@ pipeline {
     stages {
         stage('Setup VM') {
             steps {
-                sh '''
-        export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
-        echo $PATH
-        '''
+                withCredentials([file(credentialsId: 'googlejson', variable: 'googlejson')]) {
+                    sh '''
+                        export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
+                        echo $PATH
+                        cp $googlejson app/google-services.json
+                    '''
+                }
             }
         }
-        stage('Linting') {
+        /**stage('Linting') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     sh './gradlew ktlint'
@@ -53,6 +56,7 @@ pipeline {
                 }
             }
         }
+         */
     }
     post {
         always {
