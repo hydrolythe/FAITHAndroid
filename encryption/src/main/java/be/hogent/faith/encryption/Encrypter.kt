@@ -1,30 +1,21 @@
 package be.hogent.faith.encryption
 
-import org.threeten.bp.LocalDateTime
-import se.simbio.encryption.Encryption
-
 class Encrypter {
 
-    private val key = "megasecurekeydiebestzolangmogelijkis"
-    private val salt = "bahzozout"
-    // TODO: eigen IV maken
-    private val iv = ByteArray(16)
+    init {
+//        TinkConfig.register()
+    }
 
-    private val encryption = Encryption.getDefault(key, salt, iv)
+//    private val keySethandle = KeysetHandle.generateNew(AeadKeyTemplates.AES128_GCM)
+//    private val aead = keySethandle.getPrimitive(Aead::class.java)
 
     fun encrypt(string: String): String {
-        return encryption.encrypt(string)
+        return "enc$string"
+//        return aead.encrypt(string.toByteArray(), null).toString()
     }
 
     fun decrypt(string: String): String {
-        return encryption.decrypt(string)
-    }
-
-    fun encrypt(localDateTime: LocalDateTime): String {
-        return encrypt(localDateTime.toString())
-    }
-
-    fun decryptLocalDateTime(localDateTimeString: String): LocalDateTime {
-        return LocalDateTime.parse(decrypt(localDateTimeString))
+        return string.substring(3)
+//        return aead.decrypt(string.toByteArray(), null).toString()
     }
 }

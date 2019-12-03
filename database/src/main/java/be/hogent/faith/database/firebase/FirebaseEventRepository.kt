@@ -1,5 +1,6 @@
 package be.hogent.faith.database.firebase
 
+import be.hogent.faith.database.encryption.EncryptedEventEntity
 import be.hogent.faith.database.models.EventEntity
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.util.TAG
@@ -24,7 +25,7 @@ class FirebaseEventRepository(
     /**
      * get event with eventUid for the current authenticated user, also listens for changes
      */
-    fun get(eventUid: String): Flowable<EventEntity> {
+    fun get(eventUid: String): Flowable<EncryptedEventEntity> {
         val currentUser = fbAuth.currentUser
         if (currentUser == null) {
             return Flowable.error(RuntimeException("Unauthorized user."))
@@ -33,13 +34,13 @@ class FirebaseEventRepository(
             firestore.collection(USERS_KEY).document(currentUser.uid).collection(EVENTS_KEY)
                 .document(eventUid)
         )
-            .map { it.toObject(EventEntity::class.java) }
+            .map { it.toObject(EncryptedEventEntity::class.java) }
     }
 
     /**
      * get all events for current authenticated user, also listens for changes
      */
-    fun getAll(): Flowable<List<EventEntity>> {
+    fun getAll(): Flowable<List<EncryptedEventEntity>> {
         val currentUser = fbAuth.currentUser
         if (currentUser == null) {
             return Flowable.error(RuntimeException("Unauthorized user."))
@@ -51,7 +52,7 @@ class FirebaseEventRepository(
         )
             .map {
                 it.map { document ->
-                    document.toObject(EventEntity::class.java)
+                    document.toObject(EncryptedEventEntity::class.java)
                 }
             }
     }
@@ -62,7 +63,7 @@ class FirebaseEventRepository(
      * 2. for each detail : save the corresponding file and update the file reference
      * 3. insert the event
      */
-    fun insert(item: EventEntity, user: UserEntity): Maybe<EventEntity?> {
+    fun insert(item: EncryptedEventEntity, user: UserEntity): Maybe<EventEntity?> {
         val currentUser = fbAuth.currentUser
         if (currentUser == null || currentUser.uid != user.uuid) {
             return Maybe.error(RuntimeException("Unauthorized user."))

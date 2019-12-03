@@ -26,6 +26,7 @@ android {
 dependencies {
     implementation project(':domain')
     implementation project(':storage')
+    implementation project(':database')
     implementation project(':util')
 
     def commonDependencies = rootProject.ext.commonDependencies
@@ -40,7 +41,9 @@ dependencies {
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
 
-    implementation 'com.github.simbiose:Encryption:2.0.1'
+//    compile('com.google.crypto.tink:tink:1.3.0-rc2'){
+//        exclude group:'com.google.protobuf', module: 'protobuf-lite'
+//    }
 }
 
 repositories {

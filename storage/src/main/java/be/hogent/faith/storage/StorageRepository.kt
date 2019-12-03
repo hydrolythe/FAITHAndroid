@@ -2,7 +2,6 @@ package be.hogent.faith.storage
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.storage.encryption.IFileEncryptor
 import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
 import be.hogent.faith.storage.localStorage.ILocalStorageRepository
 import io.reactivex.Completable
@@ -16,8 +15,7 @@ import io.reactivex.rxkotlin.toFlowable
  */
 class StorageRepository(
     private val localStorage: ILocalStorageRepository,
-    private val remoteStorage: IFireBaseStorageRepository,
-    private val fileEncryptor: IFileEncryptor
+    private val remoteStorage: IFireBaseStorageRepository
 ) : IStorageRepository {
 
     /**
@@ -25,19 +23,7 @@ class StorageRepository(
      */
     override fun saveEvent(event: Event): Single<Event> {
         return localStorage.saveEvent(event)
-            .map { encryptEventFiles(it) }
             .flatMap { remoteStorage.saveEvent(it) }
-    }
-
-    /**
-     * Encrypts the locally saved details of an event
-     */
-    private fun encryptEventFiles(event: Event): Event {
-        event.details.forEach { detail ->
-            fileEncryptor.encrypt(detail.file)
-        }
-        event.emotionAvatar?.let { fileEncryptor.encrypt(it) }
-        return event
     }
 
     /**

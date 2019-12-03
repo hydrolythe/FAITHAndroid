@@ -62,7 +62,7 @@ class UserViewModel(
     private inner class GetUserUseCaseHandler : DisposableSubscriber<User>() {
 
         override fun onNext(t: User?) {
-            Timber.i(TAG, "success $t")
+            Timber.i("success $t")
             _user.postValue(t)
             _getLoggedInUserState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
         }
@@ -72,7 +72,7 @@ class UserViewModel(
         }
 
         override fun onError(e: Throwable) {
-            Timber.e(TAG, e.localizedMessage)
+            Timber.e(e)
             _getLoggedInUserState.postValue(
                 Resource(
                     ResourceState.ERROR, null,
@@ -101,7 +101,7 @@ class UserViewModel(
         }
 
         override fun onError(e: Throwable) {
-            Timber.e("error saving event ${e.localizedMessage}")
+            Timber.e(e, "error saving event ${e.localizedMessage}")
             _eventSavedState.postValue(
                 Resource(
                     ResourceState.ERROR,

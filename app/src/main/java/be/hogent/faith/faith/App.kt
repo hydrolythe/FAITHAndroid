@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import be.hogent.faith.BuildConfig
 import be.hogent.faith.database.di.databaseModule
+import be.hogent.faith.encryption.di.encryptionModule
 import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.service.usecases.di.serviceModule
 import be.hogent.faith.storage.di.storageModule
@@ -30,6 +31,7 @@ class App : Application() {
                     appModule,
                     databaseModule,
                     serviceModule,
+                    encryptionModule,
                     storageModule
                 )
             )

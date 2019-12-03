@@ -1,5 +1,6 @@
 package be.hogent.faith.database.repositories
 
+import be.hogent.faith.database.encryption.IEventEntityEncryptor
 import be.hogent.faith.database.firebase.FirebaseEventRepository
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.UserMapper
@@ -14,14 +15,17 @@ import java.util.UUID
 open class EventRepositoryImpl(
     private val userMapper: UserMapper,
     private val eventMapper: EventMapper,
-    private val firebaseEventRepository: FirebaseEventRepository
+    private val firebaseEventRepository: FirebaseEventRepository,
+    private val eventEntityEncryptor: IEventEntityEncryptor
 ) : EventRepository {
 
     /**
      * gets the event with uuid for authenticated user
      */
     override fun get(uuid: UUID): Flowable<Event> {
-        return firebaseEventRepository.get(uuid.toString()).map { eventMapper.mapFromEntity(it) }
+        return firebaseEventRepository.get(uuid.toString())
+            .map { eventEntityEncryptor.decrypt(it) }
+            .map { eventMapper.mapFromEntity(it) }
     }
 
     /**
@@ -29,17 +33,20 @@ open class EventRepositoryImpl(
      * @return a [Maybe<Event>] that only succeeds when both the event and its details are inserted successfully.
      */
     override fun insert(item: Event, user: User): Maybe<Event> {
+        val encryptedEvent = eventEntityEncryptor.encrypt(eventMapper.mapToEntity(item))
         return firebaseEventRepository.insert(
-            eventMapper.mapToEntity(item),
+            encryptedEvent,
             userMapper.mapToEntity(user)
-        ).map { eventMapper.mapFromEntity(it) }
+        ).map { item }
     }
 
     /**
      * get all events for authenticated user
      */
     override fun getAll(): Flowable<List<Event>> {
-        return firebaseEventRepository.getAll().map { eventMapper.mapFromEntities(it) }
+        return firebaseEventRepository.getAll()
+            .map { eventEntityEncryptor.decryptAll(it) }
+            .map { eventMapper.mapFromEntities(it) }
     }
 
     override fun delete(item: Event, user: User): Completable {

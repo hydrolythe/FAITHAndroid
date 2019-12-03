@@ -11,7 +11,7 @@ class FileEncryptor(
      */
     override fun encrypt(file: File) {
         val fileContents = file.readText()
-        val encryptedContents = encrypter.encrypt(fileContents)!!
+        val encryptedContents = encrypter.encrypt(fileContents)
         file.writeText(encryptedContents)
     }
 
@@ -20,7 +20,7 @@ class FileEncryptor(
      */
     override fun decrypt(file: File) {
         val fileContents = file.readText()
-        val decryptedContents = encrypter.decrypt(fileContents)!!
+        val decryptedContents = encrypter.decrypt(fileContents)
         file.writeText(decryptedContents)
     }
 }
