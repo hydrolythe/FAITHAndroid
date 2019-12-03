@@ -77,8 +77,8 @@ class StorageRepositoryTest {
         val event = EventFactory.makeEvent(nbrOfDetails = 1, hasEmotionAvatar = true)
         every { localStorage.isEmotionAvatarPresent(capture(eventArg)) } returns true
         every { localStorage.isFilePresent(capture(detailArg)) } returns true
-        every { remoteStorage.getEmotionAvatar(capture(eventArg)) } returns Completable.complete()
-        every { remoteStorage.getFile(capture(detailArg)) } returns Completable.complete()
+        every { remoteStorage.makeEmotionAvatarLocallyAvailable(capture(eventArg)) } returns Completable.complete()
+        every { remoteStorage.makeFileLocallyAvailable(capture(detailArg)) } returns Completable.complete()
         val result = storageRepository.getEvent(event).test()
         Assert.assertEquals(event, eventArg.captured)
         Assert.assertEquals(event.details[0], detailArg.captured)
@@ -90,14 +90,14 @@ class StorageRepositoryTest {
         val event = EventFactory.makeEvent(nbrOfDetails = 1, hasEmotionAvatar = true)
         every { localStorage.isEmotionAvatarPresent(any()) } returns true
         every { localStorage.isFilePresent(any()) } returns true
-        every { remoteStorage.getEmotionAvatar(any()) } returns Completable.complete()
-        every { remoteStorage.getFile(any()) } returns Completable.complete()
+        every { remoteStorage.makeEmotionAvatarLocallyAvailable(any()) } returns Completable.complete()
+        every { remoteStorage.makeFileLocallyAvailable(any()) } returns Completable.complete()
         val result = storageRepository.getEvent(event).test()
 
         verify(exactly = 1) { localStorage.isEmotionAvatarPresent(event) }
         verify(exactly = 1) { localStorage.isFilePresent(event.details[0]) }
-        verify { remoteStorage.getEmotionAvatar(any()) wasNot called }
-        verify { remoteStorage.getFile(any()) wasNot called }
+        verify { remoteStorage.makeEmotionAvatarLocallyAvailable(any()) wasNot called }
+        verify { remoteStorage.makeFileLocallyAvailable(any()) wasNot called }
         result.assertComplete()
     }
 
@@ -106,13 +106,13 @@ class StorageRepositoryTest {
         val event = EventFactory.makeEvent(nbrOfDetails = 1, hasEmotionAvatar = true)
         every { localStorage.isEmotionAvatarPresent(any()) } returns false
         every { localStorage.isFilePresent(any()) } returns false
-        every { remoteStorage.getEmotionAvatar(any()) } returns Completable.complete()
-        every { remoteStorage.getFile(any()) } returns Completable.complete()
+        every { remoteStorage.makeEmotionAvatarLocallyAvailable(any()) } returns Completable.complete()
+        every { remoteStorage.makeFileLocallyAvailable(any()) } returns Completable.complete()
         val result = storageRepository.getEvent(event).test()
         verify(exactly = 1) { localStorage.isEmotionAvatarPresent(event) }
         verify(exactly = 1) { localStorage.isFilePresent(event.details[0]) }
-        verify(exactly = 1) { remoteStorage.getEmotionAvatar(event) }
-        verify(exactly = 1) { remoteStorage.getFile(event.details[0]) }
+        verify(exactly = 1) { remoteStorage.makeEmotionAvatarLocallyAvailable(event) }
+        verify(exactly = 1) { remoteStorage.makeFileLocallyAvailable(event.details[0]) }
         result.assertComplete()
     }
 }

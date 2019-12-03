@@ -33,13 +33,17 @@ class FireBaseStorageRepository(
      * Gets a detail's file from [firestorage] and stores it into the path provided for it by the
      * [pathProvider].
      */
-    override fun getFile(detail: Detail): Completable {
+    override fun makeFileLocallyAvailable(detail: Detail): Completable {
         val fileToDownloadReference = storageRef.child(detail.file.path)
         val localFile: File = pathProvider.getLocalDetailPath(detail)
         return Completable.fromSingle(RxFirebaseStorage.getFile(fileToDownloadReference, localFile))
     }
 
-    override fun getEmotionAvatar(event: Event): Completable {
+    /**
+     * Gets the emotion avatar file from [firestorage] and stores it into the path provided for it by the
+     * [pathProvider].
+     */
+    override fun makeEmotionAvatarLocallyAvailable(event: Event): Completable {
         if (event.emotionAvatar == null)
             return Completable.complete()
         val fileToDownloadReference =
@@ -48,6 +52,9 @@ class FireBaseStorageRepository(
         return Completable.fromSingle(RxFirebaseStorage.getFile(fileToDownloadReference, localFile))
     }
 
+    /**
+     * Uploads the emotion avatar file to [firestorage]
+     */
     private fun saveEventEmotionAvatar(event: Event): Completable {
         if (event.emotionAvatar == null)
             return Completable.complete()
@@ -66,6 +73,9 @@ class FireBaseStorageRepository(
         )
     }
 
+    /**
+     * Uploads the detail file to [firestorage]
+     */
     private fun saveDetailFile(event: Event, detail: Detail): Completable {
         return Completable.fromSingle(
             RxFirebaseStorage.putFile(

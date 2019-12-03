@@ -7,7 +7,8 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 
 /**
- * Places all event files inlocal storage
+ * Download all event files not already in local storage from firebase to local storage
+ * Makes offline working possible. Needed for library
  */
 class GetEventFilesUseCase(
     private val storageRepo: IStorageRepository,
