@@ -29,6 +29,11 @@ class TakePhotoViewModel : ViewModel() {
     val notOkPhotoButtonClicked: LiveData<Unit>
         get() = _notOkPhotoButtonClicked
 
+    private val _flipCamera = MutableLiveData<Boolean>()
+    val flipCamera: LiveData<Boolean>
+        get() = _flipCamera
+
+
     val visibilityTakePhoto: LiveData<Int> =
         Transformations.map<PhotoState, Int>(_currentState) { state ->
             if (state is TakePhotoState) View.VISIBLE else View.GONE
@@ -46,6 +51,7 @@ class TakePhotoViewModel : ViewModel() {
 
     init {
         _currentState.value = TakePhotoState()
+        _flipCamera.postValue(false)
     }
 
     internal fun setState(state: PhotoState) {
@@ -62,6 +68,10 @@ class TakePhotoViewModel : ViewModel() {
 
     fun onNotOkPhotoButtonClicked() {
         _currentState.value!!.deletePhoto(this)
+    }
+
+    fun onSelfieButtonClicked() {
+        _flipCamera.postValue(!flipCamera.value!!)
     }
 
     fun setPhotoInCache(file: File) {

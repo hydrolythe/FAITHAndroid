@@ -19,7 +19,11 @@ import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import io.fotoapparat.Fotoapparat
+import io.fotoapparat.configuration.CameraConfiguration
 import io.fotoapparat.log.logcat
+import io.fotoapparat.parameter.ScaleType
+import io.fotoapparat.selector.back
+import io.fotoapparat.selector.front
 import kotlinx.android.synthetic.main.fragment_take_photo.img_takePhoto_Photo
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -58,9 +62,11 @@ class TakePhotoFragment : Fragment() {
         fotoApparat = Fotoapparat(
             context = this.context!!,
             view = takePhotoBinding.cameraView,
+            scaleType = ScaleType.CenterCrop,
+            lensPosition = back(),
             logger = logcat()
         )
-        return takePhotoBinding.root
+         return takePhotoBinding.root
     }
 
     override fun onAttach(context: Context) {
@@ -89,6 +95,10 @@ class TakePhotoFragment : Fragment() {
             addPhotoDetail()
         })
 
+        takePhotoViewModel.flipCamera.observe(this, Observer {
+            flipCamera()
+        })
+
         takePhotoViewModel.photo.observe(this, Observer { photo ->
             if (photo != null) {
                 Glide.with(context!!).load(photo).diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -103,6 +113,16 @@ class TakePhotoFragment : Fragment() {
             takePhotoViewModel.setSavedPhoto(it.file)
             navigation?.backToEvent()
         })
+    }
+
+    /**
+     * to take a flipCamera
+     */
+    private fun flipCamera() {
+        fotoApparat?.switchTo(
+            lensPosition =  if (takePhotoViewModel.flipCamera.value!=null && takePhotoViewModel.flipCamera.value==true) front() else back(),
+            cameraConfiguration = CameraConfiguration()
+        )
     }
 
     private fun addPhotoDetail() {
@@ -161,4 +181,6 @@ class TakePhotoFragment : Fragment() {
     interface PhotoScreenNavigation {
         fun backToEvent()
     }
+
+
 }

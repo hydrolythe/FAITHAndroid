@@ -38,7 +38,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="centerCrop"/>
 
 
         <ImageButton
@@ -68,6 +69,18 @@
             android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenNotSaved)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_flipCamera"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/ic_flip_camera"
+            android:contentDescription="@string/cancel"
+            android:onClick="@{() -> photoViewModel.onSelfieButtonClicked()}"
+            android:visibility="@{safeUnbox(photoViewModel.visibilityTakePhoto)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
             android:id="@+id/btn_takePhoto_Ok"
