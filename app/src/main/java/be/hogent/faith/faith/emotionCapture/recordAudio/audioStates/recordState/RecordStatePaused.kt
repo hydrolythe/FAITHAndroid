@@ -3,6 +3,7 @@ package be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.recordState
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Build
+import android.view.View
 import be.hogent.faith.faith.emotionCapture.recordAudio.audioStates.AudioContext
 import be.hogent.faith.util.TAG
 import timber.log.Timber
@@ -21,6 +22,8 @@ class RecordStatePaused(
     override val pauseButtonEnabled = false
     override val stopButtonEnabled = true
     override val recordButtonEnabled = true
+
+    override val recordingTimeVisibility = View.VISIBLE
 
     override fun onRecordPressed() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
