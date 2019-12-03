@@ -58,7 +58,7 @@ class CreateUserUseCaseTest {
         val params = CreateUserUseCase.Params("username", "testPassword", "avatarName")
 
         // Act
-        val result = createUserUseCase.buildUseCaseSingle(params)
+        createUserUseCase.buildUseCaseSingle(params).test()
 
         // Assert
         Assert.assertEquals(params.username, userArg.captured.username)
@@ -75,7 +75,7 @@ class CreateUserUseCaseTest {
         val params = CreateUserUseCase.Params("username", "testPassword", "avatarName")
 
         // Act
-        val result = createUserUseCase.buildUseCaseSingle(params).test()
+        createUserUseCase.buildUseCaseSingle(params).test()
             .assertError(RuntimeException::class.java)
     }
 }

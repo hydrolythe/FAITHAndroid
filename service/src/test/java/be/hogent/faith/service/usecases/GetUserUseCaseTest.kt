@@ -46,14 +46,12 @@ class GetUserUseCaseTest {
 
     @Test
     fun getUserUC_execute_callsUserRepo() {
-        // val params = GetUserUseCase.Params(DataFactory.randomUUID())
         getUserUC.buildUseCaseObservable(mockk())
         verify { userRepository.get(any()) }
     }
 
     @Test
     fun getUserUC_execute_callsEventRepo() {
-        // val params = GetUserUseCase.Params(DataFactory.randomUUID())
         getUserUC.buildUseCaseObservable(mockk())
         verify { eventRepository.getAll() }
     }
@@ -69,7 +67,9 @@ class GetUserUseCaseTest {
             .just(user)
         every { eventRepository.getAll() } returns Flowable
             .just(events)
+
         val result = getUserUC.buildUseCaseObservable(mockk())
+
         result.test().assertValue { newUser ->
             newUser.username == "username"
             newUser.events.count() == events.count()
@@ -79,10 +79,10 @@ class GetUserUseCaseTest {
 
     @Test
     fun getUserUseCase_noUserPresent_returnsNothing() {
-        val userUuidArg = slot<String>()
-        val userUuid = DataFactory.randomUUID().toString()
         every { authManager.getLoggedInUserUUID() } returns null
+
         val result = getUserUC.buildUseCaseObservable(mockk())
+
         result.test().assertError(RuntimeException::class.java)
     }
 }
