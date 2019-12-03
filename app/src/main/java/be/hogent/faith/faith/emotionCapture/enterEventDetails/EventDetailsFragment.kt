@@ -162,6 +162,7 @@ class EventDetailsFragment : Fragment() {
                 saveDialog.hideProgressBar()
                 Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
                 saveDialog.dismiss()
+                userViewModel.eventSavedHandled()
 
                 // Drawing scope can now be closed so a new DrawingVM will be created when another
                 // drawing is made.

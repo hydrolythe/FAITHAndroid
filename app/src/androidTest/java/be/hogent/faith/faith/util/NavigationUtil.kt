@@ -15,7 +15,7 @@ object NavigationUtil {
         // Focus is on input field for the name by default, which opens the soft keyboard.
         // It hides the button to go to town so we have to close it.
         // We have to close the soft keyboard everytime because otherwise it overlaps the textfield.
-        onView(withId(R.id.btn_loginfragment_register)).perform(click())
+        onView(withId(R.id.btn_loginfragment_library)).perform(click())
 
         closeSoftKeyboard()
         onView(withId(R.id.txt_register_username)).perform(typeText(UUID.randomUUID().toString()))
@@ -46,7 +46,7 @@ object NavigationUtil {
 
     fun goToEventsOverviewScreen() {
         goToCityScreen()
-        onView(withId(R.id.btn_loginfragment_register)).perform(click())
+        onView(withId(R.id.btn_loginfragment_library)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }

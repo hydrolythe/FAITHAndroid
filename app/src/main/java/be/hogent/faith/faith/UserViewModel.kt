@@ -59,6 +59,14 @@ class UserViewModel(
         getUserUseCase.execute(GetUserUseCase.Params(), GetUserUseCaseHandler())
     }
 
+    /**
+     * if the fragment updated the ui, the state is set to null.
+     * reason : a new DetailFragment is created when you want to register a new event, so the state must be empty again
+     */
+    fun eventSavedHandled() {
+        _eventSavedState.postValue(null)
+    }
+
     private inner class GetUserUseCaseHandler : DisposableSubscriber<User>() {
 
         override fun onNext(t: User?) {

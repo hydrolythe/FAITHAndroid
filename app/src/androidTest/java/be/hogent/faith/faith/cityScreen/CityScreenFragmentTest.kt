@@ -30,7 +30,7 @@ class CityScreenFragmentTest {
 
     @Test
     fun mainScreenFragment_buttonsOpenCorrectScreen() {
-        onView(withId(R.id.btn_loginfragment_register)).perform(click())
+        onView(withId(R.id.btn_loginfragment_library)).perform(click())
         onView(withId(R.id.screen_overview_events)).check(matches(isDisplayed()))
         pressBack()
 

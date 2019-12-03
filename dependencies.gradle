@@ -38,6 +38,8 @@ ext {
     material_version = '1.1.0-alpha09'
     textEditor_version = '1.2.2'
     materialdrawer_version = '2.0.1'
+    play_services_version='16.0.0'
+    legacy_support_version='1.0.0'
 
     design_version = '28.0.0'
 
@@ -56,6 +58,9 @@ ext {
     android_junit_version = '1.1.1'
     test_version = '1.2.0'
     robolectric_version = '4.3'
+    firebase_test_version = '17.2.1'
+    crashlytics_dep_version = '2.10.1'
+
 
     uiAutomator_version = '2.2.0'
     junit_version = '4.12'
@@ -98,7 +103,8 @@ ext {
 
     androidDependencies = [
             appcompat: "androidx.appcompat:appcompat:$appcompat_version",
-            lifecycle: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+            lifecycle: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
+            viewmodellifecycle : "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
     ]
 
     testDependencies = [
@@ -107,7 +113,10 @@ ext {
             coreTesting: "androidx.arch.core:core-testing:$aac_core_version",
             threeTenBP : "org.threeten:threetenbp:$threeTenBP_version",
             koinTesting: "org.koin:koin-test:$koin_version",
-            robolectric: "org.robolectric:robolectric:$robolectric_version"
+            robolectric: "org.robolectric:robolectric:$robolectric_version",
+            //Add Analytics
+            firebase_analytics: "com.google.firebase:firebase-analytics:$firebase_test_version",
+            crashlytics: "com.crashlytics.sdk.android:crashlytics:$crashlytics_dep_version"
     ]
 
     androidTestDependencies = [
@@ -158,7 +167,11 @@ ext {
             material           : "com.google.android.material:material:$material_version",
             materialdrawer     : "co.zsmb:materialdrawer-kt:$materialdrawer_version",
             design             : "com.android.support:design:$design_version",
-            viewpager2         : "androidx.viewpager2:viewpager2:$viewpager_version"
+            viewpager2         : "androidx.viewpager2:viewpager2:$viewpager_version",
+            googleplay         :  "com.google.android.gms:play-services-plus:$play_services_version",
+            legacysupport      : "androidx.legacy:legacy-support-v4:$legacy_support_version"
+
+
     ]
 
     authdependencies = [
