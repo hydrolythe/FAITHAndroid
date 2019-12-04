@@ -20,7 +20,7 @@ class EventEntityEncryptor(
                 title = title?.let { encrypter.encrypt(it) },
                 emotionAvatar = emotionAvatar?.let { encrypter.encrypt(it) },
                 notes = notes?.let { encrypter.encrypt(it) },
-                uuid = encrypter.encrypt(uuid),
+                uuid = uuid,
                 detailEntities = encryptedDetails
             )
         }
@@ -36,7 +36,7 @@ class EventEntityEncryptor(
                 title = title?.let { encrypter.decrypt(it) },
                 emotionAvatar = emotionAvatar?.let { encrypter.decrypt(it) },
                 notes = notes?.let { encrypter.decrypt(it) },
-                uuid = encrypter.decrypt(uuid),
+                uuid = uuid,
                 details = details
             )
         }

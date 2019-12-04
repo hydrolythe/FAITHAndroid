@@ -26,36 +26,26 @@ object DetailMapper : Mapper<DetailEntity, Detail> {
     }
 
     override fun mapFromEntity(entity: DetailEntity): Detail {
+        val file = FileConverter().toFile(entity.file)
+        val uuid = UUID.fromString(entity.uuid)
         return when (entity.type) {
-            DetailType.AUDIO -> AudioDetail(
-                FileConverter().toFile(entity.file),
-                UUID.fromString(entity.uuid)
-            )
-            DetailType.TEXT -> TextDetail(
-                FileConverter().toFile(entity.file),
-                UUID.fromString(entity.uuid)
-            )
-            DetailType.DRAWING -> DrawingDetail(
-                FileConverter().toFile(entity.file),
-                UUID.fromString(entity.uuid)
-            )
-            DetailType.PHOTO -> PhotoDetail(
-                FileConverter().toFile(entity.file),
-                UUID.fromString(entity.uuid)
-            )
+            DetailType.AUDIO -> AudioDetail(file, uuid)
+            DetailType.TEXT -> TextDetail(file, uuid)
+            DetailType.DRAWING -> DrawingDetail(file, uuid)
+            DetailType.PHOTO -> PhotoDetail(file, uuid)
             else -> throw ClassCastException("Unknown DetailEntity subclass encountered")
         }
     }
 
     override fun mapToEntity(model: Detail): DetailEntity {
-        return DetailEntity(
-            FileConverter().toString(model.file), model.uuid.toString(), when (model) {
-                is AudioDetail -> DetailType.AUDIO
-                is TextDetail -> DetailType.TEXT
-                is DrawingDetail -> DetailType.DRAWING
-                is PhotoDetail -> DetailType.PHOTO
-                else -> throw ClassCastException("Unknown Detail subclass encountered")
-            }
-        )
+        val mappedFile = FileConverter().toString(model.file)
+        val mappedUUID = model.uuid.toString()
+        val detailType = when (model) {
+            is AudioDetail -> DetailType.AUDIO
+            is TextDetail -> DetailType.TEXT
+            is DrawingDetail -> DetailType.DRAWING
+            is PhotoDetail -> DetailType.PHOTO
+        }
+        return DetailEntity(mappedFile, mappedUUID, detailType)
     }
 }
