@@ -14,5 +14,6 @@ class EncryptedEventEntity(
     val emotionAvatar: String? = "",
     val notes: String? = "",
     val uuid: String = "",
-    val detailEntities: List<EncryptedDetailEntity> = mutableListOf()
+    val detailEntities: List<EncryptedDetailEntity> = mutableListOf(),
+    val encryptedDEK: String = ""
 )
