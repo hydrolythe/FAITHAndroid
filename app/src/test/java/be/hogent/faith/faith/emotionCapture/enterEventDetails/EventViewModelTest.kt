@@ -3,7 +3,6 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.Runs
@@ -12,20 +11,14 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.test.KoinTest
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 
-class EventViewModelTest : KoinTest {
+class EventViewModelTest {
     private lateinit var viewModel: EventViewModel
 
     private val eventTitle = DataFactory.randomString()
@@ -37,8 +30,6 @@ class EventViewModelTest : KoinTest {
 
     @Before
     fun setUp() {
-        startKoin { modules(appModule) }
-
         viewModel = EventViewModel(
             mockk(),
             mockk(),
@@ -53,11 +44,6 @@ class EventViewModelTest : KoinTest {
         viewModel.eventTitle.value = eventTitle
         viewModel.eventNotes.value = eventNotes
         viewModel.eventDate.value = eventDateTime
-    }
-
-    @After
-    fun takeDown() {
-        stopKoin()
     }
 
     @Test
@@ -153,34 +139,5 @@ class EventViewModelTest : KoinTest {
         assertEquals(newEvent.dateTime, newDate.captured)
         assertEquals(newEvent.title, newTitle.captured)
         assertEquals(newEvent.notes, newNotes.captured)
-    }
-
-    @Test
-    fun eventViewModel_resetEvent_allCleared() {
-        // Arrange
-        val dateObserver = mockk<Observer<LocalDateTime>>(relaxed = true)
-        val titleObserver = mockk<Observer<String?>>(relaxed = true)
-        val notesObserver = mockk<Observer<String>>(relaxed = true)
-        val eventObserver = mockk<Observer<Event>>(relaxed = true)
-
-        viewModel.eventDate.observeForever(dateObserver)
-        viewModel.eventTitle.observeForever(titleObserver)
-        viewModel.eventNotes.observeForever(notesObserver)
-        viewModel.event.observeForever(eventObserver)
-
-        // Act
-        viewModel.resetViewModel()
-
-        // Assert
-        assertNotEquals(viewModel.eventDate, eventDateTime)
-        assertTrue(viewModel.eventNotes.value.isNullOrEmpty())
-        assertTrue(viewModel.eventTitle.value.isNullOrEmpty())
-        assertTrue(isEmptyEvent(viewModel.event.value!!))
-    }
-
-    private fun isEmptyEvent(event: Event): Boolean {
-        with(event) {
-            return title.isNullOrEmpty() && notes.isNullOrEmpty() && emotionAvatar == null && details.isEmpty()
-        }
     }
 }

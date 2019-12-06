@@ -21,6 +21,14 @@ object UserMapper : Mapper<UserEntity, User> {
         )
     }
 
+    fun mapToEntityWithUUID(model: User, uuid: String): UserEntity {
+        return UserEntity(
+            uuid = uuid,
+            username = model.username,
+            avatarName = model.avatarName
+        )
+    }
+
     override fun mapFromEntities(entities: List<UserEntity>): List<User> {
         return entities.map { mapFromEntity(it) }
     }

@@ -69,6 +69,7 @@
     <string name="cancel">@android:string/cancel</string>
     <string name="txt_error_userNameOrAvatarNotSet">Vul je naam in en selecteer een avatar</string>
     <string name="error_save_user_failed">Het opslaan van de nieuwe gebruiker is gefaald.</string>
+    <string name="error_register_user_failed">Het opslaan van de nieuwe gebruiker is gefaald.</string>
     <string name="error_event_no_title">Je moet een titel geven aan je gebeurtenis.</string>
     <string name="lbl_save_event_notes">Notities</string>
     <string name="lbl_save_event_date">Dag</string>
@@ -94,9 +95,11 @@
     <string name="descr_loginscreen">Loginscherm</string>
     <string name="username">Gebruikersnaam</string>
     <string name="password">Wachtwoord</string>
+    <string name="login_error_noUsername">Je moet je gebruikersnaam ingeven!</string>
+    <string name="login_error_noPassword">Je moet je wachtwoord ingeven!</string>
+    <string name="registerOrLogin_password_empty">Je moet een wachtwoord ingeven van minstens 6 posities.</string>
     <string name="register_passwords_nomatch">Wachtwoorden niet gelijk</string>
-    <string name="register_password_empty">Wachtwoord ingeven</string>
-    <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
+    <string name="register_password_empty">Wachtwoord ingeven</string>  <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
     <string name="error_no_credentials">No credentials have been stored</string>
     <string name="msg_naar_de_stad">Naar de stad</string>
     <string name="msg_registreer">Ik ben nieuw</string>
@@ -109,6 +112,7 @@
     <string name="choose_bold">kies vetjes</string>
     <string name="take_photo_de_foto">de foto</string>
     <string name="take_photo_neem_foto">neem foto</string>
+    <string name="registerOrLogin_username_empty">Je gebruikersnaam mag niet leeg zijn.</string>
     <string name="register_username_empty">Gebruikersnaam invullen</string>
     <string name="register_avatar_mustSelect">Je moet nog een avatar selecteren.</string>
     <string name="cityScreen_logOut">Wil je uitloggen?</string>
@@ -126,8 +130,12 @@
     <string name="ex_date">07/11/2019</string>
     <string name="ex_beschrijving">Het was vooral voor rust heel sterk. Na rust zijn we wat meer ingezakt, maar kwamen we er gevaarlijk uit en hebben we ook goed voetbal laten zien. Zelf voelde ik me lekker en het is super dat ik er twee heb gemaakt. Ik was bij veel gevaarlijke momenten betrokken, ik voelde me echt lekker vandaag.</string>
     <string name="ex_labeltext">Afbeelding</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="register_error_weak_password">Wachtwoord moet bestaan uit minstens 6 karakters</string>
+    <string name="register_error_invalid_username">Gebruikersnaam moet beginnen met een letter, gevolgd door 1 of meerdere letters, getallen, -, _ of .</string>
+    <string name="register_error_username_already_exists">Gebruikersnaam bestaat reeds. Geef een andere gebruikersnaam in.</string>
+    <string name="login_error_wrong_username_or_password">Gebruikersnaam of wachtwoord is fout. Probeer opnieuw.</string>
+    <string name="login_error">Inloggen mislukt. Probeer opnieuw.</string>
+    <string name="login_error_internet">Je hebt internet nodig.</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="datum">Datum</string>
     <string name="hier_kan_je_de_notities_kwijt">Hier kan je de notities kwijt</string>
@@ -135,8 +143,11 @@
     <string name="underline"><u>U</u></string>
     <string name="audio_opnemen">opnemen</string>
     <string name="description_play_recording">speel opname af</string>
-
     <string name="empty">""</string>
     <string name="kies_een_wachtwoord">Kies een wachtwoord</string>
     <string name="herhaal_je_wachtwoord">Herhaal je wachtwoord</string>
+    <string name="save_event_title">titel</string>
+    <string name="avatar_save_successfull">Je avatar werd succesvol opgeslagen.</string>
+    <string name="create_photo_failed">Er ging iets fout bij het aanmaken van je foto.</string>
+    <string name="text_save_error_emptyinput">Je hebt nog geen tekst geschreven!</string>
 </resources>

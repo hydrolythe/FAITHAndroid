@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
+
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
     compileSdkVersion globalConfig["androidCompileSdkVersion"]
@@ -62,6 +63,14 @@ dependencies {
     implementation databaseDependencies.room_rxjava
     kapt databaseDependencies.room_compiler
 
+    //firebase components
+    implementation firebaseDependencies.rxfirebase
+    implementation firebaseDependencies.firebaseauth
+    implementation firebaseDependencies.firestore
+    implementation firebaseDependencies.firebasestorage
+    implementation 'com.github.FrangSierra:RxFirebase:1.5.6'
+
+    //test
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
     //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
@@ -77,3 +86,5 @@ dependencies {
 repositories {
     mavenCentral()
 }
+
+

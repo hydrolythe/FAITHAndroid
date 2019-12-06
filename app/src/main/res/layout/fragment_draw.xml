@@ -7,7 +7,7 @@
 
         <variable
             name="drawViewModel"
-            type="be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel" />
+            type="be.hogent.faith.faith.details.drawing.create.DrawViewModel" />
 
         <import type="android.graphics.Color" />
 
@@ -49,7 +49,7 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/save_btn"
                 android:elevation="2dp"
-                android:onClick="@{() -> drawViewModel.onSaveButtonClicked()}"
+                android:onClick="@{() -> drawViewModel.onSaveClicked()}"
                 android:translationZ="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -112,9 +112,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/container_tools"
                 bind:drawViewModel="@{drawViewModel}" />
-
-
-            />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"

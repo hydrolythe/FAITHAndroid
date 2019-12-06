@@ -16,7 +16,6 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCityScreenBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.faith.loginOrRegister.LoginManager
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.util.adjustGuidelineAfterScaling
 import com.bumptech.glide.Glide
@@ -50,8 +49,6 @@ class CityScreenFragment : Fragment() {
     private lateinit var mainScreenBinding: FragmentCityScreenBinding
     private lateinit var avatarView: View
     private val avatarProvider: AvatarProvider by inject()
-
-    private val loginManager: LoginManager by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -147,8 +144,7 @@ class CityScreenFragment : Fragment() {
             navigation?.startEmotionCapture()
         })
 
-        cityScreenViewModel.logOutClicked.observe(this, Observer {
-            loginManager.logout()
+        cityScreenViewModel.logoutSuccessFull.observe(this, Observer {
             navigation?.logOut()
         })
 

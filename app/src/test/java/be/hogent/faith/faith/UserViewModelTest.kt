@@ -2,7 +2,11 @@ package be.hogent.faith.faith
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import be.hogent.faith.service.usecases.SaveEventUseCase
+import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
+import be.hogent.faith.service.usecases.GetUserUseCase
+import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.called
@@ -10,6 +14,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.subscribers.DisposableSubscriber
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -18,6 +23,7 @@ import org.junit.Test
 class UserViewModelTest {
     private lateinit var userViewModel: UserViewModel
     private val saveEventUseCase = mockk<SaveEventUseCase>(relaxed = true)
+    private val getUserUseCase = mockk<GetUserUseCase>(relaxed = true)
     private val eventTitle = DataFactory.randomString()
     private val event = EventFactory.makeEvent()
 
@@ -26,7 +32,7 @@ class UserViewModelTest {
 
     @Before
     fun setUp() {
-        userViewModel = UserViewModel(saveEventUseCase)
+        userViewModel = UserViewModel(saveEventUseCase, getUserUseCase)
         userViewModel.setUser(mockk(relaxed = true))
     }
 
@@ -64,10 +70,8 @@ class UserViewModelTest {
         val params = slot<SaveEventUseCase.Params>()
         val observer = slot<DisposableCompletableObserver>()
 
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        userViewModel.errorMessage.observeForever(errorObserver)
-        userViewModel.eventSavedSuccessFully.observeForever(successObserver)
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        userViewModel.eventSavedState.observeForever(successObserver)
 
         // Act
         userViewModel.saveEvent(eventTitle, event)
@@ -76,8 +80,11 @@ class UserViewModelTest {
         observer.captured.onComplete()
 
         // Assert
-        verify { successObserver.onChanged(any()) }
-        verify { errorObserver wasNot called }
+        verify(atLeast = 2) { successObserver.onChanged(any()) }
+        assertEquals(
+            ResourceState.SUCCESS,
+            userViewModel.eventSavedState.value?.status
+        )
     }
 
     @Test
@@ -86,10 +93,8 @@ class UserViewModelTest {
         val params = slot<SaveEventUseCase.Params>()
         val observer = slot<DisposableCompletableObserver>()
 
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
-        userViewModel.errorMessage.observeForever(errorObserver)
-        userViewModel.eventSavedSuccessFully.observeForever(successObserver)
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        userViewModel.eventSavedState.observeForever(successObserver)
 
         // Act
         userViewModel.saveEvent(eventTitle, event)
@@ -98,7 +103,53 @@ class UserViewModelTest {
         observer.captured.onError(mockk(relaxed = true))
 
         // Assert
-        verify { errorObserver.onChanged(any()) }
-        verify { successObserver wasNot called }
+        verify(atLeast = 2) { successObserver.onChanged(any()) }
+        assertEquals(
+            ResourceState.ERROR,
+            userViewModel.eventSavedState.value?.status
+        )
+    }
+
+    @Test
+    fun userViewModel_getUser_callUseCaseAndNotifiesSuccess() {
+        // Arrange
+        val observer = slot<DisposableSubscriber<User>>()
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        userViewModel.getLoggedInUserState.observeForever(successObserver)
+
+        // Act
+        userViewModel.getLoggedInUser()
+
+        verify { getUserUseCase.execute(any(), capture(observer)) }
+        // Make the UC-handler call the success handler
+        observer.captured.onNext(mockk(relaxed = true))
+
+        // Assert
+        assertEquals(
+            ResourceState.SUCCESS,
+            userViewModel.getLoggedInUserState.value?.status
+        )
+        verify { successObserver.onChanged(any()) }
+    }
+
+    @Test
+    fun userViewModel_getUser_callUseCaseAndNotifiesFailure() {
+        val observer = slot<DisposableSubscriber<User>>()
+        val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
+        userViewModel.getLoggedInUserState.observeForever(successObserver)
+
+        // Act
+        userViewModel.getLoggedInUser()
+
+        verify { getUserUseCase.execute(any(), capture(observer)) }
+        // Make the UC-handler call the success handler
+        observer.captured.onError(mockk(relaxed = true))
+
+        // Assert
+        assertEquals(
+            ResourceState.ERROR,
+            userViewModel.getLoggedInUserState.value?.status
+        )
+        verify { successObserver.onChanged(any()) }
     }
 }

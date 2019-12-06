@@ -16,6 +16,8 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
@@ -142,32 +144,43 @@ class EventDetailsFragment : Fragment() {
             navigation?.startDrawingDetailFragment()
         })
 
-        eventViewModel.errorMessage.observe(this, Observer { errorMessage ->
-            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-        })
-
         eventViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
             saveDialog.show(fragmentManager!!, null)
         })
 
-        userViewModel.eventSavedSuccessFully.observe(this, Observer {
-            Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
-            saveDialog.dismiss()
-
-            // Drawing scope can now be closed so a new DrawingVM will be created when another
-            // drawing is made.
-            runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {
-                it.close()
+        userViewModel.eventSavedState.observe(this, Observer {
+            it?.let {
+                handleDataStateSavingEvent(it)
             }
-
-            navigation?.closeEvent()
-            // Go back to main screen
         })
+    }
 
-        userViewModel.errorMessage.observe(this, Observer { errorMessage ->
-            Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show()
-        })
+    private fun handleDataStateSavingEvent(resource: Resource<Unit>) {
+        when (resource.status) {
+            ResourceState.SUCCESS -> {
+                saveDialog.hideProgressBar()
+                Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
+                saveDialog.dismiss()
+                userViewModel.eventSavedHandled()
+
+                // Drawing scope can now be closed so a new DrawingVM will be created when another
+                // drawing is made.
+                runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {
+                    it.close()
+                }
+
+                navigation?.closeEvent()
+                // Go back to main screen
+            }
+            ResourceState.LOADING -> {
+                saveDialog.showProgressBar()
+            }
+            ResourceState.ERROR -> {
+                saveDialog.hideProgressBar()
+                Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     override fun onStop() {

@@ -1,18 +1,17 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import java.lang.RuntimeException
 import java.util.concurrent.Executor
 
 class GetEventsUseCaseTest {
@@ -35,25 +34,14 @@ class GetEventsUseCaseTest {
 
         getEventsUC.buildUseCaseObservable(params)
 
-        verify { repository.getAll(any()) }
-    }
-
-    @Test
-    fun getEventsUseCase_userIsPassedToRepo() {
-        val userArg = slot<User>()
-        val params = GetEventsUseCase.Params(UserFactory.makeUser())
-        every { repository.getAll(capture(userArg)) } returns Flowable.just(EventFactory.makeEventList())
-
-        getEventsUC.buildUseCaseObservable(params)
-
-        assertEquals(params.user, userArg.captured)
+        verify { repository.getAll() }
     }
 
     @Test
     fun getEventsUseCase_eventsPresent_returnsThem() {
         val params = GetEventsUseCase.Params(UserFactory.makeUser())
         // Simulate two events on the stream
-        every { repository.getAll(any()) } returns Flowable.just(
+        every { repository.getAll() } returns Flowable.just(
             EventFactory.makeEventList(2),
             EventFactory.makeEventList(2)
         )
@@ -64,8 +52,16 @@ class GetEventsUseCaseTest {
     @Test
     fun getEventsUseCase_noEventsPresent_returnsNothing() {
         val params = GetEventsUseCase.Params(UserFactory.makeUser())
-        every { repository.getAll(any()) } returns Flowable.empty()
+        every { repository.getAll() } returns Flowable.empty()
         val result = getEventsUC.buildUseCaseObservable(params)
         result.test().assertNoValues()
+    }
+
+    @Test
+    fun getEventsUseCase_userNotAuthenticated_fails() {
+        val params = GetEventsUseCase.Params(UserFactory.makeUser())
+        every { repository.getAll() } returns Flowable.error(RuntimeException())
+        val result = getEventsUC.buildUseCaseObservable(params)
+        result.test().assertNoValues().assertError(RuntimeException::class.java)
     }
 }

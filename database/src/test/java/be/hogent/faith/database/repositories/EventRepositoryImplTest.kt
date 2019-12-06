@@ -1,88 +1,128 @@
 package be.hogent.faith.database.repositories
 
-import be.hogent.faith.database.daos.DetailDao
-import be.hogent.faith.database.daos.EventDao
-import be.hogent.faith.database.database.EntityDatabase
 import be.hogent.faith.database.factory.EntityFactory
-import be.hogent.faith.database.mappers.DetailMapper
+import be.hogent.faith.database.firebase.FirebaseEventRepository
 import be.hogent.faith.database.mappers.EventMapper
-import be.hogent.faith.database.mappers.EventWithDetailsMapper
+import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.models.EventEntity
-import be.hogent.faith.database.models.relations.EventWithDetails
+import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.Completable
 import io.reactivex.Flowable
-import org.junit.Before
+import io.reactivex.Maybe
 import org.junit.Test
+import java.util.UUID
 
 class EventRepositoryImplTest {
-    private val detailDao = mockk<DetailDao>()
-    private val eventDao = mockk<EventDao>()
-    private val database = mockk<EntityDatabase>(relaxed = true)
-    private val detailMapper = mockk<DetailMapper>()
-    private val eventMapper = mockk<EventMapper>()
-    private val eventWithDetailsMapper = mockk<EventWithDetailsMapper>()
 
-    private val eventRepository = EventRepositoryImpl(database, eventMapper, eventWithDetailsMapper, detailMapper)
+    private val firebaseEventRepository = mockk<FirebaseEventRepository>(relaxed = true)
+    private val userMapper = mockk<UserMapper>()
+    private val eventMapper = mockk<EventMapper>()
+
+    private val eventRepository =
+        EventRepositoryImpl(userMapper, eventMapper, firebaseEventRepository)
 
     private val user = UserFactory.makeUser(0)
-    private val eventWithDetails = EntityFactory.makeEventWithDetailsEntity(user.uuid, 2)
-    private val eventUuid = eventWithDetails.eventEntity.uuid
+    private val userEntity = EntityFactory.makeUserEntity()
+    private val eventEntity = EntityFactory.makeEventEntityWithDetails(2)
     private val event = EventFactory.makeEvent(2)
-
-    @Before
-    fun setUp() {
-        every { database.eventDao() } returns eventDao
-        every { database.detailDao() } returns detailDao
-    }
+    private val uuid = eventEntity.uuid
 
     @Test
-    fun eventRepository_existingEvent_succeeds() {
-        every { eventDao.getEventWithDetails(eventUuid) } returns Flowable.just(
-            eventWithDetails
+    fun eventRepository_get_existingEvent_succeeds() {
+        every { firebaseEventRepository.get(uuid) } returns Flowable.just(
+            eventEntity
         )
-        stubMapperFromEntity(event, eventWithDetails)
-        eventRepository.get(eventUuid)
+        stubMapperFromEntity(event, eventEntity)
+        eventRepository.get(UUID.fromString(uuid))
             .test()
             .assertValue(event)
     }
 
     @Test
-    fun eventRepository_nonExistingEvent_errors() {
-        every { eventDao.getEventWithDetails(eventUuid) } returns Flowable.empty()
+    fun eventRepository_get_nonExistingEvent_errors() {
+        every { firebaseEventRepository.get(uuid) } returns Flowable.empty()
 
-        eventRepository.get(eventUuid)
+        eventRepository.get(UUID.fromString(uuid))
             .test()
             .assertNoValues()
     }
 
     @Test
-    fun eventRepository_deleteEventCompletes() {
-        every { eventDao.delete(eventWithDetails.eventEntity) } returns Completable.complete()
-        stubMapperToEntity(event, eventWithDetails.eventEntity)
-        eventRepository.delete(event, user).test().assertComplete()
+    fun eventRepository_insert_succeeds() {
+        every { firebaseEventRepository.insert(eventEntity, userEntity) } returns Maybe.just(
+            eventEntity
+        )
+        stubMapperToEntity(event, eventEntity)
+        stubMapperFromEntity(event, eventEntity)
+        stubMapperToEntityUser(user, userEntity)
+        eventRepository.insert(event, user)
+            .test()
+            .assertValue { it.uuid == event.uuid && it.details.count() == 2 }
     }
 
     @Test
-    fun eventRepository_getAll_succeeds() {
-        every { eventDao.getAllEventsWithDetails(user.uuid) } returns Flowable.just(listOf(eventWithDetails))
-        stubMapperFromEntities(listOf(event), listOf(eventWithDetails))
-        eventRepository.getAll(user).test().assertValue(listOf(event))
+    fun eventRepository_insert_userNotAuthenticated_errors() {
+        every { firebaseEventRepository.insert(eventEntity, userEntity) } returns Maybe.error(
+            RuntimeException("Unauthorized used.")
+        )
+
+        eventRepository.get(UUID.fromString(uuid))
+            .test()
+            .assertNoValues()
     }
 
-    private fun stubMapperFromEntity(model: Event, entity: EventWithDetails) {
-        every { eventWithDetailsMapper.mapFromEntity(entity) } returns model
+    @Test
+    fun eventRepository_getAll_authenticatedUser_succeeds() {
+        // simulates 2 lists on the stream
+        every { firebaseEventRepository.getAll() } returns Flowable.just(
+            listOf(
+                eventEntity,
+                eventEntity
+            )
+        )
+        stubMapperFromEntities(listOf(event, event), listOf(eventEntity, eventEntity))
+        eventRepository.getAll()
+            .test()
+            .assertValue(listOf(event, event))
     }
 
-    private fun stubMapperFromEntities(models: List<Event>, entities: List<EventWithDetails>) {
-        every { eventWithDetailsMapper.mapFromEntities(entities) } returns models
+    @Test
+    fun eventRepository_getAll_2listsOnTheStream_authenticatedUser_succeeds() {
+        // simulates 2 lists on the stream
+        every { firebaseEventRepository.getAll() } returns Flowable.just(
+            listOf(
+                eventEntity,
+                eventEntity
+            ),
+            listOf(
+                eventEntity,
+                eventEntity
+            )
+        )
+        stubMapperFromEntities(listOf(event, event), listOf(eventEntity, eventEntity))
+        eventRepository.getAll()
+            .test()
+            .assertValueCount(2)
+    }
+
+    private fun stubMapperFromEntity(model: Event, entity: EventEntity) {
+        every { eventMapper.mapFromEntity(entity) } returns model
+    }
+
+    private fun stubMapperFromEntities(models: List<Event>, entities: List<EventEntity>) {
+        every { eventMapper.mapFromEntities(entities) } returns models
     }
 
     private fun stubMapperToEntity(model: Event, entity: EventEntity) {
-        every { eventMapper.mapToEntity(model, user.uuid) } returns entity
+        every { eventMapper.mapToEntity(model) } returns entity
+    }
+
+    private fun stubMapperToEntityUser(model: User, entity: UserEntity) {
+        every { userMapper.mapToEntity(model) } returns entity
     }
 }

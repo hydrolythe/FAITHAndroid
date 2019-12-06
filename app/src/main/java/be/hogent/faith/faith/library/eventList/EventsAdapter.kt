@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.faith.loadFirestorageImage
 import com.bumptech.glide.RequestManager
-import com.bumptech.glide.request.RequestOptions
 import org.threeten.bp.format.DateTimeFormatter
 
 class EventsAdapter(private val eventListener: EventListener, private val glide: RequestManager) :
@@ -49,11 +49,15 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
             eventDate.text = eventDateString
 
             event.emotionAvatar?.let {
+                loadFirestorageImage(this.itemView.context, it.path, avatarImage)
+            }
+                /*
+            event.emotionAvatar?.let {
                 glide
                     .load(it)
                     .apply(RequestOptions.circleCropTransform())
                     .into(avatarImage)
-            }
+            }*/
 
             eventDesc.text = event.notes
 

@@ -1,5 +1,6 @@
 package be.hogent.faith.util.factory
 
+import android.graphics.Bitmap
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
@@ -15,6 +16,10 @@ object DataFactory {
         Random().nextBytes(array)
         val generatedString = String(array, Charset.forName("UTF-8"))
         return File("testDirectory/$generatedString")
+    }
+
+    fun randomBitmap(): Bitmap {
+        return Bitmap.createBitmap(randomInt(), randomInt(), Bitmap.Config.ARGB_8888)
     }
 
     fun randomUUID(): UUID {

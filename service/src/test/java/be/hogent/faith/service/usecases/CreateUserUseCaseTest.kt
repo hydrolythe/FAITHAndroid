@@ -10,6 +10,7 @@ import io.reactivex.Scheduler
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.util.UUID
 import java.util.concurrent.Executor
 
 class CreateUserUseCaseTest {
@@ -29,10 +30,11 @@ class CreateUserUseCaseTest {
     @Test
     fun createUserUC_normal_newUserReturned() {
         // Arrange
+        val uuid = UUID.randomUUID().toString()
         val userArg = slot<User>()
         every { repository.insert(capture(userArg)) } returns Completable.complete()
 
-        val params = CreateUserUseCase.Params("username", "testPassword", "avatarName")
+        val params = CreateUserUseCase.Params("username", "avatarName", uuid)
 
         // Act
         val result = createUserUseCase.buildUseCaseSingle(params)
@@ -42,10 +44,9 @@ class CreateUserUseCaseTest {
             .assertNoErrors()
             .assertValue { newUser ->
                 newUser.username == "username"
+                newUser.avatarName == "avatarName"
+                newUser.uuid == uuid
             }
-
-        Assert.assertEquals(params.username, userArg.captured.username)
-        Assert.assertEquals(params.avatarName, userArg.captured.avatarName)
     }
 
     @Test
@@ -57,11 +58,24 @@ class CreateUserUseCaseTest {
         val params = CreateUserUseCase.Params("username", "testPassword", "avatarName")
 
         // Act
-        val result = createUserUseCase.buildUseCaseSingle(params)
+        createUserUseCase.buildUseCaseSingle(params).test()
 
         // Assert
         Assert.assertEquals(params.username, userArg.captured.username)
-        // TODO: add Avatar test
-//        Assert.assertEquals(params.avatarName, userArg.captured.avatarName)
+        Assert.assertEquals(params.uuid, userArg.captured.uuid)
+        Assert.assertEquals(params.avatarName, userArg.captured.avatarName)
+    }
+
+    @Test
+    fun createUserUC_userNotAuthenticated_Fails() {
+        // Arrange
+        val userArg = slot<User>()
+        every { repository.insert(capture(userArg)) } returns Completable.error(RuntimeException())
+
+        val params = CreateUserUseCase.Params("username", "testPassword", "avatarName")
+
+        // Act
+        createUserUseCase.buildUseCaseSingle(params).test()
+            .assertError(RuntimeException::class.java)
     }
 }
