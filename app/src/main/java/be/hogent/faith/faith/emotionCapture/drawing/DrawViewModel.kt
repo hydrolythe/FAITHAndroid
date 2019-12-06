@@ -1,9 +1,11 @@
 package be.hogent.faith.faith.emotionCapture.drawing
 
 import android.graphics.Color
+import android.view.View
 import androidx.annotation.ColorRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
@@ -48,6 +50,18 @@ class DrawViewModel : ViewModel() {
     val existingDetail: LiveData<DrawingDetail>
         get() = _existingDetail
 
+    private val _showDrawTools = MutableLiveData<Boolean>()
+
+    val visibilityDrawTools: LiveData<Int> =
+        Transformations.map<Boolean, Int>(_showDrawTools) { state ->
+            if (state) View.VISIBLE else View.GONE
+        }
+
+    val visibilityTextTools: LiveData<Int> =
+        Transformations.map<Boolean, Int>(_showDrawTools) { state ->
+            if (state) View.GONE else View.VISIBLE
+        }
+
     /**
      * Contains all actions that have been drawn on the [DrawView].
      * This belongs here because it's part of the UI state, just like how you would save text that's already been typed.
@@ -66,6 +80,7 @@ class DrawViewModel : ViewModel() {
         _drawingActions.value = mutableListOf()
         _selectedColor.value = Color.BLACK
         _selectedLineWidth.value = LineWidth.MEDIUM
+        _showDrawTools.value = true
     }
 
     fun loadExistingDrawingDetail(drawingDetail: DrawingDetail) {
@@ -92,10 +107,12 @@ class DrawViewModel : ViewModel() {
 
     fun onEraserClicked() {
         _eraserClicked.call()
+        _showDrawTools.value = true
     }
 
     fun onPencilClicked() {
         _pencilClicked.call()
+        _showDrawTools.value = true
     }
 
     fun onSaveButtonClicked() {
@@ -104,6 +121,7 @@ class DrawViewModel : ViewModel() {
 
     fun onTextClicked() {
         _textClicked.call()
+        _showDrawTools.value = false
     }
 
     enum class LineWidth(val width: Float) {

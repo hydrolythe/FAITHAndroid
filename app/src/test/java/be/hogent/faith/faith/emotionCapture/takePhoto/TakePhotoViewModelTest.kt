@@ -105,7 +105,6 @@ class TakePhotoViewModelTest {
         Assert.assertEquals(View.GONE, viewModel.visibilityPhotoTakenOrSaved.value!!)
     }
 
-
     @Test
     fun takePhotoVM_onSelfieButtonClicked_callsListeners() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)

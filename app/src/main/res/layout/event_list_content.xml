@@ -78,9 +78,8 @@
             app:layout_constraintEnd_toStartOf="@+id/img_audio"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/img_photo"
-
             app:layout_constraintTop_toTopOf="@+id/img_photo"
-            app:srcCompat="@drawable/brush_thickline" />
+            app:srcCompat="@drawable/ic_brush_thickline" />
 
         <ImageView
             android:id="@+id/img_audio"

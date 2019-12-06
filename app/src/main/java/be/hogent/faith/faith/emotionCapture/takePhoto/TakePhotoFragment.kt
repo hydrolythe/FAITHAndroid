@@ -45,7 +45,7 @@ class TakePhotoFragment : Fragment() {
 
     private lateinit var fotoApparat: Fotoapparat
 
-    private var navigation: TakePhotoFragment.PhotoScreenNavigation? = null
+    private var navigation: PhotoScreenNavigation? = null
 
     private val tempFileProvider by inject<TempFileProvider>()
 
@@ -66,7 +66,7 @@ class TakePhotoFragment : Fragment() {
             lensPosition = back(),
             logger = logcat()
         )
-         return takePhotoBinding.root
+        return takePhotoBinding.root
     }
 
     override fun onAttach(context: Context) {
@@ -119,8 +119,8 @@ class TakePhotoFragment : Fragment() {
      * to take a flipCamera
      */
     private fun flipCamera() {
-        fotoApparat?.switchTo(
-            lensPosition =  if (takePhotoViewModel.flipCamera.value!=null && takePhotoViewModel.flipCamera.value==true) front() else back(),
+        fotoApparat.switchTo(
+            lensPosition = if (takePhotoViewModel.flipCamera.value != null && takePhotoViewModel.flipCamera.value == true) front() else back(),
             cameraConfiguration = CameraConfiguration()
         )
     }
@@ -181,6 +181,4 @@ class TakePhotoFragment : Fragment() {
     interface PhotoScreenNavigation {
         fun backToEvent()
     }
-
-
 }

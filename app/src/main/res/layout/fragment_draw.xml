@@ -107,11 +107,28 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/container_text_utilities"
                 app:layout_constraintEnd_toStartOf="@+id/cardView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/container_tools"
-                bind:drawViewModel="@{drawViewModel}" />
+                bind:drawViewModel="@{drawViewModel}"
+                android:visibility="@{safeUnbox(drawViewModel.visibilityDrawTools)}"/>
+
+            <include
+                android:id="@+id/container_text_utilities"
+                layout="@layout/panel_text_tools"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/cardView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/container_draw_utilities"
+                bind:drawViewModel="@{drawViewModel}"
+                android:visibility="@{safeUnbox(drawViewModel.visibilityTextTools)}"/>
 
 
             />

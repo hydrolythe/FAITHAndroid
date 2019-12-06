@@ -139,4 +139,5 @@
     <string name="empty">""</string>
     <string name="kies_een_wachtwoord">Kies een wachtwoord</string>
     <string name="herhaal_je_wachtwoord">Herhaal je wachtwoord</string>
+    <string name="textSize_a">A</string>
 </resources>

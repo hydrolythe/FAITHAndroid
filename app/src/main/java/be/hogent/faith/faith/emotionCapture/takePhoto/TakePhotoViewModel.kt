@@ -33,7 +33,6 @@ class TakePhotoViewModel : ViewModel() {
     val flipCamera: LiveData<Boolean>
         get() = _flipCamera
 
-
     val visibilityTakePhoto: LiveData<Int> =
         Transformations.map<PhotoState, Int>(_currentState) { state ->
             if (state is TakePhotoState) View.VISIBLE else View.GONE
