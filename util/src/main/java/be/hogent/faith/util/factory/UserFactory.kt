@@ -7,7 +7,7 @@ object UserFactory {
         val user = User(
             username = DataFactory.randomString(),
             avatarName = DataFactory.randomString(),
-            uuid = DataFactory.randomUUID()
+            uuid = DataFactory.randomUUID().toString()
         )
         repeat(numberOfEvents) {
             user.addEvent(EventFactory.makeEvent())

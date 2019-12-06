@@ -1,18 +1,24 @@
 package be.hogent.faith.faith.cityScreen
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.LogoutUserUseCase
+import io.reactivex.observers.DisposableCompletableObserver
 import timber.log.Timber
 
 /**
  * ViewModel for the [CityScreenFragment].
  */
-class CityScreenViewModel : ViewModel() {
+class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : ViewModel() {
 
     val archiveClicked = SingleLiveEvent<Unit>()
     val parkClicked = SingleLiveEvent<Unit>()
     val thirdLocation = SingleLiveEvent<Unit>()
-    val logOutClicked = SingleLiveEvent<Unit>()
+
+    private val _logoutSuccessFull = SingleLiveEvent<Unit>()
+    val logoutSuccessFull: LiveData<Unit>
+        get() = _logoutSuccessFull
 
     fun onArchiveClicked() {
         Timber.i("First location clicked")
@@ -29,8 +35,26 @@ class CityScreenViewModel : ViewModel() {
         thirdLocation.call()
     }
 
-    // TODO: link to button
     fun onLogOutClicked() {
-        logOutClicked.call()
+        logout()
+    }
+
+    private fun logout() {
+        logoutUserUseCase.execute(null, LogoutUserUseCaseHandler())
+    }
+
+    private inner class LogoutUserUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _logoutSuccessFull.call()
+        }
+
+        override fun onError(e: Throwable) {
+            Timber.e("logout failed")
+        }
+    }
+
+    override fun onCleared() {
+        logoutUserUseCase.dispose()
+        super.onCleared()
     }
 }

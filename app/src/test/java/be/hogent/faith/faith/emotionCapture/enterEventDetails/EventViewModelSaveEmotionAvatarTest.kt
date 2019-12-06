@@ -3,7 +3,7 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.faith.di.appModule
-import be.hogent.faith.service.usecases.SaveEmotionAvatarUseCase
+import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.Called
 import io.mockk.mockk
@@ -74,7 +74,7 @@ class EventViewModelSaveEmotionAvatarTest : KoinTest {
     fun eventViewModel_saveEmotionAvatar_notifiesWhenSaveCompletes() {
         // Arrange
         val observer = slot<DisposableCompletableObserver>()
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
+        val successObserver = mockk<Observer<Int>>(relaxed = true)
         val failedObserver = mockk<Observer<Int>>(relaxed = true)
 
         viewModel.avatarSavedSuccessFully.observeForever(successObserver)
@@ -95,7 +95,7 @@ class EventViewModelSaveEmotionAvatarTest : KoinTest {
     fun eventViewModel_saveEmotionAvatar_notifiesWhenSaveFails() {
         // Arrange
         val observer = slot<DisposableCompletableObserver>()
-        val successObserver = mockk<Observer<Unit>>(relaxed = true)
+        val successObserver = mockk<Observer<Int>>(relaxed = true)
         val failedObserver = mockk<Observer<Int>>(relaxed = true)
 
         viewModel.avatarSavedSuccessFully.observeForever(successObserver)

@@ -10,23 +10,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.User
-import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
-import org.koin.android.ext.android.getKoin
-import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.error.ScopeAlreadyCreatedException
-import org.koin.core.qualifier.named
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
+import kotlinx.android.synthetic.main.fragment_login.progress
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
+class WelcomeFragment : Fragment() {
 
     private var navigation: WelcomeNavigationListener? = null
 
-    private val welcomeViewModel by viewModel<WelcomeViewModel>()
-
-    private val loginManager: LoginManager by inject()
+    private val welcomeViewModel by sharedViewModel<WelcomeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,7 +29,7 @@ class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
         val binding: be.hogent.faith.databinding.FragmentLoginBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
         binding.welcomeViewModel = welcomeViewModel
-        loginManager.attachLoginSuccesListener(this)
+
         return binding.root
     }
 
@@ -46,15 +39,33 @@ class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
     }
 
     private fun registerListeners() {
+        // user wants to register
         welcomeViewModel.registerButtonClicked.observe(this, Observer {
             navigation!!.goToRegistrationScreen()
         })
-        welcomeViewModel.loginButtonClicked.observe(this, Observer {
-            loginManager.login(activity!!)
+
+        // user is logging in....
+        welcomeViewModel.userLoggedInState.observe(this, Observer {
+            it?.let {
+                handleDataStateLogIn(it)
+            }
         })
-        welcomeViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
-            Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
-        })
+    }
+
+    // handle state when user is logging in
+    private fun handleDataStateLogIn(resource: Resource<Unit>) {
+        when (resource.status) {
+            ResourceState.SUCCESS -> {
+                navigation!!.userIsLoggedIn()
+            }
+            ResourceState.LOADING -> {
+                progress.visibility = View.VISIBLE
+            }
+            ResourceState.ERROR -> {
+                progress.visibility = View.GONE
+                Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -66,23 +77,7 @@ class WelcomeFragment : Fragment(), LoginManager.LoginSuccessListener {
 
     interface WelcomeNavigationListener {
         fun goToRegistrationScreen()
-        fun goToCityScreen()
-    }
-
-    override fun onLoginSuccess() {
-        val scope = try {
-            getKoin().createScope(KoinModules.USER_SCOPE_ID, named(USER_SCOPE_NAME))
-        } catch (e: ScopeAlreadyCreatedException) {
-            getKoin().getScope(KoinModules.USER_SCOPE_ID)
-        }
-        val userViewModel: UserViewModel = scope.get()
-        // TODO: Call the Auth0 profile and retrieve user name
-        userViewModel.setUser(User("testuser", avatarName = "meisje_stoer"))
-        navigation!!.goToCityScreen()
-    }
-
-    override fun onLoginFailure(msg: String) {
-        Toast.makeText(activity, "Log In - Error Occurred : $msg", Toast.LENGTH_SHORT).show()
+        fun userIsLoggedIn()
     }
 
     companion object {
