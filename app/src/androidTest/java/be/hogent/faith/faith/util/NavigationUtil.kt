@@ -8,6 +8,7 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import be.hogent.faith.R
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter
+import java.util.UUID
 
 object NavigationUtil {
     fun goToCityScreen() {
@@ -17,11 +18,11 @@ object NavigationUtil {
         onView(withId(R.id.btn_loginfragment_library)).perform(click())
 
         closeSoftKeyboard()
-        onView(withId(R.id.txt_register_username)).perform(typeText("Jos"))
+        onView(withId(R.id.txt_register_username)).perform(typeText(UUID.randomUUID().toString()))
         closeSoftKeyboard()
-        onView(withId(R.id.txt_register_password)).perform(typeText("ww"))
+        onView(withId(R.id.txt_register_password)).perform(typeText("wwwwww"))
         closeSoftKeyboard()
-        onView(withId(R.id.txt_register_password_repeat)).perform(typeText("ww"))
+        onView(withId(R.id.txt_register_password_repeat)).perform(typeText("wwwwww"))
         closeSoftKeyboard()
         onView(withId(R.id.btn_register_confirmInfo)).perform(click())
         onView(withId(R.id.avatar_rv_avatar)).perform(

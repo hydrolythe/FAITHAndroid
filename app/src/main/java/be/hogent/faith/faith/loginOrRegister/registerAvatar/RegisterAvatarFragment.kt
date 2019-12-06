@@ -12,16 +12,14 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter.OnAvatarClickListener
-import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
+import kotlinx.android.synthetic.main.fragment_login.progress
 import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
-import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 /**
  * A [Fragment] subclass which allows the user to register a new Avatar.
@@ -34,16 +32,17 @@ const val SELECTION_ID = "avatarSelection"
 class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
 
     private var navigation: AvatarFragmentNavigationListener? = null
-
     /**
      * ViewModel used for the avatars.
      */
     private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel()
-    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
-    private val registerUserInfoViewModel by sharedViewModel<RegisterUserInfoViewModel>()
-    private val registerUserViewModel by viewModel<RegisterUserViewModel>()
+    private val registerUserViewModel by sharedViewModel<RegisterUserViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val binding: be.hogent.faith.databinding.FragmentRegisterAvatarBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_register_avatar, container, false)
         binding.registerAvatarViewModel = registerAvatarViewModel
@@ -57,30 +56,34 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
     }
 
     private fun registerListeners() {
-        registerUserViewModel.userRegisteredSuccessFully.observe(this, Observer { newUser ->
-            userViewModel.setUser(newUser)
-            navigation!!.goToCityScreen()
-        })
-
         registerAvatarViewModel.finishRegistrationClicked.observe(this, Observer {
-            Timber.d("Registering user with:" +
-                        "username ${registerUserInfoViewModel.userName.value}, " +
-                        "password ${registerUserInfoViewModel.password.value}, " +
-                        "avatar ${registerAvatarViewModel.selectedAvatar}"
-            )
-            registerUserViewModel.registerUser(
-                registerUserInfoViewModel.userName.value!!,
-                registerUserInfoViewModel.password.value!!,
-                registerAvatarViewModel.selectedAvatar!!
-            )
+            registerUserViewModel.setAvatar(registerAvatarViewModel.selectedAvatar!!)
+            registerUserViewModel.register()
         })
 
         registerAvatarViewModel.errorMessage.observe(this, Observer { errorMessageID ->
             Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
         })
-        registerUserViewModel.errorMessage.observe(this, Observer { errorMessageID ->
-            Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
+        registerUserViewModel.userRegisteredState.observe(this, Observer {
+            it?.let {
+                handleDataState(it)
+            }
         })
+    }
+
+    private fun handleDataState(resource: Resource<Unit>) {
+        when (resource.status) {
+            ResourceState.SUCCESS -> {
+                navigation!!.userIsRegistered() // progress bar must stay visible
+            }
+            ResourceState.LOADING -> {
+                progress.visibility = View.VISIBLE
+            }
+            ResourceState.ERROR -> {
+                progress.visibility = View.GONE
+                Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -95,11 +98,12 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
             avatars = registerAvatarViewModel.avatars.value!!
             avatar_rv_avatar.adapter = this
         }
-        avatar_rv_avatar.layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
+        avatar_rv_avatar.layoutManager =
+            LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
     }
 
     interface AvatarFragmentNavigationListener {
-        fun goToCityScreen()
+        fun userIsRegistered()
     }
 
     override fun onAvatarClicked(index: Int) {

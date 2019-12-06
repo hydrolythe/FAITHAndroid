@@ -9,9 +9,9 @@ data class User(
      * This should be unique, and will be used to request the image corresponding to the chosen avatar.
      */
     val avatarName: String,
-    val uuid: UUID = UUID.randomUUID()
+    val uuid: String
 ) {
-    private val _events = HashMap<UUID, Event>()
+    private var _events = HashMap<UUID, Event>()
     val events: List<Event>
         get() = _events.values.toList()
 
@@ -24,5 +24,9 @@ data class User(
 
     fun getEvent(eventUUID: UUID): Event? {
         return _events[eventUUID]
+    }
+
+    fun clearEvents() {
+        _events = HashMap<UUID, Event>()
     }
 }

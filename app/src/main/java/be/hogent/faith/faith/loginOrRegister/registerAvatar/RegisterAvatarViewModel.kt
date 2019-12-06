@@ -5,11 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
 
 /**
- * ViewModel for the Avatar selection screen
+ * Represents the [ViewModel] for the user during the registering process - Part 2
+ * Namely the part where the user selects his/her avatar
+ * If the avatar is available, the user will be registered
  */
 class RegisterAvatarViewModel(
     private val avatarProvider: AvatarProvider
@@ -23,8 +24,8 @@ class RegisterAvatarViewModel(
         get() = _selectedAvatarPosition
     private var _selectedAvatarPosition = MutableLiveData<Int>()
 
-    private val _finishRegistrationClicked = SingleLiveEvent<User>()
-    val finishRegistrationClicked: LiveData<User>
+    private val _finishRegistrationClicked = SingleLiveEvent<Unit>() // SingleLiveEvent<User>()
+    val finishRegistrationClicked: LiveData<Unit> // LiveData<User>
         get() = _finishRegistrationClicked
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()

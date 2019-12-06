@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -96,14 +95,14 @@
             <include
                 android:id="@+id/include_register_frame"
                 layout="@layout/view_register_frame"
-                app:registerUserInfoViewModel="@{registerUserInfoViewModel}"
                 android:layout_width="400dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@+id/guide_city_top"
                 app:layout_constraintEnd_toStartOf="@+id/guide_frame_hor"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/guide_frame_hor"
-                app:layout_constraintTop_toTopOf="@+id/guide_city_top" />
+                app:layout_constraintTop_toTopOf="@+id/guide_city_top"
+                app:registerUserInfoViewModel="@{registerUserInfoViewModel}" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_register_confirmInfo"
@@ -119,6 +118,13 @@
                 app:layout_constraintTop_toTopOf="@+id/guide_continue_top"
                 app:layout_constraintVertical_bias="0.911" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
 
     </FrameLayout>
 </layout>

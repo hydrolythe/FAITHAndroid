@@ -6,12 +6,13 @@
 
         <variable
             name="drawViewModel"
-            type="be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel" />
+            type="be.hogent.faith.faith.details.drawing.create.DrawViewModel" />
 
         <import type="android.graphics.Color" />
 
-        <import type="be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel.LineWidth" />
+        <import type="be.hogent.faith.faith.details.drawing.create.DrawViewModel" />
 
+        <import type="be.hogent.faith.faith.details.drawing.create.DrawViewModel.LineWidth" />
     </data>
 
     <androidx.cardview.widget.CardView
