@@ -1,161 +1,62 @@
 package be.hogent.faith.storage
 
-import android.content.Context
-import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
+import be.hogent.faith.storage.localStorage.ILocalStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Single
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
-import java.io.File
-
-const val EMOTION_AVATAR_FILENAME = "emotionAvatar"
+import io.reactivex.rxkotlin.toFlowable
 
 /**
- * Repository providing access to both the internal and external storage.
- * It decides which one will be used based on the user's settings.
+ * Repository providing access to both the internal and remote storage.
+ * It decides which one will be used based on the network availability.
  *
- * TODO: Currently only supports internal storage.
  */
-const val TEXT_EXTENSION = "txt"
+class StorageRepository(
+    private val localStorage: ILocalStorageRepository,
+    private val remoteStorage: IFireBaseStorageRepository
+) : IStorageRepository {
 
-class StorageRepository(private val context: Context) {
-
-    fun storeBitmap(bitmap: Bitmap, file: File): Completable {
-        return Completable.fromCallable {
-            file.outputStream().use {
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
-            }
-        }
+    /**
+     * stores all event files in firebase
+     */
+    override fun saveEvent(event: Event): Single<Event> {
+        return localStorage.saveEvent(event)
+            .flatMap { remoteStorage.saveEvent(it) }
     }
 
     /**
-     * Stores the bitmap on the device's storage.
-     * It will be put in the context.filesDir/event.uuid/images/ folder
-     *
-     * @param fileName under which the bitmap will be saved
-     * @return a Single<File> with the path derived from the event's dateTime
+     * download file from firebase to localStorage if not present yet
      */
-    fun storeBitmap(bitmap: Bitmap, folder: File, fileName: String): Single<File> {
-        val saveFile = File(folder, fileName)
-        return storeBitmap(bitmap, saveFile).andThen(Single.just(saveFile))
-    }
-
-    private fun getEventImageDirectory(event: Event): File {
-        val imageDirectory = File(getEventDirectory(event), "images")
-        imageDirectory.mkdirs()
-        return imageDirectory
-    }
-
-    private fun getEventAudioDirectory(event: Event): File {
-        val audioDir = File(getEventDirectory(event), "audio")
-        audioDir.mkdirs()
-        return audioDir
-    }
-
-    private fun getEventDirectory(event: Event): File {
-        val eventDir = File(context.filesDir, "events/${event.uuid}")
-        eventDir.mkdirs()
-        return eventDir
-    }
-
-    private fun getEventTextDirectory(event: Event): File {
-        val textDir = File(context.filesDir, "text/${event.uuid}")
-        textDir.mkdirs()
-        return textDir
-    }
-
-    fun saveEventAudio(tempStorageFile: File, event: Event): Single<File> {
-        return moveFileFromTempStorageToPermanentStorage(
-            tempStorageFile,
-            getEventAudioDirectory(event),
-            createSaveFileName()
-        )
-    }
-
-    fun saveEventDrawing(bitmap: Bitmap, event: Event): Single<File> {
-        return storeBitmap(
-            bitmap,
-            getEventImageDirectory(event),
-            createSaveFileName()
-        )
-    }
-
-    fun saveEventPhoto(tempStorageFile: File, event: Event): Single<File> {
-        return moveFileFromTempStorageToPermanentStorage(
-            tempStorageFile,
-            getEventImageDirectory(event),
-            createSaveFileName()
-        )
-    }
-
-    fun saveEventEmotionAvatar(bitmap: Bitmap, event: Event): Single<File> {
-        return storeBitmap(
-            bitmap,
-            getEventDirectory(event),
-            EMOTION_AVATAR_FILENAME
-        )
+    // TODO ("Timestamp checking? What als de file op een andere tablet werd aangepast?")
+    private fun getFile(detail: Detail): Completable {
+        if (localStorage.isFilePresent(detail))
+            return Completable.complete()
+        else
+            return remoteStorage.makeFileLocallyAvailable(detail)
     }
 
     /**
-     * Returns a saveFile with the name in the following format:
-     * day_month_year_hour_minute_second_millis
+     * download emotion avatar from firebase to localStorage if not present yet
      */
-    private fun createSaveFileName(): String {
-        return LocalDateTime.now().format(DateTimeFormatter.ofPattern("d_M_y_k_m_s_A"))
+    private fun getEmotionAvatar(event: Event): Completable {
+        if (event.emotionAvatar == null || localStorage.isEmotionAvatarPresent(event))
+            return Completable.complete()
+        else
+            return remoteStorage.makeEmotionAvatarLocallyAvailable(event)
     }
 
     /**
-     * Stores a file  by moving it from a temporary file in the device's cache directory to permanent storage.
-     *
-     * @param tempStorageFile the (cache) file in which the recording is currently stored
-     * @param folder the folder where the file should be stored
+     * download all event files from firebase to localStorage if not present yet
      */
-    private fun moveFileFromTempStorageToPermanentStorage(
-        tempStorageFile: File,
-        folder: File,
-        fileName: String
-    ): Single<File> {
-        return Single.fromCallable {
-            val storedFile = File(folder, fileName)
-            tempStorageFile.copyTo(target = storedFile, overwrite = true)
-//            tempStorageFile.delete()
-            storedFile
-        }
-    }
-
-    /**
-     *  Writes a String to a text file
-     *
-     * @param text the String
-     * @param event the [Event] this text will be added to as a detail (not by this function).
-     *          Used to store the text in a folder specific for the event.
-     */
-    fun saveText(text: String, event: Event): Single<File> {
-        return Single.fromCallable {
-            val storedFile =
-                File(getEventTextDirectory(event), "${createSaveFileName()}.$TEXT_EXTENSION")
-            storedFile.writeText(text)
-            storedFile
-        }
-    }
-
-    fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String> {
-        return Single.fromCallable {
-            val readString = textDetail.file.readText()
-            readString
-        }
-    }
-
-    fun overwriteTextDetail(text: String, existingDetail: TextDetail): Completable {
-        return Completable.fromCallable {
-            existingDetail.file.writeText(text)
-        }
-    }
-
-    fun overwriteEventDetail(bitmap: Bitmap, existingDetail: DrawingDetail): Completable {
-        return storeBitmap(bitmap, existingDetail.file)
+    override fun getEvent(event: Event): Completable {
+        return getEmotionAvatar(event)
+            .concatWith(
+                event.details.toFlowable()
+                    .concatMapCompletable {
+                        getFile(it)
+                    }
+            )
     }
 }

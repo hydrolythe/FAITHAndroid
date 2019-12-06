@@ -15,7 +15,7 @@ class UserTest {
 
     @Before
     fun setUp() {
-        user = User("username", "avatarName")
+        user = User("username", "avatarName", UUID.randomUUID().toString())
 //        user = User("username", "R.drawable.avatar")
         event = Event(title = eventTitle, uuid = eventUuid)
     }
@@ -50,5 +50,12 @@ class UserTest {
         user.addEvent(event)
         val result = user.getEvent(UUID.randomUUID())
         Assert.assertNull(result)
+    }
+
+    @Test
+    fun user_clearEventsclearsAllEvents() {
+        user.addEvent(event)
+        user.clearEvents()
+        Assert.assertEquals(0, user.events.count())
     }
 }

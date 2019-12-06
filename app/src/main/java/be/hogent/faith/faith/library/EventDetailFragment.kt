@@ -16,12 +16,11 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.faith.emotionCapture.enterText.EnterTextFragment
 import be.hogent.faith.faith.library.eventDetailFragments.TestFragment
 import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
 import org.koin.android.ext.android.getKoin
-
 import timber.log.Timber
 
 /**
@@ -97,9 +96,9 @@ class EventDetailFragment : Fragment() {
                         return TestFragment.newInstance()
                     }
                     is TextDetail -> {
-                        val detail = details[position].uuid
+                        val detail = details[position] as TextDetail
                         Timber.i("De detail UUID is : $detail")
-                        fragment = EnterTextFragment.newInstance(details[position].uuid)
+                        fragment = TextDetailFragment.newInstance(detail)
                         Timber.i("Textdetail")
                         return fragment
                     }

@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.faith.loadFirestorageImage
 import com.bumptech.glide.RequestManager
-import com.bumptech.glide.request.RequestOptions
 import org.threeten.bp.format.DateTimeFormatter
 
 class EventsAdapter(private val eventListener: EventListener, private val glide: RequestManager) :
@@ -35,9 +35,11 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private var avatarImage: ImageView =
-            view.findViewById(R.id.img_overviewevents_thumbnailAvatar)
-        private var eventTitle: TextView = view.findViewById(R.id.label_overviewevents_title)
-        private var eventDate: TextView = view.findViewById(R.id.label_overviewevent_eventDate)
+            view.findViewById(be.hogent.faith.R.id.img_overviewevents_thumbnailAvatar)
+        private var eventTitle: TextView =
+            view.findViewById(be.hogent.faith.R.id.label_overviewevents_title)
+        private var eventDate: TextView =
+            view.findViewById(be.hogent.faith.R.id.label_overviewevent_eventDate)
 
         fun bind(event: Event) {
             eventTitle.text = event.title
@@ -46,10 +48,13 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
             eventDate.text = eventDateString
 
             event.emotionAvatar?.let {
-                glide
-                    .load(it)
+                loadFirestorageImage(this.itemView.context, it.path, avatarImage)
+                /*
+                GlideApp.with(this.itemView.context)
+                    .load(FirebaseStorage.getInstance().reference.child(it.path)) // storagereference
                     .apply(RequestOptions.circleCropTransform())
                     .into(avatarImage)
+                 */
             }
 
             itemView.setOnClickListener {
