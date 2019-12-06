@@ -9,6 +9,8 @@ abstract class DrawFragment : Fragment() {
 
     abstract val drawView: DrawView
 
+    open val colorAlpha: Int = 255 // no transparancy
+
     override fun onStart() {
         super.onStart()
 
@@ -18,6 +20,7 @@ abstract class DrawFragment : Fragment() {
     private fun setUpListeners() {
         drawViewModel.selectedColor.observe(this, Observer { newColor ->
             drawView.setColor(newColor)
+            drawView.setAlpha(colorAlpha)
         })
         drawViewModel.selectedLineWidth.observe(this, Observer { lineWidth ->
             drawView.setStrokeWidth(lineWidth.width)

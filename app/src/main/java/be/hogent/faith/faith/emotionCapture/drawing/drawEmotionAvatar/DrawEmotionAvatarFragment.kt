@@ -30,6 +30,11 @@ private const val ARG_AVATAR_RES_ID = "avatarResId"
 private const val NO_AVATAR = -1
 
 /**
+ * Alpha value used for the colors
+ */
+private const val COLOR_ALPHA = 230 // 90%
+
+/**
  * Fragment that allows the user to color in the outline of their avatarName according to their emotional state.
  */
 class DrawEmotionAvatarFragment : DrawFragment() {
@@ -38,6 +43,9 @@ class DrawEmotionAvatarFragment : DrawFragment() {
 
     override val drawView: DrawView
         get() = drawAvatarBinding.drawView
+
+    override val colorAlpha: Int
+        get() = COLOR_ALPHA
 
     private val eventViewModel: EventViewModel by sharedViewModel()
 
