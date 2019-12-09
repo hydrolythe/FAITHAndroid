@@ -1,7 +1,9 @@
 package be.hogent.faith.faith.details.drawing.create
 
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import be.hogent.faith.R
 import com.divyanshu.draw.widget.DrawView
 
 abstract class DrawFragment : Fragment() {
@@ -15,6 +17,9 @@ abstract class DrawFragment : Fragment() {
         super.onStart()
 
         setUpListeners()
+
+        //anders wordt zwarte kleur niet geselecteerd en wordt de alpha value niet ingesteld
+        drawViewModel.pickColor(ContextCompat.getColor(context!!, R.color.black))
     }
 
     private fun setUpListeners() {

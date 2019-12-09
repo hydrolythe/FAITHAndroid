@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawAvatarBinding
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
@@ -74,13 +75,13 @@ class DrawEmotionAvatarFragment : DrawFragment() {
 
     override fun onStart() {
         super.onStart()
-
         configureDrawingCanvas()
+        startListeners()
     }
 
     private fun configureDrawingCanvas() {
         // Paint with semi-transparent paint so you can always see the background's outline
-        drawView.setAlpha(70)
+        drawView.setAlpha(COLOR_ALPHA)
         // Leave some whitespace around the avatar
         drawView.fullScreenBackground = false
 
@@ -92,6 +93,13 @@ class DrawEmotionAvatarFragment : DrawFragment() {
                 ) as BitmapDrawable
             )
         }
+    }
+
+    private fun startListeners() {
+        drawViewModel.restartClicked.observe(this, Observer {
+            drawView.clearCanvas()
+            configureDrawingCanvas()
+        })
     }
 
     override fun onStop() {

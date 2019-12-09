@@ -152,4 +152,5 @@
     <string name="create_photo_failed">Er ging iets fout bij het aanmaken van je foto.</string>
     <string name="text_save_error_emptyinput">Je hebt nog geen tekst geschreven!</string>
     <string name="textSize_a">A</string>
+    <string name="opnieuw">Opnieuw</string>
 </resources>

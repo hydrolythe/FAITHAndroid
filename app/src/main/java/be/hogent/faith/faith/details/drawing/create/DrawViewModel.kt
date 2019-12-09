@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.details.drawing.create
 
-import android.graphics.Color
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
@@ -11,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import com.divyanshu.draw.widget.DrawView
 import com.divyanshu.draw.widget.tools.CanvasAction
+import be.hogent.faith.R
 
 /**
  * Base VM for both the [DrawingDetailViewModel] and the [DrawEmotionAvatarViewModel].
@@ -36,6 +36,10 @@ open class DrawViewModel : ViewModel() {
     private val _eraserClicked = SingleLiveEvent<Unit>()
     val eraserClicked: LiveData<Unit>
         get() = _eraserClicked
+
+    private val _restartClicked = SingleLiveEvent<Unit>()
+    val restartClicked: LiveData<Unit>
+        get() = _restartClicked
 
     private val _saveClicked = SingleLiveEvent<Unit>()
     val saveClicked: LiveData<Unit>
@@ -77,10 +81,10 @@ open class DrawViewModel : ViewModel() {
 
     init {
         _drawingActions.value = mutableListOf()
-        _selectedColor.value = Color.BLACK
+        _showDrawTools.value = true
+        _selectedColor.value = R.color.black
         _selectedLineWidth.value =
             LineWidth.MEDIUM
-        _showDrawTools.value = true
     }
 
     fun pickColor(@ColorInt color: Int) {
@@ -98,6 +102,10 @@ open class DrawViewModel : ViewModel() {
     fun onEraserClicked() {
         _eraserClicked.call()
         _showDrawTools.value = true
+    }
+
+    fun onRestartClicked() {
+        _restartClicked.call()
     }
 
     fun onPencilClicked() {
