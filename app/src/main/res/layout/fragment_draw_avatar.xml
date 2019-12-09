@@ -7,7 +7,7 @@
 
         <variable
             name="drawViewModel"
-            type="be.hogent.faith.faith.emotionCapture.drawing.DrawViewModel" />
+            type="be.hogent.faith.faith.details.drawing.create.DrawViewModel" />
 
     </data>
 

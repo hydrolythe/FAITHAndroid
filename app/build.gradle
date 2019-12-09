@@ -18,9 +18,6 @@ buildscript {
     }
 }
 
-
-
-
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
     compileSdkVersion globalConfig["androidCompileSdkVersion"]
@@ -98,13 +95,14 @@ dependencies {
 
     implementation androidDependencies.appcompat
     implementation androidDependencies.lifecycle
+    implementation androidDependencies.viewmodellifecycle
 
     implementation uiDependencies.glide
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
+   // implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation uiDependencies.legacysupport
+    implementation uiDependencies.googleplay
+    //implementation 'com.google.android.gms:play-services-plus:16.0.0'
+    //implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
     implementation uiDependencies.rv_selection
@@ -122,6 +120,8 @@ dependencies {
     implementation commonDependencies.navui
 
     implementation uiDependencies.viewpager2
+
+    implementation firebaseDependencies.firebasestorageui
 
     //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
     testImplementation(testDependencies.threeTenBP) {

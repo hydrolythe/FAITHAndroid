@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
-            name="eventViewModel"
-            type="be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel" />
-
-        <variable
-            name="enterTextViewModel"
-            type="be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel" />
+            name="textDetailViewModel"
+            type="be.hogent.faith.faith.details.text.create.TextDetailViewModel" />
 
         <import type="android.graphics.Color" />
+        <import type="be.hogent.faith.faith.details.text.create.TextDetailViewModel.FontSize"/>
 
-        <import type="be.hogent.faith.faith.emotionCapture.enterText.EnterTextViewModel.FontSize" />
+        <import type="be.hogent.faith.faith.details.text.create.TextDetailViewModel" />
 
     </data>
 
@@ -42,7 +38,7 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/save_btn"
                 android:elevation="2dp"
-                android:onClick="@{() -> eventViewModel.saveText(enterTextViewModel.text, enterTextViewModel.existingDetail)}"
+                android:onClick="@{() -> textDetailViewModel.onSaveClicked()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -75,10 +71,10 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(enterTextViewModel.boldClicked)? @drawable/background : @drawable/background_noborder}"
+                        android:background="@{safeUnbox(textDetailViewModel.boldClicked)? @drawable/background : @drawable/background_noborder}"
                         android:contentDescription="@string/choose_bold"
                         android:gravity="center_horizontal"
-                        android:onClick="@{() -> enterTextViewModel.onBoldClicked()}"
+                        android:onClick="@{() -> textDetailViewModel.onBoldClicked()}"
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/bold"
@@ -93,10 +89,10 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(enterTextViewModel.italicClicked)? @drawable/background : @drawable/background_noborder}"
+                        android:background="@{safeUnbox(textDetailViewModel.italicClicked)? @drawable/background : @drawable/background_noborder}"
                         android:contentDescription="@string/choose_italic"
                         android:gravity="center_horizontal"
-                        android:onClick="@{() -> enterTextViewModel.onItalicClicked()}"
+                        android:onClick="@{() -> textDetailViewModel.onItalicClicked()}"
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/italic"
@@ -111,10 +107,10 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(enterTextViewModel.underlineClicked)? @drawable/background : @drawable/background_noborder}"
+                        android:background="@{safeUnbox(textDetailViewModel.underlineClicked)? @drawable/background : @drawable/background_noborder}"
                         android:contentDescription="@string/choose_underline"
                         android:gravity="center_horizontal"
-                        android:onClick="@{() -> enterTextViewModel.onUnderlineClicked()}"
+                        android:onClick="@{() -> textDetailViewModel.onUnderlineClicked()}"
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/underline"
@@ -152,9 +148,9 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{enterTextViewModel.selectedFontSize==FontSize.SMALL? @drawable/background : @drawable/background_noborder}"
+                        android:background="@{textDetailViewModel.selectedFontSize==FontSize.SMALL? @drawable/background : @drawable/background_noborder}"
                         android:gravity="bottom|center_horizontal"
-                        android:onClick="@{() -> enterTextViewModel.pickFontSize(FontSize.SMALL)}"
+                        android:onClick="@{() -> textDetailViewModel.pickFontSize(FontSize.SMALL)}"
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/font_sizesmall"
@@ -168,9 +164,9 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{enterTextViewModel.selectedFontSize==FontSize.NORMAL?@drawable/background : @drawable/background_noborder}"
+                        android:background="@{textDetailViewModel.selectedFontSize==FontSize.NORMAL?@drawable/background : @drawable/background_noborder}"
                         android:gravity="bottom|center_horizontal"
-                        android:onClick="@{() -> enterTextViewModel.pickFontSize(FontSize.NORMAL)}"
+                        android:onClick="@{() -> textDetailViewModel.pickFontSize(FontSize.NORMAL)}"
                         android:padding="5dp"
                         android:scaleType="centerInside"
 
@@ -185,9 +181,9 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{enterTextViewModel.selectedFontSize==FontSize.LARGE? @drawable/background : @drawable/background_noborder}"
+                        android:background="@{textDetailViewModel.selectedFontSize==FontSize.LARGE? @drawable/background : @drawable/background_noborder}"
                         android:gravity="center_horizontal"
-                        android:onClick="@{() -> enterTextViewModel.pickFontSize(FontSize.LARGE)}"
+                        android:onClick="@{() -> textDetailViewModel.pickFontSize(FontSize.LARGE)}"
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/font_sizelarge"
@@ -224,9 +220,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(enterTextViewModel.selectedTextColor)==@color/blue ? @drawable/background : @drawable/background_noborder}"
+                        android:background="@{safeUnbox(textDetailViewModel.selectedTextColor)==@color/blue ? @drawable/background : @drawable/background_noborder}"
                         android:contentDescription="@string/choose_blue"
-                        android:onClick="@{() -> enterTextViewModel.pickTextColor(@color/blue)}"
+                        android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/blue)}"
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/paintpot_blue" />
@@ -237,9 +233,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(enterTextViewModel.selectedTextColor)==@color/red ? @drawable/background : @drawable/background_noborder}"
+                        android:background="@{safeUnbox(textDetailViewModel.selectedTextColor)==@color/red ? @drawable/background : @drawable/background_noborder}"
                         android:contentDescription="@string/choose_red"
-                        android:onClick="@{() -> enterTextViewModel.pickTextColor(@color/red)}"
+                        android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/red)}"
 
                         android:padding="5dp"
                         android:scaleType="centerInside"
@@ -251,9 +247,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(enterTextViewModel.selectedTextColor)==@color/yellow ? @drawable/background : @drawable/background_noborder}"
+                        android:background="@{safeUnbox(textDetailViewModel.selectedTextColor)==@color/yellow ? @drawable/background : @drawable/background_noborder}"
                         android:contentDescription="@string/choose_yellow"
-                        android:onClick="@{() -> enterTextViewModel.pickTextColor(@color/yellow)}"
+                        android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/yellow)}"
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/paintpot_yellow" />
@@ -264,9 +260,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{enterTextViewModel.selectedTextColor==@color/green ? @drawable/background : @drawable/background_noborder}"
+                        android:background="@{textDetailViewModel.selectedTextColor==@color/green ? @drawable/background : @drawable/background_noborder}"
                         android:contentDescription="@string/choose_green"
-                        android:onClick="@{() -> enterTextViewModel.pickTextColor(@color/green)}"
+                        android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/green)}"
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/paintpot_green" />
@@ -277,9 +273,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(enterTextViewModel.selectedTextColor)==@color/black ? @drawable/background : @drawable/background_noborder}"
+                        android:background="@{safeUnbox(textDetailViewModel.selectedTextColor)==@color/black ? @drawable/background : @drawable/background_noborder}"
                         android:contentDescription="@string/choose_black"
-                        android:onClick="@{() -> enterTextViewModel.pickTextColor(@color/black)}"
+                        android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/black)}"
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/paintpot_black" />

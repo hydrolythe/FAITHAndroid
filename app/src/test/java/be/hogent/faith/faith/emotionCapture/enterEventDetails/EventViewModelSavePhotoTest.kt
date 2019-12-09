@@ -2,31 +2,25 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.faith.di.appModule
-import be.hogent.faith.service.usecases.SaveEventPhotoUseCase
-import be.hogent.faith.util.factory.DataFactory
+import be.hogent.faith.R
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.service.usecases.event.SaveEventPhotoDetailUseCase
 import io.mockk.Called
+import io.mockk.called
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.observers.DisposableSingleObserver
-import org.junit.After
+import io.reactivex.observers.DisposableCompletableObserver
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
-import org.koin.test.KoinTest
 
-class EventViewModelSavePhotoTest : KoinTest {
+class EventViewModelSavePhotoTest {
     private lateinit var viewModel: EventViewModel
-    private val savePhotoUseCase = mockk<SaveEventPhotoUseCase>(relaxed = true)
+    private val saveEventPhotoUC = mockk<SaveEventPhotoDetailUseCase>(relaxed = true)
 
-    private val eventTitle = DataFactory.randomString()
-    private val eventNotes = DataFactory.randomString()
-    private val eventDateTime = DataFactory.randomDateTime()
+    private val detail = mockk<PhotoDetail>()
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -36,80 +30,62 @@ class EventViewModelSavePhotoTest : KoinTest {
 
     @Before
     fun setUp() {
-        startKoin { modules(appModule) }
         viewModel = EventViewModel(
             mockk(),
-            savePhotoUseCase,
+            saveEventPhotoUC,
             mockk(),
             mockk(),
             mockk()
         )
-
-        // We have to add an observer so event changes when title/notes/date are given a new value
-        viewModel.event.observeForever(mockk(relaxed = true))
-
-        viewModel.eventTitle.value = eventTitle
-        viewModel.eventNotes.value = eventNotes
-        viewModel.eventDate.value = eventDateTime
-    }
-
-    @After
-    fun takeDown() {
-        stopKoin()
     }
 
     @Test
-    fun eventViewModel_savePhoto_usesCorrectParams() {
-        // Arrange
-        val observer = slot<DisposableSingleObserver<Detail>>()
-        val params = slot<SaveEventPhotoUseCase.Params>()
+    fun eventViewModel_saveEventPhoto_callsUseCase() {
+        val params = slot<SaveEventPhotoDetailUseCase.Params>()
 
-        // Act
-        viewModel.savePhoto(mockk())
-        verify { savePhotoUseCase.execute(capture(params), capture(observer)) }
-        observer.captured.onSuccess(mockk())
+        viewModel.savePhotoDetail(detail)
+        verify { saveEventPhotoUC.execute(capture(params), any()) }
 
-        // Assert
+        assertEquals(detail, params.captured.photoDetail)
         assertEquals(event, params.captured.event)
     }
 
     @Test
-    fun eventViewModel_savePhoto_notifiesWhenSaveFails() {
+    fun eventViewModel_saveEventPhoto_notifiesUseCaseSuccess() {
         // Arrange
-        val successObserver = mockk<Observer<Detail>>(relaxed = true)
+        val useCaseObserver = slot<DisposableCompletableObserver>()
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val observer = slot<DisposableSingleObserver<Detail>>()
-
-        viewModel.photoSavedSuccessFully.observeForever(successObserver)
+        val successObserver = mockk<Observer<Int>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
+        viewModel.photoDetailSavedSuccessFully.observeForever(successObserver)
 
         // Act
-        viewModel.savePhoto(mockk())
-        verify { savePhotoUseCase.execute(any(), capture(observer)) }
-        observer.captured.onError(RuntimeException())
+        viewModel.savePhotoDetail(detail)
+        verify { saveEventPhotoUC.execute(any(), capture(useCaseObserver)) }
+        useCaseObserver.captured.onComplete()
+
+        // Assert
+        verify { successObserver.onChanged(R.string.save_photo_success) }
+        verify { errorObserver wasNot called }
+    }
+
+    @Test
+    fun eventViewModel_saveEventPhoto_notifiesUseCaseFailure() {
+        // Arrange
+        val useCaseObserver = slot<DisposableCompletableObserver>()
+
+        val errorObserver = mockk<Observer<Int>>(relaxed = true)
+        val successObserver = mockk<Observer<Int>>(relaxed = true)
+        viewModel.errorMessage.observeForever(errorObserver)
+        viewModel.photoDetailSavedSuccessFully.observeForever(successObserver)
+
+        // Act
+        viewModel.savePhotoDetail(detail)
+        verify { saveEventPhotoUC.execute(any(), capture(useCaseObserver)) }
+        useCaseObserver.captured.onError(mockk(relaxed = true))
 
         // Assert
         verify { errorObserver.onChanged(any()) }
         verify { successObserver wasNot Called }
-    }
-
-    @Test
-    fun eventViewModel_savePhoto_notifiesWhenSaveCompletes() {
-        // Arrange
-        val successObserver = mockk<Observer<Detail>>(relaxed = true)
-        val errorObserver = mockk<Observer<Int>>(relaxed = true)
-        val observer = slot<DisposableSingleObserver<Detail>>()
-
-        viewModel.photoSavedSuccessFully.observeForever(successObserver)
-        viewModel.errorMessage.observeForever(errorObserver)
-
-        // Act
-        viewModel.savePhoto(mockk())
-        verify { savePhotoUseCase.execute(any(), capture(observer)) }
-        observer.captured.onSuccess(mockk())
-
-        // Assert
-        verify { successObserver.onChanged(any()) }
-        verify { errorObserver wasNot Called }
     }
 }
