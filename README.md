@@ -102,9 +102,9 @@ TODO
 <!-- CONTACT -->
 ## Contact
 
-Jens Buysse - [@jensbuy](https://twitter.com/jensbuy) - jens.buysse@hogent.be
-Harm De Weird 
-Karine Samyn
+- Jens Buysse - [@jensbuy](https://twitter.com/jensbuy) - jens.buysse@hogent.be
+- Harm De Weird 
+- Karine Samyn
 
 Project Link: [https://hogent.be/projecten/faith/](https://hogent.be/projecten/faith/)
 
