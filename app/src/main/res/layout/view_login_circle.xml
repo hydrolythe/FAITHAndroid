@@ -31,6 +31,10 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:drawableStart="@drawable/ic_login_wrap"
+                android:imeOptions="flagNoExtractUi"
+                android:nextFocusRight="@+id/txt_welcome_password"
+                android:nextFocusDown="@+id/txt_welcome_password"
+                android:singleLine="true"
                 android:text="@={welcomeViewModel.userName}" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -50,7 +54,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_lock_wrap"
+                android:imeOptions="flagNoExtractUi"
                 android:inputType="textPassword"
+                android:nextFocusLeft="@+id/txt_welcome_userName"
+                android:singleLine="true"
                 android:text="@={welcomeViewModel.password}" />
         </com.google.android.material.textfield.TextInputLayout>
 
