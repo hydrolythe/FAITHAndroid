@@ -35,7 +35,8 @@ class TextTool(
             textPaint = TextPaint(textPaint)
             currentTextAction =
                 TextAction(Point(event.x, event.y), textPaint)
-            showSoftKeyboard()
+            // als x en y 0 zijn, dan werd er gesimuleerd dat de gebruiker ergens geklikt heeft zodat de tekst werd weggeschreven
+            if (event.x != 0.0f && event.y != 0.0f) showSoftKeyboard()
         }
     }
 

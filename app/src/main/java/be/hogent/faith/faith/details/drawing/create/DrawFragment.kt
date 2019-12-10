@@ -18,7 +18,7 @@ abstract class DrawFragment : Fragment() {
 
         setUpListeners()
 
-        //anders wordt zwarte kleur niet geselecteerd en wordt de alpha value niet ingesteld
+        // anders wordt zwarte kleur niet geselecteerd en wordt de alpha value niet ingesteld
         drawViewModel.pickColor(ContextCompat.getColor(context!!, R.color.black))
     }
 
