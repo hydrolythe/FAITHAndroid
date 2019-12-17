@@ -7,6 +7,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.platform.app.InstrumentationRegistry
 import be.hogent.faith.R
 import be.hogent.faith.database.di.databaseModule
 import be.hogent.faith.faith.androidTestModule
@@ -22,7 +23,8 @@ object NavigationUtil {
     fun startFaithApp(){
         stopKoin()
         org.koin.core.context.startKoin {
-            androidContext(ApplicationProvider.getApplicationContext())
+            androidContext(
+                InstrumentationRegistry.getInstrumentation().getTargetContext()) //ApplicationProvider.getApplicationContext())
             modules(
                 listOf(
                     appModule,
