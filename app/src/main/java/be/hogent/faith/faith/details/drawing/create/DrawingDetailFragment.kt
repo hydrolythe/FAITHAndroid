@@ -38,11 +38,16 @@ class DrawingDetailFragment : DrawFragment(),
     override val drawView: DrawView
         get() = drawBinding.drawView
 
+    override fun saveBitmap() {
+        drawView.getBitmap { bitmap ->
+            drawingDetailViewModel.onBitMapAvailable(bitmap)
+        }
+    }
+
     private val premadeImagesProvider by inject<PremadeImagesProvider>()
 
     private lateinit var drawBinding: FragmentDrawBinding
 
-    private var navigation: DrawingScreenNavigation? = null
     override lateinit var detailFinishedListener: DetailFinishedListener
 
     override fun onCreateView(
@@ -102,9 +107,6 @@ class DrawingDetailFragment : DrawFragment(),
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is DrawingScreenNavigation) {
-            navigation = context
-        }
         if (context is DetailFinishedListener) {
             detailFinishedListener = context
         } else {
@@ -115,19 +117,6 @@ class DrawingDetailFragment : DrawFragment(),
     private fun startListeners() {
         drawingDetailViewModel.textClicked.observe(this, Observer {
             drawView.pickTextTool()
-        })
-        drawingDetailViewModel.eraserClicked.observe(this, Observer {
-            drawView.pickEraserTool()
-        })
-        drawingDetailViewModel.pencilClicked.observe(this, Observer {
-            drawView.pickDrawingTool()
-        })
-
-        drawingDetailViewModel.saveClicked.observe(this, Observer {
-            // TODO: move to something async, maybe a coroutine?
-            drawView.getBitmap { bitmap ->
-                drawingDetailViewModel.onBitMapAvailable(bitmap)
-            }
         })
         drawingDetailViewModel.savedDetail.observe(this, Observer { detail ->
             if (detail == null) {
@@ -208,9 +197,5 @@ class DrawingDetailFragment : DrawFragment(),
 
             return newInstance().apply { arguments = args }
         }
-    }
-
-    interface DrawingScreenNavigation {
-        fun backToEvent()
     }
 }

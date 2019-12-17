@@ -276,6 +276,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
      */
     fun setPaintedBackground(bitmapDrawable: BitmapDrawable) {
         paintedBackground = bitmapDrawable.bitmap
+        calculateBackGroundRect()
     }
 
     /**

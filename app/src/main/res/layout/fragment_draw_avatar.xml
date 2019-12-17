@@ -23,6 +23,20 @@
             android:layout_height="match_parent"
             android:background="@color/background_register_info_color">
 
+            <ImageButton
+                android:id="@+id/btn_makeDrawing_save"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="@dimen/material_icon_height"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/save_btn"
+                android:elevation="2dp"
+                android:onClick="@{() -> drawViewModel.onSaveClicked()}"
+                android:translationZ="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <include
                 android:id="@+id/container_draw_colors"
                 layout="@layout/panel_drawing_colors"
@@ -67,17 +81,31 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="10dp"
                     android:layout_gravity="center_horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
-                     <Button
+                    <Button
                         android:id="@+id/btn_draw_restart"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:onClick="@{()->drawViewModel.onRestartClicked()}"
                         android:text="@string/opnieuw" />
+
+                    <Button
+                        android:id="@+id/btn_draw_pencil"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{()->drawViewModel.onPencilClicked()}"
+                        android:text="Penseel" />
+
+                    <Button
+                        android:id="@+id/btn_draw_eraser"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{()->drawViewModel.onEraserClicked()}"
+                        android:text="Gom" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

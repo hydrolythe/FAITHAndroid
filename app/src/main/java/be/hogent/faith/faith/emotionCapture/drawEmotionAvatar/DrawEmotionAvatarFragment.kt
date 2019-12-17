@@ -17,6 +17,7 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import com.divyanshu.draw.widget.DrawView
 import io.reactivex.disposables.CompositeDisposable
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
  * Key for this Fragment's [Bundle] to hold the resource ID pointing to the outline drawing of the avatarName.
@@ -38,13 +39,21 @@ private const val COLOR_ALPHA = 230 // 90%
  */
 class DrawEmotionAvatarFragment : DrawFragment() {
 
-    override val drawViewModel: DrawViewModel by sharedViewModel()
+    override val drawViewModel: DrawViewModel by viewModel()
 
     override val drawView: DrawView
         get() = drawAvatarBinding.drawView
 
     override val colorAlpha: Int
         get() = COLOR_ALPHA
+
+    /**
+     * saves the bitmap when the save button is clicked and goes back to the event
+     */
+    override fun saveBitmap() {
+        eventViewModel.saveEmotionAvatarImage(drawView.getBitmap())
+        navigation?.backToEvent()
+    }
 
     private val eventViewModel: EventViewModel by sharedViewModel()
 
@@ -83,8 +92,18 @@ class DrawEmotionAvatarFragment : DrawFragment() {
         // Paint with semi-transparent paint so you can always see the background's outline
         drawView.setAlpha(COLOR_ALPHA)
         // Leave some whitespace around the avatar
-        drawView.fullScreenBackground = false
+        if (eventViewModel.event.value?.emotionAvatar == null) {
+            drawAvatar()
+        } else {
+            loadExistingDrawing()
+        }
+    }
 
+    /**
+     * draw avatar on screen. the background is set to the width of the avatar
+     */
+    private fun drawAvatar() {
+        drawView.fullScreenBackground = false
         if (avatarOutlineResId != NO_AVATAR) {
             drawView.setPaintedBackground(
                 ContextCompat.getDrawable(
@@ -95,16 +114,23 @@ class DrawEmotionAvatarFragment : DrawFragment() {
         }
     }
 
+    /**
+     * load existing drawing. The drawing takes the width and height of the full screen
+     */
+    private fun loadExistingDrawing() {
+        drawView.fullScreenBackground = true
+        drawView.setImageBackground(eventViewModel.event.value!!.emotionAvatar!!)
+    }
+
     private fun startListeners() {
         drawViewModel.restartClicked.observe(this, Observer {
             drawView.clearCanvas()
-            configureDrawingCanvas()
+            drawAvatar()
         })
     }
 
     override fun onStop() {
         super.onStop()
-        eventViewModel.saveEmotionAvatarImage(drawView.getBitmap())
         disposables.clear()
     }
 
