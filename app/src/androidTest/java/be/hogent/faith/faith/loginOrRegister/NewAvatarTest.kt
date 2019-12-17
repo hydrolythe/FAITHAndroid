@@ -7,15 +7,23 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import be.hogent.faith.R
+import be.hogent.faith.faith.util.NavigationUtil
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.test.AutoCloseKoinTest
 
 @RunWith(AndroidJUnit4::class)
-class NewAvatarTest {
+class NewAvatarTest : AutoCloseKoinTest() {
 
     @get:Rule
     var activityScenarioRule = ActivityTestRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java, true, true)
+
+    @Before
+    fun setUp(){
+        NavigationUtil.startFaithApp()
+    }
 
     @Test
     fun checkCanEnterName() {

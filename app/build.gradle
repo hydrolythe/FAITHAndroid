@@ -140,6 +140,7 @@ dependencies {
     androidTestImplementation androidTestDependencies.testRules
     androidTestImplementation androidTestDependencies.androidJunit
     androidTestImplementation androidTestDependencies.espresso
+    androidTestImplementation testDependencies.koinTesting
 
     androidTestImplementation androidTestDependencies.espressoContrib
     androidTestImplementation androidTestDependencies.uiAutomator

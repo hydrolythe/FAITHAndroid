@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.util
 
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -7,10 +8,32 @@ import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import be.hogent.faith.R
+import be.hogent.faith.database.di.databaseModule
+import be.hogent.faith.faith.androidTestModule
+import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter
+import be.hogent.faith.service.usecases.di.serviceModule
+import be.hogent.faith.storage.di.storageModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.stopKoin
 import java.util.UUID
 
 object NavigationUtil {
+    fun startFaithApp(){
+        stopKoin()
+        org.koin.core.context.startKoin {
+            androidContext(ApplicationProvider.getApplicationContext())
+            modules(
+                listOf(
+                    appModule,
+                    databaseModule,
+                    serviceModule,
+                    storageModule, androidTestModule
+                )
+            )
+        }
+    }
+
     fun goToCityScreen() {
         // Focus is on input field for the name by default, which opens the soft keyboard.
         // It hides the button to go to town so we have to close it.

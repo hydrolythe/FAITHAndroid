@@ -15,9 +15,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.test.AutoCloseKoinTest
+
 
 @RunWith(AndroidJUnit4::class)
-class CityScreenFragmentTest {
+class CityScreenFragmentTest : AutoCloseKoinTest() {
 
     @get:Rule
     var activityScenarioRule =
@@ -25,14 +27,15 @@ class CityScreenFragmentTest {
 
     @Before
     fun goToScreen() {
+        NavigationUtil.startFaithApp()
         NavigationUtil.goToCityScreen()
     }
 
     @Test
     fun mainScreenFragment_buttonsOpenCorrectScreen() {
-        onView(withId(R.id.btn_loginfragment_library)).perform(click())
-        onView(withId(R.id.screen_overview_events)).check(matches(isDisplayed()))
-        pressBack()
+     //   onView(withId(R.id.btn_loginfragment_library)).perform(click())
+        onView(withId(R.id.image_main_avatar)).check(matches(isDisplayed()))
+        //pressBack()
 
         onView(withId(R.id.btn_loginfragment_startNewEvent)).perform(click())
         onView(withId(R.id.screen_new_event)).check(matches(isDisplayed()))
