@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.util
 
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -16,21 +15,22 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter
 import be.hogent.faith.service.usecases.di.serviceModule
 import be.hogent.faith.storage.di.storageModule
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.stopKoin
+import org.koin.dsl.koinApplication
 import java.util.UUID
 
 object NavigationUtil {
-    fun startFaithApp(){
-        stopKoin()
-        org.koin.core.context.startKoin {
+    fun startFaithApp() {
+        koinApplication {
             androidContext(
-                InstrumentationRegistry.getInstrumentation().getTargetContext()) //ApplicationProvider.getApplicationContext())
+                InstrumentationRegistry.getInstrumentation().getTargetContext()
+            ) //ApplicationProvider.getApplicationContext())
             modules(
                 listOf(
                     appModule,
                     databaseModule,
                     serviceModule,
-                    storageModule, androidTestModule
+                    storageModule,
+                    androidTestModule
                 )
             )
         }
