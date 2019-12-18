@@ -9,6 +9,7 @@ import androidx.test.rule.ActivityTestRule
 import be.hogent.faith.R
 import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
 import be.hogent.faith.faith.util.NavigationUtil
+import be.hogent.faith.faith.util.ToastMatcher
 import be.hogent.faith.faith.util.hasTextInputLayoutHintText
 import org.junit.Before
 import org.junit.Rule
@@ -46,6 +47,6 @@ class DetailFragmentWithEmotionAvatarTest {
             .perform(ViewActions.click())
         // Commented out the following line because UI tests on Firebase Testlab are failing
         // although on local emulator no problems arise
-        // ToastMatcher.isToastMessageDisplayed(R.string.save_event_success)
+        ToastMatcher.isToastMessageDisplayed(R.string.save_event_success)
     }
 }

@@ -6,37 +6,12 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.platform.app.InstrumentationRegistry
 import be.hogent.faith.R
-import be.hogent.faith.database.di.databaseModule
-import be.hogent.faith.faith.androidTestModule
-import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter
-import be.hogent.faith.service.usecases.di.serviceModule
-import be.hogent.faith.storage.di.storageModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.koinApplication
 import java.util.UUID
 
 object NavigationUtil {
-    fun startFaithApp() {
-        koinApplication {
-            androidContext(
-                InstrumentationRegistry.getInstrumentation().getTargetContext()
-            ) //ApplicationProvider.getApplicationContext())
-            modules(
-                listOf(
-                    appModule,
-                    databaseModule,
-                    serviceModule,
-                    storageModule,
-                    androidTestModule
-                )
-            )
-        }
-    }
-
-    fun goToCityScreen() {
+    fun goToCityScreenViaRegistration() {
         // Focus is on input field for the name by default, which opens the soft keyboard.
         // It hides the button to go to town so we have to close it.
         // We have to close the soft keyboard everytime because otherwise it overlaps the textfield.
@@ -61,6 +36,20 @@ object NavigationUtil {
         closeSoftKeyboard()
     }
 
+    fun goToCityScreenViaLogin() {
+        // Focus is on input field for the name by default, which opens the soft keyboard.
+        // It hides the button to go to town so we have to close it.
+        // We have to close the soft keyboard everytime because otherwise it overlaps the textfield.
+        closeSoftKeyboard()
+        onView(withId(R.id.txt_welcome_userName)).perform(typeText("jan"))
+        closeSoftKeyboard()
+        onView(withId(R.id.txt_welcome_password)).perform(typeText("wwwwww"))
+        closeSoftKeyboard()
+        onView(withId(R.id.btn_loginfragment_startNewEvent)).perform(click())
+        // Just for safety
+        closeSoftKeyboard()
+    }
+
     fun createEvent() {
         goToNewEventScreen()
         onView(withId(R.id.btn_event_send)).perform(click())
@@ -70,14 +59,15 @@ object NavigationUtil {
     }
 
     fun goToEventsOverviewScreen() {
-        goToCityScreen()
+        goToCityScreenViaRegistration()
         onView(withId(R.id.btn_loginfragment_library)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }
 
     fun goToNewEventScreen() {
-        goToCityScreen()
+        goToCityScreenViaLogin()
+        Thread.sleep(3000)
         onView(withId(R.id.btn_loginfragment_startNewEvent)).perform(click())
         // Just for safety
         closeSoftKeyboard()

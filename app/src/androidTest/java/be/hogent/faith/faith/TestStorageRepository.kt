@@ -14,6 +14,4 @@ class TestStorageRepository : IStorageRepository {
     override fun getEvent(event: Event): Completable {
         return Completable.complete()
     }
-
-
 }

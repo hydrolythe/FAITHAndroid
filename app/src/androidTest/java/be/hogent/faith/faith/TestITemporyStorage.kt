@@ -33,12 +33,10 @@ class TestITemporyStorage : ITemporaryStorage {
     }
 
     override fun storeDetailWithEvent(detail: Detail, event: Event): Completable {
-       return Completable.complete()
+        return Completable.complete()
     }
 
     override fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String> {
         return Single.just(DataFactory.randomString())
     }
-
-
 }

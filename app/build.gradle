@@ -28,7 +28,7 @@ android {
         versionCode generateVersionCode()
         versionName generateVersionName()
         multiDexEnabled true
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "be.hogent.faith.faith.TestAppJUnitRunner"
         manifestPlaceholders = [auth0Domain: "@string/com_auth0_domain", auth0Scheme: "app"]
         vectorDrawables.useSupportLibrary = true
 
@@ -136,13 +136,18 @@ dependencies {
     implementation testDependencies.firebase_analytics
     implementation testDependencies.crashlytics
 
+
+    // AndroidJUnitRunner and JUnit Rules
     androidTestImplementation androidTestDependencies.testCore
     androidTestImplementation androidTestDependencies.testRules
+    // Assertions
     androidTestImplementation androidTestDependencies.androidJunit
+    //espresso
     androidTestImplementation androidTestDependencies.espresso
+    androidTestImplementation androidTestDependencies.espressoContrib
+    //koin
     androidTestImplementation testDependencies.koinTesting
 
-    androidTestImplementation androidTestDependencies.espressoContrib
     androidTestImplementation androidTestDependencies.uiAutomator
 
 }

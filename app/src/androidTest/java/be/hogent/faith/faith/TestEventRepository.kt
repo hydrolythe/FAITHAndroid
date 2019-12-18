@@ -15,7 +15,7 @@ class TestEventRepository : EventRepository {
     }
 
     override fun insert(item: Event, user: User): Maybe<Event> {
-       return Maybe.just(EventFactory.makeEvent())
+        return Maybe.just(EventFactory.makeEvent())
     }
 
     override fun get(uuid: UUID): Flowable<Event> {

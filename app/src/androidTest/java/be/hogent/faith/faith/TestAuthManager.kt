@@ -8,11 +8,11 @@ import java.util.UUID
 
 class TestAuthManager : AuthManager {
     override fun isUsernameUnique(email: String): Single<Boolean> {
-       return Single.just(true)
+        return Single.just(true)
     }
 
     override fun register(email: String, password: String): Maybe<String?> {
-       return Maybe.just(email)
+        return Maybe.just(email)
     }
 
     override fun signIn(email: String, password: String): Maybe<String?> {
@@ -24,7 +24,6 @@ class TestAuthManager : AuthManager {
     }
 
     override fun getLoggedInUserUUID(): String? {
-       return UUID.randomUUID().toString()
+        return UUID.randomUUID().toString()
     }
-
 }

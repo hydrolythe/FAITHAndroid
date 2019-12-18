@@ -36,9 +36,10 @@ class ResourceAvatarProvider(private val context: Context) :
 
     private fun getDrawable(avatarName: String, type: String? = null): Drawable {
         val avatarResourceName = if (type != null) "${avatarName}_$type" else avatarName
-        Timber.d(avatarResourceName)
+        Timber.d("Resource :$avatarResourceName")
         val resourceId =
             context.resources.getIdentifier(avatarResourceName, "drawable", context.packageName)
+        Timber.d("Resource :$resourceId")
         return ContextCompat.getDrawable(context, resourceId)!!
     }
 
