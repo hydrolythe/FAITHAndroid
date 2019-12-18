@@ -101,4 +101,12 @@ class TakePhotoViewModelViewStateTests {
         Assert.assertEquals(View.GONE, viewModel.visibilityPhotoTakenNotSaved.value!!)
         Assert.assertEquals(View.GONE, viewModel.visibilityPhotoTakenOrSaved.value!!)
     }
+
+    @Test
+    fun takePhotoVM_onSelfieButtonClicked_callsListeners() {
+        val observer = mockk<Observer<Boolean>>(relaxed = true)
+        viewModel.frontSelected.observeForever(observer)
+        viewModel.onSelfieButtonClicked()
+        verify { observer.onChanged(any()) }
+    }
 }

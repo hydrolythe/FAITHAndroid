@@ -14,8 +14,8 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
+import be.hogent.faith.faith.details.drawing.create.DrawFragment
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
-import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.di.KoinModules
@@ -40,7 +40,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     OverviewEventsFragment.OverviewEventsNavigationListener,
     DetailFragmentWithEmotionAvatar.EditDetailNavigationListener,
     RecordAudioFragment.AudioScreenNavigation,
-    DrawingDetailFragment.DrawingScreenNavigation,
+    DrawFragment.DrawingScreenNavigation,
     DetailFinishedListener,
     TextDetailFragment.TextScreenNavigation,
     TakePhotoFragment.PhotoScreenNavigation,
