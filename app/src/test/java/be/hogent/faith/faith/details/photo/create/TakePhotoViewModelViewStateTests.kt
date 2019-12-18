@@ -105,7 +105,7 @@ class TakePhotoViewModelViewStateTests {
     @Test
     fun takePhotoVM_onSelfieButtonClicked_callsListeners() {
         val observer = mockk<Observer<Boolean>>(relaxed = true)
-        viewModel.flipCamera.observeForever(observer)
+        viewModel.frontSelected.observeForever(observer)
         viewModel.onSelfieButtonClicked()
         verify { observer.onChanged(any()) }
     }

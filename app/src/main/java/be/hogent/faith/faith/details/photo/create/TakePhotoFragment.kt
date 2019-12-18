@@ -98,7 +98,7 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
             takeAndSavePictureToCache()
         })
 
-        takePhotoViewModel.flipCamera.observe(this, Observer {
+        takePhotoViewModel.frontSelected.observe(this, Observer {
             flipCamera()
         })
 
@@ -119,11 +119,11 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
     }
 
     /**
-     * to take a flipCamera
+     * to take a frontSelected
      */
     private fun flipCamera() {
         fotoApparat.switchTo(
-            lensPosition = if (takePhotoViewModel.flipCamera.value != null && takePhotoViewModel.flipCamera.value == true) front() else back(),
+            if (takePhotoViewModel.frontSelected.value != null && takePhotoViewModel.frontSelected.value == true) front() else back(),
             cameraConfiguration = CameraConfiguration()
         )
     }
