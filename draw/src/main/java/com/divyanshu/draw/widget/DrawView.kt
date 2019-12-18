@@ -9,6 +9,7 @@ import android.graphics.Paint
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
+import android.os.SystemClock
 import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -33,19 +34,19 @@ const val BACKGROUND_MAX_HEIGHT_USED = 0.8
 class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), DrawingContext {
 
     override val view: View
-    get() = this
+        get() = this
 
     /**
      * Holds all [CanvasAction]s that will be drawn when calling [onDraw].
-    */
+     */
     private var _drawingActions = mutableListOf<CanvasAction>()
     val canvasActions: List<CanvasAction>
-    get() = _drawingActions
+        get() = _drawingActions
 
     /**
      * Holds a copy of all actions that were done before [clear] was called.
      * Used to restore them when calling [undo] after a call to [clear].
-    */
+     */
     private var lastDrawingActions = mutableListOf<CanvasAction>()
 
     /**
@@ -99,6 +100,9 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     }
 
     fun undo() {
+        // als texttool geselecteerd is dan nog een touchevent simuleren zodat text wordt toegevoegd als laatste drawingactie
+        if (currentTool is TextTool)
+            touchView(this)
         if (_drawingActions.isEmpty() && lastDrawingActions.isNotEmpty()) {
             // Last action was a call to [clearCanvas]
             _drawingActions = lastDrawingActions.toMutableList() // Copy
@@ -272,6 +276,7 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
      */
     fun setPaintedBackground(bitmapDrawable: BitmapDrawable) {
         paintedBackground = bitmapDrawable.bitmap
+        calculateBackGroundRect()
     }
 
     /**
@@ -314,6 +319,8 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     }
 
     fun setColor(@ColorInt color: Int) {
+        if (currentTool is EraserTool)
+            pickDrawingTool()
         currentTool.setColor(color)
         invalidate()
     }
@@ -349,5 +356,19 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         val paintToUse = Paint(currentTool.paint)
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         currentTool = TextTool(this, paintToUse, imm)
+    }
+
+    // simuleren van een touchevent
+    private fun touchView(view: View) {
+        view.dispatchTouchEvent(
+            MotionEvent.obtain(
+                SystemClock.uptimeMillis(),
+                SystemClock.uptimeMillis(),
+                MotionEvent.ACTION_UP,
+                0.0f,
+                0.0f,
+                0
+            )
+        )
     }
 }

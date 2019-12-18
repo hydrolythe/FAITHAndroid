@@ -99,7 +99,8 @@
     <string name="login_error_noPassword">Je moet je wachtwoord ingeven!</string>
     <string name="registerOrLogin_password_empty">Je moet een wachtwoord ingeven van minstens 6 posities.</string>
     <string name="register_passwords_nomatch">Wachtwoorden niet gelijk</string>
-    <string name="register_password_empty">Wachtwoord ingeven</string>  <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
+    <string name="register_password_empty">Wachtwoord ingeven</string>
+    <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
     <string name="error_no_credentials">No credentials have been stored</string>
     <string name="msg_naar_de_stad">Naar de stad</string>
     <string name="msg_registreer">Ik ben nieuw</string>
@@ -150,4 +151,6 @@
     <string name="avatar_save_successfull">Je avatar werd succesvol opgeslagen.</string>
     <string name="create_photo_failed">Er ging iets fout bij het aanmaken van je foto.</string>
     <string name="text_save_error_emptyinput">Je hebt nog geen tekst geschreven!</string>
+    <string name="textSize_a">A</string>
+    <string name="opnieuw">Opnieuw</string>
 </resources>
