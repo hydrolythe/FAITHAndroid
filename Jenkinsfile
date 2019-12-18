@@ -8,11 +8,13 @@ pipeline {
     stages {
         stage('Setup VM') {
             steps {
-                withCredentials([file(credentialsId: 'googlejson', variable: 'googlejson')]) {
+                withCredentials([file(credentialsId: 'firekey', variable: 'SERVICEACCOUNT'),file(credentialsId: 'googlejson', variable: 'googlejson')]) {
                     sh '''
                         export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$PATH"
                         echo $PATH
                         cp $googlejson app/google-services.json
+                        gcloud auth activate-service-account --key-file=$SERVICEACCOUNT
+                        gcloud config set project faith-dev-38aa1
                     '''
                 }
             }
@@ -46,8 +48,6 @@ pipeline {
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'gcloud auth activate-service-account --key-file=/key/firekey.json'
-                    sh 'gcloud config set project jenkins-server-250512'
                     sh 'gcloud firebase test android run ' +
                             '--type instrumentation ' +
                             '--app app/build/outputs/apk/debug/app-debug.apk ' +
@@ -56,7 +56,6 @@ pipeline {
                 }
             }
         }
-
     }
     post {
         always {
