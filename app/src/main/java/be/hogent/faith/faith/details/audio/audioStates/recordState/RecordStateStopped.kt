@@ -17,6 +17,10 @@ class RecordStateStopped(
     override val stopButtonEnabled = false
     override val recordButtonEnabled = true
 
+    init {
+        context.finishedRecording = true
+    }
+
     override fun onPlayPressed() {
         Timber.d("RecordStopped -> PlayStatePlaying")
         context.goToNextState(PlayStatePlaying.getPlayingState(context, mediaPlayer, recorder))
