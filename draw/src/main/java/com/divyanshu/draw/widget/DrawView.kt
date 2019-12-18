@@ -319,6 +319,8 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
     }
 
     fun setColor(@ColorInt color: Int) {
+        if (currentTool is EraserTool)
+            pickDrawingTool()
         currentTool.setColor(color)
         invalidate()
     }
