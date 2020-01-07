@@ -9,9 +9,7 @@ import be.hogent.faith.storage.di.storageModule
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.loadKoinModules
 import org.koin.core.context.startKoin
-import org.koin.core.module.Module
 
 // application class for espresso tests
 
@@ -35,9 +33,5 @@ class TestApp : Application() {
                 )
             )
         }
-    }
-
-    internal fun injectModule(module: Module) {
-        loadKoinModules(module)
     }
 }
