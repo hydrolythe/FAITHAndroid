@@ -19,7 +19,7 @@ class StorageRepository(
 ) : IStorageRepository {
 
     /**
-     * moves all event files from cache to local storage and then to firebase
+     * stores all event files in firebase
      */
     override fun saveEvent(event: Event): Single<Event> {
         return localStorage.saveEvent(event)
@@ -34,7 +34,7 @@ class StorageRepository(
         if (localStorage.isFilePresent(detail))
             return Completable.complete()
         else
-            return remoteStorage.getFile(detail)
+            return remoteStorage.makeFileLocallyAvailable(detail)
     }
 
     /**
@@ -44,7 +44,7 @@ class StorageRepository(
         if (event.emotionAvatar == null || localStorage.isEmotionAvatarPresent(event))
             return Completable.complete()
         else
-            return remoteStorage.getEmotionAvatar(event)
+            return remoteStorage.makeEmotionAvatarLocallyAvailable(event)
     }
 
     /**

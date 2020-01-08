@@ -114,7 +114,7 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
         }
 
         override fun onError(e: Throwable) {
-            Timber.e("$TAG: e.localizedMessage")
+            Timber.e("$TAG: ${ e.localizedMessage }")
             _userLoggedInState.postValue(
                 Resource(
                     ResourceState.ERROR, null, when (e) {

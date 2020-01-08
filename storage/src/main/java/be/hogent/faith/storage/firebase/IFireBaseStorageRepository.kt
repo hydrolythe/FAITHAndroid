@@ -11,7 +11,7 @@ interface IFireBaseStorageRepository {
     * Gets a detail's file from firestorage and stores it into the path provided for it by the
     * pathProvider.
     */
-    fun getFile(detail: Detail): Completable
+    fun makeFileLocallyAvailable(detail: Detail): Completable
 
-    fun getEmotionAvatar(event: Event): Completable
+    fun makeEmotionAvatarLocallyAvailable(event: Event): Completable
 }

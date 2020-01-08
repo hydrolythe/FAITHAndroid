@@ -66,6 +66,10 @@ class TakePhotoViewModel(
     val notOkPhotoButtonClicked: LiveData<Unit>
         get() = _notOkPhotoButtonClicked
 
+    private val _frontSelected = MutableLiveData<Boolean>()
+    val frontSelected: LiveData<Boolean>
+        get() = _frontSelected
+
     val visibilityTakePhoto: LiveData<Int> =
         Transformations.map<PhotoState, Int>(_currentState) { state ->
             if (state is TakePhotoState) View.VISIBLE else View.GONE
@@ -82,8 +86,8 @@ class TakePhotoViewModel(
         }
 
     init {
-        _currentState.value =
-            TakePhotoState()
+        _currentState.value = TakePhotoState()
+        _frontSelected.postValue(false)
     }
 
     internal fun setState(state: PhotoState) {
@@ -100,6 +104,10 @@ class TakePhotoViewModel(
 
     fun onNotOkPhotoButtonClicked() {
         _currentState.value!!.deletePhoto(this)
+    }
+
+    fun onSelfieButtonClicked() {
+        _frontSelected.postValue(!frontSelected.value!!)
     }
 
     /**

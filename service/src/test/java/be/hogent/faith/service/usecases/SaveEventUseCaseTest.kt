@@ -96,8 +96,8 @@ class SaveEventUseCaseTest {
 
     @Test
     fun execute_normal_eventIsSavedInRepoAndStorage() {
-        every { eventRepository.insert(any(), any()) } returns Maybe.just(event)
         every { storageRepository.saveEvent(any()) } returns Single.just(event)
+        every { eventRepository.insert(any(), any()) } returns Maybe.just(event)
 
         val params = SaveEventUseCase.Params(eventTitle, event, user)
 
@@ -112,6 +112,7 @@ class SaveEventUseCaseTest {
 
     @Test
     fun execute_repoFails_showsError() {
+        every { storageRepository.saveEvent(any()) } returns Single.just(event)
         every { eventRepository.insert(any(), any()) } returns Maybe.error(RuntimeException())
 
         val params = SaveEventUseCase.Params(eventTitle, event, user)

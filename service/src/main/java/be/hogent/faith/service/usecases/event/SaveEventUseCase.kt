@@ -7,6 +7,7 @@ import be.hogent.faith.service.usecases.base.CompletableUseCase
 import be.hogent.faith.storage.IStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
+import io.reactivex.Single
 
 open class SaveEventUseCase(
     private val eventRepository: EventRepository,
@@ -19,17 +20,18 @@ open class SaveEventUseCase(
     override fun buildUseCaseObservable(params: Params): Completable {
         this.params = params
         return addEventToUser(params.event)
-            .concatWith(
-                Completable.fromMaybe(eventRepository.insert(params.event, params.user))
-                    .concatWith(Completable.fromSingle(storageRepository.saveEvent(params.event)))
-            )
+            .flatMap { storageRepository.saveEvent(it) }
+            .flatMapMaybe { eventRepository.insert(it, params.user) }
+            .flatMapCompletable { Completable.complete()
+            }
     }
 
-    fun addEventToUser(event: Event): Completable = Completable.fromCallable {
+    private fun addEventToUser(event: Event): Single<Event> = Single.fromCallable {
         event.title = params!!.eventTitle
         // First add in domain so we can do business logic
         // If this fails the event won't get added to the Repo.
         params!!.user.addEvent(event)
+        event
     }
 
     data class Params(
