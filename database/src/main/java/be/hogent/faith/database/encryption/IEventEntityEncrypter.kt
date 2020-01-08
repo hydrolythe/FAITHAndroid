@@ -2,7 +2,7 @@ package be.hogent.faith.database.encryption
 
 import be.hogent.faith.database.models.EventEntity
 
-interface IEventEntityEncryptor {
+interface IEventEntityEncrypter {
     fun encrypt(eventEntity: EventEntity): EncryptedEventEntity
     fun decrypt(encryptedEvent: EncryptedEventEntity): EventEntity
     fun decryptAll(list: List<EncryptedEventEntity>): List<EventEntity>

@@ -1,6 +1,6 @@
 package be.hogent.faith.database.repositories
 
-import be.hogent.faith.database.encryption.IEventEntityEncryptor
+import be.hogent.faith.database.encryption.IEventEntityEncrypter
 import be.hogent.faith.database.firebase.FirebaseEventRepository
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.UserMapper
@@ -16,7 +16,7 @@ open class EventRepositoryImpl(
     private val userMapper: UserMapper,
     private val eventMapper: EventMapper,
     private val firebaseEventRepository: FirebaseEventRepository,
-    private val eventEntityEncryptor: IEventEntityEncryptor
+    private val eventEntityEncrypter: IEventEntityEncrypter
 ) : EventRepository {
 
     /**
@@ -24,7 +24,7 @@ open class EventRepositoryImpl(
      */
     override fun get(uuid: UUID): Flowable<Event> {
         return firebaseEventRepository.get(uuid.toString())
-            .map { eventEntityEncryptor.decrypt(it) }
+            .map { eventEntityEncrypter.decrypt(it) }
             .map { eventMapper.mapFromEntity(it) }
     }
 
@@ -33,7 +33,8 @@ open class EventRepositoryImpl(
      * @return a [Maybe<Event>] that only succeeds when both the event and its details are inserted successfully.
      */
     override fun insert(item: Event, user: User): Maybe<Event> {
-        val encryptedEvent = eventEntityEncryptor.encrypt(eventMapper.mapToEntity(item))
+        val encryptedEvent = eventEntityEncrypter.encrypt(eventMapper.mapToEntity(item))
+
         return firebaseEventRepository.insert(
             encryptedEvent,
             userMapper.mapToEntity(user)
@@ -45,7 +46,7 @@ open class EventRepositoryImpl(
      */
     override fun getAll(): Flowable<List<Event>> {
         return firebaseEventRepository.getAll()
-            .map { eventEntityEncryptor.decryptAll(it) }
+            .map { eventEntityEncrypter.decryptAll(it) }
             .map { eventMapper.mapFromEntities(it) }
     }
 

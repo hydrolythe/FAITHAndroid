@@ -4,14 +4,14 @@ import android.content.Context
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.StoragePathProvider
-import be.hogent.faith.storage.encryption.IFileEncryptor
+import be.hogent.faith.storage.encryption.IFileEncrypter
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
 
 class LocalStorageRepository(
     private val pathProvider: StoragePathProvider,
-    private val fileEncryptor: IFileEncryptor,
+    private val fileEncrypter: IFileEncrypter,
     private val context: Context
 ) : ILocalStorageRepository {
 
@@ -25,7 +25,7 @@ class LocalStorageRepository(
         return Completable.fromCallable {
             event.details.map { detail ->
                 detail.file.copyTo(pathProvider.getLocalDetailPath(event, detail))
-                fileEncryptor.encrypt(detail.file)
+                fileEncrypter.encrypt(detail.file)
                 detail.file.delete()
                 detail.file = pathProvider.getDetailPath(event, detail)
             }
@@ -36,7 +36,7 @@ class LocalStorageRepository(
         return Completable.fromCallable {
             if (event.emotionAvatar != null) {
                 event.emotionAvatar!!.copyTo(pathProvider.getLocalEmotionAvatarPath(event))
-                fileEncryptor.encrypt(event.emotionAvatar!!)
+                fileEncrypter.encrypt(event.emotionAvatar!!)
                 event.emotionAvatar!!.delete()
                 event.emotionAvatar = pathProvider.getEmotionAvatarPath(event)
             }

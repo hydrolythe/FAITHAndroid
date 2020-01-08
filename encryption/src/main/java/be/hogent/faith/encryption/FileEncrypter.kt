@@ -1,17 +1,23 @@
 package be.hogent.faith.encryption
 
-import be.hogent.faith.storage.encryption.IFileEncryptor
+import be.hogent.faith.encryption.internal.DataEncrypter
+import be.hogent.faith.storage.encryption.IFileEncrypter
+import com.google.crypto.tink.Aead
 import java.io.File
 
-class FileEncryptor(
-    private val encrypter: Encrypter
-) : IFileEncryptor {
+class FileEncrypter(
+    dataEncryptionKey: Aead
+) : IFileEncrypter {
+
+    private val dataEncrypter =
+        DataEncrypter(dataEncryptionKey)
+
     /**
      * Replaces the contents of a file with an encrypted version
      */
     override fun encrypt(file: File) {
         val fileContents = file.readText()
-        val encryptedContents = encrypter.encrypt(fileContents)
+        val encryptedContents = dataEncrypter.encrypt(fileContents)
         file.writeText(encryptedContents)
     }
 
@@ -20,7 +26,7 @@ class FileEncryptor(
      */
     override fun decrypt(file: File) {
         val fileContents = file.readText()
-        val decryptedContents = encrypter.decrypt(fileContents)
+        val decryptedContents = dataEncrypter.decrypt(fileContents)
         file.writeText(decryptedContents)
     }
 }

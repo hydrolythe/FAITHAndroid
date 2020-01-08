@@ -2,7 +2,7 @@ package be.hogent.faith.storage.encryption
 
 import java.io.File
 
-interface IFileEncryptor {
+interface IFileEncrypter {
     /**
      * Replaces the contents of a file with an encrypted version
      */

@@ -4,17 +4,18 @@ import be.hogent.faith.database.encryption.EncryptedDetailEntity
 import be.hogent.faith.database.encryption.IDetailEntityEncrypter
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.DetailType
+import be.hogent.faith.encryption.internal.DataEncrypter
 
 class DetailEntityEncrypter(
-    private val encrypter: Encrypter
+    private val dataEncrypter: DataEncrypter
 ) : IDetailEntityEncrypter {
 
     override fun encrypt(detailEntity: DetailEntity): EncryptedDetailEntity {
         with(detailEntity) {
             return EncryptedDetailEntity(
-                file = encrypter.encrypt(file),
-                uuid = encrypter.encrypt(uuid),
-                type = encrypter.encrypt(type.toString())
+                file = dataEncrypter.encrypt(file),
+                uuid = dataEncrypter.encrypt(uuid),
+                type = dataEncrypter.encrypt(type.toString())
             )
         }
     }
@@ -22,9 +23,9 @@ class DetailEntityEncrypter(
     override fun decrypt(encryptedDetailEntity: EncryptedDetailEntity): DetailEntity {
         with(encryptedDetailEntity) {
             return DetailEntity(
-                file = encrypter.decrypt(file),
-                uuid = encrypter.decrypt(uuid),
-                type = DetailType.valueOf(encrypter.decrypt(type))
+                file = dataEncrypter.decrypt(file),
+                uuid = dataEncrypter.decrypt(uuid),
+                type = DetailType.valueOf(dataEncrypter.decrypt(type))
             )
         }
     }
