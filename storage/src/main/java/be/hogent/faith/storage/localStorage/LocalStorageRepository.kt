@@ -5,7 +5,6 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.StoragePathProvider
 import be.hogent.faith.storage.encryption.IFileEncrypter
-import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
 
@@ -31,7 +30,6 @@ class LocalStorageRepository(
      * and updates the path
      */
     private fun saveEventDetails(event: Event) {
-
         event.details.map { detail ->
             moveFile(detail.file, pathProvider.getLocalDetailPath(event, detail))
             detail.file = pathProvider.getDetailPath(event, detail)

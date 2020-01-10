@@ -8,8 +8,8 @@ ext {
     coroutines_version = '1.1.1'
     coroutines_android_version = '1.1.1'
     koin_version = '2.0.1'
-    aac_core_version = '2.0.0'
-    lifecycle_version = '2.0.0'
+    aac_core_version = '2.1.0'
+    lifecycle_version = '2.1.0'
     appcompat_version = '1.1.0'
 
     threeTenABP_version = '1.2.1'
@@ -19,52 +19,53 @@ ext {
     rxjava_android_version = '2.1.1'
     rxkotlin_version = '2.3.0'
 
-    room_version = '2.1.0'
+    room_version = '2.2.3'
 
     fotoApparat_version = '2.7.0'
 
     annotation_version = '1.1.0'
 
-    firebase_analytics ='17.2.0'
 
     // UI LIBRARIES
-    constraint_layout_version = '2.0.0-beta1'
+    constraint_layout_version = '2.0.0-beta4'
     fragment_version = '1.1.0'
 
-    recyclerview_version = '1.0.0'
+    recyclerview_version = '1.1.0'
+    recyclerview_selection_version = '1.1.0-beta01'
 
-    glide_version = '4.9.0'
+    glide_version = '4.10.0'
     cardview_version = '1.0.0'
-    material_version = '1.1.0-alpha09'
+    material_version = '1.2.0-alpha03'
     textEditor_version = '1.2.2'
     materialdrawer_version = '2.0.1'
-    play_services_version='16.0.0'
+    play_services_version= '17.0.0'
     legacy_support_version='1.0.0'
 
     design_version = '28.0.0'
 
     firebaseui_version='6.0.2'
     rxfirebase_version ='1.5.6'
-    firebaseauth_version ='19.0.0'
-    firestore_version ='21.1.1'
+    firebaseauth_version ='19.2.0'
+    firestore_version ='21.3.1'
     firebasestorage_version ='19.1.0'
     firebasestorageui_version = '4.3.1'
+    firebase_analytics_version ='17.2.1'
 
 
     // TESTING LIBRARIES
     test_core_version = '1.2.0'
     espresso_version = '3.2.0'
-    espresso_contrib_version = '3.3.0-alpha02'
+    espresso_contrib_version = '3.3.0-alpha03'
     android_junit_version = '1.1.1'
     test_version = '1.2.0'
-    robolectric_version = '4.3'
+    robolectric_version = '4.3.1'
     firebase_test_version = '17.2.1'
     crashlytics_dep_version = '2.10.1'
 
 
     uiAutomator_version = '2.2.0'
-    junit_version = '4.12'
-    mockk_version = '1.9.2'
+    junit_version = '4.13'
+    mockk_version = '1.9.3.kotlin12'
 
     // OTHER LIBRARIES
     ktlint_version = '0.31.0'
@@ -72,7 +73,7 @@ ext {
     oss_licenses_version = '17.0.0'
     nav_version = '2.1.0'
 
-    viewpager_version = '1.0.0-beta05'
+    viewpager_version = '1.0.0'
 
     //Version Code
     ext.versionMajor = 1
@@ -143,11 +144,11 @@ ext {
     ]
 
     firebaseDependencies = [
-            analytics : "com.google.firebase:firebase-analytics:$firebase_analytics",
+            analytics : "com.google.firebase:firebase-analytics:$firebase_analytics_version",
             firebaseui   :"com.firebaseui:firebase-ui-storage:$firebaseui_version"   ,
             rxfirebase : "com.github.FrangSierra:RxFirebase:$rxfirebase_version",
             firebaseauth :"com.google.firebase:firebase-auth:$firebaseauth_version",
-            firestore :"com.google.firebase:firebase-firestore:$firestore_version",
+            firestore :"com.google.firebase:firebase-firestore-ktx:$firestore_version",
             firebasestorage :"com.google.firebase:firebase-storage:$firebasestorage_version",
             firebasestorageui:"com.firebaseui:firebase-ui-storage:$firebasestorageui_version"
     ]
@@ -161,7 +162,7 @@ ext {
             annotation         : "androidx.annotation:annotation:$annotation_version",
             fotoApparat        : "io.fotoapparat:fotoapparat:$fotoApparat_version",
             fotoApparatAdapters: "io.fotoapparat.fotoapparat:adapter-rxjava2:$fotoApparat_version",
-            rv_selection       : "androidx.recyclerview:recyclerview-selection:$recyclerview_version",
+            rv_selection       : "androidx.recyclerview:recyclerview-selection:$recyclerview_selection_version",
             cardView           : "androidx.cardview:cardview:$cardview_version",
             texteditor         : "jp.wasabeef:richeditor-android:$textEditor_version",
             material           : "com.google.android.material:material:$material_version",

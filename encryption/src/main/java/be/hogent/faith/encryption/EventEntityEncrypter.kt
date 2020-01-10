@@ -10,6 +10,7 @@ import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
 import com.google.crypto.tink.Aead
 import com.google.crypto.tink.KeysetHandle
+import com.google.crypto.tink.aead.AeadFactory
 
 /**
  * @param keyGenerator will be used to generate the DEK that will be used when encrypting the [EventEntity].
@@ -22,7 +23,7 @@ class EventEntityEncrypter(
 
     override fun encrypt(eventEntity: EventEntity): EncryptedEventEntity {
         val keysetHandle = keyGenerator.generateKeysetHandle()
-        val dataEncryptionKey = keysetHandle.getPrimitive(Aead::class.java)
+        val dataEncryptionKey = AeadFactory.getPrimitive(keysetHandle)
         val dataEncrypter = DataEncrypter(dataEncryptionKey)
 
         return encryptEntity(eventEntity, keysetHandle, dataEncrypter)
@@ -67,7 +68,7 @@ class EventEntityEncrypter(
 
     private fun decryptDEK(encryptedEvent: EncryptedEventEntity): Aead {
         val keysetHandle = keyEncrypter.decrypt(encryptedEvent.encryptedDEK)
-        return keysetHandle.getPrimitive(Aead::class.java)
+        return AeadFactory.getPrimitive(keysetHandle)
     }
 
     private fun decryptEventEntity(
