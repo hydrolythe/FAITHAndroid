@@ -32,13 +32,13 @@ open class EventRepositoryImpl(
      * Adds an event for the authenticated user together with its details
      * @return a [Maybe<Event>] that only succeeds when both the event and its details are inserted successfully.
      */
-    override fun insert(item: Event, user: User): Maybe<Event> {
-        val encryptedEvent = eventEntityEncrypter.encrypt(eventMapper.mapToEntity(item))
+    override fun insert(event: Event, user: User): Maybe<Event> {
+        val encryptedEvent = eventEntityEncrypter.encrypt(eventMapper.mapToEntity(event))
 
         return firebaseEventRepository.insert(
             encryptedEvent,
             userMapper.mapToEntity(user)
-        ).map { item }
+        ).map { event }
     }
 
     /**
@@ -50,7 +50,7 @@ open class EventRepositoryImpl(
             .map { eventMapper.mapFromEntities(it) }
     }
 
-    override fun delete(item: Event, user: User): Completable {
+    override fun delete(event: Event, user: User): Completable {
         TODO("not implemented")
     }
 }

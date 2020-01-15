@@ -8,9 +8,13 @@ import io.reactivex.Maybe
 import java.util.UUID
 
 interface EventRepository {
-    fun delete(item: Event, user: User): Completable
+    fun delete(event: Event, user: User): Completable
 
-    fun insert(item: Event, user: User): Maybe<Event>
+    /**
+     * Saves the given [event] to the events of the given [user]
+     */
+    // TODO: fix that this returns a Maybe<Event> because that seems like poor API design
+    fun insert(event: Event, user: User): Maybe<Event>
 
     fun get(uuid: UUID): Flowable<Event>
 

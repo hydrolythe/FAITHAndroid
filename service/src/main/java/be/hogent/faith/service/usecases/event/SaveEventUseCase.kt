@@ -4,14 +4,11 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.EventRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.storage.IStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
-import io.reactivex.Single
 
 open class SaveEventUseCase(
     private val eventRepository: EventRepository,
-    private val storageRepository: IStorageRepository,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEventUseCase.Params>(observeScheduler) {
 
@@ -19,19 +16,30 @@ open class SaveEventUseCase(
 
     override fun buildUseCaseObservable(params: Params): Completable {
         this.params = params
-        return addEventToUser(params.event)
-            .flatMap { storageRepository.saveEvent(it) }
-            .flatMapMaybe { eventRepository.insert(it, params.user) }
-            .flatMapCompletable { Completable.complete()
+        return Completable.fromCallable {
+            setEventTitle(params.event)
+            addEventToUser(params.event)
+            try {
+                eventRepository.insert(params.event, params.user)
+            } catch (e: Exception) {
+                // Rollback
+                removeEventFromUser(params.event)
+                throw(e)
             }
+        }
     }
 
-    private fun addEventToUser(event: Event): Single<Event> = Single.fromCallable {
-        event.title = params!!.eventTitle
-        // First add in domain so we can do business logic
-        // If this fails the event won't get added to the Repo.
+    private fun addEventToUser(event: Event) {
         params!!.user.addEvent(event)
-        event
+    }
+
+    private fun removeEventFromUser(event: Event) {
+        params!!.user.removeEvent(event)
+    }
+
+
+    private fun setEventTitle(event: Event) {
+        event.title = params!!.eventTitle
     }
 
     data class Params(
