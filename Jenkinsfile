@@ -43,9 +43,6 @@ pipeline {
             }
         }
         stage('Integration tests') {
-            when{
-                branch 'dev'
-            }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     sh 'gcloud firebase test android run ' +
