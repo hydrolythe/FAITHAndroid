@@ -19,6 +19,7 @@ import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.error.ScopeAlreadyCreatedException
 import org.koin.core.qualifier.named
+import org.koin.core.scope.Scope
 import timber.log.Timber
 
 class LoginOrRegisterActivity : AppCompatActivity(),
@@ -75,13 +76,14 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         Timber.i("Creating USER SCOPE")
         // Don't create SCOPE twice
         // This sometimes happens when running tests that reuse the same Activity twice
+        var scope: Scope
         try {
-            val scope = getKoin().createScope(KoinModules.USER_SCOPE_ID, named(USER_SCOPE_NAME))
-            userViewModel = scope.get()
+            scope = getKoin().createScope(KoinModules.USER_SCOPE_ID, named(USER_SCOPE_NAME))
         } catch (e: ScopeAlreadyCreatedException) {
-            getKoin().getScope(KoinModules.USER_SCOPE_ID)
+            scope = getKoin().getScope(KoinModules.USER_SCOPE_ID)
             Timber.i("User scope already existed, not recreating")
         }
+        userViewModel = scope.get()
     }
 
     private fun goToCityScreen() {
