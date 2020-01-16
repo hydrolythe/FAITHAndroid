@@ -42,7 +42,7 @@ pipeline {
                 }
             }
         }
-         */
+
         stage('Integration tests') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
@@ -54,11 +54,15 @@ pipeline {
                 }
             }
         }
+         */
     }
     post {
         always {
             echo 'Getting the test results'
             junit '**/TEST-*.xml'
+            emailext body: 'A Test EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'
+
+            }
         }
     }
 }
