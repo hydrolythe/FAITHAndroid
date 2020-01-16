@@ -19,7 +19,7 @@ pipeline {
                 }
             }
         }
-        stage('Linting') {
+        /**stage('Linting') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     sh './gradlew ktlint'
@@ -42,6 +42,7 @@ pipeline {
                 }
             }
         }
+         */
         stage('Integration tests') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
