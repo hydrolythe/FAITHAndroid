@@ -61,8 +61,6 @@ pipeline {
             echo 'Getting the test results'
             junit '**/TEST-*.xml'
             emailext body: 'A Test EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'
-
-            }
         }
     }
 }
