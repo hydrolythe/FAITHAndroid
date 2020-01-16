@@ -58,8 +58,8 @@ pipeline {
     }
     post {
         always {
-            emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} <br> " +
-                    "" +
+            emailext body: "<b>${currentBuild.currentResult} </b>: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} <br> " +
+                    "<br>" +
                     "More info at : <a href=\"${env.BUILD_URL} \">${env.BUILD_URL} </a> ",
                     recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
                     subject: "[FAITH] Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
