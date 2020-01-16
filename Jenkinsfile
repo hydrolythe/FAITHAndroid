@@ -19,7 +19,7 @@ pipeline {
                 }
             }
         }
-        /**stage('Linting') {
+        stage('Linting') {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     sh './gradlew ktlint'
@@ -39,6 +39,7 @@ pipeline {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     sh './gradlew testDebugUnitTest testDebugUnitTest'
+                    junit '**/TEST-*.xml'
                 }
             }
         }
@@ -54,7 +55,7 @@ pipeline {
                 }
             }
         }
-         */
+
     }
     post {
         always {
