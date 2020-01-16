@@ -58,8 +58,6 @@ pipeline {
     }
     post {
         always {
-            echo 'Getting the test results'
-            junit '**/TEST-*.xml'
             emailext body: 'A Test E-Mail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'
         }
     }
