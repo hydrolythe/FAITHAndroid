@@ -10,10 +10,15 @@ class DetailEntityEncrypter(
     private val dataEncrypter: DataEncrypter
 ) : IDetailEntityEncrypter {
 
+    /**
+     * Encrypts a [DetailEntity].
+     * The file attribute is not encrypted because it contains no sensitive information and
+     * it makes it easier to save it permanently later on.
+     */
     override fun encrypt(detailEntity: DetailEntity): EncryptedDetailEntity {
         with(detailEntity) {
             return EncryptedDetailEntity(
-                file = dataEncrypter.encrypt(file),
+                file = file,
                 uuid = dataEncrypter.encrypt(uuid),
                 type = dataEncrypter.encrypt(type.toString())
             )
@@ -23,7 +28,7 @@ class DetailEntityEncrypter(
     override fun decrypt(encryptedDetailEntity: EncryptedDetailEntity): DetailEntity {
         with(encryptedDetailEntity) {
             return DetailEntity(
-                file = dataEncrypter.decrypt(file),
+                file = file,
                 uuid = dataEncrypter.decrypt(uuid),
                 type = DetailType.valueOf(dataEncrypter.decrypt(type))
             )

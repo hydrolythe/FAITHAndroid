@@ -1,53 +1,44 @@
 package be.hogent.faith.encryption
 
 import be.hogent.faith.encryption.internal.KeyGenerator
-import com.google.crypto.tink.Aead
-import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
-import org.junit.Before
+import be.hogent.faith.util.contentEqual
+import com.google.crypto.tink.KeysetHandle
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 
 class FileEncrypterTest {
     private val dataEncryptionKey by lazy { createDEK() }
 
-    private fun createDEK(): Aead {
-        return KeyGenerator().generateKeysetHandle().getPrimitive(Aead::class.java)
+    private fun createDEK(): KeysetHandle {
+        return KeyGenerator().generateStreamingKeysetHandle()
     }
+
     private val fileEncrypter = FileEncrypter(dataEncryptionKey)
 
-    private val file = File("location")
-    private val fileContents = "File contents"
+    private val file = File("src/test/java/be/hogent/faith/encryption/testResources/screenshot.png")
 
-    @Before
-    fun setUp() {
-        file.writeText(fileContents)
-    }
 
     @Test
     fun fileDoesNotHaveSameContentsAfterEncryption() {
         // Act
-        fileEncrypter.encrypt(file)
+        val encryptedFile = fileEncrypter.encrypt(file)
 
         // Assert
-        assertNotEquals(fileContents, file.readText())
+        assertFalse(file.contentEqual(encryptedFile))
     }
 
     @Test
     fun encryptedFileIsDecryptedCorrectly() {
         // Arrange
-        fileEncrypter.encrypt(file)
+        val resultingFile = fileEncrypter.encrypt(file)
 
         // Act
-        fileEncrypter.decrypt(file)
+        val decryptedFile = fileEncrypter.decrypt(resultingFile)
 
         // Assert
-        assertEquals(fileContents, file.readText())
-    }
+        assertTrue(file.contentEqual(decryptedFile))
 
-    @After
-    fun removeFile() {
-        file.delete()
     }
 }

@@ -3,13 +3,12 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.EventRepository
-import be.hogent.faith.service.usecases.dummies.SingleUserDummyEventRepository
+import be.hogent.faith.service.usecases.fakes.SingleUserFakeEventRepository
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -29,7 +28,7 @@ class SaveEventUseCaseTest {
     fun setUp() {
         event = EventFactory.makeEvent(nbrOfDetails = 2, hasEmotionAvatar = true)
         user = UserFactory.makeUser(numberOfEvents = 0)
-        eventRepository = SingleUserDummyEventRepository()
+        eventRepository = SingleUserFakeEventRepository()
         saveEventUseCase =
             SaveEventUseCase(eventRepository, mockk(relaxed = true))
     }

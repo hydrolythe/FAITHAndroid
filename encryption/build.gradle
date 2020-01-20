@@ -40,7 +40,9 @@ dependencies {
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
 
-    implementation("com.google.crypto.tink:tink-android:1.2.2")
+    implementation("com.google.crypto.tink:tink:1.2.2")
+    // TODO: check if this can be removed
+    annotationProcessor("com.google.auto.service:auto-service:1.0-rc4")
 
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation "com.squareup.moshi:moshi-kotlin:1.9.0"

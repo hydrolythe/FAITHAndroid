@@ -14,9 +14,6 @@ class LocalStorageRepository(
     private val context: Context
 ) : ILocalStorageRepository {
 
-    /**
-     * moves the files from tempory storage to local storage
-     */
     override fun saveEvent(event: Event): Single<Event> {
         return Single.fromCallable {
             saveEmotionAvatar(event)
@@ -60,16 +57,10 @@ class LocalStorageRepository(
         from.delete()
     }
 
-    /**
-     * checks if file is present in localStorage
-     */
     override fun isFilePresent(detail: Detail): Boolean {
         return File(context.filesDir, detail.file.path).exists()
     }
 
-    /**
-     * checks if emotion avatar is present in localStorage
-     */
     override fun isEmotionAvatarPresent(event: Event): Boolean {
         if (event.emotionAvatar == null)
             return true

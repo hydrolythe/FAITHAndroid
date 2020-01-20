@@ -7,6 +7,7 @@ import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.storage.localStorage.ILocalStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -15,6 +16,7 @@ import java.util.UUID
 open class EventRepositoryImpl(
     private val userMapper: UserMapper,
     private val eventMapper: EventMapper,
+    private val localStorageRepository: ILocalStorageRepository,
     private val firebaseEventRepository: FirebaseEventRepository,
     private val eventEntityEncrypter: IEventEntityEncrypter
 ) : EventRepository {
@@ -33,7 +35,10 @@ open class EventRepositoryImpl(
      * @return a [Maybe<Event>] that only succeeds when both the event and its details are inserted successfully.
      */
     override fun insert(event: Event, user: User): Maybe<Event> {
-        val encryptedEvent = eventEntityEncrypter.encrypt(eventMapper.mapToEntity(event))
+        val eventEntity = eventMapper.mapToEntity(event)
+        val encryptedEvent = eventEntityEncrypter.encrypt(event, eventEntity)
+
+        localStorageRepository.saveEvent(encryptedEvent)
 
         return firebaseEventRepository.insert(
             encryptedEvent,

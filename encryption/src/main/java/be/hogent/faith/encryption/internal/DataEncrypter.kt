@@ -1,6 +1,7 @@
 package be.hogent.faith.encryption.internal
 
-import com.google.crypto.tink.Aead
+import com.google.crypto.tink.KeysetHandle
+import com.google.crypto.tink.aead.AeadFactory
 import com.google.crypto.tink.subtle.Base64
 
 /**
@@ -13,13 +14,16 @@ import com.google.crypto.tink.subtle.Base64
  * (as is more usual in encryption) because Firebase does not support storing byte-arrays.
  */
 class DataEncrypter(
-    private val dataEncryptionKey: Aead
+    keysetHandle: KeysetHandle
 ) {
+    private val dataEncryptionKey = AeadFactory.getPrimitive(keysetHandle)
 
     /**
      * Returns a [Base64]-encoded, encrypted version of the given [plaintext]
      */
-    internal fun encrypt(plaintext: String): String {
+    internal
+
+    fun encrypt(plaintext: String): String {
         val stringBytes = plaintext.toByteArray(Charsets.UTF_8)
         val encryptedBytes = dataEncryptionKey.encrypt(stringBytes, null)
         return Base64.encodeToString(encryptedBytes, Base64.DEFAULT)

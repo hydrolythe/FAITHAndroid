@@ -5,11 +5,19 @@ import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Single
 
 interface ILocalStorageRepository {
+
     /**
-     * moves the files from tempory storage to local storage
+     * Saves all files belonging to an event to local storage
      */
     fun saveEvent(event: Event): Single<Event>
 
+    /**
+     * checks if file is present in localStorage
+     */
     fun isFilePresent(detail: Detail): Boolean
+
+    /**
+     * checks if emotion avatar is present in localStorage
+     */
     fun isEmotionAvatarPresent(event: Event): Boolean
 }

@@ -4,15 +4,15 @@ import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.DetailType
 import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
-import com.google.crypto.tink.Aead
+import com.google.crypto.tink.KeysetHandle
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class DetailEntityEncrypterTest {
     private val dataEncryptionKey by lazy { createDEK() }
 
-    private fun createDEK(): Aead {
-        return KeyGenerator().generateKeysetHandle().getPrimitive(Aead::class.java)
+    private fun createDEK(): KeysetHandle {
+        return KeyGenerator().generateKeysetHandle()
     }
 
     private val detailEntityEncrypter = DetailEntityEncrypter(DataEncrypter(dataEncryptionKey))

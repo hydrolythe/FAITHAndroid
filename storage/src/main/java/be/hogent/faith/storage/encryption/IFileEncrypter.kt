@@ -6,10 +6,10 @@ interface IFileEncrypter {
     /**
      * Replaces the contents of a file with an encrypted version
      */
-    fun encrypt(file: File)
+    fun encrypt(file: File): File
 
     /**
      * Replaces the contents of an encrypted file with a decrypted version
      */
-    fun decrypt(file: File)
+    fun decrypt(file: File): File
 }

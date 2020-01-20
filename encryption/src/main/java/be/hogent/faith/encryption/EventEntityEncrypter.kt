@@ -5,12 +5,12 @@ import be.hogent.faith.database.encryption.EncryptedEventEntity
 import be.hogent.faith.database.encryption.IEventEntityEncrypter
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.EventEntity
+import be.hogent.faith.domain.models.Event
 import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
-import com.google.crypto.tink.Aead
 import com.google.crypto.tink.KeysetHandle
-import com.google.crypto.tink.aead.AeadFactory
+import java.io.File
 
 /**
  * @param keyGenerator will be used to generate the DEK that will be used when encrypting the [EventEntity].
@@ -21,23 +21,25 @@ class EventEntityEncrypter(
     private val keyEncrypter: KeyEncrypter
 ) : IEventEntityEncrypter {
 
-    override fun encrypt(eventEntity: EventEntity): EncryptedEventEntity {
-        val keysetHandle = keyGenerator.generateKeysetHandle()
-        val dataEncryptionKey = AeadFactory.getPrimitive(keysetHandle)
-        val dataEncrypter = DataEncrypter(dataEncryptionKey)
+    override fun encrypt(originalEvent: Event, eventEntity: EventEntity): EncryptedEventEntity {
+        val dataKeysetHandle = keyGenerator.generateKeysetHandle()
+        val streamingKeySetHandle = keyGenerator.generateStreamingKeysetHandle()
 
-        return encryptEntity(eventEntity, keysetHandle, dataEncrypter)
+        return encryptEntity(eventEntity, dataKeysetHandle, streamingKeySetHandle)
     }
 
     private fun encryptEntity(
         eventEntity: EventEntity,
         keysetHandle: KeysetHandle,
-        dataEncrypter: DataEncrypter
+        streamingKeySetHandle: KeysetHandle
     ): EncryptedEventEntity {
-        val encryptedDetails = encryptDetails(eventEntity, DetailEntityEncrypter(dataEncrypter))
+        val dataEncrypter = DataEncrypter(keysetHandle)
+        val encryptedDetails = encryptDetails(eventEntity, keysetHandle, streamingKeySetHandle)
 
-        // Encrypt the DEK so it can be placed next to the data it encrypted in the EncryptedEventEntity
+        // Encrypt the DEKs so it can be placed next to the data it encrypted in the EncryptedEventEntity
+        // TODO: maybe wrap these two into 1 key object so they can be encrypted together
         val encryptedDEK = keyEncrypter.encrypt(keysetHandle)
+        val encryptedStreamingDEK = keyEncrypter.encrypt(streamingKeySetHandle)
 
         with(eventEntity) {
             return EncryptedEventEntity(
@@ -47,38 +49,59 @@ class EventEntityEncrypter(
                 notes = notes?.let { dataEncrypter.encrypt(it) },
                 uuid = uuid,
                 detailEntities = encryptedDetails,
-                encryptedDEK = encryptedDEK
+                encryptedDEK = encryptedDEK,
+                encryptedStreamingDEK = encryptedStreamingDEK
             )
         }
     }
 
     private fun encryptDetails(
         eventEntity: EventEntity,
+        keysetHandle: KeysetHandle,
+        streamingKeySetHandle: KeysetHandle
+    ): List<EncryptedDetailEntity> {
+        val fileEncrypter = FileEncrypter(streamingKeySetHandle)
+        val detailEntityEncrypter = DetailEntityEncrypter(DataEncrypter((keysetHandle)))
+
+        encryptDetailFiles(eventEntity, fileEncrypter)
+
+        return encryptDetailData(eventEntity, detailEntityEncrypter)
+    }
+
+    private fun encryptDetailData(
+        eventEntity: EventEntity,
         detailEntityEncrypter: DetailEntityEncrypter
     ): List<EncryptedDetailEntity> {
         return eventEntity.details
             .map { detailEntityEncrypter.encrypt(it) }
-            .toList()
+    }
+
+    private fun encryptDetailFiles(
+        eventEntity: EventEntity,
+        fileEncrypter: FileEncrypter
+    ) {
+        eventEntity.details
+            .map { detailEntity: DetailEntity -> File(detailEntity.file) }
+            .forEach { fileEncrypter.encrypt(it) }
     }
 
     override fun decrypt(encryptedEvent: EncryptedEventEntity): EventEntity {
-        val dataEncryptionKey = decryptDEK(encryptedEvent)
-        return decryptEventEntity(encryptedEvent, dataEncryptionKey)
+        val dek = keyEncrypter.decrypt(encryptedEvent.encryptedDEK)
+        val streamingDEK = keyEncrypter.decrypt(encryptedEvent.encryptedStreamingDEK)
+        return decryptEventEntity(encryptedEvent, dek, streamingDEK)
     }
 
-    private fun decryptDEK(encryptedEvent: EncryptedEventEntity): Aead {
-        val keysetHandle = keyEncrypter.decrypt(encryptedEvent.encryptedDEK)
-        return AeadFactory.getPrimitive(keysetHandle)
-    }
 
     private fun decryptEventEntity(
         encryptedEvent: EncryptedEventEntity,
-        dataEncryptionKey: Aead
+        dek: KeysetHandle,
+        streamingDEK: KeysetHandle
     ): EventEntity {
-        val dataEncrypter = DataEncrypter(dataEncryptionKey)
+        val dataEncrypter = DataEncrypter(dek)
+        val fileEncrypter = FileEncrypter(streamingDEK)
 
         with(encryptedEvent) {
-            val details = decryptDetails(dataEncrypter, encryptedEvent)
+            val details = decryptDetails(dataEncrypter, encryptedEvent, fileEncrypter)
             return EventEntity(
                 dateTime = dataEncrypter.decrypt(dateTime),
                 title = title?.let { dataEncrypter.decrypt(it) },
@@ -92,13 +115,21 @@ class EventEntityEncrypter(
 
     private fun decryptDetails(
         dataEncrypter: DataEncrypter,
-        encryptedEvent: EncryptedEventEntity
+        encryptedEvent: EncryptedEventEntity,
+        fileEncrypter: FileEncrypter
     ): List<DetailEntity> {
         val detailEntityEncrypter = DetailEntityEncrypter(dataEncrypter)
+
+        encryptedEvent.detailEntities.map {
+            File(it.file)
+        }.forEach {
+            fileEncrypter.decrypt(it)
+        }
         return encryptedEvent.detailEntities
             .map { detailEntityEncrypter.decrypt(it) }
             .toList()
     }
+
 
     override fun decryptAll(list: List<EncryptedEventEntity>): List<EventEntity> {
         return list

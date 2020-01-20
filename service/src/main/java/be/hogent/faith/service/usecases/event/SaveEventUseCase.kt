@@ -37,7 +37,6 @@ open class SaveEventUseCase(
         params!!.user.removeEvent(event)
     }
 
-
     private fun setEventTitle(event: Event) {
         event.title = params!!.eventTitle
     }

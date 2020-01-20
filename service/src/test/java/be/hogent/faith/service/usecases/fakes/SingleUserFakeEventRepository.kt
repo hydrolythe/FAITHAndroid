@@ -1,4 +1,4 @@
-package be.hogent.faith.service.usecases.dummies
+package be.hogent.faith.service.usecases.fakes
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
@@ -8,7 +8,7 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import java.util.UUID
 
-class SingleUserDummyEventRepository : EventRepository {
+class SingleUserFakeEventRepository : EventRepository {
     private val events = mutableListOf<Event>()
 
     override fun delete(event: Event, user: User): Completable {
@@ -29,5 +29,4 @@ class SingleUserDummyEventRepository : EventRepository {
     override fun getAll(): Flowable<List<Event>> {
         return Flowable.just(events)
     }
-
 }

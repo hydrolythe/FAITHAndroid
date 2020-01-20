@@ -32,6 +32,5 @@ data class User(
 
     fun removeEvent(event: Event) {
         _events.remove(event.uuid)
-
     }
 }
