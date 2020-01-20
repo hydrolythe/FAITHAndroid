@@ -36,10 +36,17 @@
 
     <style name="AppTheme.PopupOverlay" parent="Theme.MaterialComponents.Light" />
 
+    <style name="TextAppearance.NavigationButton" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textSize">25sp</item>
+        <item name="android:fontFamily">@font/source_sans_pro_semibold</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
     <style name="arrow_style.toLeft" parent="Widget.MaterialComponents.Button.Icon">
         <item name="android:layout_width">170dp</item>
         <item name="android:layout_height">@dimen/arrow_height</item>
         <item name="android:textColor">@color/color_black</item>
+        <item name="android:textAppearance">@style/TextAppearance.NavigationButton</item>
         <item name="android:backgroundTint">@color/color_white</item>
         <item name="iconTint">@null</item>
         <item name="iconGravity">end</item>
@@ -59,7 +66,6 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">0dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
-
         <item name="cornerFamilyTopRight">cut</item>
         <item name="cornerFamilyBottomRight">cut</item>
         <item name="cornerSizeTopRight">37dp</item>
