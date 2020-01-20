@@ -14,6 +14,9 @@
         <item name="colorOnSurface">@color/onSurface</item>
         <item name="android:colorBackground">@color/background</item>
         <item name="colorOnBackground">@color/onBackground</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
+        <item name="fontFamily">@font/source_sans_pro</item>
+
     </style>
 
     <style name="AppTheme.FullScreen" parent="AppTheme">
