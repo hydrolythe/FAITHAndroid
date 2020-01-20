@@ -4,10 +4,10 @@ import be.hogent.faith.database.encryption.IEventEntityEncrypter
 import be.hogent.faith.database.firebase.FirebaseEventRepository
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.UserMapper
+import be.hogent.faith.database.storage.ILocalStorageRepository
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.EventRepository
-import be.hogent.faith.storage.localStorage.ILocalStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
@@ -38,12 +38,12 @@ open class EventRepositoryImpl(
         val eventEntity = eventMapper.mapToEntity(event)
         val encryptedEvent = eventEntityEncrypter.encrypt(event, eventEntity)
 
-        localStorageRepository.saveEvent(encryptedEvent)
-
-        return firebaseEventRepository.insert(
-            encryptedEvent,
-            userMapper.mapToEntity(user)
-        ).map { event }
+        return localStorageRepository.saveEvent(encryptedEvent).andThen(
+            firebaseEventRepository.insert(
+                encryptedEvent,
+                userMapper.mapToEntity(user)
+            ).map { event }
+        )
     }
 
     /**

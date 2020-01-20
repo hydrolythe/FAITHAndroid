@@ -3,7 +3,7 @@ package be.hogent.faith.storage
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
-import be.hogent.faith.storage.localStorage.ILocalStorageRepository
+import be.hogent.faith.database.storage.ILocalStorageRepository
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.called
 import io.mockk.every
@@ -17,7 +17,7 @@ import org.junit.Test
 
 class StorageRepositoryTest {
 
-    private val localStorage = mockk<ILocalStorageRepository>()
+    private val localStorage = mockk<be.hogent.faith.database.storage.ILocalStorageRepository>()
     private val remoteStorage = mockk<IFireBaseStorageRepository>()
     private val storageRepository = StorageRepository(localStorage, remoteStorage, mockk())
 

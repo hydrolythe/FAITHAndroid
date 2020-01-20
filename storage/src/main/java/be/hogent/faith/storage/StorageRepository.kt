@@ -3,7 +3,7 @@ package be.hogent.faith.storage
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
-import be.hogent.faith.storage.localStorage.ILocalStorageRepository
+import be.hogent.faith.database.storage.ILocalStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.toFlowable
@@ -14,7 +14,7 @@ import io.reactivex.rxkotlin.toFlowable
  *
  */
 class StorageRepository(
-    private val localStorage: ILocalStorageRepository,
+    private val localStorage: be.hogent.faith.database.storage.ILocalStorageRepository,
     private val remoteStorage: IFireBaseStorageRepository
 ) : IStorageRepository {
 
