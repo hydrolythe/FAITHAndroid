@@ -153,4 +153,6 @@
     <string name="text_save_error_emptyinput">Je hebt nog geen tekst geschreven!</string>
     <string name="textSize_a">A</string>
     <string name="opnieuw">Opnieuw</string>
+    <string name="bold">B</string>
+    <string name="italic">I</string>
 </resources>

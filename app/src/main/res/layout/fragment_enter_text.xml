@@ -39,6 +39,7 @@
                 android:background="@drawable/save_btn"
                 android:elevation="2dp"
                 android:onClick="@{() -> textDetailViewModel.onSaveClicked()}"
+                android:contentDescription="@string/save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,7 +50,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="15dp"
+                app:cardCornerRadius="@dimen/panel_corner_radius"
                 app:layout_constraintBottom_toTopOf="@+id/scrollView2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_enter_text_save"
@@ -78,7 +79,7 @@
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/bold"
-                        android:text="B"
+                        android:text="@string/bold"
                         android:textSize="@dimen/font_size_enter_text"
                         android:textStyle="bold" />
 
@@ -96,7 +97,7 @@
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/italic"
-                        android:text="I"
+                        android:text="@string/italic"
                         android:textSize="@dimen/font_size_enter_text"
                         android:textStyle="italic" />
 
@@ -127,7 +128,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="15dp"
+                app:cardCornerRadius="@dimen/panel_corner_radius"
                 app:layout_constraintBottom_toTopOf="@+id/guideline8"
                 app:layout_constraintEnd_toStartOf="@+id/cardView_bold"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -154,8 +155,8 @@
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/font_sizesmall"
-                        android:text="A"
-                        android:textSize="30sp" />
+                        android:text="@string/textSize_a"
+                        android:textSize="@dimen/textIcon_fontsize_small" />
 
                     <TextView
                         android:id="@+id/btn_enter_text_setFontNormal"
@@ -171,8 +172,8 @@
                         android:scaleType="centerInside"
 
                         android:src="@drawable/font_sizemedium"
-                        android:text="A"
-                        android:textSize="40sp" />
+                        android:text="@string/textSize_a"
+                        android:textSize="@dimen/textIcon_fontsize_medium" />
 
                     <TextView
                         android:id="@+id/btn_enter_text_setFontLarge"
@@ -187,8 +188,8 @@
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/font_sizelarge"
-                        android:text="A"
-                        android:textSize="50sp" />
+                        android:text="@string/textSize_a"
+                        android:textSize="@dimen/textIcon_fontsize_large" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

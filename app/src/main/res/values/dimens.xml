@@ -15,4 +15,8 @@
     <dimen name="arrow_width">210dp</dimen>
     <dimen name="panel_corner_radius">40dp</dimen>
     <dimen name="font_size_enter_text">50sp</dimen>
+    <dimen name="event_textInput_height">75dp</dimen>
+    <dimen name="textIcon_fontsize_small">25sp</dimen>
+    <dimen name="textIcon_fontsize_medium">35sp</dimen>
+    <dimen name="textIcon_fontsize_large">45sp</dimen>
 </resources>
