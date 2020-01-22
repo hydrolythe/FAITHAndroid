@@ -32,7 +32,7 @@ class GetEventFilesUseCaseTest {
 
     @Test
     fun getEventFilesUC_execute_getFiles() {
-        every { storageRepository.getEvent(any()) } returns Completable.complete()
+        every { storageRepository.downloadEventFiles(any()) } returns Completable.complete()
         getEventFilesUseCase.buildUseCaseObservable(
             GetEventFilesUseCase.Params(event)
         )
@@ -41,13 +41,13 @@ class GetEventFilesUseCaseTest {
 
         // The image should be stored in the repo
         verify {
-            storageRepository.getEvent(event)
+            storageRepository.downloadEventFiles(event)
         }
     }
 
     @Test
     fun getEventFilesUC_execute_failsOnStorageError() {
-        every { storageRepository.getEvent(any()) } returns Completable.error(
+        every { storageRepository.downloadEventFiles(any()) } returns Completable.error(
             IOException()
         )
         getEventFilesUseCase.buildUseCaseObservable(

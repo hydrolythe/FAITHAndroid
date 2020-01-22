@@ -10,7 +10,6 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.EventRepository
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import io.reactivex.Maybe
 import java.util.UUID
 
 open class EventRepositoryImpl(
@@ -34,15 +33,16 @@ open class EventRepositoryImpl(
      * Adds an event for the authenticated user together with its details
      * @return a [Maybe<Event>] that only succeeds when both the event and its details are inserted successfully.
      */
-    override fun insert(event: Event, user: User): Maybe<Event> {
-        val eventEntity = eventMapper.mapToEntity(event)
+    override fun insert(event: Event, user: User): Completable {
+        // TODO: maybe not mix procedural and reactive? Might lead to bugs.
         val encryptedEvent = eventEntityEncrypter.encrypt(event, eventEntity)
+        val eventEntity = eventMapper.mapToEntity(event)
 
         return localStorageRepository.saveEvent(encryptedEvent).andThen(
             firebaseEventRepository.insert(
                 encryptedEvent,
                 userMapper.mapToEntity(user)
-            ).map { event }
+            )
         )
     }
 

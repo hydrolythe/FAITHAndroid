@@ -1,39 +1,43 @@
 package be.hogent.faith.storage.firebase
 
 import android.net.Uri
+import be.hogent.faith.database.encryption.EncryptedDetailEntity
+import be.hogent.faith.database.encryption.EncryptedEventEntity
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.StoragePathProvider
 import com.google.firebase.storage.FirebaseStorage
 import durdinapps.rxfirebase2.RxFirebaseStorage
 import io.reactivex.Completable
-import io.reactivex.Single
 import io.reactivex.rxkotlin.toFlowable
 import timber.log.Timber
 import java.io.File
 
-class FireBaseStorageRepository(
+class OnlineStorageRepository(
     private val pathProvider: StoragePathProvider,
     private val firestorage: FirebaseStorage
-) : IFireBaseStorageRepository {
+) : IOnlineStorageRepository {
 
     private var storageRef = firestorage.reference
 
-    override fun saveEvent(event: Event): Single<Event> {
-        return saveEventEmotionAvatar(event) // save avatar in firestorage
+    /**
+     * Saves all files associated with an [EncryptedEventEntity] (detail files, emotionavatar)
+     */
+    override fun saveEvent(encryptedEventEntity: EncryptedEventEntity): Completable {
+        return saveEventEmotionAvatar(encryptedEventEntity) // save avatar in firestorage
             .concatWith(
-                event.details.toFlowable() // save all detail files in firestorage
+                encryptedEventEntity.detailEntities.toFlowable() // save all detail files in firestorage
                     .concatMapCompletable {
-                        saveDetailFile(event, it)
+                        saveDetailFile(encryptedEventEntity, it)
                     }
-            ).toSingle { event }
+            )
     }
 
     /**
      * Gets a detail's file from [firestorage] and stores it into the path provided for it by the
      * [pathProvider].
      */
-    override fun makeFileLocallyAvailable(detail: Detail): Completable {
+    override fun downloadDetail(detail: Detail): Completable {
         val fileToDownloadReference = storageRef.child(detail.file.path)
         val localFile: File = pathProvider.getLocalDetailPath(detail)
         return Completable.fromSingle(RxFirebaseStorage.getFile(fileToDownloadReference, localFile))
@@ -43,7 +47,7 @@ class FireBaseStorageRepository(
      * Gets the emotion avatar file from [firestorage] and stores it into the path provided for it by the
      * [pathProvider].
      */
-    override fun makeEmotionAvatarLocallyAvailable(event: Event): Completable {
+    override fun downloadEmotionAvatar(event: Event): Completable {
         if (event.emotionAvatar == null)
             return Completable.complete()
         val fileToDownloadReference =
@@ -55,18 +59,18 @@ class FireBaseStorageRepository(
     /**
      * Uploads the emotion avatar file to [firestorage]
      */
-    private fun saveEventEmotionAvatar(event: Event): Completable {
-        if (event.emotionAvatar == null)
+    private fun saveEventEmotionAvatar(encryptedEventEntity: EncryptedEventEntity): Completable {
+        if (encryptedEventEntity.emotionAvatar == null)
             return Completable.complete()
         return Completable.fromSingle(
             RxFirebaseStorage.putFile(
-                storageRef.child(pathProvider.getEmotionAvatarPath(event).path),
-                Uri.parse("file://${pathProvider.getLocalEmotionAvatarPath(event).path}")
+                storageRef.child(pathProvider.getEmotionAvatarPath(encryptedEventEntity).path),
+                Uri.parse("file://${pathProvider.getLocalEmotionAvatarPath(encryptedEventEntity).path}")
             )
                 .doOnError {
                     Timber.e(
                         "Firebase storage : Problems saving file ${pathProvider.getLocalEmotionAvatarPath(
-                            event
+                            encryptedEventEntity
                         ).path}: ${it.localizedMessage}"
                     )
                 }
@@ -76,7 +80,10 @@ class FireBaseStorageRepository(
     /**
      * Uploads the detail file to [firestorage]
      */
-    private fun saveDetailFile(event: Event, detail: Detail): Completable {
+    private fun saveDetailFile(
+        event: EncryptedEventEntity,
+        detail: EncryptedDetailEntity
+    ): Completable {
         return Completable.fromSingle(
             RxFirebaseStorage.putFile(
                 storageRef.child(pathProvider.getDetailPath(event, detail).path),

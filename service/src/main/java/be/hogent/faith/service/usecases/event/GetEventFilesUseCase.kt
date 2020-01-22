@@ -17,7 +17,7 @@ class GetEventFilesUseCase(
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {
-        return storageRepo.getEvent(params.event)
+        return storageRepo.downloadEventFiles(params.event)
     }
 
     data class Params(val event: Event)

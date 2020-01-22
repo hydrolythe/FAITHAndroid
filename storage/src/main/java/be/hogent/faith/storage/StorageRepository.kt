@@ -1,11 +1,11 @@
 package be.hogent.faith.storage
 
+import be.hogent.faith.database.encryption.EncryptedEventEntity
+import be.hogent.faith.database.storage.ILocalStorageRepository
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
-import be.hogent.faith.database.storage.ILocalStorageRepository
+import be.hogent.faith.storage.firebase.IOnlineStorageRepository
 import io.reactivex.Completable
-import io.reactivex.Single
 import io.reactivex.rxkotlin.toFlowable
 
 /**
@@ -14,16 +14,18 @@ import io.reactivex.rxkotlin.toFlowable
  *
  */
 class StorageRepository(
-    private val localStorage: be.hogent.faith.database.storage.ILocalStorageRepository,
-    private val remoteStorage: IFireBaseStorageRepository
+    private val localStorage: ILocalStorageRepository,
+    private val remoteStorage: IOnlineStorageRepository
 ) : IStorageRepository {
 
     /**
      * stores all event files in firebase
      */
-    override fun saveEvent(event: Event): Single<Event> {
-        return localStorage.saveEvent(event)
-            .flatMap { remoteStorage.saveEvent(it) }
+    override fun saveEvent(encryptedEventEntity: EncryptedEventEntity): Completable {
+        // TODO: do in parallel?
+        return localStorage.saveEvent(encryptedEventEntity).andThen(
+            remoteStorage.saveEvent(encryptedEventEntity)
+        )
     }
 
     /**
@@ -34,7 +36,7 @@ class StorageRepository(
         if (localStorage.isFilePresent(detail))
             return Completable.complete()
         else
-            return remoteStorage.makeFileLocallyAvailable(detail)
+            return remoteStorage.downloadDetail(detail)
     }
 
     /**
@@ -44,13 +46,13 @@ class StorageRepository(
         if (event.emotionAvatar == null || localStorage.isEmotionAvatarPresent(event))
             return Completable.complete()
         else
-            return remoteStorage.makeEmotionAvatarLocallyAvailable(event)
+            return remoteStorage.downloadEmotionAvatar(event)
     }
 
     /**
      * download all event files from firebase to localStorage if not present yet
      */
-    override fun getEvent(event: Event): Completable {
+    override fun downloadEventFiles(event: Event): Completable {
         return getEmotionAvatar(event)
             .concatWith(
                 event.details.toFlowable()

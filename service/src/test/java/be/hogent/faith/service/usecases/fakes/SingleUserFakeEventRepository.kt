@@ -17,7 +17,7 @@ class SingleUserFakeEventRepository : EventRepository {
         }
     }
 
-    override fun insert(event: Event, user: User): Maybe<Event> {
+    override fun insert(event: Event, user: User): Completable {
         events.add(event)
         return Maybe.just(event)
     }

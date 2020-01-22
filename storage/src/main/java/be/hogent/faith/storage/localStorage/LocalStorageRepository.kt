@@ -2,6 +2,7 @@ package be.hogent.faith.storage.localStorage
 
 import android.content.Context
 import be.hogent.faith.database.encryption.EncryptedEventEntity
+import be.hogent.faith.database.storage.ILocalStorageRepository
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.StoragePathProvider
@@ -13,9 +14,10 @@ class LocalStorageRepository(
     private val pathProvider: StoragePathProvider,
     private val fileEncrypter: IFileEncrypter,
     private val context: Context
-) : be.hogent.faith.database.storage.ILocalStorageRepository {
+) : ILocalStorageRepository {
 
     override fun saveEvent(encryptedEventEntity: EncryptedEventEntity): Completable {
+        //TODO: make more reactive by making subcalls reactive instead of procdural
         return Completable.fromCallable {
             saveEmotionAvatar(encryptedEventEntity)
             saveEventDetails(encryptedEventEntity)
@@ -30,9 +32,9 @@ class LocalStorageRepository(
     private fun saveEventDetails(event: EncryptedEventEntity) {
         event.detailEntities.map { detail ->
             // TODO: encryptedDetailEntity can retain a file type instead of a string as it's not encrypted
-//            moveFile(File(detail.file), pathProvider.getLocalDetailPath(event, detail))
-//            detail.file = pathProvider.getDetailPath(event, detail)
-//            fileEncrypter.encrypt(detail.file)
+            moveFile(File(detail.file), pathProvider.getLocalDetailPath(event, detail))
+            detail.file = pathProvider.getDetailPath(event, detail)
+            fileEncrypter.encrypt(detail.file)
         }
     }
 
@@ -42,12 +44,12 @@ class LocalStorageRepository(
      */
     private fun saveEmotionAvatar(event: EncryptedEventEntity) {
         if (event.emotionAvatar != null) {
-//            moveFile(
-//                event.emotionAvatar!!,
-//                pathProvider.getLocalEmotionAvatarPath(event)
-//            )
-//            event.emotionAvatar = pathProvider.getEmotionAvatarPath(event)
-//            fileEncrypter.encrypt(event.emotionAvatar!!)
+            moveFile(
+                event.emotionAvatar!!,
+                pathProvider.getLocalEmotionAvatarPath(event)
+            )
+            event.emotionAvatar = pathProvider.getEmotionAvatarPath(event)
+            fileEncrypter.encrypt(event.emotionAvatar!!)
         }
     }
 

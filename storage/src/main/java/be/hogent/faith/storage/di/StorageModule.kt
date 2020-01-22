@@ -3,9 +3,8 @@ package be.hogent.faith.storage.di
 import be.hogent.faith.storage.IStorageRepository
 import be.hogent.faith.storage.StoragePathProvider
 import be.hogent.faith.storage.StorageRepository
-import be.hogent.faith.storage.firebase.FireBaseStorageRepository
-import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
-import be.hogent.faith.database.storage.ILocalStorageRepository
+import be.hogent.faith.storage.firebase.OnlineStorageRepository
+import be.hogent.faith.storage.firebase.IOnlineStorageRepository
 import be.hogent.faith.storage.localStorage.ITemporaryStorage
 import be.hogent.faith.storage.localStorage.LocalStorageRepository
 import be.hogent.faith.storage.localStorage.TemporaryStorageRepository
@@ -19,8 +18,8 @@ val storageModule = module {
     factory { StoragePathProvider(androidContext(), constructFirebaseAuthInstance()) }
     factory<ITemporaryStorage> { TemporaryStorageRepository(androidContext(), get()) }
     factory<be.hogent.faith.database.storage.ILocalStorageRepository> { LocalStorageRepository(get(), get(), androidContext()) }
-    factory<IFireBaseStorageRepository> {
-        FireBaseStorageRepository(
+    factory<IOnlineStorageRepository> {
+        OnlineStorageRepository(
             get(),
             constructFirebaseStorageInstance()
         )
