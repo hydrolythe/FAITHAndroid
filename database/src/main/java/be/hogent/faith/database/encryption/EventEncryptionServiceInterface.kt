@@ -10,8 +10,8 @@ interface EventEncryptionServiceInterface {
      *
      * @param event used to get the original details so they can be encrypted as well
      */
-    fun encrypt(event: Event): EncryptedEventInterface
+    fun encrypt(event: Event): EncryptedEvent
 
-    fun decrypt(encryptedEvent: EncryptedEventInterface): Event
-    fun decryptAll(list: List<EncryptedEventInterface>): List<Event>
+    fun decrypt(encryptedEvent: EncryptedEvent): Event
+    fun decryptAll(list: List<EncryptedEvent>): List<Event>
 }

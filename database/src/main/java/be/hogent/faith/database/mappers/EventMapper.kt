@@ -1,12 +1,11 @@
 package be.hogent.faith.database.mappers
 
 import be.hogent.faith.database.encryption.EncryptedEvent
-import be.hogent.faith.database.encryption.EncryptedEventInterface
 import be.hogent.faith.database.models.EncryptedEventEntity
 import java.io.File
 import java.util.UUID
 
-internal object EventMapper : Mapper<EncryptedEventEntity, EncryptedEventInterface> {
+internal object EventMapper : Mapper<EncryptedEventEntity, EncryptedEvent> {
 
     override fun mapFromEntity(entity: EncryptedEventEntity): EncryptedEvent {
         return EncryptedEvent(
@@ -21,7 +20,7 @@ internal object EventMapper : Mapper<EncryptedEventEntity, EncryptedEventInterfa
         )
     }
 
-    override fun mapToEntity(model: EncryptedEventInterface): EncryptedEventEntity {
+    override fun mapToEntity(model: EncryptedEvent): EncryptedEventEntity {
         return EncryptedEventEntity(
             dateTime = model.dateTime,
             title = model.title,
@@ -34,7 +33,7 @@ internal object EventMapper : Mapper<EncryptedEventEntity, EncryptedEventInterfa
         )
     }
 
-    override fun mapToEntities(models: List<EncryptedEventInterface>): List<EncryptedEventEntity> {
+    override fun mapToEntities(models: List<EncryptedEvent>): List<EncryptedEventEntity> {
         return models.map(EventMapper::mapToEntity)
     }
 

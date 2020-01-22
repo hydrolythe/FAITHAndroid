@@ -10,11 +10,11 @@ data class EncryptedEventEntity(
     val uuid: String = UUID.randomUUID().toString(),
     val details: List<EncryptedDetailEntity> = emptyList(),
     /**
-     * @see [be.hogent.faith.database.encryption.EncryptedEventInterface.encryptedDEK]
+     * @see [be.hogent.faith.database.encryption.EncryptedEvent.encryptedDEK]
      */
     val encryptedDEK: String,
     /**
-     * @see [be.hogent.faith.database.encryption.EncryptedEventInterface.encryptedStreamingDEK]
+     * @see [be.hogent.faith.database.encryption.EncryptedEvent.encryptedStreamingDEK]
      */
     val encryptedStreamingDEK: String
 )

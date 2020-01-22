@@ -1,7 +1,6 @@
 package be.hogent.faith.database.mappers
 
 import be.hogent.faith.database.encryption.EncryptedDetail
-import be.hogent.faith.database.encryption.EncryptedDetailInterface
 import be.hogent.faith.database.models.EncryptedDetailEntity
 import java.io.File
 import java.util.UUID
@@ -12,9 +11,9 @@ import java.util.UUID
  * The event is required because we need its uuid to map the foreign key relationship.
  */
 
-internal object DetailMapper : Mapper<EncryptedDetailEntity, EncryptedDetailInterface> {
+internal object DetailMapper : Mapper<EncryptedDetailEntity, EncryptedDetail> {
 
-    override fun mapToEntity(model: EncryptedDetailInterface): EncryptedDetailEntity {
+    override fun mapToEntity(model: EncryptedDetail): EncryptedDetailEntity {
         return EncryptedDetailEntity(
             file = model.file.path,
             uuid = model.uuid.toString(),
@@ -22,7 +21,7 @@ internal object DetailMapper : Mapper<EncryptedDetailEntity, EncryptedDetailInte
         )
     }
 
-    override fun mapToEntities(models: List<EncryptedDetailInterface>): List<EncryptedDetailEntity> {
+    override fun mapToEntities(models: List<EncryptedDetail>): List<EncryptedDetailEntity> {
         return models.map(DetailMapper::mapToEntity)
     }
 

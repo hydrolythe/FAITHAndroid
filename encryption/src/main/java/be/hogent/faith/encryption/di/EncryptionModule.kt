@@ -1,5 +1,7 @@
 package be.hogent.faith.encryption.di
 
+import be.hogent.faith.database.encryption.EventEncryptionServiceInterface
+import be.hogent.faith.encryption.EventEncryptionService
 import be.hogent.faith.encryption.encryptionService.ENDPOINT
 import be.hogent.faith.encryption.encryptionService.KeyEncryptionService
 import be.hogent.faith.encryption.internal.KeyEncrypter
@@ -15,7 +17,7 @@ val encryptionModule = module {
     single { provideKeyEncryptionService(get()) }
     single { KeyEncrypter(get()) }
     single { KeyGenerator() }
-    factory { EventEncryptionServiceInterface(get(), get()) as EventEncryptionServiceInterface }
+    factory { EventEncryptionService(get(), get()) as EventEncryptionServiceInterface }
 }
 
 fun provideMoshi(): Moshi {

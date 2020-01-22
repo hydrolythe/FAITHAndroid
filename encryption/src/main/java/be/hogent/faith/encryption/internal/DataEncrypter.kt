@@ -21,9 +21,7 @@ class DataEncrypter(
     /**
      * Returns a [Base64]-encoded, encrypted version of the given [plaintext]
      */
-    internal
-
-    fun encrypt(plaintext: String): String {
+    internal fun encrypt(plaintext: String): String {
         val stringBytes = plaintext.toByteArray(Charsets.UTF_8)
         val encryptedBytes = dataEncryptionKey.encrypt(stringBytes, null)
         return Base64.encodeToString(encryptedBytes, Base64.DEFAULT)
@@ -35,7 +33,6 @@ class DataEncrypter(
     internal fun decrypt(encryptedString: String): String {
         val decryptableBytes = Base64.decode(encryptedString, Base64.DEFAULT)
         val plaintextBytes = dataEncryptionKey.decrypt(decryptableBytes, null)
-        val originalString = plaintextBytes.toString(Charsets.UTF_8)
-        return originalString
+        return plaintextBytes.toString(Charsets.UTF_8)
     }
 }
