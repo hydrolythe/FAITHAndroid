@@ -1,24 +1,6 @@
 package be.hogent.faith.database.repositories
 
-import be.hogent.faith.database.factory.EntityFactory
-import be.hogent.faith.database.firebase.FirebaseEventRepository
-import be.hogent.faith.database.mappers.EventMapper
-import be.hogent.faith.database.mappers.UserMapper
-import be.hogent.faith.database.models.EventEntity
-import be.hogent.faith.database.models.UserEntity
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.User
-import be.hogent.faith.storage.localStorage.ILocalStorageRepository
-import be.hogent.faith.util.factory.EventFactory
-import be.hogent.faith.util.factory.UserFactory
-import io.mockk.every
-import io.mockk.mockk
-import io.reactivex.Flowable
-import io.reactivex.Maybe
-import org.junit.Test
-import java.util.UUID
-
-//class EventRepositoryImplTest {
+// class EventRepositoryImplTest {
 //
 //    private val firebaseEventRepository = mockk<FirebaseEventRepository>(relaxed = true)
 //    private val userMapper = mockk<UserMapper>()
@@ -132,4 +114,4 @@ import java.util.UUID
 //    private fun stubMapperToEntityUser(model: User, entity: UserEntity) {
 //        every { userMapper.mapToEntity(model) } returns entity
 //    }
-//}
+// }

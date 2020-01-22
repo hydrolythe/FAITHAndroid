@@ -1,6 +1,6 @@
 package be.hogent.faith.database.repositories
 
-import be.hogent.faith.database.encryption.IEventEntityEncrypter
+import be.hogent.faith.database.encryption.EventEncryptionServiceInterface
 import be.hogent.faith.database.firebase.FirebaseEventRepository
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.UserMapper
@@ -13,20 +13,20 @@ import io.reactivex.Flowable
 import java.util.UUID
 
 open class EventRepositoryImpl(
-    private val userMapper: UserMapper,
-    private val eventMapper: EventMapper,
     private val localStorageRepository: ILocalStorageRepository,
     private val firebaseEventRepository: FirebaseEventRepository,
-    private val eventEntityEncrypter: IEventEntityEncrypter
+    private val eventEncryptionService: EventEncryptionServiceInterface
 ) : EventRepository {
 
+    private val userMapper = UserMapper
+    private val eventMapper = EventMapper
     /**
      * gets the event with uuid for authenticated user
      */
     override fun get(uuid: UUID): Flowable<Event> {
         return firebaseEventRepository.get(uuid.toString())
-            .map { eventEntityEncrypter.decrypt(it) }
             .map { eventMapper.mapFromEntity(it) }
+            .map { eventEncryptionService.decrypt(it) }
     }
 
     /**
@@ -35,12 +35,12 @@ open class EventRepositoryImpl(
      */
     override fun insert(event: Event, user: User): Completable {
         // TODO: maybe not mix procedural and reactive? Might lead to bugs.
-        val encryptedEvent = eventEntityEncrypter.encrypt(event, eventEntity)
-        val eventEntity = eventMapper.mapToEntity(event)
+        val encryptedEvent = eventEncryptionService.encrypt(event)
+        val eventEntity = eventMapper.mapToEntity(encryptedEvent)
 
-        return localStorageRepository.saveEvent(encryptedEvent).andThen(
+        return localStorageRepository.saveEvent(eventEntity).andThen(
             firebaseEventRepository.insert(
-                encryptedEvent,
+                eventEntity,
                 userMapper.mapToEntity(user)
             )
         )
@@ -51,8 +51,8 @@ open class EventRepositoryImpl(
      */
     override fun getAll(): Flowable<List<Event>> {
         return firebaseEventRepository.getAll()
-            .map { eventEntityEncrypter.decryptAll(it) }
             .map { eventMapper.mapFromEntities(it) }
+            .map { eventEncryptionService.decryptAll(it) }
     }
 
     override fun delete(event: Event, user: User): Completable {

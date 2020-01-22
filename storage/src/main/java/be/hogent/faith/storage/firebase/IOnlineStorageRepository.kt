@@ -7,7 +7,6 @@ import io.reactivex.Completable
 
 interface IOnlineStorageRepository {
 
-
     fun saveEvent(encryptedEventEntity: EncryptedEventEntity): Completable
 
     /**

@@ -2,9 +2,9 @@ package be.hogent.faith.database.factory
 
 import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.converters.LocalDateTimeConverter
-import be.hogent.faith.database.models.DetailEntity
+import be.hogent.faith.database.models.EncryptedDetailEntity
 import be.hogent.faith.database.models.DetailType
-import be.hogent.faith.database.models.EventEntity
+import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.util.factory.DataFactory
 import java.util.UUID
@@ -16,25 +16,25 @@ import java.util.UUID
 // Making it depend on the database module would introduce a circular dependency.
 object EntityFactory {
 
-    fun makeDetailEntity(): DetailEntity {
+    fun makeDetailEntity(): EncryptedDetailEntity {
         val rand = Math.random()
         return when {
-            rand < 0.25 -> DetailEntity(
+            rand < 0.25 -> EncryptedDetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
                 DataFactory.randomUUID().toString(),
                 DetailType.PHOTO
             )
-            rand < 0.50 -> DetailEntity(
+            rand < 0.50 -> EncryptedDetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
                 DataFactory.randomUUID().toString(),
                 DetailType.DRAWING
             )
-            rand < 0.75 -> DetailEntity(
+            rand < 0.75 -> EncryptedDetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
                 DataFactory.randomUUID().toString(),
                 DetailType.AUDIO
             )
-            else -> DetailEntity(
+            else -> EncryptedDetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
                 DataFactory.randomUUID().toString(),
                 DetailType.TEXT
@@ -42,16 +42,16 @@ object EntityFactory {
         }
     }
 
-    fun makeDetailEntityList(count: Int): List<DetailEntity> {
-        val details = mutableListOf<DetailEntity>()
+    fun makeDetailEntityList(count: Int): List<EncryptedDetailEntity> {
+        val details = mutableListOf<EncryptedDetailEntity>()
         repeat(count) {
             details.add(makeDetailEntity())
         }
         return details
     }
 
-    fun makeEventEntity(uuid: UUID = DataFactory.randomUUID()): EventEntity {
-        return EventEntity(
+    fun makeEventEntity(uuid: UUID = DataFactory.randomUUID()): EncryptedEventEntity {
+        return EncryptedEventEntity(
             LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
             DataFactory.randomString(),
             FileConverter().toString(DataFactory.randomFile()),
@@ -60,16 +60,16 @@ object EntityFactory {
         )
     }
 
-    fun makeEventEntityListWithDetails(count: Int): List<EventEntity> {
-        val events = mutableListOf<EventEntity>()
+    fun makeEventEntityListWithDetails(count: Int): List<EncryptedEventEntity> {
+        val events = mutableListOf<EncryptedEventEntity>()
         repeat(count) {
             events.add(makeEventEntityWithDetails())
         }
         return events
     }
 
-    fun makeEventEntityWithDetails(nbrOfDetails: Int = 5): EventEntity {
-        return EventEntity(
+    fun makeEventEntityWithDetails(nbrOfDetails: Int = 5): EncryptedEventEntity {
+        return EncryptedEventEntity(
             LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
             DataFactory.randomString(),
             FileConverter().toString(DataFactory.randomFile()),

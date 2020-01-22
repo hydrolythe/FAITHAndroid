@@ -17,7 +17,7 @@ class LocalStorageRepository(
 ) : ILocalStorageRepository {
 
     override fun saveEvent(encryptedEventEntity: EncryptedEventEntity): Completable {
-        //TODO: make more reactive by making subcalls reactive instead of procdural
+        // TODO: make more reactive by making subcalls reactive instead of procdural
         return Completable.fromCallable {
             saveEmotionAvatar(encryptedEventEntity)
             saveEventDetails(encryptedEventEntity)

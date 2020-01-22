@@ -1,22 +1,23 @@
 package be.hogent.faith.encryption
 
+import be.hogent.faith.database.encryption.EncryptedDetail
 import be.hogent.faith.database.encryption.EncryptedDetailEntity
-import be.hogent.faith.database.encryption.IDetailEntityEncrypter
-import be.hogent.faith.database.models.DetailEntity
-import be.hogent.faith.database.models.DetailType
+import be.hogent.faith.database.encryption.DetailEncryptionService
+import be.hogent.faith.database.models.EncryptedDetailEntity
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.encryption.internal.DataEncrypter
 
-class DetailEntityEncrypter(
+class DetailEncryptionService(
     private val dataEncrypter: DataEncrypter
-) : IDetailEntityEncrypter {
+) : DetailEncryptionService {
 
     /**
-     * Encrypts a [DetailEntity].
+     * Encrypts a [EncryptedDetailEntity].
      * The file attribute is not encrypted because it contains no sensitive information and
      * it makes it easier to save it permanently later on.
      */
-    override fun encrypt(detailEntity: DetailEntity): EncryptedDetailEntity {
-        with(detailEntity) {
+    override fun encrypt(detail: Detail): EncryptedDetail {
+        with(detail) {
             return EncryptedDetailEntity(
                 file = file,
                 uuid = dataEncrypter.encrypt(uuid),
@@ -25,9 +26,9 @@ class DetailEntityEncrypter(
         }
     }
 
-    override fun decrypt(encryptedDetailEntity: EncryptedDetailEntity): DetailEntity {
-        with(encryptedDetailEntity) {
-            return DetailEntity(
+    override fun decrypt(encryptedDetail: EncryptedDetail): Detail {
+        with(encryptedDetail) {
+            return EncryptedDetailEntity(
                 file = file,
                 uuid = dataEncrypter.decrypt(uuid),
                 type = DetailType.valueOf(dataEncrypter.decrypt(type))

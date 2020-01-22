@@ -2,7 +2,6 @@ package be.hogent.faith.util
 
 import java.io.File
 
-
 val Any.TAG: String
     get() {
         val tag = javaClass.simpleName

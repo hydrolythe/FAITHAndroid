@@ -13,7 +13,6 @@ import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import java.nio.channels.WritableByteChannel
 
-
 private const val CHUNK_SIZE = 16_000 * Byte.SIZE_BYTES
 private const val ENCRYPTED_FILE_SUFFIX = "_encrypted"
 
@@ -25,7 +24,6 @@ private val associatedData = "aad".toByteArray()
 class FileEncrypter(
     keysetHandle: KeysetHandle
 ) : IFileEncrypter {
-
 
     private val streamingAead = StreamingAeadFactory.getPrimitive(keysetHandle)
 

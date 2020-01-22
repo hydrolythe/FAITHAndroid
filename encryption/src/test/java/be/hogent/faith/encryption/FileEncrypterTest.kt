@@ -19,7 +19,6 @@ class FileEncrypterTest {
 
     private val file = File("src/test/java/be/hogent/faith/encryption/testResources/screenshot.png")
 
-
     @Test
     fun fileDoesNotHaveSameContentsAfterEncryption() {
         // Act
@@ -39,6 +38,5 @@ class FileEncrypterTest {
 
         // Assert
         assertTrue(file.contentEqual(decryptedFile))
-
     }
 }

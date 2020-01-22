@@ -9,7 +9,6 @@ class KeyGenerator {
 
     init {
         TinkConfig.register()
-
     }
 
     internal fun generateKeysetHandle(): KeysetHandle {

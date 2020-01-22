@@ -1,45 +1,44 @@
 package be.hogent.faith.database.mappers
 
-import be.hogent.faith.database.converters.FileConverter
-import be.hogent.faith.database.converters.LocalDateTimeConverter
-import be.hogent.faith.database.models.EventEntity
-import be.hogent.faith.domain.models.Event
+import be.hogent.faith.database.encryption.EncryptedEvent
+import be.hogent.faith.database.encryption.EncryptedEventInterface
+import be.hogent.faith.database.models.EncryptedEventEntity
+import java.io.File
 import java.util.UUID
 
-object EventMapper : Mapper<EventEntity, Event> {
+internal object EventMapper : Mapper<EncryptedEventEntity, EncryptedEventInterface> {
 
-    override fun mapFromEntity(entity: EventEntity): Event {
-
-        val event = Event(
-            dateTime = LocalDateTimeConverter().toDate(entity.dateTime),
+    override fun mapFromEntity(entity: EncryptedEventEntity): EncryptedEvent {
+        return EncryptedEvent(
+            dateTime = entity.dateTime,
             title = entity.title,
+            emotionAvatar = File(entity.emotionAvatar),
             notes = entity.notes,
-            emotionAvatar = entity.emotionAvatar?.let { FileConverter().toFile(it) },
-            uuid = UUID.fromString(entity.uuid)
+            uuid = UUID.fromString(entity.uuid),
+            details = DetailMapper.mapFromEntities(entity.details),
+            encryptedDEK = entity.encryptedDEK,
+            encryptedStreamingDEK = entity.encryptedStreamingDEK
         )
-        entity.details.let {
-            DetailMapper.mapFromEntities(it.toMutableList())
-                .forEach { detail -> event.addDetail(detail) }
-        }
-        return event
     }
 
-    override fun mapToEntity(model: Event): EventEntity {
-        return EventEntity(
-            dateTime = LocalDateTimeConverter().toString(model.dateTime),
-            title = model.title!!,
+    override fun mapToEntity(model: EncryptedEventInterface): EncryptedEventEntity {
+        return EncryptedEventEntity(
+            dateTime = model.dateTime,
+            title = model.title,
+            emotionAvatar = model.emotionAvatar.path,
             notes = model.notes,
-            emotionAvatar = model.emotionAvatar?.path,
             uuid = model.uuid.toString(),
-            details = DetailMapper.mapToEntities(model.details)
+            details = DetailMapper.mapToEntities(model.details),
+            encryptedDEK = model.encryptedDEK,
+            encryptedStreamingDEK = model.encryptedStreamingDEK
         )
     }
 
-    override fun mapFromEntities(entities: List<EventEntity>): List<Event> {
-        return entities.map(this::mapFromEntity)
+    override fun mapToEntities(models: List<EncryptedEventInterface>): List<EncryptedEventEntity> {
+        return models.map(EventMapper::mapToEntity)
     }
 
-    override fun mapToEntities(models: List<Event>): List<EventEntity> {
-        return models.map { mapToEntity(it) }
+    override fun mapFromEntities(entities: List<EncryptedEventEntity>): List<EncryptedEvent> {
+        return entities.map(EventMapper::mapFromEntity)
     }
 }

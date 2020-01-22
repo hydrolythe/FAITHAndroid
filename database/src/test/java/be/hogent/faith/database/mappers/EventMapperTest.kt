@@ -3,9 +3,9 @@ package be.hogent.faith.database.mappers
 import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.converters.LocalDateTimeConverter
 import be.hogent.faith.database.factory.EntityFactory
-import be.hogent.faith.database.models.DetailEntity
+import be.hogent.faith.database.models.EncryptedDetailEntity
 import be.hogent.faith.database.models.DetailType
-import be.hogent.faith.database.models.EventEntity
+import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
@@ -24,33 +24,33 @@ class EventMapperTest {
     @Test
     fun eventMapper_mapFromEntity_noDetails() {
         val eventEntity = EntityFactory.makeEventEntity()
-        val resultingEvent = eventMapper.mapFromEntity(eventEntity)
+        val resultingEvent = eventMapper.mapFromEncryptedEntity(eventEntity)
         assertEqualData(eventEntity, resultingEvent)
     }
 
     @Test
     fun eventMapper_mapToEntity_noDetails() {
         val event = EventFactory.makeEvent(0)
-        val resultingEventEntity = eventMapper.mapToEntity(event)
+        val resultingEventEntity = eventMapper.mapToEncryptedEntity(event)
         assertEqualData(resultingEventEntity, event)
     }
 
     @Test
     fun eventMapper_mapFromEntity_withDetails() {
         val eventEntity = EntityFactory.makeEventEntityWithDetails(5)
-        val resultingEvent = eventMapper.mapFromEntity(eventEntity)
+        val resultingEvent = eventMapper.mapFromEncryptedEntity(eventEntity)
         assertEqualData(eventEntity, resultingEvent)
     }
 
     @Test
     fun eventMapper_mapToEntity_withDetails() {
         val event = EventFactory.makeEvent(5)
-        val resultingEventEntity = eventMapper.mapToEntity(event)
+        val resultingEventEntity = eventMapper.mapToEncryptedEntity(event)
         assertEqualData(resultingEventEntity, event)
     }
 
     private fun assertEqualData(
-        entity: EventEntity,
+        entity: EncryptedEventEntity,
         model: Event
     ) {
         assertEquals(entity.uuid, model.uuid.toString())
@@ -68,7 +68,7 @@ class EventMapperTest {
     }
 
     private fun assertEqualDetailsData(
-        entity: DetailEntity,
+        entity: EncryptedDetailEntity,
         model: Detail
     ) {
         assertEquals(entity.uuid, model.uuid.toString())

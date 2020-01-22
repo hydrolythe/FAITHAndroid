@@ -2,7 +2,7 @@ package be.hogent.faith.database.mappers
 
 import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.factory.EntityFactory
-import be.hogent.faith.database.models.DetailEntity
+import be.hogent.faith.database.models.EncryptedDetailEntity
 import be.hogent.faith.database.models.DetailType
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
@@ -33,7 +33,7 @@ class DetailMapperTest {
     }
 
     private fun assertEqualData(
-        entity: DetailEntity,
+        entity: EncryptedDetailEntity,
         model: Detail
     ) {
         assertEquals(entity.uuid, model.uuid.toString())

@@ -1,11 +1,11 @@
 package be.hogent.faith.database.repositories
 
-import be.hogent.faith.database.encryption.IEventEntityEncrypter
+import be.hogent.faith.database.encryption.EventEncryptionServiceInterface
 import be.hogent.faith.database.factory.EntityFactory
 import be.hogent.faith.database.firebase.FirebaseEventRepository
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.UserMapper
-import be.hogent.faith.database.models.EventEntity
+import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
@@ -27,7 +27,7 @@ class NewEventRepositoryImplTest {
     private val userMapper = mockk<UserMapper>()
     private val eventMapper = mockk<EventMapper>()
     private val localStorageRepository = mockk<ILocalStorageRepository>()
-    private val eventEncrypter = mockk<IEventEntityEncrypter>(relaxed = true)
+    private val eventEncrypter = mockk<EventEncryptionServiceInterface>(relaxed = true)
 
     private val eventRepository =
         EventRepositoryImpl(
@@ -66,7 +66,6 @@ class NewEventRepositoryImplTest {
         verify { localStorageRepository.saveEvent(event) }
     }
 
-
     @Test
     fun `After inserting an event it is found in the device's online storage in an unreadable format`() {
         eventRepository.insert(event, user)
@@ -74,21 +73,20 @@ class NewEventRepositoryImplTest {
             .assertComplete()
         // TODO make more specific?
         verify { firebaseEventRepository.insert(any(), any()) }
-
     }
 
     // TODO: failure cases
 
-    private fun stubMapperFromEntity(model: Event, entity: EventEntity) {
-        every { eventMapper.mapFromEntity(entity) } returns model
+    private fun stubMapperFromEntity(model: Event, entity: EncryptedEventEntity) {
+        every { eventMapper.mapFromEncryptedEntity(entity) } returns model
     }
 
-    private fun stubMapperFromEntities(models: List<Event>, entities: List<EventEntity>) {
+    private fun stubMapperFromEntities(models: List<Event>, entities: List<EncryptedEventEntity>) {
         every { eventMapper.mapFromEntities(entities) } returns models
     }
 
-    private fun stubMapperToEntity(model: Event, entity: EventEntity) {
-        every { eventMapper.mapToEntity(model) } returns entity
+    private fun stubMapperToEntity(model: Event, entity: EncryptedEventEntity) {
+        every { eventMapper.mapToEncryptedEntity(model) } returns entity
     }
 
     private fun stubMapperToEntityUser(model: User, entity: UserEntity) {

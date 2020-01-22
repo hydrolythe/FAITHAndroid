@@ -1,6 +1,6 @@
 package be.hogent.faith.encryption
 
-import be.hogent.faith.database.models.DetailEntity
+import be.hogent.faith.database.models.EncryptedDetailEntity
 import be.hogent.faith.database.models.DetailType
 import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
@@ -15,9 +15,9 @@ class DetailEntityEncrypterTest {
         return KeyGenerator().generateKeysetHandle()
     }
 
-    private val detailEntityEncrypter = DetailEntityEncrypter(DataEncrypter(dataEncryptionKey))
+    private val detailEntityEncrypter = DetailEncryptionService(DataEncrypter(dataEncryptionKey))
 
-    private val detailEntity = DetailEntity(
+    private val detailEntity = EncryptedDetailEntity(
         file = "/location/of/file",
         uuid = "uuid",
         type = DetailType.TEXT

@@ -3,7 +3,6 @@ package be.hogent.faith.storage
 import be.hogent.faith.database.encryption.EncryptedEventEntity
 import be.hogent.faith.domain.models.Event
 import io.reactivex.Completable
-import io.reactivex.Single
 
 interface IStorageRepository {
     /**
