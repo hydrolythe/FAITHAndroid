@@ -14,6 +14,7 @@ class CreateDrawingDetailUseCase(
 
     override fun buildUseCaseSingle(params: Params): Single<DrawingDetail> {
         return storageRepository.storeBitmapTemporarily(params.bitmap)
+            // TODO: UUID van detail en degene gebruikt in pad  moeten zelfde zijn
             .map { storedFile -> DrawingDetail(storedFile) }
     }
 
