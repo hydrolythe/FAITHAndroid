@@ -17,7 +17,7 @@
 
     <color name="background">#FFFFFF</color>
     <color name="surface">#FFFFFF</color>
-    <color name="error">#4A148C</color>
+    <color name="error">#FF1744</color>
 
     <color name="onPrimary">#FFFFFF</color>
     <color name="onSecondary">#FFFFFF</color>

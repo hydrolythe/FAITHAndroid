@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitEnd"
+            android:contentDescription="@string/register_background"
             app:srcCompat="@drawable/register_background_info" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,94 +30,31 @@
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_avatarRecyclerView_top"
+                android:id="@+id/guide_register_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.4" />
+                app:layout_constraintGuide_percent="0.3" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_password_bottom"
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.46" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_city_top"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.42" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_city_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.62" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_city_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.72" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_city_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.95" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_continue_top"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.47" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_frame_hor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_form_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.553" />
-
+                android:contentDescription="@string/ster"
+                app:layout_constraintBottom_toBottomOf="@+id/guide_register_top"
+                app:layout_constraintEnd_toEndOf="@+id/include_register_frame"
+                app:srcCompat="@drawable/registratie_vogeltje" />
 
             <include
                 android:id="@+id/include_register_frame"
                 layout="@layout/view_register_frame"
-                android:layout_width="400dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/guide_city_top"
-                app:layout_constraintEnd_toStartOf="@+id/guide_frame_hor"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/guide_frame_hor"
-                app:layout_constraintTop_toTopOf="@+id/guide_city_top"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/guide_register_top"
                 app:registerUserInfoViewModel="@{registerUserInfoViewModel}" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_register_confirmInfo"
-                style="@style/arrow_style.toRight"
-                android:layout_width="200dp"
-                android:onClick="@{()->registerUserInfoViewModel.onConfirmUserInfoClicked()}"
-                android:text="@string/ga_verder"
-                app:icon="@drawable/ic_gaverder"
-                app:layout_constraintBottom_toTopOf="@+id/guide_city_bottom"
-                app:layout_constraintEnd_toStartOf="@+id/guide_city_end"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guide_city_start"
-                app:layout_constraintTop_toTopOf="@+id/guide_continue_top"
-                app:layout_constraintVertical_bias="0.911" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
@@ -124,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </FrameLayout>
 </layout>

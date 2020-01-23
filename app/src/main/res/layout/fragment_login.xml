@@ -42,19 +42,18 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.85" />
 
-
             <include
                 android:id="@+id/include_login_txts"
                 layout="@layout/view_login_circle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:layout_constraintBottom_toBottomOf="@id/ik_ben_nieuw"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/ik_ben_nieuw"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:welcomeViewModel="@{welcomeViewModel}" />
 
-                <androidx.constraintlayout.widget.Guideline
+            <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_login_center_circle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -65,13 +64,13 @@
                 android:id="@+id/img_loginfragment_avatars"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:scaleType="fitCenter"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/avatar_vrienden"
+                android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/include_login_txts"
-                app:layout_constraintTop_toBottomOf="@+id/guide_login_center_circle"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/guide_login_center_circle"
                 app:srcCompat="@drawable/avatar_vriendjes" />
 
             <TextView
@@ -79,30 +78,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/welkom_in_lifecity"
-                android:textAppearance="@style/TextAppearance.H3"
-                android:textColor = "@color/caption"
+                android:textAppearance="@style/AppTheme.H3"
+                android:textColor="@color/caption"
                 app:layout_constraintBottom_toTopOf="@+id/include_login_txts"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/ik_ben_nieuw"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="@string/ik_ben_nieuw"
-                android:gravity="center"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                app:layout_constraintTop_toBottomOf="@+id/guide_login_ik_ben_nieuw_bottom"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 android:backgroundTint="@color/color_white"
+                android:gravity="center"
+                android:onClick="@{() -> welcomeViewModel.registerButtonClicked()}"
+                android:text="@string/ik_ben_nieuw"
+                android:textAppearance="@style/TextAppearance.NavigationButtonSmall"
                 android:textColor="@color/caption"
                 app:cornerRadius="20dp"
-                app:strokeColor="@color/caption"
-            android:textAppearance="@style/TextAppearance.NavigationButtonSmall"
-                android:onClick="@{() -> welcomeViewModel.registerButtonClicked()}"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/guide_login_ik_ben_nieuw_bottom"
+                app:strokeColor="@color/caption" />
 
             <ImageView
                 android:id="@+id/img_ster_before"
@@ -133,6 +131,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </FrameLayout>
 </layout>
