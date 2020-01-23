@@ -14,7 +14,7 @@ import java.nio.channels.FileChannel
 import java.nio.channels.WritableByteChannel
 
 private const val CHUNK_SIZE = 16_000 * Byte.SIZE_BYTES
-private const val ENCRYPTED_FILE_SUFFIX = "_encrypted"
+private const val ORIGINAL_FILE_SUFFIX = "_encrypted"
 
 // This dummy associatedData is required  to open a decryptingChannel
 // Passing null (as you can do with a regular Aead) results in a nullpointer when oping the
@@ -28,19 +28,18 @@ class FileEncrypter(
     private val streamingAead = StreamingAeadFactory.getPrimitive(keysetHandle)
 
     /**
-     * Encrypt the contents of a given [file].
-     *
-     * @return Returns the [File] where the encrypted version is stored
+     * Encrypts the contents of the given [file].
      */
-    override fun encrypt(file: File): File {
-        val encryptedFile = File(file.path.withSuffix(ENCRYPTED_FILE_SUFFIX))
+    override fun encrypt(file: File) {
+        val originalBackup = File(file.path.withSuffix(ORIGINAL_FILE_SUFFIX))
+        file.copyTo(originalBackup)
 
-        val cipherTextDestination: FileChannel = FileOutputStream(encryptedFile).channel
+        val cipherTextDestination: FileChannel = FileOutputStream(file).channel
         val encryptingChannel: WritableByteChannel =
             streamingAead.newEncryptingChannel(cipherTextDestination, associatedData)
 
         val buffer: ByteBuffer = ByteBuffer.allocate(CHUNK_SIZE)
-        val fileInputStream: InputStream = FileInputStream(file)
+        val fileInputStream: InputStream = FileInputStream(originalBackup)
 
         while (fileInputStream.available() > 0) {
             fileInputStream.read(buffer.array())
@@ -49,21 +48,20 @@ class FileEncrypter(
 
         encryptingChannel.close()
         fileInputStream.close()
-
-        return encryptedFile
     }
 
     /**
-     * Replaces the contents of an encrypted file with a decrypted version
-     * @return the [File] where the decrypted version is stored
+     * Decrypts the contents of the given [file].
      */
-    override fun decrypt(file: File): File {
-        val decryptedFile = File(file.path.removeSuffix(ENCRYPTED_FILE_SUFFIX))
+    override fun decrypt(file: File) {
+        val originalBackup = File(file.path.removeSuffix(ORIGINAL_FILE_SUFFIX))
+        file.copyTo(originalBackup)
+
         val cipherTextSource =
-            FileInputStream(file).channel
+            FileInputStream(originalBackup).channel
         val decryptingChannel = streamingAead.newDecryptingChannel(cipherTextSource, associatedData)
 
-        val out: OutputStream = FileOutputStream(decryptedFile)
+        val out: OutputStream = FileOutputStream(file)
         val buffer = ByteBuffer.allocate(CHUNK_SIZE)
         var cnt: Int
         do {
@@ -74,6 +72,5 @@ class FileEncrypter(
 
         decryptingChannel.close()
         out.close()
-        return decryptedFile
     }
 }
