@@ -1,15 +1,12 @@
 package be.hogent.faith.storage.firebase
 
 import android.net.Uri
-import be.hogent.faith.database.encryption.EncryptedDetailEntity
-import be.hogent.faith.database.encryption.EncryptedEventEntity
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.StoragePathProvider
 import com.google.firebase.storage.FirebaseStorage
 import durdinapps.rxfirebase2.RxFirebaseStorage
 import io.reactivex.Completable
-import io.reactivex.rxkotlin.toFlowable
 import timber.log.Timber
 import java.io.File
 

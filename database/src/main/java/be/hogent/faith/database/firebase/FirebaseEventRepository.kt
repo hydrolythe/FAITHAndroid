@@ -1,6 +1,6 @@
 package be.hogent.faith.database.firebase
 
-import be.hogent.faith.database.encryption.EncryptedEventEntity
+import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.database.models.UserEntity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

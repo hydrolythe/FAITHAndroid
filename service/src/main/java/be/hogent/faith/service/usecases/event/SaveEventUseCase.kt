@@ -19,14 +19,11 @@ open class SaveEventUseCase(
         return Completable.fromCallable {
             setEventTitle(params.event)
             addEventToUser(params.event)
-            try {
-                // TODO: is een completable, dus moet op subscribed worden
-                eventRepository.insert(params.event, params.user)
-            } catch (e: Exception) {
-                // Rollback
-                removeEventFromUser(params.event)
-                throw(e)
-            }
+        }.andThen(
+            eventRepository.insert(params.event, params.user)
+        ).doOnError {
+            //TODO: also clean up in repo?
+            removeEventFromUser(params.event)
         }
     }
 

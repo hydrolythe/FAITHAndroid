@@ -36,13 +36,14 @@ open class EventRepositoryImpl(
     override fun insert(event: Event, user: User): Completable {
         // TODO: maybe not mix procedural and reactive? Might lead to bugs.
         val encryptedEvent = eventEncryptionService.encrypt(event)
+        // Move to local storage -> paths inside the event are changed, and final
+        localStorageRepository.saveEvent(encryptedEvent)
+
         val eventEntity = eventMapper.mapToEntity(encryptedEvent)
 
-        return localStorageRepository.saveEvent(eventEntity).andThen(
-            firebaseEventRepository.insert(
-                eventEntity,
-                userMapper.mapToEntity(user)
-            )
+        return firebaseEventRepository.insert(
+            eventEntity,
+            userMapper.mapToEntity(user)
         )
     }
 

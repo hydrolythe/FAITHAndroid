@@ -24,7 +24,7 @@ internal object EventMapper : Mapper<EncryptedEventEntity, EncryptedEvent> {
         return EncryptedEventEntity(
             dateTime = model.dateTime,
             title = model.title,
-            emotionAvatar = model.emotionAvatar.path,
+            emotionAvatar = model.emotionAvatar?.path,
             notes = model.notes,
             uuid = model.uuid.toString(),
             details = DetailMapper.mapToEntities(model.details),

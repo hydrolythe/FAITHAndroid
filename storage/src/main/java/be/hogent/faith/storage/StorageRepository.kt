@@ -1,6 +1,6 @@
 package be.hogent.faith.storage
 
-import be.hogent.faith.database.encryption.EncryptedEventEntity
+import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.database.storage.ILocalStorageRepository
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail

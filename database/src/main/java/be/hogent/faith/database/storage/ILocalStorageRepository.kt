@@ -1,6 +1,6 @@
 package be.hogent.faith.database.storage
 
-import be.hogent.faith.database.encryption.EncryptedEventEntity
+import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Completable
@@ -12,7 +12,7 @@ interface ILocalStorageRepository {
     /**
      * Saves all files belonging to an event to local storage
      */
-    fun saveEvent(event: EncryptedEventEntity): Completable
+    fun saveEvent(encryptedEvent: EncryptedEvent): Completable
 
     /**
      * checks if file is present in localStorage

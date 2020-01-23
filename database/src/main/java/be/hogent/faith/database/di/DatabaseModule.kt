@@ -23,7 +23,7 @@ val databaseModule = module {
     // In other modules some elements require an EventRepository as constructor parameter.
     // Koin doesn't automatically see the Impl as an implementation of the interface,
     // so we have to explicitly mention it.
-    single { EventRepositoryImpl(get(), get(), get(), get(), get()) as EventRepository }
+    single { EventRepositoryImpl(get(), get(), get()) as EventRepository }
     single { UserRepositoryImpl(get(), get()) as UserRepository }
     single { AuthManagerImpl(get()) as AuthManager }
     single { FirebaseAuthManager(constructFirebaseAuthInstance()) }
