@@ -155,4 +155,9 @@
     <string name="opnieuw">Opnieuw</string>
     <string name="bold">B</string>
     <string name="italic">I</string>
+    <string name="avatar_vrienden">avatar vrienden</string>
+    <string name="welkom_in_lifecity">Welkom in Lifecity</string>
+    <string name="ik_ben_nieuw">Ik ben nieuw</string>
+    <string name="ster">ster</string>
+    <string name="naar_de_stad">Naar de stad</string>
 </resources>

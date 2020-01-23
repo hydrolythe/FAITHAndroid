@@ -33,6 +33,8 @@
     <color name="green">#16F48A</color>
     <color name="black">#3F3E3E</color>
     <color name="yellow">#FFFF00</color>
+
+    <color name="caption">#0000FF</color>
 </resources>
 
 
