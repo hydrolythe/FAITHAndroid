@@ -17,5 +17,5 @@
         android:adjustViewBounds="true"
         android:contentDescription="@string/avatar_inkleuren"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/meisje_stoer_gezicht" />
+        app:srcCompat="@drawable/jongen_gamer_gezicht" />
 </LinearLayout>

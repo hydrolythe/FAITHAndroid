@@ -240,7 +240,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/guide_avatar_bottom"
                 app:layout_constraintStart_toStartOf="@+id/guide_avatar_left"
                 app:layout_constraintTop_toTopOf="@+id/guide_avatar_titel_bottom"
-                app:srcCompat="@drawable/meisje_stoer_zitten" />
+                app:srcCompat="@drawable/meisje_stoer_bank" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_avatar_inkleuren_left"

@@ -69,7 +69,7 @@ class AvatarItemAdapter(private val avatarClickListener: OnAvatarClickListener) 
             view.isActivated = isActivated
             Glide.with(this.itemView.context).load(avatarDrawable).into(view.avatar_list_image)
             view.setTag(R.id.TAG_VIEWHOLDER, this)
-            view.findViewById<ImageView>(R.id.btn_selected).visibility = if (isActivated)  View.VISIBLE else View.INVISIBLE
+            //view.findViewById<ImageView>(R.id.btn_selected).visibility = if (isActivated)  View.VISIBLE else View.INVISIBLE
             setClickListener()
         }
 
