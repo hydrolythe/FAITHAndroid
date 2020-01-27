@@ -3,6 +3,7 @@ package be.hogent.faith.faith.loginOrRegister.registerAvatar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import com.bumptech.glide.Glide
@@ -68,6 +69,7 @@ class AvatarItemAdapter(private val avatarClickListener: OnAvatarClickListener) 
             view.isActivated = isActivated
             Glide.with(this.itemView.context).load(avatarDrawable).into(view.avatar_list_image)
             view.setTag(R.id.TAG_VIEWHOLDER, this)
+            view.findViewById<ImageView>(R.id.btn_selected).visibility = if (isActivated)  View.VISIBLE else View.INVISIBLE
             setClickListener()
         }
 

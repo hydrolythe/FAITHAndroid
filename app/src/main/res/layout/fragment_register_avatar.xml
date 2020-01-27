@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="registerAvatarViewModel"
             type="be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel" />
@@ -27,6 +28,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/material_icon_button"
+                style="@style/login_button"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="32dp"
+                android:gravity="center"
+                android:onClick="@{() -> registerAvatarViewModel.onFinishRegistrationClicked()}"
+                android:text="@string/naar_de_stad"
+                app:icon="@drawable/icoon_stad"
+
+                app:iconGravity="textStart"
+                app:iconSize="34dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/avatar_rv_avatar"
                 android:layout_width="0dp"
@@ -35,10 +51,10 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@+id/bottom_guide_line"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/top_guide_line"
+                app:layout_constraintTop_toBottomOf="@id/top_guide_line"
                 tools:listitem="@layout/avatar_rv_item" />
 
             <androidx.constraintlayout.widget.Guideline
@@ -46,37 +62,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.5" />
+                app:layout_constraintGuide_percent="0.3" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/bottom_guide_line"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.85" />
+                app:layout_constraintGuide_percent="1.0" />
 
-
-
-            <Button
-                android:id="@+id/btn_register_finishRegistration"
-                android:layout_width="200dp"
-                android:layout_height="100dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:onClick="@{() -> registerAvatarViewModel.onFinishRegistrationClicked()}"
-                android:text="@string/msg_naar_de_stad"
-                app:layout_constraintBottom_toTopOf="@+id/avatar_rv_avatar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </FrameLayout>
 
 
