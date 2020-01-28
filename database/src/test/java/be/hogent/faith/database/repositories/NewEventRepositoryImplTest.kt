@@ -24,11 +24,9 @@ import org.junit.Test
 
 class NewEventRepositoryImplTest {
 
-    private val firebaseEventRepository = mockk<FirebaseEventRepository>(relaxed = true)
-    private val userMapper = mockk<UserMapper>()
-    private val eventMapper = mockk<EventMapper>()
+    private val firebaseEventRepository = mockk<FirebaseEventRepository>()
     private val localStorageRepository = mockk<ILocalStorageRepository>()
-    private val eventEncryptionService = mockk<EventEncryptionServiceInterface>(relaxed = true)
+    private val eventEncryptionService = mockk<EventEncryptionServiceInterface>()
 
     private val eventRepository =
         EventRepositoryImpl(
@@ -49,9 +47,9 @@ class NewEventRepositoryImplTest {
 
     @Test
     fun `When inserting an event its data is saved in the device's local storage`() {
-        slot<EncryptedEvent>().let {
-            every { localStorageRepository.saveEvent(capture(it)) } returns Single.just(it.captured)
-        }
+        val eventSlot = slot<EncryptedEvent>()
+        every { localStorageRepository.saveEvent(capture(eventSlot)) } returns Single.just(eventSlot.captured)
+
         every { firebaseEventRepository.insert(any(), any()) } returns Completable.complete()
         every { eventEncryptionService.encrypt(any()) } returns mockk()
 
@@ -73,15 +71,4 @@ class NewEventRepositoryImplTest {
 
     // TODO: failure cases
 
-    private fun stubMapperFromEntity(model: EncryptedEvent, entity: EncryptedEventEntity) {
-        every { eventMapper.mapFromEntity(entity) } returns model
-    }
-
-    private fun stubMapperToEntity(model: EncryptedEvent, entity: EncryptedEventEntity) {
-        every { eventMapper.mapToEntity(model) } returns entity
-    }
-
-    private fun stubMapperToEntityUser(model: User, entity: UserEntity) {
-        every { userMapper.mapToEntity(model) } returns entity
-    }
 }
