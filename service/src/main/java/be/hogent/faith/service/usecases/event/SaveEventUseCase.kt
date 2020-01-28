@@ -22,7 +22,7 @@ open class SaveEventUseCase(
         }.andThen(
             eventRepository.insert(params.event, params.user)
         ).doOnError {
-            //TODO: also clean up in repo?
+            // TODO: also clean up in repo?
             removeEventFromUser(params.event)
         }
     }

@@ -1,25 +1,20 @@
 package be.hogent.faith.database.mappers
 
 import be.hogent.faith.database.converters.FileConverter
+import be.hogent.faith.database.encryption.EncryptedDetail
 import be.hogent.faith.database.factory.EntityFactory
 import be.hogent.faith.database.models.EncryptedDetailEntity
-import be.hogent.faith.database.models.DetailType
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.util.factory.DetailFactory
-import be.hogent.faith.util.factory.EventFactory
+import be.hogent.faith.util.factory.DataFactory
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.util.UUID
 
 class DetailMapperTest {
 
-    private val event = EventFactory.makeEvent()
     private val detailMapper = DetailMapper
 
     @Test
-    fun `should map to Detail when DetailEntity is given`() {
+    fun `should map to EncryptedDetail when EncryptedDetailEntity is given`() {
         val entity = EntityFactory.makeDetailEntity()
         val model = detailMapper.mapFromEntity(entity)
         assertEqualData(entity, model)
@@ -27,22 +22,21 @@ class DetailMapperTest {
 
     @Test
     fun `should map to DetailEntity when Detail is given`() {
-        val model = DetailFactory.makeRandomDetail()
+        val model = EncryptedDetail(
+            file = DataFactory.randomFile(),
+            uuid = UUID.randomUUID(),
+            type = "encrypted type"
+        )
         val entity = detailMapper.mapToEntity(model)
         assertEqualData(entity, model)
     }
 
     private fun assertEqualData(
         entity: EncryptedDetailEntity,
-        model: Detail
+        model: EncryptedDetail
     ) {
         assertEquals(entity.uuid, model.uuid.toString())
         assertEquals(entity.file, FileConverter().toString(model.file))
-        when (model) {
-            is AudioDetail -> assertEquals(DetailType.AUDIO, entity.type)
-            is PhotoDetail -> assertEquals(DetailType.PHOTO, entity.type)
-            is TextDetail -> assertEquals(DetailType.TEXT, entity.type)
-            else -> assertEquals(DetailType.DRAWING, entity.type)
-        }
+        assertEquals(entity.type, model.type)
     }
 }

@@ -7,7 +7,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.StoragePathProvider
 import be.hogent.faith.storage.encryption.IFileEncrypter
-import io.reactivex.Completable
+import io.reactivex.Single
 import java.io.File
 
 class LocalStorageRepository(
@@ -16,9 +16,9 @@ class LocalStorageRepository(
     private val context: Context
 ) : ILocalStorageRepository {
 
-    override fun saveEvent(encryptedEvent: EncryptedEvent): Completable {
+    override fun saveEvent(encryptedEvent: EncryptedEvent): Single<EncryptedEvent> {
         // TODO: make more reactive by making subcalls reactive instead of procedural
-        return Completable.fromCallable {
+        return Single.fromCallable {
             saveEmotionAvatar(encryptedEvent)
             saveEventDetails(encryptedEvent)
             encryptedEvent

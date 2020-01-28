@@ -3,7 +3,6 @@ package be.hogent.faith.database.factory
 import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.converters.LocalDateTimeConverter
 import be.hogent.faith.database.models.EncryptedDetailEntity
-import be.hogent.faith.database.models.DetailType
 import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.util.factory.DataFactory
@@ -22,22 +21,22 @@ object EntityFactory {
             rand < 0.25 -> EncryptedDetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
                 DataFactory.randomUUID().toString(),
-                DetailType.PHOTO
+                "photo"
             )
             rand < 0.50 -> EncryptedDetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
                 DataFactory.randomUUID().toString(),
-                DetailType.DRAWING
+                "drawing"
             )
             rand < 0.75 -> EncryptedDetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
                 DataFactory.randomUUID().toString(),
-                DetailType.AUDIO
+                "audio"
             )
             else -> EncryptedDetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
                 DataFactory.randomUUID().toString(),
-                DetailType.TEXT
+                "text"
             )
         }
     }
@@ -52,11 +51,13 @@ object EntityFactory {
 
     fun makeEventEntity(uuid: UUID = DataFactory.randomUUID()): EncryptedEventEntity {
         return EncryptedEventEntity(
-            LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
-            DataFactory.randomString(),
-            FileConverter().toString(DataFactory.randomFile()),
-            DataFactory.randomString(),
-            uuid.toString()
+            dateTime = LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
+            title = DataFactory.randomString(),
+            emotionAvatar = FileConverter().toString(DataFactory.randomFile()),
+            notes = DataFactory.randomString(),
+            uuid = uuid.toString(),
+            encryptedStreamingDEK = "sDEK",
+            encryptedDEK = "DEK"
         )
     }
 
@@ -70,12 +71,14 @@ object EntityFactory {
 
     fun makeEventEntityWithDetails(nbrOfDetails: Int = 5): EncryptedEventEntity {
         return EncryptedEventEntity(
-            LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
-            DataFactory.randomString(),
-            FileConverter().toString(DataFactory.randomFile()),
-            DataFactory.randomString(),
-            DataFactory.randomUUID().toString(),
-            makeDetailEntityList(nbrOfDetails)
+            dateTime = LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
+            title = DataFactory.randomString(),
+            emotionAvatar = FileConverter().toString(DataFactory.randomFile()),
+            notes = DataFactory.randomString(),
+            uuid = DataFactory.randomUUID().toString(),
+            details = makeDetailEntityList(nbrOfDetails),
+            encryptedStreamingDEK = "sDEK",
+            encryptedDEK = "DEK"
         )
     }
 
