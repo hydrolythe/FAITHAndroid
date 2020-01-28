@@ -32,7 +32,7 @@ class SaveEmotionAvatarUseCaseTest {
             storageRepository,
             observer
         )
-        event = EventFactory.makeEvent(nbrOfDetails = 0)
+        event = EventFactory.makeEvent(numberOfDetails = 0)
     }
 
     @Test

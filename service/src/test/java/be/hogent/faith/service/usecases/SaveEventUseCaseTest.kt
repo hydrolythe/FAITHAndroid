@@ -26,7 +26,7 @@ class SaveEventUseCaseTest {
 
     @Before
     fun setUp() {
-        event = EventFactory.makeEvent(nbrOfDetails = 2, hasEmotionAvatar = true)
+        event = EventFactory.makeEvent(numberOfDetails = 2, hasEmotionAvatar = true)
         user = UserFactory.makeUser(numberOfEvents = 0)
         eventRepository = SingleUserFakeEventRepository()
         saveEventUseCase =

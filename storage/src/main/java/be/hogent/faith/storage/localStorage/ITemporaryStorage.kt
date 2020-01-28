@@ -13,7 +13,7 @@ import java.io.File
  * The temporary storage is to be used when constructing something (eg. an Event), but the user
  * is not finished yet. As such these files should be saved in the cache.
  * Once the user is finished (and saves the event), these files can be moved to permanent storage
- * using the [LocalStorageRepository]
+ * using the [LocalFileStorageRepository]
  */
 interface ITemporaryStorage {
 

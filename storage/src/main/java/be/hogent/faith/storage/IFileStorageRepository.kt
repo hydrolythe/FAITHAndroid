@@ -4,7 +4,7 @@ import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.domain.models.Event
 import io.reactivex.Completable
 
-interface IStorageRepository {
+interface IFileStorageRepository {
     /**
      * Saves the event in storage.
      *

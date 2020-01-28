@@ -1,10 +1,10 @@
 package be.hogent.faith.storage
 
 import be.hogent.faith.database.models.EncryptedEventEntity
-import be.hogent.faith.database.storage.ILocalStorageRepository
+import be.hogent.faith.database.storage.ILocalFileStorageRepository
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.storage.firebase.IOnlineStorageRepository
+import be.hogent.faith.storage.firebase.IOnlineFileStorageRepository
 import io.reactivex.Completable
 import io.reactivex.rxkotlin.toFlowable
 
@@ -13,18 +13,18 @@ import io.reactivex.rxkotlin.toFlowable
  * It decides which one will be used based on the network availability.
  *
  */
-class StorageRepository(
-    private val localStorage: ILocalStorageRepository,
-    private val remoteStorage: IOnlineStorageRepository
-) : IStorageRepository {
+class FileStorageRepository(
+    private val localFileStorage: ILocalFileStorageRepository,
+    private val remoteFileStorage: IOnlineFileStorageRepository
+) : IFileStorageRepository {
 
     /**
      * stores all event files in firebase
      */
     override fun saveEvent(encryptedEventEntity: EncryptedEventEntity): Completable {
         // TODO: do in parallel?
-        return localStorage.saveEvent(encryptedEventEntity).andThen(
-            remoteStorage.saveEvent(encryptedEventEntity)
+        return localFileStorage.saveEvent(encryptedEventEntity).andThen(
+            remoteFileStorage.saveEvent(encryptedEventEntity)
         )
     }
 
@@ -33,20 +33,20 @@ class StorageRepository(
      */
     // TODO ("Timestamp checking? What als de file op een andere tablet werd aangepast?")
     private fun getFile(detail: Detail): Completable {
-        if (localStorage.isFilePresent(detail))
+        if (localFileStorage.isFilePresent(detail))
             return Completable.complete()
         else
-            return remoteStorage.downloadDetail(detail)
+            return remoteFileStorage.downloadDetail(detail)
     }
 
     /**
      * download emotion avatar from firebase to localStorage if not present yet
      */
     private fun getEmotionAvatar(event: Event): Completable {
-        if (event.emotionAvatar == null || localStorage.isEmotionAvatarPresent(event))
+        if (event.emotionAvatar == null || localFileStorage.isEmotionAvatarPresent(event))
             return Completable.complete()
         else
-            return remoteStorage.downloadEmotionAvatar(event)
+            return remoteFileStorage.downloadEmotionAvatar(event)
     }
 
     /**

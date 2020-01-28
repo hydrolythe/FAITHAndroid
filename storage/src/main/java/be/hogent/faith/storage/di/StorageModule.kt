@@ -1,12 +1,12 @@
 package be.hogent.faith.storage.di
 
-import be.hogent.faith.storage.IStorageRepository
+import be.hogent.faith.storage.IFileStorageRepository
 import be.hogent.faith.storage.StoragePathProvider
-import be.hogent.faith.storage.StorageRepository
-import be.hogent.faith.storage.firebase.OnlineStorageRepository
-import be.hogent.faith.storage.firebase.IOnlineStorageRepository
+import be.hogent.faith.storage.FileStorageRepository
+import be.hogent.faith.storage.firebase.OnlineFileStorageRepository
+import be.hogent.faith.storage.firebase.IOnlineFileStorageRepository
 import be.hogent.faith.storage.localStorage.ITemporaryStorage
-import be.hogent.faith.storage.localStorage.LocalStorageRepository
+import be.hogent.faith.storage.localStorage.LocalFileStorageRepository
 import be.hogent.faith.storage.localStorage.TemporaryStorageRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
@@ -14,12 +14,12 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val storageModule = module {
-    factory<IStorageRepository> { StorageRepository(get(), get()) }
+    factory<IFileStorageRepository> { FileStorageRepository(get(), get()) }
     factory { StoragePathProvider(androidContext(), constructFirebaseAuthInstance()) }
     factory<ITemporaryStorage> { TemporaryStorageRepository(androidContext(), get()) }
-    factory<be.hogent.faith.database.storage.ILocalStorageRepository> { LocalStorageRepository(get(), get(), androidContext()) }
-    factory<IOnlineStorageRepository> {
-        OnlineStorageRepository(
+    factory<be.hogent.faith.database.storage.ILocalFileStorageRepository> { LocalFileStorageRepository(get(), get(), androidContext()) }
+    factory<IOnlineFileStorageRepository> {
+        OnlineFileStorageRepository(
             get(),
             constructFirebaseStorageInstance()
         )

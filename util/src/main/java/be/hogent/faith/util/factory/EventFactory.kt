@@ -7,7 +7,7 @@ import be.hogent.faith.domain.models.detail.TextDetail
 
 object EventFactory {
 
-    fun makeEvent(nbrOfDetails: Int = 5, hasEmotionAvatar: Boolean = false): Event {
+    fun makeEvent(numberOfDetails: Int = 5, hasEmotionAvatar: Boolean = false): Event {
         val event = Event(
             dateTime = DataFactory.randomDateTime(),
             title = DataFactory.randomString(),
@@ -15,7 +15,7 @@ object EventFactory {
             notes = DataFactory.randomString(),
             uuid = DataFactory.randomUUID()
         )
-        repeat(nbrOfDetails) {
+        repeat(numberOfDetails) {
             DetailFactory.makeRandomDetail().let { detail ->
                 when (detail) {
                     is AudioDetail -> event.addNewAudioDetail(detail.file)

@@ -7,7 +7,7 @@ import io.reactivex.Single
 
 // TODO: maybe split in multiple interfaces depending on what is needed?
 // e.g. an encryptedStorageRepository and an "isXAvailableChecker"
-interface ILocalStorageRepository {
+interface ILocalFileStorageRepository {
 
     /**
      * Saves all files belonging to an event to local storage

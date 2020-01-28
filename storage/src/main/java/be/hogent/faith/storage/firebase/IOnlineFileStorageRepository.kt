@@ -5,7 +5,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Completable
 
-interface IOnlineStorageRepository {
+interface IOnlineFileStorageRepository {
 
     fun saveEvent(encryptedEventEntity: EncryptedEventEntity): Completable
 

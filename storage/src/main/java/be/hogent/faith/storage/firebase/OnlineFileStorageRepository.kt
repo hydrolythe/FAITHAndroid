@@ -10,10 +10,10 @@ import io.reactivex.Completable
 import timber.log.Timber
 import java.io.File
 
-class OnlineStorageRepository(
+class OnlineFileStorageRepository(
     private val pathProvider: StoragePathProvider,
     private val firestorage: FirebaseStorage
-) : IOnlineStorageRepository {
+) : IOnlineFileStorageRepository {
 
     private var storageRef = firestorage.reference
 
