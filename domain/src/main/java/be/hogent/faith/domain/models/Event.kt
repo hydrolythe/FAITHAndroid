@@ -5,7 +5,6 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import org.jetbrains.annotations.TestOnly
 import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.util.UUID
@@ -35,6 +34,17 @@ data class Event(
     val uuid: UUID = UUID.randomUUID()
 ) {
 
+    constructor(
+        dateTime: LocalDateTime,
+        title: String?,
+        emotionAvatar: File?,
+        notes: String?,
+        uuid: UUID,
+        details: List<Detail>
+    ) : this(dateTime, title, emotionAvatar, notes, uuid) {
+        _details.addAll(details)
+    }
+
     private val _details = mutableListOf<Detail>()
     val details: List<Detail>
         get() = _details
@@ -47,7 +57,6 @@ data class Event(
         return details.find { it.uuid == uuid }
     }
 
-    @TestOnly
     fun addDetail(detail: Detail) {
         _details += detail
     }
@@ -71,4 +80,5 @@ data class Event(
     fun addNewTextDetail(saveFile: File) {
         addDetail(TextDetail(saveFile))
     }
+
 }

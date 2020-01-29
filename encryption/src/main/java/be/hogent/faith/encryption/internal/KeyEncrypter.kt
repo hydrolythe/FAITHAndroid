@@ -7,24 +7,33 @@ import com.google.crypto.tink.CleartextKeysetHandle
 import com.google.crypto.tink.JsonKeysetReader
 import com.google.crypto.tink.JsonKeysetWriter
 import com.google.crypto.tink.KeysetHandle
+import io.reactivex.Single
 import java.io.ByteArrayOutputStream
 
 class KeyEncrypter(private val encryptionService: KeyEncryptionService) {
 
-    internal fun encrypt(keysetHandle: KeysetHandle): String {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        CleartextKeysetHandle.write(
-            keysetHandle, JsonKeysetWriter.withOutputStream(
-                byteArrayOutputStream
+    internal fun encrypt(keysetHandle: KeysetHandle): Single<String> {
+        return Single.fromCallable {
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            CleartextKeysetHandle.write(
+                keysetHandle, JsonKeysetWriter.withOutputStream(
+                    byteArrayOutputStream
+                )
             )
-        )
-        val stringToEncrypt = byteArrayOutputStream.toString()
-        return encryptionService.encrypt(EncryptionRequest(stringToEncrypt)).execute().body()!!
+            val stringToEncrypt = byteArrayOutputStream.toString()
+            stringToEncrypt
+        }
+            .map(::EncryptionRequest)
+            .flatMap(encryptionService::encrypt)
     }
 
-    internal fun decrypt(encryptedString: String): KeysetHandle {
-        val jsonKeysetHandle =
-            encryptionService.decrypt(DecryptionRequest(encryptedString)).execute().body()!!
+    internal fun decrypt(encryptedString: String): Single<KeysetHandle> {
+        return encryptionService
+            .decrypt(DecryptionRequest(encryptedString))
+            .map(::recreateKeySetHandle)
+    }
+
+    private fun recreateKeySetHandle(jsonKeysetHandle: String): KeysetHandle {
         val keySetInputStream = jsonKeysetHandle.byteInputStream()
         return CleartextKeysetHandle.read(JsonKeysetReader.withInputStream(keySetInputStream))
     }

@@ -2,6 +2,7 @@ package be.hogent.faith.database.encryption
 
 import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.domain.models.Event
+import io.reactivex.Single
 
 interface EventEncryptionServiceInterface {
     /**
@@ -10,8 +11,7 @@ interface EventEncryptionServiceInterface {
      *
      * @param event used to get the original details so they can be encrypted as well
      */
-    fun encrypt(event: Event): EncryptedEvent
+    fun encrypt(event: Event): Single<EncryptedEvent>
 
-    fun decrypt(encryptedEvent: EncryptedEvent): Event
-    fun decryptAll(list: List<EncryptedEvent>): List<Event>
+    fun decrypt(encryptedEvent: EncryptedEvent): Single<Event>
 }

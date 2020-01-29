@@ -37,6 +37,8 @@ class FileEncrypterTest {
     fun fileDoesNotHaveSameContentsAfterEncryption() {
         // Act
         fileEncrypter.encrypt(file)
+            .test()
+            .assertComplete()
 
         // Assert
         assertFalse(file.contentEqual(originalFile))
@@ -46,7 +48,11 @@ class FileEncrypterTest {
     fun encryptedFileIsDecryptedCorrectly() {
         // Act
         fileEncrypter.encrypt(file)
-        fileEncrypter.decrypt(file)
+            .andThen(
+                fileEncrypter.decrypt(file)
+            )
+            .test()
+            .assertComplete()
 
         // Assert
         assertTrue(file.contentEqual(originalFile))

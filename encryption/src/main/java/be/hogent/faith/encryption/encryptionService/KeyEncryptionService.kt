@@ -1,7 +1,7 @@
 package be.hogent.faith.encryption.encryptionService
 
 import com.squareup.moshi.JsonClass
-import retrofit2.Call
+import io.reactivex.Single
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -10,10 +10,10 @@ const val ENDPOINT = "https://encryptionapi-bvjyzvhieq-ew.a.run.app"
 interface KeyEncryptionService {
 
     @POST("encrypt")
-    fun encrypt(@Body request: EncryptionRequest): Call<String>
+    fun encrypt(@Body request: EncryptionRequest): Single<String>
 
     @POST("decrypt")
-    fun decrypt(@Body request: DecryptionRequest): Call<String>
+    fun decrypt(@Body request: DecryptionRequest): Single<String>
 }
 
 @JsonClass(generateAdapter = true)

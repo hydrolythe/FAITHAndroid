@@ -39,6 +39,7 @@ dependencies {
 
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
+    // TODO: add deps to dependencies.gradle
 
     implementation("com.google.crypto.tink:tink:1.2.2")
     // TODO: check if this can be removed
@@ -47,6 +48,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation "com.squareup.moshi:moshi-kotlin:1.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.6.2"
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
+    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
 }
 
 repositories {

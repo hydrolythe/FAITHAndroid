@@ -4,6 +4,7 @@ import be.hogent.faith.storage.encryption.IFileEncrypter
 import be.hogent.faith.util.withSuffix
 import com.google.crypto.tink.KeysetHandle
 import com.google.crypto.tink.streamingaead.StreamingAeadFactory
+import io.reactivex.Completable
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -30,47 +31,52 @@ class FileEncrypter(
     /**
      * Encrypts the contents of the given [file].
      */
-    override fun encrypt(file: File) {
-        val originalBackup = File(file.path.withSuffix(ORIGINAL_FILE_SUFFIX))
-        file.copyTo(originalBackup)
+    override fun encrypt(file: File): Completable {
+        return Completable.fromCallable {
+            val originalBackup = File(file.path.withSuffix(ORIGINAL_FILE_SUFFIX))
+            file.copyTo(originalBackup)
 
-        val cipherTextDestination: FileChannel = FileOutputStream(file).channel
-        val encryptingChannel: WritableByteChannel =
-            streamingAead.newEncryptingChannel(cipherTextDestination, associatedData)
+            val cipherTextDestination: FileChannel = FileOutputStream(file).channel
+            val encryptingChannel: WritableByteChannel =
+                streamingAead.newEncryptingChannel(cipherTextDestination, associatedData)
 
-        val buffer: ByteBuffer = ByteBuffer.allocate(CHUNK_SIZE)
-        val fileInputStream: InputStream = FileInputStream(originalBackup)
+            val buffer: ByteBuffer = ByteBuffer.allocate(CHUNK_SIZE)
+            val fileInputStream: InputStream = FileInputStream(originalBackup)
 
-        while (fileInputStream.available() > 0) {
-            fileInputStream.read(buffer.array())
-            encryptingChannel.write(buffer)
+            while (fileInputStream.available() > 0) {
+                fileInputStream.read(buffer.array())
+                encryptingChannel.write(buffer)
+            }
+
+            encryptingChannel.close()
+            fileInputStream.close()
         }
-
-        encryptingChannel.close()
-        fileInputStream.close()
     }
 
     /**
      * Decrypts the contents of the given [file].
      */
-    override fun decrypt(file: File) {
-        val originalBackup = File(file.path.removeSuffix(ORIGINAL_FILE_SUFFIX))
-        file.copyTo(originalBackup)
+    override fun decrypt(file: File): Completable {
+        return Completable.fromCallable {
+            val originalBackup = File(file.path.removeSuffix(ORIGINAL_FILE_SUFFIX))
+            file.copyTo(originalBackup)
 
-        val cipherTextSource =
-            FileInputStream(originalBackup).channel
-        val decryptingChannel = streamingAead.newDecryptingChannel(cipherTextSource, associatedData)
+            val cipherTextSource =
+                FileInputStream(originalBackup).channel
+            val decryptingChannel =
+                streamingAead.newDecryptingChannel(cipherTextSource, associatedData)
 
-        val out: OutputStream = FileOutputStream(file)
-        val buffer = ByteBuffer.allocate(CHUNK_SIZE)
-        var cnt: Int
-        do {
-            buffer.clear()
-            cnt = decryptingChannel.read(buffer)
-            out.write(buffer.array())
-        } while (cnt > 0)
+            val out: OutputStream = FileOutputStream(file)
+            val buffer = ByteBuffer.allocate(CHUNK_SIZE)
+            var cnt: Int
+            do {
+                buffer.clear()
+                cnt = decryptingChannel.read(buffer)
+                out.write(buffer.array())
+            } while (cnt > 0)
 
-        decryptingChannel.close()
-        out.close()
+            decryptingChannel.close()
+            out.close()
+        }
     }
 }
