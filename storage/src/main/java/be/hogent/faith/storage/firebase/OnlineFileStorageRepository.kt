@@ -1,12 +1,16 @@
 package be.hogent.faith.storage.firebase
 
 import android.net.Uri
+import be.hogent.faith.database.encryption.EncryptedDetail
+import be.hogent.faith.database.encryption.EncryptedEvent
+import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.StoragePathProvider
 import com.google.firebase.storage.FirebaseStorage
 import durdinapps.rxfirebase2.RxFirebaseStorage
 import io.reactivex.Completable
+import io.reactivex.rxkotlin.toFlowable
 import timber.log.Timber
 import java.io.File
 
@@ -20,12 +24,12 @@ class OnlineFileStorageRepository(
     /**
      * Saves all files associated with an [EncryptedEventEntity] (detail files, emotionavatar)
      */
-    override fun saveEvent(encryptedEventEntity: EncryptedEventEntity): Completable {
-        return saveEventEmotionAvatar(encryptedEventEntity) // save avatar in firestorage
+    override fun saveEvent(encryptedEvent: EncryptedEvent): Completable {
+        return saveEventEmotionAvatar(encryptedEvent) // save avatar in firestorage
             .concatWith(
-                encryptedEventEntity.detailEntities.toFlowable() // save all detail files in firestorage
+                encryptedEvent.details.toFlowable() // save all detail files in firestorage
                     .concatMapCompletable {
-                        saveDetailFile(encryptedEventEntity, it)
+                        saveDetailFile(encryptedEvent, it)
                     }
             )
     }
@@ -56,18 +60,18 @@ class OnlineFileStorageRepository(
     /**
      * Uploads the emotion avatar file to [firestorage]
      */
-    private fun saveEventEmotionAvatar(encryptedEventEntity: EncryptedEventEntity): Completable {
-        if (encryptedEventEntity.emotionAvatar == null)
+    private fun saveEventEmotionAvatar(encryptedEvent: EncryptedEvent): Completable {
+        if (encryptedEvent.emotionAvatar == null)
             return Completable.complete()
         return Completable.fromSingle(
             RxFirebaseStorage.putFile(
-                storageRef.child(pathProvider.getEmotionAvatarPath(encryptedEventEntity).path),
-                Uri.parse("file://${pathProvider.getLocalEmotionAvatarPath(encryptedEventEntity).path}")
+                storageRef.child(pathProvider.getEmotionAvatarPath(encryptedEvent).path),
+                Uri.parse("file://${pathProvider.getLocalEmotionAvatarPath(encryptedEvent).path}")
             )
                 .doOnError {
                     Timber.e(
                         "Firebase storage : Problems saving file ${pathProvider.getLocalEmotionAvatarPath(
-                            encryptedEventEntity
+                            encryptedEvent
                         ).path}: ${it.localizedMessage}"
                     )
                 }
@@ -78,8 +82,8 @@ class OnlineFileStorageRepository(
      * Uploads the detail file to [firestorage]
      */
     private fun saveDetailFile(
-        event: EncryptedEventEntity,
-        detail: EncryptedDetailEntity
+        event: EncryptedEvent,
+        detail: EncryptedDetail
     ): Completable {
         return Completable.fromSingle(
             RxFirebaseStorage.putFile(

@@ -1,8 +1,9 @@
 package be.hogent.faith.storage
 
-import be.hogent.faith.database.models.EncryptedEventEntity
+import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.domain.models.Event
 import io.reactivex.Completable
+import io.reactivex.Single
 
 interface IFileStorageRepository {
     /**
@@ -10,7 +11,7 @@ interface IFileStorageRepository {
      *
      * Returns the event after it is done so calls can be chained.
      */
-    fun saveEvent(encryptedEventEntity: EncryptedEventEntity): Completable
+    fun saveEvent(encryptedEvent: EncryptedEvent): Single<EncryptedEvent>
 
     /**
      * Saves all files of an [event] in localStorage : emotion avatar and all detail files

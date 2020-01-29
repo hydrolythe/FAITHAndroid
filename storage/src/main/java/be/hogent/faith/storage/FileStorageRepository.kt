@@ -1,11 +1,12 @@
 package be.hogent.faith.storage
 
-import be.hogent.faith.database.models.EncryptedEventEntity
+import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.database.storage.ILocalFileStorageRepository
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.firebase.IOnlineFileStorageRepository
 import io.reactivex.Completable
+import io.reactivex.Single
 import io.reactivex.rxkotlin.toFlowable
 
 /**
@@ -19,13 +20,17 @@ class FileStorageRepository(
 ) : IFileStorageRepository {
 
     /**
-     * stores all event files in firebase
+     * stores all event files in permanent storage, both local and online.
+     * @return the saved event. This can be different from the original
+     * @see ILocalFileStorageRepository.saveEvent
      */
-    override fun saveEvent(encryptedEventEntity: EncryptedEventEntity): Completable {
-        // TODO: do in parallel?
-        return localFileStorage.saveEvent(encryptedEventEntity).andThen(
-            remoteFileStorage.saveEvent(encryptedEventEntity)
-        )
+    override fun saveEvent(encryptedEvent: EncryptedEvent): Single<EncryptedEvent> {
+        // Hacky way to first store locally, then remotely, and then give back the event.
+        // Must be done in this order because saving to localstorage changes paths inside the event.
+        return localFileStorage.saveEvent(encryptedEvent)
+            .ignoreElement()
+            .andThen(remoteFileStorage.saveEvent(encryptedEvent))
+            .toSingle { encryptedEvent }
     }
 
     /**

@@ -1,13 +1,13 @@
 package be.hogent.faith.storage.firebase
 
-import be.hogent.faith.database.encryption.EncryptedEventEntity
+import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Completable
 
 interface IOnlineFileStorageRepository {
 
-    fun saveEvent(encryptedEventEntity: EncryptedEventEntity): Completable
+    fun saveEvent(encryptedEvent: EncryptedEvent): Completable
 
     /**
      * Ensures a detail's file is locally available.
