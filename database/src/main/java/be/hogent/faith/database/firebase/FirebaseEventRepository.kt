@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import durdinapps.rxfirebase2.RxFirestore
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Observable
 
 /**
  * uses RxFirebase: https://github.com/FrangSierra/RxFirebase
@@ -22,16 +23,18 @@ class FirebaseEventRepository(
     /**
      * get event with eventUid for the current authenticated user, also listens for changes
      */
-    fun get(eventUid: String): Flowable<EncryptedEventEntity> {
+    fun get(eventUid: String): Observable<EncryptedEventEntity> {
         val currentUser = fbAuth.currentUser
         if (currentUser == null) {
-            return Flowable.error(RuntimeException("Unauthorized user."))
+            return Observable.error(RuntimeException("Unauthorized user."))
         }
         return RxFirestore.observeDocumentRef(
             firestore.collection(USERS_KEY).document(currentUser.uid).collection(EVENTS_KEY)
                 .document(eventUid)
         )
+            .toObservable() // No need for a Flowable as updates are infrequent
             .map { it.toObject(EncryptedEventEntity::class.java) }
+
     }
 
     /**

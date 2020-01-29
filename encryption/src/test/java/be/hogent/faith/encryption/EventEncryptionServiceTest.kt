@@ -10,18 +10,18 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class EventEntityEncrypterTest {
+class EventEncryptionServiceTest {
     private val keyGenerator = KeyGenerator()
     private val encrypter = KeyEncrypter(DummyKeyEncryptionService())
 
-    private val evenEncrypter = EventEncryptionService(keyGenerator, encrypter)
+    private val eventEncrypter = EventEncryptionService(keyGenerator, encrypter)
 
     private val event = EventFactory.makeEvent()
 
     @Test
     fun eventEntityCanBeEncrypted() {
         // Act
-        evenEncrypter.encrypt(event)
+        eventEncrypter.encrypt(event)
             .test()
             .assertNoErrors()
             .assertComplete()
@@ -31,13 +31,13 @@ class EventEntityEncrypterTest {
     fun encryptedEventEntityCanBeDecrypted() {
         // Arrange
         var encryptedEvent: EncryptedEvent? = null
-        evenEncrypter.encrypt(event)
+        eventEncrypter.encrypt(event)
             .doOnSuccess { encryptedEvent = it }
             .test()
 
         // Act
         var decryptedEvent: Event? = null
-        evenEncrypter.decrypt(encryptedEvent!!)
+        eventEncrypter.decrypt(encryptedEvent!!)
             .doOnSuccess { decryptedEvent = it }
             .test()
 
@@ -50,7 +50,7 @@ class EventEntityEncrypterTest {
         // Act
         // Arrange
         var encryptedEvent: EncryptedEvent? = null
-        evenEncrypter.encrypt(event)
+        eventEncrypter.encrypt(event)
             .doOnSuccess { encryptedEvent = it }
             .test()
 

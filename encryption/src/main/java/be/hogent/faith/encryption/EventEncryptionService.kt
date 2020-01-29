@@ -155,4 +155,11 @@ class EventEncryptionService(
             .map(EncryptedDetail::file)
             .flatMapCompletable(fileEncrypter::decrypt)
     }
+
+    override fun decryptList(encryptedEvents: List<EncryptedEvent>): Single<List<Event>> {
+        return Observable.fromIterable(encryptedEvents)
+            .flatMapSingle(this::decrypt)
+            .toList()
+    }
+
 }

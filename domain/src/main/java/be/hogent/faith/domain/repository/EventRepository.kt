@@ -4,6 +4,8 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Single
+import java.util.Observable
 import java.util.UUID
 
 interface EventRepository {
@@ -15,7 +17,7 @@ interface EventRepository {
     // TODO: fix that this returns a Maybe<Event> because that seems like poor API design
     fun insert(event: Event, user: User): Completable
 
-    fun get(uuid: UUID): Flowable<Event>
+    fun get(uuid: UUID): io.reactivex.Observable<Event>
 
-    fun getAll(): Flowable<List<Event>>
+    fun getAll(): io.reactivex.Observable<List<Event>>
 }

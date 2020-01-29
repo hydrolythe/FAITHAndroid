@@ -14,4 +14,6 @@ interface EventEncryptionServiceInterface {
     fun encrypt(event: Event): Single<EncryptedEvent>
 
     fun decrypt(encryptedEvent: EncryptedEvent): Single<Event>
+
+    fun decryptList(encryptedEvents: List<EncryptedEvent>): Single<List<Event>>
 }

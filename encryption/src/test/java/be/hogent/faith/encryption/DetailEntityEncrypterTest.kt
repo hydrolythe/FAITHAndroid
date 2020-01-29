@@ -16,13 +16,12 @@ class DetailEntityEncrypterTest {
 
     private val detailEncrypter = DetailEncryptionService(DataEncrypter(dataEncryptionKey))
 
-    private val detail= DetailFactory.makeRandomDetail()
+    private val detail = DetailFactory.makeRandomDetail()
 
     @Test
     fun detailEntityCanBeEncrypted() {
         // Act
         detailEncrypter.encrypt(detail)
-
     }
 
     @Test
