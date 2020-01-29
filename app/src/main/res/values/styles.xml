@@ -65,7 +65,7 @@
         <item name="android:layout_height">69dp</item>
         <item name="cornerRadius">40dp</item>
         <item name="android:elevation">2dp</item>
-        <item name="android:textAppearance">@style/AppTheme.NavigationButton</item>
+        <item name="android:textAppearance">@style/AppTheme.Button</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:backgroundTint">@color/color_white</item>
         <item name="android:paddingLeft">24dp</item>
@@ -74,45 +74,17 @@
         <item name="iconGravity">textStart</item>
     </style>
 
-    <style name="arrow_style.toLeft" parent="Widget.MaterialComponents.Button.Icon">
-        <item name="android:layout_width">170dp</item>
+    <style name="arrow_style" parent="Widget.MaterialComponents.Button.Icon">
+        <item name="android:layout_width">@dimen/arrow_width</item>
         <item name="android:layout_height">@dimen/arrow_height</item>
+        <item name="cornerRadius">30dp</item>
         <item name="android:textColor">@color/color_black</item>
-        <item name="android:textAppearance">@style/AppTheme.NavigationButton</item>
+        <item name="android:textAppearance">@style/AppTheme.Button</item>
         <item name="android:backgroundTint">@color/color_white</item>
         <item name="iconTint">@null</item>
-        <item name="iconGravity">end</item>
-        <item name="android:paddingLeft">24dp</item>
-        <item name="shapeAppearanceOverlay">@style/arrow_button_to_left</item>
-    </style>
-
-    <style name="arrow_style.toRight" parent="arrow_style.toLeft">
-        <item name="android:layout_height">@dimen/arrow_height</item>
-        <item name="android:textColor">@color/color_black</item>
         <item name="iconGravity">start</item>
-        <item name="android:backgroundTint">@color/color_white</item>
-        <item name="shapeAppearanceOverlay">@style/arrow_button_to_right</item>
-    </style>
-
-    <style name="arrow_button_to_right" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">0dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-        <item name="cornerFamilyTopRight">cut</item>
-        <item name="cornerFamilyBottomRight">cut</item>
-        <item name="cornerSizeTopRight">37dp</item>
-        <item name="cornerSizeBottomRight">37dp</item>
-    </style>
-
-    <style name="arrow_button_to_left" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">37dp</item>
-        <item name="cornerSizeBottomLeft">37dp</item>
-
-        <item name="cornerFamilyTopLeft">cut</item>
-        <item name="cornerFamilyBottomLeft">cut</item>
-        <item name="cornerSizeTopRight">0dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <!--item name="shapeAppearanceOverlay">@style/arrow_button_to_left</item>-->
     </style>
 
     <style name="AppTheme.H1" parent="TextAppearance.MaterialComponents.Headline1">
@@ -164,25 +136,23 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="TextAppearance.body1" parent="TextAppearance.MaterialComponents.Body1">
+    <style name="AppTheme.body1" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/sourcesanspro</item>
         <item name="android:fontFamily">@font/sourcesanspro</item>
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="TextAppearance.body2" parent="TextAppearance.MaterialComponents.Body2">
+    <style name="AppTheme.body2" parent="TextAppearance.MaterialComponents.Body2">
         <item name="fontFamily">@font/sourcesanspro</item>
         <item name="android:fontFamily">@font/sourcesanspro</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:letterSpacing">0.25</item>
     </style>
 
-    <style name="TextAppearance.Button" parent="TextAppearance.MaterialComponents.Button">
-        <item name="android:textSize">14sp</item>
+    <style name="AppTheme.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textSize">25sp</item>
         <item name="fontFamily">@font/sourcesanspro_semibold</item>
         <item name="android:fontFamily">@font/sourcesanspro_semibold</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:letterSpacing">1.15</item>
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="AppTheme.caption" parent="TextAppearance.MaterialComponents.Caption">
@@ -196,7 +166,6 @@
         <item name="fontFamily">@font/sourcesanspro</item>
         <item name="android:fontFamily">@font/sourcesanspro</item>
         <item name="android:textSize">10sp</item>
-        <item name="android:letterSpacing">1.5</item>
         <item name="android:textAllCaps">true</item>
     </style>
 

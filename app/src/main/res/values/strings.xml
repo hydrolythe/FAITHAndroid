@@ -49,8 +49,8 @@
     <string name="frag_takePhoto_takePhoto">Neem foto</string>
     <string name="description_thumbnail">Miniatuur</string>
     <string name="description_addText">Schrijven</string>
-    <string name="description_addPhoto">Foto maken</string>
-    <string name="description_addAudio">Opnemen</string>
+    <string name="description_addPhoto">Foto</string>
+    <string name="description_addAudio">Inspreken</string>
     <string name="description_addDrawing">Tekenen</string>
     <string name="error_save_photo">Er ging iets mis bij het opslaan van je foto.</string>
     <string name="hint_photo_name">een naam voor je foto</string>

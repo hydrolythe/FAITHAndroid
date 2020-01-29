@@ -21,14 +21,13 @@ import be.hogent.faith.faith.state.ResourceState
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
-
 import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_zittend
 import kotlinx.android.synthetic.main.view_button_color_avatar.img_event_details_avatar_inkleuren
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import java.util.UUID
-import androidx.recyclerview.widget.DividerItemDecoration
+
 
 private const val ARG_EVENTUUID = "eventUUID"
 
@@ -66,7 +65,7 @@ class EventDetailsFragment : Fragment() {
         eventDetailsBinding =
             DataBindingUtil.inflate(
                 inflater,
-                be.hogent.faith.R.layout.fragment_enter_event_details,
+                R.layout.fragment_enter_event_details,
                 container,
                 false
             )
@@ -94,14 +93,12 @@ class EventDetailsFragment : Fragment() {
 
         eventDetailsBinding.recyclerViewEventDetailsDetails.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             // Start with empty list and then fill it in
             adapter = DetailThumbnailsAdapter(
                 emptyList(),
                 requireNotNull(activity) as EmotionCaptureMainActivity
             )
-            val divider = DividerItemDecoration(this.context, this.layoutManager!!.layoutDirection)
-            addItemDecoration(divider)
         }
         detailThumbnailsAdapter =
             eventDetailsBinding.recyclerViewEventDetailsDetails.adapter as DetailThumbnailsAdapter
@@ -110,7 +107,7 @@ class EventDetailsFragment : Fragment() {
 
     private fun setBackgroundImage() {
         Glide.with(requireContext())
-            .load(be.hogent.faith.R.drawable.park)
+            .load(R.drawable.park_achtergrond)
             .into(background_event_details)
     }
 

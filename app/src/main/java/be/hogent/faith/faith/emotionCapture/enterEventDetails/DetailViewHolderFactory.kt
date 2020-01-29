@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
+import be.hogent.faith.R.drawable.rv_item_detail_background
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.AudioDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExistingDetailNavigationListener
@@ -51,6 +52,7 @@ object DetailViewHolderFactory {
         thumbnailView: ImageView,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): AudioDetailViewHolder {
+        thumbnailView.background = null
         return AudioDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
 
@@ -58,6 +60,7 @@ object DetailViewHolderFactory {
         thumbnailView: ImageView,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): TextDetailViewHolder {
+        thumbnailView.background = null
         return TextDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
 
