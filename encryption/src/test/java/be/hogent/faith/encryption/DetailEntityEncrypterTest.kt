@@ -1,9 +1,8 @@
 package be.hogent.faith.encryption
 
-import be.hogent.faith.database.models.EncryptedDetailEntity
-import be.hogent.faith.database.models.DetailType
 import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
+import be.hogent.faith.util.factory.DetailFactory
 import com.google.crypto.tink.KeysetHandle
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -15,29 +14,26 @@ class DetailEntityEncrypterTest {
         return KeyGenerator().generateKeysetHandle()
     }
 
-    private val detailEntityEncrypter = DetailEncryptionService(DataEncrypter(dataEncryptionKey))
+    private val detailEncrypter = DetailEncryptionService(DataEncrypter(dataEncryptionKey))
 
-    private val detailEntity = EncryptedDetailEntity(
-        file = "/location/of/file",
-        uuid = "uuid",
-        type = DetailType.TEXT
-    )
+    private val detail= DetailFactory.makeRandomDetail()
 
     @Test
     fun detailEntityCanBeEncrypted() {
         // Act
-        detailEntityEncrypter.encrypt(detailEntity)
+        detailEncrypter.encrypt(detail)
+
     }
 
     @Test
     fun encryptedDetailEntityCanBeDecrypted() {
         // Arrange
-        val encryptedEntity = detailEntityEncrypter.encrypt(detailEntity)
+        val encryptedDetail = detailEncrypter.encrypt(detail)
 
         // Act
-        val decryptedEntity = detailEntityEncrypter.decrypt(encryptedEntity)
+        val decryptedDetail = detailEncrypter.decrypt(encryptedDetail)
 
         // Assert
-        assertEquals(detailEntity, decryptedEntity)
+        assertEquals(detail, decryptedDetail)
     }
 }
