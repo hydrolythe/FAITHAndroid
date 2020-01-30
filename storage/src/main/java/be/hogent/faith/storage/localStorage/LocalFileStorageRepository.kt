@@ -1,58 +1,75 @@
 package be.hogent.faith.storage.localStorage
 
 import android.content.Context
+import be.hogent.faith.database.encryption.EncryptedDetail
 import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.database.storage.ILocalFileStorageRepository
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.StoragePathProvider
-import be.hogent.faith.storage.encryption.IFileEncrypter
+import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 import java.io.File
 
 class LocalFileStorageRepository(
     private val pathProvider: StoragePathProvider,
-    private val fileEncrypter: IFileEncrypter,
     private val context: Context
 ) : ILocalFileStorageRepository {
 
     override fun saveEvent(encryptedEvent: EncryptedEvent): Single<EncryptedEvent> {
-        // TODO: make more reactive by making subcalls reactive instead of procedural
-        return Single.fromCallable {
-            saveEmotionAvatar(encryptedEvent)
+        return Completable.mergeArray(
+            saveEmotionAvatar(encryptedEvent),
             saveEventDetails(encryptedEvent)
-            encryptedEvent
-        }
+        ).andThen(
+            Single.just(encryptedEvent)
+        )
     }
 
     /**
-     * moves all detail files of an event from tempory storage to local storage
-     * and updates the path
+     * Moves all detail files of an event from temporary storage to local storage
+     * and updates the path.
      */
-    private fun saveEventDetails(encryptedEvent: EncryptedEvent) {
-        encryptedEvent.details.map { encryptedDetail ->
-            moveFile(
-                encryptedDetail.file,
-                pathProvider.getLocalDetailPath(encryptedEvent, encryptedDetail)
-            )
-            encryptedDetail.file = pathProvider.getDetailPath(encryptedEvent, encryptedDetail)
-            fileEncrypter.encrypt(encryptedDetail.file)
-        }
+    private fun saveEventDetails(encryptedEvent: EncryptedEvent): Completable {
+        return Observable.fromIterable(encryptedEvent.details)
+            .flatMapCompletable { detail ->
+                Completable.fromCallable {
+                    moveDetailToLocalStorage(detail, encryptedEvent)
+                }
+            }
+    }
+
+    private fun moveDetailToLocalStorage(
+        it: EncryptedDetail,
+        encryptedEvent: EncryptedEvent
+    ) {
+        moveFile(
+            it.file,
+            pathProvider.getLocalDetailPath(encryptedEvent, it)
+        )
+        it.file = pathProvider.getDetailPath(encryptedEvent, it)
     }
 
     /**
-     * moves the emotion avatar of an event from tempory storage to local storage
+     * Moves the emotion avatar of an event from temporary storage to local storage
      * and updates the path
      */
-    private fun saveEmotionAvatar(encryptedEvent: EncryptedEvent) {
-        if (encryptedEvent.emotionAvatar != null) {
-            moveFile(
-                encryptedEvent.emotionAvatar!!,
-                pathProvider.getLocalEmotionAvatarPath(encryptedEvent)
-            )
-            encryptedEvent.emotionAvatar = pathProvider.getEmotionAvatarPath(encryptedEvent)
-            fileEncrypter.encrypt(encryptedEvent.emotionAvatar!!)
+    private fun saveEmotionAvatar(encryptedEvent: EncryptedEvent): Completable {
+        return if (encryptedEvent.emotionAvatar == null) {
+            Completable.complete()
+        } else {
+            Completable.fromCallable {
+                moveAvatarToLocalStorage(encryptedEvent)
+            }
         }
+    }
+
+    private fun moveAvatarToLocalStorage(encryptedEvent: EncryptedEvent) {
+        moveFile(
+            encryptedEvent.emotionAvatar!!,
+            pathProvider.getLocalEmotionAvatarPath(encryptedEvent)
+        )
+        encryptedEvent.emotionAvatar = pathProvider.getEmotionAvatarPath(encryptedEvent)
     }
 
     /**
