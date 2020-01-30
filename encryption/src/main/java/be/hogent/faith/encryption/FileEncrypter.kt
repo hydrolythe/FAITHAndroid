@@ -24,14 +24,14 @@ private val associatedData = "aad".toByteArray()
 
 class FileEncrypter(
     keysetHandle: KeysetHandle
-) : IFileEncrypter {
+) {
 
     private val streamingAead = StreamingAeadFactory.getPrimitive(keysetHandle)
 
     /**
      * Encrypts the contents of the given [file].
      */
-    override fun encrypt(file: File): Completable {
+    fun encrypt(file: File): Completable {
         return Completable.fromCallable {
             val originalBackup = File(file.path.withSuffix(ORIGINAL_FILE_SUFFIX))
             file.copyTo(originalBackup)
@@ -56,7 +56,7 @@ class FileEncrypter(
     /**
      * Decrypts the contents of the given [file].
      */
-    override fun decrypt(file: File): Completable {
+    fun decrypt(file: File): Completable {
         return Completable.fromCallable {
             val originalBackup = File(file.path.removeSuffix(ORIGINAL_FILE_SUFFIX))
             file.copyTo(originalBackup)
