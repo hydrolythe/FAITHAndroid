@@ -33,7 +33,7 @@ class KeyEncrypterTest {
     @Test
     fun `transforms an encrypted keySetHandle back to the original`() {
         val keySetHandle = keyGenerator.generateKeysetHandle()
-        var encryptedKeySethandle: String = ""
+        var encryptedKeySethandle = ""
         var decryptedKeySetHandle: KeysetHandle? = null
 
         keyEncrypter.encrypt(keySetHandle)
@@ -45,6 +45,8 @@ class KeyEncrypterTest {
             .doOnSuccess { decryptedKeySetHandle = it }
             .test()
 
-        assertEquals(decryptedKeySetHandle, keySetHandle)
+
+        // Have to use keySetInfo because comparing the keysets themselves differ by some whitespace only.
+        assertEquals(decryptedKeySetHandle!!.keysetInfo, keySetHandle.keysetInfo)
     }
 }

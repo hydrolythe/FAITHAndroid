@@ -1,5 +1,6 @@
 package be.hogent.faith.encryption.internal
 
+import be.hogent.faith.database.encryption.EncryptedString
 import be.hogent.faith.encryption.encryptionService.DecryptionRequest
 import be.hogent.faith.encryption.encryptionService.EncryptionRequest
 import be.hogent.faith.encryption.encryptionService.KeyEncryptionService
@@ -12,7 +13,7 @@ import java.io.ByteArrayOutputStream
 
 class KeyEncrypter(private val encryptionService: KeyEncryptionService) {
 
-    internal fun encrypt(keysetHandle: KeysetHandle): Single<String> {
+    internal fun encrypt(keysetHandle: KeysetHandle): Single<EncryptedString> {
         return Single.fromCallable {
             val byteArrayOutputStream = ByteArrayOutputStream()
             CleartextKeysetHandle.write(
@@ -27,9 +28,9 @@ class KeyEncrypter(private val encryptionService: KeyEncryptionService) {
             .flatMap(encryptionService::encrypt)
     }
 
-    internal fun decrypt(encryptedString: String): Single<KeysetHandle> {
+    internal fun decrypt(encryptedKey: EncryptedString): Single<KeysetHandle> {
         return encryptionService
-            .decrypt(DecryptionRequest(encryptedString))
+            .decrypt(DecryptionRequest(encryptedKey))
             .map(::recreateKeySetHandle)
     }
 
