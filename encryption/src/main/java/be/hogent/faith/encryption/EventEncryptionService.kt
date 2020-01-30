@@ -93,7 +93,6 @@ class EventEncryptionService(
         val dek = keyEncrypter.decrypt(encryptedEvent.encryptedDEK)
         val streamingDEK = keyEncrypter.decrypt(encryptedEvent.encryptedStreamingDEK)
 
-
         // TODO: checken of blockingGet goeie aanpak is
         return dek.zipWith(streamingDEK) { dek, sdek ->
             decryptEvent(
@@ -161,5 +160,4 @@ class EventEncryptionService(
             .flatMapSingle(this::decrypt)
             .toList()
     }
-
 }

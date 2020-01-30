@@ -34,7 +34,6 @@ class FirebaseEventRepository(
         )
             .toObservable() // No need for a Flowable as updates are infrequent
             .map { it.toObject(EncryptedEventEntity::class.java) }
-
     }
 
     /**

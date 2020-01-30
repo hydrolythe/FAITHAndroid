@@ -80,5 +80,4 @@ data class Event(
     fun addNewTextDetail(saveFile: File) {
         addDetail(TextDetail(saveFile))
     }
-
 }

@@ -6,8 +6,8 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.firebase.IOnlineFileStorageRepository
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.rxkotlin.toFlowable
 
 /**
  * Repository providing access to both the internal and remote storage.
@@ -26,7 +26,7 @@ class FileStorageRepository(
      */
     override fun saveEvent(encryptedEvent: EncryptedEvent): Single<EncryptedEvent> {
         // Hacky way to first store locally, then remotely, and then give back the event.
-        // Must be done in this order because saving to localstorage changes paths inside the event.
+        // Must be done in this order because saving to local storage changes paths inside the event.
         return localFileStorage.saveEvent(encryptedEvent)
             .ignoreElement()
             .andThen(remoteFileStorage.saveEvent(encryptedEvent))
@@ -34,10 +34,11 @@ class FileStorageRepository(
     }
 
     /**
-     * download file from firebase to localStorage if not present yet
+     * Transfers a [detail]'s file(s) from online storage to local storage.
+     * If the files were already in local storage, completes immediately.
      */
     // TODO ("Timestamp checking? What als de file op een andere tablet werd aangepast?")
-    private fun getFile(detail: Detail): Completable {
+    private fun getDetailFile(detail: Detail): Completable {
         if (localFileStorage.isFilePresent(detail))
             return Completable.complete()
         else
@@ -58,12 +59,10 @@ class FileStorageRepository(
      * download all event files from firebase to localStorage if not present yet
      */
     override fun downloadEventFiles(event: Event): Completable {
-        return getEmotionAvatar(event)
-            .concatWith(
-                event.details.toFlowable()
-                    .concatMapCompletable {
-                        getFile(it)
-                    }
-            )
+        return Completable.mergeArray(
+            getEmotionAvatar(event),
+            Observable.fromIterable(event.details)
+                .flatMapCompletable(::getDetailFile)
+        )
     }
 }
