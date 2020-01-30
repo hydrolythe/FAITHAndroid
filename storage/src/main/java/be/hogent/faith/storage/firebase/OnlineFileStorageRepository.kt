@@ -8,7 +8,6 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.StoragePathProvider
 import com.google.firebase.storage.FirebaseStorage
-import durdinapps.rxfirebase2.RxFirebaseStorage
 import io.reactivex.Completable
 import io.reactivex.rxkotlin.toFlowable
 import timber.log.Timber
@@ -16,7 +15,8 @@ import java.io.File
 
 class OnlineFileStorageRepository(
     private val pathProvider: StoragePathProvider,
-    private val firestorage: FirebaseStorage
+    private val firestorage: FirebaseStorage,
+    private val rxFirebaseStorage: IRxFireBaseStorage
 ) : IOnlineFileStorageRepository {
 
     private var storageRef = firestorage.reference
@@ -41,7 +41,7 @@ class OnlineFileStorageRepository(
     override fun downloadDetail(detail: Detail): Completable {
         val fileToDownloadReference = storageRef.child(detail.file.path)
         val localFile: File = pathProvider.getLocalDetailPath(detail)
-        return Completable.fromSingle(RxFirebaseStorage.getFile(fileToDownloadReference, localFile))
+        return Completable.fromSingle(rxFirebaseStorage.getFile(fileToDownloadReference, localFile))
     }
 
     /**
@@ -54,7 +54,7 @@ class OnlineFileStorageRepository(
         val fileToDownloadReference =
             storageRef.child(pathProvider.getEmotionAvatarPath(event).path)
         val localFile: File = pathProvider.getLocalEmotionAvatarPath(event)
-        return Completable.fromSingle(RxFirebaseStorage.getFile(fileToDownloadReference, localFile))
+        return Completable.fromSingle(rxFirebaseStorage.getFile(fileToDownloadReference, localFile))
     }
 
     /**
@@ -64,7 +64,7 @@ class OnlineFileStorageRepository(
         if (encryptedEvent.emotionAvatar == null)
             return Completable.complete()
         return Completable.fromSingle(
-            RxFirebaseStorage.putFile(
+            rxFirebaseStorage.putFile(
                 storageRef.child(pathProvider.getEmotionAvatarPath(encryptedEvent).path),
                 Uri.parse("file://${pathProvider.getLocalEmotionAvatarPath(encryptedEvent).path}")
             )
@@ -86,7 +86,7 @@ class OnlineFileStorageRepository(
         detail: EncryptedDetail
     ): Completable {
         return Completable.fromSingle(
-            RxFirebaseStorage.putFile(
+            rxFirebaseStorage.putFile(
                 storageRef.child(pathProvider.getDetailPath(event, detail).path),
                 Uri.parse("file://${pathProvider.getLocalDetailPath(detail).path}")
             ).doOnError {
