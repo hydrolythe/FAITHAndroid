@@ -1,11 +1,13 @@
 package be.hogent.faith.faith.details.drawing.create
 
 import android.content.Context
+import android.content.res.Resources
 import android.content.res.TypedArray
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,8 +22,13 @@ import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImage
 import be.hogent.faith.faith.di.KoinModules
 import com.divyanshu.draw.widget.DrawView
 import com.google.android.material.tabs.TabLayout
+import com.skydoves.colorpickerview.ActionMode
+import com.skydoves.colorpickerview.ColorPickerDialog
+import com.skydoves.colorpickerview.ColorPickerView
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
+import org.koin.android.scope.currentScope
 import org.koin.core.error.ScopeNotCreatedException
 import org.koin.core.qualifier.named
 import timber.log.Timber
@@ -115,6 +122,10 @@ class DrawingDetailFragment : DrawFragment(),
     }
 
     private fun startListeners() {
+        drawingDetailViewModel.customColorClicked.observe(this, Observer {
+            showColorPickerDialog()
+        })
+
         drawingDetailViewModel.textClicked.observe(this, Observer {
             drawView.pickTextTool()
         })
@@ -137,6 +148,32 @@ class DrawingDetailFragment : DrawFragment(),
         with(drawView) {
             setOnDragListener(DragListener(this))
         }
+    }
+
+
+    fun showColorPickerDialog() {
+
+        val colorPickerView = ColorPickerView.Builder(context)
+            .setColorListener( ColorEnvelopeListener { envelope, _ -> drawViewModel.pickColor(envelope.color) })
+            .setPreferenceName("MyColorPicker")
+            .setActionMode(ActionMode.LAST)
+            .setPaletteDrawable(getDrawable(this.context!!, R.drawable.colorpicker)!!)
+            .build();
+
+        val builder = ColorPickerDialog.Builder(this.context)
+            .setTitle(R.string.kies_een_kleur)
+            .attachAlphaSlideBar(false)
+            .attachBrightnessSlideBar(true)
+
+            .setPositiveButton(
+                getString(R.string.confirm),
+                ColorEnvelopeListener { envelope, _ -> drawViewModel.pickColor(envelope.color) })
+            .setNegativeButton(
+                getString(R.string.cancel)
+            ) { dialogInterface, i -> dialogInterface.dismiss() }
+        builder.show()
+
+
     }
 
     private fun configureTemplatesRecyclerView() {

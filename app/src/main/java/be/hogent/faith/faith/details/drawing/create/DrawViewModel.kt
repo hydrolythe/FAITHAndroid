@@ -21,9 +21,17 @@ open class DrawViewModel : ViewModel() {
     val selectedColor: LiveData<Int>
         get() = _selectedColor
 
+    protected val _customColor = MutableLiveData<@ColorInt Int>()
+    val customColor: LiveData<Int>
+        get() = _customColor
+
     protected val _selectedLineWidth = MutableLiveData<LineWidth>()
     val selectedLineWidth: LiveData<LineWidth>
         get() = _selectedLineWidth
+
+    protected val _selectedTool = MutableLiveData<Tool>()
+    val selectedTool: LiveData<Tool>
+        get() = _selectedTool
 
     private val _undoClicked = SingleLiveEvent<Unit>()
     val undoClicked: LiveData<Unit>
@@ -49,9 +57,14 @@ open class DrawViewModel : ViewModel() {
     val pencilClicked: LiveData<Unit>
         get() = _pencilClicked
 
+    private val _customColorClicked = SingleLiveEvent<Unit>()
+    val customColorClicked: LiveData<Unit>
+        get() = _customColorClicked
+
     internal val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
+
 
     private val _showDrawTools = MutableLiveData<Boolean>()
 
@@ -64,6 +77,7 @@ open class DrawViewModel : ViewModel() {
         Transformations.map<Boolean, Int>(_showDrawTools) { state ->
             if (state) View.GONE else View.VISIBLE
         }
+
 
     /**
      * Contains all actions that have been drawn on the [DrawView].
@@ -82,6 +96,7 @@ open class DrawViewModel : ViewModel() {
     init {
         _drawingActions.value = mutableListOf()
         _showDrawTools.value = true
+        _selectedTool.value = Tool.PENCIL
         _selectedColor.value = R.color.black
         _selectedLineWidth.value =
             LineWidth.MEDIUM
@@ -93,6 +108,7 @@ open class DrawViewModel : ViewModel() {
 
     fun setLineWidth(width: LineWidth) {
         _selectedLineWidth.value = width
+        _showDrawTools.value = false
     }
 
     fun undo() {
@@ -101,15 +117,24 @@ open class DrawViewModel : ViewModel() {
 
     fun onEraserClicked() {
         _eraserClicked.call()
+        _selectedTool.value = Tool.ERASER
         _showDrawTools.value = true
     }
 
+    fun onCustomColorClicked() {
+        _customColorClicked.call()
+    }
+
+    fun setCustomColor(){
+
+    }
     fun onRestartClicked() {
         _restartClicked.call()
     }
 
     fun onPencilClicked() {
         _pencilClicked.call()
+        _selectedTool.value = Tool.PENCIL
         _showDrawTools.value = true
     }
 
@@ -121,12 +146,19 @@ open class DrawViewModel : ViewModel() {
 
     fun onTextClicked() {
         _textClicked.call()
-        _showDrawTools.value = false
+        _selectedTool.value = Tool.TEXT
+        _showDrawTools.value = true
     }
 
     enum class LineWidth(val width: Float) {
         THIN(12f),
         MEDIUM(30f),
         THICK(55f)
+    }
+
+    enum class Tool {
+        PENCIL,
+        TEXT,
+        ERASER
     }
 }

@@ -27,18 +27,52 @@
             android:layout_height="match_parent"
             android:background="@color/background_register_info_color">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_middle_toolbox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.75" />
+
+            <!-- todo implement                 android:onClick="@{() -> drawViewModel.onCancelButtonClicked()}"-->
+            <ImageButton
+                android:id="@+id/btn_draw_cancel"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="@dimen/material_icon_height"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/ic_return"
+                android:contentDescription="@string/cancel"
+                app:layout_constraintBottom_toTopOf="@+id/container_draw_colors"
+                app:layout_constraintEnd_toStartOf="@+id/guide_draw_drawview_left"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <include
                 android:id="@+id/container_draw_colors"
                 layout="@layout/panel_drawing_colors"
-                android:layout_width="0dp"
+                android:layout_width="110dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/container_tools"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/guide_middle_toolbox"
                 app:layout_constraintEnd_toStartOf="@+id/guide_draw_drawview_left"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_draw_cancel"
                 bind:drawViewModel="@{drawViewModel}" />
 
+            <include
+                android:id="@+id/container_draw_utilities"
+                layout="@layout/panel_drawing_tools"
+                android:layout_width="110dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/container_draw_colors"
+                app:layout_constraintStart_toStartOf="@+id/container_draw_colors"
+                app:layout_constraintTop_toBottomOf="@+id/guide_middle_toolbox"
+                bind:drawViewModel="@{drawViewModel}" />
 
             <ImageButton
                 android:id="@+id/btn_makeDrawing_save"
@@ -54,81 +88,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/container_tools"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="@dimen/panel_corner_radius"
-                app:layout_constraintBottom_toTopOf="@+id/container_draw_utilities"
-                app:layout_constraintEnd_toStartOf="@+id/guide_draw_drawview_left"
-                app:layout_constraintStart_toStartOf="@+id/container_draw_colors"
-                app:layout_constraintTop_toBottomOf="@+id/container_draw_colors">
-
-                <LinearLayout
-
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_vertical">
-
-                    <Button
-                        android:id="@+id/btn_draw_pencil"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{()->drawViewModel.onPencilClicked()}"
-                        android:text="Penseel" />
-
-                    <Button
-                        android:id="@+id/btn_draw_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{()->drawViewModel.onTextClicked()}"
-                        android:text="Text" />
-
-
-                    <Button
-                        android:id="@+id/btn_draw_eraser"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="@{()->drawViewModel.onEraserClicked()}"
-                        android:text="Gom" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <include
-                android:id="@+id/container_draw_utilities"
-                layout="@layout/panel_drawing_tools"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/container_text_utilities"
-                app:layout_constraintEnd_toStartOf="@+id/cardView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/container_tools"
-                bind:drawViewModel="@{drawViewModel}"
-                android:visibility="@{safeUnbox(drawViewModel.visibilityDrawTools)}"/>
-
-            <include
-                android:id="@+id/container_text_utilities"
-                layout="@layout/panel_text_tools"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/cardView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/container_draw_utilities"
-                bind:drawViewModel="@{drawViewModel}"
-                android:visibility="@{safeUnbox(drawViewModel.visibilityTextTools)}"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
@@ -141,13 +100,15 @@
                 app:layout_constraintBottom_toTopOf="@+id/tabs_drawing_templates"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/guide_draw_drawview_left"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:elevation="2dp">
 
                 <com.divyanshu.draw.widget.DrawView
                     android:id="@+id/drawView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:focusableInTouchMode="true" />
+                    android:focusableInTouchMode="true"
+                    android:elevation="0dp"/>
 
             </androidx.cardview.widget.CardView>
 
@@ -206,7 +167,24 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guide_draw_drawview_left" />
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="510dp" />
 
+            <include
+                android:id="@+id/container_size_brushes"
+                layout="@layout/panel_brush_sizes"
+                android:layout_width="110dp"
+                android:layout_height="0dp"
+                android:elevation="24dp"
+                android:visibility="@{safeUnbox(drawViewModel.visibilityTextTools)}"
+                app:layout_constraintBottom_toBottomOf="@+id/container_draw_utilities"
+                app:layout_constraintStart_toEndOf="@+id/container_draw_utilities"
+                app:layout_constraintTop_toTopOf="@+id/container_draw_utilities"
+                bind:drawViewModel="@{drawViewModel}" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>

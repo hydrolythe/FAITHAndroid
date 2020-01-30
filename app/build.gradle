@@ -116,6 +116,8 @@ dependencies {
     implementation uiDependencies.annotation
     implementation uiDependencies.material
 
+    implementation "com.github.skydoves:colorpickerpreference:2.0.0"
+
     implementation commonDependencies.navktx
     implementation commonDependencies.navui
 

@@ -161,4 +161,6 @@
     <string name="ster">ster</string>
     <string name="naar_de_stad">Naar de stad</string>
     <string name="register_background">register background</string>
+    <string name="confirm">ok</string>
+    <string name="kies_een_kleur">Kies een kleur</string>
 </resources>
