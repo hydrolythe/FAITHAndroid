@@ -45,7 +45,6 @@ class KeyEncrypterTest {
             .doOnSuccess { decryptedKeySetHandle = it }
             .test()
 
-
         // Have to use keySetInfo because comparing the keysets themselves differ by some whitespace only.
         assertEquals(decryptedKeySetHandle!!.keysetInfo, keySetHandle.keysetInfo)
     }

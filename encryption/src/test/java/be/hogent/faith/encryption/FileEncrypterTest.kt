@@ -20,17 +20,22 @@ class FileEncrypterTest {
 
     private val fileEncrypter = FileEncrypter(dataEncryptionKey)
 
-    private val file = File("src/test/java/be/hogent/faith/encryption/testResources/screenshot.png")
+    private val file = File("src/test/java/be/hogent/faith/encryption/testResources/image.png")
     private val originalFile = File(file.path.withSuffix("original"))
 
     @Before
     fun backUpFileToBeEncrypted() {
-        file.copyTo(originalFile)
+        file.copyTo(
+            target = originalFile,
+            overwrite = true)
     }
 
     @After
     fun restoreFileToBeEncrypted() {
-        originalFile.copyTo(file)
+        originalFile.copyTo(
+            target = file,
+            overwrite = true)
+        originalFile.delete()
     }
 
     @Test

@@ -1,6 +1,5 @@
 package be.hogent.faith.encryption
 
-import be.hogent.faith.storage.encryption.IFileEncrypter
 import be.hogent.faith.util.withSuffix
 import com.google.crypto.tink.KeysetHandle
 import com.google.crypto.tink.streamingaead.StreamingAeadFactory
@@ -15,9 +14,9 @@ import java.nio.channels.FileChannel
 import java.nio.channels.WritableByteChannel
 
 private const val CHUNK_SIZE = 16_000 * Byte.SIZE_BYTES
-private const val ORIGINAL_FILE_SUFFIX = "_encrypted"
+private const val ORIGINAL_FILE_SUFFIX = "_original"
 
-// This dummy associatedData is required  to open a decryptingChannel
+// This dummy associatedData is required to open a decryptingChannel
 // Passing null (as you can do with a regular Aead) results in a nullpointer when oping the
 // decryptionChannel.
 private val associatedData = "aad".toByteArray()
@@ -33,8 +32,7 @@ class FileEncrypter(
      */
     fun encrypt(file: File): Completable {
         return Completable.fromCallable {
-            val originalBackup = File(file.path.withSuffix(ORIGINAL_FILE_SUFFIX))
-            file.copyTo(originalBackup)
+            val originalBackup = createBackupOfOriginal(file)
 
             val cipherTextDestination: FileChannel = FileOutputStream(file).channel
             val encryptingChannel: WritableByteChannel =
@@ -50,6 +48,8 @@ class FileEncrypter(
 
             encryptingChannel.close()
             fileInputStream.close()
+            // Remove temp file
+            removeBackup(originalBackup)
         }
     }
 
@@ -58,8 +58,7 @@ class FileEncrypter(
      */
     fun decrypt(file: File): Completable {
         return Completable.fromCallable {
-            val originalBackup = File(file.path.removeSuffix(ORIGINAL_FILE_SUFFIX))
-            file.copyTo(originalBackup)
+            val originalBackup = createBackupOfOriginal(file)
 
             val cipherTextSource =
                 FileInputStream(originalBackup).channel
@@ -77,6 +76,16 @@ class FileEncrypter(
 
             decryptingChannel.close()
             out.close()
+
+            removeBackup(originalBackup)
         }
+    }
+
+    private fun removeBackup(originalBackup: File) = originalBackup.delete()
+
+    private fun createBackupOfOriginal(original: File): File {
+        val originalBackup = File(original.path.withSuffix(ORIGINAL_FILE_SUFFIX))
+        original.copyTo(originalBackup)
+        return originalBackup
     }
 }
