@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -17,61 +16,57 @@
     </data>
 
     <LinearLayout
-        android:layout_width="110dp"
+        android:layout_width="100dp"
         android:layout_height="200dp"
-        android:background="@drawable/ic_callout"
         android:focusable="true"
-        android:orientation="vertical"
-        android:paddingLeft="10dp"
-        android:visibility="@{safeUnbox(drawViewModel.visibilityDrawTools)}">
+        android:orientation="vertical">
 
         <Space
             android:layout_width="100dp"
-            android:layout_height="30dp" />
+            android:layout_height="20dp" />
 
         <ImageView
             android:id="@+id/btn_draw_setThickLineWidth"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THICK)}"
+            android:tint="@{(((LineWidth)drawViewModel.selectedLineWidth)==LineWidth.THICK)  ? drawViewModel.selectedColor : Color.BLACK}"
+            android:src="@drawable/ic_color_no_border" />
+
+        <Space
+            android:layout_width="100dp"
+            android:layout_height="20dp" />
+
+        <ImageView
+            android:id="@+id/btn_draw_setMediumLineWidth"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THICK)}"
-            android:src="@{drawViewModel.selectedLineWidth==LineWidth.THICK ? @drawable/ic_color_with_border : @drawable/ic_color_no_border }"
-            android:tint="@{drawViewModel.selectedColor}"
-            tools:src="@drawable/ic_color_with_border" />
-
-        <Space
-            android:layout_width="100dp"
-            android:layout_height="30dp" />
-
-        <ImageView
-            android:id="@+id/btn_draw_setMediumLineWidth"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
             android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.MEDIUM)}"
-            android:src="@{drawViewModel.selectedLineWidth==LineWidth.MEDIUM ? @drawable/ic_color_with_border : @drawable/ic_color_no_border }"
-            android:tint="@{drawViewModel.selectedColor}"
-            tools:src="@drawable/ic_color_no_border" />
+            android:tint="@{(((LineWidth)drawViewModel.selectedLineWidth)==LineWidth.MEDIUM) ? drawViewModel.selectedColor : Color.BLACK}"
+            android:src="@drawable/ic_color_no_border"
+ />
 
         <Space
             android:layout_width="100dp"
-            android:layout_height="30dp" />
+            android:layout_height="20dp" />
 
         <ImageView
             android:id="@+id/btn_draw_setThinLineWidth"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THIN)}"
-            android:src="@{drawViewModel.selectedLineWidth==LineWidth.THIN ? @drawable/ic_color_with_border : @drawable/ic_color_no_border }"
-            android:tint="@{drawViewModel.selectedColor}"
-            tools:src="@drawable/ic_color_with_border" />
+            android:tint="@{((LineWidth)drawViewModel.selectedLineWidth)==LineWidth.THIN ? drawViewModel.selectedColor : Color.BLACK}"
+            android:src="@drawable/ic_color_no_border"
+        />
 
         <Space
             android:layout_width="100dp"
-            android:layout_height="30dp" />
+            android:layout_height="20dp" />
     </LinearLayout>
 </layout>

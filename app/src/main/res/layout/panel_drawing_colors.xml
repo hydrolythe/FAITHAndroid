@@ -31,16 +31,16 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                   android:layout_weight="1">
+                android:layout_weight="1">
 
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_selected"
+                    android:visibility="@{((int)drawViewModel.selectedColor)==@color/black ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="@{((int)drawViewModel.selectedColor)==@color/black ? View.VISIBLE : View.GONE}"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/btn_draw_setColorBlack"
@@ -62,114 +62,28 @@
                 android:layout_height="0dp"
                 android:layout_weight="1">
 
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_selected"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="@{((int)drawViewModel.selectedColor)==@color/blue ? View.VISIBLE : View.GONE}"/>
-            <ImageView
-                android:id="@+id/btn_draw_setColorBlue"
-                android:layout_width="50dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/choose_blue"
-                android:onClick="@{() -> drawViewModel.pickColor(@color/blue)}"
-                android:src="@drawable/paintpot_blue"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_selected"
+                    android:visibility="@{((int)drawViewModel.selectedColor)==@color/blue ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_selected"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="@{((int)drawViewModel.selectedColor)==@color/red ? View.VISIBLE : View.GONE}"/>
-            <ImageView
-                android:id="@+id/btn_draw_setColorRed"
-                android:layout_width="50dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/choose_red"
-                android:onClick="@{() -> drawViewModel.pickColor(@color/red)}"
-                android:src="@drawable/paintpot_red"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_selected"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="@{((int)drawViewModel.selectedColor)==@color/yellow ? View.VISIBLE : View.GONE}"/>
-            <ImageView
-                android:id="@+id/btn_draw_setColorYellow"
-                android:layout_width="50dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/choose_yellow"
-                android:onClick="@{() -> drawViewModel.pickColor(@color/yellow)}"
-                android:src="@drawable/paintpot_yellow"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_selected"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="@{((int)drawViewModel.selectedColor)==@color/green ? View.VISIBLE : View.GONE}"/>
-            <ImageView
-                android:id="@+id/btn_draw_setColorGreen"
-                android:layout_width="50dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/choose_green"
-                android:onClick="@{() -> drawViewModel.pickColor(@color/green)}"
-                android:src="@drawable/paintpot_green"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <ImageView
+                    android:id="@+id/btn_draw_setColorBlue"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/choose_blue"
+                    android:onClick="@{() -> drawViewModel.pickColor(@color/blue)}"
+                    android:src="@drawable/paintpot_blue"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -182,10 +96,100 @@
                     android:layout_width="15dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_selected"
+                    android:visibility="@{((int)drawViewModel.selectedColor)==@color/red ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="@{((int)drawViewModel.selectedColor)==@color/green ? View.VISIBLE : View.GONE}"/>
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/btn_draw_setColorRed"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/choose_red"
+                    android:onClick="@{() -> drawViewModel.pickColor(@color/red)}"
+                    android:src="@drawable/paintpot_red"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_selected"
+                    android:visibility="@{((int)drawViewModel.selectedColor)==@color/yellow ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/btn_draw_setColorYellow"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/choose_yellow"
+                    android:onClick="@{() -> drawViewModel.pickColor(@color/yellow)}"
+                    android:src="@drawable/paintpot_yellow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_selected"
+                    android:visibility="@{((int)drawViewModel.selectedColor)==@color/green ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/btn_draw_setColorGreen"
+                    android:layout_width="50dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/choose_green"
+                    android:onClick="@{() -> drawViewModel.pickColor(@color/green)}"
+                    android:src="@drawable/paintpot_green"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_selected"
+                    android:visibility="@{drawViewModel.customColorSelected? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/btn_draw_setCustomColor"

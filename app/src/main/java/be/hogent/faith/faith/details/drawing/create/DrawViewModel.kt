@@ -37,6 +37,10 @@ open class DrawViewModel : ViewModel() {
     val undoClicked: LiveData<Unit>
         get() = _undoClicked
 
+    private val _pencilClicked = SingleLiveEvent<Unit>()
+    val pencilClicked: LiveData<Unit>
+        get() = _pencilClicked
+
     private val _textClicked = SingleLiveEvent<Unit>()
     val textClicked: LiveData<Unit>
         get() = _textClicked
@@ -44,6 +48,10 @@ open class DrawViewModel : ViewModel() {
     private val _eraserClicked = SingleLiveEvent<Unit>()
     val eraserClicked: LiveData<Unit>
         get() = _eraserClicked
+
+    private val _customColorClicked = SingleLiveEvent<Unit>()
+    val customColorClicked: LiveData<Unit>
+        get() = _customColorClicked
 
     private val _restartClicked = SingleLiveEvent<Unit>()
     val restartClicked: LiveData<Unit>
@@ -53,31 +61,24 @@ open class DrawViewModel : ViewModel() {
     val saveClicked: LiveData<Unit>
         get() = _saveClicked
 
-    private val _pencilClicked = SingleLiveEvent<Unit>()
-    val pencilClicked: LiveData<Unit>
-        get() = _pencilClicked
-
-    private val _customColorClicked = SingleLiveEvent<Unit>()
-    val customColorClicked: LiveData<Unit>
-        get() = _customColorClicked
-
     internal val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
 
-
-    private val _showDrawTools = MutableLiveData<Boolean>()
-
-    val visibilityDrawTools: LiveData<Int> =
-        Transformations.map<Boolean, Int>(_showDrawTools) { state ->
-            if (state) View.VISIBLE else View.GONE
+    val customColorSelected: LiveData<Boolean> =
+        Transformations.map<Int, Boolean>(_selectedColor) { color ->
+            color == _customColor.value
         }
 
-    val visibilityTextTools: LiveData<Int> =
-        Transformations.map<Boolean, Int>(_showDrawTools) { state ->
-            if (state) View.GONE else View.VISIBLE
-        }
+    private val _showColorPicker = MutableLiveData<Boolean>()
+    val showColorPicker: LiveData<Boolean>
+        get() = _showColorPicker
 
+    private val _showColorWidthTools = MutableLiveData<Boolean>()
+    val showColorWidthTools: LiveData<Boolean>
+        get() = _showColorWidthTools
+
+    private var _lastToolclicked: Tool? = null
 
     /**
      * Contains all actions that have been drawn on the [DrawView].
@@ -95,47 +96,73 @@ open class DrawViewModel : ViewModel() {
 
     init {
         _drawingActions.value = mutableListOf()
-        _showDrawTools.value = true
+        _showColorPicker.value = false
+        _showColorWidthTools.value = false
         _selectedTool.value = Tool.PENCIL
         _selectedColor.value = R.color.black
+        _customColor.value = R.color.green
         _selectedLineWidth.value =
             LineWidth.MEDIUM
     }
 
     fun pickColor(@ColorInt color: Int) {
         _selectedColor.value = color
+        //als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
+        if (_selectedTool.value == Tool.ERASER)
+            onPencilClicked()
+        _showColorPicker.value = false;
+    }
+
+    fun setCustomColor(@ColorInt color: Int) {
+        _customColor.value = color
+        _selectedColor.value = color
+        //als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
+
     }
 
     fun setLineWidth(width: LineWidth) {
         _selectedLineWidth.value = width
-        _showDrawTools.value = false
+        if (_selectedTool.value != Tool.ERASER) _selectedColor.value = _selectedColor.value //anders past de tint zich niet aan
     }
 
     fun undo() {
         _undoClicked.call()
     }
 
-    fun onEraserClicked() {
-        _eraserClicked.call()
-        _selectedTool.value = Tool.ERASER
-        _showDrawTools.value = true
-    }
-
     fun onCustomColorClicked() {
         _customColorClicked.call()
+        _selectedColor.value = _customColor.value
+        _showColorPicker.value = true
+        if (_selectedTool.value == Tool.ERASER)
+            onPencilClicked()
     }
 
-    fun setCustomColor(){
-
-    }
     fun onRestartClicked() {
         _restartClicked.call()
     }
 
     fun onPencilClicked() {
+        setSelectedTool(Tool.PENCIL)
         _pencilClicked.call()
-        _selectedTool.value = Tool.PENCIL
-        _showDrawTools.value = true
+    }
+
+    fun onTextClicked() {
+        setSelectedTool(Tool.TEXT)
+        _textClicked.call()
+    }
+
+    fun onEraserClicked() {
+        setSelectedTool(Tool.ERASER)
+        _eraserClicked.call()
+        _showColorPicker.value = false
+    }
+
+    private fun setSelectedTool(tool: Tool) {
+        if (tool == _selectedTool.value)
+            _showColorWidthTools.value = !_showColorWidthTools.value!!
+        else
+            _showColorWidthTools.value = true
+        _selectedTool.value = tool
     }
 
     fun onSaveClicked() {
@@ -144,11 +171,6 @@ open class DrawViewModel : ViewModel() {
         _saveClicked.call()
     }
 
-    fun onTextClicked() {
-        _textClicked.call()
-        _selectedTool.value = Tool.TEXT
-        _showDrawTools.value = true
-    }
 
     enum class LineWidth(val width: Float) {
         THIN(12f),
