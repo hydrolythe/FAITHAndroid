@@ -10,7 +10,6 @@ import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
 import com.google.crypto.tink.KeysetHandle
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
@@ -68,25 +67,12 @@ class EventEncryptionService(
         streamingKeySetHandle: KeysetHandle
     ): Single<List<EncryptedDetail>> {
         val fileEncrypter = FileEncrypter(streamingKeySetHandle)
-        val detailEntityEncrypter = DetailEncryptionService(DataEncrypter((keysetHandle)))
+        val detailEncrypter =
+            DetailEncryptionService(DataEncrypter((keysetHandle)), fileEncrypter)
 
-        return encryptDetailFiles(event, fileEncrypter)
-            .andThen(encryptDetailData(event, detailEntityEncrypter))
-    }
-
-    private fun encryptDetailData(
-        event: Event,
-        detailEntityEncrypter: DetailEncryptionService
-    ): Single<List<EncryptedDetail>> {
         return Observable.fromIterable(event.details)
-            .map(detailEntityEncrypter::encrypt)
+            .flatMapSingle(detailEncrypter::encrypt)
             .toList()
-    }
-
-    private fun encryptDetailFiles(event: Event, fileEncrypter: FileEncrypter): Completable {
-        return Observable.fromIterable(event.details)
-            .map(Detail::file)
-            .flatMapCompletable(fileEncrypter::encrypt)
     }
 
     override fun decrypt(encryptedEvent: EncryptedEvent): Single<Event> {
@@ -129,30 +115,11 @@ class EventEncryptionService(
         encryptedEvent: EncryptedEvent,
         fileEncrypter: FileEncrypter
     ): Single<List<Detail>> {
-        val detailEntityEncrypter = DetailEncryptionService(dataEncrypter)
+        val detailEntityEncrypter = DetailEncryptionService(dataEncrypter, fileEncrypter)
 
-        // Decrypt detail files
-        return decryptDetailFiles(encryptedEvent, fileEncrypter).andThen(
-            decryptDetailData(encryptedEvent, detailEntityEncrypter)
-        )
-    }
-
-    private fun decryptDetailData(
-        encryptedEvent: EncryptedEvent,
-        detailEntityEncrypter: DetailEncryptionService
-    ): Single<List<Detail>> {
         return Observable.fromIterable(encryptedEvent.details)
-            .map(detailEntityEncrypter::decrypt)
+            .flatMapSingle(detailEntityEncrypter::decrypt)
             .toList()
-    }
-
-    private fun decryptDetailFiles(
-        encryptedEvent: EncryptedEvent,
-        fileEncrypter: FileEncrypter
-    ): Completable {
-        return Observable.fromIterable(encryptedEvent.details)
-            .map(EncryptedDetail::file)
-            .flatMapCompletable(fileEncrypter::decrypt)
     }
 
     override fun decryptList(encryptedEvents: List<EncryptedEvent>): Single<List<Event>> {

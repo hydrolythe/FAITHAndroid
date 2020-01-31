@@ -40,7 +40,7 @@ class EventEncryptionServiceTest {
     }
 
     @Test
-    fun `after encrypting none of the sensitive data is in a human readable format`() {
+    fun `After encrypting an event none of the sensitive data is in a human readable format`() {
         // Act
         eventEncrypter.encrypt(eventWithoutFiles)
             .test()
@@ -54,7 +54,7 @@ class EventEncryptionServiceTest {
     }
 
     @Test
-    fun `event without files is back to original after decrypting`() {
+    fun `After decrypting an encrypted event all its data is back to the original values`() {
         // Arrange
         var encryptedEvent: EncryptedEvent? = null
         eventEncrypter.encrypt(eventWithoutFiles)
@@ -91,20 +91,17 @@ class EventEncryptionServiceTest {
         // Arrange
         createFilesForEvent(eventWithFiles)
 
-        // Arrange
-        var encryptedEvent: EncryptedEvent? = null
-        eventEncrypter.encrypt(eventWithoutFiles)
+        // Act
+        lateinit var encryptedEvent: EncryptedEvent
+        eventEncrypter.encrypt(eventWithFiles)
             .doOnSuccess { encryptedEvent = it }
             .test()
+            .assertNoErrors()
+            .assertComplete()
 
-        // Act
-        var decryptedEvent: Event? = null
-        eventEncrypter.decrypt(encryptedEvent!!)
-            .doOnSuccess { decryptedEvent = it }
-            .test()
-
-        // Assert
-        assertEquals(decryptedEvent, eventWithoutFiles)
+        assertTrue(encryptedEvent.details.none { encryptedDetail ->
+            encryptedDetail.file.contentEqual(dataFile)
+        })
     }
 
     private fun createFilesForEvent(eventWithFiles: Event) {
