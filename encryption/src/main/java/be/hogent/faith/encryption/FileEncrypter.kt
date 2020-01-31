@@ -59,8 +59,6 @@ class FileEncrypter(
     fun decrypt(file: File): Completable {
         return Completable.fromCallable {
             val originalBackup = createBackupOfOriginal(file)
-            // Remove contents of file
-            file.delete()
 
             val cipherTextSource =
                 FileInputStream(originalBackup).channel

@@ -5,17 +5,14 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 import java.io.File
-import java.nio.charset.Charset
-import java.util.Random
+import java.security.SecureRandom
 import java.util.UUID
+import kotlin.experimental.and
 
 object DataFactory {
 
     fun randomFile(): File {
-        val array = ByteArray(7) // length is bounded by 7
-        Random().nextBytes(array)
-        val generatedString = String(array, Charset.forName("UTF-8"))
-        return File("testDirectory/$generatedString")
+        return File(randomString())
     }
 
     fun randomBitmap(): Bitmap {
@@ -26,8 +23,16 @@ object DataFactory {
         return UUID.randomUUID()
     }
 
-    fun randomString(): String {
-        return UUID.randomUUID().toString()
+    fun randomString(length: Int = 10): String {
+        val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+        val random = SecureRandom()
+        val bytes = ByteArray(length)
+        random.nextBytes(bytes)
+
+        return (bytes.indices)
+            .map { i ->
+                charPool.get((bytes[i] and 0xFF.toByte() and (charPool.size - 1).toByte()).toInt())
+            }.joinToString("")
     }
 
     /**
