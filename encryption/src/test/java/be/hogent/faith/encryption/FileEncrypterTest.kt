@@ -4,6 +4,7 @@ import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.util.contentEqual
 import be.hogent.faith.util.withSuffix
 import com.google.crypto.tink.KeysetHandle
+import io.reactivex.Completable
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -20,46 +21,46 @@ class FileEncrypterTest {
 
     private val fileEncrypter = FileEncrypter(dataEncryptionKey)
 
-    private val file = File("src/test/java/be/hogent/faith/encryption/testResources/image.png")
-    private val originalFile = File(file.path.withSuffix("original"))
+    private val originalFile =
+        File("src/test/java/be/hogent/faith/encryption/testResources/image.png")
+    private val workingFile = File(originalFile.path.withSuffix("working"))
 
     @Before
     fun backUpFileToBeEncrypted() {
-        file.copyTo(
-            target = originalFile,
-            overwrite = true)
+        originalFile.copyTo(
+            target = workingFile,
+            overwrite = true
+        )
     }
 
     @After
     fun restoreFileToBeEncrypted() {
-        originalFile.copyTo(
-            target = file,
-            overwrite = true)
-        originalFile.delete()
+        workingFile.delete()
     }
 
     @Test
     fun fileDoesNotHaveSameContentsAfterEncryption() {
         // Act
-        fileEncrypter.encrypt(file)
+        fileEncrypter.encrypt(workingFile)
             .test()
             .assertComplete()
 
         // Assert
-        assertFalse(file.contentEqual(originalFile))
+        assertFalse(workingFile.contentEqual(originalFile))
     }
 
     @Test
     fun encryptedFileIsDecryptedCorrectly() {
         // Act
-        fileEncrypter.encrypt(file)
+        fileEncrypter.encrypt(workingFile)
             .andThen(
-                fileEncrypter.decrypt(file)
+                Completable.defer { fileEncrypter.decrypt(workingFile) }
             )
             .test()
             .assertComplete()
 
         // Assert
-        assertTrue(file.contentEqual(originalFile))
+//        assertEquals(originalFile.readText(), file.readText())
+        assertTrue(workingFile.contentEqual(originalFile))
     }
 }

@@ -14,7 +14,7 @@ import java.nio.channels.FileChannel
 import java.nio.channels.WritableByteChannel
 
 private const val CHUNK_SIZE = 16_000 * Byte.SIZE_BYTES
-private const val ORIGINAL_FILE_SUFFIX = "_original"
+private const val ORIGINAL_FILE_SUFFIX = "_temp"
 
 // This dummy associatedData is required to open a decryptingChannel
 // Passing null (as you can do with a regular Aead) results in a nullpointer when oping the
@@ -59,6 +59,8 @@ class FileEncrypter(
     fun decrypt(file: File): Completable {
         return Completable.fromCallable {
             val originalBackup = createBackupOfOriginal(file)
+            // Remove contents of file
+            file.delete()
 
             val cipherTextSource =
                 FileInputStream(originalBackup).channel
