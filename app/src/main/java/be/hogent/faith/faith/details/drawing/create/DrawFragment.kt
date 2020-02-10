@@ -49,6 +49,9 @@ abstract class DrawFragment : Fragment() {
         drawViewModel.undoClicked.observe(this, Observer {
             drawView.undo()
         })
+        drawViewModel.redoClicked.observe(this, Observer {
+            drawView.redo()
+        })
         drawViewModel.saveClicked.observe(this, Observer {
             saveBitmap()
         })

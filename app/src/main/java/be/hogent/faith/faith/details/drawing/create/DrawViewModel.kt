@@ -12,9 +12,7 @@ import com.divyanshu.draw.widget.DrawView
 import com.divyanshu.draw.widget.tools.CanvasAction
 import be.hogent.faith.R
 
-/**
- * Base VM for both the [DrawingDetailViewModel] and the [DrawEmotionAvatarViewModel].
- */
+
 open class DrawViewModel : ViewModel() {
 
     protected val _selectedColor = MutableLiveData<@ColorInt Int>()
@@ -36,6 +34,10 @@ open class DrawViewModel : ViewModel() {
     private val _undoClicked = SingleLiveEvent<Unit>()
     val undoClicked: LiveData<Unit>
         get() = _undoClicked
+
+    private val _redoClicked = SingleLiveEvent<Unit>()
+    val redoClicked: LiveData<Unit>
+        get() = _redoClicked
 
     private val _pencilClicked = SingleLiveEvent<Unit>()
     val pencilClicked: LiveData<Unit>
@@ -110,7 +112,7 @@ open class DrawViewModel : ViewModel() {
         //als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
         if (_selectedTool.value == Tool.ERASER)
             onPencilClicked()
-        _showColorPicker.value = false;
+        _showColorPicker.value = false
     }
 
     fun setCustomColor(@ColorInt color: Int) {
@@ -122,11 +124,16 @@ open class DrawViewModel : ViewModel() {
 
     fun setLineWidth(width: LineWidth) {
         _selectedLineWidth.value = width
-        if (_selectedTool.value != Tool.ERASER) _selectedColor.value = _selectedColor.value //anders past de tint zich niet aan
+        if (_selectedTool.value != Tool.ERASER) _selectedColor.value =
+            _selectedColor.value //anders past de tint zich niet aan
     }
 
     fun undo() {
         _undoClicked.call()
+    }
+
+    fun redo() {
+        _redoClicked.call()
     }
 
     fun onCustomColorClicked() {

@@ -17,7 +17,6 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         app:cardCornerRadius="@dimen/panel_corner_radius">
 
         <LinearLayout
@@ -176,6 +175,11 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                android:layout_height="1dip"
+                android:layout_width="fill_parent"
+                android:background="@color/black"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
