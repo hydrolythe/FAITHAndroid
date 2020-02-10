@@ -36,7 +36,6 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.75" />
 
-            <!-- todo implement                 android:onClick="@{() -> drawViewModel.onCancelButtonClicked()}"-->
             <ImageButton
                 android:id="@+id/btn_draw_cancel"
                 android:layout_width="@dimen/material_icon_width"
@@ -44,6 +43,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/ic_return"
+                android:onClick="@{() -> drawViewModel.onCancelClicked()}"
                 android:contentDescription="@string/cancel"
                 app:layout_constraintBottom_toTopOf="@+id/container_draw_colors"
                 app:layout_constraintEnd_toStartOf="@+id/guide_draw_drawview_left"

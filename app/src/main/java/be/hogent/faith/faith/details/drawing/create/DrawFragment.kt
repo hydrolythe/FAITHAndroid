@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.details.drawing.create
 
 import android.content.Context
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -55,6 +56,9 @@ abstract class DrawFragment : Fragment() {
         drawViewModel.saveClicked.observe(this, Observer {
             saveBitmap()
         })
+        drawViewModel.cancelClicked.observe(this, Observer {
+            showExitAlert()
+        })
         drawViewModel.eraserClicked.observe(this, Observer {
             drawView.pickEraserTool()
         })
@@ -63,6 +67,23 @@ abstract class DrawFragment : Fragment() {
             // that is saved in such a way that it survives configuration changes. See [DrawViewModel].
             drawView.setActions(it)
         })
+    }
+
+    private fun showExitAlert() {
+       val alertDialog : AlertDialog = this.run {
+            val builder = AlertDialog.Builder(this.requireContext()).apply {
+                setTitle(R.string.dialog_to_the_event_title)
+                setMessage(R.string.dialog_to_the_event_message)
+                setPositiveButton(R.string.ok) { _, _ ->
+                    navigation!!.backToEvent()
+                }
+                setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.cancel()
+                }
+            }
+            builder.create()
+        }
+        alertDialog!!.show()
     }
 
     interface DrawingScreenNavigation {

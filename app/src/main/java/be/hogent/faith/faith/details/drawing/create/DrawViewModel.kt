@@ -1,16 +1,15 @@
 package be.hogent.faith.faith.details.drawing.create
 
-import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.R
 import be.hogent.faith.faith.util.SingleLiveEvent
 import com.divyanshu.draw.widget.DrawView
 import com.divyanshu.draw.widget.tools.CanvasAction
-import be.hogent.faith.R
 
 
 open class DrawViewModel : ViewModel() {
@@ -63,14 +62,18 @@ open class DrawViewModel : ViewModel() {
     val saveClicked: LiveData<Unit>
         get() = _saveClicked
 
+    private val _cancelClicked = SingleLiveEvent<Unit>()
+    val cancelClicked: LiveData<Unit>
+        get() = _cancelClicked
+
     internal val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
 
     val customColorSelected: LiveData<Boolean> =
-        Transformations.map<Int, Boolean>(_selectedColor) { color ->
-            color == _customColor.value
-        }
+        Transformations.map<Int, Boolean>(selectedColor) { color ->
+        color == _customColor.value && !intArrayOf(R.color.green, R.color.yellow, R.color.black, R.color.red, R.color.blue).contains(color)
+    }
 
     private val _showColorPicker = MutableLiveData<Boolean>()
     val showColorPicker: LiveData<Boolean>
@@ -178,6 +181,9 @@ open class DrawViewModel : ViewModel() {
         _saveClicked.call()
     }
 
+    fun onCancelClicked() {
+        _cancelClicked.call()
+    }
 
     enum class LineWidth(val width: Float) {
         THIN(12f),
