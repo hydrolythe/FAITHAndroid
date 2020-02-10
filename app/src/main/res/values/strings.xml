@@ -49,8 +49,8 @@
     <string name="frag_takePhoto_takePhoto">Neem foto</string>
     <string name="description_thumbnail">Miniatuur</string>
     <string name="description_addText">Schrijven</string>
-    <string name="description_addPhoto">Foto maken</string>
-    <string name="description_addAudio">Opnemen</string>
+    <string name="description_addPhoto">Foto</string>
+    <string name="description_addAudio">Inspreken</string>
     <string name="description_addDrawing">Tekenen</string>
     <string name="error_save_photo">Er ging iets mis bij het opslaan van je foto.</string>
     <string name="hint_photo_name">een naam voor je foto</string>
@@ -153,4 +153,14 @@
     <string name="text_save_error_emptyinput">Je hebt nog geen tekst geschreven!</string>
     <string name="textSize_a">A</string>
     <string name="opnieuw">Opnieuw</string>
+    <string name="bold">B</string>
+    <string name="italic">I</string>
+    <string name="avatar_vrienden">avatar vrienden</string>
+    <string name="welkom_in_lifecity">Welkom in Lifecity</string>
+    <string name="ik_ben_nieuw">Ik ben nieuw</string>
+    <string name="ster">ster</string>
+    <string name="naar_de_stad">Naar de stad</string>
+    <string name="register_background">register background</string>
+    <string name="confirm">ok</string>
+    <string name="kies_een_kleur">Kies een kleur</string>
 </resources>

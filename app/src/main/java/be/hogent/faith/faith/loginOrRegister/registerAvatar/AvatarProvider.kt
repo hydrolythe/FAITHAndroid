@@ -11,24 +11,18 @@ interface AvatarProvider {
         return listOf(
             "jongen_gamer",
             "meisje_stoer",
-            "jongen_gamer",
-            "meisje_stoer",
-            "jongen_gamer",
-            "meisje_stoer",
-            "jongen_gamer",
-            "meisje_stoer",
-            "jongen_gamer",
-            "meisje_stoer",
-            "jongen_gamer",
-            "meisje_stoer",
-            "jongen_gamer",
-            "meisje_stoer",
-            "jongen_gamer",
-            "meisje_stoer",
-            "jongen_gamer",
-            "meisje_stoer",
-            "jongen_gamer",
-            "meisje_stoer"
+            "jongen_newwave",
+            "meisje_newwave",
+            "jongen_alternatief",
+            "meisje_creatief",
+            "jongen_boysband",
+            "meisje_girly",
+            "jongen_klassiek",
+            "meisje_klassiek",
+            "jongen_modieus",
+            "meisje_modieus",
+            "jongen_voetballer",
+            "meisje_sportief"
         ).map { name -> Avatar(name) }
     }
 

@@ -58,6 +58,7 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/ic_return"
                 android:onClick="@{() -> eventViewModel.onCancelButtonClicked()}"
+                android:contentDescription="@string/cancel"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -69,6 +70,7 @@
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/save_btn"
                 android:minWidth="24dp"
+                android:contentDescription="@string/save"
                 android:onClick="@{() -> userViewModel.saveEvent(eventViewModel.eventTitle, eventViewModel.event)}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -102,7 +104,7 @@
                         android:id="@+id/textInputLayout_eventtitle"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
+                        android:layout_height="@dimen/event_textInput_height"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
@@ -130,7 +132,7 @@
                         android:id="@+id/textInputLayout_date"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
+                        android:layout_height="@dimen/event_textInput_height"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
@@ -172,7 +174,7 @@
                             android:id="@+id/txt_save_event_notes"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="top|left"
+                            android:gravity="top|start"
                             android:inputType="textMultiLine"
                             android:singleLine="false"
                             android:text="@={eventViewModel.eventNotes}"

@@ -36,70 +36,22 @@
             android:focusableInTouchMode="true">
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_login_arrows_top"
+                android:id="@+id/guide_login_ik_ben_nieuw_bottom"
                 android:layout_width="1dp"
                 android:layout_height="1dp"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.47" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_center_circle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.5" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_frame_hor"
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.3" />
-
+                app:layout_constraintGuide_percent="0.85" />
 
             <include
                 android:id="@+id/include_login_txts"
                 layout="@layout/view_login_circle"
-                android:layout_width="300dp"
-                android:layout_height="300dp"
-                app:layout_constraintBottom_toTopOf="@+id/guide_login_center_circle"
-                app:layout_constraintEnd_toStartOf="@+id/guide_center_circle"
-                app:layout_constraintStart_toStartOf="@+id/guide_center_circle"
-                app:layout_constraintTop_toTopOf="@+id/guide_login_center_circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/ik_ben_nieuw"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:welcomeViewModel="@{welcomeViewModel}" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_loginfragment_library"
-                style="@style/arrow_style.toRight"
-                android:onClick="@{() -> welcomeViewModel.registerButtonClicked()}"
-
-                android:text="@string/msg_registreer"
-                app:icon="@drawable/ic_nieuw"
-                app:layout_constraintStart_toStartOf="@+id/guide_right_arrow"
-                app:layout_constraintTop_toTopOf="@+id/guide_login_arrows_top" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_loginfragment_startNewEvent"
-                style="@style/arrow_style.toLeft"
-                android:onClick="@{() -> welcomeViewModel.loginButtonClicked()}"
-                android:text="@string/msg_naar_de_stad"
-                app:icon="@drawable/icoon_stad"
-                app:layout_constraintEnd_toStartOf="@+id/guide_left_arrow"
-                app:layout_constraintTop_toTopOf="@+id/guide_login_arrows_top" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_left_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.79" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_right_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.84" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_login_center_circle"
@@ -112,11 +64,65 @@
                 android:id="@+id/img_loginfragment_avatars"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/avatar_vrienden"
+                android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guide_frame_hor"
+                app:layout_constraintEnd_toStartOf="@+id/include_login_txts"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guide_login_arrows_top"
-                app:srcCompat="@drawable/login_avatars" />
+                app:layout_constraintTop_toBottomOf="@+id/guide_login_center_circle"
+                app:srcCompat="@drawable/avatar_vriendjes" />
+
+            <TextView
+                android:id="@+id/textView_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/welkom_in_lifecity"
+                android:textAppearance="@style/AppTheme.H3"
+                android:textColor="@color/caption"
+                app:layout_constraintBottom_toTopOf="@+id/include_login_txts"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/ik_ben_nieuw"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:backgroundTint="@color/color_white"
+                android:gravity="center"
+                android:onClick="@{() -> welcomeViewModel.registerButtonClicked()}"
+                android:text="@string/ik_ben_nieuw"
+                android:textAppearance="@style/TextAppearance.NavigationButtonSmall"
+                android:textColor="@color/caption"
+                app:cornerRadius="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/guide_login_ik_ben_nieuw_bottom"
+                app:strokeColor="@color/caption" />
+
+            <ImageView
+                android:id="@+id/img_ster_before"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="32dp"
+                android:contentDescription="@string/ster"
+                app:layout_constraintBottom_toBottomOf="@+id/ik_ben_nieuw"
+                app:layout_constraintEnd_toStartOf="@+id/ik_ben_nieuw"
+                app:layout_constraintTop_toTopOf="@+id/ik_ben_nieuw"
+                app:srcCompat="@drawable/ic_ster" />
+
+            <ImageView
+                android:id="@+id/img_ster_after"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="32dp"
+                android:contentDescription="@string/ster"
+                app:layout_constraintBottom_toBottomOf="@+id/ik_ben_nieuw"
+                app:layout_constraintStart_toEndOf="@+id/ik_ben_nieuw"
+                app:layout_constraintTop_toTopOf="@+id/ik_ben_nieuw"
+                app:srcCompat="@drawable/ic_ster" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -125,6 +131,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </FrameLayout>
 </layout>

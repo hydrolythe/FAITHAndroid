@@ -14,6 +14,9 @@
         <item name="colorOnSurface">@color/onSurface</item>
         <item name="android:colorBackground">@color/background</item>
         <item name="colorOnBackground">@color/onBackground</item>
+        <item name="android:fontFamily">@font/sourcesanspro</item>
+        <item name="fontFamily">@font/sourcesanspro</item>
+
     </style>
 
     <style name="AppTheme.FullScreen" parent="AppTheme">
@@ -33,45 +36,143 @@
 
     <style name="AppTheme.PopupOverlay" parent="Theme.MaterialComponents.Light" />
 
-    <style name="arrow_style.toLeft" parent="Widget.MaterialComponents.Button.Icon">
-        <item name="android:layout_width">170dp</item>
+    <style name="AppTheme.NavigationButton" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textSize">25sp</item>
+        <item name="android:fontFamily">@font/sourcesanspro_semibold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
+
+    <style name="TextAppearance.NavigationButtonSmall" parent="AppTheme.NavigationButton">
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="login_textInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="boxCornerRadiusTopEnd">30dp</item>
+        <item name="boxCornerRadiusTopStart">30dp</item>
+        <item name="boxCornerRadiusBottomEnd">30dp</item>
+        <item name="boxCornerRadiusBottomStart">30dp</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="boxStrokeColor">@color/caption</item>
+        <item name="hintTextColor">@color/caption</item>
+
+    </style>
+
+    <style name="login_button" parent="Widget.MaterialComponents.Button.OutlinedButton.Icon">
+        <item name="android:layout_width">300dp</item>
+        <item name="android:layout_height">69dp</item>
+        <item name="cornerRadius">40dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:textAppearance">@style/AppTheme.Button</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:backgroundTint">@color/color_white</item>
+        <item name="android:paddingLeft">24dp</item>
+        <item name="iconTint">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="iconGravity">textStart</item>
+    </style>
+
+    <style name="arrow_style" parent="Widget.MaterialComponents.Button.Icon">
+        <item name="android:layout_width">@dimen/arrow_width</item>
         <item name="android:layout_height">@dimen/arrow_height</item>
+        <item name="cornerRadius">30dp</item>
         <item name="android:textColor">@color/color_black</item>
+        <item name="android:textAppearance">@style/AppTheme.Button</item>
         <item name="android:backgroundTint">@color/color_white</item>
         <item name="iconTint">@null</item>
-        <item name="iconGravity">end</item>
-        <item name="android:paddingLeft">24dp</item>
-        <item name="shapeAppearanceOverlay">@style/arrow_button_to_left</item>
-    </style>
-
-    <style name="arrow_style.toRight" parent="arrow_style.toLeft">
-        <item name="android:layout_height">@dimen/arrow_height</item>
-        <item name="android:textColor">@color/color_black</item>
         <item name="iconGravity">start</item>
-        <item name="android:backgroundTint">@color/color_white</item>
-        <item name="shapeAppearanceOverlay">@style/arrow_button_to_right</item>
+        <item name="android:paddingLeft">16dp</item>
+        <!--item name="shapeAppearanceOverlay">@style/arrow_button_to_left</item>-->
     </style>
 
-    <style name="arrow_button_to_right" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">0dp</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-
-        <item name="cornerFamilyTopRight">cut</item>
-        <item name="cornerFamilyBottomRight">cut</item>
-        <item name="cornerSizeTopRight">37dp</item>
-        <item name="cornerSizeBottomRight">37dp</item>
+    <style name="AppTheme.H1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="fontFamily">@font/sourcesanspro_light</item>
+        <item name="android:fontFamily">@font/sourcesanspro_light</item>
+        <item name="android:textSize">96sp</item>
     </style>
 
-    <style name="arrow_button_to_left" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">37dp</item>
-        <item name="cornerSizeBottomLeft">37dp</item>
+    <style name="AppTheme.H2" parent="TextAppearance.MaterialComponents.Headline2">
+        <item name="fontFamily">@font/sourcesanspro_light</item>
+        <item name="android:fontFamily">@font/sourcesanspro_light</item>
+        <item name="android:textSize">60sp</item>
+    </style>
 
-        <item name="cornerFamilyTopLeft">cut</item>
-        <item name="cornerFamilyBottomLeft">cut</item>
-        <item name="cornerSizeTopRight">0dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
+    <style name="AppTheme.H3" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="fontFamily">@font/sourcesanspro_light</item>
+        <item name="android:fontFamily">@font/sourcesanspro_light</item>
+        <item name="android:textSize">45sp</item>
+    </style>
+
+    <style name="AppTheme.H4" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="fontFamily">@font/sourcesanspro_light</item>
+        <item name="android:fontFamily">@font/sourcesanspro_light</item>
+        <item name="android:textSize">34sp</item>
+    </style>
+
+    <style name="AppTheme.H5" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/sourcesanspro</item>
+        <item name="android:fontFamily">@font/sourcesanspro</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="AppTheme.H6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/sourcesanspro</item>
+        <item name="android:fontFamily">@font/sourcesanspro</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="AppTheme.subtitle1" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">@font/sourcesanspro</item>
+        <item name="android:fontFamily">@font/sourcesanspro</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">0.15</item>
+    </style>
+
+    <style name="TextAppearance.subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="fontFamily">@font/sourcesanspro_semibold</item>
+        <item name="android:fontFamily">@font/sourcesanspro_semibold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AppTheme.body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/sourcesanspro</item>
+        <item name="android:fontFamily">@font/sourcesanspro</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AppTheme.body2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/sourcesanspro</item>
+        <item name="android:fontFamily">@font/sourcesanspro</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="AppTheme.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textSize">25sp</item>
+        <item name="fontFamily">@font/sourcesanspro_semibold</item>
+        <item name="android:fontFamily">@font/sourcesanspro_semibold</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="AppTheme.caption" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="fontFamily">@font/sourcesanspro_semibold</item>
+        <item name="android:fontFamily">@font/sourcesanspro_semibold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/caption</item>
+    </style>
+
+    <style name="AppTheme.overline" parent="TextAppearance.MaterialComponents.Overline">
+        <item name="fontFamily">@font/sourcesanspro</item>
+        <item name="android:fontFamily">@font/sourcesanspro</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="AppTheme.Error" parent="TextAppearance.Design.Error">
+        <item name="android:textColor">@color/red</item>
+        <item name="android:colorActivatedHighlight">@color/red</item>
+        <item name="android:colorControlActivated">@color/red</item>
     </style>
 
 

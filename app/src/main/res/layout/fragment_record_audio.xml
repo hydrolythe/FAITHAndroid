@@ -15,7 +15,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#91C6A8"
+        android:background="@color/background_record_audio"
         android:orientation="vertical">
         <!--ACHTERGROND-->
         <ImageView
@@ -39,6 +39,7 @@
                 android:background="@drawable/save_btn"
                 android:onClick="@{() -> audioDetailViewModel.onSaveClicked()}"
                 android:visibility="@{audioDetailViewModel.saveButtonVisible? View.VISIBLE : View.GONE}"
+                android:contentDescription="@string/save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +47,7 @@
                 android:id="@+id/cardView_record"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="15dp"
+                app:cardCornerRadius="@dimen/panel_corner_radius"
                 app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"

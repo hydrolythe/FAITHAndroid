@@ -104,6 +104,7 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     }
 
     override fun goToRegisterAvatarScreen() {
+      //  replaceFragment(RegisterAvatarFragment.newInstance(), R.id.fragment_container)
         replaceFragment(RegisterAvatarFragment.newInstance(), R.id.fragment_container)
     }
 }
