@@ -3,6 +3,7 @@ package be.hogent.faith.encryption
 import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.util.contentEqual
 import com.google.crypto.tink.KeysetHandle
+import io.reactivex.Completable
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -24,16 +25,8 @@ class FileEncrypterTest {
     private val backupFile =
         File("src/test/java/be/hogent/faith/encryption/testResources/image - copy.png")
 
-
-    @Before
-    fun setUp() {
-        file.delete()
-        backupFile.copyTo(file, overwrite = true)
-    }
-
     @After
     fun tearDown() {
-        file.delete()
         backupFile.copyTo(file, overwrite = true)
     }
 
@@ -53,17 +46,14 @@ class FileEncrypterTest {
     fun encryptedFileIsDecryptedCorrectly() {
         // Act
         fileEncrypter.encrypt(file)
-            .test()
-            .assertComplete()
-            .dispose()
-
-        fileEncrypter.decrypt(file)
+            .andThen(Completable.defer {
+                fileEncrypter.decrypt(file)
+            })
             .test()
             .assertComplete()
             .dispose()
 
         // Assert
-        val result =backupFile.contentEqual(file)
-        assertTrue(result)
+        assertTrue(backupFile.contentEqual(file))
     }
 }

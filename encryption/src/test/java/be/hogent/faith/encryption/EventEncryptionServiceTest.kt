@@ -30,6 +30,8 @@ class EventEncryptionServiceTest {
      */
     private val dataFile =
         File("src/test/java/be/hogent/faith/encryption/testResources/image.png")
+    private val backupFile =
+        File("src/test/java/be/hogent/faith/encryption/testResources/image - copy.png")
 
     @After
     fun cleanUpFiles() {
@@ -82,7 +84,7 @@ class EventEncryptionServiceTest {
             .assertNoErrors()
             .assertComplete()
             .assertValue { encryptedEvent ->
-                encryptedEvent.emotionAvatar!!.contentEqual(eventWithFiles.emotionAvatar!!)
+                encryptedEvent.emotionAvatar!!.contentEqual(backupFile)
             }
     }
 
@@ -100,7 +102,7 @@ class EventEncryptionServiceTest {
             .assertComplete()
 
         assertTrue(encryptedEvent.details.none { encryptedDetail ->
-            encryptedDetail.file.contentEqual(dataFile)
+            encryptedDetail.file.contentEqual(backupFile)
         })
     }
 

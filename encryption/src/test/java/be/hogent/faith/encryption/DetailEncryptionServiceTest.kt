@@ -82,7 +82,7 @@ class DetailEncryptionServiceTest {
         detailEncrypter.decrypt(encryptedDetail)
             .test()
             .assertValue { decryptedDetail ->
-                decryptedDetail.file.contentEqual(dataFile)
+                decryptedDetail.file.contentEqual(backupFile)
             }
     }
 }

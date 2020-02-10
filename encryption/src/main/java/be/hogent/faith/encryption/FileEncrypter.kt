@@ -58,15 +58,14 @@ class FileEncrypter(
      */
     fun decrypt(file: File): Completable {
         return Completable.fromCallable {
-            val originalBackup = createBackupOfOriginal(file)
+            val cipherTextFile = createBackupOfOriginal(file)
 
-            file.delete()
             val cipherTextSource =
-                FileInputStream(originalBackup).channel
+                FileInputStream(cipherTextFile).channel
             val decryptingChannel =
                 streamingAead.newDecryptingChannel(cipherTextSource, associatedData)
 
-            val out: OutputStream = FileOutputStream(file)
+            val out: OutputStream = FileOutputStream(file, false)
             val buffer = ByteBuffer.allocate(CHUNK_SIZE)
             var cnt: Int
             do {
@@ -78,7 +77,7 @@ class FileEncrypter(
             decryptingChannel.close()
             out.close()
 
-            removeBackup(originalBackup)
+            removeBackup(cipherTextFile)
         }
     }
 
