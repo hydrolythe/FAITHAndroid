@@ -5,6 +5,8 @@ import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.util.contentEqual
 import be.hogent.faith.util.factory.DetailFactory
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import java.io.File
 
@@ -19,6 +21,19 @@ class DetailEncryptionServiceTest {
     private val dataFile =
         File("src/test/java/be/hogent/faith/encryption/testResources/image.png")
 
+    private val backupFile =
+        File("src/test/java/be/hogent/faith/encryption/testResources/image - copy.png")
+
+    @Before
+    fun setUp() {
+        detail.file = dataFile
+    }
+
+    @After
+    fun tearDown() {
+        backupFile.copyTo(dataFile, overwrite = true)
+    }
+
     @Test
     fun `After encrypting a detail its data is no longer human readable`() {
         // Act
@@ -31,15 +46,11 @@ class DetailEncryptionServiceTest {
 
     @Test
     fun `After encrypting a detail its associated file is no longer human readable`() {
-        // Arrange
-        // set the file to an actual file so it can be encrypted
-        detail.file = dataFile
-
         // Act
         detailEncrypter.encrypt(detail)
             .test()
             .assertValue { encryptedDetail ->
-                encryptedDetail.file.contentEqual(dataFile).not()
+                encryptedDetail.file.contentEqual(backupFile).not()
             }
     }
 
@@ -49,10 +60,12 @@ class DetailEncryptionServiceTest {
         detailEncrypter.encrypt(detail)
             .doOnSuccess { encryptedDetail = it }
             .test()
+            .assertComplete()
 
         // Act
         detailEncrypter.decrypt(encryptedDetail)
             .test()
+            .assertComplete()
             .assertValue { decryptedDetail ->
                 detail == decryptedDetail
             }

@@ -60,6 +60,7 @@ class FileEncrypter(
         return Completable.fromCallable {
             val originalBackup = createBackupOfOriginal(file)
 
+            file.delete()
             val cipherTextSource =
                 FileInputStream(originalBackup).channel
             val decryptingChannel =

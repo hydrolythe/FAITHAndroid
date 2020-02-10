@@ -2,9 +2,7 @@ package be.hogent.faith.encryption
 
 import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.util.contentEqual
-import be.hogent.faith.util.withSuffix
 import com.google.crypto.tink.KeysetHandle
-import io.reactivex.Completable
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -21,46 +19,51 @@ class FileEncrypterTest {
 
     private val fileEncrypter = FileEncrypter(dataEncryptionKey)
 
-    private val originalFile =
+    private val file =
         File("src/test/java/be/hogent/faith/encryption/testResources/image.png")
-    private val workingFile = File(originalFile.path.withSuffix("working"))
+    private val backupFile =
+        File("src/test/java/be/hogent/faith/encryption/testResources/image - copy.png")
+
 
     @Before
-    fun backUpFileToBeEncrypted() {
-        originalFile.copyTo(
-            target = workingFile,
-            overwrite = true
-        )
+    fun setUp() {
+        file.delete()
+        backupFile.copyTo(file, overwrite = true)
     }
 
     @After
-    fun restoreFileToBeEncrypted() {
-        workingFile.delete()
+    fun tearDown() {
+        file.delete()
+        backupFile.copyTo(file, overwrite = true)
     }
 
     @Test
     fun fileDoesNotHaveSameContentsAfterEncryption() {
         // Act
-        fileEncrypter.encrypt(workingFile)
+        fileEncrypter.encrypt(file)
             .test()
             .assertComplete()
+            .dispose()
 
         // Assert
-        assertFalse(workingFile.contentEqual(originalFile))
+        assertFalse(backupFile.contentEqual(file))
     }
 
     @Test
     fun encryptedFileIsDecryptedCorrectly() {
         // Act
-        fileEncrypter.encrypt(workingFile)
-            .andThen(
-                Completable.defer { fileEncrypter.decrypt(workingFile) }
-            )
+        fileEncrypter.encrypt(file)
             .test()
             .assertComplete()
+            .dispose()
+
+        fileEncrypter.decrypt(file)
+            .test()
+            .assertComplete()
+            .dispose()
 
         // Assert
-//        assertEquals(originalFile.readText(), file.readText())
-        assertTrue(workingFile.contentEqual(originalFile))
+        val result =backupFile.contentEqual(file)
+        assertTrue(result)
     }
 }
