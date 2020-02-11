@@ -11,7 +11,6 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import com.divyanshu.draw.widget.DrawView
 import com.divyanshu.draw.widget.tools.CanvasAction
 
-
 open class DrawViewModel : ViewModel() {
 
     protected val _selectedColor = MutableLiveData<@ColorInt Int>()
@@ -112,7 +111,7 @@ open class DrawViewModel : ViewModel() {
 
     fun pickColor(@ColorInt color: Int) {
         _selectedColor.value = color
-        //als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
+        // als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
         if (_selectedTool.value == Tool.ERASER)
             onPencilClicked()
         _showColorPicker.value = false
@@ -121,14 +120,13 @@ open class DrawViewModel : ViewModel() {
     fun setCustomColor(@ColorInt color: Int) {
         _customColor.value = color
         _selectedColor.value = color
-        //als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
-
+        // als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
     }
 
     fun setLineWidth(width: LineWidth) {
         _selectedLineWidth.value = width
         if (_selectedTool.value != Tool.ERASER) _selectedColor.value =
-            _selectedColor.value //anders past de tint zich niet aan
+            _selectedColor.value // anders past de tint zich niet aan
     }
 
     fun undo() {

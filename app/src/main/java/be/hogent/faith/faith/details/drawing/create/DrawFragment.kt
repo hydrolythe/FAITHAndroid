@@ -70,7 +70,7 @@ abstract class DrawFragment : Fragment() {
     }
 
     private fun showExitAlert() {
-       val alertDialog : AlertDialog = this.run {
+        val alertDialog: AlertDialog = this.run {
             val builder = AlertDialog.Builder(this.requireContext()).apply {
                 setTitle(R.string.dialog_to_the_event_title)
                 setMessage(R.string.dialog_to_the_event_message)
@@ -83,7 +83,7 @@ abstract class DrawFragment : Fragment() {
             }
             builder.create()
         }
-        alertDialog!!.show()
+        alertDialog.show()
     }
 
     interface DrawingScreenNavigation {
