@@ -40,6 +40,11 @@
                 android:src="@drawable/ic_brush"
                 android:tint="@{drawViewModel.selectedTool==Tool.PENCIL ? drawViewModel.selectedColor : Color.BLACK}" />
 
+            <View
+                android:layout_height="1dip"
+                android:layout_width="fill_parent"
+                android:background="@color/black"/>
+
 
             <ImageView
                 android:id="@+id/btn_text"
@@ -51,6 +56,11 @@
                 android:padding="16dp"
                 android:src="@drawable/ic_tekst"
                 android:tint="@{drawViewModel.selectedTool==Tool.TEXT ? drawViewModel.selectedColor : Color.BLACK}" />
+
+            <View
+                android:layout_height="1dip"
+                android:layout_width="fill_parent"
+                android:background="@color/black"/>
 
             <ImageView
                 android:id="@+id/btn_eraser"

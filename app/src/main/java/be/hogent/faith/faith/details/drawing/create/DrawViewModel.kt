@@ -1,20 +1,16 @@
 package be.hogent.faith.faith.details.drawing.create
 
-import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.R
 import be.hogent.faith.faith.util.SingleLiveEvent
 import com.divyanshu.draw.widget.DrawView
 import com.divyanshu.draw.widget.tools.CanvasAction
-import be.hogent.faith.R
 
-/**
- * Base VM for both the [DrawingDetailViewModel] and the [DrawEmotionAvatarViewModel].
- */
 open class DrawViewModel : ViewModel() {
 
     protected val _selectedColor = MutableLiveData<@ColorInt Int>()
@@ -36,6 +32,10 @@ open class DrawViewModel : ViewModel() {
     private val _undoClicked = SingleLiveEvent<Unit>()
     val undoClicked: LiveData<Unit>
         get() = _undoClicked
+
+    private val _redoClicked = SingleLiveEvent<Unit>()
+    val redoClicked: LiveData<Unit>
+        get() = _redoClicked
 
     private val _pencilClicked = SingleLiveEvent<Unit>()
     val pencilClicked: LiveData<Unit>
@@ -61,14 +61,18 @@ open class DrawViewModel : ViewModel() {
     val saveClicked: LiveData<Unit>
         get() = _saveClicked
 
+    private val _cancelClicked = SingleLiveEvent<Unit>()
+    val cancelClicked: LiveData<Unit>
+        get() = _cancelClicked
+
     internal val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
 
     val customColorSelected: LiveData<Boolean> =
-        Transformations.map<Int, Boolean>(_selectedColor) { color ->
-            color == _customColor.value
-        }
+        Transformations.map<Int, Boolean>(selectedColor) { color ->
+        color == _customColor.value && !intArrayOf(R.color.green, R.color.yellow, R.color.black, R.color.red, R.color.blue).contains(color)
+    }
 
     private val _showColorPicker = MutableLiveData<Boolean>()
     val showColorPicker: LiveData<Boolean>
@@ -107,26 +111,30 @@ open class DrawViewModel : ViewModel() {
 
     fun pickColor(@ColorInt color: Int) {
         _selectedColor.value = color
-        //als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
+        // als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
         if (_selectedTool.value == Tool.ERASER)
             onPencilClicked()
-        _showColorPicker.value = false;
+        _showColorPicker.value = false
     }
 
     fun setCustomColor(@ColorInt color: Int) {
         _customColor.value = color
         _selectedColor.value = color
-        //als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
-
+        // als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
     }
 
     fun setLineWidth(width: LineWidth) {
         _selectedLineWidth.value = width
-        if (_selectedTool.value != Tool.ERASER) _selectedColor.value = _selectedColor.value //anders past de tint zich niet aan
+        if (_selectedTool.value != Tool.ERASER) _selectedColor.value =
+            _selectedColor.value // anders past de tint zich niet aan
     }
 
     fun undo() {
         _undoClicked.call()
+    }
+
+    fun redo() {
+        _redoClicked.call()
     }
 
     fun onCustomColorClicked() {
@@ -171,6 +179,9 @@ open class DrawViewModel : ViewModel() {
         _saveClicked.call()
     }
 
+    fun onCancelClicked() {
+        _cancelClicked.call()
+    }
 
     enum class LineWidth(val width: Float) {
         THIN(12f),

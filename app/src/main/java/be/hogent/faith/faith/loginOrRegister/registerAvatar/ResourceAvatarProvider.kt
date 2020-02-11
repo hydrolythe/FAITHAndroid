@@ -19,7 +19,7 @@ class ResourceAvatarProvider(private val context: Context) :
     }
 
     override fun getAvatarDrawableStaan(avatarName: String): Drawable {
-        return getDrawable(avatarName) //, "staan")
+        return getDrawable(avatarName) // , "staan")
     }
 
     override fun getAvatarDrawableZitten(avatarName: String): Drawable {
