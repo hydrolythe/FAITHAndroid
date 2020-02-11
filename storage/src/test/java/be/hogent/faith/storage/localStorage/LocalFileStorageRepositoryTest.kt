@@ -75,6 +75,7 @@ class LocalFileStorageRepositoryTest {
             .test()
             .assertComplete()
             .assertNoErrors()
+            .dispose()
 
         // Assert
         val detailLocation =
@@ -92,14 +93,11 @@ class LocalFileStorageRepositoryTest {
             .test()
             .assertComplete()
             .assertNoErrors()
+            .dispose()
 
         // Assert
         val avatarLocation =
             File(filesDir, "users/$userUID/events/${encryptedEvent.uuid}/emotionAvatar")
         assertTrue(avatarLocation.exists())
-    }
-
-    private fun fileNameExistsInDirectory(directory: File, fileName: String): Boolean {
-        return directory.walk().any { it.name == fileName }
     }
 }

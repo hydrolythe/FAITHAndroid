@@ -53,6 +53,7 @@ class EventEncryptionServiceTest {
                         encryptedEvent.notes != eventWithoutFiles.notes &&
                         encryptedEvent.title != eventWithoutFiles.title
             }
+            .dispose()
     }
 
     @Test
@@ -62,12 +63,14 @@ class EventEncryptionServiceTest {
         eventEncrypter.encrypt(eventWithoutFiles)
             .doOnSuccess { encryptedEvent = it }
             .test()
+            .dispose()
 
         // Act
         var decryptedEvent: Event? = null
         eventEncrypter.decrypt(encryptedEvent!!)
             .doOnSuccess { decryptedEvent = it }
             .test()
+            .dispose()
 
         // Assert
         assertEquals(decryptedEvent, eventWithoutFiles)
@@ -86,6 +89,7 @@ class EventEncryptionServiceTest {
             .assertValue { encryptedEvent ->
                 encryptedEvent.emotionAvatar!!.contentEqual(backupFile)
             }
+            .dispose()
     }
 
     @Test
@@ -100,6 +104,7 @@ class EventEncryptionServiceTest {
             .test()
             .assertNoErrors()
             .assertComplete()
+            .dispose()
 
         assertTrue(encryptedEvent.details.none { encryptedDetail ->
             encryptedDetail.file.contentEqual(backupFile)
@@ -121,6 +126,7 @@ class EventEncryptionServiceTest {
         eventEncrypter.encrypt(eventWithoutFiles)
             .doOnSuccess { encryptedEvent = it }
             .test()
+            .dispose()
 
         // Assert
         assertTrue(encryptedEvent!!.encryptedDEK.isNotEmpty())

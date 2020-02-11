@@ -42,6 +42,7 @@ class DetailEncryptionServiceTest {
             .assertValue { encryptedDetail ->
                 encryptedDetail.type != detail.javaClass.canonicalName
             }
+            .dispose()
     }
 
     @Test
@@ -52,6 +53,7 @@ class DetailEncryptionServiceTest {
             .assertValue { encryptedDetail ->
                 encryptedDetail.file.contentEqual(backupFile).not()
             }
+            .dispose()
     }
 
     @Test
@@ -61,6 +63,7 @@ class DetailEncryptionServiceTest {
             .doOnSuccess { encryptedDetail = it }
             .test()
             .assertComplete()
+            .dispose()
 
         // Act
         detailEncrypter.decrypt(encryptedDetail)
@@ -69,6 +72,7 @@ class DetailEncryptionServiceTest {
             .assertValue { decryptedDetail ->
                 detail == decryptedDetail
             }
+            .dispose()
     }
 
     @Test
@@ -77,6 +81,7 @@ class DetailEncryptionServiceTest {
         detailEncrypter.encrypt(detail)
             .doOnSuccess { encryptedDetail = it }
             .test()
+            .dispose()
 
         // Act
         detailEncrypter.decrypt(encryptedDetail)
@@ -84,5 +89,6 @@ class DetailEncryptionServiceTest {
             .assertValue { decryptedDetail ->
                 decryptedDetail.file.contentEqual(backupFile)
             }
+            .dispose()
     }
 }

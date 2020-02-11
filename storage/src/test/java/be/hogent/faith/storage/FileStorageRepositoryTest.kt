@@ -43,6 +43,7 @@ class FileStorageRepositoryTest {
         // Act
         storageRepository.saveEvent(encryptedEvent)
             .test()
+            .dispose()
 
         verify(exactly = 1) { localStorage.saveEvent(encryptedEvent) }
     }
@@ -56,6 +57,7 @@ class FileStorageRepositoryTest {
         // Act
         storageRepository.saveEvent(encryptedEvent)
             .test()
+            .dispose()
 
         verify(exactly = 1) { remoteStorage.saveEvent(encryptedEvent) }
     }
@@ -69,6 +71,7 @@ class FileStorageRepositoryTest {
         // Act
         storageRepository.saveEvent(encryptedEvent)
             .test()
+            .dispose()
 
         verify { remoteStorage.saveEvent(any()) wasNot Called }
     }
@@ -83,6 +86,7 @@ class FileStorageRepositoryTest {
         storageRepository.saveEvent(encryptedEvent)
             .test()
             .assertError(RuntimeException::class.java)
+            .dispose()
     }
 
     @Test
@@ -95,6 +99,7 @@ class FileStorageRepositoryTest {
         storageRepository.saveEvent(encryptedEvent)
             .test()
             .assertError(RuntimeException::class.java)
+            .dispose()
     }
 
     @Test
@@ -108,6 +113,7 @@ class FileStorageRepositoryTest {
         // Act
         storageRepository.downloadEventFiles(event)
             .test()
+            .dispose()
 
         // Assert
         event.details.forEach {
@@ -130,6 +136,7 @@ class FileStorageRepositoryTest {
         // Act
         storageRepository.downloadEventFiles(event)
             .test()
+            .dispose()
 
         // Assert
         verifyAll {
@@ -151,6 +158,7 @@ class FileStorageRepositoryTest {
         // Act
         storageRepository.downloadEventFiles(event)
             .test()
+            .dispose()
 
         // Assert
         verifyAll {
@@ -168,6 +176,7 @@ class FileStorageRepositoryTest {
         // Act
         storageRepository.downloadEventFiles(event)
             .test()
+            .dispose()
 
         // Assert
         verify { remoteStorage.downloadEmotionAvatar(event) wasNot Called }

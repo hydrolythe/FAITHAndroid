@@ -28,6 +28,7 @@ class KeyEncrypterTest {
             .assertComplete()
             .assertValue(Objects::nonNull)
             .assertValue(String::isNotEmpty)
+            .dispose()
     }
 
     @Test
@@ -40,10 +41,12 @@ class KeyEncrypterTest {
             .doOnSuccess { encryptedKeySethandle = it }
             .test()
             .assertComplete()
+            .dispose()
 
         keyEncrypter.decrypt(encryptedKeySethandle)
             .doOnSuccess { decryptedKeySetHandle = it }
             .test()
+            .dispose()
 
         // Have to use keySetInfo because comparing the keysets themselves differ by some whitespace only.
         assertEquals(decryptedKeySetHandle!!.keysetInfo, keySetHandle.keysetInfo)

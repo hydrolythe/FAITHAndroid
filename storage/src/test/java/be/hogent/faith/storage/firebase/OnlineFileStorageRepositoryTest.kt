@@ -75,6 +75,7 @@ class OnlineFileStorageRepositoryTest {
             .test()
             .assertNoErrors()
             .assertComplete()
+            .dispose()
 
         // Would be better to also check the reference to where it is put but I don't know
         // how to do that.
@@ -91,6 +92,7 @@ class OnlineFileStorageRepositoryTest {
             .test()
             .assertNoErrors()
             .assertComplete()
+            .dispose()
 
         // Would be better to also check the reference to where it is put but I don't know
         // how to do that.
@@ -107,6 +109,7 @@ class OnlineFileStorageRepositoryTest {
         onlineFileStorageRepository.saveEvent(encryptedEvent)
             .test()
             .assertError(RuntimeException::class.java)
+            .dispose()
 
         // Would be better to also check the reference to where it is put but I don't know
         // how to do that.
@@ -122,6 +125,7 @@ class OnlineFileStorageRepositoryTest {
         onlineFileStorageRepository.saveEvent(encryptedEvent)
             .test()
             .assertError(RuntimeException::class.java)
+            .dispose()
 
         // Would be better to also check the reference to where it is put but I don't know
         // how to do that.
