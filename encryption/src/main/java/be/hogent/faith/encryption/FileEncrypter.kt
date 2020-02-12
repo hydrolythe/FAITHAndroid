@@ -7,14 +7,14 @@ import io.reactivex.Completable
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
+import java.io.RandomAccessFile
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import java.nio.channels.WritableByteChannel
 
-private const val CHUNK_SIZE = 16_000 * Byte.SIZE_BYTES
-private const val ORIGINAL_FILE_SUFFIX = "_temp"
+private const val CHUNK_SIZE = 1024
+private const val ENCRYPTED_FILE_SUFFIX = "_encrypted"
+private const val DECRYPTED_FILE_SUFFIX = "_decrypted"
 
 // This dummy associatedData is required to open a decryptingChannel
 // Passing null (as you can do with a regular Aead) results in a nullpointer when oping the
@@ -28,64 +28,70 @@ class FileEncrypter(
     private val streamingAead = StreamingAeadFactory.getPrimitive(keysetHandle)
 
     /**
-     * Encrypts the contents of the given [file].
+     * Encrypts the contents of the given [plainTextFile].
      */
-    fun encrypt(file: File): Completable {
+    fun encrypt(plainTextFile: File): Completable {
         return Completable.fromCallable {
-            val originalBackup = createBackupOfOriginal(file)
+            val encryptedFile = File(plainTextFile.path.withSuffix(ENCRYPTED_FILE_SUFFIX))
 
-            val cipherTextDestination: FileChannel = FileOutputStream(file).channel
+            val cipherTextDestination: FileChannel = FileOutputStream(encryptedFile).channel
             val encryptingChannel: WritableByteChannel =
                 streamingAead.newEncryptingChannel(cipherTextDestination, associatedData)
 
-            val buffer: ByteBuffer = ByteBuffer.allocate(CHUNK_SIZE)
-            val fileInputStream: InputStream = FileInputStream(originalBackup)
+            val plainTextChannel = RandomAccessFile(plainTextFile, "r").channel
+            val buffer: ByteBuffer = createBuffer(plainTextChannel)
 
-            while (fileInputStream.available() > 0) {
-                fileInputStream.read(buffer.array())
+            var bytesRead = plainTextChannel.read(buffer)
+            while (bytesRead > 0) {
+                buffer.flip()
                 encryptingChannel.write(buffer)
+                buffer.clear()
+                bytesRead = plainTextChannel.read(buffer)
             }
 
             encryptingChannel.close()
-            fileInputStream.close()
-            // Remove temp file
-            removeBackup(originalBackup)
+            plainTextChannel.close()
+
+            encryptedFile.copyTo(plainTextFile, overwrite = true)
+            encryptedFile.delete()
         }
     }
 
     /**
-     * Decrypts the contents of the given [file].
+     * Decrypts the contents of the given [cypherTextFile].
      */
-    fun decrypt(file: File): Completable {
+    fun decrypt(cypherTextFile: File): Completable {
         return Completable.fromCallable {
-            val cipherTextFile = createBackupOfOriginal(file)
+            val plainTextFile = File(cypherTextFile.path.withSuffix(DECRYPTED_FILE_SUFFIX))
 
-            val cipherTextSource =
-                FileInputStream(cipherTextFile).channel
+            val cipherTextChannel = FileInputStream(cypherTextFile).channel
             val decryptingChannel =
-                streamingAead.newDecryptingChannel(cipherTextSource, associatedData)
+                streamingAead.newDecryptingChannel(cipherTextChannel, associatedData)
 
-            val out: OutputStream = FileOutputStream(file, false)
-            val buffer = ByteBuffer.allocate(CHUNK_SIZE)
-            var cnt: Int
-            do {
+            val plainTextChannel = FileOutputStream(plainTextFile, false).channel
+            val buffer = createBuffer(cipherTextChannel)
+
+            var bytesRead = decryptingChannel.read(buffer)
+            while (bytesRead > 0) {
+                buffer.flip()
+                plainTextChannel.write(buffer)
                 buffer.clear()
-                cnt = decryptingChannel.read(buffer)
-                out.write(buffer.array())
-            } while (cnt > 0)
+                bytesRead = decryptingChannel.read(buffer)
+            }
 
             decryptingChannel.close()
-            out.close()
+            plainTextChannel.close()
 
-            removeBackup(cipherTextFile)
+            plainTextFile.copyTo(cypherTextFile, overwrite = true)
+            plainTextFile.delete()
         }
     }
 
-    private fun removeBackup(originalBackup: File) = originalBackup.delete()
-
-    private fun createBackupOfOriginal(original: File): File {
-        val originalBackup = File(original.path.withSuffix(ORIGINAL_FILE_SUFFIX))
-        original.copyTo(originalBackup)
-        return originalBackup
+    private fun createBuffer(channel: FileChannel): ByteBuffer {
+        var bufferSize = CHUNK_SIZE
+        if (CHUNK_SIZE > channel.size()) {
+            bufferSize = channel.size().toInt()
+        }
+        return ByteBuffer.allocate(bufferSize)
     }
 }
