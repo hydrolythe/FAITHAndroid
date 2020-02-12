@@ -2,7 +2,6 @@ package be.hogent.faith.encryption
 
 import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.util.contentEqual
-import com.google.crypto.tink.KeysetHandle
 import io.reactivex.Completable
 import org.junit.After
 import org.junit.Assert.assertFalse
@@ -11,48 +10,44 @@ import org.junit.Test
 import java.io.File
 
 class FileEncrypterTest {
-    private val dataEncryptionKey by lazy { createDEK() }
-
-    private fun createDEK(): KeysetHandle {
-        return KeyGenerator().generateStreamingKeysetHandle()
-    }
+    private val dataEncryptionKey = KeyGenerator().generateStreamingKeysetHandle()
 
     private val fileEncrypter = FileEncrypter(dataEncryptionKey)
 
-    private val file =
+    private val workingFile =
         File("src/test/java/be/hogent/faith/encryption/testResources/image.png")
-    private val backupFile =
+    private val originalFile =
         File("src/test/java/be/hogent/faith/encryption/testResources/image - copy.png")
 
     @After
     fun tearDown() {
-        backupFile.copyTo(file, overwrite = true)
+        originalFile.copyTo(workingFile, overwrite = true)
     }
 
     @Test
     fun fileDoesNotHaveSameContentsAfterEncryption() {
         // Act
-        fileEncrypter.encrypt(file)
+        fileEncrypter.encrypt(workingFile)
             .test()
             .assertComplete()
             .dispose()
 
         // Assert
-        assertFalse(backupFile.contentEqual(file))
+        assertFalse(originalFile.contentEqual(workingFile))
     }
 
     @Test
     fun encryptedFileIsDecryptedCorrectly() {
         // Act
-        fileEncrypter.encrypt(file)
+        fileEncrypter.encrypt(workingFile)
             .andThen(Completable.defer {
-                fileEncrypter.decrypt(file)
+                fileEncrypter.decrypt(workingFile)
             })
             .test()
             .assertComplete()
             .dispose()
 
         // Assert
-        assertTrue(backupFile.contentEqual(file))
+        assertTrue(originalFile.contentEqual(workingFile))
     }
 }
