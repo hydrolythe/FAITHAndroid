@@ -32,7 +32,7 @@ class RegisterTest : KoinTest {
 
     @Test
     fun canRegister() {
-        onView(withId(R.id.btn_loginfragment_library)).perform(ViewActions.click())
+        onView(withId(R.id.btn_login_ik_ben_nieuw)).perform(ViewActions.click())
 
         closeSoftKeyboard()
         onView(withId(R.id.txt_register_username)).perform(typeText(UUID.randomUUID().toString()))
@@ -48,10 +48,10 @@ class RegisterTest : KoinTest {
                 ViewActions.click()
             )
         )
-        onView(withId(R.id.btn_register_finishRegistration)).perform(ViewActions.click())
+        onView(withId(R.id.btn_register_naar_de_stad)).perform(ViewActions.click())
         // Just for safety
         closeSoftKeyboard()
-        onView(withId(R.id.btn_loginfragment_startNewEvent)).check(
+        onView(withId(R.id.btn_loginfragment_library)).check(
             ViewAssertions.matches(
                 ViewMatchers.isDisplayed()
             )

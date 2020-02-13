@@ -32,6 +32,7 @@ class CityScreenFragmentTest : KoinTest {
     @Test
     fun mainScreenFragment_buttonsOpenCorrectScreen() {
         onView(withId(R.id.btn_loginfragment_startNewEvent)).check(matches(isDisplayed()))
+        Thread.sleep(3000)
         onView(withId(R.id.image_main_avatar)).check(matches(isDisplayed()))
 
         onView(withId(R.id.btn_loginfragment_startNewEvent)).perform(click())

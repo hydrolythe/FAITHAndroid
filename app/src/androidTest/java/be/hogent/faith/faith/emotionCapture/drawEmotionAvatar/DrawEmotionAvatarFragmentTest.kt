@@ -18,7 +18,8 @@ import org.junit.runner.RunWith
 @LargeTest
 class DrawEmotionAvatarFragmentTest {
     @get:Rule
-    var activityScenarioRule = ActivityTestRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java, true, true)
+    var activityScenarioRule =
+        ActivityTestRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java, true, true)
 
     @Before
     fun goToScreen() {
@@ -33,10 +34,8 @@ class DrawEmotionAvatarFragmentTest {
         onView(withId(R.id.btn_draw_setColorRed)).perform(click())
         onView(withId(R.id.btn_draw_setColorYellow)).perform(click())
 
-        onView(withId(R.id.btn_draw_setThinLineWidth)).perform(click())
-        onView(withId(R.id.btn_draw_setMediumLineWidth)).perform(click())
-        onView(withId(R.id.btn_draw_setThickLineWidth)).perform(click())
-
-        onView(withId(R.id.btn_draw_undo)).perform(click())
+        onView(withId(R.id.btn_pencil)).perform(click())
+        onView(withId(R.id.btn_text)).perform(click())
+        onView(withId(R.id.btn_eraser)).perform(click())
     }
 }
