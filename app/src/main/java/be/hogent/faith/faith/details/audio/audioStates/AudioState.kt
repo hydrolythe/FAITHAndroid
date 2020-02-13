@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.details.audio.audioStates
 
+import be.hogent.faith.faith.details.audio.AudioViewState
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.view.View
@@ -21,11 +22,9 @@ abstract class AudioState(
     abstract fun onStopPressed()
     abstract fun onRecordPressed()
 
-    abstract val playButtonEnabled: Boolean
-    abstract val pauseButtonEnabled: Boolean
-    abstract val stopButtonEnabled: Boolean
-    abstract val recordButtonEnabled: Boolean
     open val saveButtonEnabled: Boolean = false
+
+    abstract val audioViewState: AudioViewState
 
     open val recordingTimeVisibility = View.INVISIBLE
 

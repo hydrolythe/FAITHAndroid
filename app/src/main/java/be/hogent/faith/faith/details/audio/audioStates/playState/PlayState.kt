@@ -1,12 +1,15 @@
 package be.hogent.faith.faith.details.audio.audioStates.playState
 
 import android.media.MediaPlayer
+import be.hogent.faith.faith.details.audio.AudioViewState
 import be.hogent.faith.faith.details.audio.audioStates.AudioContext
 import be.hogent.faith.faith.details.audio.audioStates.AudioState
 import be.hogent.faith.util.TAG
 import timber.log.Timber
 
 abstract class PlayState(context: AudioContext) : AudioState(context) {
+
+    override val audioViewState = AudioViewState.FinishedRecording
 
     /**
      * Initialise the [MediaPlayer].

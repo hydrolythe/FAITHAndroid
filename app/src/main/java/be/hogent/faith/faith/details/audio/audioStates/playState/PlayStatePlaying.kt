@@ -31,11 +31,6 @@ class PlayStatePlaying(
         }
     }
 
-    override val playButtonEnabled = false
-    override val pauseButtonEnabled = true
-    override val stopButtonEnabled = true
-    override val recordButtonEnabled = false
-
     init {
         Timber.d("Started playing audio from ${tempFileProvider.tempAudioRecordingFile.path}")
     }

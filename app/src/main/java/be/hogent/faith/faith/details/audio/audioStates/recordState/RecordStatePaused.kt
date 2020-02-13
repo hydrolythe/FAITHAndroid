@@ -5,6 +5,7 @@ import android.media.MediaRecorder
 import android.os.Build
 import be.hogent.faith.faith.details.audio.audioStates.AudioContext
 import android.view.View
+import be.hogent.faith.faith.details.audio.AudioViewState
 import be.hogent.faith.util.TAG
 import timber.log.Timber
 
@@ -18,10 +19,7 @@ class RecordStatePaused(
     override val recorder: MediaRecorder
 ) : RecordState(context) {
 
-    override val playButtonEnabled = false
-    override val pauseButtonEnabled = false
-    override val stopButtonEnabled = true
-    override val recordButtonEnabled = true
+    override val audioViewState = AudioViewState.Recording
 
     override val recordingTimeVisibility = View.VISIBLE
 

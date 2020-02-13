@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.view.View
+import be.hogent.faith.faith.details.audio.AudioViewState
 import be.hogent.faith.faith.details.audio.audioStates.AudioContext
 import timber.log.Timber
 
@@ -12,6 +13,8 @@ class RecordStateRecording(
     override val mediaPlayer: MediaPlayer,
     override val recorder: MediaRecorder
 ) : RecordState(context) {
+
+    override val audioViewState = AudioViewState.Recording
 
     companion object {
         /**
@@ -29,11 +32,7 @@ class RecordStateRecording(
         }
     }
 
-    override val playButtonEnabled = false
-    override val stopButtonEnabled = true
-    override val recordButtonEnabled = false
-    // True by default, but [AudioDetailVM] has final decision because it can know if pause is supported
-    override val pauseButtonEnabled = true
+    val pauseButtonEnabled = true
 
     override val recordingTimeVisibility = View.VISIBLE
 
@@ -59,7 +58,6 @@ class RecordStateRecording(
     override fun onStopPressed() {
         Timber.d("Recording -> Stopped: Finished recording")
         recorder.stop()
-        context.finishedRecording = true
         context.goToNextState(RecordStateStopped(context, mediaPlayer, recorder))
     }
 }

@@ -131,7 +131,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
 
     public override fun onDestroy() {
         super.onDestroy()
-        if (alertDialog != null && alertDialog!!.isShowing()) {
+        if (alertDialog != null && alertDialog!!.isShowing) {
             alertDialog!!.cancel()
         }
     }

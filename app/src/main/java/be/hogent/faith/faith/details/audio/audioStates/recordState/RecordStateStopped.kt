@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.details.audio.audioStates.recordState
 
+import be.hogent.faith.faith.details.audio.AudioViewState
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import be.hogent.faith.faith.details.audio.audioStates.AudioContext
@@ -12,14 +13,7 @@ class RecordStateStopped(
     override val recorder: MediaRecorder
 ) : RecordState(context) {
 
-    override val playButtonEnabled = true
-    override val pauseButtonEnabled = false
-    override val stopButtonEnabled = false
-    override val recordButtonEnabled = true
-
-    init {
-        context.finishedRecording = true
-    }
+    override val audioViewState = AudioViewState.FinishedRecording
 
     override fun onPlayPressed() {
         Timber.d("RecordStopped -> PlayStatePlaying")
@@ -29,7 +23,6 @@ class RecordStateStopped(
     override fun onRecordPressed() {
         Timber.d("Stopped->Recording")
         recorder.reset()
-        context.finishedRecording = false
         context.goToNextState(
             RecordStateRecording.getRecordingState(
                 context,

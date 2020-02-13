@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.details.audio.audioStates.recordState
 
+import be.hogent.faith.faith.details.audio.AudioViewState
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import be.hogent.faith.faith.details.audio.audioStates.AudioContext
@@ -10,10 +11,7 @@ class RecordStateInitial(context: AudioContext) : RecordState(context) {
     override val mediaPlayer: MediaPlayer = MediaPlayer()
     override val recorder: MediaRecorder = MediaRecorder()
 
-    override val playButtonEnabled = false
-    override val pauseButtonEnabled = false
-    override val stopButtonEnabled = false
-    override val recordButtonEnabled = true
+    override val audioViewState = AudioViewState.Initial
 
     init {
         initializeRecorder()

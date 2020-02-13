@@ -10,7 +10,7 @@ fun setErrorMessageResId(view: EditText, errorMessageResId: Int?) {
     if (errorMessageResId != null) {
         Log.d("BindingAdapter", "error ingesteld")
         val errorString = view.context.getString(errorMessageResId)
-        view.setHint(errorString)
+        view.hint = errorString
         view.setHintTextColor(Color.RED)
     }
 }

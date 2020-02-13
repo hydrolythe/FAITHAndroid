@@ -12,11 +12,6 @@ class PlayStateStopped(
     override val recorder: MediaRecorder
 ) : PlayState(context) {
 
-    override val playButtonEnabled = true
-    override val pauseButtonEnabled = false
-    override val stopButtonEnabled = false
-    override val recordButtonEnabled = true
-
     override fun onPlayPressed() {
         // Go to Prepared state
         mediaPlayer.prepare()

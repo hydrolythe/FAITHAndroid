@@ -3,6 +3,7 @@ package be.hogent.faith.faith.details.audio.audioStates.playState
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.faith.details.audio.AudioViewState
 import be.hogent.faith.faith.details.audio.audioStates.AudioContext
 import be.hogent.faith.faith.details.audio.audioStates.AudioState
 import be.hogent.faith.util.TAG
@@ -20,10 +21,7 @@ class PlayStateInitial(
     override val mediaPlayer: MediaPlayer = MediaPlayer()
     override val recorder: MediaRecorder = MediaRecorder()
 
-    override val playButtonEnabled = true
-    override val pauseButtonEnabled = false
-    override val stopButtonEnabled = false
-    override val recordButtonEnabled = false
+    override val audioViewState = AudioViewState.FinishedRecording
 
     init {
         initialisePlayer()
@@ -75,4 +73,5 @@ class PlayStateInitial(
     override fun onRecordPressed() {
         Timber.d("Initial -> Initial: pressing record does nothing")
     }
+
 }

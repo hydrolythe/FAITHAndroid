@@ -11,11 +11,6 @@ class PlayStatePaused(
     override val recorder: MediaRecorder
 ) : PlayState(context) {
 
-    override val playButtonEnabled = true
-    override val pauseButtonEnabled = false
-    override val stopButtonEnabled = true
-    override val recordButtonEnabled = false
-
     override fun onPlayPressed() {
         Timber.d("Paused -> Playing")
         mediaPlayer.start()
