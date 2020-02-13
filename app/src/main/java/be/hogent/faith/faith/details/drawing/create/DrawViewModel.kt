@@ -36,6 +36,10 @@ open class DrawViewModel : ViewModel() {
     val undoClicked: LiveData<Unit>
         get() = _undoClicked
 
+    private val _redoClicked = SingleLiveEvent<Unit>()
+    val redoClicked: LiveData<Unit>
+        get() = _redoClicked
+
     private val _pencilClicked = SingleLiveEvent<Unit>()
     val pencilClicked: LiveData<Unit>
         get() = _pencilClicked
@@ -59,6 +63,10 @@ open class DrawViewModel : ViewModel() {
     private val _saveClicked = SingleLiveEvent<Unit>()
     val saveClicked: LiveData<Unit>
         get() = _saveClicked
+
+    private val _cancelClicked = SingleLiveEvent<Unit>()
+    val cancelClicked: LiveData<Unit>
+        get() = _cancelClicked
 
     internal val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
@@ -127,6 +135,10 @@ open class DrawViewModel : ViewModel() {
         _undoClicked.call()
     }
 
+    fun redo() {
+        _redoClicked.call()
+    }
+
     fun onCustomColorClicked() {
         _customColorClicked.call()
         _selectedColor.value = _customColor.value
@@ -167,6 +179,10 @@ open class DrawViewModel : ViewModel() {
         // We expect the listener to create a bitmap from the DrawView and call [onBitMapAvailable]
         // afterwards.
         _saveClicked.call()
+    }
+
+    fun onCancelClicked() {
+        _cancelClicked.call()
     }
 
     enum class LineWidth(val width: Float) {

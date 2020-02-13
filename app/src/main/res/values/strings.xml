@@ -63,6 +63,8 @@
     <string name="navigation_terugNaarDeStad">Terug naar de stad</string>
     <string name="header_emotie_regulatie">Emotie regulatie</string>
     <string name="frag_viewEvent_notes">notes</string>
+    <string name="dialog_to_the_event_title">"Wil je teruggaan naar het park?</string>
+    <string name="dialog_to_the_event_message">Ben je zeker? Je tekening is nog niet opgeslagen!</string>
     <string name="dialog_to_the_city_title">"Wil je teruggaan naar de stad?</string>
     <string name="dialog_to_the_city_message">Ben je zeker? Je gebeurtenis is nog niet opgeslagen!</string>
     <string name="ok">@android:string/ok</string>
@@ -165,4 +167,9 @@
     <string name="kies_een_kleur">Kies een kleur</string>
     <string name="huidskleur">huidskleur</string>
     <string name="wegwijzerpaal">wegwijzerpaal</string>
+    <string name="redo">redo</string>
+    <string name="penseel">penseel</string>
+    <string name="tekst">tekst</string>
+    <string name="gom">gom</string>
+    <string name="pijl">pijl</string>
 </resources>

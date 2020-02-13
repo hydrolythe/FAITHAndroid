@@ -38,7 +38,13 @@
                 android:onClick="@{()->drawViewModel.onPencilClicked()}"
                 android:padding="16dp"
                 android:src="@drawable/ic_brush"
+                android:contentDescription="@string/penseel"
                 android:tint="@{drawViewModel.selectedTool==Tool.PENCIL ? drawViewModel.selectedColor : Color.BLACK}" />
+
+            <View
+                android:layout_height="1dip"
+                android:layout_width="fill_parent"
+                android:background="@color/black"/>
 
 
             <ImageView
@@ -50,7 +56,13 @@
                 android:onClick="@{()->drawViewModel.onTextClicked()}"
                 android:padding="16dp"
                 android:src="@drawable/ic_tekst"
+                android:contentDescription="@string/tekst"
                 android:tint="@{drawViewModel.selectedTool==Tool.TEXT ? drawViewModel.selectedColor : Color.BLACK}" />
+
+            <View
+                android:layout_height="1dip"
+                android:layout_width="fill_parent"
+                android:background="@color/black"/>
 
             <ImageView
                 android:id="@+id/btn_eraser"
@@ -61,6 +73,7 @@
                 android:onClick="@{()->drawViewModel.onEraserClicked()}"
                 android:padding="16dp"
                 android:src="@drawable/ic_gom"
+                android:contentDescription="@string/gom"
                 android:tint="@{drawViewModel.selectedTool==Tool.ERASER ? drawViewModel.selectedColor : Color.BLACK}" />
 
         </LinearLayout>
