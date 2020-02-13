@@ -1,15 +1,11 @@
 package be.hogent.faith.faith.details.drawing.create
 
-
 import android.content.Context
-
-
 import android.content.res.TypedArray
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getDrawable
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,8 +20,6 @@ import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImage
 import be.hogent.faith.faith.di.KoinModules
 import com.divyanshu.draw.widget.DrawView
 import com.google.android.material.tabs.TabLayout
-import com.skydoves.colorpickerview.ColorEnvelope
-import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import kotlinx.android.synthetic.main.fragment_draw.colorPickerView
 import org.koin.android.ext.android.getKoin

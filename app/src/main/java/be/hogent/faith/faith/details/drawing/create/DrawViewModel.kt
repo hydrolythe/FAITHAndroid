@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.details.drawing.create
 
-import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
@@ -13,7 +12,7 @@ import com.divyanshu.draw.widget.tools.CanvasAction
 import be.hogent.faith.R
 
 /**
- * Base VM for both the [DrawingDetailViewModel] and the [DrawEmotionAvatarViewModel].
+ * Base VM for both the [DrawingDetailViewModel]
  */
 open class DrawViewModel : ViewModel() {
 
@@ -107,22 +106,21 @@ open class DrawViewModel : ViewModel() {
 
     fun pickColor(@ColorInt color: Int) {
         _selectedColor.value = color
-        //als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
+        // als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
         if (_selectedTool.value == Tool.ERASER)
             onPencilClicked()
-        _showColorPicker.value = false;
+        _showColorPicker.value = false
     }
 
     fun setCustomColor(@ColorInt color: Int) {
         _customColor.value = color
         _selectedColor.value = color
-        //als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
-
+        // als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
     }
 
     fun setLineWidth(width: LineWidth) {
         _selectedLineWidth.value = width
-        if (_selectedTool.value != Tool.ERASER) _selectedColor.value = _selectedColor.value //anders past de tint zich niet aan
+        if (_selectedTool.value != Tool.ERASER) _selectedColor.value = _selectedColor.value // anders past de tint zich niet aan
     }
 
     fun undo() {
@@ -170,7 +168,6 @@ open class DrawViewModel : ViewModel() {
         // afterwards.
         _saveClicked.call()
     }
-
 
     enum class LineWidth(val width: Float) {
         THIN(12f),
