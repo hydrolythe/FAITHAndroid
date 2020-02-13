@@ -22,14 +22,14 @@ open class EventRepositoryImpl(
     private val eventMapper = EventMapper
 
     /**
-     * Gets the event with uuid for authenticated user
-     * **Does not download the events files!**
+     * Gets the event with the given [uuid] for the currently authenticated user.
+     * Also downloads all files associated with it, so it is ready to be used.
      */
-    // TODO: verschil tussen event ophalen (data) en event met files ophalen
     override fun get(uuid: UUID): Observable<Event> {
         return firebaseEventRepository.get(uuid.toString())
             .map(eventMapper::mapFromEntity)
-            .flatMapSingle(eventEncryptionService::decrypt)
+            .flatMapSingle(eventEncryptionService::decryptEventData)
+            .flatMap { fileStorageRepository.downloadEventFiles(it).andThen(Observable.just(it)) }
     }
 
     /**
@@ -38,18 +38,17 @@ open class EventRepositoryImpl(
      */
     override fun insert(event: Event, user: User): Completable {
         return eventEncryptionService.encrypt(event)
-            .flatMap(fileStorageRepository::saveEvent)
+            .flatMap(fileStorageRepository::saveEventFiles)
             .map(eventMapper::mapToEntity)
             .flatMapCompletable { entity ->
-                firebaseEventRepository.insert(
-                    entity,
-                    userMapper.mapToEntity(user)
-                )
+                firebaseEventRepository.insert(entity, userMapper.mapToEntity(user))
             }
     }
 
     /**
-     * get all events for authenticated user
+     * Get all events for the authenticated user.
+     * Does <b>NOT</b> download the files for each event. This will have to be done separately
+     * using [EventRepositoryImpl.get].
      */
     override fun getAll(): Observable<List<Event>> {
         return firebaseEventRepository.getAll()

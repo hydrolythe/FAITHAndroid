@@ -8,6 +8,7 @@ import com.google.crypto.tink.CleartextKeysetHandle
 import com.google.crypto.tink.JsonKeysetReader
 import com.google.crypto.tink.JsonKeysetWriter
 import com.google.crypto.tink.KeysetHandle
+import com.squareup.moshi.Moshi
 import io.reactivex.Single
 import java.io.ByteArrayOutputStream
 

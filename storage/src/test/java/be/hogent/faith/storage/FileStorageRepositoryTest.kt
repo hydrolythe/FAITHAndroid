@@ -41,7 +41,7 @@ class FileStorageRepositoryTest {
         every { remoteStorage.saveEvent(any()) } returns Completable.complete()
 
         // Act
-        storageRepository.saveEvent(encryptedEvent)
+        storageRepository.saveEventFiles(encryptedEvent)
             .test()
             .dispose()
 
@@ -55,7 +55,7 @@ class FileStorageRepositoryTest {
         every { remoteStorage.saveEvent(any()) } returns Completable.complete()
 
         // Act
-        storageRepository.saveEvent(encryptedEvent)
+        storageRepository.saveEventFiles(encryptedEvent)
             .test()
             .dispose()
 
@@ -69,7 +69,7 @@ class FileStorageRepositoryTest {
         every { remoteStorage.saveEvent(any()) } returns Completable.complete()
 
         // Act
-        storageRepository.saveEvent(encryptedEvent)
+        storageRepository.saveEventFiles(encryptedEvent)
             .test()
             .dispose()
 
@@ -83,7 +83,7 @@ class FileStorageRepositoryTest {
         every { remoteStorage.saveEvent(any()) } returns Completable.complete()
 
         // Act
-        storageRepository.saveEvent(encryptedEvent)
+        storageRepository.saveEventFiles(encryptedEvent)
             .test()
             .assertError(RuntimeException::class.java)
             .dispose()
@@ -96,7 +96,7 @@ class FileStorageRepositoryTest {
         every { remoteStorage.saveEvent(any()) } returns Completable.error(RuntimeException())
 
         // Act
-        storageRepository.saveEvent(encryptedEvent)
+        storageRepository.saveEventFiles(encryptedEvent)
             .test()
             .assertError(RuntimeException::class.java)
             .dispose()

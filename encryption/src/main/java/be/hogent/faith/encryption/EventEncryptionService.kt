@@ -2,6 +2,7 @@ package be.hogent.faith.encryption
 
 import be.hogent.faith.database.encryption.EncryptedDetail
 import be.hogent.faith.database.encryption.EncryptedEvent
+import be.hogent.faith.database.encryption.EncryptionKeys
 import be.hogent.faith.database.encryption.EventEncryptionServiceInterface
 import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.domain.models.Event
@@ -10,10 +11,10 @@ import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
 import com.google.crypto.tink.KeysetHandle
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
-import io.reactivex.rxkotlin.zipWith
 import org.threeten.bp.LocalDateTime
 
 /**
@@ -41,7 +42,6 @@ class EventEncryptionService(
         val encryptedDetails = encryptDetails(event, keysetHandle, streamingKeySetHandle)
 
         // Encrypt the DEKs so it can be placed next to the data it encrypted in the EncryptedEventEntity
-        // TODO: maybe wrap these two into 1 key object so they can be encrypted together
         val encryptedDEK = keyEncrypter.encrypt(keysetHandle)
         val encryptedStreamingDEK = keyEncrypter.encrypt(streamingKeySetHandle)
 
@@ -55,8 +55,7 @@ class EventEncryptionService(
                 notes = event.notes?.let { dataEncrypter.encrypt(it) },
                 uuid = event.uuid,
                 details = details,
-                encryptedDEK = dek,
-                encryptedStreamingDEK = sdek
+                keys = EncryptionKeys(dek, sdek)
             )
         }
     }
@@ -75,29 +74,19 @@ class EventEncryptionService(
             .toList()
     }
 
-    override fun decrypt(encryptedEvent: EncryptedEvent): Single<Event> {
-        val dek = keyEncrypter.decrypt(encryptedEvent.encryptedDEK)
-        val streamingDEK = keyEncrypter.decrypt(encryptedEvent.encryptedStreamingDEK)
-
-        // TODO: checken of blockingGet goeie aanpak is
-        return dek.zipWith(streamingDEK) { dek, sdek ->
-            decryptEvent(
-                encryptedEvent,
-                dek,
-                sdek
-            ).blockingGet()
-        }
+    override fun decryptEventData(encryptedEvent: EncryptedEvent): Single<Event> {
+        return keyEncrypter.decrypt(encryptedEvent.keys.encryptedDEK)
+            .flatMap { dek -> decryptEvent(encryptedEvent, dek) }
     }
+
 
     private fun decryptEvent(
         encryptedEvent: EncryptedEvent,
-        dek: KeysetHandle,
-        streamingDEK: KeysetHandle
+        dek: KeysetHandle
     ): Single<Event> {
         val dataEncrypter = DataEncrypter(dek)
-        val fileEncrypter = FileEncrypter(streamingDEK)
 
-        return decryptDetails(dataEncrypter, encryptedEvent, fileEncrypter)
+        return decryptDetails(dataEncrypter, encryptedEvent)
             .map { details ->
                 Event(
                     dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedEvent.dateTime)),
@@ -112,10 +101,9 @@ class EventEncryptionService(
 
     private fun decryptDetails(
         dataEncrypter: DataEncrypter,
-        encryptedEvent: EncryptedEvent,
-        fileEncrypter: FileEncrypter
+        encryptedEvent: EncryptedEvent
     ): Single<List<Detail>> {
-        val detailEntityEncrypter = DetailEncryptionService(dataEncrypter, fileEncrypter)
+        val detailEntityEncrypter = DetailEncryptionService()
 
         return Observable.fromIterable(encryptedEvent.details)
             .flatMapSingle(detailEntityEncrypter::decrypt)
@@ -124,7 +112,12 @@ class EventEncryptionService(
 
     override fun decryptList(encryptedEvents: List<EncryptedEvent>): Single<List<Event>> {
         return Observable.fromIterable(encryptedEvents)
-            .flatMapSingle(this::decrypt)
+            .flatMapSingle(this::decryptEventData)
             .toList()
+    }
+
+    override fun decryptEventFiles(encryptedEvent: EncryptedEvent): Completable {
+        val streamingDEK = keyEncrypter.decrypt(encryptedEvent.encryptedStreamingDEK)
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

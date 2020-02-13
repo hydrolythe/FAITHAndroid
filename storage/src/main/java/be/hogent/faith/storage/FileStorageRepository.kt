@@ -1,6 +1,7 @@
 package be.hogent.faith.storage
 
 import be.hogent.faith.database.encryption.EncryptedEvent
+import be.hogent.faith.database.storage.IFileStorageRepository
 import be.hogent.faith.database.storage.ILocalFileStorageRepository
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
@@ -24,7 +25,7 @@ class FileStorageRepository(
      * @return the saved event. This can be different from the original
      * @see ILocalFileStorageRepository.saveEvent
      */
-    override fun saveEvent(encryptedEvent: EncryptedEvent): Single<EncryptedEvent> {
+    override fun saveEventFiles(encryptedEvent: EncryptedEvent): Single<EncryptedEvent> {
         // Hacky way to first store locally, then remotely, and then give back the event.
         // Must be done in this order because saving to local storage changes paths inside the event.
         return localFileStorage.saveEvent(encryptedEvent)
@@ -56,7 +57,7 @@ class FileStorageRepository(
     }
 
     /**
-     * download all event files from firebase to localStorage if not present yet
+     * Download all files belonging to an event
      */
     override fun downloadEventFiles(event: Event): Completable {
         return Completable.mergeArray(

@@ -17,14 +17,19 @@ class EncryptedEvent(
      */
     val uuid: UUID,
     val details: List<EncryptedDetail>,
+    val keys: EncryptionKeys
+)
+
+class EncryptionKeys(dek: EncryptedString, sdek: EncryptedString) {
+
     /**
      * An encrypted version of the Data Encryption Key, used for envelope encryption.
      * This DEK is used for encrypting small pieces of data directly.
      */
-    val encryptedDEK: EncryptedString,
+    val encryptedDEK: EncryptedString = dek
     /**
      * An encrypted version of the streaming Data Encryption Key, used for envelope encryption.
      * This DEK is used for encrypting entire files as a stream.
      */
-    val encryptedStreamingDEK: EncryptedString
-)
+    val encryptedStreamingDEK: EncryptedString = sdek
+}

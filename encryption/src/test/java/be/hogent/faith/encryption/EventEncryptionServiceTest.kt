@@ -67,7 +67,7 @@ class EventEncryptionServiceTest {
 
         // Act
         var decryptedEvent: Event? = null
-        eventEncrypter.decrypt(encryptedEvent!!)
+        eventEncrypter.decryptEventData(encryptedEvent!!)
             .doOnSuccess { decryptedEvent = it }
             .test()
             .dispose()
