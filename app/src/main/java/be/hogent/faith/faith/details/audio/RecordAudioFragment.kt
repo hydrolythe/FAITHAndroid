@@ -22,6 +22,8 @@ import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.details.audio.audioPlayer.AudioPlayerAdapter
 import be.hogent.faith.faith.details.audio.audioPlayer.AudioPlayerHolder
 import be.hogent.faith.faith.details.audio.audioPlayer.PlaybackInfoListener
+import be.hogent.faith.faith.details.audio.audioRecorder.AudioRecorderAdapter
+import be.hogent.faith.faith.details.audio.audioRecorder.AudioRecorderHolder
 import be.hogent.faith.faith.util.TempFileProvider
 import kotlinx.android.synthetic.main.fragment_record_audio.seekBar
 import org.koin.android.ext.android.inject
@@ -46,6 +48,8 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
     private var hasAudioRecordingPermission = false
 
     private val audioPlayer: AudioPlayerAdapter = AudioPlayerHolder()
+    private val audioRecorder: AudioRecorderAdapter =
+        AudioRecorderHolder(tempFileProvider.tempAudioRecordingFile)
 
     /**
      * true when the user is currently dragging the indicator on the seekBar
@@ -118,10 +122,10 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             audioPlayer.reset()
         })
         audioDetailViewModel.recordButtonClicked.observe(this, Observer {
-            // TODO: add recorder start
+            audioRecorder.record()
         })
         audioDetailViewModel.recordStopButtonClicked.observe(this, Observer {
-            // TODO: add recorder stop
+            audioRecorder.stop()
         })
     }
 
@@ -215,6 +219,12 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             }
             return newInstance
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        audioRecorder.release()
+        audioPlayer.release()
     }
 
     interface AudioScreenNavigation {

@@ -12,6 +12,7 @@ class AudioPlayerHolder : AudioPlayerAdapter {
     private var mPlaybackInfoListener: PlaybackInfoListener? = null
     private var mExecutor: ScheduledExecutorService? = null
     private var mSeekbarPositionUpdateTask: Runnable? = null
+
     /**
      * Once the [MediaPlayer] is released, it can't be used again, and another one has to be
      * created. In the onStop() method of the [MainActivity] the [MediaPlayer] is
