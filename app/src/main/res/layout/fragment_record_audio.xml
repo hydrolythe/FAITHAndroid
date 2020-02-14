@@ -47,7 +47,7 @@
             <!-- https://medium.com/androiddevelopers/building-a-simple-audio-app-in-android-part-3-3-ead4a0e10673 -->
             <SeekBar
                 android:id="@+id/seekBar"
-                android:layout_width="1000dp"
+                android:layout_width="0dp"
                 android:layout_height="20dp"
                 app:layout_constraintBottom_toTopOf="@+id/cardView_audio_center"
                 app:layout_constraintEnd_toEndOf="@+id/cardView_audio_center"
@@ -99,7 +99,7 @@
                         android:layout_height="match_parent"
                         android:background="@drawable/button_audio_stop"
                         android:contentDescription="@string/description_stop_recording"
-                        android:onClick="@{() -> audioDetailViewModel.onStopButtonClicked()}"
+                        android:onClick="@{() -> audioDetailViewModel.onRecordStopButtonClicked()}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>

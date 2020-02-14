@@ -38,129 +38,129 @@ class AudioDetailViewModelTest : KoinTest {
         stopKoin()
     }
 
-    @Test
-    fun audioDetailVM_existingDetail_recordButtonNotAvailable() {
-        // Act
-        viewModel.loadExistingDetail(mockk())
-
-        // Assert
-        assertFalse(getValue(viewModel.recordButtonEnabled))
-    }
-
-    @Test
-    fun audioDetailVM_existingDetail_saveButtonNotVisible() {
-        // Act
-        viewModel.loadExistingDetail(mockk())
-
-        // Assert
-        assertFalse(getValue(viewModel.saveButtonVisible))
-    }
-
-    @Test
-    fun audioDetailVM_initial_correctButtonsEnabled() {
-        // Assert
-        assertFalse(getValue(viewModel.playButtonEnabled))
-        assertFalse(getValue(viewModel.pauseButtonEnabled))
-        assertFalse(getValue(viewModel.stopButtonEnabled))
-        assertTrue(getValue(viewModel.recordButtonEnabled))
-
-        assertFalse(getValue(viewModel.saveButtonVisible))
-    }
-
-    @Test
-    fun audioDetailVM_onRecording_pauseSupported_correctButtonsEnabled() {
-        // Arrange
-        viewModel.pauseSupported = true
-
-        // Act
-        viewModel.onRecordButtonClicked()
-
-        // Assert
-        assertFalse(getValue(viewModel.playButtonEnabled))
-        assertTrue(getValue(viewModel.pauseButtonEnabled))
-        assertTrue(getValue(viewModel.stopButtonEnabled))
-        assertFalse(getValue(viewModel.recordButtonEnabled))
-
-        assertFalse(getValue(viewModel.saveButtonVisible))
-    }
-
-    @Test
-    fun audioDetailVM_onRecording_pauseNotSupported_correctButtonsEnabled() {
-        // Act
-        viewModel.pauseSupported = false
-        viewModel.onRecordButtonClicked()
-
-        // Assert
-        assertFalse(getValue(viewModel.playButtonEnabled))
-        assertFalse(getValue(viewModel.pauseButtonEnabled))
-        assertTrue(getValue(viewModel.stopButtonEnabled))
-        assertFalse(getValue(viewModel.recordButtonEnabled))
-
-        assertFalse(getValue(viewModel.saveButtonVisible))
-    }
-
-    @Test
-    fun audioDetailVM_onRecordingPaused_correctButtonsEnabled() {
-        // Act
-        viewModel.onRecordButtonClicked()
-        viewModel.onPauseButtonClicked()
-
-        // Assert
-        assertFalse(getValue(viewModel.playButtonEnabled))
-        assertFalse(getValue(viewModel.pauseButtonEnabled))
-        assertTrue(getValue(viewModel.stopButtonEnabled))
-        assertTrue(getValue(viewModel.recordButtonEnabled))
-
-        assertFalse(getValue(viewModel.saveButtonVisible))
-    }
-
-    @Test
-    fun audioDetailVM_onRecordingStopped_correctButtonsEnabled() {
-        // Act
-        viewModel.onRecordButtonClicked()
-        viewModel.onStopButtonClicked()
-
-        // Assert
-        assertTrue(getValue(viewModel.playButtonEnabled))
-        assertFalse(getValue(viewModel.pauseButtonEnabled))
-        assertFalse(getValue(viewModel.stopButtonEnabled))
-        assertTrue(getValue(viewModel.recordButtonEnabled))
-
-        assertTrue(getValue(viewModel.saveButtonVisible))
-    }
-
-    @Test
-    fun audioDetailVM_onRecordingPlaying_correctButtonsEnabled() {
-        viewModel.pauseSupported = true
-        // Act
-        viewModel.onRecordButtonClicked()
-        viewModel.onStopButtonClicked()
-        viewModel.onPlayButtonClicked()
-
-        // Assert
-        assertFalse(getValue(viewModel.playButtonEnabled))
-        assertTrue(getValue(viewModel.pauseButtonEnabled))
-        assertTrue(getValue(viewModel.stopButtonEnabled))
-        assertFalse(getValue(viewModel.recordButtonEnabled))
-
-        assertTrue(getValue(viewModel.saveButtonVisible))
-    }
-
-    @Test
-    fun audioDetailVM_onRecordingPlayingPaused_correctButtonsEnabled() {
-        viewModel.pauseSupported = true
-        // Act
-        viewModel.onRecordButtonClicked()
-        viewModel.onStopButtonClicked()
-        viewModel.onPlayButtonClicked()
-        viewModel.onPauseButtonClicked()
-
-        // Assert
-        assertTrue(getValue(viewModel.playButtonEnabled))
-        assertFalse(getValue(viewModel.pauseButtonEnabled))
-        assertTrue(getValue(viewModel.stopButtonEnabled))
-        assertFalse(getValue(viewModel.recordButtonEnabled))
-
-        assertTrue(getValue(viewModel.saveButtonVisible))
-    }
+//    @Test
+//    fun audioDetailVM_existingDetail_recordButtonNotAvailable() {
+//        // Act
+//        viewModel.loadExistingDetail(mockk())
+//
+//        // Assert
+//        assertFalse(getValue(viewModel.recordButtonEnabled))
+//    }
+//
+//    @Test
+//    fun audioDetailVM_existingDetail_saveButtonNotVisible() {
+//        // Act
+//        viewModel.loadExistingDetail(mockk())
+//
+//        // Assert
+//        assertFalse(getValue(viewModel.saveButtonVisible))
+//    }
+//
+//    @Test
+//    fun audioDetailVM_initial_correctButtonsEnabled() {
+//        // Assert
+//        assertFalse(getValue(viewModel.playButtonEnabled))
+//        assertFalse(getValue(viewModel.pauseButtonEnabled))
+//        assertFalse(getValue(viewModel.stopButtonEnabled))
+//        assertTrue(getValue(viewModel.recordButtonEnabled))
+//
+//        assertFalse(getValue(viewModel.saveButtonVisible))
+//    }
+//
+//    @Test
+//    fun audioDetailVM_onRecording_pauseSupported_correctButtonsEnabled() {
+//        // Arrange
+//        viewModel.pauseSupported = true
+//
+//        // Act
+//        viewModel.onRecordButtonClicked()
+//
+//        // Assert
+//        assertFalse(getValue(viewModel.playButtonEnabled))
+//        assertTrue(getValue(viewModel.pauseButtonEnabled))
+//        assertTrue(getValue(viewModel.stopButtonEnabled))
+//        assertFalse(getValue(viewModel.recordButtonEnabled))
+//
+//        assertFalse(getValue(viewModel.saveButtonVisible))
+//    }
+//
+//    @Test
+//    fun audioDetailVM_onRecording_pauseNotSupported_correctButtonsEnabled() {
+//        // Act
+//        viewModel.pauseSupported = false
+//        viewModel.onRecordButtonClicked()
+//
+//        // Assert
+//        assertFalse(getValue(viewModel.playButtonEnabled))
+//        assertFalse(getValue(viewModel.pauseButtonEnabled))
+//        assertTrue(getValue(viewModel.stopButtonEnabled))
+//        assertFalse(getValue(viewModel.recordButtonEnabled))
+//
+//        assertFalse(getValue(viewModel.saveButtonVisible))
+//    }
+//
+//    @Test
+//    fun audioDetailVM_onRecordingPaused_correctButtonsEnabled() {
+//        // Act
+//        viewModel.onRecordButtonClicked()
+//        viewModel.onPauseButtonClicked()
+//
+//        // Assert
+//        assertFalse(getValue(viewModel.playButtonEnabled))
+//        assertFalse(getValue(viewModel.pauseButtonEnabled))
+//        assertTrue(getValue(viewModel.stopButtonEnabled))
+//        assertTrue(getValue(viewModel.recordButtonEnabled))
+//
+//        assertFalse(getValue(viewModel.saveButtonVisible))
+//    }
+//
+//    @Test
+//    fun audioDetailVM_onRecordingStopped_correctButtonsEnabled() {
+//        // Act
+//        viewModel.onRecordButtonClicked()
+//        viewModel.onStopButtonClicked()
+//
+//        // Assert
+//        assertTrue(getValue(viewModel.playButtonEnabled))
+//        assertFalse(getValue(viewModel.pauseButtonEnabled))
+//        assertFalse(getValue(viewModel.stopButtonEnabled))
+//        assertTrue(getValue(viewModel.recordButtonEnabled))
+//
+//        assertTrue(getValue(viewModel.saveButtonVisible))
+//    }
+//
+//    @Test
+//    fun audioDetailVM_onRecordingPlaying_correctButtonsEnabled() {
+//        viewModel.pauseSupported = true
+//        // Act
+//        viewModel.onRecordButtonClicked()
+//        viewModel.onStopButtonClicked()
+//        viewModel.onPlayButtonClicked()
+//
+//        // Assert
+//        assertFalse(getValue(viewModel.playButtonEnabled))
+//        assertTrue(getValue(viewModel.pauseButtonEnabled))
+//        assertTrue(getValue(viewModel.stopButtonEnabled))
+//        assertFalse(getValue(viewModel.recordButtonEnabled))
+//
+//        assertTrue(getValue(viewModel.saveButtonVisible))
+//    }
+//
+//    @Test
+//    fun audioDetailVM_onRecordingPlayingPaused_correctButtonsEnabled() {
+//        viewModel.pauseSupported = true
+//        // Act
+//        viewModel.onRecordButtonClicked()
+//        viewModel.onStopButtonClicked()
+//        viewModel.onPlayButtonClicked()
+//        viewModel.onPauseButtonClicked()
+//
+//        // Assert
+//        assertTrue(getValue(viewModel.playButtonEnabled))
+//        assertFalse(getValue(viewModel.pauseButtonEnabled))
+//        assertTrue(getValue(viewModel.stopButtonEnabled))
+//        assertFalse(getValue(viewModel.recordButtonEnabled))
+//
+//        assertTrue(getValue(viewModel.saveButtonVisible))
+//    }
 }

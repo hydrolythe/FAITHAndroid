@@ -8,8 +8,11 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.details.audio.audioPlayer.PlaybackInfoListener
-import be.hogent.faith.faith.details.audio.audioStates.playState.PlayStateInitial
-import be.hogent.faith.faith.details.audio.audioStates.recordState.RecordStateInitial
+import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener
+import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.RecordingState.INVALID
+import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.RecordingState.RECORDING
+import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.RecordingState.RESET
+import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.RecordingState.STOPPED
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
@@ -43,11 +46,7 @@ class AudioDetailViewModel(
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int> = _errorMessage
 
-    private val _recordingDuration = MutableLiveData<Int>()
-    val recordingDuration: LiveData<Int> = _recordingDuration
-
-    private val _playbackPosition = MutableLiveData<Int>()
-    val playbackPosition: LiveData<Int> = _playbackPosition
+    val recordingDuration = MutableLiveData<Int>()
 
     private val _playButtonClicked = SingleLiveEvent<Unit>()
     val playButtonClicked: LiveData<Unit> = _playButtonClicked
@@ -76,9 +75,9 @@ class AudioDetailViewModel(
      */
     fun initialiseState() {
         if (playingExistingAudioDetail()) {
-            goToNextState(PlayStateInitial(this, this, existingDetail!!))
+            _viewState.value = AudioViewState.FinishedRecording
         } else {
-            goToNextState(RecordStateInitial(this, this))
+            _viewState.value = AudioViewState.Initial
         }
         updateUIVisibilityStates()
     }
@@ -135,5 +134,13 @@ class AudioDetailViewModel(
 
     fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun onRecordingStateChanged(state: RecordingInfoListener.RecordingState) {
+        when (state) {
+            INVALID, RESET -> _viewState.value = AudioViewState.Initial
+            RECORDING -> _viewState.value = AudioViewState.Recording
+            STOPPED -> _viewState.value = AudioViewState.FinishedRecording
+        }
     }
 }

@@ -24,8 +24,8 @@ import be.hogent.faith.faith.details.audio.audioPlayer.AudioPlayerHolder
 import be.hogent.faith.faith.details.audio.audioPlayer.PlaybackInfoListener
 import be.hogent.faith.faith.details.audio.audioRecorder.AudioRecorderAdapter
 import be.hogent.faith.faith.details.audio.audioRecorder.AudioRecorderHolder
+import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener
 import be.hogent.faith.faith.util.TempFileProvider
-import kotlinx.android.synthetic.main.fragment_record_audio.seekBar
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -47,9 +47,13 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     private var hasAudioRecordingPermission = false
 
-    private val audioPlayer: AudioPlayerAdapter = AudioPlayerHolder()
+    private val audioPlayer: AudioPlayerAdapter = AudioPlayerHolder().apply {
+        setPlaybackInfoListener(PlaybackListener())
+    }
     private val audioRecorder: AudioRecorderAdapter =
-        AudioRecorderHolder(tempFileProvider.tempAudioRecordingFile)
+        AudioRecorderHolder(tempFileProvider.tempAudioRecordingFile).apply {
+            recordingInfoListener = RecordingListener()
+        }
 
     /**
      * true when the user is currently dragging the indicator on the seekBar
@@ -130,7 +134,8 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
     }
 
     private fun initialiseSeekBar() {
-        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        recordAudioBinding.seekBar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
             var userSelectedPosition = 0
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
@@ -233,12 +238,13 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     inner class PlaybackListener : PlaybackInfoListener {
         override fun onDurationChanged(duration: Int) {
-            seekBar.setMax(duration)
+            recordAudioBinding.seekBar.setMax(duration)
+            audioDetailViewModel.recordingDuration.value = duration
         }
 
         override fun onPositionChanged(position: Int) {
             if (!userIsSeeking) {
-                seekBar.setProgress(position, true)
+                recordAudioBinding.seekBar.setProgress(position, true)
             }
         }
 
@@ -250,5 +256,12 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
         override fun onLogUpdated(message: String?) {
             Timber.i(message)
         }
+    }
+
+    inner class RecordingListener : RecordingInfoListener {
+        override fun onStateChanged(state: RecordingInfoListener.RecordingState) {
+            audioDetailViewModel.onRecordingStateChanged(state)
+        }
+
     }
 }
