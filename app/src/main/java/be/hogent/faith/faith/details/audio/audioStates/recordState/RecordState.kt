@@ -8,7 +8,6 @@ abstract class RecordState(
     context: AudioContext
 ) : AudioState(context) {
 
-
     /**
      * Initialises a [MediaRecorder] from the Initial up until the Prepared state
      */

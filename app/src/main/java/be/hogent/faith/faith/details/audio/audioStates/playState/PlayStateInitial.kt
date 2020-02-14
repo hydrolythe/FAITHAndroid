@@ -73,5 +73,4 @@ class PlayStateInitial(
     override fun onRecordPressed() {
         Timber.d("Initial -> Initial: pressing record does nothing")
     }
-
 }
