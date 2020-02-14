@@ -24,18 +24,11 @@ abstract class PlayState(context: AudioContext) : AudioState(context) {
     fun initialisePlayer() {
         with(mediaPlayer) {
             try {
-                setDataSource(tempFileProvider.tempAudioRecordingFile.path)
+                loadMedia(tempFileProvider.tempAudioRecordingFile)
                 Timber.d("Audio playback prepared")
             } catch (e: IllegalStateException) {
                 Timber.e(TAG, "Continuing with the prepare step")
             }
-        }
-
-        mediaPlayer.setOnCompletionListener {
-            Timber.d("Playing -> Stopped: finished playback")
-            // Go from PlaybackCompleted to Stopped
-            mediaPlayer.stop()
-            context.goToNextState(PlayStateStopped(context, mediaPlayer, recorder))
         }
     }
 }

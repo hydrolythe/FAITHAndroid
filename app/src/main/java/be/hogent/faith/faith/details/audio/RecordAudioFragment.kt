@@ -163,14 +163,13 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail>, PlaybackInf
     }
 
     override fun onDurationChanged(duration: Int) {
-
     }
 
     override fun onPositionChanged(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onPlaybackCompleted() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 }

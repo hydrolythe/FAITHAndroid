@@ -4,6 +4,7 @@ import be.hogent.faith.faith.details.audio.AudioViewState
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.view.View
+import be.hogent.faith.faith.details.audio.mediaplayer.MediaPlayerAdapter
 import be.hogent.faith.faith.util.TempFileProvider
 import org.koin.core.KoinComponent
 import org.koin.core.inject
@@ -14,7 +15,7 @@ abstract class AudioState(
 
     protected val tempFileProvider: TempFileProvider by inject()
 
-    protected abstract val mediaPlayer: MediaPlayer
+    protected abstract val mediaPlayer: MediaPlayerAdapter
     protected abstract val recorder: MediaRecorder
 
     abstract fun onPlayPressed()

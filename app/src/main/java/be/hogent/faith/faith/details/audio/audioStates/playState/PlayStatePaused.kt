@@ -1,19 +1,19 @@
 package be.hogent.faith.faith.details.audio.audioStates.playState
 
-import android.media.MediaPlayer
 import android.media.MediaRecorder
 import be.hogent.faith.faith.details.audio.audioStates.AudioContext
+import be.hogent.faith.faith.details.audio.mediaplayer.MediaPlayerAdapter
 import timber.log.Timber
 
 class PlayStatePaused(
     context: AudioContext,
-    override val mediaPlayer: MediaPlayer,
+    override val mediaPlayer: MediaPlayerAdapter,
     override val recorder: MediaRecorder
 ) : PlayState(context) {
 
     override fun onPlayPressed() {
         Timber.d("Paused -> Playing")
-        mediaPlayer.start()
+        mediaPlayer.play()
         context.goToNextState(PlayStatePlaying(context, mediaPlayer, recorder))
     }
 
@@ -23,7 +23,7 @@ class PlayStatePaused(
 
     override fun onStopPressed() {
         Timber.d("Paused -> Stopped")
-        mediaPlayer.stop()
+        mediaPlayer.reset()
         context.goToNextState(PlayStateStopped(context, mediaPlayer, recorder))
     }
 

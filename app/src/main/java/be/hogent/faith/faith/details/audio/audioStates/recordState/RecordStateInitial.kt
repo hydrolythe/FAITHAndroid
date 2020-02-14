@@ -1,14 +1,14 @@
 package be.hogent.faith.faith.details.audio.audioStates.recordState
 
-import be.hogent.faith.faith.details.audio.AudioViewState
-import android.media.MediaPlayer
 import android.media.MediaRecorder
+import be.hogent.faith.faith.details.audio.AudioViewState
 import be.hogent.faith.faith.details.audio.audioStates.AudioContext
+import be.hogent.faith.faith.details.audio.mediaplayer.MediaPlayerHolder
 import timber.log.Timber
 
 class RecordStateInitial(context: AudioContext) : RecordState(context) {
 
-    override val mediaPlayer: MediaPlayer = MediaPlayer()
+    override val mediaPlayer = MediaPlayerHolder()
     override val recorder: MediaRecorder = MediaRecorder()
 
     override val audioViewState = AudioViewState.Initial

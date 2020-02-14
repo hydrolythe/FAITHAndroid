@@ -1,16 +1,16 @@
 package be.hogent.faith.faith.details.audio.audioStates.recordState
 
 import android.annotation.SuppressLint
-import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.view.View
 import be.hogent.faith.faith.details.audio.AudioViewState
 import be.hogent.faith.faith.details.audio.audioStates.AudioContext
+import be.hogent.faith.faith.details.audio.mediaplayer.MediaPlayerAdapter
 import timber.log.Timber
 
 class RecordStateRecording(
     context: AudioContext,
-    override val mediaPlayer: MediaPlayer,
+    override val mediaPlayer: MediaPlayerAdapter,
     override val recorder: MediaRecorder
 ) : RecordState(context) {
 
@@ -22,7 +22,7 @@ class RecordStateRecording(
          */
         fun getRecordingState(
             context: AudioContext,
-            mediaPlayer: MediaPlayer,
+            mediaPlayer: MediaPlayerAdapter,
             recorder: MediaRecorder
         ): RecordStateRecording {
             return RecordStateRecording(context, mediaPlayer, recorder).apply {

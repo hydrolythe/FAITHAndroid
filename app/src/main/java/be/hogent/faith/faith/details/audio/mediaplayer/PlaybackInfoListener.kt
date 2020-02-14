@@ -9,5 +9,4 @@ interface PlaybackInfoListener {
     fun onDurationChanged(duration: Int)
     fun onPositionChanged(position: Int)
     fun onPlaybackCompleted()
-
 }

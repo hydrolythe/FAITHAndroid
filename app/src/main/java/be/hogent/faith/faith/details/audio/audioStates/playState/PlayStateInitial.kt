@@ -6,6 +6,8 @@ import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.details.audio.AudioViewState
 import be.hogent.faith.faith.details.audio.audioStates.AudioContext
 import be.hogent.faith.faith.details.audio.audioStates.AudioState
+import be.hogent.faith.faith.details.audio.mediaplayer.MediaPlayerAdapter
+import be.hogent.faith.faith.details.audio.mediaplayer.MediaPlayerHolder
 import be.hogent.faith.util.TAG
 import timber.log.Timber
 
@@ -18,7 +20,7 @@ class PlayStateInitial(
     private val audioDetail: AudioDetail
 ) : AudioState(context) {
 
-    override val mediaPlayer: MediaPlayer = MediaPlayer()
+    override val mediaPlayer: MediaPlayerAdapter = MediaPlayerHolder()
     override val recorder: MediaRecorder = MediaRecorder()
 
     override val audioViewState = AudioViewState.FinishedRecording
@@ -40,25 +42,17 @@ class PlayStateInitial(
     private fun initialisePlayer() {
         with(mediaPlayer) {
             try {
-                setDataSource(audioDetail.file.path)
-                prepare()
+                mediaPlayer.loadMedia(audioDetail.file)
                 Timber.d("Audio playback prepared")
             } catch (e: IllegalStateException) {
                 Timber.e(TAG, "Continuing with the prepare step")
             }
         }
-
-        mediaPlayer.setOnCompletionListener {
-            Timber.d("Playing -> Stopped: finished playback")
-            // Go from PlaybackCompleted to Stopped
-            mediaPlayer.stop()
-            context.goToNextState(PlayStateStopped(context, mediaPlayer, recorder))
-        }
     }
 
     override fun onPlayPressed() {
         Timber.d("Initial -> Playing")
-        mediaPlayer.start()
+        mediaPlayer.play()
         context.goToNextState(PlayStatePlaying(context, mediaPlayer, recorder))
     }
 

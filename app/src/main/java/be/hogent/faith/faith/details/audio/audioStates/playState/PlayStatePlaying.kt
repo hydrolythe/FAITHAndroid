@@ -3,11 +3,12 @@ package be.hogent.faith.faith.details.audio.audioStates.playState
 import android.media.MediaPlayer
 import android.media.MediaRecorder
 import be.hogent.faith.faith.details.audio.audioStates.AudioContext
+import be.hogent.faith.faith.details.audio.mediaplayer.MediaPlayerAdapter
 import timber.log.Timber
 
 class PlayStatePlaying(
     context: AudioContext,
-    override val mediaPlayer: MediaPlayer,
+    override val mediaPlayer: MediaPlayerAdapter,
     override val recorder: MediaRecorder
 ) : PlayState(context) {
 
@@ -17,16 +18,13 @@ class PlayStatePlaying(
          */
         fun getPlayingState(
             context: AudioContext,
-            mediaPlayer: MediaPlayer,
+            mediaPlayer: MediaPlayerAdapter,
             recorder: MediaRecorder
         ): PlayStatePlaying {
             return PlayStatePlaying(context, mediaPlayer, recorder).apply {
                 // Go to Initialized state
                 initialisePlayer()
-                // Go to Prepared state
-                mediaPlayer.prepare()
-                // Go to Started state
-                mediaPlayer.start()
+                mediaPlayer.play()
             }
         }
     }
@@ -47,7 +45,7 @@ class PlayStatePlaying(
 
     override fun onStopPressed() {
         Timber.d("Playing -> Stopped")
-        mediaPlayer.stop()
+        mediaPlayer.reset()
         context.goToNextState(PlayStateStopped(context, mediaPlayer, recorder))
     }
 

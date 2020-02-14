@@ -1,15 +1,12 @@
 package be.hogent.faith.faith.details.audio.mediaplayer
 
-import android.content.Context
 import android.media.MediaPlayer
 import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
-class MediaMediaPlayerHolder(context: Context) :
-    MediaPlayerAdapter {
-    private val mContext: Context = context.applicationContext
+class MediaPlayerHolder : MediaPlayerAdapter {
     private var mMediaPlayer: MediaPlayer? = null
     private lateinit var audioFile: File
     private var mPlaybackInfoListener: PlaybackInfoListener? = null
@@ -29,7 +26,6 @@ class MediaMediaPlayerHolder(context: Context) :
                 stopUpdatingCallbackWithPosition(true)
                 logToUI("MediaPlayer playback completed")
                 if (mPlaybackInfoListener != null) {
-                    mPlaybackInfoListener!!.onStateChanged(PlaybackInfoListener.State.COMPLETED)
                     mPlaybackInfoListener!!.onPlaybackCompleted()
                 }
             }
@@ -79,11 +75,10 @@ class MediaMediaPlayerHolder(context: Context) :
             logToUI(
                 String.format(
                     "playbackStart() %s",
-                    mContext.resources.getResourceEntryName(audioFile)
+                    audioFile.name
                 )
             )
             mMediaPlayer!!.start()
-            mPlaybackInfoListener?.onStateChanged(PlaybackInfoListener.State.PLAYING)
             startUpdatingCallbackWithPosition()
         }
     }
@@ -93,7 +88,6 @@ class MediaMediaPlayerHolder(context: Context) :
             logToUI("playbackReset()")
             mMediaPlayer!!.reset()
             loadMedia(audioFile)
-            mPlaybackInfoListener?.onStateChanged(PlaybackInfoListener.State.RESET)
             stopUpdatingCallbackWithPosition(true)
         }
     }
@@ -101,7 +95,6 @@ class MediaMediaPlayerHolder(context: Context) :
     override fun pause() {
         if (mMediaPlayer != null && mMediaPlayer!!.isPlaying) {
             mMediaPlayer!!.pause()
-            mPlaybackInfoListener?.onStateChanged(PlaybackInfoListener.State.PAUSED)
             logToUI("playbackPause()")
         }
     }
