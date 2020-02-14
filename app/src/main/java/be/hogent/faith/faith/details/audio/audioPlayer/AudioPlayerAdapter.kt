@@ -1,8 +1,8 @@
-package be.hogent.faith.faith.details.audio.mediaplayer
+package be.hogent.faith.faith.details.audio.audioPlayer
 
 import java.io.File
 
-interface MediaPlayerAdapter {
+interface AudioPlayerAdapter {
     fun release()
     val isPlaying: Boolean
 

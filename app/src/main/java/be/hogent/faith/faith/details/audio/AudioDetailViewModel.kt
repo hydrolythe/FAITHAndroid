@@ -7,10 +7,10 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.details.DetailViewModel
-import be.hogent.faith.faith.details.audio.audioStates.AudioContext
-import be.hogent.faith.faith.details.audio.audioStates.AudioState
+import be.hogent.faith.faith.details.audio.audioPlayer.PlaybackInfoListener
 import be.hogent.faith.faith.details.audio.audioStates.playState.PlayStateInitial
 import be.hogent.faith.faith.details.audio.audioStates.recordState.RecordStateInitial
+import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import io.reactivex.observers.DisposableSingleObserver
@@ -19,12 +19,10 @@ import timber.log.Timber
 class AudioDetailViewModel(
     private val createAudioDetailUseCase: CreateAudioDetailUseCase,
     private val tempFileProvider: TempFileProvider
-) : ViewModel(), AudioContext, DetailViewModel<AudioDetail> {
+) : ViewModel(), DetailViewModel<AudioDetail> {
 
     private val _savedDetail = MutableLiveData<AudioDetail>()
     override val savedDetail: LiveData<AudioDetail> = _savedDetail
-
-    private lateinit var audioState: AudioState
 
     private var existingDetail: AudioDetail? = null
 
@@ -45,6 +43,27 @@ class AudioDetailViewModel(
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int> = _errorMessage
 
+    private val _recordingDuration = MutableLiveData<Int>()
+    val recordingDuration: LiveData<Int> = _recordingDuration
+
+    private val _playbackPosition = MutableLiveData<Int>()
+    val playbackPosition: LiveData<Int> = _playbackPosition
+
+    private val _playButtonClicked = SingleLiveEvent<Unit>()
+    val playButtonClicked: LiveData<Unit> = _playButtonClicked
+
+    private val _pauseButtonClicked = SingleLiveEvent<Unit>()
+    val pauseButtonClicked: LiveData<Unit> = _pauseButtonClicked
+
+    private val _recordStopButtonClicked = SingleLiveEvent<Unit>()
+    val recordStopButtonClicked: LiveData<Unit> = _recordStopButtonClicked
+
+    private val _playStopButtonClicked = SingleLiveEvent<Unit>()
+    val playStopButtonClicked: LiveData<Unit> = _playStopButtonClicked
+
+    private val _recordButtonClicked = SingleLiveEvent<Unit>()
+    val recordButtonClicked: LiveData<Unit> = _recordButtonClicked
+
     init {
         // Can be set to false once an existing Detail is added
         _saveButtonVisible.value = true
@@ -57,59 +76,52 @@ class AudioDetailViewModel(
      */
     fun initialiseState() {
         if (playingExistingAudioDetail()) {
-            goToNextState(PlayStateInitial(this, existingDetail!!))
+            goToNextState(PlayStateInitial(this, this, existingDetail!!))
         } else {
-            goToNextState(RecordStateInitial(this))
+            goToNextState(RecordStateInitial(this, this))
         }
-        updateUIVisibilityStates()
-    }
-
-    override fun goToNextState(audioState: AudioState) {
-        this.audioState = audioState
         updateUIVisibilityStates()
     }
 
     private fun updateUIVisibilityStates() {
         _saveButtonVisible.value = true
-        _viewState.value = audioState.audioViewState
     }
 
     fun onRecordButtonClicked() {
-        audioState.onRecordPressed()
+        _recordButtonClicked.call()
     }
 
-    fun onStopButtonClicked() {
-        audioState.onStopPressed()
+    fun onRecordStopButtonClicked() {
+        _recordStopButtonClicked.call()
+    }
+
+    fun onPlayStopButtonClicked() {
+        _playStopButtonClicked.call()
     }
 
     fun onPauseButtonClicked() {
-        audioState.onPausePressed()
+        _pauseButtonClicked.call()
     }
 
     fun onPlayButtonClicked() {
-        audioState.onPlayPressed()
+        _playButtonClicked.call()
     }
 
     override fun onSaveClicked() {
         val params = CreateAudioDetailUseCase.Params(tempFileProvider.tempAudioRecordingFile)
-        createAudioDetailUseCase.execute(params, CreateDrawingDetailUseCaseHandler())
+        createAudioDetailUseCase.execute(params, CreateAudioDetailUseCaseHandler())
     }
 
-    private inner class CreateDrawingDetailUseCaseHandler :
+    private inner class CreateAudioDetailUseCaseHandler :
         DisposableSingleObserver<AudioDetail>() {
         override fun onSuccess(createdDetail: AudioDetail) {
             _savedDetail.value = createdDetail
-            audioState.reset()
         }
 
         override fun onError(e: Throwable) {
             _errorMessage.postValue(R.string.error_save_audio_failed)
             Timber.e(e)
         }
-    }
-
-    override fun onCleared() {
-        audioState.release()
     }
 
     private fun playingExistingAudioDetail(): Boolean {
@@ -119,5 +131,9 @@ class AudioDetailViewModel(
     override fun loadExistingDetail(existingDetail: AudioDetail) {
         this.existingDetail = existingDetail
         _saveButtonVisible.value = false
+    }
+
+    fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 }

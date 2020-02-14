@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.details.audio.mediaplayer
+package be.hogent.faith.faith.details.audio.audioPlayer
 
 import android.media.MediaPlayer
 import java.io.File
@@ -6,7 +6,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
-class MediaPlayerHolder : MediaPlayerAdapter {
+class AudioPlayerHolder : AudioPlayerAdapter {
     private var mMediaPlayer: MediaPlayer? = null
     private lateinit var audioFile: File
     private var mPlaybackInfoListener: PlaybackInfoListener? = null

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.checkSelfPermission
@@ -18,14 +19,21 @@ import be.hogent.faith.databinding.FragmentRecordAudioBinding
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
-import be.hogent.faith.faith.details.audio.mediaplayer.PlaybackInfoListener
+import be.hogent.faith.faith.details.audio.audioPlayer.AudioPlayerAdapter
+import be.hogent.faith.faith.details.audio.audioPlayer.AudioPlayerHolder
+import be.hogent.faith.faith.details.audio.audioPlayer.PlaybackInfoListener
+import be.hogent.faith.faith.util.TempFileProvider
+import kotlinx.android.synthetic.main.fragment_record_audio.seekBar
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 const val REQUESTCODE_AUDIO = 12
 private const val AUDIO_DETAIL = "An existing AudioDetail"
 
-class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail>, PlaybackInfoListener {
+class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
+
+    private val tempFileProvider: TempFileProvider by inject()
 
     override lateinit var detailFinishedListener: DetailFinishedListener
 
@@ -37,10 +45,17 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail>, PlaybackInf
 
     private var hasAudioRecordingPermission = false
 
+    private val audioPlayer: AudioPlayerAdapter = AudioPlayerHolder()
+
+    /**
+     * true when the user is currently dragging the indicator on the seekBar
+     */
+    private var userIsSeeking = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (existingTextGiven()) {
+        if (existingDetailGiven()) {
             loadExistingAudioDetail()
         }
 
@@ -52,7 +67,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail>, PlaybackInf
         audioDetailViewModel.loadExistingDetail(existingDetail)
     }
 
-    private fun existingTextGiven(): Boolean {
+    private fun existingDetailGiven(): Boolean {
         return arguments?.getSerializable(AUDIO_DETAIL) != null
     }
 
@@ -66,7 +81,68 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail>, PlaybackInf
         recordAudioBinding.audioDetailViewModel = audioDetailViewModel
         recordAudioBinding.lifecycleOwner = this
 
+        initialiseAudioPlayer()
+        initialiseSeekBar()
+
         return recordAudioBinding.root
+    }
+
+    private fun initialiseAudioPlayer() {
+        if (existingDetailGiven()) {
+            // Dangerous to get LiveData directly but we can assume the LiveData has been set
+            // becuase we just checked if an existing detail was given.
+            audioPlayer.loadMedia(audioDetailViewModel.savedDetail.value!!.file)
+        } else {
+            audioPlayer.loadMedia(tempFileProvider.tempAudioRecordingFile)
+        }
+    }
+
+    private fun startListeners() {
+        audioDetailViewModel.savedDetail.observe(this, Observer { finishedDetail ->
+            Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
+
+            detailFinishedListener.onDetailFinished(finishedDetail)
+
+            navigation?.backToEvent()
+        })
+        audioDetailViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
+            Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
+        })
+        audioDetailViewModel.playButtonClicked.observe(this, Observer {
+            audioPlayer.play()
+        })
+        audioDetailViewModel.pauseButtonClicked.observe(this, Observer {
+            audioPlayer.pause()
+        })
+        audioDetailViewModel.playStopButtonClicked.observe(this, Observer {
+            audioPlayer.reset()
+        })
+        audioDetailViewModel.recordButtonClicked.observe(this, Observer {
+            // TODO: add recorder start
+        })
+        audioDetailViewModel.recordStopButtonClicked.observe(this, Observer {
+            // TODO: add recorder stop
+        })
+    }
+
+    private fun initialiseSeekBar() {
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            var userSelectedPosition = 0
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    userSelectedPosition = progress
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                userIsSeeking = true
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                userIsSeeking = false
+                audioPlayer.seekTo(userSelectedPosition)
+            }
+        })
     }
 
     override fun onAttach(context: Context) {
@@ -127,19 +203,6 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail>, PlaybackInf
         }
     }
 
-    private fun startListeners() {
-        audioDetailViewModel.savedDetail.observe(this, Observer { finishedDetail ->
-            Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
-
-            detailFinishedListener.onDetailFinished(finishedDetail)
-
-            navigation?.backToEvent()
-        })
-        audioDetailViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
-            Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
-        })
-    }
-
     companion object {
         fun newInstance(): RecordAudioFragment {
             return RecordAudioFragment()
@@ -158,18 +221,24 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail>, PlaybackInf
         fun backToEvent()
     }
 
-    override fun onLogUpdated(formattedMessage: String?) {
-        Timber.i(formattedMessage)
-    }
+    inner class PlaybackListener : PlaybackInfoListener {
+        override fun onDurationChanged(duration: Int) {
+            seekBar.setMax(duration)
+        }
 
-    override fun onDurationChanged(duration: Int) {
-    }
+        override fun onPositionChanged(position: Int) {
+            if (!userIsSeeking) {
+                seekBar.setProgress(position, true)
+            }
+        }
 
-    override fun onPositionChanged(position: Int) {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
+        override fun onPlaybackCompleted() {}
+        override fun onStateChanged(state: PlaybackInfoListener.PlaybackState) {
+            audioDetailViewModel.onPlayStateChanged(state)
+        }
 
-    override fun onPlaybackCompleted() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        override fun onLogUpdated(message: String?) {
+            Timber.i(message)
+        }
     }
 }

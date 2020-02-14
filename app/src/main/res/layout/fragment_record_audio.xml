@@ -46,7 +46,7 @@
 
             <!-- https://medium.com/androiddevelopers/building-a-simple-audio-app-in-android-part-3-3-ead4a0e10673 -->
             <SeekBar
-                android:id="@+id/seekBar_audio_progress"
+                android:id="@+id/seekBar"
                 android:layout_width="1000dp"
                 android:layout_height="20dp"
                 app:layout_constraintBottom_toTopOf="@+id/cardView_audio_center"
