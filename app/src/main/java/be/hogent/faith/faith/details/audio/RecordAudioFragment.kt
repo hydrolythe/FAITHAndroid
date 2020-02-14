@@ -18,12 +18,14 @@ import be.hogent.faith.databinding.FragmentRecordAudioBinding
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.details.audio.mediaplayer.PlaybackInfoListener
 import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 const val REQUESTCODE_AUDIO = 12
 private const val AUDIO_DETAIL = "An existing AudioDetail"
 
-class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
+class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail>, PlaybackInfoListener {
 
     override lateinit var detailFinishedListener: DetailFinishedListener
 
@@ -154,5 +156,21 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     interface AudioScreenNavigation {
         fun backToEvent()
+    }
+
+    override fun onLogUpdated(formattedMessage: String?) {
+        Timber.i(formattedMessage)
+    }
+
+    override fun onDurationChanged(duration: Int) {
+
+    }
+
+    override fun onPositionChanged(position: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onPlaybackCompleted() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
