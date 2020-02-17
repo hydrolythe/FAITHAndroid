@@ -117,7 +117,7 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/frag_main_descr_your_avatar"
                 android:scaleType="fitXY"
-                android:src="@drawable/meisje_stoer_staan"
+                android:src="@drawable/meisje_stoer_bl"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guide_avatar_left"
                 app:layout_constraintTop_toBottomOf="@+id/guide_avatar_top" />

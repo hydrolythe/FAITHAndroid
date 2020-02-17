@@ -43,8 +43,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/ic_return"
-                android:onClick="@{() -> drawViewModel.onCancelClicked()}"
                 android:contentDescription="@string/cancel"
+                android:onClick="@{() -> drawViewModel.onCancelClicked()}"
                 app:layout_constraintBottom_toTopOf="@+id/container_draw_colors"
                 app:layout_constraintEnd_toStartOf="@+id/guide_draw_drawview_left"
                 app:layout_constraintStart_toStartOf="parent"
@@ -84,6 +84,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/save_btn"
+                android:contentDescription="@string/save"
                 android:elevation="2dp"
                 android:onClick="@{() -> drawViewModel.onSaveClicked()}"
                 android:translationZ="2dp"
@@ -129,7 +130,7 @@
                 android:layout_marginTop="-5dp"
                 android:layout_marginEnd="50dp"
                 app:cardCornerRadius="@dimen/panel_corner_radius"
-                app:cardElevation="@dimen/panel_corner_elevation"
+                app:cardElevation="@dimen/panel_elevation"
                 app:layout_constraintEnd_toEndOf="@+id/cardView"
                 app:layout_constraintTop_toTopOf="@+id/cardView">
 
@@ -224,7 +225,7 @@
                 android:layout_marginStart="8dp"
                 android:visibility="@{drawViewModel.showColorPicker? View.VISIBLE : View.GONE}"
                 app:cardCornerRadius="@dimen/panel_corner_radius"
-                app:cardElevation="@dimen/panel_corner_elevation"
+                app:cardElevation="@dimen/panel_elevation"
                 app:layout_constraintBottom_toBottomOf="@+id/container_draw_colors"
                 app:layout_constraintStart_toEndOf="@+id/container_draw_colors">
 
@@ -244,6 +245,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:adjustViewBounds="true"
+                        android:contentDescription="@string/kies_een_kleur"
                         android:src="@drawable/ic_color_no_border"
                         android:tint="@{drawViewModel.customColor}" />
 
@@ -270,7 +272,7 @@
                 android:layout_marginStart="8dp"
                 android:visibility="@{drawViewModel.showColorWidthTools? View.VISIBLE : View.GONE}"
                 app:cardCornerRadius="@dimen/panel_corner_radius"
-                app:cardElevation="@dimen/panel_corner_elevation"
+                app:cardElevation="@dimen/panel_elevation"
                 app:layout_constraintBottom_toBottomOf="@+id/container_draw_utilities"
                 app:layout_constraintStart_toEndOf="@+id/container_draw_utilities">
 

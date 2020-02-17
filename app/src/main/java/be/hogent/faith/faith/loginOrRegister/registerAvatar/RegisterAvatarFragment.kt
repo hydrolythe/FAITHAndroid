@@ -1,11 +1,16 @@
 package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -18,6 +23,9 @@ import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
 import kotlinx.android.synthetic.main.fragment_login.progress
 import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
+import kotlinx.android.synthetic.main.fragment_register_avatar.btn_register_skincolor_blank
+import kotlinx.android.synthetic.main.fragment_register_avatar.btn_register_skincolor_darkbrown
+import kotlinx.android.synthetic.main.fragment_register_avatar.btn_register_skincolor_lightbrown
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -37,6 +45,7 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
      */
     private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel()
     private val registerUserViewModel by sharedViewModel<RegisterUserViewModel>()
+    private lateinit var adapter: AvatarItemAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +78,49 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
                 handleDataState(it)
             }
         })
+        registerAvatarViewModel.selectedSkinColor.observe(this, Observer {
+            setSkinColorDrawable(it, SkinColor.blank, btn_register_skincolor_blank, R.color.skin_blank)
+            setSkinColorDrawable(
+                it,
+                SkinColor.light_brown,
+                btn_register_skincolor_lightbrown,
+                R.color.skin_lightbrown
+            )
+            setSkinColorDrawable(
+                it,
+                SkinColor.dark_brown,
+                btn_register_skincolor_darkbrown,
+                R.color.skin_darkbrown
+            )
+        })
+        registerAvatarViewModel.avatars.observe(this, Observer {
+            it?.let {
+                adapter.submitList(it)
+                if (adapter.selectedItem != -1) avatar_rv_avatar.post {
+                    avatar_rv_avatar.scrollToPosition(
+                        adapter.selectedItem
+                    )
+                }
+            }
+        })
+    }
+
+    private fun setSkinColorDrawable(
+        selectedColor: SkinColor,
+        color: SkinColor,
+        view: ImageView,
+        fillColor: Int
+    ) {
+        val gradientDrawable =
+            getDrawable(this.context!!, R.drawable.skin_color) as GradientDrawable
+        gradientDrawable.setColor(ContextCompat.getColor(this.context!!, fillColor))
+        gradientDrawable.setStroke(
+            2,
+            if (selectedColor != color) ContextCompat.getColor(
+                this.context!!, fillColor
+            ) else Color.BLACK
+        )
+        view.background = gradientDrawable
     }
 
     private fun handleDataState(resource: Resource<Unit>) {
@@ -94,10 +146,8 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
     }
 
     private fun configureRecyclerViewAdapter() {
-        with(AvatarItemAdapter(this)) {
-            avatars = registerAvatarViewModel.avatars.value!!
-            avatar_rv_avatar.adapter = this
-        }
+        adapter = AvatarItemAdapter(this)
+        avatar_rv_avatar.adapter = adapter
         avatar_rv_avatar.layoutManager =
             LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
     }

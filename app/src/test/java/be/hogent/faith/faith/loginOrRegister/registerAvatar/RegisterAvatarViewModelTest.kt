@@ -17,13 +17,14 @@ class RegisterAvatarViewModelTest {
     private val avatarProvider = mockk<ResourceAvatarProvider>(relaxed = true)
     private val listOfAvatars = listOf(Avatar(DataFactory.randomString()))
     private val selection = 0
+    private val selectedSkinColor = SkinColor.dark_brown
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {
-        every { avatarProvider.getAvatars() } returns listOfAvatars
+        every { avatarProvider.getAvatars(SkinColor.blank) } returns listOfAvatars
         registerAvatarViewModel = RegisterAvatarViewModel(avatarProvider)
     }
 
@@ -40,6 +41,11 @@ class RegisterAvatarViewModelTest {
     }
 
     @Test
+    fun registerAvatarViewModel_setsSelectedSkinColor() {
+        registerAvatarViewModel.setSelectedSkinColor(selectedSkinColor)
+        Assert.assertEquals(selectedSkinColor, registerAvatarViewModel.selectedSkinColor.value)
+    }
+    @Test
     fun registerAvatarViewModel_selectedAvatar_WhenNoAvatarIsSelected_ReturnsNull() {
         Assert.assertNull(registerAvatarViewModel.selectedAvatar)
     }
@@ -50,6 +56,11 @@ class RegisterAvatarViewModelTest {
         Assert.assertNotNull(registerAvatarViewModel.selectedAvatar)
     }
 
+    @Test
+    fun registerAvatarViewModel_selectedSkinColor_WhenSkinColorIsSelected_ReturnsSkinColor() {
+        registerAvatarViewModel.setSelectedSkinColor(selectedSkinColor)
+        Assert.assertNotNull(registerAvatarViewModel.selectedSkinColor)
+    }
     @Test
     fun registerAvatarViewModel_avatarWasSelectedWhenNoAvatarIsSelected_ReturnsFalse() {
         Assert.assertFalse(registerAvatarViewModel.avatarWasSelected())

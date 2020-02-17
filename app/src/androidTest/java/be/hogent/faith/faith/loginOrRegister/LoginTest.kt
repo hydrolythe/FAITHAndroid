@@ -35,10 +35,10 @@ class LoginTest : KoinTest {
         closeSoftKeyboard()
         onView(withId(R.id.txt_welcome_password)).perform(typeText("wwwwww"))
         closeSoftKeyboard()
-        onView(withId(R.id.btn_loginfragment_startNewEvent)).perform(ViewActions.click())
+        onView(withId(R.id.btn_register_naar_de_stad)).perform(ViewActions.click())
         // Just for safety
         closeSoftKeyboard()
-        onView(withId(R.id.btn_loginfragment_startNewEvent)).check(
+        onView(withId(R.id.btn_loginfragment_library)).check(
             ViewAssertions.matches(
                 ViewMatchers.isDisplayed()
             ))
