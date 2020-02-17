@@ -17,14 +17,14 @@ class RegisterAvatarViewModelTest {
     private val avatarProvider = mockk<ResourceAvatarProvider>(relaxed = true)
     private val listOfAvatars = listOf(Avatar(DataFactory.randomString()))
     private val selection = 0
-    private val selectedSkinColor = SkinColor.db
+    private val selectedSkinColor = SkinColor.dark_brown
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {
-        every { avatarProvider.getAvatars(SkinColor.bl) } returns listOfAvatars
+        every { avatarProvider.getAvatars(SkinColor.blank) } returns listOfAvatars
         registerAvatarViewModel = RegisterAvatarViewModel(avatarProvider)
     }
 

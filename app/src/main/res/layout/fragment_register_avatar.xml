@@ -108,7 +108,7 @@
                         android:background="@drawable/skin_color"
                         android:contentDescription="@string/huidskleur"
                         android:focusableInTouchMode="false"
-                        android:onClick="@{() -> registerAvatarViewModel.setSelectedSkinColor(SkinColor.bl)}"
+                        android:onClick="@{() -> registerAvatarViewModel.setSelectedSkinColor(SkinColor.blank)}"
                         android:padding="1dp" />
 
                     <ImageView
@@ -121,7 +121,7 @@
                         android:background="@drawable/skin_color"
                         android:contentDescription="@string/huidskleur"
                         android:focusableInTouchMode="false"
-                        android:onClick="@{() -> registerAvatarViewModel.setSelectedSkinColor(SkinColor.lb)}"
+                        android:onClick="@{() -> registerAvatarViewModel.setSelectedSkinColor(SkinColor.light_brown)}"
                         android:padding="1dp" />
 
                     <ImageView
@@ -134,7 +134,7 @@
                         android:background="@drawable/skin_color"
                         android:contentDescription="@string/huidskleur"
                         android:focusableInTouchMode="false"
-                        android:onClick="@{() -> registerAvatarViewModel.setSelectedSkinColor(SkinColor.db)}"
+                        android:onClick="@{() -> registerAvatarViewModel.setSelectedSkinColor(SkinColor.dark_brown)}"
                         android:padding="1dp" />
 
                 </LinearLayout>

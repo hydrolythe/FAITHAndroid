@@ -79,16 +79,16 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
             }
         })
         registerAvatarViewModel.selectedSkinColor.observe(this, Observer {
-            setSkinColorDrawable(it, SkinColor.bl, btn_register_skincolor_blank, R.color.skin_blank)
+            setSkinColorDrawable(it, SkinColor.blank, btn_register_skincolor_blank, R.color.skin_blank)
             setSkinColorDrawable(
                 it,
-                SkinColor.lb,
+                SkinColor.light_brown,
                 btn_register_skincolor_lightbrown,
                 R.color.skin_lightbrown
             )
             setSkinColorDrawable(
                 it,
-                SkinColor.db,
+                SkinColor.dark_brown,
                 btn_register_skincolor_darkbrown,
                 R.color.skin_darkbrown
             )

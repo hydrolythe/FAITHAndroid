@@ -37,7 +37,7 @@ class RegisterAvatarViewModel(
         get() = _errorMessage
 
     init {
-        _selectedSkinColor.value = SkinColor.bl
+        _selectedSkinColor.value = SkinColor.blank
         fetchAvatarImages()
         // Set initially to -1 = no selection has been provided.
         _selectedAvatarPosition.postValue(-1)

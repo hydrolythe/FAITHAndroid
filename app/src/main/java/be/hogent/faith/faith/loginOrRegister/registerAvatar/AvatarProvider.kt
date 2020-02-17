@@ -23,7 +23,7 @@ interface AvatarProvider {
             "meisje_modieus",
             "jongen_voetballer",
             "meisje_sportief"
-        ).map { name -> Avatar("${name}_${skinColor}") }
+        ).map { name -> Avatar("${name}_${skinColor.abbreviation}") }
     }
 
     /**
@@ -43,4 +43,4 @@ interface AvatarProvider {
     fun getAvatarDrawableOutlineId(avatarName: String): Int
 }
 
-enum class SkinColor { bl, lb, db }
+enum class SkinColor (val abbreviation:String) { blank ("bl"), light_brown ("lb"), dark_brown ("db") }
