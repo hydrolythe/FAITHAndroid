@@ -8,6 +8,8 @@
         <variable
             name="registerAvatarViewModel"
             type="be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel" />
+
+        <import type="be.hogent.faith.faith.loginOrRegister.registerAvatar.SkinColor" />
     </data>
 
     <FrameLayout
@@ -19,17 +21,17 @@
             android:id="@+id/background_register_avatar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/register_background"
             android:scaleType="fitXY"
             android:src="@drawable/avatar_selection_background"
             app:srcCompat="@drawable/avatar_selection_background" />
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/material_icon_button"
+                android:id="@+id/btn_register_naar_de_stad"
                 style="@style/login_button"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
@@ -57,12 +59,13 @@
                 android:id="@+id/foreground_register_avatar"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:contentDescription="@string/register_background"
                 android:scaleType="fitXY"
+                android:src="@drawable/avatar_selection_foreground"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/foreground_guide_line"
-                android:src="@drawable/avatar_selection_foreground"
                 app:srcCompat="@drawable/avatar_selection_foreground" />
 
             <androidx.constraintlayout.widget.Guideline
@@ -79,7 +82,63 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.81" />
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="@dimen/panel_corner_radius"
+                app:cardElevation="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/foreground_register_avatar">
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/btn_register_skincolor_blank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="16dp"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/skin_color"
+                        android:contentDescription="@string/huidskleur"
+                        android:focusableInTouchMode="false"
+                        android:onClick="@{() -> registerAvatarViewModel.setSelectedSkinColor(SkinColor.blank)}"
+                        android:padding="1dp" />
+
+                    <ImageView
+                        android:id="@+id/btn_register_skincolor_lightbrown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="16dp"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/skin_color"
+                        android:contentDescription="@string/huidskleur"
+                        android:focusableInTouchMode="false"
+                        android:onClick="@{() -> registerAvatarViewModel.setSelectedSkinColor(SkinColor.light_brown)}"
+                        android:padding="1dp" />
+
+                    <ImageView
+                        android:id="@+id/btn_register_skincolor_darkbrown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="16dp"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/skin_color"
+                        android:contentDescription="@string/huidskleur"
+                        android:focusableInTouchMode="false"
+                        android:onClick="@{() -> registerAvatarViewModel.setSelectedSkinColor(SkinColor.dark_brown)}"
+                        android:padding="1dp" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar

@@ -35,6 +35,10 @@
     <color name="yellow">#FFFF00</color>
 
     <color name="caption">#0000FF</color>
+
+    <color name="skin_blank">#FFC18E</color>
+    <color name="skin_lightbrown">#D39751</color>
+    <color name="skin_darkbrown">#9C6231</color>
 </resources>
 
 

@@ -32,6 +32,7 @@
             android:adjustViewBounds="true"
             android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THICK)}"
             android:src="@drawable/ic_color_no_border"
+            android:contentDescription="@string/lineWidth_Thick"
             android:tint="@{(((LineWidth)drawViewModel.selectedLineWidth)==LineWidth.THICK)  ? drawViewModel.selectedColor : Color.BLACK}" />
 
         <Space
@@ -46,6 +47,7 @@
             android:adjustViewBounds="true"
             android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.MEDIUM)}"
             android:src="@drawable/ic_color_no_border"
+            android:contentDescription="@string/lineWidth_medium"
             android:tint="@{(((LineWidth)drawViewModel.selectedLineWidth)==LineWidth.MEDIUM) ? drawViewModel.selectedColor : Color.BLACK}" />
 
         <Space
@@ -58,6 +60,7 @@
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/lineWidth_thin"
             android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THIN)}"
             android:src="@drawable/ic_color_no_border"
             android:tint="@{((LineWidth)drawViewModel.selectedLineWidth)==LineWidth.THIN ? drawViewModel.selectedColor : Color.BLACK}" />

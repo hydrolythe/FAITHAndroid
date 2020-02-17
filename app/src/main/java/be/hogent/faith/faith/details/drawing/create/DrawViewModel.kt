@@ -6,11 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import be.hogent.faith.R
 import be.hogent.faith.faith.util.SingleLiveEvent
 import com.divyanshu.draw.widget.DrawView
 import com.divyanshu.draw.widget.tools.CanvasAction
+import be.hogent.faith.R
 
+/**
+ * Base VM for both the [DrawingDetailViewModel]
+ */
 open class DrawViewModel : ViewModel() {
 
     protected val _selectedColor = MutableLiveData<@ColorInt Int>()
@@ -70,9 +73,9 @@ open class DrawViewModel : ViewModel() {
         get() = _errorMessage
 
     val customColorSelected: LiveData<Boolean> =
-        Transformations.map<Int, Boolean>(selectedColor) { color ->
-        color == _customColor.value && !intArrayOf(R.color.green, R.color.yellow, R.color.black, R.color.red, R.color.blue).contains(color)
-    }
+        Transformations.map<Int, Boolean>(_selectedColor) { color ->
+            color == _customColor.value
+        }
 
     private val _showColorPicker = MutableLiveData<Boolean>()
     val showColorPicker: LiveData<Boolean>
@@ -125,8 +128,7 @@ open class DrawViewModel : ViewModel() {
 
     fun setLineWidth(width: LineWidth) {
         _selectedLineWidth.value = width
-        if (_selectedTool.value != Tool.ERASER) _selectedColor.value =
-            _selectedColor.value // anders past de tint zich niet aan
+        if (_selectedTool.value != Tool.ERASER) _selectedColor.value = _selectedColor.value // anders past de tint zich niet aan
     }
 
     fun undo() {

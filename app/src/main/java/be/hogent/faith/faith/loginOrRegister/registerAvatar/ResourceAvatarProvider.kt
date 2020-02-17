@@ -8,8 +8,8 @@ import timber.log.Timber
 class ResourceAvatarProvider(private val context: Context) :
     AvatarProvider {
 
-    override fun getAvatarDrawables(): List<Drawable> {
-        return getAvatars()
+    override fun getAvatarDrawables(skinColor: SkinColor): List<Drawable> {
+        return getAvatars(skinColor)
             .map(Avatar::avatarName)
             .map { avatarName -> getAvatarDrawable(avatarName) }
     }
@@ -19,7 +19,7 @@ class ResourceAvatarProvider(private val context: Context) :
     }
 
     override fun getAvatarDrawableStaan(avatarName: String): Drawable {
-        return getDrawable(avatarName) // , "staan")
+        return getDrawable(avatarName)
     }
 
     override fun getAvatarDrawableZitten(avatarName: String): Drawable {
@@ -31,7 +31,7 @@ class ResourceAvatarProvider(private val context: Context) :
     }
 
     override fun getAvatarDrawableOutline(avatarName: String): Drawable {
-        return getDrawable(avatarName, "outline")
+        return getDrawable(getAvatarnameWithoutSkinColor(avatarName), "outline")
     }
 
     private fun getDrawable(avatarName: String, type: String? = null): Drawable {
@@ -45,8 +45,12 @@ class ResourceAvatarProvider(private val context: Context) :
 
     override fun getAvatarDrawableOutlineId(avatarName: String): Int {
         return context.getResources().getIdentifier(
-            "${avatarName}_outline", "drawable",
+            "${getAvatarnameWithoutSkinColor(avatarName)}_outline", "drawable",
             context.getPackageName()
         )
+    }
+
+    private fun getAvatarnameWithoutSkinColor(avatarName: String): String {
+        return avatarName.substring(0, avatarName.length - 3)
     }
 }

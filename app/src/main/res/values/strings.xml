@@ -165,5 +165,11 @@
     <string name="register_background">register background</string>
     <string name="confirm">ok</string>
     <string name="kies_een_kleur">Kies een kleur</string>
+    <string name="huidskleur">huidskleur</string>
+    <string name="wegwijzerpaal">wegwijzerpaal</string>
     <string name="redo">redo</string>
+    <string name="penseel">penseel</string>
+    <string name="tekst">tekst</string>
+    <string name="gom">gom</string>
+    <string name="pijl">pijl</string>
 </resources>

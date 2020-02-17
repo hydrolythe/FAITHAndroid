@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/ik_ben_nieuw"
+                app:layout_constraintBottom_toTopOf="@+id/btn_login_ik_ben_nieuw"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:welcomeViewModel="@{welcomeViewModel}" />
@@ -85,7 +85,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/ik_ben_nieuw"
+                android:id="@+id/btn_login_ik_ben_nieuw"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
@@ -108,9 +108,9 @@
                 android:layout_height="20dp"
                 android:layout_marginEnd="32dp"
                 android:contentDescription="@string/ster"
-                app:layout_constraintBottom_toBottomOf="@+id/ik_ben_nieuw"
-                app:layout_constraintEnd_toStartOf="@+id/ik_ben_nieuw"
-                app:layout_constraintTop_toTopOf="@+id/ik_ben_nieuw"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_login_ik_ben_nieuw"
+                app:layout_constraintEnd_toStartOf="@+id/btn_login_ik_ben_nieuw"
+                app:layout_constraintTop_toTopOf="@+id/btn_login_ik_ben_nieuw"
                 app:srcCompat="@drawable/ic_ster" />
 
             <ImageView
@@ -119,9 +119,9 @@
                 android:layout_height="20dp"
                 android:layout_marginStart="32dp"
                 android:contentDescription="@string/ster"
-                app:layout_constraintBottom_toBottomOf="@+id/ik_ben_nieuw"
-                app:layout_constraintStart_toEndOf="@+id/ik_ben_nieuw"
-                app:layout_constraintTop_toTopOf="@+id/ik_ben_nieuw"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_login_ik_ben_nieuw"
+                app:layout_constraintStart_toEndOf="@+id/btn_login_ik_ben_nieuw"
+                app:layout_constraintTop_toTopOf="@+id/btn_login_ik_ben_nieuw"
                 app:srcCompat="@drawable/ic_ster" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
