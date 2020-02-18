@@ -43,4 +43,4 @@ interface AvatarProvider {
     fun getAvatarDrawableOutlineId(avatarName: String): Int
 }
 
-enum class SkinColor (val abbreviation:String) { blank ("bl"), light_brown ("lb"), dark_brown ("db") }
+enum class SkinColor(val abbreviation: String) { blank("bl"), light_brown("lb"), dark_brown("db") }
