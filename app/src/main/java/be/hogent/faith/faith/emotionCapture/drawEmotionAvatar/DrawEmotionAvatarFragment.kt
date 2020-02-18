@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -128,8 +129,21 @@ class DrawEmotionAvatarFragment : DrawFragment() {
 
     private fun startListeners() {
         drawViewModel.restartClicked.observe(this, Observer {
-            drawView.clearCanvas()
-            drawAvatar()
+            val alertDialog: AlertDialog = this.run {
+                val builder = AlertDialog.Builder(this.requireContext()).apply {
+                    setTitle(R.string.dialog_to_restart_drawavatar_title)
+                    setMessage(R.string.dialog_to_restart_drawavatar_message)
+                    setPositiveButton(R.string.ok) { _, _ ->
+                        drawView.clearCanvas()
+                        drawAvatar()
+                    }
+                    setNegativeButton(R.string.cancel) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                }
+                builder.create()
+            }
+            alertDialog.show()
         })
     }
 
