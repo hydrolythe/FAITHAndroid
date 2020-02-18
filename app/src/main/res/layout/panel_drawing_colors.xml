@@ -182,11 +182,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
+                android:id="@+id/hr_customColor"
                 android:layout_width="fill_parent"
                 android:layout_height="1dip"
                 android:background="@color/black" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/paintpot_customColor"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1">

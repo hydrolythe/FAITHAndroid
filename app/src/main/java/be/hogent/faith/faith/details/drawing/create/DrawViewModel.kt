@@ -77,15 +77,9 @@ open class DrawViewModel : ViewModel() {
             color == _customColor.value
         }
 
-    private val _showColorPicker = MutableLiveData<Boolean>()
-    val showColorPicker: LiveData<Boolean>
-        get() = _showColorPicker
-
     private val _showColorWidthTools = MutableLiveData<Boolean>()
     val showColorWidthTools: LiveData<Boolean>
         get() = _showColorWidthTools
-
-    private var _lastToolclicked: Tool? = null
 
     /**
      * Contains all actions that have been drawn on the [DrawView].
@@ -103,7 +97,6 @@ open class DrawViewModel : ViewModel() {
 
     init {
         _drawingActions.value = mutableListOf()
-        _showColorPicker.value = false
         _showColorWidthTools.value = false
         _selectedTool.value = Tool.PENCIL
         _selectedColor.value = R.color.black
@@ -117,7 +110,6 @@ open class DrawViewModel : ViewModel() {
         // als op eraser en je kiest ander kleur dan moet je terug naar penseel anders gom je in dat kleur
         if (_selectedTool.value == Tool.ERASER)
             onPencilClicked()
-        _showColorPicker.value = false
     }
 
     fun setCustomColor(@ColorInt color: Int) {
@@ -128,7 +120,8 @@ open class DrawViewModel : ViewModel() {
 
     fun setLineWidth(width: LineWidth) {
         _selectedLineWidth.value = width
-        if (_selectedTool.value != Tool.ERASER) _selectedColor.value = _selectedColor.value // anders past de tint zich niet aan
+        if (_selectedTool.value != Tool.ERASER)
+            _selectedColor.value = _selectedColor.value // anders past de tint zich niet aan
     }
 
     fun undo() {
@@ -142,7 +135,6 @@ open class DrawViewModel : ViewModel() {
     fun onCustomColorClicked() {
         _customColorClicked.call()
         _selectedColor.value = _customColor.value
-        _showColorPicker.value = true
         if (_selectedTool.value == Tool.ERASER)
             onPencilClicked()
     }
@@ -164,7 +156,6 @@ open class DrawViewModel : ViewModel() {
     fun onEraserClicked() {
         setSelectedTool(Tool.ERASER)
         _eraserClicked.call()
-        _showColorPicker.value = false
     }
 
     private fun setSelectedTool(tool: Tool) {

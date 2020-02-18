@@ -1,12 +1,18 @@
 package be.hogent.faith.faith.details.drawing.create
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import com.divyanshu.draw.widget.DrawView
+import kotlinx.android.synthetic.main.panel_brush_sizes.btn_draw_setMediumLineWidth
+import kotlinx.android.synthetic.main.panel_brush_sizes.btn_draw_setThickLineWidth
+import kotlinx.android.synthetic.main.panel_brush_sizes.btn_draw_setThinLineWidth
 
 abstract class DrawFragment : Fragment() {
     abstract val drawViewModel: DrawViewModel
@@ -40,12 +46,14 @@ abstract class DrawFragment : Fragment() {
         drawViewModel.selectedColor.observe(this, Observer { newColor ->
             drawView.setColor(newColor)
             drawView.setAlpha(colorAlpha)
+            setBrushSizeDrawables()
         })
         drawViewModel.pencilClicked.observe(this, Observer {
             drawView.pickDrawingTool()
         })
         drawViewModel.selectedLineWidth.observe(this, Observer { lineWidth ->
             drawView.setStrokeWidth(lineWidth.width)
+            setBrushSizeDrawables()
         })
         drawViewModel.undoClicked.observe(this, Observer {
             drawView.undo()
@@ -67,6 +75,27 @@ abstract class DrawFragment : Fragment() {
             // that is saved in such a way that it survives configuration changes. See [DrawViewModel].
             drawView.setActions(it)
         })
+    }
+
+    protected fun setBrushSizeDrawables() {
+        btn_draw_setThickLineWidth.setImageDrawable(getBrushSizeDrawable(DrawViewModel.LineWidth.THICK))
+        btn_draw_setMediumLineWidth.setImageDrawable(getBrushSizeDrawable(DrawViewModel.LineWidth.MEDIUM))
+        btn_draw_setThinLineWidth.setImageDrawable(getBrushSizeDrawable(DrawViewModel.LineWidth.THIN))
+    }
+
+    private fun getBrushSizeDrawable(lineWidth: DrawViewModel.LineWidth): GradientDrawable {
+        val color: Int = drawViewModel.selectedColor.value!!
+        val gradientDrawable =
+            AppCompatResources.getDrawable(
+                this.context!!,
+                R.drawable.circle
+            ) as GradientDrawable
+        gradientDrawable.setColor(color)
+        gradientDrawable.setStroke(
+            2,
+            if (drawViewModel.selectedLineWidth.value != lineWidth) color else Color.BLACK
+        )
+        return gradientDrawable
     }
 
     private fun showExitAlert() {

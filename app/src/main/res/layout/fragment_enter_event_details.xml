@@ -40,7 +40,6 @@
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/guide_recyclerview_top"
                 app:layout_constraintEnd_toStartOf="@+id/guide_center_pole"
-                app:layout_constraintHeight_percent="0.50"
                 app:layout_constraintStart_toStartOf="@+id/guide_center_pole"
                 app:layout_constraintTop_toBottomOf="@+id/guide_top_pole"
                 app:srcCompat="@drawable/wegwijzerpaal"
@@ -134,8 +133,10 @@
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/guide_recyclerview_end"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/guide_recyclerview_start"
                 app:layout_constraintTop_toBottomOf="@+id/guide_recyclerview_top"
+                app:layout_constraintVertical_bias="1.0"
                 tools:listitem="@layout/item_event_detail_thumbnail" />
 
             <ImageButton

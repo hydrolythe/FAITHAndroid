@@ -16,6 +16,8 @@ import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import com.divyanshu.draw.widget.DrawView
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.panel_drawing_colors.hr_customColor
+import kotlinx.android.synthetic.main.panel_drawing_colors.paintpot_customColor
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -42,7 +44,7 @@ class DrawEmotionAvatarFragment : DrawFragment() {
     override val drawViewModel: DrawViewModel by viewModel()
 
     override val drawView: DrawView
-        get() = drawAvatarBinding.drawView
+        get() = drawAvatarBinding.drawAvatarDrawView
 
     override val colorAlpha: Int
         get() = COLOR_ALPHA
@@ -86,6 +88,8 @@ class DrawEmotionAvatarFragment : DrawFragment() {
         super.onStart()
         configureDrawingCanvas()
         startListeners()
+        hr_customColor.visibility = View.GONE
+        paintpot_customColor.visibility = View.GONE
     }
 
     private fun configureDrawingCanvas() {

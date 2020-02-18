@@ -125,7 +125,7 @@ class DrawingDetailFragment : DrawFragment(),
 
                 .setPositiveButton(
                     getString(R.string.confirm),
-                    ColorEnvelopeListener { envelope, _ ->  if (envelope != null)
+                    ColorEnvelopeListener { envelope, _ -> if (envelope != null)
                         drawViewModel.setCustomColor(envelope.color) })
                 .setNegativeButton(
                     getString(R.string.cancel)
