@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.databinding.DataBindingUtil
@@ -26,7 +27,7 @@ import io.fotoapparat.log.logcat
 import io.fotoapparat.parameter.ScaleType
 import io.fotoapparat.selector.back
 import io.fotoapparat.selector.front
-import kotlinx.android.synthetic.main.fragment_take_photo.img_takePhoto_Photo
+import kotlinx.android.synthetic.main.fragment_take_photo.img_takePhoto_theTakenPhoto
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -105,7 +106,7 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
         takePhotoViewModel.photoSaveFile.observe(this, Observer { photo ->
             if (photo != null) {
                 Glide.with(context!!).load(photo).diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true).into(img_takePhoto_Photo)
+                    .skipMemoryCache(true).into(img_takePhoto_theTakenPhoto)
                 Timber.d("photoSaveFile saved ${photo.name} ${photo.path}")
             }
         })
@@ -115,6 +116,10 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
                 .show()
             detailFinishedListener.onDetailFinished(newPhotoDetail)
             navigation?.backToEvent()
+        })
+
+        takePhotoViewModel.cancelClicked.observe(this, Observer {
+            navigation!!.backToEvent()
         })
     }
 
@@ -143,6 +148,22 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
         return checkSelfPermission(activity!!, Manifest.permission.CAMERA) == PERMISSION_GRANTED
     }
 
+    private fun showExitAlert() {
+        val alertDialog: AlertDialog = this.run {
+            val builder = AlertDialog.Builder(this.requireContext()).apply {
+                setTitle(R.string.dialog_to_the_event_title)
+                setMessage(R.string.dialog_takePhoto_cancel_message)
+                setPositiveButton(R.string.ok) { _, _ ->
+                    navigation!!.backToEvent()
+                }
+                setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.cancel()
+                }
+            }
+            builder.create()
+        }
+        alertDialog.show()
+    }
     /**
      * Checks if requested permissions have been granted and starts the action that required the permission
      *  in the first place.
