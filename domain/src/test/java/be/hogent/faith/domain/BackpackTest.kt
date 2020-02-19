@@ -12,22 +12,25 @@ import org.junit.Test
 class BackpackTest {
 
     private lateinit var backpack : Backpack
+    private lateinit var detail : Detail
 
     @Before
     fun setUp() {
         backpack = Backpack()
+        detail = mockk()
     }
 
     @Test
     fun `Backpack addDetail correctly adds the detail`() {
-        backpack.addDetail(mockk())
+        backpack.addDetail(detail)
 
         Assert.assertEquals(1, backpack.details.size)
+        Assert.assertEquals(detail, backpack.details.first())
     }
 
     @Test
     fun `Backpack removeDetail correctly removes the detail`() {
-        backpack.removeDetail(mockk())
+        backpack.removeDetail(detail)
 
         Assert.assertEquals(0, backpack.details.size)
     }
