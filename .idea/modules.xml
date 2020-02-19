@@ -3,6 +3,14 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FAITH.iml" filepath="$PROJECT_DIR$/FAITH.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/FAITH-app.iml" filepath="$PROJECT_DIR$/app/FAITH-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/database/FAITH-database.iml" filepath="$PROJECT_DIR$/database/FAITH-database.iml" />
+      <module fileurl="file://$PROJECT_DIR$/domain/FAITH-domain.iml" filepath="$PROJECT_DIR$/domain/FAITH-domain.iml" />
+      <module fileurl="file://$PROJECT_DIR$/draw/FAITH-draw.iml" filepath="$PROJECT_DIR$/draw/FAITH-draw.iml" />
+      <module fileurl="file://$PROJECT_DIR$/service/FAITH-service.iml" filepath="$PROJECT_DIR$/service/FAITH-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/storage/FAITH-storage.iml" filepath="$PROJECT_DIR$/storage/FAITH-storage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/util/FAITH-util.iml" filepath="$PROJECT_DIR$/util/FAITH-util.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Stage-FAITH.iml" filepath="$PROJECT_DIR$/Stage-FAITH.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/database/database.iml" filepath="$PROJECT_DIR$/database/database.iml" />
       <module fileurl="file://$PROJECT_DIR$/domain/domain.iml" filepath="$PROJECT_DIR$/domain/domain.iml" />

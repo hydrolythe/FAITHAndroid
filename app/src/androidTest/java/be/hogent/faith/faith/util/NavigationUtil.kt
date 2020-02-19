@@ -107,4 +107,11 @@ object NavigationUtil {
         // Just for safety
         closeSoftKeyboard()
     }
+    fun goToBagpack(){
+        goToCityScreenViaLogin()
+        onView(withId(R.id.btn_backpack)).perform(click())
+        // Just for safety
+        closeSoftKeyboard()
+    }
+
 }
