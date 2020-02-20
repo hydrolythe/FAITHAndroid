@@ -29,6 +29,7 @@ class DetailFragmentWithEmotionAvatarTest {
     @Test
     fun editDetailsFragment_saveEventWithoutTitleEntered_errorMessage() {
         onView(withId(R.id.btn_event_send)).perform(ViewActions.click())
+        Espresso.closeSoftKeyboard()
         onView(withId(R.id.btn_save_event_save)).perform(ViewActions.click())
         onView(withId(R.id.textInputLayout_eventtitle)).check(matches(hasTextInputLayoutHintText(activityScenarioRule.activity.getString(R.string
             .error_event_no_title))))
