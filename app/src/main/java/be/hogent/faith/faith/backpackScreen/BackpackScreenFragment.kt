@@ -15,6 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentBackpackBinding
 import be.hogent.faith.databinding.PanelAddItemBagpackBinding
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
@@ -25,6 +29,7 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.SaveEventDialog
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
+import be.hogent.faith.storage.IDummyStorageRepository
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
 import org.koin.android.ext.android.getKoin
@@ -40,6 +45,9 @@ class BackpackScreenFragment : Fragment() {
     private val eventViewModel: EventViewModel by sharedViewModel()
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
+
+    //TODO verwijderen
+    private var details = ArrayList<Detail>()
 
     private lateinit var saveDialog: SaveEventDialog
 
@@ -86,6 +94,15 @@ class BackpackScreenFragment : Fragment() {
 
     private fun updateUI() {
 
+        val file = File("")
+        var audio = AudioDetail(file)
+        details.add(audio)
+        var draw = DrawingDetail(file)
+        details.add(draw)
+        var photo = PhotoDetail(file)
+        details.add(draw)
+        var text = TextDetail(file)
+        details.add(text)
 
         backpackBinding.recyclerviewBackpack.apply {
             setHasFixedSize(true)
@@ -93,7 +110,7 @@ class BackpackScreenFragment : Fragment() {
             // Start with empty list and then fill it in
 
             adapter = DetailThumbnailsAdapter(
-                emptyList(),
+                details,
                 requireNotNull(activity) as BackpackScreenActivity
             )
         }

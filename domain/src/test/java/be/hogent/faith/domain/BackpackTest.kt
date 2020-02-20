@@ -1,8 +1,6 @@
 package be.hogent.faith.domain
 
 import be.hogent.faith.domain.models.Backpack
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import io.mockk.mockk
 import org.junit.Assert
