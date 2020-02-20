@@ -82,7 +82,7 @@
                 android:layout_height="@dimen/material_icon_height"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:background="@drawable/save_btn"
                 android:contentDescription="@string/save"
                 android:elevation="2dp"
@@ -96,9 +96,9 @@
                 android:id="@+id/cardView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:elevation="2dp"
                 app:cardCornerRadius="@dimen/panel_corner_radius"
                 app:layout_constraintBottom_toTopOf="@+id/tabs_drawing_templates"
@@ -123,46 +123,16 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.1" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardview_draw_undo_redo"
+            <include
+                android:id="@+id/container_undo_redo"
+                layout="@layout/panel_drawing_undo_redo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-5dp"
                 android:layout_marginEnd="50dp"
-                app:cardCornerRadius="@dimen/panel_corner_radius"
-                app:cardElevation="@dimen/panel_elevation"
                 app:layout_constraintEnd_toEndOf="@+id/cardView"
-                app:layout_constraintTop_toTopOf="@+id/cardView">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <ImageButton
-                        android:id="@+id/btn_draw_undo"
-                        android:layout_width="32dp"
-                        android:layout_height="23dp"
-                        android:layout_margin="16dp"
-                        android:background="@drawable/ic_undo"
-                        android:contentDescription="@string/undo"
-                        android:onClick="@{()->drawViewModel.undo()}" />
-
-                    <View
-                        android:layout_width="1dip"
-                        android:layout_height="fill_parent"
-                        android:background="@color/black" />
-
-                    <ImageButton
-                        android:id="@+id/btn_draw_redo"
-                        android:layout_width="32dp"
-                        android:layout_height="23dp"
-                        android:layout_margin="16dp"
-                        android:background="@drawable/ic_redo"
-                        android:contentDescription="@string/redo"
-                        android:onClick="@{()->drawViewModel.redo()}" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                app:layout_constraintTop_toTopOf="@+id/cardView"
+                bind:drawViewModel="@{drawViewModel}" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs_drawing_templates"
@@ -211,78 +181,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guide_draw_drawview_left" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="510dp" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/draw_customColorPicker"
-                android:layout_width="100dp"
-                android:layout_height="300dp"
-                android:layout_marginStart="8dp"
-                android:visibility="@{drawViewModel.showColorPicker? View.VISIBLE : View.GONE}"
-                app:cardCornerRadius="@dimen/panel_corner_radius"
-                app:cardElevation="@dimen/panel_elevation"
-                app:layout_constraintBottom_toBottomOf="@+id/container_draw_colors"
-                app:layout_constraintStart_toEndOf="@+id/container_draw_colors">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:focusable="true"
-                    android:orientation="vertical">
-
-                    <Space
-                        android:layout_width="100dp"
-                        android:layout_height="15dp" />
-
-                    <ImageView
-                        android:id="@+id/btn_draw_customColor"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:adjustViewBounds="true"
-                        android:contentDescription="@string/kies_een_kleur"
-                        android:src="@drawable/ic_color_no_border"
-                        android:tint="@{drawViewModel.customColor}" />
-
-                    <Space
-                        android:layout_width="100dp"
-                        android:layout_height="30dp" />
-
-                    <com.skydoves.colorpickerview.ColorPickerView
-                        android:id="@+id/colorPickerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="210dp"
-                        app:palette="@drawable/colorpicker"
-                        app:selector="@drawable/wheel" />
-
-                    <Space
-                        android:layout_width="100dp"
-                        android:layout_height="15dp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
+            <include
+                android:id="@+id/container_size_brushes"
+                layout="@layout/panel_brush_sizes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:visibility="@{drawViewModel.showColorWidthTools? View.VISIBLE : View.GONE}"
-                app:cardCornerRadius="@dimen/panel_corner_radius"
-                app:cardElevation="@dimen/panel_elevation"
                 app:layout_constraintBottom_toBottomOf="@+id/container_draw_utilities"
-                app:layout_constraintStart_toEndOf="@+id/container_draw_utilities">
+                app:layout_constraintStart_toEndOf="@+id/container_draw_utilities"
+                bind:drawViewModel="@{drawViewModel}" />
 
-                <include
-                    android:id="@+id/container_size_brushes"
-                    layout="@layout/panel_brush_sizes"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    bind:drawViewModel="@{drawViewModel}" />
-            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>
