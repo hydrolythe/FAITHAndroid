@@ -24,7 +24,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout_username"
-                style="@style/login_textInputLayout"
+                style="@style/faith_textInputLayout"
                 android:hint="@string/username"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
@@ -46,7 +46,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout_pwd"
-                style="@style/login_textInputLayout"
+                style="@style/faith_textInputLayout"
                 android:layout_marginTop="10dp"
                 android:hint="@string/password"
                 app:endIconMode="password_toggle"
@@ -67,7 +67,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_register_naar_de_stad"
-                style="@style/login_button"
+                style="@style/faith_button"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:onClick="@{() -> welcomeViewModel.loginButtonClicked()}"

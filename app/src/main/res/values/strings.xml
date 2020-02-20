@@ -76,7 +76,7 @@
     <string name="txt_error_userNameOrAvatarNotSet">Vul je naam in en selecteer een avatar</string>
     <string name="error_save_user_failed">Het opslaan van de nieuwe gebruiker is gefaald.</string>
     <string name="error_register_user_failed">Het opslaan van de nieuwe gebruiker is gefaald.</string>
-    <string name="error_event_no_title">Je moet een titel geven aan je gebeurtenis.</string>
+    <string name="error_event_no_title">Je moet een titel geven aan je werkje.</string>
     <string name="lbl_save_event_notes">Notities</string>
     <string name="lbl_save_event_date">Dag</string>
     <string name="lbl_save_event_title">Titel</string>
@@ -145,7 +145,7 @@
     <string name="login_error_internet">Je hebt internet nodig.</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="datum">Datum</string>
-    <string name="hier_kan_je_de_notities_kwijt">Hier kan je de notities kwijt</string>
+    <string name="hier_kan_je_de_notities_kwijt">Typ hier bijkomende notities</string>
     <string name="ga_verder">Ga verder</string>
     <string name="underline"><u>U</u></string>
     <string name="audio_opnemen">opnemen</string>
@@ -153,7 +153,7 @@
     <string name="empty">""</string>
     <string name="kies_een_wachtwoord">Kies een wachtwoord</string>
     <string name="herhaal_je_wachtwoord">Herhaal je wachtwoord</string>
-    <string name="save_event_title">titel</string>
+    <string name="save_event_title">Typ hier de titel van je werkje</string>
     <string name="avatar_save_successfull">Je avatar werd succesvol opgeslagen.</string>
     <string name="create_photo_failed">Er ging iets fout bij het aanmaken van je foto.</string>
     <string name="text_save_error_emptyinput">Je hebt nog geen tekst geschreven!</string>
@@ -177,6 +177,10 @@
     <string name="gom">gom</string>
     <string name="pijl">pijl</string>
     <string name="in_de_prullenmand">in de prullenmand</string>
+    <string name="je_werkje_opslaan">Je werkje opslaan</string>
+    <string name="schilder">schilder</string>
+    <string name="editeer">editeer</string>
+    <string name="slide">schuif avatar open</string>
     <string name="tekstgrootte">tekstgrootte</string>
     <string name="kies_tekstgrootte">kies tekstgrootte</string>
 </resources>
