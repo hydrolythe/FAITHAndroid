@@ -34,6 +34,18 @@
             android:focusable="true"
             android:focusableInTouchMode="true">
 
+            <ImageButton
+                android:id="@+id/btn_draw_cancel"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="@dimen/material_icon_height"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/ic_return"
+                android:contentDescription="@string/cancel"
+                android:onClick="@{() -> eventViewModel.onCancelButtonClicked()}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
             <ImageView
                 android:id="@+id/img_wegwijzerpaal"
                 android:layout_width="wrap_content"
