@@ -9,11 +9,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.details.audio.audioPlayer.PlaybackInfoListener
-import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener
-import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.RecordingState.INVALID
-import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.RecordingState.RECORDING
-import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.RecordingState.RESET
-import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.RecordingState.STOPPED
+import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.RecordingState
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.faith.util.combineWith
@@ -57,6 +53,14 @@ class AudioDetailViewModel(
             // Delete is set in init so can be !!
             deleteEnabled!! && viewState == AudioViewState.FinishedRecording
         }
+
+    val pauseRecordingVisible: LiveData<Boolean> = Transformations.map(viewState) { state ->
+        state == AudioViewState.Recording && pauseSupported
+    }
+
+    val restartRecordingVisible: LiveData<Boolean> = Transformations.map(viewState) { state ->
+        state == AudioViewState.RecordingPaused && pauseSupported
+    }
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int> = _errorMessage
@@ -175,11 +179,12 @@ class AudioDetailViewModel(
         // NOP
     }
 
-    fun onRecordingStateChanged(state: RecordingInfoListener.RecordingState) {
+    fun onRecordingStateChanged(state: RecordingState) {
         when (state) {
-            INVALID, RESET -> _viewState.value = AudioViewState.Initial
-            RECORDING -> _viewState.value = AudioViewState.Recording
-            STOPPED -> _viewState.value = AudioViewState.FinishedRecording
+            RecordingState.INVALID, RecordingState.RESET -> _viewState.value = AudioViewState.Initial
+            RecordingState.RECORDING -> _viewState.value = AudioViewState.Recording
+            RecordingState.STOPPED -> _viewState.value = AudioViewState.FinishedRecording
+            RecordingState.PAUSED -> _viewState.value = AudioViewState.RecordingPaused
         }
     }
 

@@ -249,7 +249,11 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
         override fun onPositionChanged(position: Int) {
             if (!userIsSeeking) {
-                recordAudioBinding.seekBar.setProgress(position, true)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    recordAudioBinding.seekBar.setProgress(position, true)
+                } else {
+                    recordAudioBinding.seekBar.progress = position
+                }
             }
         }
 

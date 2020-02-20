@@ -166,4 +166,5 @@
     <string name="confirm">ok</string>
     <string name="kies_een_kleur">Kies een kleur</string>
     <string name="redo">redo</string>
+    <string name="description_recording_pause">Opname pauzeren</string>
 </resources>

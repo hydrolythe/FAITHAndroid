@@ -1,14 +1,9 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="120dp"
-    android:height="120dp"
-    android:viewportWidth="120"
-    android:viewportHeight="120">
-  <path
-      android:pathData="M20,0.25L100,0.25A19.75,19.75 0,0 1,119.75 20L119.75,100A19.75,19.75 0,0 1,100 119.75L20,119.75A19.75,19.75 0,0 1,0.25 100L0.25,20A19.75,19.75 0,0 1,20 0.25z"
-      android:strokeWidth="0.5"
-      android:fillColor="#ffffff"
-      android:strokeColor="#000000"/>
-  <path
-      android:pathData="M60,94C79.33,94 95,78.33 95,59C95,39.67 79.33,24 60,24C40.67,24 25,39.67 25,59C25,78.33 40.67,94 60,94Z"
-      android:fillColor="#F21040"/>
-</vector>
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <size
+        android:width="70dp"
+        android:height="70dp" />
+    <solid android:color="@color/recorderIcons" />
+</shape>
+
