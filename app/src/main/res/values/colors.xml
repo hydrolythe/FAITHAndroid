@@ -27,6 +27,7 @@
     <color name="onError">#FFFFFF</color>
     <color name="background_register_info_color">#A7FFEB</color>
     <color name="background_record_audio">#91C6A8</color>
+    <color name="background_save_event">#CDF9EC</color>
 
     <color name="blue">#00FFFF</color>
     <color name="red">#DA1D45</color>
