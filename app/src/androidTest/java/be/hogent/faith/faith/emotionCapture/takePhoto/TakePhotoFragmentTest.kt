@@ -31,7 +31,7 @@ class TakePhotoFragmentTest {
     fun makeDrawingScreen_saveClicked_backToPark() {
         onView(withId(R.id.btn_takePhoto_takePhoto)).perform(click())
         Thread.sleep(3000)
-        onView(withId(R.id.btn_takePhoto_Ok)).perform(click())
+        onView(withId(R.id.btn_takePhoto_Ok_Save)).perform(click())
         Thread.sleep(3000)
         onView(withId(R.id.screen_new_event)).check(matches(isDisplayed()))
     }
