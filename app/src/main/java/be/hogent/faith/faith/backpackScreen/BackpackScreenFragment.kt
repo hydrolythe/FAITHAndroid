@@ -1,22 +1,63 @@
 package be.hogent.faith.faith.backpackScreen
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridLayout
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentBackpackBinding
+import be.hogent.faith.databinding.PanelAddItemBagpackBinding
+import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.SaveEventDialog
+import be.hogent.faith.faith.state.Resource
+import be.hogent.faith.faith.state.ResourceState
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
+import org.koin.android.ext.android.getKoin
+import org.koin.android.viewmodel.ext.android.sharedViewModel
+import java.io.File
+import java.util.UUID
 
-
+private const val ARG_EVENTUUID = "eventUUID"
 class BackpackScreenFragment : Fragment() {
+
+    private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
+    private var navigation: EventDetailsFragment.EventDetailsNavigationListener? = null
+    private val eventViewModel: EventViewModel by sharedViewModel()
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
+    private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
+
+    private lateinit var saveDialog: SaveEventDialog
 
     companion object {
         fun newInstance() = BackpackScreenFragment()
     }
-    private lateinit var backpackBinding: FragmentBackpackBinding
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // When an UUID is given the [eventViewModel] should be updated to show the given event's state.
+        arguments?.getSerializable(ARG_EVENTUUID)?.let {
+            val event = userViewModel.user.value?.getEvent(it as UUID)
+            requireNotNull(event) { "Could not find event with UUID $it." }
+            eventViewModel.setEvent(event)
+        }
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -24,8 +65,136 @@ class BackpackScreenFragment : Fragment() {
     ): View? {
         backpackBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_backpack, container, false)
-        backpackBinding.lifecycleOwner = this
 
+        backpackBinding.eventViewModel = eventViewModel
+        backpackBinding.lifecycleOwner = this@BackpackScreenFragment
         return backpackBinding.root
     }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is EventDetailsFragment.EventDetailsNavigationListener) {
+            navigation = context
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        startListeners()
+        updateUI()
+    }
+
+    private fun updateUI() {
+
+
+        backpackBinding.recyclerviewBackpack.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            // Start with empty list and then fill it in
+
+            adapter = DetailThumbnailsAdapter(
+                emptyList(),
+                requireNotNull(activity) as BackpackScreenActivity
+            )
+        }
+
+        detailThumbnailsAdapter =
+            backpackBinding.recyclerviewBackpack.adapter as DetailThumbnailsAdapter
+       // determineRVVisibility()
+    }
+
+
+    private fun determineRVVisibility() {
+        if (detailThumbnailsAdapter!!.itemCount > 0) {
+            backpackBinding.recyclerviewBackpack.visibility = View.VISIBLE
+        } else {
+            backpackBinding.recyclerviewBackpack.visibility = View.GONE
+        }
+    }
+    private fun handleDataStateSavingEvent(resource: Resource<Unit>) {
+        when (resource.status) {
+            ResourceState.SUCCESS -> {
+                saveDialog.hideProgressBar()
+                Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
+                saveDialog.dismiss()
+                userViewModel.eventSavedHandled()
+
+                // Drawing scope can now be closed so a new DrawingVM will be created when another
+                // drawing is made.
+                runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {
+                    it.close()
+                }
+
+                navigation?.closeEvent()
+                // Go back to main screen
+            }
+            ResourceState.LOADING -> {
+                saveDialog.showProgressBar()
+            }
+            ResourceState.ERROR -> {
+                saveDialog.hideProgressBar()
+                Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        detailThumbnailsAdapter = null
+    }
+    private fun startListeners() {
+        // Update adapter when event changes
+        eventViewModel.event.observe(this, Observer { event ->
+            detailThumbnailsAdapter?.updateDetailsList(event.details)
+            // check whether there are detail in de adapter. If so, show the RV, of not leave hidden
+           // determineRVVisibility()
+        })
+
+
+
+        // Four main actions
+        eventViewModel.emotionAvatarClicked.observe(this, Observer {
+            navigation?.startDrawEmotionAvatarFragment()
+        })
+        eventViewModel.cameraButtonClicked.observe(this, Observer {
+            // navigation?.startTakePhotoFragment()
+            navigation?.startPhotoDetailFragment()
+        })
+        eventViewModel.audioButtonClicked.observe(this, Observer {
+            // navigation?.startRecordAudioFragment()
+            navigation?.startAudioDetailFragment()
+        })
+        eventViewModel.textButtonClicked.observe(this, Observer {
+            // navigation?.startRecordAudioFragment()
+            navigation?.startTextDetailFragment()
+        })
+        eventViewModel.drawingButtonClicked.observe(this, Observer {
+            // navigation?.startMakeDrawingFragment()
+            navigation?.startDrawingDetailFragment()
+        })
+
+        eventViewModel.sendButtonClicked.observe(this, Observer {
+            saveDialog = SaveEventDialog.newInstance()
+            saveDialog.show(fragmentManager!!, null)
+        })
+
+        userViewModel.eventSavedState.observe(this, Observer {
+            it?.let {
+                handleDataStateSavingEvent(it)
+            }
+        })
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
