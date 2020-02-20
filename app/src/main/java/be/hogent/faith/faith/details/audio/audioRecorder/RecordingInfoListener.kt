@@ -11,4 +11,5 @@ interface RecordingInfoListener {
     }
 
     fun onStateChanged(state: RecordingState)
+    fun onRecordingDurationChanged(duration: Long)
 }

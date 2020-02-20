@@ -33,6 +33,7 @@ import timber.log.Timber
 const val REQUESTCODE_AUDIO = 12
 private const val AUDIO_DETAIL = "An existing AudioDetail"
 
+// TODO: might be cleaner to be split in a record and play fragment, now this does both
 class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     private val tempFileProvider: TempFileProvider by inject()
@@ -47,9 +48,10 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     private var hasAudioRecordingPermission = false
 
-    private val audioPlayer: AudioPlayerAdapter = AudioPlayerHolder().apply {
-        setPlaybackInfoListener(PlaybackListener())
-    }
+    private val audioPlayer: AudioPlayerAdapter =
+        AudioPlayerHolder().apply {
+            setPlaybackInfoListener(PlaybackListener())
+        }
     private val audioRecorder: AudioRecorderAdapter =
         AudioRecorderHolder(tempFileProvider.tempAudioRecordingFile).apply {
             recordingInfoListener = RecordingListener()
@@ -63,16 +65,13 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (existingDetailGiven()) {
-            loadExistingAudioDetail()
-        }
-
         audioDetailViewModel.pauseSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
     }
 
     private fun loadExistingAudioDetail() {
         val existingDetail = arguments?.getSerializable(AUDIO_DETAIL) as AudioDetail
         audioDetailViewModel.loadExistingDetail(existingDetail)
+        audioPlayer.loadMedia(existingDetail.file)
     }
 
     private fun existingDetailGiven(): Boolean {
@@ -89,20 +88,13 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
         recordAudioBinding.audioDetailViewModel = audioDetailViewModel
         recordAudioBinding.lifecycleOwner = this
 
-        initialiseAudioPlayer()
         initialiseSeekBar()
 
-        return recordAudioBinding.root
-    }
-
-    private fun initialiseAudioPlayer() {
         if (existingDetailGiven()) {
-            // Dangerous to get LiveData directly but we can assume the LiveData has been set
-            // becuase we just checked if an existing detail was given.
-            audioPlayer.loadMedia(audioDetailViewModel.savedDetail.value!!.file)
-        } else {
-            audioPlayer.loadMedia(tempFileProvider.tempAudioRecordingFile)
+            loadExistingAudioDetail()
         }
+
+        return recordAudioBinding.root
     }
 
     private fun startListeners() {
@@ -129,7 +121,16 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             audioRecorder.record()
         })
         audioDetailViewModel.recordStopButtonClicked.observe(this, Observer {
+            // Initialise now so we're ready to play
             audioRecorder.stop()
+            audioPlayer.loadMedia(tempFileProvider.tempAudioRecordingFile)
+        })
+        audioDetailViewModel.recordPauseButtonClicked.observe(this, Observer {
+            audioRecorder.pause()
+        })
+        audioDetailViewModel.resetButtonClicked.observe(this, Observer {
+            audioPlayer.reset()
+            audioRecorder.reset()
         })
     }
 
@@ -137,7 +138,11 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
         recordAudioBinding.seekBar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             var userSelectedPosition = 0
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            override fun onProgressChanged(
+                seekBar: SeekBar?,
+                progress: Int,
+                fromUser: Boolean
+            ) {
                 if (fromUser) {
                     userSelectedPosition = progress
                 }
@@ -238,8 +243,8 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     inner class PlaybackListener : PlaybackInfoListener {
         override fun onDurationChanged(duration: Int) {
-            recordAudioBinding.seekBar.setMax(duration)
-            audioDetailViewModel.recordingDuration.value = duration
+            recordAudioBinding.seekBar.max = duration
+            audioDetailViewModel.setRecordingFinalDuration(duration)
         }
 
         override fun onPositionChanged(position: Int) {
@@ -263,5 +268,8 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             audioDetailViewModel.onRecordingStateChanged(state)
         }
 
+        override fun onRecordingDurationChanged(duration: Long) {
+            audioDetailViewModel.updateRecordingTimer(duration)
+        }
     }
 }

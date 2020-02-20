@@ -6,5 +6,6 @@ package be.hogent.faith.faith.details.audio
 enum class AudioViewState {
     Initial,
     Recording,
+    RecordingPaused,
     FinishedRecording
 }

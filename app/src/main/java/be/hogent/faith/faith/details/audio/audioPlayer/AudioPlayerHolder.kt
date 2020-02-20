@@ -6,6 +6,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
+// Inspired by https://medium.com/androiddevelopers/building-a-simple-audio-app-in-android-part-3-3-ead4a0e10673
 class AudioPlayerHolder : AudioPlayerAdapter {
     private var mMediaPlayer: MediaPlayer? = null
     private lateinit var audioFile: File
@@ -27,6 +28,7 @@ class AudioPlayerHolder : AudioPlayerAdapter {
                 stopUpdatingCallbackWithPosition(true)
                 logToUI("MediaPlayer playback completed")
                 if (mPlaybackInfoListener != null) {
+                    mPlaybackInfoListener!!.onStateChanged(PlaybackInfoListener.PlaybackState.COMPLETED)
                     mPlaybackInfoListener!!.onPlaybackCompleted()
                 }
             }
@@ -73,14 +75,10 @@ class AudioPlayerHolder : AudioPlayerAdapter {
 
     override fun play() {
         if (mMediaPlayer != null && !mMediaPlayer!!.isPlaying) {
-            logToUI(
-                String.format(
-                    "playbackStart() %s",
-                    audioFile.name
-                )
-            )
+            logToUI("playbackStart() $audioFile.name")
             mMediaPlayer!!.start()
             startUpdatingCallbackWithPosition()
+            mPlaybackInfoListener?.onStateChanged(PlaybackInfoListener.PlaybackState.PLAYING)
         }
     }
 
@@ -88,14 +86,15 @@ class AudioPlayerHolder : AudioPlayerAdapter {
         if (mMediaPlayer != null) {
             logToUI("playbackReset()")
             mMediaPlayer!!.reset()
-            loadMedia(audioFile)
             stopUpdatingCallbackWithPosition(true)
+            mPlaybackInfoListener?.onStateChanged(PlaybackInfoListener.PlaybackState.RESET)
         }
     }
 
     override fun pause() {
         if (mMediaPlayer != null && mMediaPlayer!!.isPlaying) {
             mMediaPlayer!!.pause()
+            mPlaybackInfoListener?.onStateChanged(PlaybackInfoListener.PlaybackState.PAUSED)
             logToUI("playbackPause()")
         }
     }
@@ -164,6 +163,6 @@ class AudioPlayerHolder : AudioPlayerAdapter {
     }
 
     companion object {
-        const val PLAYBACK_POSITION_REFRESH_INTERVAL_MS = 1000
+        const val PLAYBACK_POSITION_REFRESH_INTERVAL_MS = 100
     }
 }

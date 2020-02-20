@@ -175,5 +175,10 @@
         <item name="android:colorControlActivated">@color/red</item>
     </style>
 
+    <style name="recordingTime">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:color">@color/dark_green</item>
+    </style>
 
 </resources>

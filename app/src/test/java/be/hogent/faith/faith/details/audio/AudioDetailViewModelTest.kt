@@ -7,11 +7,8 @@ import be.hogent.faith.faith.testModule
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import io.mockk.mockk
 import org.junit.After
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.test.KoinTest

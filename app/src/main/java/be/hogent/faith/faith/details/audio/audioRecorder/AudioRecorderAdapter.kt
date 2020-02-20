@@ -5,4 +5,5 @@ interface AudioRecorderAdapter {
     fun record()
     fun stop()
     fun reset()
+    fun pause()
 }

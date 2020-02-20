@@ -35,6 +35,9 @@
     <color name="yellow">#FFFF00</color>
 
     <color name="caption">#0000FF</color>
+    <color name="recorderIcons">#F21040</color>
+
+    <color name="dark_green">#44786B</color>
 </resources>
 
 
