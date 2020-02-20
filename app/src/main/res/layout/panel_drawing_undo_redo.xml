@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="drawViewModel"
+            type="be.hogent.faith.faith.details.drawing.create.DrawViewModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardview_draw_undo_redo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/panel_corner_radius"
+        app:cardElevation="@dimen/panel_elevation">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btn_draw_undo"
+                android:layout_width="32dp"
+                android:layout_height="23dp"
+                android:layout_margin="16dp"
+                android:background="@drawable/ic_undo"
+                android:contentDescription="@string/undo"
+                android:onClick="@{()->drawViewModel.undo()}" />
+
+            <View
+                android:layout_width="1dip"
+                android:layout_height="fill_parent"
+                android:background="@color/black" />
+
+            <ImageButton
+                android:id="@+id/btn_draw_redo"
+                android:layout_width="32dp"
+                android:layout_height="23dp"
+                android:layout_margin="16dp"
+                android:background="@drawable/ic_redo"
+                android:contentDescription="@string/redo"
+                android:onClick="@{()->drawViewModel.redo()}" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
