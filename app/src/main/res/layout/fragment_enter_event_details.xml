@@ -34,16 +34,28 @@
             android:focusable="true"
             android:focusableInTouchMode="true">
 
+            <ImageButton
+                android:id="@+id/btn_draw_cancel"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="@dimen/material_icon_height"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/ic_return"
+                android:contentDescription="@string/cancel"
+                android:onClick="@{() -> eventViewModel.onCancelButtonClicked()}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
             <ImageView
                 android:id="@+id/img_wegwijzerpaal"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/guide_recyclerview_top"
                 app:layout_constraintEnd_toStartOf="@+id/guide_center_pole"
-                app:layout_constraintHeight_percent="0.50"
                 app:layout_constraintStart_toStartOf="@+id/guide_center_pole"
                 app:layout_constraintTop_toBottomOf="@+id/guide_top_pole"
-                app:srcCompat="@drawable/wegwijzerpaal" />
+                app:srcCompat="@drawable/wegwijzerpaal"
+                android:contentDescription="@string/wegwijzerpaal"/>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_center_pole"
@@ -85,7 +97,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_event_details_drawing"
                 style="@style/arrow_style"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:contentDescription="@string/description_addDrawing"
                 android:onClick="@{() -> eventViewModel.onDrawingButtonClicked()}"
                 android:text="@string/description_addDrawing"
@@ -133,8 +145,10 @@
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/guide_recyclerview_end"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/guide_recyclerview_start"
                 app:layout_constraintTop_toBottomOf="@+id/guide_recyclerview_top"
+                app:layout_constraintVertical_bias="1.0"
                 tools:listitem="@layout/item_event_detail_thumbnail" />
 
             <ImageButton
@@ -147,7 +161,8 @@
                 android:minWidth="24dp"
                 android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/save"/>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_avatar_titel_bottom"
@@ -185,7 +200,7 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_recyclerview_start"
                 app:layout_constraintTop_toTopOf="@+id/guide_avatar_top"
                 app:layout_constraintVertical_bias="1.0"
-                app:srcCompat="@drawable/meisje_stoer_bank" />
+                app:srcCompat="@drawable/meisje_stoer_bl_bank" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_avatar_inkleuren_left"

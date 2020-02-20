@@ -24,6 +24,10 @@ class RegisterAvatarViewModel(
         get() = _selectedAvatarPosition
     private var _selectedAvatarPosition = MutableLiveData<Int>()
 
+    val selectedSkinColor: LiveData<SkinColor>
+        get() = _selectedSkinColor
+    private var _selectedSkinColor = MutableLiveData<SkinColor>()
+
     private val _finishRegistrationClicked = SingleLiveEvent<Unit>() // SingleLiveEvent<User>()
     val finishRegistrationClicked: LiveData<Unit> // LiveData<User>
         get() = _finishRegistrationClicked
@@ -33,6 +37,7 @@ class RegisterAvatarViewModel(
         get() = _errorMessage
 
     init {
+        _selectedSkinColor.value = SkinColor.blank
         fetchAvatarImages()
         // Set initially to -1 = no selection has been provided.
         _selectedAvatarPosition.postValue(-1)
@@ -77,7 +82,12 @@ class RegisterAvatarViewModel(
         _selectedAvatarPosition.postValue(position)
     }
 
+    fun setSelectedSkinColor(skinColor: SkinColor) {
+        _selectedSkinColor.value = skinColor
+        fetchAvatarImages()
+    }
+
     private fun fetchAvatarImages() {
-        _avatars.value = (avatarProvider.getAvatars())
+        _avatars.value = (avatarProvider.getAvatars(selectedSkinColor.value!!))
     }
 }

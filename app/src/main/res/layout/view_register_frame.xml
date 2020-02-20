@@ -25,7 +25,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout_register_username"
-                style="@style/login_textInputLayout"
+                style="@style/faith_textInputLayout"
                 android:hint="@string/hint_choose_username"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
@@ -44,7 +44,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout_register_pwd"
-                style="@style/login_textInputLayout"
+                style="@style/faith_textInputLayout"
                 android:layout_marginTop="10dp"
                 android:hint="@string/kies_een_wachtwoord"
                 app:endIconMode="password_toggle"
@@ -64,7 +64,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout_register_pwd_repeat"
-                style="@style/login_textInputLayout"
+                style="@style/faith_textInputLayout"
                 android:layout_marginTop="10dp"
                 android:hint="@string/herhaal_je_wachtwoord"
                 app:endIconMode="password_toggle"
@@ -84,7 +84,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_register_confirmInfo"
-                style="@style/login_button"
+                style="@style/faith_button"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:onClick="@{()->registerUserInfoViewModel.onConfirmUserInfoClicked()}"

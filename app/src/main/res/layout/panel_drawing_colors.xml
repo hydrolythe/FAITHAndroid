@@ -35,6 +35,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="20dp"
+                    android:contentDescription="@string/pijl"
                     android:src="@drawable/ic_selected"
                     android:visibility="@{((int)drawViewModel.selectedColor)==@color/black ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -64,6 +65,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="20dp"
+                    android:contentDescription="@string/pijl"
                     android:src="@drawable/ic_selected"
                     android:visibility="@{((int)drawViewModel.selectedColor)==@color/blue ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -94,6 +96,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="20dp"
+                    android:contentDescription="@string/pijl"
                     android:src="@drawable/ic_selected"
                     android:visibility="@{((int)drawViewModel.selectedColor)==@color/red ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -124,6 +127,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="20dp"
+                    android:contentDescription="@string/pijl"
                     android:src="@drawable/ic_selected"
                     android:visibility="@{((int)drawViewModel.selectedColor)==@color/yellow ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -154,6 +158,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="20dp"
+                    android:contentDescription="@string/pijl"
                     android:src="@drawable/ic_selected"
                     android:visibility="@{((int)drawViewModel.selectedColor)==@color/green ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -177,11 +182,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View
-                android:layout_height="1dip"
+                android:id="@+id/hr_customColor"
                 android:layout_width="fill_parent"
-                android:background="@color/black"/>
+                android:layout_height="1dip"
+                android:background="@color/black" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/paintpot_customColor"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1">
@@ -189,6 +196,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="20dp"
+                    android:contentDescription="@string/pijl"
                     android:src="@drawable/ic_selected"
                     android:visibility="@{drawViewModel.customColorSelected? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -12,58 +13,69 @@
         <import type="be.hogent.faith.faith.details.drawing.create.DrawViewModel" />
 
         <import type="be.hogent.faith.faith.details.drawing.create.DrawViewModel.LineWidth" />
+
+        <import type="android.view.View" />
     </data>
 
-    <LinearLayout
-        android:layout_width="100dp"
-        android:layout_height="185dp"
-        android:focusable="true"
-        android:orientation="vertical">
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:visibility="@{drawViewModel.showColorWidthTools? View.VISIBLE : View.GONE}"
+        app:cardCornerRadius="@dimen/panel_corner_radius"
+        app:cardElevation="@dimen/panel_elevation">
 
-        <Space
+        <LinearLayout
             android:layout_width="100dp"
-            android:layout_height="20dp" />
+            android:layout_height="185dp"
+            android:focusable="true"
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/btn_draw_setThickLineWidth"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THICK)}"
-            android:src="@drawable/ic_color_no_border"
-            android:tint="@{(((LineWidth)drawViewModel.selectedLineWidth)==LineWidth.THICK)  ? drawViewModel.selectedColor : Color.BLACK}" />
+            <Space
+                android:layout_width="100dp"
+                android:layout_height="20dp" />
 
-        <Space
-            android:layout_width="100dp"
-            android:layout_height="20dp" />
+            <ImageView
+                android:id="@+id/btn_draw_setThickLineWidth"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/lineWidth_Thick"
+                android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THICK)}"
+                android:src="@drawable/circle" />
 
-        <ImageView
-            android:id="@+id/btn_draw_setMediumLineWidth"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.MEDIUM)}"
-            android:src="@drawable/ic_color_no_border"
-            android:tint="@{(((LineWidth)drawViewModel.selectedLineWidth)==LineWidth.MEDIUM) ? drawViewModel.selectedColor : Color.BLACK}" />
+            <Space
+                android:layout_width="100dp"
+                android:layout_height="20dp" />
 
-        <Space
-            android:layout_width="100dp"
-            android:layout_height="20dp" />
+            <ImageView
+                android:id="@+id/btn_draw_setMediumLineWidth"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/lineWidth_medium"
+                android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.MEDIUM)}"
+                android:src="@drawable/circle" />
 
-        <ImageView
-            android:id="@+id/btn_draw_setThinLineWidth"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
-            android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THIN)}"
-            android:src="@drawable/ic_color_no_border"
-            android:tint="@{((LineWidth)drawViewModel.selectedLineWidth)==LineWidth.THIN ? drawViewModel.selectedColor : Color.BLACK}" />
+            <Space
+                android:layout_width="100dp"
+                android:layout_height="20dp" />
 
-        <Space
-            android:layout_width="100dp"
-            android:layout_height="20dp" />
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/btn_draw_setThinLineWidth"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/lineWidth_thin"
+                android:onClick="@{() -> drawViewModel.setLineWidth(LineWidth.THIN)}"
+                android:src="@drawable/circle" />
+
+            <Space
+                android:layout_width="100dp"
+                android:layout_height="20dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </layout>
