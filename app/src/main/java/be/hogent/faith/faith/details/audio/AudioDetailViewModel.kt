@@ -188,6 +188,9 @@ class AudioDetailViewModel(
         }
     }
 
+    /**
+     * @param duration the duration in milliseconds
+     */
     fun setRecordingFinalDuration(duration: Int) {
         _recordingFinalDuration.value = duration
     }
