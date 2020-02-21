@@ -35,7 +35,6 @@ class DrawEmotionAvatarFragmentTest {
         onView(withId(R.id.btn_draw_setColorYellow)).perform(click())
 
         onView(withId(R.id.btn_pencil)).perform(click())
-        onView(withId(R.id.btn_text)).perform(click())
         onView(withId(R.id.btn_eraser)).perform(click())
     }
 }
