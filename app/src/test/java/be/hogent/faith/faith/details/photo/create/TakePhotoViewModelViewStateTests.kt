@@ -48,7 +48,7 @@ class TakePhotoViewModelViewStateTests {
 
         viewModel.photoTaken(mockk())
 
-        Assert.assertEquals(View.GONE, viewModel.visibilityTakePhoto.value!!)
+        Assert.assertEquals(View.INVISIBLE, viewModel.visibilityTakePhoto.value!!)
         Assert.assertEquals(View.VISIBLE, viewModel.visibilityPhotoTakenNotSaved.value!!)
         Assert.assertEquals(View.VISIBLE, viewModel.visibilityPhotoTakenOrSaved.value!!)
     }
@@ -98,8 +98,8 @@ class TakePhotoViewModelViewStateTests {
 
         // Assert
         Assert.assertEquals(View.VISIBLE, viewModel.visibilityTakePhoto.value!!)
-        Assert.assertEquals(View.GONE, viewModel.visibilityPhotoTakenNotSaved.value!!)
-        Assert.assertEquals(View.GONE, viewModel.visibilityPhotoTakenOrSaved.value!!)
+        Assert.assertEquals(View.INVISIBLE, viewModel.visibilityPhotoTakenNotSaved.value!!)
+        Assert.assertEquals(View.INVISIBLE, viewModel.visibilityPhotoTakenOrSaved.value!!)
     }
 
     @Test

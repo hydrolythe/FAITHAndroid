@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,7 +16,10 @@ import be.hogent.faith.databinding.FragmentEnterTextBinding
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import com.skydoves.colorpickerview.ColorPickerDialog
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import kotlinx.android.synthetic.main.fragment_enter_text.enterText_editor
+import kotlinx.android.synthetic.main.fragment_enter_text.img_enter_text_black_Selected
 import org.koin.android.viewmodel.ext.android.viewModel
 
 // uses https://github.com/wasabeef/richeditor-android
@@ -111,6 +115,7 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
             enterText_editor.html = text
         })
         textDetailDetailViewModel.selectedTextColor.observe(this, Observer { newColor ->
+            if (newColor == R.color.black) img_enter_text_black_Selected.visibility = View.VISIBLE
             enterText_editor.setTextColor(newColor)
         })
         textDetailDetailViewModel.boldClicked.observe(this, Observer {
@@ -133,6 +138,43 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
             detailFinishedListener.onDetailFinished(savedTextDetail)
             navigation?.backToEvent()
         })
+        textDetailDetailViewModel.customTextColorClicked.observe(this, Observer {
+            val builder = ColorPickerDialog.Builder(this.context)
+                .setTitle("Kies een kleur")
+                .attachAlphaSlideBar(false)
+                .attachBrightnessSlideBar(true)
+
+                .setPositiveButton(
+                    getString(R.string.confirm),
+                    ColorEnvelopeListener { envelope, _ ->
+                        if (envelope != null)
+                            textDetailDetailViewModel.pickCustomTextColor(envelope.color)
+                    })
+                .setNegativeButton(
+                    getString(R.string.cancel)
+                ) { dialogInterface, _ -> dialogInterface.dismiss() }
+            builder.show()
+        })
+        textDetailDetailViewModel.cancelClicked.observe(this, Observer {
+            showExitAlert()
+        })
+    }
+
+    private fun showExitAlert() {
+        val alertDialog: AlertDialog = this.run {
+            val builder = AlertDialog.Builder(this.requireContext()).apply {
+                setTitle(R.string.dialog_to_the_event_title)
+                setMessage(R.string.dialog_enterText_cancel_message)
+                setPositiveButton(R.string.ok) { _, _ ->
+                    navigation!!.backToEvent()
+                }
+                setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.cancel()
+                }
+            }
+            builder.create()
+        }
+        alertDialog.show()
     }
 
     interface TextScreenNavigation {
