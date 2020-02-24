@@ -44,9 +44,9 @@ class ResourceAvatarProvider(private val context: Context) :
     }
 
     override fun getAvatarDrawableOutlineId(avatarName: String): Int {
-        return context.getResources().getIdentifier(
+        return context.resources.getIdentifier(
             "${getAvatarnameWithoutSkinColor(avatarName)}_outline", "drawable",
-            context.getPackageName()
+            context.packageName
         )
     }
 
