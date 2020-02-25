@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="eventViewModel"
-            type="be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel" />
+            name="backpackViewModel"
+            type="be.hogent.faith.faith.backpackScreen.BackpackViewModel" />
     </data>
     <FrameLayout
         android:layout_width="match_parent"

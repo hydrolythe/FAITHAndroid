@@ -9,8 +9,8 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import java.io.File
 
-class DummyStorageRepository : IDummyStorageRepository{
-    override fun getBackpackDetailsUserTestData(): List<Detail> {
+class DummyStorageRepository() : IDummyStorageRepository{
+    override fun getBackpackDetailsUserTestData() : List<Detail> {
         val details = ArrayList<Detail>()
         val file = File("")
         var audio = AudioDetail(file)

@@ -4,7 +4,7 @@ import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Completable
 import io.reactivex.Flowable
 
-interface IDummyStorageRepository{
+interface IDummyStorageRepository {
 
     fun storeDetail(detail: Detail): Completable
 

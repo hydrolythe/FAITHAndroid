@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.File
 import java.util.UUID
 
@@ -41,31 +42,14 @@ private const val ARG_EVENTUUID = "eventUUID"
 class BackpackScreenFragment : Fragment() {
 
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
-    private var navigation: EventDetailsFragment.EventDetailsNavigationListener? = null
-    private val eventViewModel: EventViewModel by sharedViewModel()
+    private val backpackViewModel : BackpackViewModel by viewModel()
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
-
-    //TODO verwijderen
-    private var details = ArrayList<Detail>()
-
-    private lateinit var saveDialog: SaveEventDialog
 
     companion object {
         fun newInstance() = BackpackScreenFragment()
     }
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // When an UUID is given the [eventViewModel] should be updated to show the given event's state.
-        arguments?.getSerializable(ARG_EVENTUUID)?.let {
-            val event = userViewModel.user.value?.getEvent(it as UUID)
-            requireNotNull(event) { "Could not find event with UUID $it." }
-            eventViewModel.setEvent(event)
-        }
-    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -74,16 +58,9 @@ class BackpackScreenFragment : Fragment() {
         backpackBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_backpack, container, false)
 
-        backpackBinding.eventViewModel = eventViewModel
+        backpackBinding.backpackViewModel = backpackViewModel
         backpackBinding.lifecycleOwner = this@BackpackScreenFragment
         return backpackBinding.root
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is EventDetailsFragment.EventDetailsNavigationListener) {
-            navigation = context
-        }
     }
 
     override fun onStart() {
@@ -94,23 +71,13 @@ class BackpackScreenFragment : Fragment() {
 
     private fun updateUI() {
 
-        val file = File("")
-        var audio = AudioDetail(file)
-        details.add(audio)
-        var draw = DrawingDetail(file)
-        details.add(draw)
-        var photo = PhotoDetail(file)
-        details.add(draw)
-        var text = TextDetail(file)
-        details.add(text)
-
         backpackBinding.recyclerviewBackpack.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             // Start with empty list and then fill it in
 
             adapter = DetailThumbnailsAdapter(
-                details,
+                emptyList(),
                 requireNotNull(activity) as BackpackScreenActivity
             )
         }
@@ -120,85 +87,15 @@ class BackpackScreenFragment : Fragment() {
        // determineRVVisibility()
     }
 
-
-    private fun determineRVVisibility() {
-        if (detailThumbnailsAdapter!!.itemCount > 0) {
-            backpackBinding.recyclerviewBackpack.visibility = View.VISIBLE
-        } else {
-            backpackBinding.recyclerviewBackpack.visibility = View.GONE
-        }
-    }
-    private fun handleDataStateSavingEvent(resource: Resource<Unit>) {
-        when (resource.status) {
-            ResourceState.SUCCESS -> {
-                saveDialog.hideProgressBar()
-                Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
-                saveDialog.dismiss()
-                userViewModel.eventSavedHandled()
-
-                // Drawing scope can now be closed so a new DrawingVM will be created when another
-                // drawing is made.
-                runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {
-                    it.close()
-                }
-
-                navigation?.closeEvent()
-                // Go back to main screen
-            }
-            ResourceState.LOADING -> {
-                saveDialog.showProgressBar()
-            }
-            ResourceState.ERROR -> {
-                saveDialog.hideProgressBar()
-                Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-
     override fun onStop() {
         super.onStop()
         detailThumbnailsAdapter = null
     }
     private fun startListeners() {
-        // Update adapter when event changes
-        eventViewModel.event.observe(this, Observer { event ->
-            detailThumbnailsAdapter?.updateDetailsList(event.details)
-            // check whether there are detail in de adapter. If so, show the RV, of not leave hidden
-           // determineRVVisibility()
-        })
+        // TODO Update adapter when backpack changes, change this to userviewmodel when working with real data
 
-
-
-        // Four main actions
-        eventViewModel.emotionAvatarClicked.observe(this, Observer {
-            navigation?.startDrawEmotionAvatarFragment()
-        })
-        eventViewModel.cameraButtonClicked.observe(this, Observer {
-            // navigation?.startTakePhotoFragment()
-            navigation?.startPhotoDetailFragment()
-        })
-        eventViewModel.audioButtonClicked.observe(this, Observer {
-            // navigation?.startRecordAudioFragment()
-            navigation?.startAudioDetailFragment()
-        })
-        eventViewModel.textButtonClicked.observe(this, Observer {
-            // navigation?.startRecordAudioFragment()
-            navigation?.startTextDetailFragment()
-        })
-        eventViewModel.drawingButtonClicked.observe(this, Observer {
-            // navigation?.startMakeDrawingFragment()
-            navigation?.startDrawingDetailFragment()
-        })
-
-        eventViewModel.sendButtonClicked.observe(this, Observer {
-            saveDialog = SaveEventDialog.newInstance()
-            saveDialog.show(fragmentManager!!, null)
-        })
-
-        userViewModel.eventSavedState.observe(this, Observer {
-            it?.let {
-                handleDataStateSavingEvent(it)
-            }
+        backpackViewModel.details.observe(this, Observer { details ->
+            detailThumbnailsAdapter?.updateDetailsList(details)
         })
     }
 }

@@ -32,14 +32,7 @@
                 <map>
                   <entry key="eventDetailFragment">
                     <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="141" />
-                            <option name="y" value="81" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
+                      <LayoutPositions />
                     </value>
                   </entry>
                 </map>
