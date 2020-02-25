@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.firebase-perf'
 
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
@@ -14,7 +15,7 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.2'
+        classpath 'com.android.tools.build:gradle:3.5.3'
     }
 }
 
@@ -116,6 +117,7 @@ dependencies {
     implementation uiDependencies.annotation
     implementation uiDependencies.material
 
+
     implementation "com.github.skydoves:colorpickerpreference:2.0.0"
 
     implementation commonDependencies.navktx
@@ -137,6 +139,7 @@ dependencies {
 
     implementation testDependencies.firebase_analytics
     implementation testDependencies.crashlytics
+    implementation firebaseDependencies.performance
 
 
     // AndroidJUnitRunner and JUnit Rules
@@ -151,6 +154,8 @@ dependencies {
     androidTestImplementation testDependencies.koinTesting
 
     androidTestImplementation androidTestDependencies.uiAutomator
+
+
 
 }
 
