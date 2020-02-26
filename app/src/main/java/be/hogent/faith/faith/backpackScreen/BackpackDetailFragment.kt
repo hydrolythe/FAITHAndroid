@@ -23,7 +23,6 @@ import java.io.File
 abstract class BackpackDetailFragment : Fragment() {
 
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
-    private val editDetailViewModel: EditDetailViewModel by viewModel()
     private lateinit var editDetailBinding: be.hogent.faith.databinding.FragmentEditDetailBinding
 
     override fun onCreateView(
@@ -33,7 +32,6 @@ abstract class BackpackDetailFragment : Fragment() {
     ): View? {
         editDetailBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_edit_detail, container, false)
-        editDetailBinding.editdetailViewModel = editDetailViewModel
         editDetailBinding.lifecycleOwner = this
 
         return editDetailBinding.root
@@ -41,8 +39,6 @@ abstract class BackpackDetailFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-      //  val file = File("")
-        //val detail = TextDetail(file)
         setChildFragment()
     }
 
@@ -61,11 +57,6 @@ abstract class BackpackDetailFragment : Fragment() {
             }
 
         }
-        private fun getBundleForDetails(detail: Detail): Bundle {
-            return Bundle().apply {
-                putSerializable(DETAIL, detail)
-            }
-        }
     }
 
 
@@ -73,14 +64,15 @@ abstract class BackpackDetailFragment : Fragment() {
         class TextFragmentNoEmotionAvatar : BackpackDetailFragment() {
 
             companion object {
+                fun newInstance(): TextFragmentNoEmotionAvatar{
+                    return TextFragmentNoEmotionAvatar()
+                }
+
                 fun newInstance(textDetail: TextDetail): TextFragmentNoEmotionAvatar {
-                    return TextFragmentNoEmotionAvatar().apply {
-                        arguments = getBundleForDetails(textDetail).apply {
-                            setChildFragment(textDetail)
-                        }
-                    }
+                    return TextFragmentNoEmotionAvatar()
                     }
                 }
+
             override fun setChildFragment(detail : Detail?) {
      //           val detail = arguments?.getSerializable(DETAIL) as TextDetail?
                 val childFragment = if (detail == null) {

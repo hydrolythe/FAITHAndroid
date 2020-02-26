@@ -73,9 +73,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
 
     override fun startTextDetailFragment() {
         replaceFragment(
-            DetailFragmentWithEmotionAvatar.TextFragmentWithEmotionAvatar.newInstance(
-                -1
-            ), R.id.fragment
+            BackpackDetailFragment.TextFragmentNoEmotionAvatar.newInstance(), R.id.fragment
         )
     }
 

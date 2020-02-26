@@ -77,14 +77,13 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        if(avatarOutlineResId != -1)
         startListeners()
         eventViewModel.updateEvent()
     }
 
     private fun startListeners() {
         eventViewModel.event.observe(this, Observer { event ->
-            loadAvatarImage(event).
+            loadAvatarImage(event)
         })
         editDetailViewModel.emotionAvatarButtonClicked.observe(this, Observer {
             navigation?.startDrawEmotionAvatarFragment()
