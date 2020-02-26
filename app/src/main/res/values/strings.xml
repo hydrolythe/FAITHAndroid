@@ -172,4 +172,7 @@
     <string name="tekst">tekst</string>
     <string name="gom">gom</string>
     <string name="pijl">pijl</string>
+    <string name="bestand_toevoegen">Bestand toevoegen</string>
+    <string name="foto_nemen">Foto nemen</string>
+    <string name="add_video">Filmen</string>
 </resources>

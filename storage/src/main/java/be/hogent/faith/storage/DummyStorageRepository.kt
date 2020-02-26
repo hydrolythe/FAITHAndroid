@@ -12,7 +12,7 @@ import java.io.File
 class DummyStorageRepository() : IDummyStorageRepository{
     override fun getBackpackDetailsUserTestData() : List<Detail> {
         val details = ArrayList<Detail>()
-        val file = File("")
+        val file = File("users/oz7czHu2FGdyBTNbZMOe6tCRw612/events/79679ea5-3583-44a8-9d3e-dc98ba3611ba/c8d761dd-f6d0-4603-b53c-52c28c16a20e")
         var audio = AudioDetail(file)
         details.add(audio)
         var draw = DrawingDetail(file)
