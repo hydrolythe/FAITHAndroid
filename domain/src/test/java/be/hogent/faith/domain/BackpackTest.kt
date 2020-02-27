@@ -2,7 +2,6 @@ package be.hogent.faith.domain
 
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Before
@@ -10,8 +9,8 @@ import org.junit.Test
 
 class BackpackTest {
 
-    private lateinit var backpack : Backpack
-    private lateinit var detail : AudioDetail
+    private lateinit var backpack: Backpack
+    private lateinit var detail: AudioDetail
 
     @Before
     fun setUp() {

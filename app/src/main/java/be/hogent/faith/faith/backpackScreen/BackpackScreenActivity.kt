@@ -60,15 +60,15 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun startPhotoDetailFragment() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
     }
 
     override fun startAudioDetailFragment() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
     }
 
     override fun startDrawingDetailFragment() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
     }
 
     override fun startTextDetailFragment() {

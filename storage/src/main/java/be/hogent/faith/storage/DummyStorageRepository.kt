@@ -18,7 +18,7 @@ class DummyStorageRepository() : IDummyStorageRepository{
         var draw = DrawingDetail(file)
         details.add(draw)
         var photo = PhotoDetail(file)
-        details.add(draw)
+        details.add(photo)
         var text = TextDetail(file)
         details.add(text)
         return details
