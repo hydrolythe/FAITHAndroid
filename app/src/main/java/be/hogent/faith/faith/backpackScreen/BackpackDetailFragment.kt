@@ -42,6 +42,7 @@ abstract class BackpackDetailFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setChildFragment(backpackViewModel.currentFile.value)
+        backpackViewModel.setCurrentFile(null)
     }
 
     abstract fun setChildFragment(detail: Detail? = null)

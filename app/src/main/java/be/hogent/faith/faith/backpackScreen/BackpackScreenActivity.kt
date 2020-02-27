@@ -8,24 +8,16 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.faith.emotionCapture.editDetail.DetailFragmentWithEmotionAvatar
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
-import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
-import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.util.replaceFragment
-import io.fotoapparat.selector.back
 import org.koin.android.ext.android.getKoin
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
-import java.util.UUID
 
 class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.BackpackDetailsNavigationListener,
     RecordAudioFragment.AudioScreenNavigation,

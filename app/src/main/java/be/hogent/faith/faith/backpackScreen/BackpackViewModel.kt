@@ -12,12 +12,18 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import org.koin.core.KoinComponent
 
 class BackpackViewModel(
     private val saveBackpackTextDetailUseCase: SaveBackpackTextDetailUseCase,
+    private val saveBackpackAudioDetailUseCase: SaveBackpackAudioDetailUseCase,
+    private val saveBackpackPhotoDetailUseCase: SaveBackpackPhotoDetailUseCase,
+    private val saveBackpackDrawingDetailUseCase: SaveBackpackDrawingDetailUseCase,
     private val getBackPackFilesDummyUseCase : GetBackPackFilesDummyUseCase
 ) : ViewModel(), KoinComponent {
 
@@ -30,7 +36,7 @@ class BackpackViewModel(
     val currentFile : LiveData<Detail>
         get() = _currentFile
 
-    fun setCurrentFile(detail : Detail){
+    fun setCurrentFile(detail: Detail?){
         _currentFile.postValue(detail)
     }
 
@@ -61,19 +67,55 @@ class BackpackViewModel(
     }
 
     fun saveAudioDetail(detail: AudioDetail){
+        val params = SaveBackpackAudioDetailUseCase.Params(detail)
+        saveBackpackAudioDetailUseCase.execute(params, SaveBackpackAudioDetailUseCaseHandler())
+    }
 
+    private inner class SaveBackpackAudioDetailUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _textSavedSuccessFully.postValue(R.string.save_text_success)
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_text_failed)
+        }
     }
 
     fun savePhotoDetail(detail: PhotoDetail){
+        val params = SaveBackpackPhotoDetailUseCase.Params(detail)
+        saveBackpackPhotoDetailUseCase.execute(params, SaveBackpackPhotoDetailUseCaseHandler())
+    }
 
+    private inner class SaveBackpackPhotoDetailUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _textSavedSuccessFully.postValue(R.string.save_text_success)
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_text_failed)
+        }
     }
 
     fun saveDrawingDetail(detail: DrawingDetail){
+        val params = SaveBackpackDrawingDetailUseCase.Params(detail)
+        saveBackpackDrawingDetailUseCase.execute(params, SaveBackpackDrawingDetailUseCaseHandler())
+    }
 
+    private inner class SaveBackpackDrawingDetailUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _textSavedSuccessFully.postValue(R.string.save_text_success)
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_text_failed)
+        }
     }
 
     override fun onCleared() {
         saveBackpackTextDetailUseCase.dispose()
+        saveBackpackAudioDetailUseCase.dispose()
+        saveBackpackDrawingDetailUseCase.dispose()
+        saveBackpackPhotoDetailUseCase.dispose()
         super.onCleared()
     }
 
