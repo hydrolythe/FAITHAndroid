@@ -1,5 +1,6 @@
 package be.hogent.faith.storage
 
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Completable
 import io.reactivex.Flowable

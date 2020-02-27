@@ -3,7 +3,11 @@ package be.hogent.faith.faith.backpackScreen
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
@@ -17,6 +21,7 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragme
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.util.replaceFragment
+import io.fotoapparat.selector.back
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
@@ -51,12 +56,18 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         }
     }
 
+    // BackToBackpack overrides method already defined in details
     override fun backToEvent() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        supportFragmentManager.popBackStack()
     }
 
     override fun onDetailFinished(detail: Detail) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        when (detail) {
+            is DrawingDetail -> save(detail)
+            is TextDetail -> save(detail)
+            is PhotoDetail -> save(detail)
+            is AudioDetail -> save(detail)
+        }
     }
 
     override fun startPhotoDetailFragment() {
@@ -86,13 +97,39 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun openDetailScreenFor(detail: Detail) {
+        backpackViewModel.setCurrentFile(detail)
         replaceFragment(
             BackpackDetailFragment.newInstance(detail),
             R.id.fragment
         )    }
 
-    override fun closeEvent() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun closeBackpack() {
+        closeEventSpecificScopes()
+        finish()
+    }
+
+    private fun closeEventSpecificScopes() {
+        // Close the drawing scope so unfinished drawings aren't shown when capturing
+        // a new event.
+        runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {
+            it.close()
+        }
+    }
+
+    fun save(detail : TextDetail){
+        backpackViewModel.saveTextDetail(detail)
+    }
+
+    fun save(detail: PhotoDetail){
+        backpackViewModel.savePhotoDetail(detail)
+    }
+
+    fun save(detail: DrawingDetail){
+        backpackViewModel.saveDrawingDetail(detail)
+    }
+
+    fun save(detail: AudioDetail){
+        backpackViewModel.saveAudioDetail(detail)
     }
 
 }

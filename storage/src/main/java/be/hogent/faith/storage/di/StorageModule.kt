@@ -22,9 +22,9 @@ val storageModule = module {
     factory<ITemporaryStorage> { TemporaryStorageRepository(androidContext(), get()) }
     factory<ILocalStorageRepository> { LocalStorageRepository(get(), androidContext()) }
     factory<IFireBaseStorageRepository> { FireBaseStorageRepository(get(), constructFirebaseStorageInstance()) }
-    factory<IDummyStorageRepository> { DummyStorageRepository() }
+    factory<IDummyStorageRepository> { DummyStorageRepository(get(), get()) }
 
-    single {DummyStorageRepository() }
+    single {DummyStorageRepository(get(), get()) }
 }
 
 fun constructFirebaseStorageInstance(): FirebaseStorage {

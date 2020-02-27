@@ -41,7 +41,7 @@ abstract class BackpackDetailFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setChildFragment()
+        setChildFragment(backpackViewModel.currentFile.value)
     }
 
     abstract fun setChildFragment(detail: Detail? = null)
@@ -76,7 +76,7 @@ abstract class BackpackDetailFragment : Fragment() {
         }
 
         override fun setChildFragment(detail: Detail?) {
-            //           val detail = arguments?.getSerializable(DETAIL) as TextDetail?
+          //  val detail = arguments?.getSerializable(DETAIL) as TextDetail?
             val childFragment = if (detail == null) {
                 TextDetailFragment.newInstance()
             } else {

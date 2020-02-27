@@ -171,7 +171,7 @@ class BackpackScreenFragment : Fragment() {
 
         fun openDetailScreenFor(detail: Detail)
 
-        fun closeEvent()
+        fun closeBackpack()
     }
 
     companion object {
