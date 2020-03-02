@@ -1,4 +1,4 @@
-package be.hogent.faith.storage
+package be.hogent.faith.storage.backpack
 
 import java.io.File
 import java.util.UUID

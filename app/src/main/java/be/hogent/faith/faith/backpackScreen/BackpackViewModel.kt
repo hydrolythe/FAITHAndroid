@@ -47,6 +47,15 @@ class BackpackViewModel(
     private val _textSavedSuccessFully = SingleLiveEvent<Int>()
     val textDetailSavedSuccessFully: LiveData<Int> = _textSavedSuccessFully
 
+    private val _photoSavedSuccessFully = SingleLiveEvent<Int>()
+    val photoDetailSavedSuccessFully: LiveData<Int> = _photoSavedSuccessFully
+
+    private val _drawingSavedSuccessFully = SingleLiveEvent<Int>()
+    val drawingDetailSavedSuccessFully: LiveData<Int> = _drawingSavedSuccessFully
+
+    private val _audioSavedSuccessFully = SingleLiveEvent<Int>()
+    val audioDetailSavedSuccessFully: LiveData<Int> = _audioSavedSuccessFully
+
     init {
         _details.postValue(getBackPackFilesDummyUseCase.getDetails())
     }
@@ -73,11 +82,11 @@ class BackpackViewModel(
 
     private inner class SaveBackpackAudioDetailUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            _textSavedSuccessFully.postValue(R.string.save_text_success)
+            _audioSavedSuccessFully.postValue(R.string.save_audio_success)
         }
 
         override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_text_failed)
+            _errorMessage.postValue(R.string.error_save_audio_failed)
         }
     }
 
@@ -88,11 +97,11 @@ class BackpackViewModel(
 
     private inner class SaveBackpackPhotoDetailUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            _textSavedSuccessFully.postValue(R.string.save_text_success)
+            _photoSavedSuccessFully.postValue(R.string.save_photo_success)
         }
 
         override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_text_failed)
+            _errorMessage.postValue(R.string.error_save_photo_failed)
         }
     }
 
@@ -103,11 +112,11 @@ class BackpackViewModel(
 
     private inner class SaveBackpackDrawingDetailUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            _textSavedSuccessFully.postValue(R.string.save_text_success)
+            _drawingSavedSuccessFully.postValue(R.string.save_drawing_success)
         }
 
         override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_text_failed)
+            _errorMessage.postValue(R.string.error_save_drawing_failed)
         }
     }
 

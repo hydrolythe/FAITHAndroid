@@ -1,4 +1,4 @@
-package be.hogent.faith.storage
+package be.hogent.faith.storage.backpack
 
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
@@ -41,7 +41,7 @@ object DummyDetailMapper {
 
     fun mapToEntity(model: Detail): DummyDetail {
         return DummyDetail(
-                model.file.absolutePath, model.uuid.toString(), when (model) {
+            model.file.absolutePath, model.uuid.toString(), when (model) {
                 is AudioDetail -> "AUDIO"
                 is TextDetail -> "TEXT"
                 is DrawingDetail -> "DRAWING"

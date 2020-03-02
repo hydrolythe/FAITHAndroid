@@ -2,7 +2,7 @@ package be.hogent.faith.service.usecases.backpack
 
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.storage.IDummyStorageRepository
+import be.hogent.faith.storage.backpack.IDummyStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 

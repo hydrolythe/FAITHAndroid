@@ -1,4 +1,4 @@
-package be.hogent.faith.storage
+package be.hogent.faith.storage.backpack
 
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.detail.Detail

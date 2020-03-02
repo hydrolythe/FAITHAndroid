@@ -11,6 +11,7 @@ import io.reactivex.observers.DisposableCompletableObserver
 import org.junit.Assert.assertEquals
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import io.mockk.Called
 import io.mockk.called
 import org.junit.Before
@@ -20,6 +21,7 @@ import org.junit.Test
 class BackpackViewModelSaveTextTest {
     private lateinit var viewModel: BackpackViewModel
     private val saveTextUseCase = mockk<SaveBackpackTextDetailUseCase>(relaxed = true)
+    private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<TextDetail>()
 
     @get:Rule
@@ -29,7 +31,10 @@ class BackpackViewModelSaveTextTest {
     fun setUp() {
         viewModel = BackpackViewModel(
             saveTextUseCase,
-            mockk()
+            mockk(),
+            mockk(),
+            mockk(),
+            getBackPackFilesDummyUseCase
         )
     }
 
@@ -63,7 +68,7 @@ class BackpackViewModelSaveTextTest {
     }
 
     @Test
-    fun eventViewModel_saveText_notifiesUseCaseFailure() {
+    fun backpackViewModel_saveText_notifiesUseCaseFailure() {
         // Arrange
         val useCaseObserver = slot<DisposableCompletableObserver>()
         val errorObserver = mockk<Observer<Int>>(relaxed = true)

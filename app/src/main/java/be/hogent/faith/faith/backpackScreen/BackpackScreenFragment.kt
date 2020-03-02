@@ -7,44 +7,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
-import android.widget.GridLayout
-import android.widget.LinearLayout
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
-import be.hogent.faith.databinding.FragmentBackpackBinding
-import be.hogent.faith.databinding.PanelAddItemBagpackBinding
-import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.details.DetailFragment
-import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
-import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
-import be.hogent.faith.faith.details.text.create.TextDetailFragment
-import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
-import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.SaveEventDialog
-import be.hogent.faith.faith.state.Resource
-import be.hogent.faith.faith.state.ResourceState
-import be.hogent.faith.storage.IDummyStorageRepository
-import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
-import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.io.File
-import java.util.UUID
 
 class BackpackScreenFragment : Fragment() {
 
@@ -87,7 +61,7 @@ class BackpackScreenFragment : Fragment() {
 
         backpackBinding.recyclerviewBackpack.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager =  GridLayoutManager(activity,5)
             // Start with empty list and then fill it in
 
             adapter = DetailThumbnailsAdapter(

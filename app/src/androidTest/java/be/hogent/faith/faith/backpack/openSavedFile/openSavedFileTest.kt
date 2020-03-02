@@ -18,7 +18,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.test.KoinTest
 
-@RunWith(AndroidJUnit4::class)
+/*@RunWith(AndroidJUnit4::class)
 class BackpackScreenFragmentTest : KoinTest {
 
     @get:Rule
@@ -30,7 +30,7 @@ class BackpackScreenFragmentTest : KoinTest {
     fun goToScreen() {
         NavigationUtil.goToBackpack()
 
-    }
+    }*/
 
 
    /* @Test
@@ -58,4 +58,4 @@ class BackpackScreenFragmentTest : KoinTest {
         onView(withId(R.id.enterText_editor)).check(ViewAssertions.matches(isDisplayed()))
     }*/
 
-}
+//}

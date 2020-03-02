@@ -48,21 +48,18 @@ abstract class BackpackDetailFragment : Fragment() {
     abstract fun setChildFragment(detail: Detail? = null)
 
     companion object {
-        private const val DETAIL = "The detail to show"
         fun newInstance(detail: Detail): BackpackDetailFragment {
             return when (detail) {
-                is TextDetail -> TextFragmentNoEmotionAvatar.newInstance(detail)
-                is DrawingDetail -> DrawingFragmentNoEmotionAvatar.newInstance(detail)
-                is PhotoDetail -> PhotoFragmentNoEmotionAvatar.newInstance(detail)
-                is AudioDetail -> AudioFragmentNoEmotionAvatar.newInstance(detail)
-                else -> TextFragmentNoEmotionAvatar.newInstance(
-                    detail as TextDetail
-                )
+                is TextDetail -> TextFragmentNoEmotionAvatar.newInstance()
+                is DrawingDetail -> DrawingFragmentNoEmotionAvatar.newInstance()
+                is PhotoDetail -> PhotoFragmentNoEmotionAvatar.newInstance()
+                is AudioDetail -> AudioFragmentNoEmotionAvatar.newInstance()
+                //TODO change
+                else -> TextFragmentNoEmotionAvatar.newInstance()
             }
 
         }
     }
-
 
     class TextFragmentNoEmotionAvatar : BackpackDetailFragment() {
 
@@ -70,14 +67,9 @@ abstract class BackpackDetailFragment : Fragment() {
             fun newInstance(): TextFragmentNoEmotionAvatar {
                 return TextFragmentNoEmotionAvatar()
             }
-
-            fun newInstance(textDetail: TextDetail): TextFragmentNoEmotionAvatar {
-                return TextFragmentNoEmotionAvatar()
-            }
         }
 
         override fun setChildFragment(detail: Detail?) {
-          //  val detail = arguments?.getSerializable(DETAIL) as TextDetail?
             val childFragment = if (detail == null) {
                 TextDetailFragment.newInstance()
             } else {
@@ -91,10 +83,6 @@ abstract class BackpackDetailFragment : Fragment() {
 
         companion object {
             fun newInstance(): DrawingFragmentNoEmotionAvatar {
-                return DrawingFragmentNoEmotionAvatar()
-            }
-
-            fun newInstance(drawingDetail: DrawingDetail): DrawingFragmentNoEmotionAvatar {
                 return DrawingFragmentNoEmotionAvatar()
             }
         }
@@ -114,10 +102,6 @@ abstract class BackpackDetailFragment : Fragment() {
             fun newInstance(): PhotoFragmentNoEmotionAvatar {
                 return PhotoFragmentNoEmotionAvatar()
             }
-
-            fun newInstance(photoDetail: PhotoDetail): PhotoFragmentNoEmotionAvatar {
-                return PhotoFragmentNoEmotionAvatar()
-            }
         }
 
         override fun setChildFragment(detail: Detail?) {
@@ -133,10 +117,6 @@ abstract class BackpackDetailFragment : Fragment() {
 
         companion object {
             fun newInstance(): AudioFragmentNoEmotionAvatar {
-                return AudioFragmentNoEmotionAvatar()
-            }
-
-            fun newInstance(audioDetail: AudioDetail): AudioFragmentNoEmotionAvatar {
                 return AudioFragmentNoEmotionAvatar()
             }
         }
