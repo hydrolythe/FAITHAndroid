@@ -30,7 +30,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.FullScreen"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".faith.backpackScreen.BackpackScreenActivity"></activity>
+        <activity android:name=".faith.backpackScreen.BackpackScreenActivity"
+            android:label="@string/title_backpack"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.FullScreen"
+            >
+
+        </activity>
         <activity
             android:name=".faith.library.EventListActivity"
             android:label="@string/title_event_detail"
