@@ -18,3 +18,4 @@ class SaveBackpackAudioDetailUseCase(
 
     data class Params(val audioDetail: AudioDetail)
 }
+

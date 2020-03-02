@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
+import android.widget.ImageButton
 import android.widget.PopupMenu
 import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
@@ -30,6 +31,11 @@ class BackpackScreenFragment : Fragment() {
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
 
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
+
+    private lateinit var btnAdd : ImageButton
+    private lateinit var btnDelete : ImageButton
+    private lateinit var btnSearch : ImageButton
+    private lateinit var btnBack : ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,6 +97,25 @@ class BackpackScreenFragment : Fragment() {
             onAddClicked()
             rotateBtnForward(backpackBinding.btnAdd)
         }
+
+        btnAdd = backpackBinding.btnAdd
+        btnBack = backpackBinding.btnBackpackBack
+        btnDelete = backpackBinding.btnDelete
+        btnSearch = backpackBinding.btnSearch
+
+        backpackViewModel.disableUi.observe(this, Observer {
+            disableButtons()
+            hideRV()
+        })
+
+        backpackViewModel.enableUi.observe(this, Observer {
+            enableButtons()
+            showRV()
+        })
+
+        backpackBinding.btnBackpackBack.setOnClickListener {
+            backpackViewModel.goToCityScreen()
+        }
     }
 
     private fun rotateBtnForward(view: View) {
@@ -135,6 +160,38 @@ class BackpackScreenFragment : Fragment() {
         popUpMenu.show()
     }
 
+    private fun hideRV() {
+        backpackBinding.recyclerviewBackpack.visibility = View.GONE
+    }
+
+    private fun showRV(){
+        backpackBinding.recyclerviewBackpack.visibility = View.VISIBLE
+    }
+
+    private fun disableButtons() {
+        disable(btnAdd)
+        disable(btnBack)
+        disable(btnDelete)
+        disable(btnSearch)
+    }
+
+    private fun disable(btn : ImageButton){
+        btn.isClickable = false
+        btn.isEnabled = false
+    }
+
+    private fun enableButtons(){
+        enable(btnAdd)
+        enable(btnBack)
+        enable(btnDelete)
+        enable(btnSearch)
+    }
+
+    private fun enable(btn : ImageButton){
+        btn.isClickable = true
+        btn.isEnabled = true
+    }
+
     interface BackpackDetailsNavigationListener {
         fun startPhotoDetailFragment()
         fun startAudioDetailFragment()
@@ -153,8 +210,6 @@ class BackpackScreenFragment : Fragment() {
             return BackpackScreenFragment()
         }
     }
-
-
 }
 
 

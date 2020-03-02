@@ -2,6 +2,9 @@ package be.hogent.faith.faith.backpackScreen
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageButton
+import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
@@ -16,6 +19,7 @@ import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.util.replaceFragment
+import io.fotoapparat.selector.back
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.getViewModel
 
@@ -46,11 +50,16 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
                 .add(R.id.fragment, fragment)
                 .commit()
         }
+
+        backpackViewModel.goToCityScreen.observe(this, Observer {
+            closeBackpack()
+        })
     }
 
     // BackToBackpack overrides method already defined in details
     override fun backToEvent() {
         supportFragmentManager.popBackStack()
+        backpackViewModel.enableUi()
     }
 
     override fun onDetailFinished(detail: Detail) {
@@ -60,24 +69,29 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
             is PhotoDetail -> save(detail)
             is AudioDetail -> save(detail)
         }
+        backpackViewModel.enableUi()
     }
 
     override fun startPhotoDetailFragment() {
         replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
+        backpackViewModel.disableScreenUi()
     }
 
     override fun startAudioDetailFragment() {
         replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
+        backpackViewModel.disableScreenUi()
     }
 
     override fun startDrawingDetailFragment() {
         replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
+        backpackViewModel.disableScreenUi()
     }
 
     override fun startTextDetailFragment() {
         replaceFragment(
             BackpackDetailFragment.TextFragmentNoEmotionAvatar.newInstance(), R.id.fragment
         )
+        backpackViewModel.disableScreenUi()
     }
 
     override fun startVideoDetailFragment() {
@@ -93,14 +107,16 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         replaceFragment(
             BackpackDetailFragment.newInstance(detail),
             R.id.fragment
-        )    }
+        )
+        backpackViewModel.disableScreenUi()
+    }
 
     override fun closeBackpack() {
-        closeEventSpecificScopes()
+        closeBackpackSpecificScopes()
         finish()
     }
 
-    private fun closeEventSpecificScopes() {
+    private fun closeBackpackSpecificScopes() {
         // Close the drawing scope so unfinished drawings aren't shown when capturing
         // a new event.
         runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {

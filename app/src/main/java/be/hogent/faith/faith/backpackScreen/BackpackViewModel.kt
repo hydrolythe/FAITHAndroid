@@ -56,8 +56,29 @@ class BackpackViewModel(
     private val _audioSavedSuccessFully = SingleLiveEvent<Int>()
     val audioDetailSavedSuccessFully: LiveData<Int> = _audioSavedSuccessFully
 
+    private val _disableUi = SingleLiveEvent<Any>()
+    val disableUi: LiveData<Any> = _disableUi
+
+    private val _enableUi = SingleLiveEvent<Any>()
+    val enableUi: LiveData<Any> = _enableUi
+
+    private val _goToCityScreen = SingleLiveEvent<Any>()
+    val goToCityScreen: LiveData<Any> = _goToCityScreen
+
     init {
         _details.postValue(getBackPackFilesDummyUseCase.getDetails())
+    }
+
+    fun disableScreenUi(){
+        _disableUi.call()
+    }
+
+    fun enableUi(){
+        _enableUi.call()
+    }
+
+    fun goToCityScreen(){
+        _goToCityScreen.call()
     }
 
     fun saveTextDetail(detail: TextDetail) {

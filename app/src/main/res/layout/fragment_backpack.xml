@@ -104,7 +104,7 @@
                 app:srcCompat="@drawable/add_btn" />
 
             <ImageButton
-                android:id="@+id/btn_draw_cancel"
+                android:id="@+id/btn_backpack_back"
                 android:layout_width="@dimen/material_icon_width"
                 android:layout_height="@dimen/material_icon_height"
                 android:background="@drawable/ic_return"
