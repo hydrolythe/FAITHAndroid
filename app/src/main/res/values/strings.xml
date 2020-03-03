@@ -177,4 +177,6 @@
     <string name="bestand_toevoegen">Bestand toevoegen</string>
     <string name="foto_nemen">Foto nemen</string>
     <string name="add_video">Filmen</string>
+    <string name="title_backpack">Backpack</string>
+
 </resources>
