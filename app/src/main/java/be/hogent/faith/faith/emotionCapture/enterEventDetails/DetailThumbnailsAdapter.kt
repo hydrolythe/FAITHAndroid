@@ -9,6 +9,7 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.AUDIO_DETAIL
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.DRAW_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.PICTURE_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.TEXT_DETAIL
 
@@ -16,6 +17,7 @@ object DetailTypes {
     const val AUDIO_DETAIL = 1
     const val TEXT_DETAIL = 2
     const val PICTURE_DETAIL = 3
+    const val DRAW_DETAIL = 4
 }
 
 class DetailThumbnailsAdapter(
@@ -23,8 +25,8 @@ class DetailThumbnailsAdapter(
     private val existingDetailNavigationListener: DetailViewHolder.ExistingDetailNavigationListener
 ) : RecyclerView.Adapter<DetailViewHolder>() {
 
-    private val _details = details.toMutableList()
-
+    private var _details = details.toMutableList()
+    private var _detailsCopy = details.toMutableList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         return DetailViewHolderFactory.createViewHolder(parent, viewType, existingDetailNavigationListener)
     }
@@ -49,9 +51,34 @@ class DetailThumbnailsAdapter(
     fun updateDetailsList(newDetails: List<Detail>) {
         val diffCallback = ThumbnailDiffCallback(_details, newDetails)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-
+        _detailsCopy.addAll(newDetails)
         _details.clear()
         _details.addAll(newDetails)
         diffResult.dispatchUpdatesTo(this)
     }
+    fun filterSearchBar(text:String){
+        //TODO update for detail.title
+        _details.clear()
+        if(text.isEmpty()){
+            _details.addAll(_detailsCopy)
+        }else{
+            for(detail in _detailsCopy){
+                if(detail.uuid.toString().toLowerCase().contains(text.toLowerCase())){
+                    _details.add(detail)
+                }
+            }
+        }
+        notifyDataSetChanged()
+
+    }
+    fun filterType(type: Int){
+        when(type){
+             AUDIO_DETAIL -> _details = _detailsCopy.filterIsInstance<AudioDetail>().toMutableList()
+             DRAW_DETAIL ->_details = _detailsCopy.filterIsInstance<DrawingDetail>().toMutableList()
+             TEXT_DETAIL -> _details = _detailsCopy.filterIsInstance<TextDetail>().toMutableList()
+             PICTURE_DETAIL -> _details = _detailsCopy.filterIsInstance<PhotoDetail>().toMutableList()
+        }
+        notifyDataSetChanged()
+    }
+
 }

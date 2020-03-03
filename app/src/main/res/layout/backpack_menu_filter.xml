@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/include"
+    >
+
+    <ImageView
+        android:id="@+id/filter_achtegrond"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/filter_achtergrond" />
+
+    <ImageView
+        android:id="@+id/filter_inhoud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="40dp"
+        android:paddingBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/filter_achtegrond"
+        app:layout_constraintEnd_toEndOf="@+id/filter_achtegrond"
+        app:layout_constraintStart_toStartOf="@+id/filter_achtegrond"
+        app:layout_constraintTop_toTopOf="@+id/filter_achtegrond"
+        app:srcCompat="@drawable/filter_inhoud" />
+
+    <ImageView
+        android:id="@+id/filter_boy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/filter_inhoud"
+        app:layout_constraintStart_toStartOf="@+id/filter_inhoud"
+        app:layout_constraintTop_toTopOf="@+id/guide_items_horizontal_end"
+        app:srcCompat="@drawable/filter_boy" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_searchbar_horizontal"
+        android:layout_width="8dp"
+        android:layout_height="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_items_horizontal_start"
+        android:layout_width="8dp"
+        android:layout_height="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.27" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_items_horizontal_end"
+        android:layout_width="8dp"
+        android:layout_height="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.36" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_items_vertical_1"
+        android:layout_width="8dp"
+        android:layout_height="12dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.20" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_items_vertical_2"
+        android:layout_width="8dp"
+        android:layout_height="12dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_items_vertical_3"
+        android:layout_width="8dp"
+        android:layout_height="12dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.80" />
+
+
+    <ImageButton
+        android:id="@+id/filterknop_teksten"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+
+        app:layout_constraintBottom_toTopOf="@+id/guide_items_horizontal_start"
+        app:layout_constraintEnd_toStartOf="@+id/filterknop_audio"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/filter_inhoud"
+        app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_1"
+        app:srcCompat="@drawable/filterknop_teksten" />
+
+    <ImageButton
+        android:id="@+id/filterknop_audio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+
+        app:layout_constraintBottom_toTopOf="@+id/guide_items_horizontal_start"
+        app:layout_constraintEnd_toStartOf="@+id/filterknop_foto"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/filterknop_teksten"
+        app:srcCompat="@drawable/filterknop_audio" />
+
+    <ImageButton
+        android:id="@+id/filterknop_foto"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+
+        app:layout_constraintBottom_toTopOf="@+id/guide_items_horizontal_start"
+        app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_3"
+        app:layout_constraintStart_toEndOf="@+id/filterknop_audio"
+        app:srcCompat="@drawable/filterknop_foto" />
+
+    <ImageButton
+        android:id="@+id/filterknop_tekeningen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+
+        app:layout_constraintBottom_toTopOf="@+id/guide_items_horizontal_end"
+        app:layout_constraintEnd_toStartOf="@+id/filterknop_film"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/filter_inhoud"
+        app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_1"
+        app:layout_constraintTop_toTopOf="@+id/guide_items_horizontal_start"
+        app:srcCompat="@drawable/filterknop_tekeningen" />
+
+    <ImageButton
+        android:id="@+id/filterknop_film"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+
+        app:layout_constraintBottom_toTopOf="@+id/guide_items_horizontal_end"
+        app:layout_constraintEnd_toStartOf="@+id/filterknop_extern_bestand"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/filterknop_tekeningen"
+        app:layout_constraintTop_toTopOf="@+id/guide_items_horizontal_start"
+        app:srcCompat="@drawable/filterknop_film" />
+
+    <ImageButton
+        android:id="@+id/filterknop_extern_bestand"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FFFFFF"
+
+        app:layout_constraintBottom_toTopOf="@+id/guide_items_horizontal_end"
+        app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/filterknop_film"
+        app:layout_constraintTop_toTopOf="@+id/guide_items_horizontal_start"
+        app:srcCompat="@drawable/filterknop_extern_bestand" />
+
+    <ImageButton
+        android:id="@+id/search_close_btn"
+        android:layout_width="66dp"
+        android:layout_height="42dp"
+        android:backgroundTint="#0000FF"
+        app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_3"
+        app:layout_constraintTop_toTopOf="@+id/filter_achtegrond"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <SearchView
+        android:id="@+id/search_bar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guide_searchbar_horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_3"
+        app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_1"
+        app:layout_constraintTop_toBottomOf="@+id/search_close_btn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

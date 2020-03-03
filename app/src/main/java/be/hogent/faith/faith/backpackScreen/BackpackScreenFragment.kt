@@ -7,35 +7,45 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
-import android.widget.ImageButton
 import android.widget.PopupMenu
+import android.widget.SearchView
 import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.backpackScreen.DetailTypes.AUDIO_DETAIL
+import be.hogent.faith.faith.backpackScreen.DetailTypes.DRAW_DETAIL
+import be.hogent.faith.faith.backpackScreen.DetailTypes.PICTURE_DETAIL
+import be.hogent.faith.faith.backpackScreen.DetailTypes.TEXT_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
+import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_audio
+import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_foto
+import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_tekeningen
+import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_teksten
+import kotlinx.android.synthetic.main.backpack_menu_filter.view.search_bar
+import kotlinx.android.synthetic.main.backpack_menu_filter.view.search_close_btn
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+
+
+object DetailTypes {
+    const val AUDIO_DETAIL = 1
+    const val TEXT_DETAIL = 2
+    const val PICTURE_DETAIL = 3
+    const val DRAW_DETAIL = 4
+}
 
 class BackpackScreenFragment : Fragment() {
 
     private var navigation: BackpackDetailsNavigationListener? = null
 
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
- //   private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
+    //   private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
 
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
-
-    private lateinit var btnAdd : ImageButton
-    private lateinit var btnDelete : ImageButton
-    private lateinit var btnSearch : ImageButton
-    private lateinit var btnBack : ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +57,7 @@ class BackpackScreenFragment : Fragment() {
 
         backpackBinding.backpackViewModel = backpackViewModel
         backpackBinding.lifecycleOwner = this@BackpackScreenFragment
+
         return backpackBinding.root
     }
 
@@ -65,20 +76,13 @@ class BackpackScreenFragment : Fragment() {
 
     private fun updateUI() {
 
-        backpackBinding.recyclerviewBackpack.apply {
-            setHasFixedSize(true)
-            layoutManager =  GridLayoutManager(activity,5)
-            // Start with empty list and then fill it in
+        detailThumbnailsAdapter = DetailThumbnailsAdapter(
+            emptyList(),
+            requireNotNull(activity) as BackpackScreenActivity
+        )
+        backpackBinding.recyclerviewBackpack.layoutManager = GridLayoutManager(activity, 5)
+        backpackBinding.recyclerviewBackpack.adapter = detailThumbnailsAdapter
 
-            adapter = DetailThumbnailsAdapter(
-                emptyList(),
-                requireNotNull(activity) as BackpackScreenActivity
-            )
-        }
-
-        detailThumbnailsAdapter =
-            backpackBinding.recyclerviewBackpack.adapter as DetailThumbnailsAdapter
-        // determineRVVisibility()
     }
 
     override fun onStop() {
@@ -98,24 +102,34 @@ class BackpackScreenFragment : Fragment() {
             rotateBtnForward(backpackBinding.btnAdd)
         }
 
-        btnAdd = backpackBinding.btnAdd
-        btnBack = backpackBinding.btnBackpackBack
-        btnDelete = backpackBinding.btnDelete
-        btnSearch = backpackBinding.btnSearch
+        backpackBinding.backpackMenuFilter.search_bar.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener {
 
-        backpackViewModel.disableUi.observe(this, Observer {
-            disableButtons()
-            hideRV()
+            override fun onQueryTextChange(newText: String): Boolean {
+                detailThumbnailsAdapter!!.filterSearchBar(newText)
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                detailThumbnailsAdapter!!.filterSearchBar(query)
+                return true
+            }
+
         })
 
-        backpackViewModel.enableUi.observe(this, Observer {
-            enableButtons()
-            showRV()
-        })
-
-        backpackBinding.btnBackpackBack.setOnClickListener {
-            backpackViewModel.goToCityScreen()
+        backpackBinding.backpackMenuFilter.filterknop_teksten.setOnClickListener {
+            detailThumbnailsAdapter!!.filterType(TEXT_DETAIL)
         }
+        backpackBinding.backpackMenuFilter.filterknop_audio.setOnClickListener {
+            detailThumbnailsAdapter!!.filterType(AUDIO_DETAIL)
+        }
+        backpackBinding.backpackMenuFilter.filterknop_foto.setOnClickListener {
+            detailThumbnailsAdapter!!.filterType(PICTURE_DETAIL)
+        }
+        backpackBinding.backpackMenuFilter.filterknop_tekeningen.setOnClickListener {
+            detailThumbnailsAdapter!!.filterType(DRAW_DETAIL)
+        }
+        1
     }
 
     private fun rotateBtnForward(view: View) {
@@ -143,7 +157,7 @@ class BackpackScreenFragment : Fragment() {
         popUpMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.backpack_menu_addAudio ->
-                  navigation?.startAudioDetailFragment()
+                    navigation?.startAudioDetailFragment()
                 R.id.backpack_menu_addDrawing ->
                     navigation?.startDrawingDetailFragment()
                 R.id.backpack_menu_addFile ->
@@ -151,45 +165,13 @@ class BackpackScreenFragment : Fragment() {
                 R.id.backpack_menu_addFoto ->
                     navigation?.startPhotoDetailFragment()
                 R.id.backpack_menu_addText ->
-                   navigation?.startTextDetailFragment()
+                    navigation?.startTextDetailFragment()
                 R.id.backpack_menu_addVideo ->
-                   navigation?.startVideoDetailFragment()
+                    navigation?.startVideoDetailFragment()
             }
             true
         }
         popUpMenu.show()
-    }
-
-    private fun hideRV() {
-        backpackBinding.recyclerviewBackpack.visibility = View.GONE
-    }
-
-    private fun showRV(){
-        backpackBinding.recyclerviewBackpack.visibility = View.VISIBLE
-    }
-
-    private fun disableButtons() {
-        disable(btnAdd)
-        disable(btnBack)
-        disable(btnDelete)
-        disable(btnSearch)
-    }
-
-    private fun disable(btn : ImageButton){
-        btn.isClickable = false
-        btn.isEnabled = false
-    }
-
-    private fun enableButtons(){
-        enable(btnAdd)
-        enable(btnBack)
-        enable(btnDelete)
-        enable(btnSearch)
-    }
-
-    private fun enable(btn : ImageButton){
-        btn.isClickable = true
-        btn.isEnabled = true
     }
 
     interface BackpackDetailsNavigationListener {
@@ -210,6 +192,8 @@ class BackpackScreenFragment : Fragment() {
             return BackpackScreenFragment()
         }
     }
+
+
 }
 
 

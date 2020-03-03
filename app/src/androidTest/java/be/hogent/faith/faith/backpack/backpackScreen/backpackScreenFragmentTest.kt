@@ -1,8 +1,11 @@
 package be.hogent.faith.faith.backpack.backpackScreen
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import be.hogent.faith.R
 import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
@@ -12,10 +15,11 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.test.KoinTest
-/*
+
 
 @RunWith(AndroidJUnit4::class)
-class BagpackScreenFragmentTest : KoinTest {
+@LargeTest
+class BackpackScreenFragmentTest : KoinTest {
 
     @get:Rule
     var activityScenarioRule =
@@ -29,11 +33,10 @@ class BagpackScreenFragmentTest : KoinTest {
 
     @Test
     fun backpackFragment_canClickAllButtons() {
-
         onView(withId(R.id.btn_draw_cancel)).perform(click())
         onView(withId(R.id.btn_search)).perform(click())
         onView(withId(R.id.btn_add)).perform(click())
         onView(withId(R.id.btn_delete)).perform(click())
 
     }
-}*/
+}

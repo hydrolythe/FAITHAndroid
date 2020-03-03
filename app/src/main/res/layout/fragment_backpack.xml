@@ -2,116 +2,138 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
 
         <variable
             name="backpackViewModel"
             type="be.hogent.faith.faith.backpackScreen.BackpackViewModel" />
     </data>
-    <FrameLayout
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background_bagpack"
-        android:orientation="vertical">
+        app:layoutDescription="@xml/filtermenu_slide">
+
 
         <ImageView
-            android:id="@+id/background_bagpack"
-            android:layout_width="match_parent"
+            android:id="@+id/background_backpack"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/bagpack"
             tools:srcCompat="@drawable/bagpack" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_undo_horizontal"
-                android:layout_width="8dp"
-                android:layout_height="12dp"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.02" />
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_items_horizontal_start"
-                android:layout_width="8dp"
-                android:layout_height="12dp"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.34" />
+        <include
+            android:id="@+id/backpack_menu_filter"
+            layout="@layout/backpack_menu_filter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/background_backpack"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_items_horizontal_end"
-                android:layout_width="8dp"
-                android:layout_height="12dp"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.88" />
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_items_vertical_start"
-                android:layout_width="8dp"
-                android:layout_height="12dp"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.20" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_undo_horizontal"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.02" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_items_vertical_end"
-                android:layout_width="8dp"
-                android:layout_height="12dp"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.80" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_items_horizontal_start"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.34" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_search_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.03" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_items_horizontal_end"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.88" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview_backpack"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:scrollbars="horizontal|vertical"
-                app:layout_constraintBottom_toTopOf="@+id/guide_items_horizontal_end"
-                app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_end"
-                app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_start"
-                app:layout_constraintTop_toTopOf="@+id/guide_items_horizontal_start" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_items_vertical_start"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.22" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_filtermenu_vertical"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.35" />
 
-            <ImageButton
-                android:id="@+id/btn_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/prullenbak"
-                app:layout_constraintBottom_toTopOf="@+id/guide_items_horizontal_end"
-                app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_end"
-                app:srcCompat="@drawable/prullenbak" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_items_vertical_end"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.80" />
 
-            <ImageButton
-                android:id="@+id/btn_search"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/search_btn"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/search_btn" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_search_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.03" />
 
-            <ImageButton
-                android:id="@+id/btn_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/add_btn"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@drawable/add_btn" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_backpack"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scrollbars="horizontal|vertical"
+            app:layout_constraintBottom_toTopOf="@+id/guide_items_horizontal_end"
+            app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_items_horizontal_start" />
 
-            <ImageButton
-                android:id="@+id/btn_backpack_back"
-                android:layout_width="@dimen/material_icon_width"
-                android:layout_height="@dimen/material_icon_height"
-                android:background="@drawable/ic_return"
-                android:contentDescription="@string/cancel"
-                app:layout_constraintStart_toStartOf="@+id/guide_search_btn"
-                app:layout_constraintTop_toTopOf="@+id/guide_undo_horizontal" />
+        <ImageButton
+            android:id="@+id/btn_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/prullenbak"
+            app:layout_constraintBottom_toTopOf="@+id/guide_items_horizontal_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_end"
+            app:srcCompat="@drawable/prullenbak" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </FrameLayout>
+        <ImageButton
+            android:id="@+id/btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/search_btn" />
+
+        <ImageButton
+            android:id="@+id/btn_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/add_btn"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/add_btn" />
+
+        <ImageButton
+            android:id="@+id/btn_draw_cancel"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:background="@drawable/ic_return"
+            android:contentDescription="@string/cancel"
+            app:layout_constraintStart_toStartOf="@+id/guide_search_btn"
+            app:layout_constraintTop_toTopOf="@+id/guide_undo_horizontal" />
+
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
