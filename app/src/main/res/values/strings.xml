@@ -64,6 +64,7 @@
     <string name="header_emotie_regulatie">Emotie regulatie</string>
     <string name="frag_viewEvent_notes">notes</string>
     <string name="dialog_to_the_event_title">"Wil je teruggaan naar het park?</string>
+    <string name="dialog_takePhoto_cancel_message">Ben je zeker? Je foto is nog niet opgeslagen!</string>
     <string name="dialog_to_the_event_message">Ben je zeker? Je tekening is nog niet opgeslagen!</string>
     <string name="dialog_to_the_city_title">"Wil je teruggaan naar de stad?</string>
     <string name="dialog_to_the_city_message">Ben je zeker? Je gebeurtenis is nog niet opgeslagen!</string>
@@ -129,7 +130,6 @@
     <string name="description_arrow_right">Icon for arrow to the right</string>
     <string name="title_event_list">Events</string>
     <string name="title_event_detail">Event Detail</string>
-    <string name="title_backpack">Backpack</string>
     <string name="ex_title">Een geweldige dag</string>
     <string name="ex_date">07/11/2019</string>
     <string name="ex_beschrijving">Het was vooral voor rust heel sterk. Na rust zijn we wat meer ingezakt, maar kwamen we er gevaarlijk uit en hebben we ook goed voetbal laten zien. Zelf voelde ik me lekker en het is super dat ik er twee heb gemaakt. Ik was bij veel gevaarlijke momenten betrokken, ik voelde me echt lekker vandaag.</string>
@@ -173,7 +173,5 @@
     <string name="tekst">tekst</string>
     <string name="gom">gom</string>
     <string name="pijl">pijl</string>
-    <string name="bestand_toevoegen">Bestand toevoegen</string>
-    <string name="foto_nemen">Foto nemen</string>
-    <string name="add_video">Filmen</string>
+    <string name="in_de_prullenmand">in de prullenmand</string>
 </resources>

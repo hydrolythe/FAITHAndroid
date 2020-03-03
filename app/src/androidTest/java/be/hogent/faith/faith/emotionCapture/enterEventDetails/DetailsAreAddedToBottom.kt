@@ -43,7 +43,7 @@ class DetailsAreAddedToBottom {
         // TODO: replace sleep with IdlingResource implementation
         // See https://developer.android.com/reference/androidx/test/espresso/idling/CountingIdlingResource.html
         Thread.sleep(3000)
-        onView(withId(R.id.btn_takePhoto_Ok)).perform(click())
+        onView(withId(R.id.btn_takePhoto_Ok_Save)).perform(click())
         Thread.sleep(3000)
         // Check if thumbnail was added
         onView(withId(R.id.recyclerView_event_details_details)).check(RecyclerViewItemCountAssertion(1))
