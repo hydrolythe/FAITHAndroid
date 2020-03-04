@@ -2,12 +2,16 @@ package be.hogent.faith.faith.backpackScreen
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
+import android.widget.ImageButton
 import android.widget.PopupMenu
+import android.widget.PopupWindow
 import android.widget.SearchView
 import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
@@ -44,8 +48,13 @@ class BackpackScreenFragment : Fragment() {
     //   private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
-
+    private lateinit var popUpWindow : PopupWindow
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
+
+    private lateinit var btnAdd : ImageButton
+    private lateinit var btnDelete : ImageButton
+    private lateinit var btnSearch : ImageButton
+    private lateinit var btnBack : ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,6 +63,8 @@ class BackpackScreenFragment : Fragment() {
     ): View? {
         backpackBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_backpack, container, false)
+
+
 
         backpackBinding.backpackViewModel = backpackViewModel
         backpackBinding.lifecycleOwner = this@BackpackScreenFragment
@@ -97,10 +108,30 @@ class BackpackScreenFragment : Fragment() {
             detailThumbnailsAdapter?.updateDetailsList(details)
         })
 
+        btnAdd = backpackBinding.btnAdd
+        btnBack = backpackBinding.btnDrawCancel
+        btnDelete = backpackBinding.btnDelete
+        btnSearch = backpackBinding.btnSearch
+
         backpackBinding.btnAdd.setOnClickListener {
-            onAddClicked()
-            rotateBtnForward(backpackBinding.btnAdd)
+            onAddClicked(it)
         }
+
+        backpackBinding.btnDrawCancel.setOnClickListener {
+            backpackViewModel.goToCityScreen()
+        }
+
+        backpackViewModel.disableUi.observe(this, Observer {
+            disableButtons()
+            hideRV()
+        })
+
+
+
+        backpackViewModel.enableUi.observe(this, Observer {
+            enableButtons()
+            showRV()
+        })
 
         backpackBinding.backpackMenuFilter.search_bar.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
@@ -132,29 +163,47 @@ class BackpackScreenFragment : Fragment() {
         1
     }
 
-    private fun rotateBtnForward(view: View) {
-        ViewCompat.animate(view)
-            .rotation(135.0F)
-            .withLayer()
-            .setDuration(300L)
-            .setInterpolator(OvershootInterpolator(10.0F))
-            .start()
+    private fun hideRV() {
+        backpackBinding.recyclerviewBackpack.visibility = View.GONE
     }
 
-    private fun rotateBtnBackwards(view: View) {
-        ViewCompat.animate(view)
-            .rotation(0.0F)
-            .withLayer()
-            .setDuration(300L)
-            .setInterpolator(OvershootInterpolator(10.0F))
-            .start()
+    private fun showRV(){
+        backpackBinding.recyclerviewBackpack.visibility = View.VISIBLE
     }
 
-    private fun onAddClicked() {
-        val popUpMenu = PopupMenu(activity, backpackBinding.btnAdd)
-        popUpMenu.menuInflater.inflate(R.menu.menu_backpack, popUpMenu.menu)
+    private fun disableButtons() {
+        disable(btnAdd)
+        disable(btnBack)
+        disable(btnDelete)
+        disable(btnSearch)
+    }
 
-        popUpMenu.setOnMenuItemClickListener { item ->
+    private fun disable(btn : ImageButton){
+        btn.isClickable = false
+        btn.isEnabled = false
+    }
+
+    private fun enableButtons(){
+        enable(btnAdd)
+        enable(btnBack)
+        enable(btnDelete)
+        enable(btnSearch)
+    }
+
+    private fun enable(btn : ImageButton){
+        btn.isClickable = true
+        btn.isEnabled = true
+    }
+
+    fun onAddClicked(view: View) = PopupMenu(view.context, view).run {
+        backpackBinding.btnAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
+        menuInflater.inflate(R.menu.menu_backpack, menu)
+
+        setOnDismissListener {
+            backpackBinding.btnAdd.background = resources.getDrawable(R.drawable.add_btn, null)
+        }
+
+        setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.backpack_menu_addAudio ->
                     navigation?.startAudioDetailFragment()
@@ -171,7 +220,19 @@ class BackpackScreenFragment : Fragment() {
             }
             true
         }
-        popUpMenu.show()
+        try {
+            val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
+            fieldMPopup.isAccessible = true
+            val mPopup = fieldMPopup.get(this)
+            mPopup.javaClass
+                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                .invoke(mPopup, true)
+
+        } catch (e: Exception){
+            Log.e("Main", "Error showing menu icons.", e)
+        } finally {
+            show()
+        }
     }
 
     interface BackpackDetailsNavigationListener {

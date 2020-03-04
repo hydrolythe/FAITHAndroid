@@ -123,7 +123,7 @@
             android:background="@drawable/add_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/add_btn" />
+  />
 
         <ImageButton
             android:id="@+id/btn_draw_cancel"

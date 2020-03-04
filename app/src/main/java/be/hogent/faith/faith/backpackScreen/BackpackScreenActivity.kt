@@ -139,5 +139,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     fun save(detail: AudioDetail){
         backpackViewModel.saveAudioDetail(detail)
     }
+    
+    
 
 }
