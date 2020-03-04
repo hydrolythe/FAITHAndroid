@@ -149,4 +149,8 @@ class BackpackViewModel(
         super.onCleared()
     }
 
+    fun removeDetail() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 }

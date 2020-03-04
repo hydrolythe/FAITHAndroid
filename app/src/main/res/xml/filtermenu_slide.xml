@@ -9,7 +9,18 @@
 
         <OnClick
             app:clickAction="toggle"
-            app:targetId="@+id/btn_search" />
+            app:targetId="@+id/btn_backpack_search" />
+
+    </Transition>
+    <Transition
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@id/start"
+        app:duration="1000">
+
+        <OnClick
+            app:clickAction="toggle"
+            app:targetId="@+id/search_close_btn" />
+
     </Transition>
 
     <ConstraintSet android:id="@+id/start">

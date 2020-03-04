@@ -12,6 +12,7 @@ import android.widget.SearchView
 import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
@@ -46,7 +47,6 @@ class BackpackScreenFragment : Fragment() {
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
 
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -81,6 +81,8 @@ class BackpackScreenFragment : Fragment() {
             requireNotNull(activity) as BackpackScreenActivity
         )
         backpackBinding.recyclerviewBackpack.layoutManager = GridLayoutManager(activity, 5)
+
+
         backpackBinding.recyclerviewBackpack.adapter = detailThumbnailsAdapter
 
     }
@@ -97,9 +99,9 @@ class BackpackScreenFragment : Fragment() {
             detailThumbnailsAdapter?.updateDetailsList(details)
         })
 
-        backpackBinding.btnAdd.setOnClickListener {
+        backpackBinding.btnBackpackAdd.setOnClickListener {
             onAddClicked()
-            rotateBtnForward(backpackBinding.btnAdd)
+            rotateBtnForward(backpackBinding.btnBackpackAdd)
         }
 
         backpackBinding.backpackMenuFilter.search_bar.setOnQueryTextListener(object :
@@ -129,7 +131,7 @@ class BackpackScreenFragment : Fragment() {
         backpackBinding.backpackMenuFilter.filterknop_tekeningen.setOnClickListener {
             detailThumbnailsAdapter!!.filterType(DRAW_DETAIL)
         }
-        1
+
     }
 
     private fun rotateBtnForward(view: View) {
@@ -151,7 +153,7 @@ class BackpackScreenFragment : Fragment() {
     }
 
     private fun onAddClicked() {
-        val popUpMenu = PopupMenu(activity, backpackBinding.btnAdd)
+        val popUpMenu = PopupMenu(activity, backpackBinding.btnBackpackAdd)
         popUpMenu.menuInflater.inflate(R.menu.menu_backpack, popUpMenu.menu)
 
         popUpMenu.setOnMenuItemClickListener { item ->

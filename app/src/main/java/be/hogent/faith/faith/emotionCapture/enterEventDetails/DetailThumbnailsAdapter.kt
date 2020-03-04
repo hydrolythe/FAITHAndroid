@@ -73,10 +73,10 @@ class DetailThumbnailsAdapter(
     }
     fun filterType(type: Int){
         when(type){
-             AUDIO_DETAIL -> _details = _detailsCopy.filterIsInstance<AudioDetail>().toMutableList()
-             DRAW_DETAIL ->_details = _detailsCopy.filterIsInstance<DrawingDetail>().toMutableList()
-             TEXT_DETAIL -> _details = _detailsCopy.filterIsInstance<TextDetail>().toMutableList()
-             PICTURE_DETAIL -> _details = _detailsCopy.filterIsInstance<PhotoDetail>().toMutableList()
+             AUDIO_DETAIL -> if(_details == _detailsCopy.toMutableList()) _details = _detailsCopy.filterIsInstance<AudioDetail>().toMutableList() else _details = _detailsCopy
+             DRAW_DETAIL ->  if(_details == _detailsCopy.toMutableList()) _details = _detailsCopy.filterIsInstance<DrawingDetail>().toMutableList() else _details = _detailsCopy
+             TEXT_DETAIL ->  if(_details == _detailsCopy.toMutableList()) _details = _detailsCopy.filterIsInstance<TextDetail>().toMutableList() else _details = _detailsCopy
+             PICTURE_DETAIL -> if(_details == _detailsCopy.toMutableList()) _details = _detailsCopy.filterIsInstance<PhotoDetail>().toMutableList() else _details = _detailsCopy
         }
         notifyDataSetChanged()
     }

@@ -33,10 +33,10 @@ class BackpackScreenFragmentTest : KoinTest {
 
     @Test
     fun backpackFragment_canClickAllButtons() {
-        onView(withId(R.id.btn_draw_cancel)).perform(click())
-        onView(withId(R.id.btn_search)).perform(click())
-        onView(withId(R.id.btn_add)).perform(click())
-        onView(withId(R.id.btn_delete)).perform(click())
+        onView(withId(R.id.btn_backpack_draw_cancel)).perform(click())
+        onView(withId(R.id.btn_backpack_search)).perform(click())
+        onView(withId(R.id.btn_backpack_add)).perform(click())
+        onView(withId(R.id.btn_backpack_delete)).perform(click())
 
     }
 }
