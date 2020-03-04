@@ -13,6 +13,7 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.PopupWindow
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -49,7 +50,8 @@ class BackpackScreenFragment : Fragment() {
     //   private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
-    private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
+
+    private var backpackDetailAdapter : BackpackDetailAdapter? = null
 
     private lateinit var btnAdd : ImageButton
     private lateinit var btnDelete : ImageButton
@@ -84,24 +86,32 @@ class BackpackScreenFragment : Fragment() {
     }
 
     private fun updateUI() {
-        detailThumbnailsAdapter = DetailThumbnailsAdapter(
-            emptyList(),
-            requireNotNull(activity) as BackpackScreenActivity
-        )
+        backpackDetailAdapter =
+            BackpackDetailAdapter(emptyList(), object : DetailListener {
+                override fun deleteDetail(detail: Detail) {
+                   val toast = Toast.makeText(context, "delete", Toast.LENGTH_SHORT)
+                    toast.show()
+                }
+
+                override fun viewDetail(detail: Detail) {
+                    val toast = Toast.makeText(context, "view", Toast.LENGTH_SHORT)
+                    toast.show()
+                }
+            })
         backpackBinding.recyclerviewBackpack.layoutManager = GridLayoutManager(activity, 5)
-        backpackBinding.recyclerviewBackpack.adapter = detailThumbnailsAdapter
+        backpackBinding.recyclerviewBackpack.adapter = backpackDetailAdapter
     }
 
     override fun onStop() {
         super.onStop()
-        detailThumbnailsAdapter = null
+        backpackDetailAdapter = null
     }
 
     private fun startListeners() {
         // TODO Update adapter when backpack changes, change this to userviewmodel when working with real data
 
         backpackViewModel.details.observe(this, Observer { details ->
-            detailThumbnailsAdapter?.updateDetailsList(details)
+            backpackDetailAdapter?.updateDetailsList(details)
         })
 
         btnAdd = backpackBinding.btnBackpackAdd
@@ -128,7 +138,7 @@ class BackpackScreenFragment : Fragment() {
             showRV()
         })
 
-        backpackBinding.backpackMenuFilter.search_bar.setOnQueryTextListener(object :
+        /*backpackBinding.backpackMenuFilter.search_bar.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
@@ -154,7 +164,7 @@ class BackpackScreenFragment : Fragment() {
         }
         backpackBinding.backpackMenuFilter.filterknop_tekeningen.setOnClickListener {
             detailThumbnailsAdapter!!.filterType(DRAW_DETAIL)
-        }
+        }*/
     }
 
     private fun hideRV() {
