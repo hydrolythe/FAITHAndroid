@@ -178,6 +178,22 @@
     <string name="foto_nemen">Foto nemen</string>
     <string name="add_video">Filmen</string>
     <string name="title_backpack">Backpack</string>
+<<<<<<< HEAD
     <string name="add_detail_menu_backpack">Detail toevoegen aan rugzak</string>
+=======
+    <string name="filter_menu_background">Filter menu achtergrond</string>
+    <string name="filter_menu_content">Filter menu inhoud</string>
+    <string name="filter_boy">Filter jongen afbeelding</string>
+    <string name="filter_btn_text">Filter knop tekst</string>
+    <string name="filter_btn_audio">Filter knop audio</string>
+    <string name="filter_btn_foto">Filter knop foto</string>
+    <string name="filter_btn_drawing">Filter knop tekening</string>
+    <string name="filter_btn_video">Filter knop video</string>
+    <string name="filter_btn_file">Filter knop bestand</string>
+    <string name="close_filter_btn">Knop sluit filter menu</string>
+    <string name="backpack_btn_delete">Verwijderknop rugzak</string>
+    <string name="backpack_btn_open_filter">Open zoekmenu rugzak</string>
+    <string name="backpack_btn_add">"Knop voeg toe "</string>
+>>>>>>> c7f3ce4c8f79ef315e1ec753467b7184fe0e0dcb
 
 </resources>

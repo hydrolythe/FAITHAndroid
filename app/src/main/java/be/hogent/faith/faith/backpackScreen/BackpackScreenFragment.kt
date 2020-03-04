@@ -16,6 +16,7 @@ import android.widget.SearchView
 import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
@@ -48,7 +49,6 @@ class BackpackScreenFragment : Fragment() {
     //   private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
-    private lateinit var popUpWindow : PopupWindow
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
 
     private lateinit var btnAdd : ImageButton
@@ -63,8 +63,6 @@ class BackpackScreenFragment : Fragment() {
     ): View? {
         backpackBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_backpack, container, false)
-
-
 
         backpackBinding.backpackViewModel = backpackViewModel
         backpackBinding.lifecycleOwner = this@BackpackScreenFragment
@@ -86,14 +84,12 @@ class BackpackScreenFragment : Fragment() {
     }
 
     private fun updateUI() {
-
         detailThumbnailsAdapter = DetailThumbnailsAdapter(
             emptyList(),
             requireNotNull(activity) as BackpackScreenActivity
         )
         backpackBinding.recyclerviewBackpack.layoutManager = GridLayoutManager(activity, 5)
         backpackBinding.recyclerviewBackpack.adapter = detailThumbnailsAdapter
-
     }
 
     override fun onStop() {
@@ -108,16 +104,17 @@ class BackpackScreenFragment : Fragment() {
             detailThumbnailsAdapter?.updateDetailsList(details)
         })
 
-        btnAdd = backpackBinding.btnAdd
-        btnBack = backpackBinding.btnDrawCancel
-        btnDelete = backpackBinding.btnDelete
-        btnSearch = backpackBinding.btnSearch
+        btnAdd = backpackBinding.btnBackpackAdd
+        btnBack = backpackBinding.btnBackpackDrawCancel
+        btnDelete = backpackBinding.btnBackpackDelete
+        btnSearch = backpackBinding.btnBackpackSearch
 
-        backpackBinding.btnAdd.setOnClickListener {
+
+        backpackBinding.btnBackpackAdd.setOnClickListener {
             onAddClicked(it)
         }
 
-        backpackBinding.btnDrawCancel.setOnClickListener {
+        backpackBinding.btnBackpackDrawCancel.setOnClickListener {
             backpackViewModel.goToCityScreen()
         }
 
@@ -125,8 +122,6 @@ class BackpackScreenFragment : Fragment() {
             disableButtons()
             hideRV()
         })
-
-
 
         backpackViewModel.enableUi.observe(this, Observer {
             enableButtons()
@@ -160,7 +155,6 @@ class BackpackScreenFragment : Fragment() {
         backpackBinding.backpackMenuFilter.filterknop_tekeningen.setOnClickListener {
             detailThumbnailsAdapter!!.filterType(DRAW_DETAIL)
         }
-        1
     }
 
     private fun hideRV() {
@@ -196,11 +190,11 @@ class BackpackScreenFragment : Fragment() {
     }
 
     fun onAddClicked(view: View) = PopupMenu(view.context, view).run {
-        backpackBinding.btnAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
+        backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
         menuInflater.inflate(R.menu.menu_backpack, menu)
 
         setOnDismissListener {
-            backpackBinding.btnAdd.background = resources.getDrawable(R.drawable.add_btn, null)
+            backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.add_btn, null)
         }
 
         setOnMenuItemClickListener { item ->
@@ -253,8 +247,6 @@ class BackpackScreenFragment : Fragment() {
             return BackpackScreenFragment()
         }
     }
-
-
 }
 
 

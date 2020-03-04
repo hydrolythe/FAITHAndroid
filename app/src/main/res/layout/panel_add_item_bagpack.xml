@@ -21,7 +21,7 @@
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_items_horizontal_start"
+                android:id="@+id/guide_filter_btn_horizontal_1"
                 android:layout_width="8dp"
                 android:layout_height="12dp"
                 android:orientation="horizontal"
@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/add_file_btn"
                 app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_start"
-                app:layout_constraintTop_toTopOf="@+id/guide_items_horizontal_start"
+                app:layout_constraintTop_toTopOf="@+id/guide_filter_btn_horizontal_1"
                 app:srcCompat="@drawable/add_file_btn" />
 
             <TextView
@@ -58,7 +58,7 @@
                 android:text="TextView"
                 app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_end"
                 app:layout_constraintStart_toEndOf="@+id/add_file_btn"
-                app:layout_constraintTop_toTopOf="@+id/guide_items_horizontal_start"
+                app:layout_constraintTop_toTopOf="@+id/guide_filter_btn_horizontal_1"
                 tools:text="Bestand toevoegen" />
 
 

@@ -48,14 +48,14 @@
             app:layout_constraintGuide_percent="0.02" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide_items_horizontal_start"
+            android:id="@+id/guide_rv_horizontal_1"
             android:layout_width="8dp"
             android:layout_height="12dp"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.34" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide_items_horizontal_end"
+            android:id="@+id/guide_rv_horizontal_2"
             android:layout_width="8dp"
             android:layout_height="12dp"
             android:orientation="horizontal"
@@ -93,22 +93,23 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scrollbars="horizontal|vertical"
-            app:layout_constraintBottom_toTopOf="@+id/guide_items_horizontal_end"
+
+            app:layout_constraintBottom_toTopOf="@+id/guide_rv_horizontal_2"
             app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_end"
             app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_start"
-            app:layout_constraintTop_toTopOf="@+id/guide_items_horizontal_start" />
+            app:layout_constraintTop_toTopOf="@+id/guide_rv_horizontal_1" />
 
         <ImageButton
-            android:id="@+id/btn_delete"
+            android:id="@+id/btn_backpack_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/prullenbak"
-            app:layout_constraintBottom_toTopOf="@+id/guide_items_horizontal_end"
             app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_end"
+            app:layout_constraintTop_toTopOf="@+id/guide_rv_horizontal_2"
             app:srcCompat="@drawable/prullenbak" />
 
         <ImageButton
-            android:id="@+id/btn_search"
+            android:id="@+id/btn_backpack_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/search_btn"
@@ -117,7 +118,7 @@
             app:srcCompat="@drawable/search_btn" />
 
         <ImageButton
-            android:id="@+id/btn_add"
+            android:id="@+id/btn_backpack_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/add_btn"
@@ -126,7 +127,7 @@
   />
 
         <ImageButton
-            android:id="@+id/btn_draw_cancel"
+            android:id="@+id/btn_backpack_draw_cancel"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
             android:background="@drawable/ic_return"
