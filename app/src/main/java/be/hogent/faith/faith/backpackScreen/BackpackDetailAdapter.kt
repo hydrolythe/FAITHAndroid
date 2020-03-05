@@ -33,14 +33,15 @@ object BackpackDetailTypes {
     const val DRAW_DETAIL = 4
 }
 
-class BackpackDetailAdapter(details: List<Detail>, val clickListener : DetailListener): ListAdapter<Detail, BackpackDetailAdapter.BackpackDetailViewHolder>(BackpackDiffCallback()) {
+class BackpackDetailAdapter(details: List<Detail>, val clickListener: DetailListener) :
+    ListAdapter<Detail, BackpackDetailAdapter.BackpackDetailViewHolder>(BackpackDiffCallback()) {
 
     private var _details = details.toMutableList()
-
+    private var _detailsCopy = details.toMutableList()
     fun updateDetailsList(newDetails: List<Detail>) {
         val diffCallback = ThumbnailDiffCallback(_details, newDetails)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-      //  _detailsCopy.addAll(newDetails)
+        _detailsCopy.addAll(newDetails)
         _details.clear()
         _details.addAll(newDetails)
         diffResult.dispatchUpdatesTo(this)
@@ -56,7 +57,7 @@ class BackpackDetailAdapter(details: List<Detail>, val clickListener : DetailLis
         }
     }
 
-    override fun onBindViewHolder(holder: BackpackDetailViewHolder, position : Int){
+    override fun onBindViewHolder(holder: BackpackDetailViewHolder, position: Int) {
 
         holder.binding.backpackDetail.setOnClickListener {
             clickListener.viewDetail(getItem(position)!!)
@@ -69,11 +70,14 @@ class BackpackDetailAdapter(details: List<Detail>, val clickListener : DetailLis
         holder.fillViewItems(getItem(position)!!, clickListener)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BackpackDetailViewHolder{
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BackpackDetailViewHolder {
         return BackpackDetailViewHolder.from(parent, viewType)
     }
 
-    class BackpackDetailViewHolder private constructor(val binding: DetailItemBinding, private val viewType: Int): RecyclerView.ViewHolder(binding.root),
+    class BackpackDetailViewHolder private constructor(
+        val binding: DetailItemBinding,
+        private val viewType: Int
+    ) : RecyclerView.ViewHolder(binding.root),
         KoinComponent {
 
         private val androidTempFileProvider: TempFileProvider by inject()
@@ -87,25 +91,41 @@ class BackpackDetailAdapter(details: List<Detail>, val clickListener : DetailLis
 
             when (viewType) {
                 DetailTypes.AUDIO_DETAIL -> (
-                        Glide.with(binding.backpackDetail).load(R.drawable.event_detail_audio).into(binding.backpackDetail)
+                        Glide.with(binding.backpackDetail).load(R.drawable.event_detail_audio).into(
+                            binding.backpackDetail
+                        )
                         )
 
                 DetailTypes.PICTURE_DETAIL -> (
                         Glide.with(binding.backpackDetail)
                             .load(androidTempFileProvider.getFile(binding.detail!! as PhotoDetail))
                             // Signature is required to force Glide to reload overwritten pictures
-                            .signature(MediaStoreSignature("", binding.detail!!.file.lastModified(), 0))
+                            .signature(
+                                MediaStoreSignature(
+                                    "",
+                                    binding.detail!!.file.lastModified(),
+                                    0
+                                )
+                            )
                             .into(binding.backpackDetail)
                         )
                 DetailTypes.DRAW_DETAIL -> (
                         Glide.with(binding.backpackDetail)
                             .load(androidTempFileProvider.getFile(binding.detail!! as DrawingDetail))
                             // Signature is required to force Glide to reload overwritten pictures
-                            .signature(MediaStoreSignature("", binding.detail!!.file.lastModified(), 0))
+                            .signature(
+                                MediaStoreSignature(
+                                    "",
+                                    binding.detail!!.file.lastModified(),
+                                    0
+                                )
+                            )
                             .into(binding.backpackDetail)
                         )
                 // TEXT_DETAIL
-                else -> (Glide.with(binding.backpackDetail).load(R.drawable.event_detail_text).into(binding.backpackDetail)
+                else -> (Glide.with(binding.backpackDetail).load(R.drawable.event_detail_text).into(
+                    binding.backpackDetail
+                )
                         )
             }
 
@@ -121,6 +141,40 @@ class BackpackDetailAdapter(details: List<Detail>, val clickListener : DetailLis
                 return BackpackDetailViewHolder(binding, viewType)
             }
         }
+    }
+
+    fun filterSearchBar(text: String) {
+        //TODO update for detail.title
+        _details.clear()
+        if (text.isEmpty()) {
+            _details.addAll(_detailsCopy)
+        } else {
+            for (detail in _detailsCopy) {
+                if (detail.uuid.toString().toLowerCase().contains(text.toLowerCase())) {
+                    _details.add(detail)
+                }
+            }
+        }
+        notifyDataSetChanged()
+
+    }
+
+    fun filterType(type: Int) {
+        when (type) {
+            be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.AUDIO_DETAIL -> if (_details == _detailsCopy.toMutableList()) _details =
+                _detailsCopy.filterIsInstance<AudioDetail>().toMutableList() else _details =
+                _detailsCopy
+            be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.DRAW_DETAIL -> if (_details == _detailsCopy.toMutableList()) _details =
+                _detailsCopy.filterIsInstance<DrawingDetail>().toMutableList() else _details =
+                _detailsCopy
+            be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.TEXT_DETAIL -> if (_details == _detailsCopy.toMutableList()) _details =
+                _detailsCopy.filterIsInstance<TextDetail>().toMutableList() else _details =
+                _detailsCopy
+            be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.PICTURE_DETAIL -> if (_details == _detailsCopy.toMutableList()) _details =
+                _detailsCopy.filterIsInstance<PhotoDetail>().toMutableList() else _details =
+                _detailsCopy
+        }
+        notifyDataSetChanged()
     }
 }
 
@@ -138,6 +192,6 @@ class BackpackDiffCallback : DiffUtil.ItemCallback<Detail>() {
  * Creates onclicklisteners for all the attributes of a beat
  * */
 interface DetailListener {
-    fun deleteDetail(detail : Detail)
-    fun viewDetail (detail : Detail)
+    fun deleteDetail(detail: Detail)
+    fun viewDetail(detail: Detail)
 }

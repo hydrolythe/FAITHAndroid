@@ -137,33 +137,33 @@ class BackpackScreenFragment : Fragment() {
             showRV()
         })
 
-        /*backpackBinding.backpackMenuFilter.search_bar.setOnQueryTextListener(object :
+        backpackBinding.backpackMenuFilter.search_bar.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
-                detailThumbnailsAdapter!!.filterSearchBar(newText)
+                backpackDetailAdapter!!.filterSearchBar(newText)
                 return true
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                detailThumbnailsAdapter!!.filterSearchBar(query)
+                backpackDetailAdapter!!.filterSearchBar(query)
                 return true
             }
 
         })
 
         backpackBinding.backpackMenuFilter.filterknop_teksten.setOnClickListener {
-            detailThumbnailsAdapter!!.filterType(TEXT_DETAIL)
+            backpackDetailAdapter!!.filterType(TEXT_DETAIL)
         }
         backpackBinding.backpackMenuFilter.filterknop_audio.setOnClickListener {
-            detailThumbnailsAdapter!!.filterType(AUDIO_DETAIL)
+            backpackDetailAdapter!!.filterType(AUDIO_DETAIL)
         }
         backpackBinding.backpackMenuFilter.filterknop_foto.setOnClickListener {
-            detailThumbnailsAdapter!!.filterType(PICTURE_DETAIL)
+            backpackDetailAdapter!!.filterType(PICTURE_DETAIL)
         }
         backpackBinding.backpackMenuFilter.filterknop_tekeningen.setOnClickListener {
-            detailThumbnailsAdapter!!.filterType(DRAW_DETAIL)
-        }*/
+            backpackDetailAdapter!!.filterType(DRAW_DETAIL)
+        }
     }
 
     private fun hideRV() {
