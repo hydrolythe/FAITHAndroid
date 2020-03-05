@@ -51,11 +51,6 @@ class BackpackScreenFragment : Fragment() {
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
 
-    private lateinit var btnAdd : ImageButton
-    private lateinit var btnDelete : ImageButton
-    private lateinit var btnSearch : ImageButton
-    private lateinit var btnBack : ImageButton
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -103,12 +98,6 @@ class BackpackScreenFragment : Fragment() {
         backpackViewModel.details.observe(this, Observer { details ->
             detailThumbnailsAdapter?.updateDetailsList(details)
         })
-
-        btnAdd = backpackBinding.btnBackpackAdd
-        btnBack = backpackBinding.btnBackpackDrawCancel
-        btnDelete = backpackBinding.btnBackpackDelete
-        btnSearch = backpackBinding.btnBackpackSearch
-
 
         backpackBinding.btnBackpackAdd.setOnClickListener {
             onAddClicked(it)
@@ -166,10 +155,10 @@ class BackpackScreenFragment : Fragment() {
     }
 
     private fun disableButtons() {
-        disable(btnAdd)
-        disable(btnBack)
-        disable(btnDelete)
-        disable(btnSearch)
+        disable(backpackBinding.btnBackpackAdd)
+        disable(backpackBinding.btnBackpackDrawCancel)
+        disable(backpackBinding.btnBackpackDelete)
+        disable(backpackBinding.btnBackpackSearch)
     }
 
     private fun disable(btn : ImageButton){
@@ -178,10 +167,10 @@ class BackpackScreenFragment : Fragment() {
     }
 
     private fun enableButtons(){
-        enable(btnAdd)
-        enable(btnBack)
-        enable(btnDelete)
-        enable(btnSearch)
+        enable(backpackBinding.btnBackpackAdd)
+        enable(backpackBinding.btnBackpackDrawCancel)
+        enable(backpackBinding.btnBackpackDelete)
+        enable(backpackBinding.btnBackpackSearch)
     }
 
     private fun enable(btn : ImageButton){
@@ -189,7 +178,7 @@ class BackpackScreenFragment : Fragment() {
         btn.isEnabled = true
     }
 
-    fun onAddClicked(view: View) = PopupMenu(view.context, view).run {
+    private fun onAddClicked(view: View) = PopupMenu(view.context, view).run {
         backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
         menuInflater.inflate(R.menu.menu_backpack, menu)
 
@@ -226,6 +215,7 @@ class BackpackScreenFragment : Fragment() {
             Log.e("Main", "Error showing menu icons.", e)
         } finally {
             show()
+            disableButtons()
         }
     }
 

@@ -54,10 +54,7 @@ abstract class BackpackDetailFragment : Fragment() {
                 is DrawingDetail -> DrawingFragmentNoEmotionAvatar.newInstance()
                 is PhotoDetail -> PhotoFragmentNoEmotionAvatar.newInstance()
                 is AudioDetail -> AudioFragmentNoEmotionAvatar.newInstance()
-                //TODO change
-                else -> TextFragmentNoEmotionAvatar.newInstance()
             }
-
         }
     }
 
