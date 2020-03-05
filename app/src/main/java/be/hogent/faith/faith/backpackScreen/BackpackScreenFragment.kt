@@ -13,7 +13,6 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.PopupWindow
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -50,8 +49,7 @@ class BackpackScreenFragment : Fragment() {
     //   private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
-
-    private var backpackDetailAdapter : BackpackDetailAdapter? = null
+    private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
 
     private lateinit var btnAdd : ImageButton
     private lateinit var btnDelete : ImageButton
@@ -86,31 +84,24 @@ class BackpackScreenFragment : Fragment() {
     }
 
     private fun updateUI() {
-        backpackDetailAdapter =
-            BackpackDetailAdapter(emptyList(), object : DetailListener {
-                override fun deleteDetail(detail: Detail) {
-                   val toast = Toast.makeText(context, "delete", Toast.LENGTH_SHORT)
-                    toast.show()
-                }
-
-                override fun viewDetail(detail: Detail) {
-                    backpackViewModel.viewDetail(detail)
-                }
-            })
+        detailThumbnailsAdapter = DetailThumbnailsAdapter(
+            emptyList(),
+            requireNotNull(activity) as BackpackScreenActivity
+        )
         backpackBinding.recyclerviewBackpack.layoutManager = GridLayoutManager(activity, 5)
-        backpackBinding.recyclerviewBackpack.adapter = backpackDetailAdapter
+        backpackBinding.recyclerviewBackpack.adapter = detailThumbnailsAdapter
     }
 
     override fun onStop() {
         super.onStop()
-        backpackDetailAdapter = null
+        detailThumbnailsAdapter = null
     }
 
     private fun startListeners() {
         // TODO Update adapter when backpack changes, change this to userviewmodel when working with real data
 
         backpackViewModel.details.observe(this, Observer { details ->
-            backpackDetailAdapter?.updateDetailsList(details)
+            detailThumbnailsAdapter?.updateDetailsList(details)
         })
 
         btnAdd = backpackBinding.btnBackpackAdd
@@ -141,28 +132,28 @@ class BackpackScreenFragment : Fragment() {
             SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
-                backpackDetailAdapter!!.filterSearchBar(newText)
+                detailThumbnailsAdapter!!.filterSearchBar(newText)
                 return true
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                backpackDetailAdapter!!.filterSearchBar(query)
+                detailThumbnailsAdapter!!.filterSearchBar(query)
                 return true
             }
 
         })
 
         backpackBinding.backpackMenuFilter.filterknop_teksten.setOnClickListener {
-            backpackDetailAdapter!!.filterType(TEXT_DETAIL)
+            detailThumbnailsAdapter!!.filterType(TEXT_DETAIL)
         }
         backpackBinding.backpackMenuFilter.filterknop_audio.setOnClickListener {
-            backpackDetailAdapter!!.filterType(AUDIO_DETAIL)
+            detailThumbnailsAdapter!!.filterType(AUDIO_DETAIL)
         }
         backpackBinding.backpackMenuFilter.filterknop_foto.setOnClickListener {
-            backpackDetailAdapter!!.filterType(PICTURE_DETAIL)
+            detailThumbnailsAdapter!!.filterType(PICTURE_DETAIL)
         }
         backpackBinding.backpackMenuFilter.filterknop_tekeningen.setOnClickListener {
-            backpackDetailAdapter!!.filterType(DRAW_DETAIL)
+            detailThumbnailsAdapter!!.filterType(DRAW_DETAIL)
         }
     }
 
@@ -257,15 +248,3 @@ class BackpackScreenFragment : Fragment() {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

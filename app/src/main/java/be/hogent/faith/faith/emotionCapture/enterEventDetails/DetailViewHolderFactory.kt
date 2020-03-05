@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
@@ -15,6 +16,7 @@ import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.signature.MediaStoreSignature
+import kotlinx.android.synthetic.main.detail_item_rv.view.detail_img
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -25,10 +27,10 @@ object DetailViewHolderFactory {
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): DetailViewHolder {
         val thumbnailView = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_event_detail_thumbnail,
+            R.layout.detail_item_rv,
             parent,
             false
-        ) as ImageView
+        ) as ConstraintLayout
 
         return when (viewType) {
             DetailTypes.AUDIO_DETAIL -> createAudioDetailViewHolder(
@@ -48,7 +50,7 @@ object DetailViewHolderFactory {
     }
 
     private fun createAudioDetailViewHolder(
-        thumbnailView: ImageView,
+        thumbnailView: ConstraintLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): AudioDetailViewHolder {
         thumbnailView.background = null
@@ -56,7 +58,7 @@ object DetailViewHolderFactory {
     }
 
     private fun createTextDetailViewHolder(
-        thumbnailView: ImageView,
+        thumbnailView: ConstraintLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): TextDetailViewHolder {
         thumbnailView.background = null
@@ -64,7 +66,7 @@ object DetailViewHolderFactory {
     }
 
     private fun createPictureDetailViewHolder(
-        thumbnailView: ImageView,
+        thumbnailView: ConstraintLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): PictureDetailViewHolder {
         return PictureDetailViewHolder(thumbnailView, existingDetailNavigationListener)
@@ -72,38 +74,38 @@ object DetailViewHolderFactory {
 }
 
 sealed class DetailViewHolder(
-    val imageView: ImageView,
+    val thumbnailView: ConstraintLayout,
     private val existingDetailNavigationListener: ExistingDetailNavigationListener
-) : RecyclerView.ViewHolder(imageView), KoinComponent {
+) : RecyclerView.ViewHolder(thumbnailView), KoinComponent {
 
     fun bind(detail: Detail) {
-        load(detail).into(imageView)
-        imageView.setTag(R.id.TAG_DETAIL, detail)
-        imageView.setOnClickListener {
-            existingDetailNavigationListener.openDetailScreenFor(imageView.getTag(R.id.TAG_DETAIL) as Detail)
+        load(detail).into(thumbnailView.detail_img)
+        thumbnailView.setTag(R.id.TAG_DETAIL, detail)
+        thumbnailView.setOnClickListener {
+            existingDetailNavigationListener.openDetailScreenFor(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
         }
     }
 
     abstract fun load(detail: Detail): RequestBuilder<Drawable>
 
     class TextDetailViewHolder(
-        imageView: ImageView,
+        imageView: ConstraintLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {
-            return Glide.with(imageView).load(R.drawable.event_detail_text)
+            return Glide.with(thumbnailView).load(R.drawable.event_detail_text)
         }
     }
 
     class PictureDetailViewHolder(
-        imageView: ImageView,
+        imageView: ConstraintLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
         val androidTempFileProvider: TempFileProvider by inject()
         override fun load(detail: Detail): RequestBuilder<Drawable> {
-            return Glide.with(imageView)
+            return Glide.with(thumbnailView)
                 .load(androidTempFileProvider.getFile(detail))
                 // Signature is required to force Glide to reload overwritten pictures
                 .signature(MediaStoreSignature("", detail.file.lastModified(), 0))
@@ -111,12 +113,12 @@ sealed class DetailViewHolder(
     }
 
     class AudioDetailViewHolder(
-        imageView: ImageView,
+        imageView: ConstraintLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {
-            return Glide.with(imageView).load(R.drawable.event_detail_audio)
+            return Glide.with(thumbnailView).load(R.drawable.event_detail_audio)
         }
     }
 

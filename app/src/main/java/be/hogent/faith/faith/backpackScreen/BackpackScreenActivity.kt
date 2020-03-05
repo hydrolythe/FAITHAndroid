@@ -28,11 +28,12 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     DrawFragment.DrawingScreenNavigation,
     DetailFinishedListener,
     TextDetailFragment.TextScreenNavigation,
-    TakePhotoFragment.PhotoScreenNavigation{
+    TakePhotoFragment.PhotoScreenNavigation,
+    DetailViewHolder.ExistingDetailNavigationListener {
 
     private lateinit var backpackViewModel: BackpackViewModel
 
-   // private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
+    // private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,10 +53,6 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
 
         backpackViewModel.goToCityScreen.observe(this, Observer {
             closeBackpack()
-        })
-
-        backpackViewModel.viewDetail.observe(this, Observer {
-            openDetailScreenFor(it)
         })
     }
 
@@ -142,7 +139,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     fun save(detail: AudioDetail){
         backpackViewModel.saveAudioDetail(detail)
     }
-    
-    
+
+
 
 }

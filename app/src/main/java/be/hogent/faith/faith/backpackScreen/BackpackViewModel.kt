@@ -65,15 +65,8 @@ class BackpackViewModel(
     private val _goToCityScreen = SingleLiveEvent<Any>()
     val goToCityScreen: LiveData<Any> = _goToCityScreen
 
-    private val _viewDetail = SingleLiveEvent<Detail>()
-    val viewDetail: LiveData<Detail> = _viewDetail
-
     init {
         _details.postValue(getBackPackFilesDummyUseCase.getDetails())
-    }
-
-    fun viewDetail(detail: Detail){
-        _viewDetail.postValue(detail)
     }
 
     fun disableScreenUi(){
