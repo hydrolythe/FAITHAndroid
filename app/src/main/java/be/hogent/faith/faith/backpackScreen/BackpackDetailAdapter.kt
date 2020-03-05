@@ -73,10 +73,10 @@ class BackpackDetailAdapter(details: List<Detail>, val clickListener : DetailLis
         return BackpackDetailViewHolder.from(parent, viewType)
     }
 
-    class BackpackDetailViewHolder private constructor(val binding: DetailItemBinding, val viewType: Int): RecyclerView.ViewHolder(binding.root),
+    class BackpackDetailViewHolder private constructor(val binding: DetailItemBinding, private val viewType: Int): RecyclerView.ViewHolder(binding.root),
         KoinComponent {
 
-        val androidTempFileProvider: TempFileProvider by inject()
+        private val androidTempFileProvider: TempFileProvider by inject()
 
         fun fillViewItems(
             item: Detail,

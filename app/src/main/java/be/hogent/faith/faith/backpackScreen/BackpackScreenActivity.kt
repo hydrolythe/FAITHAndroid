@@ -28,8 +28,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     DrawFragment.DrawingScreenNavigation,
     DetailFinishedListener,
     TextDetailFragment.TextScreenNavigation,
-    TakePhotoFragment.PhotoScreenNavigation,
-    DetailViewHolder.ExistingDetailNavigationListener {
+    TakePhotoFragment.PhotoScreenNavigation{
 
     private lateinit var backpackViewModel: BackpackViewModel
 
@@ -53,6 +52,10 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
 
         backpackViewModel.goToCityScreen.observe(this, Observer {
             closeBackpack()
+        })
+
+        backpackViewModel.viewDetail.observe(this, Observer {
+            openDetailScreenFor(it)
         })
     }
 

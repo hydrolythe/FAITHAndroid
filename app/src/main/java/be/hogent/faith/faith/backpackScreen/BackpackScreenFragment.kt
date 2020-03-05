@@ -94,8 +94,7 @@ class BackpackScreenFragment : Fragment() {
                 }
 
                 override fun viewDetail(detail: Detail) {
-                    val toast = Toast.makeText(context, "view", Toast.LENGTH_SHORT)
-                    toast.show()
+                    backpackViewModel.viewDetail(detail)
                 }
             })
         backpackBinding.recyclerviewBackpack.layoutManager = GridLayoutManager(activity, 5)
