@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.backpackScreen
 
+import android.view.View
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -56,11 +57,11 @@ class BackpackViewModel(
     private val _audioSavedSuccessFully = SingleLiveEvent<Int>()
     val audioDetailSavedSuccessFully: LiveData<Int> = _audioSavedSuccessFully
 
-    private val _disableUi = SingleLiveEvent<Any>()
-    val disableUi: LiveData<Any> = _disableUi
+    private val _viewButtons = MutableLiveData<Boolean>()
+    val viewButtons : LiveData<Boolean> = _viewButtons
 
-    private val _enableUi = SingleLiveEvent<Any>()
-    val enableUi: LiveData<Any> = _enableUi
+    private val _openAddDetailMenu = MutableLiveData<View>()
+    val openAddDetailMenu : LiveData<View> = _openAddDetailMenu
 
     private val _goToCityScreen = SingleLiveEvent<Any>()
     val goToCityScreen: LiveData<Any> = _goToCityScreen
@@ -69,12 +70,12 @@ class BackpackViewModel(
         _details.postValue(getBackPackFilesDummyUseCase.getDetails())
     }
 
-    fun disableScreenUi(){
-        _disableUi.call()
+    fun openAddDetailMenu(view : View){
+        _openAddDetailMenu.postValue(view)
     }
 
-    fun enableUi(){
-        _enableUi.call()
+    fun viewButtons(viewButtons: Boolean){
+        _viewButtons.postValue(viewButtons)
     }
 
     fun goToCityScreen(){
