@@ -1,22 +1,21 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.OvershootInterpolator
-import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.PopupWindow
 import android.widget.SearchView
-import androidx.core.view.ViewCompat
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
@@ -30,7 +29,6 @@ import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_foto
 import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_tekeningen
 import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_teksten
 import kotlinx.android.synthetic.main.backpack_menu_filter.view.search_bar
-import kotlinx.android.synthetic.main.backpack_menu_filter.view.search_close_btn
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 
@@ -59,8 +57,14 @@ class BackpackScreenFragment : Fragment() {
         backpackBinding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_backpack, container, false)
 
+        backpackViewModel.viewButtons(true)
+
         backpackBinding.backpackViewModel = backpackViewModel
         backpackBinding.lifecycleOwner = this@BackpackScreenFragment
+
+        backpackViewModel.openAddDetailMenu.observe(this, Observer {
+            onAddClicked(it)
+        })
 
         return backpackBinding.root
     }
@@ -100,7 +104,7 @@ class BackpackScreenFragment : Fragment() {
         })
 
         backpackBinding.btnBackpackAdd.setOnClickListener {
-            onAddClicked(it)
+            backpackViewModel.openAddDetailMenu(it)
         }
 
         backpackBinding.btnBackpackDrawCancel.setOnClickListener {
@@ -144,7 +148,8 @@ class BackpackScreenFragment : Fragment() {
         }
     }
 
-      private fun onAddClicked(view: View) = PopupMenu(view.context, view).run {
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
+    private fun onAddClicked(view: View) = PopupMenu(view.context, view, Gravity.END, 0, R.style.PopupMenu_AddDetail).run {
         backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
         menuInflater.inflate(R.menu.menu_backpack, menu)
 

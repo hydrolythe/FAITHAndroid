@@ -28,28 +28,6 @@
             android:background="@color/background_register_info_color">
 
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_save_bottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.5" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_save_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.8" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_back_end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.2" />
-
-
             <ImageButton
                 android:id="@+id/btn_save_backpack_cancel"
                 android:layout_width="@dimen/material_icon_width"
@@ -79,19 +57,17 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guide_back_end"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guide_save_bottom"
                 app:srcCompat="@drawable/schilder_avatar_op_ladder" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_margin="10dp"
-                app:layout_constraintBottom_toTopOf="@+id/guideline7"
-                app:layout_constraintEnd_toStartOf="@+id/guide_save_start"
-                app:layout_constraintStart_toStartOf="@+id/guide_back_end"
-                app:layout_constraintTop_toTopOf="@+id/guideline4">
+                app:layout_constraintBottom_toTopOf="@+id/btn_save_backpack_cancel"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_save_backpack">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintlayout"
@@ -126,20 +102,6 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.11" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.89" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
