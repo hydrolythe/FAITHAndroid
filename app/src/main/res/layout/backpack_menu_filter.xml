@@ -2,13 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
     android:id="@+id/include"
-    >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/filter_menu_background"
+        android:id="@+id/background_filter_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/filter_menu_background"
@@ -21,17 +20,148 @@
         app:srcCompat="@drawable/filter_achtergrond" />
 
     <ImageView
-        android:id="@+id/filter_menu_content"
+        android:id="@+id/background_content_filter_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/filter_menu_content"
         android:paddingTop="40dp"
         android:paddingBottom="30dp"
-        app:layout_constraintBottom_toBottomOf="@+id/filter_menu_background"
-        app:layout_constraintEnd_toEndOf="@+id/filter_menu_background"
-        app:layout_constraintStart_toStartOf="@+id/filter_menu_background"
-        app:layout_constraintTop_toTopOf="@+id/filter_menu_background"
+        app:layout_constraintBottom_toBottomOf="@+id/background_filter_menu"
+        app:layout_constraintEnd_toEndOf="@+id/background_filter_menu"
+        app:layout_constraintStart_toStartOf="@+id/background_filter_menu"
+        app:layout_constraintTop_toTopOf="@+id/background_filter_menu"
         app:srcCompat="@drawable/filter_inhoud" />
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/guide_tablelayout_end"
+        app:layout_constraintEnd_toEndOf="@+id/background_content_filter_menu"
+        app:layout_constraintStart_toStartOf="@+id/background_content_filter_menu"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar">
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/filterknop_teksten"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="#FFFFFF"
+
+                android:contentDescription="@string/filter_btn_text"
+                app:srcCompat="@drawable/filterknop_teksten" />
+
+            <ImageButton
+                android:id="@+id/filterknop_audio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="#FFFFFF"
+                android:contentDescription="@string/filter_btn_audio"
+                app:srcCompat="@drawable/filterknop_audio" />
+
+            <ImageButton
+                android:id="@+id/filterknop_foto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="#FFFFFF"
+
+                android:contentDescription="@string/filter_btn_foto"
+                app:srcCompat="@drawable/filterknop_foto" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/filterknop_tekeningen"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="#FFFFFF"
+
+                android:contentDescription="@string/filter_btn_drawing"
+                app:srcCompat="@drawable/filterknop_tekeningen" />
+
+            <ImageButton
+                android:id="@+id/filterknop_film"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="#FFFFFF"
+
+                android:contentDescription="@string/filter_btn_video"
+                app:srcCompat="@drawable/filterknop_film" />
+
+            <ImageButton
+                android:id="@+id/filterknop_extern_bestand"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="#FFFFFF"
+
+                android:contentDescription="@string/filter_btn_file"
+                app:srcCompat="@drawable/filterknop_extern_bestand" />
+        </TableRow>
+    </TableLayout>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_searchbar_horizontal_start"
+        android:layout_width="8dp"
+        android:layout_height="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.10" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_searchbar_horizontal"
+        android:layout_width="8dp"
+        android:layout_height="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.18" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_tablelayout_end"
+        android:layout_width="8dp"
+        android:layout_height="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.36" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guide_close_button_vertical"
+        android:layout_width="8dp"
+        android:layout_height="12dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <SearchView
+        android:id="@+id/search_bar"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/guide_searchbar_horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/tableLayout"
+        app:layout_constraintStart_toStartOf="@+id/background_content_filter_menu"
+        app:layout_constraintTop_toTopOf="@+id/guide_searchbar_horizontal_start" />
+
+    <ImageButton
+        android:id="@+id/search_close_btn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="25dp"
+        android:backgroundTint="#0000FF"
+        android:contentDescription="@string/close_filter_btn"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/guide_searchbar_horizontal_start"
+        app:layout_constraintEnd_toEndOf="@+id/background_content_filter_menu"
+        app:layout_constraintStart_toStartOf="@+id/guide_close_button_vertical"
+        app:layout_constraintTop_toTopOf="@+id/background_filter_menu"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
     <ImageView
         android:id="@+id/filter_boy"
@@ -39,154 +169,10 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/filter_boy"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/filter_menu_content"
-        app:layout_constraintStart_toStartOf="@+id/filter_menu_content"
-        app:layout_constraintTop_toTopOf="@+id/guide_filter_btn_horizontal_2"
+        app:layout_constraintEnd_toEndOf="@+id/background_content_filter_menu"
+        app:layout_constraintStart_toStartOf="@+id/background_content_filter_menu"
+        app:layout_constraintTop_toTopOf="@+id/guide_tablelayout_end"
         app:srcCompat="@drawable/filter_boy" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide_searchbar_horizontal"
-        android:layout_width="8dp"
-        android:layout_height="12dp"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.15" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide_filter_btn_horizontal_1"
-        android:layout_width="8dp"
-        android:layout_height="12dp"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.27" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide_filter_btn_horizontal_2"
-        android:layout_width="8dp"
-        android:layout_height="12dp"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.36" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide_items_vertical_1"
-        android:layout_width="8dp"
-        android:layout_height="12dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.20" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide_items_vertical_2"
-        android:layout_width="8dp"
-        android:layout_height="12dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.50" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guide_items_vertical_3"
-        android:layout_width="8dp"
-        android:layout_height="12dp"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.80" />
-
-
-    <ImageButton
-        android:id="@+id/filterknop_teksten"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FFFFFF"
-
-        android:contentDescription="@string/filter_btn_text"
-        app:layout_constraintBottom_toTopOf="@+id/guide_filter_btn_horizontal_1"
-        app:layout_constraintEnd_toStartOf="@+id/filterknop_audio"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/filter_menu_content"
-        app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_1"
-        app:srcCompat="@drawable/filterknop_teksten" />
-
-    <ImageButton
-        android:id="@+id/filterknop_audio"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FFFFFF"
-
-        android:contentDescription="@string/filter_btn_audio"
-        app:layout_constraintBottom_toTopOf="@+id/guide_filter_btn_horizontal_1"
-        app:layout_constraintEnd_toStartOf="@+id/filterknop_foto"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/filterknop_teksten"
-        app:srcCompat="@drawable/filterknop_audio" />
-
-    <ImageButton
-        android:id="@+id/filterknop_foto"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FFFFFF"
-
-        android:contentDescription="@string/filter_btn_foto"
-        app:layout_constraintBottom_toTopOf="@+id/guide_filter_btn_horizontal_1"
-        app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_3"
-        app:layout_constraintStart_toEndOf="@+id/filterknop_audio"
-        app:srcCompat="@drawable/filterknop_foto" />
-
-    <ImageButton
-        android:id="@+id/filterknop_tekeningen"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FFFFFF"
-
-        android:contentDescription="@string/filter_btn_drawing"
-        app:layout_constraintBottom_toTopOf="@+id/guide_filter_btn_horizontal_2"
-        app:layout_constraintEnd_toStartOf="@+id/filterknop_film"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/filter_menu_content"
-        app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_1"
-        app:layout_constraintTop_toTopOf="@+id/guide_filter_btn_horizontal_1"
-        app:srcCompat="@drawable/filterknop_tekeningen" />
-
-    <ImageButton
-        android:id="@+id/filterknop_film"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FFFFFF"
-
-        android:contentDescription="@string/filter_btn_video"
-        app:layout_constraintBottom_toTopOf="@+id/guide_filter_btn_horizontal_2"
-        app:layout_constraintEnd_toStartOf="@+id/filterknop_extern_bestand"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/filterknop_tekeningen"
-        app:layout_constraintTop_toTopOf="@+id/guide_filter_btn_horizontal_1"
-        app:srcCompat="@drawable/filterknop_film" />
-
-    <ImageButton
-        android:id="@+id/filterknop_extern_bestand"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#FFFFFF"
-
-        android:contentDescription="@string/filter_btn_file"
-        app:layout_constraintBottom_toTopOf="@+id/guide_filter_btn_horizontal_2"
-        app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_3"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/filterknop_film"
-        app:layout_constraintTop_toTopOf="@+id/guide_filter_btn_horizontal_1"
-        app:srcCompat="@drawable/filterknop_extern_bestand" />
-
-    <ImageButton
-        android:id="@+id/search_close_btn"
-        android:layout_width="66dp"
-        android:layout_height="42dp"
-        android:backgroundTint="#0000FF"
-        android:contentDescription="@string/close_filter_btn"
-        app:layout_constraintEnd_toEndOf="@+id/filter_menu_content"
-        app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
-
-    <SearchView
-        android:id="@+id/search_bar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guide_searchbar_horizontal"
-        app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_3"
-        app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_1"
-        app:layout_constraintTop_toBottomOf="@+id/search_close_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

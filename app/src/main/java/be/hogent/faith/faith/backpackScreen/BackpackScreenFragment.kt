@@ -107,78 +107,44 @@ class BackpackScreenFragment : Fragment() {
             backpackViewModel.goToCityScreen()
         }
 
-        backpackViewModel.disableUi.observe(this, Observer {
-            disableButtons()
-            hideRV()
-        })
-
-        backpackViewModel.enableUi.observe(this, Observer {
-            enableButtons()
-            showRV()
-        })
-
         backpackBinding.backpackMenuFilter.search_bar.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
-                detailThumbnailsAdapter!!.filterSearchBar(newText)
+
+               val filteredDetails = backpackViewModel.filterSearchBar(newText)
+                detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
+                //detailThumbnailsAdapter!!.filterSearchBar(newText)
                 return true
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                detailThumbnailsAdapter!!.filterSearchBar(query)
+                val filteredDetails = backpackViewModel.filterSearchBar(query)
+                detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
                 return true
             }
 
         })
 
         backpackBinding.backpackMenuFilter.filterknop_teksten.setOnClickListener {
-            detailThumbnailsAdapter!!.filterType(TEXT_DETAIL)
+            val filteredDetails = backpackViewModel.filterType(TEXT_DETAIL)
+            detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
         }
         backpackBinding.backpackMenuFilter.filterknop_audio.setOnClickListener {
-            detailThumbnailsAdapter!!.filterType(AUDIO_DETAIL)
+            val filteredDetails = backpackViewModel.filterType(AUDIO_DETAIL)
+            detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
         }
         backpackBinding.backpackMenuFilter.filterknop_foto.setOnClickListener {
-            detailThumbnailsAdapter!!.filterType(PICTURE_DETAIL)
+            val filteredDetails = backpackViewModel.filterType(PICTURE_DETAIL)
+            detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
         }
         backpackBinding.backpackMenuFilter.filterknop_tekeningen.setOnClickListener {
-            detailThumbnailsAdapter!!.filterType(DRAW_DETAIL)
+            val filteredDetails = backpackViewModel.filterType(DRAW_DETAIL)
+            detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
         }
     }
 
-    private fun hideRV() {
-        backpackBinding.recyclerviewBackpack.visibility = View.GONE
-    }
-
-    private fun showRV(){
-        backpackBinding.recyclerviewBackpack.visibility = View.VISIBLE
-    }
-
-    private fun disableButtons() {
-        disable(backpackBinding.btnBackpackAdd)
-        disable(backpackBinding.btnBackpackDrawCancel)
-        disable(backpackBinding.btnBackpackDelete)
-        disable(backpackBinding.btnBackpackSearch)
-    }
-
-    private fun disable(btn : ImageButton){
-        btn.isClickable = false
-        btn.isEnabled = false
-    }
-
-    private fun enableButtons(){
-        enable(backpackBinding.btnBackpackAdd)
-        enable(backpackBinding.btnBackpackDrawCancel)
-        enable(backpackBinding.btnBackpackDelete)
-        enable(backpackBinding.btnBackpackSearch)
-    }
-
-    private fun enable(btn : ImageButton){
-        btn.isClickable = true
-        btn.isEnabled = true
-    }
-
-    private fun onAddClicked(view: View) = PopupMenu(view.context, view).run {
+      private fun onAddClicked(view: View) = PopupMenu(view.context, view).run {
         backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
         menuInflater.inflate(R.menu.menu_backpack, menu)
 
@@ -215,7 +181,6 @@ class BackpackScreenFragment : Fragment() {
             Log.e("Main", "Error showing menu icons.", e)
         } finally {
             show()
-            disableButtons()
         }
     }
 

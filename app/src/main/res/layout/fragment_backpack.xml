@@ -14,7 +14,7 @@
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_bagpack"
+        android:background="@color/background_backpack"
         app:layoutDescription="@xml/filtermenu_slide">
 
 
@@ -27,8 +27,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/bagpack"
-            tools:srcCompat="@drawable/bagpack" />
+            app:srcCompat="@drawable/backpack"
+            tools:srcCompat="@drawable/backpack" />
 
 
         <include
@@ -72,7 +72,7 @@
             android:layout_width="8dp"
             android:layout_height="12dp"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.35" />
+            app:layout_constraintGuide_percent="0.33" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_items_vertical_end"
@@ -81,12 +81,6 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.80" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide_search_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.03" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_backpack"
@@ -124,6 +118,7 @@
             android:background="@drawable/add_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+
   />
 
         <ImageButton
