@@ -137,7 +137,7 @@ class CityScreenFragment : Fragment() {
     }
 
     private fun registerListeners() {
-        mainScreenBinding.btnBackpack.setOnClickListener{
+        mainScreenBinding.btnBackpack.setOnClickListener {
             navigation?.startBackpackFragment()
         }
         cityScreenViewModel.archiveClicked.observe(this, Observer {

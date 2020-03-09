@@ -25,14 +25,12 @@ class BackpackScreenFragmentTest : KoinTest {
     var activityScenarioRule =
         ActivityTestRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java, true, true)
 
-
     @Before
     fun goToScreen() {
         NavigationUtil.goToBackpack()
-
     }
 
-    //Momenteel soms een error wanneer een audio file wordt opgehaald
+    // Momenteel soms een error wanneer een audio file wordt opgehaald
     /*@Test
     fun backpackFragment_canOpenAudioFile() {
         onView(withId(R.id.recyclerview_backpack)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(4, click()))
@@ -57,5 +55,4 @@ class BackpackScreenFragmentTest : KoinTest {
         Thread.sleep(1000)
         onView(withId(R.id.enterText_editor)).check(ViewAssertions.matches(isDisplayed()))
     }
-
 }

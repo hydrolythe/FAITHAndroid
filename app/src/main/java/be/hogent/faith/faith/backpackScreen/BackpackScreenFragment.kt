@@ -7,9 +7,11 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import android.widget.SearchView
 import androidx.annotation.RequiresApi
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.appcompat.view.menu.MenuPopupHelper
+import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -27,8 +29,6 @@ import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_teken
 import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_teksten
 import kotlinx.android.synthetic.main.backpack_menu_filter.view.search_bar
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import timber.log.Timber
-
 
 object DetailTypes {
     const val AUDIO_DETAIL = 1
@@ -46,6 +46,7 @@ class BackpackScreenFragment : Fragment() {
 
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
+    private lateinit var addDetailMenu: PopupMenu
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -116,7 +117,7 @@ class BackpackScreenFragment : Fragment() {
 
                val filteredDetails = backpackViewModel.filterSearchBar(newText)
                 detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
-                //detailThumbnailsAdapter!!.filterSearchBar(newText)
+                // detailThumbnailsAdapter!!.filterSearchBar(newText)
                 return true
             }
 
@@ -125,7 +126,6 @@ class BackpackScreenFragment : Fragment() {
                 detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
                 return true
             }
-
         })
 
         backpackBinding.backpackMenuFilter.filterknop_teksten.setOnClickListener {
@@ -146,22 +146,26 @@ class BackpackScreenFragment : Fragment() {
         }
 
         backpackViewModel.isDetailScreenOpen.observe(this, Observer {
-            if(it){
-                backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
+            if (!it) {
+                backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.add_btn, null)
+                addDetailMenu.dismiss()
             }
         })
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-    private fun onAddClicked(view: View) = PopupMenu(view.context, view, Gravity.END, 0, R.style.PopupMenu_AddDetail).run {
+    private fun onAddClicked(view: View) {
+        addDetailMenu = PopupMenu(view.context, view, Gravity.END, 0, R.style.PopupMenu_AddDetail)
         backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
-        menuInflater.inflate(R.menu.menu_backpack, menu)
+        addDetailMenu.menuInflater.inflate(R.menu.menu_backpack, addDetailMenu.menu)
 
-        setOnDismissListener {
+        val menuPopupHelper = MenuPopupHelper(view.context, addDetailMenu.menu as MenuBuilder, backpackBinding.btnBackpackAdd)
+
+        addDetailMenu.setOnDismissListener {
             backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.add_btn, null)
         }
 
-        setOnMenuItemClickListener { item ->
+        addDetailMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.backpack_menu_addAudio ->
                     navigation?.startAudioDetailFragment()
@@ -178,19 +182,8 @@ class BackpackScreenFragment : Fragment() {
             }
             true
         }
-        try {
-            val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
-            fieldMPopup.isAccessible = true
-            val mPopup = fieldMPopup.get(this)
-            mPopup.javaClass
-                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                .invoke(mPopup, true)
-
-        } catch (e: Exception){
-            Timber.e(e, "Error showing menu icons.")
-        } finally {
-            show()
-        }
+            menuPopupHelper.setForceShowIcon(true)
+            menuPopupHelper.show()
     }
 
     interface BackpackDetailsNavigationListener {

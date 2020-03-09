@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.backpackScreen
 
-
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,7 +19,6 @@ import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.util.replaceChildFragment
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-
 
 abstract class BackpackDetailFragment : Fragment() {
 
@@ -128,4 +126,3 @@ abstract class BackpackDetailFragment : Fragment() {
         }
     }
 }
-

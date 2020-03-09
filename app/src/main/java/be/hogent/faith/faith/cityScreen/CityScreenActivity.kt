@@ -74,7 +74,7 @@ class CityScreenActivity : AppCompatActivity(),
     }
 
     override fun startBackpackFragment() {
-        val intent = Intent(this, BackpackScreenActivity::class.java )
+        val intent = Intent(this, BackpackScreenActivity::class.java)
         startActivity(intent)
     }
 

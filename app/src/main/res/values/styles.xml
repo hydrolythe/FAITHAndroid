@@ -175,9 +175,9 @@
         <item name="android:colorControlActivated">@color/red</item>
     </style>
 
-    <style name="PopupMenu.AddDetail" parent="@style/Widget.AppCompat.PopupMenu">
+    <style name="PopupMenu.AddDetail" parent="TextAppearance.AppCompat.Light.Widget.PopupMenu.Small">
         <item name="android:dropDownHorizontalOffset">-8dp</item>
         <item name="android:dropDownVerticalOffset">4dp</item>
-        <item name="android:listPreferredItemHeightSmall">8dp</item>
+        <item name="android:listPreferredItemHeightSmall">32dp</item>
     </style>
 </resources>
