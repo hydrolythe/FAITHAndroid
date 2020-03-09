@@ -1,9 +1,11 @@
 package be.hogent.faith.faith.backpackScreen
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
+import android.view.ViewGroup
+import android.widget.PopupWindow
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
@@ -19,9 +21,9 @@ import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.util.replaceFragment
-import io.fotoapparat.selector.back
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.getViewModel
+
 
 class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.BackpackDetailsNavigationListener,
     RecordAudioFragment.AudioScreenNavigation,
@@ -32,6 +34,8 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     DetailViewHolder.ExistingDetailNavigationListener {
 
     private lateinit var backpackViewModel: BackpackViewModel
+
+    private lateinit var popupWindow: PopupWindow
 
     // private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
@@ -59,7 +63,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     // BackToBackpack overrides method already defined in details
     override fun backToEvent() {
         supportFragmentManager.popBackStack()
-        backpackViewModel.enableUi()
+        backpackViewModel.viewButtons(true)
     }
 
     override fun onDetailFinished(detail: Detail) {
@@ -69,29 +73,29 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
             is PhotoDetail -> save(detail)
             is AudioDetail -> save(detail)
         }
-        backpackViewModel.enableUi()
+        backpackViewModel.viewButtons(true)
     }
 
     override fun startPhotoDetailFragment() {
         replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
-        backpackViewModel.disableScreenUi()
+        backpackViewModel.viewButtons(false)
     }
 
     override fun startAudioDetailFragment() {
         replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
-        backpackViewModel.disableScreenUi()
+        backpackViewModel.viewButtons(false)
     }
 
     override fun startDrawingDetailFragment() {
         replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
-        backpackViewModel.disableScreenUi()
+        backpackViewModel.viewButtons(false)
     }
 
     override fun startTextDetailFragment() {
         replaceFragment(
             BackpackDetailFragment.TextFragmentNoEmotionAvatar.newInstance(), R.id.fragment
         )
-        backpackViewModel.disableScreenUi()
+        backpackViewModel.viewButtons(false)
     }
 
     override fun startVideoDetailFragment() {
@@ -108,7 +112,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
             BackpackDetailFragment.newInstance(detail),
             R.id.fragment
         )
-        backpackViewModel.disableScreenUi()
+        backpackViewModel.viewButtons(false)
     }
 
     override fun closeBackpack() {
