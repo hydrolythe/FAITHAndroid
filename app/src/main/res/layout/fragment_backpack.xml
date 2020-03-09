@@ -16,18 +16,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background_backpack"
-        app:layoutDescription="@xml/filtermenu_slide">
+        app:layoutDescription="@xml/filtermenu_slide"
+        >
 
 
         <ImageView
             android:id="@+id/background_backpack"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/backpack"
             tools:srcCompat="@drawable/backpack" />
 
@@ -36,10 +36,13 @@
             android:id="@+id/backpack_menu_filter"
             layout="@layout/backpack_menu_filter"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+
+            app:layout_constraintEnd_toStartOf="@+id/guide_filtermenu_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/background_backpack"
-            app:layout_constraintTop_toTopOf="parent" />
+             />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_undo_horizontal"
