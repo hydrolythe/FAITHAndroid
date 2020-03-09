@@ -56,21 +56,7 @@ class DetailThumbnailsAdapter(
         _details.addAll(newDetails)
         diffResult.dispatchUpdatesTo(this)
     }
-    fun filterSearchBar(text:String){
-        //TODO update for detail.title
-        _details.clear()
-        if(text.isEmpty()){
-            _details.addAll(_detailsCopy)
-        }else{
-            for(detail in _detailsCopy){
-                if(detail.uuid.toString().toLowerCase().contains(text.toLowerCase())){
-                    _details.add(detail)
-                }
-            }
-        }
-        notifyDataSetChanged()
 
-    }
     fun filterType(type: Int){
         when(type){
              AUDIO_DETAIL -> if(_details == _detailsCopy.toMutableList()) _details = _detailsCopy.filterIsInstance<AudioDetail>().toMutableList() else _details = _detailsCopy

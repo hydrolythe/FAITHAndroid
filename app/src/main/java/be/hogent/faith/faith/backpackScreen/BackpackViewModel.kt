@@ -11,6 +11,10 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.faith.backpackScreen.DetailTypes.AUDIO_DETAIL
+import be.hogent.faith.faith.backpackScreen.DetailTypes.DRAW_DETAIL
+import be.hogent.faith.faith.backpackScreen.DetailTypes.PICTURE_DETAIL
+import be.hogent.faith.faith.backpackScreen.DetailTypes.TEXT_DETAIL
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
@@ -25,21 +29,23 @@ class BackpackViewModel(
     private val saveBackpackAudioDetailUseCase: SaveBackpackAudioDetailUseCase,
     private val saveBackpackPhotoDetailUseCase: SaveBackpackPhotoDetailUseCase,
     private val saveBackpackDrawingDetailUseCase: SaveBackpackDrawingDetailUseCase,
-    private val getBackPackFilesDummyUseCase : GetBackPackFilesDummyUseCase
-) : ViewModel(), KoinComponent {
+    private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
+) : ViewModel() {
 
 
     private var _details = MutableLiveData<List<Detail>>()
-    val details : LiveData<List<Detail>>
-    get() = _details
+    val details: LiveData<List<Detail>>
+        get() = _details
 
     private var _currentFile = MutableLiveData<Detail>()
-    val currentFile : LiveData<Detail>
+    val currentFile: LiveData<Detail>
         get() = _currentFile
 
-    fun setCurrentFile(detail: Detail?){
+    fun setCurrentFile(detail: Detail?) {
         _currentFile.postValue(detail)
     }
+
+    private var filteredDetails = mutableListOf<Detail>()
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
@@ -78,7 +84,7 @@ class BackpackViewModel(
         _viewButtons.postValue(viewButtons)
     }
 
-    fun goToCityScreen(){
+    fun goToCityScreen() {
         _goToCityScreen.call()
     }
 
@@ -97,7 +103,7 @@ class BackpackViewModel(
         }
     }
 
-    fun saveAudioDetail(detail: AudioDetail){
+    fun saveAudioDetail(detail: AudioDetail) {
         val params = SaveBackpackAudioDetailUseCase.Params(detail)
         saveBackpackAudioDetailUseCase.execute(params, SaveBackpackAudioDetailUseCaseHandler())
     }
@@ -112,7 +118,7 @@ class BackpackViewModel(
         }
     }
 
-    fun savePhotoDetail(detail: PhotoDetail){
+    fun savePhotoDetail(detail: PhotoDetail) {
         val params = SaveBackpackPhotoDetailUseCase.Params(detail)
         saveBackpackPhotoDetailUseCase.execute(params, SaveBackpackPhotoDetailUseCaseHandler())
     }
@@ -127,7 +133,7 @@ class BackpackViewModel(
         }
     }
 
-    fun saveDrawingDetail(detail: DrawingDetail){
+    fun saveDrawingDetail(detail: DrawingDetail) {
         val params = SaveBackpackDrawingDetailUseCase.Params(detail)
         saveBackpackDrawingDetailUseCase.execute(params, SaveBackpackDrawingDetailUseCaseHandler())
     }
@@ -153,5 +159,42 @@ class BackpackViewModel(
     fun removeDetail() {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+    fun filterSearchBar(text: String): List<Detail> {
+        //TODO update for detail.title
+
+        if (text.isEmpty()) {
+            return _details.value!!
+        } else {
+            filteredDetails = mutableListOf()
+            for (detail in _details.value!!) {
+                if (detail.uuid.toString().toLowerCase().contains(text.toLowerCase())) {
+                    filteredDetails.add(detail)
+                }
+            }
+        }
+        return filteredDetails
+
+    }
+
+    fun filterType(type: Int): List<Detail> {
+
+        when (type) {
+            AUDIO_DETAIL -> if (filteredDetails == _details.value!!) filteredDetails =
+                _details.value!!.filterIsInstance<AudioDetail>()
+                    .toMutableList() else filteredDetails = _details.value!!.toMutableList()
+            DRAW_DETAIL -> if (filteredDetails == _details.value!!) filteredDetails =
+                _details.value!!.filterIsInstance<DrawingDetail>()
+                    .toMutableList() else filteredDetails = _details.value!!.toMutableList()
+            TEXT_DETAIL -> if (filteredDetails == _details.value!!) filteredDetails =
+                _details.value!!.filterIsInstance<TextDetail>()
+                    .toMutableList() else filteredDetails = _details.value!!.toMutableList()
+            PICTURE_DETAIL -> if (filteredDetails == _details.value!!) filteredDetails =
+                _details.value!!.filterIsInstance<PhotoDetail>()
+                    .toMutableList() else filteredDetails = _details.value!!.toMutableList()
+        }
+        return filteredDetails
+    }
+
 
 }

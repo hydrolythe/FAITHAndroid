@@ -115,28 +115,36 @@ class BackpackScreenFragment : Fragment() {
             SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
-                detailThumbnailsAdapter!!.filterSearchBar(newText)
+
+               val filteredDetails = backpackViewModel.filterSearchBar(newText)
+                detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
+                //detailThumbnailsAdapter!!.filterSearchBar(newText)
                 return true
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                detailThumbnailsAdapter!!.filterSearchBar(query)
+                val filteredDetails = backpackViewModel.filterSearchBar(query)
+                detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
                 return true
             }
 
         })
 
         backpackBinding.backpackMenuFilter.filterknop_teksten.setOnClickListener {
-            detailThumbnailsAdapter!!.filterType(TEXT_DETAIL)
+            val filteredDetails = backpackViewModel.filterType(TEXT_DETAIL)
+            detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
         }
         backpackBinding.backpackMenuFilter.filterknop_audio.setOnClickListener {
-            detailThumbnailsAdapter!!.filterType(AUDIO_DETAIL)
+            val filteredDetails = backpackViewModel.filterType(AUDIO_DETAIL)
+            detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
         }
         backpackBinding.backpackMenuFilter.filterknop_foto.setOnClickListener {
-            detailThumbnailsAdapter!!.filterType(PICTURE_DETAIL)
+            val filteredDetails = backpackViewModel.filterType(PICTURE_DETAIL)
+            detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
         }
         backpackBinding.backpackMenuFilter.filterknop_tekeningen.setOnClickListener {
-            detailThumbnailsAdapter!!.filterType(DRAW_DETAIL)
+            val filteredDetails = backpackViewModel.filterType(DRAW_DETAIL)
+            detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
         }
     }
 
