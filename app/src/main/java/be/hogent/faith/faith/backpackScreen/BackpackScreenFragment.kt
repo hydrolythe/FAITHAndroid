@@ -115,7 +115,7 @@ class BackpackScreenFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String): Boolean {
 
-               val filteredDetails = backpackViewModel.filterSearchBar(newText)
+                val filteredDetails = backpackViewModel.filterSearchBar(newText)
                 detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
                 // detailThumbnailsAdapter!!.filterSearchBar(newText)
                 return true
@@ -149,8 +149,8 @@ class BackpackScreenFragment : Fragment() {
             if (!it) {
                 backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.add_btn, null)
                 addDetailMenu.dismiss()
-            }
-        })
+                }
+    })
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)

@@ -18,7 +18,7 @@
         app:duration="1000">
 
         <OnClick
-            app:clickAction="toggle"
+            app:clickAction="transitionToStart"
             app:targetId="@+id/search_close_btn" />
 
     </Transition>
@@ -32,16 +32,26 @@
 
         <Constraint
             android:id="@id/backpack_menu_filter"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guide_filtermenu_vertical"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/motionLayout"
-            app:layout_constraintTop_toTopOf="@+id/motionLayout"
+            app:layout_constraintTop_toTopOf="parent"
+
+
             />
 
         <Constraint
             android:id="@id/guide_items_vertical_start"
             app:layout_constraintGuide_percent="0.32"/>
-
+        <Constraint
+            android:id="@id/btn_backpack_search"
+            android:visibility="gone"/>
+        <Constraint
+            android:id="@id/btn_backpack_search"
+            android:visibility="gone"/>
+        <Constraint
+            android:id="@id/btn_backpack_draw_cancel"
+            android:visibility="gone"/>
 
     </ConstraintSet>
 

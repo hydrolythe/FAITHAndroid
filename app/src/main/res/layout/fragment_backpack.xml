@@ -8,6 +8,7 @@
         <variable
             name="backpackViewModel"
             type="be.hogent.faith.faith.backpackScreen.BackpackViewModel" />
+
         <import type="android.view.View" />
     </data>
 
@@ -22,12 +23,11 @@
         <ImageView
             android:id="@+id/background_backpack"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/backpack"
             tools:srcCompat="@drawable/backpack" />
 
@@ -36,9 +36,11 @@
             android:id="@+id/backpack_menu_filter"
             layout="@layout/backpack_menu_filter"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/background_backpack"
+            app:layout_constraintEnd_toStartOf="@+id/guide_filtermenu_vertical"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -68,6 +70,7 @@
             android:layout_height="12dp"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.22" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_filtermenu_vertical"
             android:layout_width="8dp"
@@ -107,8 +110,8 @@
             android:id="@+id/btn_backpack_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             android:background="@drawable/search_btn"
+            android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/search_btn" />
@@ -122,14 +125,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
 
-  />
+            />
 
         <ImageButton
             android:id="@+id/btn_backpack_draw_cancel"
             android:layout_width="@dimen/material_icon_width"
-            android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             android:layout_height="@dimen/material_icon_height"
             android:background="@drawable/ic_return"
+            android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             android:contentDescription="@string/cancel"
             app:layout_constraintStart_toStartOf="@+id/guide_search_btn"
             app:layout_constraintTop_toTopOf="@+id/guide_undo_horizontal" />

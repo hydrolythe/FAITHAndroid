@@ -19,7 +19,7 @@ import org.junit.runner.RunWith
 import org.koin.test.KoinTest
 
 @RunWith(AndroidJUnit4::class)
-class BackpackScreenFragmentTest : KoinTest {
+class OpenSavedFileTest : KoinTest {
 
     @get:Rule
     var activityScenarioRule =
@@ -39,19 +39,36 @@ class BackpackScreenFragmentTest : KoinTest {
     }*/
     @Test
     fun backpackFragment_canOpenDrawFile() {
-        onView(withId(R.id.recyclerview_backpack)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+        onView(withId(R.id.recyclerview_backpack)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                0,
+                click()
+            )
+        )
         Thread.sleep(1000)
         onView(withId(R.id.screen_draw)).check(ViewAssertions.matches(isDisplayed()))
     }
+
     @Test
     fun backpackFragment_canOpenPhotoFile() {
-        onView(withId(R.id.recyclerview_backpack)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(3, click()))
+        onView(withId(R.id.recyclerview_backpack)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                3,
+                click()
+            )
+        )
         Thread.sleep(1000)
         onView(withId(R.id.img_reviewPhoto_image)).check(ViewAssertions.matches(isDisplayed()))
     }
+
     @Test
     fun backpackFragment_canOpenTextFile() {
-        onView(withId(R.id.recyclerview_backpack)).perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(1, click()))
+        onView(withId(R.id.recyclerview_backpack)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(
+                1,
+                click()
+            )
+        )
         Thread.sleep(1000)
         onView(withId(R.id.enterText_editor)).check(ViewAssertions.matches(isDisplayed()))
     }

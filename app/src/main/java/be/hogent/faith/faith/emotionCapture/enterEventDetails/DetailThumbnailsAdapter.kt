@@ -28,7 +28,11 @@ class DetailThumbnailsAdapter(
     private var _details = details.toMutableList()
     private var _detailsCopy = details.toMutableList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
-        return DetailViewHolderFactory.createViewHolder(parent, viewType, existingDetailNavigationListener)
+        return DetailViewHolderFactory.createViewHolder(
+            parent,
+            viewType,
+            existingDetailNavigationListener
+        )
     }
 
     override fun getItemCount(): Int {
@@ -57,13 +61,4 @@ class DetailThumbnailsAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
-    fun filterType(type: Int) {
-        when (type) {
-             AUDIO_DETAIL -> if (_details == _detailsCopy.toMutableList()) _details = _detailsCopy.filterIsInstance<AudioDetail>().toMutableList() else _details = _detailsCopy
-             DRAW_DETAIL -> if (_details == _detailsCopy.toMutableList()) _details = _detailsCopy.filterIsInstance<DrawingDetail>().toMutableList() else _details = _detailsCopy
-             TEXT_DETAIL -> if (_details == _detailsCopy.toMutableList()) _details = _detailsCopy.filterIsInstance<TextDetail>().toMutableList() else _details = _detailsCopy
-             PICTURE_DETAIL -> if (_details == _detailsCopy.toMutableList()) _details = _detailsCopy.filterIsInstance<PhotoDetail>().toMutableList() else _details = _detailsCopy
-        }
-        notifyDataSetChanged()
-    }
 }
