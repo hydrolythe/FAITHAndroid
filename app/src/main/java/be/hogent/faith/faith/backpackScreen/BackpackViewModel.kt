@@ -22,7 +22,6 @@ import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCas
 import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
-import org.koin.core.KoinComponent
 
 class BackpackViewModel(
     private val saveBackpackTextDetailUseCase: SaveBackpackTextDetailUseCase,
@@ -31,7 +30,6 @@ class BackpackViewModel(
     private val saveBackpackDrawingDetailUseCase: SaveBackpackDrawingDetailUseCase,
     private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
 ) : ViewModel() {
-
 
     private var _details = MutableLiveData<List<Detail>>()
     val details: LiveData<List<Detail>>
@@ -64,30 +62,30 @@ class BackpackViewModel(
     val audioDetailSavedSuccessFully: LiveData<Int> = _audioSavedSuccessFully
 
     private val _viewButtons = MutableLiveData<Boolean>()
-    val viewButtons : LiveData<Boolean> = _viewButtons
+    val viewButtons: LiveData<Boolean> = _viewButtons
 
     private val _openAddDetailMenu = MutableLiveData<View>()
-    val openAddDetailMenu : LiveData<View> = _openAddDetailMenu
+    val openAddDetailMenu: LiveData<View> = _openAddDetailMenu
 
     private val _goToCityScreen = SingleLiveEvent<Any>()
     val goToCityScreen: LiveData<Any> = _goToCityScreen
 
     private val _isDetailScreenOpen = MutableLiveData<Boolean>()
-    val isDetailScreenOpen : LiveData<Boolean> = _isDetailScreenOpen
+    val isDetailScreenOpen: LiveData<Boolean> = _isDetailScreenOpen
 
     init {
         _details.postValue(getBackPackFilesDummyUseCase.getDetails())
     }
 
-    fun setDetailScreenOpen(isOpen : Boolean){
+    fun setDetailScreenOpen(isOpen: Boolean) {
         _isDetailScreenOpen.postValue(isOpen)
     }
 
-    fun openAddDetailMenu(view : View){
+    fun openAddDetailMenu(view: View) {
         _openAddDetailMenu.postValue(view)
     }
 
-    fun viewButtons(viewButtons: Boolean){
+    fun viewButtons(viewButtons: Boolean) {
         _viewButtons.postValue(viewButtons)
     }
 
@@ -164,11 +162,11 @@ class BackpackViewModel(
     }
 
     fun removeDetail() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     fun filterSearchBar(text: String): List<Detail> {
-        //TODO update for detail.title
+        // TODO update for detail.title
 
         if (text.isEmpty()) {
             return _details.value!!
@@ -181,7 +179,6 @@ class BackpackViewModel(
             }
         }
         return filteredDetails
-
     }
 
     fun filterType(type: Int): List<Detail> {
@@ -202,6 +199,4 @@ class BackpackViewModel(
         }
         return filteredDetails
     }
-
-
 }

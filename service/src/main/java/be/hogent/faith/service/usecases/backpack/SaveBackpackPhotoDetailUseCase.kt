@@ -9,7 +9,7 @@ import io.reactivex.Scheduler
 class SaveBackpackPhotoDetailUseCase(
     private val dummyStorageRepo: IDummyStorageRepository,
     observeScheduler: Scheduler
-): CompletableUseCase<SaveBackpackPhotoDetailUseCase.Params>(
+) : CompletableUseCase<SaveBackpackPhotoDetailUseCase.Params>(
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {

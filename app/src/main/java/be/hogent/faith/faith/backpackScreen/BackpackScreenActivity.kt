@@ -1,9 +1,6 @@
 package be.hogent.faith.faith.backpackScreen
 
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -23,7 +20,6 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.getViewModel
-
 
 class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.BackpackDetailsNavigationListener,
     RecordAudioFragment.AudioScreenNavigation,
@@ -79,19 +75,19 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun startPhotoDetailFragment() {
-        replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
+        replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
         backpackViewModel.viewButtons(false)
         backpackViewModel.setDetailScreenOpen(true)
     }
 
     override fun startAudioDetailFragment() {
-        replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
+        replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
         backpackViewModel.viewButtons(false)
         backpackViewModel.setDetailScreenOpen(true)
     }
 
     override fun startDrawingDetailFragment() {
-        replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
+        replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
         backpackViewModel.viewButtons(false)
         backpackViewModel.setDetailScreenOpen(true)
     }
@@ -103,11 +99,11 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun startVideoDetailFragment() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun startFileDetailFragment() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun openDetailScreenFor(detail: Detail) {
@@ -132,22 +128,19 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         }
     }
 
-    fun save(detail : TextDetail){
+    fun save(detail: TextDetail) {
         backpackViewModel.saveTextDetail(detail)
     }
 
-    fun save(detail: PhotoDetail){
+    fun save(detail: PhotoDetail) {
         backpackViewModel.savePhotoDetail(detail)
     }
 
-    fun save(detail: DrawingDetail){
+    fun save(detail: DrawingDetail) {
         backpackViewModel.saveDrawingDetail(detail)
     }
 
-    fun save(detail: AudioDetail){
+    fun save(detail: AudioDetail) {
         backpackViewModel.saveAudioDetail(detail)
     }
-
-
-
 }

@@ -9,7 +9,7 @@ import io.reactivex.Scheduler
 class SaveBackpackAudioDetailUseCase(
     private val dummyStorageRepo: IDummyStorageRepository,
     observeScheduler: Scheduler
-): CompletableUseCase<SaveBackpackAudioDetailUseCase.Params>(
+) : CompletableUseCase<SaveBackpackAudioDetailUseCase.Params>(
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {
@@ -18,4 +18,3 @@ class SaveBackpackAudioDetailUseCase(
 
     data class Params(val audioDetail: AudioDetail)
 }
-

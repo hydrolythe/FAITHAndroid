@@ -29,7 +29,6 @@ import kotlinx.android.synthetic.main.backpack_menu_filter.view.search_bar
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
-
 object DetailTypes {
     const val AUDIO_DETAIL = 1
     const val TEXT_DETAIL = 2
@@ -114,9 +113,9 @@ class BackpackScreenFragment : Fragment() {
 
             override fun onQueryTextChange(newText: String): Boolean {
 
-               val filteredDetails = backpackViewModel.filterSearchBar(newText)
+                val filteredDetails = backpackViewModel.filterSearchBar(newText)
                 detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
-                //detailThumbnailsAdapter!!.filterSearchBar(newText)
+                // detailThumbnailsAdapter!!.filterSearchBar(newText)
                 return true
             }
 
@@ -125,7 +124,6 @@ class BackpackScreenFragment : Fragment() {
                 detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
                 return true
             }
-
         })
 
         backpackBinding.backpackMenuFilter.filterknop_teksten.setOnClickListener {
@@ -146,52 +144,55 @@ class BackpackScreenFragment : Fragment() {
         }
 
         backpackViewModel.isDetailScreenOpen.observe(this, Observer {
-            if(it){
-                backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
+            if (it) {
+                backpackBinding.btnBackpackAdd.background =
+                    resources.getDrawable(R.drawable.ic_add_btn_selected, null)
             }
         })
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-    private fun onAddClicked(view: View) = PopupMenu(view.context, view, Gravity.END, 0, R.style.PopupMenu_AddDetail).run {
-        backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
-        menuInflater.inflate(R.menu.menu_backpack, menu)
+    private fun onAddClicked(view: View) =
+        PopupMenu(view.context, view, Gravity.END, 0, R.style.PopupMenu_AddDetail).run {
+            backpackBinding.btnBackpackAdd.background =
+                resources.getDrawable(R.drawable.ic_add_btn_selected, null)
+            menuInflater.inflate(R.menu.menu_backpack, menu)
 
-        setOnDismissListener {
-            backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.add_btn, null)
-        }
-
-        setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.backpack_menu_addAudio ->
-                    navigation?.startAudioDetailFragment()
-                R.id.backpack_menu_addDrawing ->
-                    navigation?.startDrawingDetailFragment()
-                R.id.backpack_menu_addFile ->
-                    navigation?.startFileDetailFragment()
-                R.id.backpack_menu_addFoto ->
-                    navigation?.startPhotoDetailFragment()
-                R.id.backpack_menu_addText ->
-                    navigation?.startTextDetailFragment()
-                R.id.backpack_menu_addVideo ->
-                    navigation?.startVideoDetailFragment()
+            setOnDismissListener {
+                backpackBinding.btnBackpackAdd.background =
+                    resources.getDrawable(R.drawable.add_btn, null)
             }
-            true
-        }
-        try {
-            val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
-            fieldMPopup.isAccessible = true
-            val mPopup = fieldMPopup.get(this)
-            mPopup.javaClass
-                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                .invoke(mPopup, true)
 
-        } catch (e: Exception){
-            Timber.e(e, "Error showing menu icons.")
-        } finally {
-            show()
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.backpack_menu_addAudio ->
+                        navigation?.startAudioDetailFragment()
+                    R.id.backpack_menu_addDrawing ->
+                        navigation?.startDrawingDetailFragment()
+                    R.id.backpack_menu_addFile ->
+                        navigation?.startFileDetailFragment()
+                    R.id.backpack_menu_addFoto ->
+                        navigation?.startPhotoDetailFragment()
+                    R.id.backpack_menu_addText ->
+                        navigation?.startTextDetailFragment()
+                    R.id.backpack_menu_addVideo ->
+                        navigation?.startVideoDetailFragment()
+                }
+                true
+            }
+            try {
+                val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
+                fieldMPopup.isAccessible = true
+                val mPopup = fieldMPopup.get(this)
+                mPopup.javaClass
+                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                    .invoke(mPopup, true)
+            } catch (e: Exception) {
+                Timber.e(e, "Error showing menu icons.")
+            } finally {
+                show()
+            }
         }
-    }
 
     interface BackpackDetailsNavigationListener {
         fun startPhotoDetailFragment()

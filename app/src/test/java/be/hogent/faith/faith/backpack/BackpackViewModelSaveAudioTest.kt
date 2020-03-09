@@ -85,5 +85,4 @@ class BackpackViewModelSaveAudioTest {
         verify { errorObserver.onChanged(any()) }
         verify { successObserver wasNot Called }
     }
-
 }

@@ -86,5 +86,4 @@ class BackpackViewModelSaveDrawingTest {
         verify { errorObserver.onChanged(any()) }
         verify { successObserver wasNot Called }
     }
-
 }

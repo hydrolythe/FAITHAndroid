@@ -1,8 +1,6 @@
 package be.hogent.faith.faith.backpack.backpackScreen
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -16,7 +14,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.test.KoinTest
 
-
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class BackpackScreenFragmentTest : KoinTest {
@@ -28,7 +25,6 @@ class BackpackScreenFragmentTest : KoinTest {
     @Before
     fun goToScreen() {
         NavigationUtil.goToBackpack()
-
     }
 
     @Test
@@ -37,6 +33,5 @@ class BackpackScreenFragmentTest : KoinTest {
         onView(withId(R.id.btn_backpack_search)).perform(click())
         onView(withId(R.id.btn_backpack_add)).perform(click())
         onView(withId(R.id.btn_backpack_delete)).perform(click())
-
     }
 }

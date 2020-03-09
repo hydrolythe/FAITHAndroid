@@ -3,7 +3,6 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R

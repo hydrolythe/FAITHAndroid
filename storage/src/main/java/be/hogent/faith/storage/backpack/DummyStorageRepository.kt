@@ -17,19 +17,17 @@ class DummyStorageRepository(
     private var preferences: SharedPreferences? = null
     private var details = ArrayList<DummyDetail>()
 
-    override fun getBackpackDetailsUserTestData() : List<Detail> {
+    override fun getBackpackDetailsUserTestData(): List<Detail> {
         details = ArrayList()
         var hulpList = ArrayList<Detail>()
         preferences = context.getSharedPreferences(STORAGE, Context.MODE_PRIVATE)
         val gson = Gson()
         val json = preferences!!.getString("backpackDetail", null)
-        val type=
+        val type =
             object : TypeToken<ArrayList<DummyDetail?>?>() {}.type
-        try{
+        try {
             details = gson.fromJson(json, type)
-        }
-        catch (e : Exception){
-
+        } catch (e: Exception) {
         }
 
         hulpList = DummyDetailMapper.mapFromEntities(details) as ArrayList<Detail>
@@ -42,13 +40,11 @@ class DummyStorageRepository(
         val editor: SharedPreferences.Editor = preferences!!.edit()
         val gson = Gson()
         val jsonGet = preferences!!.getString("backpackDetail", null)
-        val type=
+        val type =
             object : TypeToken<ArrayList<DummyDetail?>?>() {}.type
-        try{
+        try {
             details = gson.fromJson(jsonGet, type)
-        }
-        catch (e : Exception){
-
+        } catch (e: Exception) {
         }
         editor.clear()
         details.add(dummyDetail)
@@ -57,5 +53,4 @@ class DummyStorageRepository(
         editor.apply()
         return Completable.fromCallable { true }
     }
-
 }

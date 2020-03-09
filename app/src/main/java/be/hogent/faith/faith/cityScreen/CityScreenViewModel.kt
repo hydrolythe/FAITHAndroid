@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.LogoutUserUseCase
-import io.fotoapparat.selector.back
 import io.reactivex.observers.DisposableCompletableObserver
 import timber.log.Timber
 
@@ -36,7 +35,7 @@ class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : Vi
         Timber.i("third location clicked")
         thirdLocation.call()
     }
-    fun onBackpackClicked(){
+    fun onBackpackClicked() {
         Timber.i("Fourth location clicked")
         backpackClicked.call()
     }
