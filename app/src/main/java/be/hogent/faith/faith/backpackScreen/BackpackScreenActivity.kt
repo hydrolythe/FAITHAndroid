@@ -64,6 +64,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     override fun backToEvent() {
         supportFragmentManager.popBackStack()
         backpackViewModel.viewButtons(true)
+        backpackViewModel.setDetailScreenOpen(false)
     }
 
     override fun onDetailFinished(detail: Detail) {
@@ -74,28 +75,31 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
             is AudioDetail -> save(detail)
         }
         backpackViewModel.viewButtons(true)
+        backpackViewModel.setDetailScreenOpen(false)
     }
 
     override fun startPhotoDetailFragment() {
         replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
         backpackViewModel.viewButtons(false)
+        backpackViewModel.setDetailScreenOpen(true)
     }
 
     override fun startAudioDetailFragment() {
         replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
         backpackViewModel.viewButtons(false)
+        backpackViewModel.setDetailScreenOpen(true)
     }
 
     override fun startDrawingDetailFragment() {
         replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(),R.id.fragment)
         backpackViewModel.viewButtons(false)
+        backpackViewModel.setDetailScreenOpen(true)
     }
 
     override fun startTextDetailFragment() {
-        replaceFragment(
-            BackpackDetailFragment.TextFragmentNoEmotionAvatar.newInstance(), R.id.fragment
-        )
+        replaceFragment(BackpackDetailFragment.TextFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
         backpackViewModel.viewButtons(false)
+        backpackViewModel.setDetailScreenOpen(true)
     }
 
     override fun startVideoDetailFragment() {

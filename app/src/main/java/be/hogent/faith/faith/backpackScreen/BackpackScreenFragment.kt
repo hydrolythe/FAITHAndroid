@@ -3,16 +3,13 @@ package be.hogent.faith.faith.backpackScreen
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.PopupWindow
 import android.widget.SearchView
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -30,6 +27,7 @@ import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_teken
 import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_teksten
 import kotlinx.android.synthetic.main.backpack_menu_filter.view.search_bar
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import timber.log.Timber
 
 
 object DetailTypes {
@@ -146,6 +144,12 @@ class BackpackScreenFragment : Fragment() {
             val filteredDetails = backpackViewModel.filterType(DRAW_DETAIL)
             detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
         }
+
+        backpackViewModel.isDetailScreenOpen.observe(this, Observer {
+            if(it){
+                backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
+            }
+        })
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
@@ -183,7 +187,7 @@ class BackpackScreenFragment : Fragment() {
                 .invoke(mPopup, true)
 
         } catch (e: Exception){
-            Log.e("Main", "Error showing menu icons.", e)
+            Timber.e(e, "Error showing menu icons.")
         } finally {
             show()
         }

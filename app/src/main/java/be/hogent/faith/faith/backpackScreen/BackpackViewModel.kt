@@ -72,8 +72,15 @@ class BackpackViewModel(
     private val _goToCityScreen = SingleLiveEvent<Any>()
     val goToCityScreen: LiveData<Any> = _goToCityScreen
 
+    private val _isDetailScreenOpen = MutableLiveData<Boolean>()
+    val isDetailScreenOpen : LiveData<Boolean> = _isDetailScreenOpen
+
     init {
         _details.postValue(getBackPackFilesDummyUseCase.getDetails())
+    }
+
+    fun setDetailScreenOpen(isOpen : Boolean){
+        _isDetailScreenOpen.postValue(isOpen)
     }
 
     fun openAddDetailMenu(view : View){

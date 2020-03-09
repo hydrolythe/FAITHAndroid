@@ -87,7 +87,6 @@
             android:id="@+id/recyclerview_backpack"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="@{backpackViewModel.viewButtons == false ? View.GONE : View.VISIBLE}"
             android:scrollbars="horizontal|vertical"
             app:layout_constraintBottom_toTopOf="@+id/guide_rv_horizontal_2"
             app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_end"
