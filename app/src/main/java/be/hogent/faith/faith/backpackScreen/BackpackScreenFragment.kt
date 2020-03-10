@@ -42,12 +42,15 @@ class BackpackScreenFragment : Fragment() {
     private var navigation: BackpackDetailsNavigationListener? = null
 
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
+
     //   private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
     private lateinit var addDetailMenu: PopupMenu
+    private var menuPopupHelper : MenuPopupHelper? = null
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -60,10 +63,6 @@ class BackpackScreenFragment : Fragment() {
 
         backpackBinding.backpackViewModel = backpackViewModel
         backpackBinding.lifecycleOwner = this@BackpackScreenFragment
-
-        backpackViewModel.openAddDetailMenu.observe(this, Observer {
-            onAddClicked(it)
-        })
 
         return backpackBinding.root
     }
@@ -79,6 +78,7 @@ class BackpackScreenFragment : Fragment() {
         super.onStart()
         startListeners()
         updateUI()
+        initialiseMenu()
     }
 
     private fun updateUI() {
@@ -88,6 +88,7 @@ class BackpackScreenFragment : Fragment() {
         )
         backpackBinding.recyclerviewBackpack.layoutManager = GridLayoutManager(activity, 5)
         backpackBinding.recyclerviewBackpack.adapter = detailThumbnailsAdapter
+
     }
 
     override fun onStop() {
@@ -95,6 +96,7 @@ class BackpackScreenFragment : Fragment() {
         detailThumbnailsAdapter = null
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private fun startListeners() {
         // TODO Update adapter when backpack changes, change this to userviewmodel when working with real data
 
@@ -103,8 +105,12 @@ class BackpackScreenFragment : Fragment() {
         })
 
         backpackBinding.btnBackpackAdd.setOnClickListener {
-            backpackViewModel.openAddDetailMenu(it)
+            backpackViewModel.setOnAddClicked(it)
         }
+
+        backpackViewModel.onAddClicked.observe(this, Observer {
+            backpackViewModel.changePopupMenuState()
+        })
 
         backpackBinding.btnBackpackDrawCancel.setOnClickListener {
             backpackViewModel.goToCityScreen()
@@ -146,23 +152,43 @@ class BackpackScreenFragment : Fragment() {
         }
 
         backpackViewModel.isDetailScreenOpen.observe(this, Observer {
-            if (!it) {
+            if (!it) { closeMenu() }
+        })
+
+        backpackBinding.btnBackpackDelete.setOnClickListener {
+            backpackViewModel.setIsInEditMode()
+        }
+
+        backpackViewModel.isInEditMode.observe(this, Observer{
+            if(backpackViewModel.isInEditMode.value == OpenState.OPEN)
+                detailThumbnailsAdapter!!.hide(false)
+            else
+                detailThumbnailsAdapter!!.hide(true)
+        })
+
+        backpackViewModel.isPopupMenuOpen.observe(this, Observer {
+            if(it == OpenState.OPEN){
+                openMenu()
+                backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
+            }
+            else if(it == OpenState.CLOSED){
+                closeMenu()
                 backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.add_btn, null)
-                addDetailMenu.dismiss()
-                }
-    })
+            }
+        })
+
+        backpackViewModel.initialize()
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-    private fun onAddClicked(view: View) {
-        addDetailMenu = PopupMenu(view.context, view, Gravity.END, 0, R.style.PopupMenu_AddDetail)
-        backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
+    private fun initialiseMenu(){
+        addDetailMenu = PopupMenu(backpackBinding.btnBackpackAdd.context, backpackBinding.btnBackpackAdd, Gravity.END, 0, R.style.PopupMenu_AddDetail)
+
         addDetailMenu.menuInflater.inflate(R.menu.menu_backpack, addDetailMenu.menu)
 
-        val menuPopupHelper = MenuPopupHelper(view.context, addDetailMenu.menu as MenuBuilder, backpackBinding.btnBackpackAdd)
+        menuPopupHelper = MenuPopupHelper(backpackBinding.btnBackpackAdd.context, addDetailMenu.menu as MenuBuilder, backpackBinding.btnBackpackAdd)
 
-        addDetailMenu.setOnDismissListener {
-            backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.add_btn, null)
+        menuPopupHelper!!.setOnDismissListener {
+            menuPopupHelper!!.dismiss()
         }
 
         addDetailMenu.setOnMenuItemClickListener { item ->
@@ -180,10 +206,19 @@ class BackpackScreenFragment : Fragment() {
                 R.id.backpack_menu_addVideo ->
                     navigation?.startVideoDetailFragment()
             }
+            menuPopupHelper!!.dismiss()
             true
         }
-            menuPopupHelper.setForceShowIcon(true)
-            menuPopupHelper.show()
+
+        menuPopupHelper!!.setForceShowIcon(true)
+    }
+
+    private fun closeMenu(){
+        menuPopupHelper?.dismiss()
+    }
+
+    private fun openMenu() {
+        menuPopupHelper!!.show()
     }
 
     interface BackpackDetailsNavigationListener {

@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,6 +23,12 @@ import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCas
 import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
+
+object OpenState {
+    const val OPEN = 2
+    const val CLOSED = 3
+}
+
 
 class BackpackViewModel(
     private val saveBackpackTextDetailUseCase: SaveBackpackTextDetailUseCase,
@@ -64,8 +71,8 @@ class BackpackViewModel(
     private val _viewButtons = MutableLiveData<Boolean>()
     val viewButtons: LiveData<Boolean> = _viewButtons
 
-    private val _openAddDetailMenu = MutableLiveData<View>()
-    val openAddDetailMenu: LiveData<View> = _openAddDetailMenu
+    private val _onAddClicked = MutableLiveData<View>()
+    val onAddClicked : LiveData<View> = _onAddClicked
 
     private val _goToCityScreen = SingleLiveEvent<Any>()
     val goToCityScreen: LiveData<Any> = _goToCityScreen
@@ -73,16 +80,46 @@ class BackpackViewModel(
     private val _isDetailScreenOpen = MutableLiveData<Boolean>()
     val isDetailScreenOpen: LiveData<Boolean> = _isDetailScreenOpen
 
+    private val _isPopupMenuOpen = MutableLiveData<Int>()
+    val isPopupMenuOpen : LiveData<Int> = _isPopupMenuOpen
+
+    private val _isInEditMode = MutableLiveData<Int>()
+    val isInEditMode : LiveData<Int> = _isInEditMode
+
     init {
         _details.postValue(getBackPackFilesDummyUseCase.getDetails())
     }
 
-    fun setDetailScreenOpen(isOpen: Boolean) {
-        _isDetailScreenOpen.postValue(isOpen)
+    fun initialize(){
+        _isInEditMode.postValue(OpenState.CLOSED)
+        _isPopupMenuOpen.postValue(OpenState.CLOSED)
     }
 
-    fun openAddDetailMenu(view: View) {
-        _openAddDetailMenu.postValue(view)
+    fun setIsInEditMode(){
+        if(isInEditMode.value == OpenState.CLOSED)
+            _isInEditMode.postValue(OpenState.OPEN)
+        else if(isInEditMode.value == OpenState.OPEN)
+            _isInEditMode.postValue(OpenState.CLOSED)
+    }
+
+    fun changePopupMenuState(){
+        if(isPopupMenuOpen.value == OpenState.CLOSED)
+            _isPopupMenuOpen.postValue(OpenState.OPEN)
+        else if(isPopupMenuOpen.value == OpenState.OPEN)
+            _isPopupMenuOpen.postValue(OpenState.CLOSED)
+    }
+
+    fun closePopUpMenu(){
+        _isPopupMenuOpen.postValue(OpenState.CLOSED)
+    }
+
+    fun setDetailScreenOpen(isOpen: Boolean) {
+        _isDetailScreenOpen.postValue(isOpen)
+        _isPopupMenuOpen.postValue(OpenState.CLOSED)
+    }
+
+    fun setOnAddClicked(view: View) {
+        _onAddClicked.postValue(view)
     }
 
     fun viewButtons(viewButtons: Boolean) {
@@ -159,10 +196,6 @@ class BackpackViewModel(
         saveBackpackDrawingDetailUseCase.dispose()
         saveBackpackPhotoDetailUseCase.dispose()
         super.onCleared()
-    }
-
-    fun removeDetail() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     fun filterSearchBar(text: String): List<Detail> {
