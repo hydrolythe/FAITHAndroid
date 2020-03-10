@@ -94,17 +94,12 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
     private fun loadAvatarImage(event: Event) {
         if (event.emotionAvatar != null) {
             textView_editDetail_avatar.text = ""
-            val image =
-                event.emotionAvatar ?: ContextCompat.getDrawable(
-                    this.context!!,
-                    avatarOutlineResId
-                ) as BitmapDrawable
 
             val width = Resources.getSystem().displayMetrics.widthPixels
             val height = Resources.getSystem().displayMetrics.heightPixels
 
             Glide.with(this)
-                .load(image)
+                .load(event.emotionAvatar)
                 // to refresh the picture and not get it from the glide cache
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
