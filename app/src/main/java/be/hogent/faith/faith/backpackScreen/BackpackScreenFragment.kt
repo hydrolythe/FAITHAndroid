@@ -189,6 +189,7 @@ class BackpackScreenFragment : Fragment() {
 
         menuPopupHelper!!.setOnDismissListener {
             menuPopupHelper!!.dismiss()
+            backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.add_btn, null)
         }
 
         addDetailMenu.setOnMenuItemClickListener { item ->
