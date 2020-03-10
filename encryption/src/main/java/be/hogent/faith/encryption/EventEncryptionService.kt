@@ -79,7 +79,6 @@ class EventEncryptionService(
             .flatMap { dek -> decryptEvent(encryptedEvent, dek) }
     }
 
-
     private fun decryptEvent(
         encryptedEvent: EncryptedEvent,
         dek: KeysetHandle
@@ -118,6 +117,6 @@ class EventEncryptionService(
 
     override fun decryptEventFiles(encryptedEvent: EncryptedEvent): Completable {
         val streamingDEK = keyEncrypter.decrypt(encryptedEvent.encryptedStreamingDEK)
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 }
