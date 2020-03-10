@@ -61,6 +61,8 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.FullScreen"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+
+
     </application>
 
 </manifest>

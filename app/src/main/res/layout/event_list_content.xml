@@ -92,7 +92,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/img_draw"
             app:layout_constraintTop_toTopOf="@+id/img_photo"
-            app:srcCompat="@drawable/audio_record" />
+            app:srcCompat="@drawable/button_record_start" />
 
         <ImageView
             android:id="@+id/img_text"

@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.firebase-perf'
 
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
@@ -28,7 +29,7 @@ android {
         versionCode generateVersionCode()
         versionName generateVersionName()
         multiDexEnabled true
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "be.hogent.faith.faith.TestAppJUnitRunner"
         manifestPlaceholders = [auth0Domain: "@string/com_auth0_domain", auth0Scheme: "app"]
         vectorDrawables.useSupportLibrary = true
 
@@ -117,6 +118,9 @@ dependencies {
     implementation uiDependencies.annotation
     implementation uiDependencies.material
 
+
+    implementation "com.github.skydoves:colorpickerpreference:2.0.0"
+
     implementation commonDependencies.navktx
     implementation commonDependencies.navui
 
@@ -136,14 +140,23 @@ dependencies {
 
     implementation testDependencies.firebase_analytics
     implementation testDependencies.crashlytics
+    implementation firebaseDependencies.performance
 
+
+    // AndroidJUnitRunner and JUnit Rules
     androidTestImplementation androidTestDependencies.testCore
     androidTestImplementation androidTestDependencies.testRules
+    // Assertions
     androidTestImplementation androidTestDependencies.androidJunit
+    //espresso
     androidTestImplementation androidTestDependencies.espresso
-
     androidTestImplementation androidTestDependencies.espressoContrib
+    //koin
+    androidTestImplementation testDependencies.koinTesting
+
     androidTestImplementation androidTestDependencies.uiAutomator
+
+
 
 }
 

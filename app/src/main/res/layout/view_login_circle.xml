@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <data>
 
         <variable
@@ -8,60 +9,75 @@
             type="be.hogent.faith.faith.loginOrRegister.WelcomeViewModel" />
     </data>
 
-    <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:background="@drawable/cirkel_paneel"
-        android:gravity="center"
-        android:orientation="vertical">
+    <androidx.cardview.widget.CardView
+        android:layout_width="380dp"
+        android:layout_height="330dp"
+        app:cardCornerRadius="30dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_username"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/username"
-            app:endIconMode="clear_text"
-            app:errorResId="@{welcomeViewModel.userNameErrorMessage}"
-            app:errorEnabled="true">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_username"
+                style="@style/faith_textInputLayout"
+                android:hint="@string/username"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:errorResId="@{welcomeViewModel.userNameErrorMessage}">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_welcome_userName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_login_wrap"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="text"
+                    android:nextFocusRight="@+id/txt_welcome_password"
+                    android:nextFocusDown="@+id/txt_welcome_password"
+                    android:singleLine="true"
+                    android:text="@={welcomeViewModel.userName}" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txt_welcome_userName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:drawableStart="@drawable/ic_login_wrap"
-                android:imeOptions="flagNoExtractUi"
-                android:nextFocusRight="@+id/txt_welcome_password"
-                android:nextFocusDown="@+id/txt_welcome_password"
-                android:singleLine="true"
-                android:text="@={welcomeViewModel.userName}" />
-        </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_pwd"
+                style="@style/faith_textInputLayout"
+                android:layout_marginTop="10dp"
+                android:hint="@string/password"
+                app:endIconMode="password_toggle"
+                app:errorEnabled="true"
+                app:errorResId="@{welcomeViewModel.passwordErrorMessage}">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_welcome_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_lock_wrap"
+                    android:imeOptions="flagNoExtractUi"
+                    android:inputType="textPassword"
+                    android:nextFocusLeft="@+id/txt_welcome_userName"
+                    android:singleLine="true"
+                    android:text="@={welcomeViewModel.password}" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_pwd"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/password"
-            app:endIconMode="password_toggle"
-            app:errorResId="@{welcomeViewModel.passwordErrorMessage}"
-            app:errorEnabled="true">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_register_naar_de_stad"
+                style="@style/faith_button"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:onClick="@{() -> welcomeViewModel.loginButtonClicked()}"
+                android:text="@string/naar_de_stad"
+                app:icon="@drawable/icoon_stad"
+                app:iconGravity="textStart"
+                app:iconSize="34dp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txt_welcome_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_lock_wrap"
-                android:imeOptions="flagNoExtractUi"
-                android:inputType="textPassword"
-                android:nextFocusLeft="@+id/txt_welcome_userName"
-                android:singleLine="true"
-                android:text="@={welcomeViewModel.password}" />
-        </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
-    </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 </layout>

@@ -8,8 +8,8 @@ import timber.log.Timber
 class ResourceAvatarProvider(private val context: Context) :
     AvatarProvider {
 
-    override fun getAvatarDrawables(): List<Drawable> {
-        return getAvatars()
+    override fun getAvatarDrawables(skinColor: SkinColor): List<Drawable> {
+        return getAvatars(skinColor)
             .map(Avatar::avatarName)
             .map { avatarName -> getAvatarDrawable(avatarName) }
     }
@@ -19,33 +19,38 @@ class ResourceAvatarProvider(private val context: Context) :
     }
 
     override fun getAvatarDrawableStaan(avatarName: String): Drawable {
-        return getDrawable(avatarName, "staan")
+        return getDrawable(avatarName)
     }
 
     override fun getAvatarDrawableZitten(avatarName: String): Drawable {
-        return getDrawable(avatarName, "zitten")
+        return getDrawable(avatarName, "bank")
     }
 
     override fun getAvatarDrawableGezicht(avatarName: String): Drawable {
-        return getDrawable(avatarName, "gezicht")
+        return getDrawable(avatarName, "hoofd")
     }
 
     override fun getAvatarDrawableOutline(avatarName: String): Drawable {
-        return getDrawable(avatarName, "outline")
+        return getDrawable(getAvatarnameWithoutSkinColor(avatarName), "outline")
     }
 
     private fun getDrawable(avatarName: String, type: String? = null): Drawable {
         val avatarResourceName = if (type != null) "${avatarName}_$type" else avatarName
-        Timber.d(avatarResourceName)
+        Timber.d("Resource :$avatarResourceName")
         val resourceId =
             context.resources.getIdentifier(avatarResourceName, "drawable", context.packageName)
+        Timber.d("Resource :$resourceId")
         return ContextCompat.getDrawable(context, resourceId)!!
     }
 
     override fun getAvatarDrawableOutlineId(avatarName: String): Int {
-        return context.getResources().getIdentifier(
-            "${avatarName}_outline", "drawable",
-            context.getPackageName()
+        return context.resources.getIdentifier(
+            "${getAvatarnameWithoutSkinColor(avatarName)}_outline", "drawable",
+            context.packageName
         )
+    }
+
+    private fun getAvatarnameWithoutSkinColor(avatarName: String): String {
+        return avatarName.substring(0, avatarName.length - 3)
     }
 }

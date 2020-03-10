@@ -2,12 +2,15 @@
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/img_event_detail_thumbnail"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
-    android:layout_margin="8dp"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
     android:background="@drawable/rv_item_detail_background"
+    android:layout_gravity="center_vertical"
+    android:layout_centerInParent="true"
     android:contentDescription="@string/description_thumbnail"
     android:padding="@dimen/material_drawer_item_profile_icon_padding_right"
+    android:scaleType="centerInside"
     tools:srcCompat="@drawable/ic_micro">
 
 </ImageView>

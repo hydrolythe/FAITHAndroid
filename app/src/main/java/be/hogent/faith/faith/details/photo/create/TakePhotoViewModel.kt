@@ -72,18 +72,22 @@ class TakePhotoViewModel(
 
     val visibilityTakePhoto: LiveData<Int> =
         Transformations.map<PhotoState, Int>(_currentState) { state ->
-            if (state is TakePhotoState) View.VISIBLE else View.GONE
+            if (state is TakePhotoState) View.VISIBLE else View.INVISIBLE
         }
 
     val visibilityPhotoTakenNotSaved: LiveData<Int> =
         Transformations.map<PhotoState, Int>(_currentState) { state ->
-            if (state is PhotoTakenState) View.VISIBLE else View.GONE
+            if (state is PhotoTakenState) View.VISIBLE else View.INVISIBLE
         }
 
     val visibilityPhotoTakenOrSaved: LiveData<Int> =
         Transformations.map<PhotoState, Int>(_currentState) { state ->
-            if (state is PhotoTakenState || state is PhotoSavedState) View.VISIBLE else View.GONE
+            if (state is PhotoTakenState || state is PhotoSavedState) View.VISIBLE else View.INVISIBLE
         }
+
+    private val _cancelClicked = SingleLiveEvent<Unit>()
+    val cancelClicked: LiveData<Unit>
+        get() = _cancelClicked
 
     init {
         _currentState.value = TakePhotoState()
@@ -117,6 +121,10 @@ class TakePhotoViewModel(
      */
     fun photoTaken(file: File) {
         _currentState.value!!.setPhotoSaveFile(this, file)
+    }
+
+    fun onCancelClicked() {
+        _cancelClicked.call()
     }
 
     internal abstract class PhotoState {

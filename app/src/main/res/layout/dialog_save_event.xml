@@ -25,73 +25,79 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/background_register_info_color">
+            android:background="@color/color_white">
 
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.12" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_save_bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.5" />
+                app:layout_constraintGuide_percent="0.88" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.93" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_save_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.8" />
+                app:layout_constraintGuide_percent="0.21" />
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_back_end"
+                android:id="@+id/guide_save_painter_end"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.2" />
-
+                app:layout_constraintGuide_percent="0.22" />
 
             <ImageButton
                 android:id="@+id/btn_save_event_cancel"
                 android:layout_width="@dimen/material_icon_width"
                 android:layout_height="@dimen/material_icon_height"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/ic_return"
-                android:onClick="@{() -> eventViewModel.onCancelButtonClicked()}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <ImageButton
-                android:id="@+id/btn_save_event_save"
-                android:layout_width="@dimen/material_icon_width"
-                android:layout_height="@dimen/material_icon_height"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="@drawable/save_btn"
-                android:minWidth="24dp"
-                android:onClick="@{() -> userViewModel.saveEvent(eventViewModel.eventTitle, eventViewModel.event)}"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@drawable/ic_return"
+                android:contentDescription="@string/cancel"
+                android:onClick="@{() -> eventViewModel.onCancelButtonClicked()}"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="0dp"
+                android:id="@+id/save_event_schilder"
+                android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="@string/schilder"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guide_back_end"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/guide_save_bottom"
-                app:srcCompat="@drawable/schilder_avatar_op_ladder" />
+                app:layout_constraintEnd_toStartOf="@+id/guide_save_painter_end"
+                app:layout_constraintTop_toBottomOf="@+id/btn_save_event_cancel"
+                app:srcCompat="@drawable/schilder" />
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/save_event_cardview"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_margin="10dp"
-                app:layout_constraintBottom_toTopOf="@+id/guideline7"
-                app:layout_constraintEnd_toStartOf="@+id/guide_save_start"
-                app:layout_constraintStart_toStartOf="@+id/guide_back_end"
-                app:layout_constraintTop_toTopOf="@+id/guideline4">
+                app:cardBackgroundColor="@color/background_save_event"
+                app:cardCornerRadius="60dp"
+                app:cardElevation="@dimen/panel_elevation"
+                app:layout_constraintBottom_toTopOf="@+id/guide_save_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/guide_save_end"
+                app:layout_constraintStart_toEndOf="@+id/guide_save_start"
+                app:layout_constraintTop_toBottomOf="@+id/guide_save_top">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintlayout"
@@ -99,103 +105,124 @@
                     android:layout_height="match_parent">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textInputLayout_eventtitle"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:id="@+id/textInputLayout_date"
+                        style="@style/faith_textInputLayout"
                         android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:hint="@string/save_event_title"
+                        android:layout_height="@dimen/event_textInput_height"
+                        android:layout_marginEnd="64dp"
+                        app:hintEnabled="false"
+                        app:layout_constraintBottom_toTopOf="@+id/save_event_title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/btn_save_event_open_datepicker"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/ic_kalender"
+                            android:drawablePadding="5dp"
+                            android:hint="@string/datum"
+                            android:inputType="date"
+                            android:onClick="@{() -> eventViewModel.onDateButtonClicked()}"
+                            android:text="@{eventViewModel.eventDateString}"
+                            tools:text="@tools:sample/date/ddmmyy" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/save_event_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/je_werkje_opslaan"
+                        android:textColor="@color/caption"
+                        android:textSize="45sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/textInputLayout_eventtitle"
+                        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_eventtitle"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/textInputLayout_eventtitle"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_date" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_eventtitle"
+                        style="@style/faith_textInputLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="48dp"
+                        android:layout_marginEnd="48dp"
+                        android:layout_marginBottom="16dp"
+                        app:errorEnabled="true"
                         app:errorResId='@{userViewModel.titleErrorMessage}'
-                        app:layout_constraintBottom_toTopOf="@+id/textInputLayout_date"
+                        app:layout_constraintBottom_toTopOf="@+id/textInputLayout_notes"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/save_event_title"
                         app:layout_constraintVertical_weight="1">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/txt_save_event_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/ic_titel"
+                            android:drawablePadding="5dp"
+                            android:hint="@string/save_event_title"
                             android:inputType="text"
-                            android:nextFocusDown = "@+id/txt_save_event_notes"
-                            android:text="@={eventViewModel.eventTitle}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textInputLayout_date"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="0dp"
-                        android:layout_height="75dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:hint="@string/datum"
-                        app:layout_constraintBottom_toTopOf="@+id/textInputLayout_notes"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_eventtitle">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/btn_save_event_open_datepicker"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="date"
-                            android:onClick="@{() -> eventViewModel.onDateButtonClicked()}"
-                            android:text="@{eventViewModel.eventDateString}"
-                            tools:text="@tools:sample/date/ddmmyy" />
-
+                            android:nextFocusDown="@+id/txt_save_event_notes"
+                            android:text="@={eventViewModel.eventTitle}">
+                            <requestFocus />
+                        </com.google.android.material.textfield.TextInputEditText>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputLayout_notes"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        style="@style/faith_textInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:hint="@string/hier_kan_je_de_notities_kwijt"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/btn_save_event_save"
+                        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_eventtitle"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_date"
-                        app:layout_constraintVertical_weight="2">
+                        app:layout_constraintStart_toStartOf="@+id/textInputLayout_eventtitle"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_eventtitle">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/txt_save_event_notes"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:gravity="top|left"
+                            android:drawableStart="@drawable/ic_notities"
+                            android:drawablePadding="5dp"
+                            android:gravity="top|start"
+                            android:hint="@string/hier_kan_je_de_notities_kwijt"
                             android:inputType="textMultiLine"
+                            android:nextFocusDown="@+id/btn_save_event_save"
                             android:singleLine="false"
                             android:text="@={eventViewModel.eventNotes}"
                             tools:text="@tools:sample/lorem/random" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
-
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_save_event_save"
+                        style="@style/faith_button"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/save_btn"
+                        android:contentDescription="@string/save"
+                        android:onClick="@{() -> userViewModel.saveEvent(eventViewModel.eventTitle, eventViewModel.event)}"
+                        android:text="@string/save"
+                        app:cornerRadius="40dp"
+                        app:icon="@drawable/save_btn"
+                        app:iconGravity="textStart"
+                        app:iconPadding="5dp"
+                        app:iconSize="44dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_notes" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.11" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.89" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

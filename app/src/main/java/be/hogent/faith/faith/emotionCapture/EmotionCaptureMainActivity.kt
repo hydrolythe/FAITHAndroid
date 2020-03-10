@@ -62,6 +62,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
 
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private val avatarProvider: AvatarProvider by inject()
+    private var alertDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,10 +110,13 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         eventViewModel.errorMessage.observe(this, Observer { errorMessageResId ->
             Toast.makeText(this, errorMessageResId, Toast.LENGTH_SHORT).show()
         })
+        eventViewModel.cancelButtonClicked.observe(this, Observer {
+            onBackPressed()
+        })
     }
 
     private fun showExitAlert() {
-        val alertDialog: AlertDialog = this.run {
+        alertDialog = this.run {
             val builder = AlertDialog.Builder(this).apply {
                 setTitle(R.string.dialog_to_the_city_title)
                 setMessage(R.string.dialog_to_the_city_message)
@@ -125,7 +129,14 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
             }
             builder.create()
         }
-        alertDialog.show()
+        alertDialog!!.show()
+    }
+
+    public override fun onDestroy() {
+        super.onDestroy()
+        if (alertDialog != null && alertDialog!!.isShowing) {
+            alertDialog!!.cancel()
+        }
     }
 
     private fun closeEventSpecificScopes() {

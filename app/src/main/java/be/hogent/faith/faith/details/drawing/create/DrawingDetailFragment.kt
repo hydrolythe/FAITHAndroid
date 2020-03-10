@@ -20,6 +20,8 @@ import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImage
 import be.hogent.faith.faith.di.KoinModules
 import com.divyanshu.draw.widget.DrawView
 import com.google.android.material.tabs.TabLayout
+import com.skydoves.colorpickerview.ColorPickerDialog
+import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.core.error.ScopeNotCreatedException
@@ -115,9 +117,26 @@ class DrawingDetailFragment : DrawFragment(),
     }
 
     private fun startListeners() {
+        drawViewModel.customColorClicked.observe(this, Observer {
+            val builder = ColorPickerDialog.Builder(this.context)
+                .setTitle("Kies een kleur")
+                .attachAlphaSlideBar(false)
+                .attachBrightnessSlideBar(true)
+
+                .setPositiveButton(
+                    getString(R.string.confirm),
+                    ColorEnvelopeListener { envelope, _ -> if (envelope != null)
+                        drawViewModel.setCustomColor(envelope.color) })
+                .setNegativeButton(
+                    getString(R.string.cancel)
+                ) { dialogInterface, i -> dialogInterface.dismiss() }
+            builder.show()
+        })
+
         drawingDetailViewModel.textClicked.observe(this, Observer {
             drawView.pickTextTool()
         })
+
         drawingDetailViewModel.savedDetail.observe(this, Observer { detail ->
             if (detail == null) {
                 return@Observer

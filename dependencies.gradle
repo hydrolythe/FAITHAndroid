@@ -61,6 +61,7 @@ ext {
     robolectric_version = '4.3.1'
     firebase_test_version = '17.2.1'
     crashlytics_dep_version = '2.10.1'
+    firebase_performance = '19.0.5'
 
 
     uiAutomator_version = '2.2.0'
@@ -150,7 +151,9 @@ ext {
             firebaseauth :"com.google.firebase:firebase-auth:$firebaseauth_version",
             firestore :"com.google.firebase:firebase-firestore-ktx:$firestore_version",
             firebasestorage :"com.google.firebase:firebase-storage:$firebasestorage_version",
-            firebasestorageui:"com.firebaseui:firebase-ui-storage:$firebasestorageui_version"
+            firebasestorageui:"com.firebaseui:firebase-ui-storage:$firebasestorageui_version",
+            // Add the dependency for the Performance Monitoring library
+            performance: "com.google.firebase:firebase-perf:$firebase_performance"
     ]
 
     uiDependencies = [

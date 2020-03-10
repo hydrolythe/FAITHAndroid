@@ -3,7 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="colorTransparent">#00000000</color>
+    <color name="colorTransparent">#B3FFFFFF</color>
 
     <color name="park_sky">#C1FCEE</color>
     <color name="park_gras">#16F48A</color>
@@ -17,7 +17,7 @@
 
     <color name="background">#FFFFFF</color>
     <color name="surface">#FFFFFF</color>
-    <color name="error">#4A148C</color>
+    <color name="error">#FF1744</color>
 
     <color name="onPrimary">#FFFFFF</color>
     <color name="onSecondary">#FFFFFF</color>
@@ -26,12 +26,24 @@
     <color name="onSurface">#000000</color>
     <color name="onError">#FFFFFF</color>
     <color name="background_register_info_color">#A7FFEB</color>
+    <color name="background_record_audio">#91C6A8</color>
+    <color name="background_save_event">#CDF9EC</color>
+    <color name="background_enter_text">#F21040</color>
 
     <color name="blue">#00FFFF</color>
     <color name="red">#DA1D45</color>
     <color name="green">#16F48A</color>
     <color name="black">#3F3E3E</color>
     <color name="yellow">#FFFF00</color>
+
+    <color name="caption">#0000FF</color>
+    <color name="recorderIcons">#F21040</color>
+
+    <color name="dark_green">#44786B</color>
+
+    <color name="skin_blank">#FFC18E</color>
+    <color name="skin_lightbrown">#D39751</color>
+    <color name="skin_darkbrown">#9C6231</color>
 </resources>
 
 

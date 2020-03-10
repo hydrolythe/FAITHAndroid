@@ -12,65 +12,69 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/screen_take_photo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/yellow">
 
-        <io.fotoapparat.view.CameraView
-            android:id="@+id/cameraView"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/takePhoto_cardView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="0dp"
-            android:visibility="@{safeUnbox(photoViewModel.visibilityTakePhoto)}"
+            android:layout_margin="16dp"
+            android:elevation="@dimen/panel_corner_radius"
+            app:cardBackgroundColor="@color/black"
+            app:cardCornerRadius="@dimen/panel_corner_radius"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_takePhoto_Ok_Save"
+            app:layout_constraintStart_toEndOf="@+id/btn_takePhoto_cancel"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <io.fotoapparat.view.CameraView
+                android:id="@+id/cameraView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="@{safeUnbox(photoViewModel.visibilityTakePhoto)}" />
+
+            <ImageView
+                android:id="@+id/img_takePhoto_theTakenPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:contentDescription="@string/take_photo_de_foto"
+                android:scaleType="centerCrop"
+                android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenOrSaved)}" />
+        </androidx.cardview.widget.CardView>
+
+        <ImageButton
+            android:id="@+id/btn_takePhoto_cancel"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/ic_return"
+            android:contentDescription="@string/cancel"
+            android:onClick="@{() -> photoViewModel.onCancelClicked()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/img_takePhoto_Photo"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="0dp"
-            android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenOrSaved)}"
-            android:contentDescription="@string/take_photo_de_foto"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:scaleType="centerCrop"/>
-
 
         <ImageButton
             android:id="@+id/btn_takePhoto_takePhoto"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/ic_take_picture"
             android:contentDescription="@string/take_photo_neem_foto"
             android:onClick="@{() -> photoViewModel.onTakePhotoButtonClicked()}"
-            android:background="@drawable/btn_take_picture"
             android:text="@string/frag_takePhoto_takePhoto"
             android:visibility="@{safeUnbox(photoViewModel.visibilityTakePhoto)}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <ImageButton
-            android:id="@+id/btn_takePhoto_NotOk"
-            android:layout_width="@dimen/material_icon_width"
-            android:layout_height="@dimen/material_icon_height"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/ic_return"
-            android:contentDescription="@string/cancel"
-            android:onClick="@{() -> photoViewModel.onNotOkPhotoButtonClicked()}"
-            android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenNotSaved)}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/btn_flipCamera"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
+            android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/ic_flip_camera"
             android:contentDescription="@string/cancel"
@@ -80,7 +84,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
-            android:id="@+id/btn_takePhoto_Ok"
+            android:id="@+id/btn_takePhoto_Ok_Save"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
             android:layout_marginTop="16dp"
@@ -89,9 +93,22 @@
             android:contentDescription="@string/ok"
             android:onClick="@{() -> photoViewModel.onOkPhotoButtonClicked()}"
             android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenNotSaved)}"
-            android:minWidth="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_takePhoto_NotOk"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/ic_prullenmand"
+            android:contentDescription="@string/in_de_prullenmand"
+            android:onClick="@{() -> photoViewModel.onNotOkPhotoButtonClicked()}"
+            android:visibility="@{safeUnbox(photoViewModel.visibilityPhotoTakenNotSaved)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

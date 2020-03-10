@@ -4,6 +4,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
 import androidx.test.rule.ActivityTestRule
 import be.hogent.faith.R
 import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
@@ -14,9 +15,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@LargeTest
 class DrawEmotionAvatarFragmentTest {
     @get:Rule
-    var activityScenarioRule = ActivityTestRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java, true, true)
+    var activityScenarioRule =
+        ActivityTestRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java, true, true)
 
     @Before
     fun goToScreen() {
@@ -31,10 +34,7 @@ class DrawEmotionAvatarFragmentTest {
         onView(withId(R.id.btn_draw_setColorRed)).perform(click())
         onView(withId(R.id.btn_draw_setColorYellow)).perform(click())
 
-        onView(withId(R.id.btn_draw_setThinLineWidth)).perform(click())
-        onView(withId(R.id.btn_draw_setMediumLineWidth)).perform(click())
-        onView(withId(R.id.btn_draw_setThickLineWidth)).perform(click())
-
-        onView(withId(R.id.btn_draw_undo)).perform(click())
+        onView(withId(R.id.btn_pencil)).perform(click())
+        onView(withId(R.id.btn_eraser)).perform(click())
     }
 }

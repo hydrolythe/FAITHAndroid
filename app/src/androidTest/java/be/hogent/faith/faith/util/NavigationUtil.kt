@@ -11,11 +11,11 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter
 import java.util.UUID
 
 object NavigationUtil {
-    fun goToCityScreen() {
+    fun goToCityScreenViaRegistration() {
         // Focus is on input field for the name by default, which opens the soft keyboard.
         // It hides the button to go to town so we have to close it.
         // We have to close the soft keyboard everytime because otherwise it overlaps the textfield.
-        onView(withId(R.id.btn_loginfragment_library)).perform(click())
+        onView(withId(R.id.btn_login_ik_ben_nieuw)).perform(click())
 
         closeSoftKeyboard()
         onView(withId(R.id.txt_register_username)).perform(typeText(UUID.randomUUID().toString()))
@@ -31,7 +31,21 @@ object NavigationUtil {
                 click()
             )
         )
-        onView(withId(R.id.btn_register_finishRegistration)).perform(click())
+        onView(withId(R.id.btn_register_naar_de_stad)).perform(click())
+        // Just for safety
+        closeSoftKeyboard()
+    }
+
+    fun goToCityScreenViaLogin() {
+        // Focus is on input field for the name by default, which opens the soft keyboard.
+        // It hides the button to go to town so we have to close it.
+        // We have to close the soft keyboard everytime because otherwise it overlaps the textfield.
+        closeSoftKeyboard()
+        onView(withId(R.id.txt_welcome_userName)).perform(typeText("jan"))
+        closeSoftKeyboard()
+        onView(withId(R.id.txt_welcome_password)).perform(typeText("wwwwww"))
+        closeSoftKeyboard()
+        onView(withId(R.id.btn_register_naar_de_stad)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }
@@ -45,14 +59,15 @@ object NavigationUtil {
     }
 
     fun goToEventsOverviewScreen() {
-        goToCityScreen()
+        goToCityScreenViaRegistration()
         onView(withId(R.id.btn_loginfragment_library)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }
 
     fun goToNewEventScreen() {
-        goToCityScreen()
+        goToCityScreenViaLogin()
+        Thread.sleep(3000)
         onView(withId(R.id.btn_loginfragment_startNewEvent)).perform(click())
         // Just for safety
         closeSoftKeyboard()
@@ -81,7 +96,7 @@ object NavigationUtil {
 
     fun goToDrawEmotionAvatarScreen() {
         goToNewEventScreen()
-        onView(withId(R.id.btn_event_details_gotoEmotionAvatar)).perform(click())
+        onView(withId(R.id.img_event_details_avatar_inkleuren)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }

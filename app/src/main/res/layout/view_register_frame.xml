@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -11,105 +10,91 @@
     </data>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="400dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/background_register_infoframe">
+    <androidx.cardview.widget.CardView
+        android:layout_width="380dp"
+        android:layout_height="420dp"
+        app:cardCornerRadius="30dp">
 
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_register_username"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:hint="@string/hint_choose_username"
-            app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            app:errorResId="@{registerUserInfoViewModel.userNameErrorMessage}"
-            app:layout_constraintEnd_toStartOf="@+id/guideline5"
-            app:layout_constraintStart_toStartOf="@+id/guideline6"
-            app:layout_constraintTop_toTopOf="parent">
-
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txt_register_username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_login_wrap"
-                android:inputType="textPersonName"
-                android:text="@={registerUserInfoViewModel.userName}" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_register_pwd"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/kies_een_wachtwoord"
-            app:endIconMode="password_toggle"
-            app:errorEnabled="true"
-            app:errorResId="@{registerUserInfoViewModel.passwordErrorMessage}"
-            app:layout_constraintBottom_toTopOf="@+id/textInputLayout_register_pwd_repeat"
-            app:layout_constraintEnd_toStartOf="@+id/guideline5"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/guideline6"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout_register_username">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txt_register_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_lock_wrap"
-                android:inputType="textPassword"
-                android:text="@={registerUserInfoViewModel.password}" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout_register_pwd_repeat"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:hint="@string/herhaal_je_wachtwoord"
-            app:endIconMode="password_toggle"
-            app:errorEnabled="true"
-
-            app:errorResId="@{registerUserInfoViewModel.passwordRepeatErrorMessage}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline5"
-            app:layout_constraintStart_toStartOf="@+id/guideline6"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout_register_pwd">
-
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txt_register_password_repeat"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_lock_wrap"
-                android:inputType="textPassword"
-                android:text="@={registerUserInfoViewModel.passwordRepeated}" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.81" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline6"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.18" />
+            android:layout_margin="30dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_register_username"
+                style="@style/faith_textInputLayout"
+                android:hint="@string/hint_choose_username"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:errorResId="@{registerUserInfoViewModel.userNameErrorMessage}">
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_register_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_login_wrap"
+                    android:inputType="textPersonName"
+                    android:text="@={registerUserInfoViewModel.userName}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_register_pwd"
+                style="@style/faith_textInputLayout"
+                android:layout_marginTop="10dp"
+                android:hint="@string/kies_een_wachtwoord"
+                app:endIconMode="password_toggle"
+                app:errorEnabled="true"
+                app:errorResId="@{registerUserInfoViewModel.passwordErrorMessage}">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_register_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_lock_wrap"
+                    android:inputType="textPassword"
+                    android:text="@={registerUserInfoViewModel.password}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout_register_pwd_repeat"
+                style="@style/faith_textInputLayout"
+                android:layout_marginTop="10dp"
+                android:hint="@string/herhaal_je_wachtwoord"
+                app:endIconMode="password_toggle"
+                app:errorEnabled="true"
+                app:errorResId="@{registerUserInfoViewModel.passwordRepeatErrorMessage}">
+
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/txt_register_password_repeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_lock_wrap"
+                    android:inputType="textPassword"
+                    android:text="@={registerUserInfoViewModel.passwordRepeated}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_register_confirmInfo"
+                style="@style/faith_button"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:onClick="@{()->registerUserInfoViewModel.onConfirmUserInfoClicked()}"
+                android:text="@string/ga_verder"
+                app:icon="@drawable/ic_gaverder"
+                app:iconGravity="textStart"
+                app:iconSize="34dp" />
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </layout>

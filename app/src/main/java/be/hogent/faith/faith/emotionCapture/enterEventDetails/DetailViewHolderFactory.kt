@@ -51,6 +51,7 @@ object DetailViewHolderFactory {
         thumbnailView: ImageView,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): AudioDetailViewHolder {
+        thumbnailView.background = null
         return AudioDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
 
@@ -58,6 +59,7 @@ object DetailViewHolderFactory {
         thumbnailView: ImageView,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): TextDetailViewHolder {
+        thumbnailView.background = null
         return TextDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
 

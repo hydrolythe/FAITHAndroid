@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Linting') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                catchError {
                     sh './gradlew ktlint'
                 }
             }
@@ -29,7 +29,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                catchError {
                     sh './gradlew :app:assembleDebug'
                     sh './gradlew :app:assembleDebugAndroidTest'
                 }
@@ -37,17 +37,16 @@ pipeline {
         }
         stage('Unit Test') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                catchError {
                     sh './gradlew testDebugUnitTest testDebugUnitTest'
+                    junit '**/TEST-*.xml'
                 }
             }
         }
+
         stage('Integration tests') {
-            when{
-                branch 'dev'
-            }
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                catchError {
                     sh 'gcloud firebase test android run ' +
                             '--type instrumentation ' +
                             '--app app/build/outputs/apk/debug/app-debug.apk ' +
@@ -56,11 +55,15 @@ pipeline {
                 }
             }
         }
+
     }
     post {
         always {
-            echo 'Getting the test results'
-            junit '**/TEST-*.xml'
+            emailext body: "<b> ${currentBuild.currentResult} </b>: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} <br> " +
+                    "<br>" +
+                    "More info at : <a href=\"${env.BUILD_URL} \">${env.BUILD_URL} </a> ",
+                    recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                    subject: "[FAITH] Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
         }
     }
 }
