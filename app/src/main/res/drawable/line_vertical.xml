@@ -9,5 +9,4 @@
             android:width="1dp"
             android:color="@color/color_black" />
     </shape>
-    <?xml version="1.0" encoding="utf-8"?>
 </rotate>

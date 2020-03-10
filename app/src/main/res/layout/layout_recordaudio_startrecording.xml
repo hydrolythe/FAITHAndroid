@@ -1,51 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    <data>
 
-    <TextView
-        android:id="@+id/lbl_audio_startrecord_instruction"
+        <variable
+            name="audioDetailViewModel"
+            type="be.hogent.faith.faith.details.audio.AudioDetailViewModel" />
+    </data>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:text="Druk op de rode bol om\neen geluidsfragment op te nemen!"
-        android:textAlCaps="true"
-        android:textAlignment="center"
-        android:textColor="@color/caption" />
+        android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView_audio_center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        app:cardCornerRadius="@dimen/panel_corner_radius">
+        <TextView
+            android:id="@+id/lbl_audio_startrecord_instruction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:text="@string/recordaudio_record_description"
+            android:textAlignment="center"
+            android:textColor="@color/caption"
+            android:textSize="15sp" />
 
-        <ImageButton
-            android:id="@+id/btn_recordAudio_recorderStart"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_margin="25dp"
-            android:background="@drawable/button_record_start"
-            android:contentDescription="@string/description_start_recording"
-            android:onClick="@{() -> audioDetailViewModel.onRecorderStartButtonClicked()}" />
-    </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_audio_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="@dimen/panel_corner_radius">
 
-    <TextView
-        android:id="@+id/lbl_audio_startrecord_opnemen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Opnemen"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="@color/caption" />
-</LinearLayout>
+            <ImageButton
+                android:id="@+id/btn_recordAudio_recorderStart"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_margin="25dp"
+                android:background="@drawable/button_record_start"
+                android:contentDescription="@string/description_start_recording"
+                android:onClick="@{() -> audioDetailViewModel.onRecorderStartButtonClicked()}" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/lbl_audio_startrecord_opnemen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/recordaudio_record"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="@color/caption"
+            android:textSize="12sp" />
+    </LinearLayout>
+</layout>
 
 
 

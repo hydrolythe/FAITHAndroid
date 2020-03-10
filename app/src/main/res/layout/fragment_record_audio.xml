@@ -46,80 +46,49 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_width="0dp"
-                android:layout_height="58dp"
-                android:layout_marginTop="16dp"
-                android:progressDrawable="@drawable/audio_seekbar_progress"
-                android:splitTrack="false"
-                android:thumb="@drawable/audio_seekbar_thumb"
-                android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.FinishedRecording ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toTopOf="@+id/cardView_audio_center"
-                app:layout_constraintEnd_toEndOf="@+id/cardView_audio_center"
-                app:layout_constraintStart_toStartOf="@+id/cardView_audio_center"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_default="percent"
-                app:layout_constraintWidth_percent="0.625"
-                tools:progress="25" />
+            <include
+                bind:audioDetailViewModel="@{audioDetailViewModel}"
+                layout="@layout/layout_recordaudio_startrecording"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{audioDetailViewModel.viewState == AudioViewState.Initial ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <include layout="@layout/layout_recordaudio_startrecording" />
+            <include
+                bind:audioDetailViewModel="@{audioDetailViewModel}"
+                layout="@layout/layout_recordaudio_recording"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{audioDetailViewModel.viewState == AudioViewState.Recording ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
+
+            <include
+                android:id="@+id/playRecording"
+                bind:audioDetailViewModel="@{audioDetailViewModel}"
+                layout="@layout/layout_recordaudio_playrecording"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{audioDetailViewModel.viewState == AudioViewState.FinishedRecording ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_recordAudio_bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.43" />
-
-            <TextView
-                android:id="@+id/lbl_audio_startTime"
-                style="@style/recordingTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0:00"
-                android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.FinishedRecording ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toTopOf="@+id/seekBar"
-                app:layout_constraintEnd_toStartOf="@+id/seekBar"
-                app:layout_constraintStart_toStartOf="@+id/seekBar" />
-
-            <TextView
-                android:id="@+id/lbl_audio_recordingDuration"
-                style="@style/recordingTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{audioDetailViewModel.recordingDuration}"
-                android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.FinishedRecording ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toTopOf="@+id/seekBar"
-                app:layout_constraintEnd_toEndOf="@+id/seekBar"
-                app:layout_constraintStart_toEndOf="@+id/seekBar"
-                tools:text="01:23" />
-
-            <ImageButton
-                android:id="@+id/btn_recordAudio_reset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> audioDetailViewModel.onResetButtonClicked()}"
-                android:visibility="@{audioDetailViewModel.deleteButtonVisible ? View.VISIBLE: View.GONE}"
-                app:layout_constraintBottom_toBottomOf="@+id/seekBar"
-                app:layout_constraintStart_toEndOf="@+id/seekBar"
-                app:layout_constraintTop_toTopOf="@+id/seekBar"
-                app:srcCompat="@drawable/trashcan" />
-
-            <TextView
-                android:id="@+id/lbl_recordAudio_startInstructions"
-                style="@style/AppTheme.caption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Druk op de rode bol om\neen geluidsfragment op te nemen!"
-                android:textAlignment="center"
-                android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.Initial ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toTopOf="@+id/cardView_audio_center"
-                app:layout_constraintEnd_toEndOf="@+id/cardView_audio_center"
-                app:layout_constraintStart_toStartOf="@+id/cardView_audio_center"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="gone" />
-
+                app:layout_constraintGuide_percent="0.45" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
