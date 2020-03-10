@@ -8,16 +8,19 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.AUDIO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.DRAW_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.PICTURE_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.TEXT_DETAIL
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.VIDEO_DETAIL
 
 object DetailTypes {
     const val AUDIO_DETAIL = 1
     const val TEXT_DETAIL = 2
     const val PICTURE_DETAIL = 3
     const val DRAW_DETAIL = 4
+    const val VIDEO_DETAIL = 5
 }
 
 class DetailThumbnailsAdapter(
@@ -52,6 +55,7 @@ class DetailThumbnailsAdapter(
             is DrawingDetail -> PICTURE_DETAIL
             is TextDetail -> TEXT_DETAIL
             is PhotoDetail -> PICTURE_DETAIL
+            is VideoDetail -> VIDEO_DETAIL
         }
     }
 

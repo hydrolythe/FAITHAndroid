@@ -86,6 +86,9 @@ class BackpackViewModel(
     private val _isInEditMode = MutableLiveData<Int>()
     val isInEditMode : LiveData<Int> = _isInEditMode
 
+    private val _showSaveDialog = MutableLiveData<Detail>()
+    val showSaveDialog: LiveData<Detail> = _showSaveDialog
+
     init {
         _details.postValue(getBackPackFilesDummyUseCase.getDetails())
     }
@@ -107,6 +110,19 @@ class BackpackViewModel(
             _isPopupMenuOpen.postValue(OpenState.OPEN)
         else if(isPopupMenuOpen.value == OpenState.OPEN)
             _isPopupMenuOpen.postValue(OpenState.CLOSED)
+    }
+
+    fun showSaveDialog(detail: Detail){
+        _showSaveDialog.postValue(detail)
+    }
+
+    fun saveCurrentDetail(detail : Detail){
+        when (detail) {
+            is DrawingDetail -> saveDrawingDetail(showSaveDialog.value as DrawingDetail)
+            is TextDetail -> saveTextDetail(showSaveDialog.value as TextDetail)
+            is PhotoDetail -> savePhotoDetail(showSaveDialog.value as PhotoDetail)
+            is AudioDetail -> saveAudioDetail(showSaveDialog.value as AudioDetail)
+        }
     }
 
     fun closePopUpMenu(){

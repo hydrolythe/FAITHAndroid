@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
@@ -84,6 +85,8 @@ sealed class DetailViewHolder(
         thumbnailView.setOnClickListener {
             existingDetailNavigationListener.openDetailScreenFor(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
         }
+        val detailTitle = thumbnailView.getViewById(R.id.text_detail_title) as TextView
+        detailTitle.text = detail.fileName
     }
 
     fun hide(hide : Boolean){

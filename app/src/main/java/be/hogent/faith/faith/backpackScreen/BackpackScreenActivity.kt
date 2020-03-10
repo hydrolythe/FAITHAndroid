@@ -133,19 +133,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         }
     }
 
-    fun save(detail: TextDetail) {
-        backpackViewModel.saveTextDetail(detail)
-    }
-
-    fun save(detail: PhotoDetail) {
-        backpackViewModel.savePhotoDetail(detail)
-    }
-
-    fun save(detail: DrawingDetail) {
-        backpackViewModel.saveDrawingDetail(detail)
-    }
-
-    fun save(detail: AudioDetail) {
-        backpackViewModel.saveAudioDetail(detail)
+    fun save (detail : Detail){
+        backpackViewModel.showSaveDialog(detail)
     }
 }
