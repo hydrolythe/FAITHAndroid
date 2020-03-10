@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/filter_achtergrond" />
+        app:srcCompat="@drawable/filter_menu_background" />
 
     <ImageView
         android:id="@+id/background_content_filter_menu"
@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="@+id/background_filter_menu"
         app:layout_constraintStart_toStartOf="@+id/background_filter_menu"
         app:layout_constraintTop_toTopOf="@+id/background_filter_menu"
-        app:srcCompat="@drawable/filter_inhoud" />
+        app:srcCompat="@drawable/filter_menu_content" />
 <!--        android:src="@color/color_white"/>-->
 
     <TableLayout
@@ -121,7 +121,7 @@
 
         android:layout_marginTop="16dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="32dp"
         android:backgroundTint="#0000FF"
         android:contentDescription="@string/close_filter_btn"
         android:visibility="visible"
@@ -134,6 +134,7 @@
         android:id="@+id/filter_boy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:contentDescription="@string/filter_boy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/background_content_filter_menu"
