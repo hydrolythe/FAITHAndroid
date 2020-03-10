@@ -53,8 +53,5 @@ class EventDetailFragment : Fragment() {
      * it deletes the pageradapter and set a new one with the desired [Detail] objects of the [Event].
      */
     private fun setListeners() {
-
     }
-
-
 }

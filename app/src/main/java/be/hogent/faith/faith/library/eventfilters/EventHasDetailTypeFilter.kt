@@ -11,5 +11,4 @@ class EventHasDetailTypeFilter<T : Detail>(
     override fun invoke(p1: Event): Boolean {
         return p1.details.any { it::class == detailType }
     }
-
 }
