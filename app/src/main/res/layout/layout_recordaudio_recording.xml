@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView_audio_center"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/panel_corner_radius">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.Recording ? View.VISIBLE : View.GONE}">
+
+        <ImageButton
+            android:id="@+id/btn_recordAudio_recorderStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            android:background="@drawable/button_record_stop"
+            android:contentDescription="@string/description_stop_recording"
+            android:onClick="@{() -> audioDetailViewModel.onRecorderStopButtonClicked()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_recordAudio_recorderPause"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_recordAudio_recorderPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            android:background="@drawable/button_record_pause"
+            android:contentDescription="@string/description_recording_pause"
+            android:onClick="@{() -> audioDetailViewModel.onRecorderPauseButtonClicked()}"
+            android:visibility="@{audioDetailViewModel.pauseRecordingVisible ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_recordAudio_recorderStop"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_recordAudio_recorderRestartRecording"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="40dp"
+            android:background="@drawable/button_record_start"
+            android:contentDescription="@string/description_start_recording"
+            android:onClick="@{() -> audioDetailViewModel.onRecorderPauseButtonClicked()}"
+            android:visibility="@{audioDetailViewModel.restartRecordingVisible ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@id/btn_recordAudio_recorderPause"
+            app:layout_constraintEnd_toEndOf="@id/btn_recordAudio_recorderPause"
+            app:layout_constraintStart_toStartOf="@id/btn_recordAudio_recorderPause"
+            app:layout_constraintTop_toTopOf="@id/btn_recordAudio_recorderPause" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
