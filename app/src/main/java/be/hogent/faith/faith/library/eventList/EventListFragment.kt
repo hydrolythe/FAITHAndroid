@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.library
+package be.hogent.faith.faith.library.eventList
 
 import android.os.Bundle
 import android.util.Log
@@ -16,9 +16,7 @@ import be.hogent.faith.databinding.FragmentEventoverviewBinding
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
-import be.hogent.faith.faith.library.eventList.EventListener
-import be.hogent.faith.faith.library.eventList.EventsAdapter
+import be.hogent.faith.faith.library.eventDetails.EventDetailsViewModel
 import com.bumptech.glide.Glide
 import org.koin.android.ext.android.getKoin
 
@@ -44,7 +42,7 @@ class EventListFragment : Fragment() {
     /**
      * The Viewmodel used to track the selected item.
      */
-    private lateinit var selectedItemViewModel: SelectedItemViewModel
+    private lateinit var eventDetailsViewModel: EventDetailsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,8 +52,8 @@ class EventListFragment : Fragment() {
         binding = inflate(inflater, R.layout.fragment_eventoverview, container, false)
 
         // TODO: change to Koin implementation
-        selectedItemViewModel =
-            ViewModelProviders.of(activity!!).get(SelectedItemViewModel::class.java)
+        eventDetailsViewModel =
+            ViewModelProviders.of(activity!!).get(EventDetailsViewModel::class.java)
         if (context!!.resources.getBoolean(R.bool.isTablet)) {
             displayMasterDetailLayout()
         } else {
@@ -77,7 +75,7 @@ class EventListFragment : Fragment() {
         eventListener = object : EventListener {
             override fun onEventClicked(selectedIndex: Int) {
                 Log.i("Tag", "Selected $selectedIndex")
-                selectedItemViewModel.selectedItem.value = selectedIndex
+                eventDetailsViewModel.selectedItem.value = selectedIndex
             }
         }
         eventsAdapter = EventsAdapter(eventListener, Glide.with(this))
