@@ -134,7 +134,8 @@ dependencies {
     testImplementation testDependencies.mockk
     testImplementation testDependencies.coreTesting
     testImplementation testDependencies.koinTesting
-
+    testImplementation testDependencies.hamcrest
+    testImplementation testDependencies.hamcrestLibrary
     implementation testDependencies.firebase_analytics
     implementation testDependencies.crashlytics
 
