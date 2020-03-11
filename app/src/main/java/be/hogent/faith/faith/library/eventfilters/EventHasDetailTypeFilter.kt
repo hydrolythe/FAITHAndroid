@@ -6,7 +6,7 @@ import kotlin.reflect.KClass
 
 class EventHasDetailTypeFilter<T : Detail>(
     private val detailType: KClass<T>
-) : (Event) -> Boolean {
+) : EventFilter {
 
     override fun invoke(event: Event): Boolean {
         return event.details.any { it::class == detailType }

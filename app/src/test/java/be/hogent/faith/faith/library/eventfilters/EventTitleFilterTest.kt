@@ -63,4 +63,18 @@ class EventTitleFilterTest {
         // Assert
         assertTrue(filteredEvents.isEmpty())
     }
+
+    @Test
+    fun `when the filter is empty all events are passed through`() {
+        // Arrange
+        filter = EventTitleFilter("")
+
+        // Act
+        val filteredEvents = events.filter(filter)
+
+        // Assert
+        assertTrue(filteredEvents.contains(event1))
+        assertTrue(filteredEvents.contains(event2))
+        assertTrue(filteredEvents.contains(event3))
+    }
 }
