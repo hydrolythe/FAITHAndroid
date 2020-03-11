@@ -8,7 +8,6 @@
         <variable
             name="backpackViewModel"
             type="be.hogent.faith.faith.backpackScreen.BackpackViewModel" />
-
         <import type="android.view.View" />
     </data>
 
@@ -111,6 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/search_btn"
+            android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -121,17 +121,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/add_btn"
+            android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-
-            />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <ImageButton
             android:id="@+id/btn_backpack_draw_cancel"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
             android:background="@drawable/ic_return"
+            android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             android:contentDescription="@string/cancel"
             app:layout_constraintStart_toStartOf="@+id/guide_search_btn"

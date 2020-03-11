@@ -2,6 +2,7 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -82,6 +83,18 @@ sealed class DetailViewHolder(
         thumbnailView.setTag(R.id.TAG_DETAIL, detail)
         thumbnailView.setOnClickListener {
             existingDetailNavigationListener.openDetailScreenFor(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
+        }
+    }
+
+    fun hide(hide : Boolean){
+        val deleteBtn = thumbnailView.getViewById(R.id.btn_delete_detailRv)
+        if(hide){
+            deleteBtn.visibility = View.INVISIBLE
+           deleteBtn.isClickable = false
+        }
+        else{
+            deleteBtn.visibility = View.VISIBLE
+            deleteBtn.isClickable = true
         }
     }
 

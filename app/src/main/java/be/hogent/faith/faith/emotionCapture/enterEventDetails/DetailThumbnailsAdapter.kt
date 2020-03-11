@@ -26,12 +26,19 @@ class DetailThumbnailsAdapter(
 
     private var _details = details.toMutableList()
     private var _detailsCopy = details.toMutableList()
+    private var hide = true
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         return DetailViewHolderFactory.createViewHolder(
             parent,
             viewType,
             existingDetailNavigationListener
         )
+    }
+
+    fun hide(hide : Boolean){
+        this.hide = hide
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
@@ -49,6 +56,7 @@ class DetailThumbnailsAdapter(
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
         holder.bind(_details[position])
+        holder.hide(this.hide)
     }
 
     fun updateDetailsList(newDetails: List<Detail>) {

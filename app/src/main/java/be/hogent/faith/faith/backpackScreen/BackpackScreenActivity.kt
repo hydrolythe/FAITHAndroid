@@ -27,11 +27,9 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     DetailFinishedListener,
     TextDetailFragment.TextScreenNavigation,
     TakePhotoFragment.PhotoScreenNavigation,
-    DetailViewHolder.ExistingDetailNavigationListener {
+    DetailViewHolder.ExistingDetailNavigationListener{
 
     private lateinit var backpackViewModel: BackpackViewModel
-
-    private lateinit var popupWindow: PopupWindow
 
     // private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
@@ -61,6 +59,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         supportFragmentManager.popBackStack()
         backpackViewModel.viewButtons(true)
         backpackViewModel.setDetailScreenOpen(false)
+        backpackViewModel.closePopUpMenu()
     }
 
     override fun onDetailFinished(detail: Detail) {
@@ -72,30 +71,35 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         }
         backpackViewModel.viewButtons(true)
         backpackViewModel.setDetailScreenOpen(false)
+        backpackViewModel.closePopUpMenu()
     }
 
     override fun startPhotoDetailFragment() {
         replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
         backpackViewModel.viewButtons(false)
         backpackViewModel.setDetailScreenOpen(true)
+        backpackViewModel.closePopUpMenu()
     }
 
     override fun startAudioDetailFragment() {
         replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
         backpackViewModel.viewButtons(false)
         backpackViewModel.setDetailScreenOpen(true)
+        backpackViewModel.closePopUpMenu()
     }
 
     override fun startDrawingDetailFragment() {
         replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
         backpackViewModel.viewButtons(false)
         backpackViewModel.setDetailScreenOpen(true)
+        backpackViewModel.closePopUpMenu()
     }
 
     override fun startTextDetailFragment() {
         replaceFragment(BackpackDetailFragment.TextFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
         backpackViewModel.viewButtons(false)
         backpackViewModel.setDetailScreenOpen(true)
+        backpackViewModel.closePopUpMenu()
     }
 
     override fun startVideoDetailFragment() {
@@ -113,6 +117,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
             R.id.fragment
         )
         backpackViewModel.viewButtons(false)
+        backpackViewModel.closePopUpMenu()
     }
 
     override fun closeBackpack() {
