@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -26,16 +25,13 @@ import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCas
 import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
-import java.lang.Exception
 import java.lang.NullPointerException
 import java.util.Locale
-
 
 object OpenState {
     const val OPEN = 2
     const val CLOSED = 3
 }
-
 
 class BackpackViewModel(
     private val saveBackpackTextDetailUseCase: SaveBackpackTextDetailUseCase,
@@ -64,7 +60,6 @@ class BackpackViewModel(
     }
     private var filterText =
         MutableLiveData<String>().apply { value = "" } // Starts with empty rv if not initialized
-
 
     private var _currentFile = MutableLiveData<Detail>()
     val currentFile: LiveData<Detail>
@@ -116,7 +111,6 @@ class BackpackViewModel(
 
     init {
         _details = getBackPackFilesDummyUseCase.getDetails()
-
     }
 
     fun initialize() {
@@ -138,11 +132,11 @@ class BackpackViewModel(
             _isPopupMenuOpen.postValue(OpenState.CLOSED)
     }
 
-    fun showSaveDialog(detail: Detail){
+    fun showSaveDialog(detail: Detail) {
         _showSaveDialog.postValue(detail)
     }
 
-    fun saveCurrentDetail(detail : Detail){
+    fun saveCurrentDetail(detail: Detail) {
         when (detail) {
             is DrawingDetail -> saveDrawingDetail(showSaveDialog.value as DrawingDetail)
             is TextDetail -> saveTextDetail(showSaveDialog.value as TextDetail)
@@ -176,7 +170,6 @@ class BackpackViewModel(
         val params = SaveBackpackTextDetailUseCase.Params(detail)
         saveBackpackTextDetailUseCase.execute(params, SaveBackpackTextDetailUseCaseHandler())
     }
-
 
     private inner class SaveBackpackTextDetailUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
@@ -297,20 +290,16 @@ class BackpackViewModel(
                         }
                     }
                 }
-
             } catch (e: NullPointerException) {
-
             }
 
             return@combineWith resultSet.toList().sortedBy {
                 it.javaClass.canonicalName
             }
-
-
         }
     }
 
-    //Method to combine 2 livedata
+    // Method to combine 2 livedata
     private fun <T, K, R> LiveData<T>.combineWith(
         liveData: LiveData<K>,
         block: (T?, K?) -> R
@@ -325,18 +314,17 @@ class BackpackViewModel(
         return result
     }
 
-
-
-    //For testing purposes
+    // For testing purposes
     fun getFilterDetailType(): MutableLiveData<MutableMap<Int, Boolean>> {
         return filterDetailType
     }
 
     fun deleteDetail(detail: Detail) {
-       //TODO
+        // TODO
         val params = DeleteBackpackFileUseCase.Params(detail)
-        deleteBackpackFileUseCase.execute(params,DeleteBackpackFileUseCaseHandler())
+        deleteBackpackFileUseCase.execute(params, DeleteBackpackFileUseCaseHandler())
     }
+
     private inner class DeleteBackpackFileUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
             _textSavedSuccessFully.postValue(R.string.save_text_success)

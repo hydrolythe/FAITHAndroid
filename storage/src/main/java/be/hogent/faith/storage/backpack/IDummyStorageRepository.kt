@@ -9,5 +9,5 @@ interface IDummyStorageRepository {
 
     fun getBackpackDetailsUserTestData(): List<Detail>
 
-    fun deleteDetail(detail: Detail):Completable
+    fun deleteDetail(detail: Detail): Completable
 }

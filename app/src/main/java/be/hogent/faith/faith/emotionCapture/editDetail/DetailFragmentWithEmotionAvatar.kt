@@ -19,7 +19,6 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
@@ -133,7 +132,7 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                 is PhotoDetail -> PhotoFragmentWithEmotionAvatar.newInstance(
                     avatarOutLineId, detail
                 )
-                //TODO vragen of hier een video moet kunnen geopend worden
+                // TODO vragen of hier een video moet kunnen geopend worden
                 else -> TextFragmentWithEmotionAvatar.newInstance(
                     avatarOutLineId, detail as TextDetail
                 )

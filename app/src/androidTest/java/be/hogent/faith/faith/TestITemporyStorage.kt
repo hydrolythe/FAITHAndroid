@@ -32,7 +32,7 @@ class TestITemporyStorage : ITemporaryStorage {
         return Completable.complete()
     }
 
-    override fun executeActionOnDetailWithEvent(detail: Detail, event: Event): Completable {
+    override fun storeDetailWithEvent(detail: Detail, event: Event): Completable {
         return Completable.complete()
     }
 
