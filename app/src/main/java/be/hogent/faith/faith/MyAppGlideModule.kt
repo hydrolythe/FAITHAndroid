@@ -19,7 +19,7 @@ import java.io.InputStream
 fun loadFirestorageImage(context: Context, referencePath: String, image: ImageView) {
     GlideApp.with(context)
         .load(FirebaseStorage.getInstance().reference.child(referencePath)) // load the storagereference
-        .apply(RequestOptions.circleCropTransform())
+        .apply(RequestOptions.centerCropTransform())
         .into(image)
 }
 

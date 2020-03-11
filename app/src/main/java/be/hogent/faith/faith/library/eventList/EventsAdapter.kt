@@ -3,7 +3,6 @@ package be.hogent.faith.faith.library.eventList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +11,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.loadFirestorageImage
 import com.bumptech.glide.RequestManager
 import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
 
 class EventsAdapter(private val eventListener: EventListener, private val glide: RequestManager) :
     RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
@@ -40,37 +40,25 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
         private var eventTitle: TextView = view.findViewById(R.id.lbl_title)
         private var eventDate: TextView = view.findViewById(R.id.lbl_date)
         private var eventDesc: TextView = view.findViewById(R.id.lbl_description)
-        private var expandButton: ImageButton = view.findViewById(R.id.expand_button)
 
         fun bind(event: Event, position: Int) {
-            eventTitle.text = event.title
-            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            eventTitle.text =
+                if (event.title!!.length < 50) event.title!! else "${event.title!!.substring(
+                    0,
+                    50
+                )}..."
+            val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
             val eventDateString: String = formatter.format(event.dateTime)
             eventDate.text = eventDateString
 
             event.emotionAvatar?.let {
                 loadFirestorageImage(this.itemView.context, it.path, avatarImage)
             }
-                /*
-            event.emotionAvatar?.let {
-                glide
-                    .load(it)
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(avatarImage)
-            }*/
 
             eventDesc.text = event.notes
 
-            expandButton.setOnClickListener {
-                if (eventDesc.visibility == View.GONE) {
-                    eventDesc.visibility = View.VISIBLE
-                } else {
-                    eventDesc.visibility = View.GONE
-                }
-            }
-
             itemView.setOnClickListener {
-                eventListener.onEventClicked(position)
+                // eventListener.onEventClicked(position)
             }
         }
     }

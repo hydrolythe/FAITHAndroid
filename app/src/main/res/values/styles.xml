@@ -16,9 +16,12 @@
         <item name="colorOnBackground">@color/onBackground</item>
         <item name="android:fontFamily">@font/sourcesanspro</item>
         <item name="fontFamily">@font/sourcesanspro</item>
-        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MyApp.SmallComponent</item>
-        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MyApp.MediumComponent</item>
-        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MyApp.LargeComponent</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MyApp.SmallComponent
+        </item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.MyApp.MediumComponent
+        </item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.MyApp.LargeComponent
+        </item>
     </style>
 
 
@@ -163,7 +166,7 @@
         <item name="android:letterSpacing">0.15</item>
     </style>
 
-    <style name="TextAppearance.subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
+    <style name="AppTheme.subtitle2" parent="TextAppearance.MaterialComponents.Subtitle2">
         <item name="fontFamily">@font/sourcesanspro_semibold</item>
         <item name="android:fontFamily">@font/sourcesanspro_semibold</item>
         <item name="android:textSize">14sp</item>
@@ -212,6 +215,10 @@
         <item name="android:textSize">15sp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:color">@color/dark_green</item>
+    </style>
+
+    <style name="CardView.Transparant">
+        <item name="cardBackgroundColor">@color/colorTransparent</item>
     </style>
 
 

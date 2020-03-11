@@ -70,6 +70,7 @@ class EventListFragment : Fragment() {
         eventsAdapter = EventsAdapter(eventListener, Glide.with(this))
         recyclerView.apply {
             layoutManager = GridLayoutManager(context, 3)
+            addItemDecoration(GridSpacingItemDecoration(3, 10, true, 0))
             this.adapter = eventsAdapter
         }
     }
