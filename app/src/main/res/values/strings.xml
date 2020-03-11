@@ -184,4 +184,7 @@
     <string name="slide">schuif avatar open</string>
     <string name="tekstgrootte">tekstgrootte</string>
     <string name="kies_tekstgrootte">kies tekstgrootte</string>
+    <string name="datumVan">van</string>
+    <string name="datumTot">tot</string>
+    <string name="wat_zoek_je">wat zoek je?</string>
 </resources>

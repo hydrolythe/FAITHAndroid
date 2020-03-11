@@ -32,7 +32,6 @@ import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.util.UUID
 
 class EmotionCaptureMainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,

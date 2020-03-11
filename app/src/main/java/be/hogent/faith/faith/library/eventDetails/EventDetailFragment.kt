@@ -31,7 +31,7 @@ class EventDetailFragment : Fragment() {
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     /**
-     * ViewModel used to monitor the last selected [Event].
+     * ViewModel used to monitor the last selected event.
      */
     private lateinit var eventDetailsViewModel: EventDetailsViewModel
 
@@ -50,11 +50,8 @@ class EventDetailFragment : Fragment() {
     /**
      * Sets up the observers. In this case it will observe the [eventDetailsViewModel] and observe
      * changes of its value. Whenever a new value (i.e. another event has been clicked) is observed
-     * it deletes the pageradapter and set a new one with the desired [Detail] objects of the [Event].
+     * it deletes the pageradapter and set a new one with the desired [Detail] objects of the event.
      */
     private fun setListeners() {
-
     }
-
-
 }
