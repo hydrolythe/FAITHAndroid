@@ -1,38 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/btn_delete_detailRv"
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="wrap_content">
 
-        app:layout_constraintBottom_toTopOf="@+id/detail_img"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="30dp">
 
-    <ImageView
-        android:id="@+id/detail_img"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_delete_detailRv"
-        app:srcCompat="@drawable/event_detail_text" />
+            <ImageView
+                android:id="@+id/detail_img"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                app:srcCompat="@drawable/event_detail_text" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="55dp"
+            android:layout_marginTop="17dp"
+            android:animateLayoutChanges="true">
+
+            <ImageButton
+                android:id="@+id/btn_delete_detailRv"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/round_button"
+                app:srcCompat="@drawable/ic_close_black" />
+
+        </RelativeLayout>
+    </FrameLayout>
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/text_detail_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/btn_delete_detailRv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/detail_img" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

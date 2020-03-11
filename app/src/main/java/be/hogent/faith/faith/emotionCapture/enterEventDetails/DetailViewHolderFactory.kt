@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
@@ -16,7 +16,9 @@ import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.signature.MediaStoreSignature
+import kotlinx.android.synthetic.main.detail_item_rv.view.btn_delete_detailRv
 import kotlinx.android.synthetic.main.detail_item_rv.view.detail_img
+import kotlinx.android.synthetic.main.detail_item_rv.view.text_detail_title
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -30,7 +32,7 @@ object DetailViewHolderFactory {
             R.layout.detail_item_rv,
             parent,
             false
-        ) as ConstraintLayout
+        ) as LinearLayout
 
         return when (viewType) {
             DetailTypes.AUDIO_DETAIL -> createAudioDetailViewHolder(
@@ -50,7 +52,7 @@ object DetailViewHolderFactory {
     }
 
     private fun createAudioDetailViewHolder(
-        thumbnailView: ConstraintLayout,
+        thumbnailView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): AudioDetailViewHolder {
         thumbnailView.background = null
@@ -58,7 +60,7 @@ object DetailViewHolderFactory {
     }
 
     private fun createTextDetailViewHolder(
-        thumbnailView: ConstraintLayout,
+        thumbnailView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): TextDetailViewHolder {
         thumbnailView.background = null
@@ -66,7 +68,7 @@ object DetailViewHolderFactory {
     }
 
     private fun createPictureDetailViewHolder(
-        thumbnailView: ConstraintLayout,
+        thumbnailView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): PictureDetailViewHolder {
         return PictureDetailViewHolder(thumbnailView, existingDetailNavigationListener)
@@ -74,20 +76,24 @@ object DetailViewHolderFactory {
 }
 
 sealed class DetailViewHolder(
-    val thumbnailView: ConstraintLayout,
+    val thumbnailView: LinearLayout,
     private val existingDetailNavigationListener: ExistingDetailNavigationListener
 ) : RecyclerView.ViewHolder(thumbnailView), KoinComponent {
 
     fun bind(detail: Detail) {
         load(detail).into(thumbnailView.detail_img)
         thumbnailView.setTag(R.id.TAG_DETAIL, detail)
-        thumbnailView.setOnClickListener {
+        thumbnailView.detail_img.setOnClickListener {
             existingDetailNavigationListener.openDetailScreenFor(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
         }
+        thumbnailView.btn_delete_detailRv.setOnClickListener {
+            existingDetailNavigationListener.deleteDetail(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
+        }
+        thumbnailView.text_detail_title.text = detail.fileName
     }
 
     fun hide(hide : Boolean){
-        val deleteBtn = thumbnailView.getViewById(R.id.btn_delete_detailRv)
+        val deleteBtn = thumbnailView.btn_delete_detailRv
         if(hide){
             deleteBtn.visibility = View.INVISIBLE
            deleteBtn.isClickable = false
@@ -101,7 +107,7 @@ sealed class DetailViewHolder(
     abstract fun load(detail: Detail): RequestBuilder<Drawable>
 
     class TextDetailViewHolder(
-        imageView: ConstraintLayout,
+        imageView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
@@ -111,7 +117,7 @@ sealed class DetailViewHolder(
     }
 
     class PictureDetailViewHolder(
-        imageView: ConstraintLayout,
+        imageView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
@@ -125,7 +131,7 @@ sealed class DetailViewHolder(
     }
 
     class AudioDetailViewHolder(
-        imageView: ConstraintLayout,
+        imageView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
@@ -136,5 +142,6 @@ sealed class DetailViewHolder(
 
     interface ExistingDetailNavigationListener {
         fun openDetailScreenFor(detail: Detail)
+        fun deleteDetail(detail : Detail)
     }
 }

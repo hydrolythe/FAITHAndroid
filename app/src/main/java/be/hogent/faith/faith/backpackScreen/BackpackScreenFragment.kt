@@ -157,10 +157,14 @@ class BackpackScreenFragment : Fragment() {
         }
 
         backpackViewModel.isInEditMode.observe(this, Observer{
-            if(backpackViewModel.isInEditMode.value == OpenState.OPEN)
+            if(backpackViewModel.isInEditMode.value == OpenState.OPEN){
                 detailThumbnailsAdapter!!.hide(false)
-            else
-                detailThumbnailsAdapter!!.hide(true)
+                backpackViewModel.viewButtons(false)
+            }
+            else{
+            detailThumbnailsAdapter!!.hide(true)
+                backpackViewModel.viewButtons(true)
+        }
         })
 
         backpackViewModel.isPopupMenuOpen.observe(this, Observer {

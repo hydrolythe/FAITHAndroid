@@ -6,17 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
+import be.hogent.faith.faith.details.video.create.CreateVideoFragment
+import be.hogent.faith.faith.details.video.view.ViewVideoFragment
 import be.hogent.faith.faith.util.replaceChildFragment
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -24,6 +28,7 @@ abstract class BackpackDetailFragment : Fragment() {
 
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
     private lateinit var editDetailBinding: be.hogent.faith.databinding.FragmentEditFileBinding
+    private lateinit var saveDialog: SaveDetailDialog
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +39,16 @@ abstract class BackpackDetailFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_edit_file, container, false)
         editDetailBinding.lifecycleOwner = this
 
+        backpackViewModel.showSaveDialog.observe(this, Observer {
+            showSaveDialog(it)
+        })
+
         return editDetailBinding.root
+    }
+
+    private fun showSaveDialog(it: Detail?) {
+        saveDialog = SaveDetailDialog.newInstance()
+        saveDialog.show(fragmentManager!!, null)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -52,6 +66,7 @@ abstract class BackpackDetailFragment : Fragment() {
                 is DrawingDetail -> DrawingFragmentNoEmotionAvatar.newInstance()
                 is PhotoDetail -> PhotoFragmentNoEmotionAvatar.newInstance()
                 is AudioDetail -> AudioFragmentNoEmotionAvatar.newInstance()
+                is VideoDetail -> VideoFragmentNoEmotionAvatar.newInstance()
             }
         }
     }
@@ -121,6 +136,23 @@ abstract class BackpackDetailFragment : Fragment() {
                 RecordAudioFragment.newInstance()
             } else {
                 RecordAudioFragment.newInstance(detail as AudioDetail)
+            }
+            replaceChildFragment(childFragment, R.id.fragment_container_editFile)
+        }
+    }
+    class VideoFragmentNoEmotionAvatar : BackpackDetailFragment() {
+
+        companion object {
+            fun newInstance(): VideoFragmentNoEmotionAvatar {
+                return VideoFragmentNoEmotionAvatar()
+            }
+        }
+
+        override fun setChildFragment(detail: Detail?) {
+            val childFragment = if (detail == null) {
+                CreateVideoFragment.newInstance()
+            } else {
+                ViewVideoFragment.newInstance(detail as VideoDetail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }
