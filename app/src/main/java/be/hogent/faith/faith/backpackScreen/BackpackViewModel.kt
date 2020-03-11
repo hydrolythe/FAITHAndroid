@@ -19,6 +19,7 @@ import be.hogent.faith.faith.backpackScreen.DetailTypes.DRAW_DETAIL
 import be.hogent.faith.faith.backpackScreen.DetailTypes.PICTURE_DETAIL
 import be.hogent.faith.faith.backpackScreen.DetailTypes.TEXT_DETAIL
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.backpack.DeleteBackpackFileUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCase
@@ -41,7 +42,9 @@ class BackpackViewModel(
     private val saveBackpackAudioDetailUseCase: SaveBackpackAudioDetailUseCase,
     private val saveBackpackPhotoDetailUseCase: SaveBackpackPhotoDetailUseCase,
     private val saveBackpackDrawingDetailUseCase: SaveBackpackDrawingDetailUseCase,
+    private val deleteBackpackFileUseCase: DeleteBackpackFileUseCase,
     private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
+
 ) : ViewModel() {
 
     private var _details = listOf<Detail>()
@@ -107,6 +110,9 @@ class BackpackViewModel(
 
     private val _showSaveDialog = MutableLiveData<Detail>()
     val showSaveDialog: LiveData<Detail> = _showSaveDialog
+
+    private val _fileDeletedSuccessfully = SingleLiveEvent<Int>()
+    val fileDeletedSuccessfully: LiveData<Int> = _fileDeletedSuccessfully
 
     init {
         _details = getBackPackFilesDummyUseCase.getDetails()
@@ -232,6 +238,7 @@ class BackpackViewModel(
         saveBackpackAudioDetailUseCase.dispose()
         saveBackpackDrawingDetailUseCase.dispose()
         saveBackpackPhotoDetailUseCase.dispose()
+        deleteBackpackFileUseCase.dispose()
         super.onCleared()
     }
 
@@ -327,5 +334,16 @@ class BackpackViewModel(
 
     fun deleteDetail(detail: Detail) {
        //TODO
+        val params = DeleteBackpackFileUseCase.Params(detail)
+        deleteBackpackFileUseCase.execute(params,DeleteBackpackFileUseCaseHandler())
+    }
+    private inner class DeleteBackpackFileUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _textSavedSuccessFully.postValue(R.string.save_text_success)
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_text_failed)
+        }
     }
 }

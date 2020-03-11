@@ -34,6 +34,26 @@ class DummyStorageRepository(
         return hulpList
     }
 
+    override fun deleteDetail(detail: Detail): Completable {
+        var dummyDetail = DummyDetailMapper.mapToEntity(detail)
+        preferences = context.getSharedPreferences(STORAGE, Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = preferences!!.edit()
+        val gson = Gson()
+        val jsonGet = preferences!!.getString("backpackDetail", null)
+        val type =
+            object : TypeToken<ArrayList<DummyDetail?>?>() {}.type
+        try {
+            details = gson.fromJson(jsonGet, type)
+        } catch (e: Exception) {
+        }
+        editor.clear()
+        details.remove(dummyDetail)
+        val json: String? = gson.toJson(details)
+        editor.putString("backpackDetail", json)
+        editor.apply()
+        return Completable.fromCallable { true }
+    }
+
     override fun storeDetail(detail: Detail): Completable {
         var dummyDetail = DummyDetailMapper.mapToEntity(detail)
         preferences = context.getSharedPreferences(STORAGE, Context.MODE_PRIVATE)
