@@ -91,7 +91,7 @@ class BackpackViewModel(
     val viewButtons: LiveData<Boolean> = _viewButtons
 
     private val _onAddClicked = MutableLiveData<View>()
-    val onAddClicked : LiveData<View> = _onAddClicked
+    val onAddClicked: LiveData<View> = _onAddClicked
 
     private val _goToCityScreen = SingleLiveEvent<Any>()
     val goToCityScreen: LiveData<Any> = _goToCityScreen
@@ -100,36 +100,36 @@ class BackpackViewModel(
     val isDetailScreenOpen: LiveData<Boolean> = _isDetailScreenOpen
 
     private val _isPopupMenuOpen = MutableLiveData<Int>()
-    val isPopupMenuOpen : LiveData<Int> = _isPopupMenuOpen
+    val isPopupMenuOpen: LiveData<Int> = _isPopupMenuOpen
 
     private val _isInEditMode = MutableLiveData<Int>()
-    val isInEditMode : LiveData<Int> = _isInEditMode
+    val isInEditMode: LiveData<Int> = _isInEditMode
 
     init {
         _details = getBackPackFilesDummyUseCase.getDetails()
 
     }
 
-    fun initialize(){
+    fun initialize() {
         _isInEditMode.postValue(OpenState.CLOSED)
         _isPopupMenuOpen.postValue(OpenState.CLOSED)
     }
 
-    fun setIsInEditMode(){
-        if(isInEditMode.value == OpenState.CLOSED)
+    fun setIsInEditMode() {
+        if (isInEditMode.value == OpenState.CLOSED)
             _isInEditMode.postValue(OpenState.OPEN)
-        else if(isInEditMode.value == OpenState.OPEN)
+        else if (isInEditMode.value == OpenState.OPEN)
             _isInEditMode.postValue(OpenState.CLOSED)
     }
 
-    fun changePopupMenuState(){
-        if(isPopupMenuOpen.value == OpenState.CLOSED)
+    fun changePopupMenuState() {
+        if (isPopupMenuOpen.value == OpenState.CLOSED)
             _isPopupMenuOpen.postValue(OpenState.OPEN)
-        else if(isPopupMenuOpen.value == OpenState.OPEN)
+        else if (isPopupMenuOpen.value == OpenState.OPEN)
             _isPopupMenuOpen.postValue(OpenState.CLOSED)
     }
 
-    fun closePopUpMenu(){
+    fun closePopUpMenu() {
         _isPopupMenuOpen.postValue(OpenState.CLOSED)
     }
 
@@ -154,7 +154,6 @@ class BackpackViewModel(
         val params = SaveBackpackTextDetailUseCase.Params(detail)
         saveBackpackTextDetailUseCase.execute(params, SaveBackpackTextDetailUseCaseHandler())
     }
-
 
 
     private inner class SaveBackpackTextDetailUseCaseHandler : DisposableCompletableObserver() {
@@ -262,29 +261,32 @@ class BackpackViewModel(
         return textFilterRes.combineWith(typeFilterRes) { textRes, typeRes ->
             val resultSet = mutableSetOf<Detail>()
             try {
-                if(textRes!!.size>typeRes!!.size){
-                    for(detail in textRes){
-                        if(typeRes.contains(detail)){
+                if (textRes!!.size > typeRes!!.size) {
+                    for (detail in textRes) {
+                        if (typeRes.contains(detail)) {
                             resultSet.add(detail)
                         }
                     }
-                }else{
-                    for(detail in typeRes){
-                        if(textRes.contains(detail)){
+                } else {
+                    for (detail in typeRes) {
+                        if (textRes.contains(detail)) {
                             resultSet.add(detail)
                         }
                     }
                 }
 
-            }catch (e : NullPointerException){
+            } catch (e: NullPointerException) {
 
             }
+
             return@combineWith resultSet.toList()
+
 
         }
     }
+
     //Method to combine 2 livedata
-   private fun <T, K, R> LiveData<T>.combineWith(
+    private fun <T, K, R> LiveData<T>.combineWith(
         liveData: LiveData<K>,
         block: (T?, K?) -> R
     ): LiveData<R> {
@@ -297,11 +299,11 @@ class BackpackViewModel(
         }
         return result
     }
+
+
+
     //For testing purposes
-    fun get_details(): List<Detail>{
-        return _details
-    }
-    fun getFilterDetailType(): MutableLiveData<MutableMap<Int,Boolean>>{
+    fun getFilterDetailType(): MutableLiveData<MutableMap<Int, Boolean>> {
         return filterDetailType
     }
 }
