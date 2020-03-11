@@ -35,6 +35,7 @@
     <string name="save_drawing_success">Je tekening werd opgeslagen</string>
     <string name="save_photo_success">Je foto werd opgeslagen</string>
     <string name="save_event_success">Je gebeurtenis werd opgeslagen</string>
+    <string name="error_load_events">Er ging iets fout bij het laden van je gebeurtenissen.</string>
     <string name="save_text_success">Je tekst werd opgeslagen</string>
     <string name="error_save_audio_failed">Er ging iets fout bij het opslaan van je opname</string>
     <string name="error_save_event_failed">Er ging iets fout bij het opslaan van je gebeurtenis</string>
