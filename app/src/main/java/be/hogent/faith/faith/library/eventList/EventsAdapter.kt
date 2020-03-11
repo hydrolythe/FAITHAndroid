@@ -51,9 +51,10 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
             val eventDateString: String = formatter.format(event.dateTime)
             eventDate.text = eventDateString
 
-            event.emotionAvatar?.let {
-                loadFirestorageImage(this.itemView.context, it.path, avatarImage)
-            }
+            if (event.emotionAvatar != null)
+                loadFirestorageImage(this.itemView.context, event.emotionAvatar!!.path, avatarImage)
+            else
+                avatarImage.setImageDrawable(null)
 
             eventDesc.text = event.notes
 
