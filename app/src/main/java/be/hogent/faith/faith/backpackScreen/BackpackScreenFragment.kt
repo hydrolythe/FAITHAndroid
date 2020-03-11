@@ -1,6 +1,8 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -96,7 +98,6 @@ class BackpackScreenFragment : Fragment() {
     }
 
     private fun startListeners() {
-        // TODO Update adapter when backpack changes, change this to userviewmodel when working with real data
 
         backpackViewModel.details.observe(this, Observer { details ->
             detailThumbnailsAdapter?.updateDetailsList(details)
@@ -114,55 +115,67 @@ class BackpackScreenFragment : Fragment() {
             SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
-
-                val filteredDetails = backpackViewModel.filterSearchBar(newText)
-                detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
-                // detailThumbnailsAdapter!!.filterSearchBar(newText)
+                backpackViewModel.filterSearchBar(newText)
                 return true
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                val filteredDetails = backpackViewModel.filterSearchBar(query)
-                detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
+                backpackViewModel.filterSearchBar(query)
                 return true
             }
         })
 
         backpackBinding.backpackMenuFilter.filterknop_teksten.setOnClickListener {
-            val filteredDetails = backpackViewModel.filterType(TEXT_DETAIL)
-            detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
+            backpackViewModel.setFilters(TEXT_DETAIL)
+            setBtnState(it)
         }
         backpackBinding.backpackMenuFilter.filterknop_audio.setOnClickListener {
-            val filteredDetails = backpackViewModel.filterType(AUDIO_DETAIL)
-            detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
+            backpackViewModel.setFilters(AUDIO_DETAIL)
+            setBtnState(it)
         }
         backpackBinding.backpackMenuFilter.filterknop_foto.setOnClickListener {
-            val filteredDetails = backpackViewModel.filterType(PICTURE_DETAIL)
-            detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
+            backpackViewModel.setFilters(PICTURE_DETAIL)
+            setBtnState(it)
         }
         backpackBinding.backpackMenuFilter.filterknop_tekeningen.setOnClickListener {
-            val filteredDetails = backpackViewModel.filterType(DRAW_DETAIL)
-            detailThumbnailsAdapter!!.updateDetailsList(filteredDetails)
+            backpackViewModel.setFilters(DRAW_DETAIL)
+            setBtnState(it)
         }
 
         backpackViewModel.isDetailScreenOpen.observe(this, Observer {
             if (!it) {
-                backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.add_btn, null)
+                backpackBinding.btnBackpackAdd.background =
+                    resources.getDrawable(R.drawable.add_btn, null)
                 addDetailMenu.dismiss()
-                }
-    })
+            }
+        })
+    }
+
+    private fun setBtnState(it: View) {
+        if(it.backgroundTintList == ColorStateList.valueOf(Color.GRAY)){
+            it.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
+        }else{
+            it.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+        }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private fun onAddClicked(view: View) {
         addDetailMenu = PopupMenu(view.context, view, Gravity.END, 0, R.style.PopupMenu_AddDetail)
-        backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
+        backpackBinding.btnBackpackAdd.background =
+            resources.getDrawable(R.drawable.ic_add_btn_selected, null)
         addDetailMenu.menuInflater.inflate(R.menu.menu_backpack, addDetailMenu.menu)
 
-        val menuPopupHelper = MenuPopupHelper(view.context, addDetailMenu.menu as MenuBuilder, backpackBinding.btnBackpackAdd)
+        val menuPopupHelper = MenuPopupHelper(
+            view.context,
+            addDetailMenu.menu as MenuBuilder,
+            backpackBinding.btnBackpackAdd
+        )
 
         addDetailMenu.setOnDismissListener {
-            backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.add_btn, null)
+            backpackBinding.btnBackpackAdd.background =
+                resources.getDrawable(R.drawable.add_btn, null)
         }
 
         addDetailMenu.setOnMenuItemClickListener { item ->
@@ -182,8 +195,8 @@ class BackpackScreenFragment : Fragment() {
             }
             true
         }
-            menuPopupHelper.setForceShowIcon(true)
-            menuPopupHelper.show()
+        menuPopupHelper.setForceShowIcon(true)
+        menuPopupHelper.show()
     }
 
     interface BackpackDetailsNavigationListener {

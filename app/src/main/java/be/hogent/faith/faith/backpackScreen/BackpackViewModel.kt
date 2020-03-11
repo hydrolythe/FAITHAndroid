@@ -3,7 +3,9 @@ package be.hogent.faith.faith.backpackScreen
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
@@ -22,6 +24,10 @@ import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCas
 import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
+import java.lang.Exception
+import java.lang.NullPointerException
+import java.util.Locale
+
 
 class BackpackViewModel(
     private val saveBackpackTextDetailUseCase: SaveBackpackTextDetailUseCase,
@@ -31,9 +37,24 @@ class BackpackViewModel(
     private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
 ) : ViewModel() {
 
-    private var _details = MutableLiveData<List<Detail>>()
+    private var _details = listOf<Detail>()
+
     val details: LiveData<List<Detail>>
-        get() = _details
+        get() = applyFilters()
+
+    private var filterDetailType = MutableLiveData<MutableMap<Int, Boolean>>().apply {
+        postValue(
+            mutableMapOf(
+                AUDIO_DETAIL to false,
+                TEXT_DETAIL to false,
+                DRAW_DETAIL to false,
+                PICTURE_DETAIL to false
+            )
+        )
+    }
+    private var filterText =
+        MutableLiveData<String>().apply { value = "" } // Starts with empty rv if not initialized
+
 
     private var _currentFile = MutableLiveData<Detail>()
     val currentFile: LiveData<Detail>
@@ -42,8 +63,6 @@ class BackpackViewModel(
     fun setCurrentFile(detail: Detail?) {
         _currentFile.postValue(detail)
     }
-
-    private var filteredDetails = mutableListOf<Detail>()
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
@@ -74,7 +93,8 @@ class BackpackViewModel(
     val isDetailScreenOpen: LiveData<Boolean> = _isDetailScreenOpen
 
     init {
-        _details.postValue(getBackPackFilesDummyUseCase.getDetails())
+        _details = getBackPackFilesDummyUseCase.getDetails()
+
     }
 
     fun setDetailScreenOpen(isOpen: Boolean) {
@@ -97,6 +117,8 @@ class BackpackViewModel(
         val params = SaveBackpackTextDetailUseCase.Params(detail)
         saveBackpackTextDetailUseCase.execute(params, SaveBackpackTextDetailUseCaseHandler())
     }
+
+
 
     private inner class SaveBackpackTextDetailUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
@@ -165,38 +187,89 @@ class BackpackViewModel(
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    fun filterSearchBar(text: String): List<Detail> {
-        // TODO update for detail.title
+    fun filterSearchBar(text: String) {
+        filterText.value = text
+        // To move
+    }
 
-        if (text.isEmpty()) {
-            return _details.value!!
-        } else {
-            filteredDetails = mutableListOf()
-            for (detail in _details.value!!) {
-                if (detail.uuid.toString().toLowerCase().contains(text.toLowerCase())) {
-                    filteredDetails.add(detail)
+    fun setFilters(type: Int) {
+        val newFilterValues = filterDetailType.value
+        newFilterValues!![type] = newFilterValues[type]!!.not()
+        filterDetailType.postValue(newFilterValues)
+    }
+
+    private fun applyFilters(): LiveData<List<Detail>> {
+        val typeFilterRes = Transformations.map(filterDetailType) { filter ->
+            _details.filter { detail ->
+
+                if (!filter.containsValue(true)) true else {
+                    if (detail is AudioDetail && filter[AUDIO_DETAIL] == true) {
+                        return@filter true
+                    }
+                    if (detail is DrawingDetail && filter[DRAW_DETAIL] == true) {
+                        return@filter true
+                    }
+                    if (detail is PhotoDetail && filter[PICTURE_DETAIL] == true) {
+                        return@filter true
+                    }
+                    if (detail is TextDetail && filter[TEXT_DETAIL] == true) {
+                        return@filter true
+                    }
+                    return@filter false
                 }
             }
         }
-        return filteredDetails
-    }
-
-    fun filterType(type: Int): List<Detail> {
-
-        when (type) {
-            AUDIO_DETAIL -> if (filteredDetails == _details.value!!) filteredDetails =
-                _details.value!!.filterIsInstance<AudioDetail>()
-                    .toMutableList() else filteredDetails = _details.value!!.toMutableList()
-            DRAW_DETAIL -> if (filteredDetails == _details.value!!) filteredDetails =
-                _details.value!!.filterIsInstance<DrawingDetail>()
-                    .toMutableList() else filteredDetails = _details.value!!.toMutableList()
-            TEXT_DETAIL -> if (filteredDetails == _details.value!!) filteredDetails =
-                _details.value!!.filterIsInstance<TextDetail>()
-                    .toMutableList() else filteredDetails = _details.value!!.toMutableList()
-            PICTURE_DETAIL -> if (filteredDetails == _details.value!!) filteredDetails =
-                _details.value!!.filterIsInstance<PhotoDetail>()
-                    .toMutableList() else filteredDetails = _details.value!!.toMutableList()
+        val textFilterRes = Transformations.map(filterText) { filterText ->
+            _details.filter { detail ->
+                if (filterText.isEmpty()) return@filter true else
+                    return@filter detail.uuid.toString().toLowerCase(Locale.getDefault())
+                        .contains(filterText.toLowerCase(Locale.getDefault()))
+            }.sortedBy { it.javaClass.canonicalName }.toMutableList()
         }
-        return filteredDetails
+
+        return textFilterRes.combineWith(typeFilterRes) { textRes, typeRes ->
+            val resultSet = mutableSetOf<Detail>()
+            try {
+                if(textRes!!.size>typeRes!!.size){
+                    for(detail in textRes){
+                        if(typeRes.contains(detail)){
+                            resultSet.add(detail)
+                        }
+                    }
+                }else{
+                    for(detail in typeRes){
+                        if(textRes.contains(detail)){
+                            resultSet.add(detail)
+                        }
+                    }
+                }
+
+            }catch (e : NullPointerException){
+
+            }
+            return@combineWith resultSet.toList()
+
+        }
+    }
+    //Method to combine 2 livedata
+   private fun <T, K, R> LiveData<T>.combineWith(
+        liveData: LiveData<K>,
+        block: (T?, K?) -> R
+    ): LiveData<R> {
+        val result = MediatorLiveData<R>()
+        result.addSource(this) {
+            result.value = block.invoke(this.value, liveData.value)
+        }
+        result.addSource(liveData) {
+            result.value = block.invoke(this.value, liveData.value)
+        }
+        return result
+    }
+    //For testing purposes
+    fun get_details(): List<Detail>{
+        return _details
+    }
+    fun getFilterDetailType(): MutableLiveData<MutableMap<Int,Boolean>>{
+        return filterDetailType
     }
 }

@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="@+id/background_filter_menu"
         app:layout_constraintTop_toTopOf="@+id/background_filter_menu"
         app:srcCompat="@drawable/filter_menu_content" />
-<!--        android:src="@color/color_white"/>-->
+
 
     <TableLayout
         android:id="@+id/tableLayout"
