@@ -12,10 +12,10 @@ import be.hogent.faith.R
  * event details. On bigger devices, the activity presents the list of events and
  * events details side-by-side using two vertical panes.
  */
-class EventListActivity : AppCompatActivity() {
+class LibraryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_eventlist)
+        setContentView(R.layout.activity_library)
     }
 }

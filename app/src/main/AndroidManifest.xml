@@ -32,18 +32,18 @@
         android:theme="@style/AppTheme.FullScreen"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
-            android:name=".faith.library.EventListActivity"
+            android:name=".faith.library.LibraryActivity"
             android:label="@string/title_event_detail"
-            android:parentActivityName=".faith.library.EventListActivity">
+            android:parentActivityName=".faith.library.LibraryActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="be.hogent.faith.faith.library.EventListActivity" />
+                android:value="be.hogent.faith.faith.library.LibraryActivity" />
         </activity>
         <activity
             android:name=".faith.loginOrRegister.LoginOrRegisterActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.FullScreen"
             android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.FullScreen"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,7 +54,7 @@
         <activity
             android:name=".faith.cityScreen.CityScreenActivity"
             android:label="@string/lbl_activity_city"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".faith.emotionCapture.EmotionCaptureMainActivity"
             android:label="@string/lbl_activity_emotionCapture"
