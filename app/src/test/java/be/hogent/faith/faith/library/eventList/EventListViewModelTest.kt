@@ -3,9 +3,14 @@ package be.hogent.faith.faith.library.eventList
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.TestUtils.getValue
+import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import be.hogent.faith.util.factory.DetailFactory
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
+import io.reactivex.subscribers.DisposableSubscriber
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -56,13 +61,28 @@ class EventListViewModelTest {
     // the MediatorLiveData will not start processing updates from its sources.
     private val eventsObserver = Observer<List<Event>> { }
 
+    private val user = mockk<User>()
+    private val getEventsUseCase = mockk<GetEventsUseCase>()
+    private val eventsUseCaseSubscriber = slot<DisposableSubscriber<List<Event>>>()
+
     @Before
     fun setUp() {
+        setUpGetEventsUseCase()
         viewModel = EventListViewModel(
-            getEventsUseCase = mockk()
+            user = user,
+            getEventsUseCase = getEventsUseCase
         )
-        viewModel.events = events
+        eventsUseCaseSubscriber.captured.onNext(events)
         viewModel.filteredEvents.observeForever(eventsObserver)
+    }
+
+    private fun setUpGetEventsUseCase() {
+        every {
+            getEventsUseCase.execute(
+                any(),
+                capture(eventsUseCaseSubscriber)
+            )
+        } returns Unit
     }
 
     @After

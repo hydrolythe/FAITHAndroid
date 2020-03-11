@@ -4,14 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.library.eventfilters.CombinedEventFilter
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
+import io.reactivex.subscribers.DisposableSubscriber
 import org.threeten.bp.LocalDate
 
-class EventListViewModel(private val getEventsUseCase: GetEventsUseCase) : ViewModel() {
+class EventListViewModel(
+    user: User,
+    private val getEventsUseCase: GetEventsUseCase
+) : ViewModel() {
     // Currently like this to do testing
-    lateinit var events: List<Event>
+    private var events: List<Event> = emptyList()
 
     private val eventFilter = CombinedEventFilter()
 
@@ -68,6 +74,17 @@ class EventListViewModel(private val getEventsUseCase: GetEventsUseCase) : ViewM
         }
     }
 
+    private val _errorMessage = MutableLiveData<Int>()
+    val errorMessage: LiveData<Int> = _errorMessage
+
+    init {
+        loadEvents(user)
+    }
+
+    private fun loadEvents(user: User) {
+        getEventsUseCase.execute(GetEventsUseCase.Params(user), GetEventsUseCaseHandler())
+    }
+
     fun onFilterPhotosClicked() {
         photoFilterEnabled.value = photoFilterEnabled.value!!.not()
     }
@@ -82,5 +99,20 @@ class EventListViewModel(private val getEventsUseCase: GetEventsUseCase) : ViewM
 
     fun onFilterAudioClicked() {
         audioFilterEnabled.value = audioFilterEnabled.value!!.not()
+    }
+
+    private inner class GetEventsUseCaseHandler : DisposableSubscriber<List<Event>>() {
+
+        override fun onComplete() {
+            // NOP
+        }
+
+        override fun onNext(t: List<Event>) {
+            events = t
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_load_events)
+        }
     }
 }
