@@ -269,9 +269,9 @@ class BackpackViewModel(
         val textFilterRes = Transformations.map(filterText) { filterText ->
             _details.filter { detail ->
                 if (filterText.isEmpty()) return@filter true else
-                    return@filter detail.uuid.toString().toLowerCase(Locale.getDefault())
+                    return@filter detail.fileName.toLowerCase(Locale.getDefault())
                         .contains(filterText.toLowerCase(Locale.getDefault()))
-            }.sortedBy { it.javaClass.canonicalName }.toMutableList()
+            }
         }
 
         return textFilterRes.combineWith(typeFilterRes) { textRes, typeRes ->
@@ -295,7 +295,9 @@ class BackpackViewModel(
 
             }
 
-            return@combineWith resultSet.toList()
+            return@combineWith resultSet.toList().sortedBy {
+                it.javaClass.canonicalName
+            }
 
 
         }
