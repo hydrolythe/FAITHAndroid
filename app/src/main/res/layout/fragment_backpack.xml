@@ -100,7 +100,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/prullenbak"
-            android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_end"
             app:layout_constraintTop_toTopOf="@+id/guide_rv_horizontal_2"
             app:srcCompat="@drawable/prullenbak" />

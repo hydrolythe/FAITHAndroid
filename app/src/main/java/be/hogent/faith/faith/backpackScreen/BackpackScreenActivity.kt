@@ -136,4 +136,8 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     fun save (detail : Detail){
         backpackViewModel.showSaveDialog(detail)
     }
+
+    override fun deleteDetail(detail : Detail){
+        backpackViewModel.deleteDetail(detail)
+    }
 }

@@ -248,4 +248,8 @@ class BackpackViewModel(
         }
         return filteredDetails
     }
+
+    fun deleteDetail(detail: Detail) {
+       //TODO
+    }
 }
