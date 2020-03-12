@@ -14,10 +14,7 @@
         android:layout_height="match_parent"
         android:background="@color/background_library_eventlist"
         android:orientation="vertical">
-        <!--ACHTERGROND-->
 
-        <!-- KNOPPEN -->
-        <!-- Invisible to make it transparent -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -69,8 +66,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text" />
-                <!--                    android:text="@{eventlistViewModel.search}"/>-->
+                    android:inputType="text"
+                    android:text="@={eventlistViewModel.searchString}"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -121,7 +118,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/btn_library_eventlist_searchAudio"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/group_library_eventlist_dates"
-                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel" />
+                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel"
+                android:onClick="@{() -> eventlistViewModel.onFilterTextClicked()}"/>
 
             <ImageButton
                 android:id="@+id/btn_library_eventlist_searchAudio"
@@ -131,13 +129,14 @@
                 android:src="@drawable/ic_filterknop_audio"
                 android:contentDescription="@string/audio_opnemen"
                 android:background="@null"
-                app:layout_constraintEnd_toStartOf="@+id/btn_library_eventlist_searchCamera"
+                app:layout_constraintEnd_toStartOf="@+id/btn_library_eventlist_searchPhotos"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btn_library_eventlist_searchText"
-                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel" />
+                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel"
+                android:onClick="@{() -> eventlistViewModel.onFilterAudioClicked()}"/>
 
             <ImageButton
-                android:id="@+id/btn_library_eventlist_searchCamera"
+                android:id="@+id/btn_library_eventlist_searchPhotos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -147,7 +146,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/btn_library_eventlist_searchDrawing"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btn_library_eventlist_searchAudio"
-                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel" />
+                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel"
+                android:onClick="@{() -> eventlistViewModel.onFilterPhotosClicked()}"/>
 
             <ImageButton
                 android:id="@+id/btn_library_eventlist_searchDrawing"
@@ -158,8 +158,9 @@
                 android:background="@null"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_library_eventlist_right"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/btn_library_eventlist_searchCamera"
-                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel" />
+                app:layout_constraintStart_toEndOf="@+id/btn_library_eventlist_searchPhotos"
+                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel"
+                android:onClick="@{() -> eventlistViewModel.onFilterDrawingClicked()}"/>
 
             <ImageButton
                 android:id="@+id/btn_library_eventlist_delete"
@@ -178,6 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/podloodje"
+                android:contentDescription="@string/potlood"
                 app:layout_constraintStart_toEndOf="@+id/guideline_library_eventlist_right"
                 app:layout_constraintTop_toTopOf="@+id/cardview_library_eventlist"
                 app:layout_constraintEnd_toEndOf="parent"

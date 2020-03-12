@@ -30,6 +30,7 @@
     <color name="background_save_event">#CDF9EC</color>
     <color name="background_enter_text">#F21040</color>
     <color name="background_library_eventlist">#CDF9EC</color>
+    <color name="background_library_eventdetails">#6BBDA4</color>
 
     <color name="blue">#00FFFF</color>
     <color name="red">#DA1D45</color>

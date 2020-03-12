@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.di
 
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.details.audio.AudioDetailViewModel
@@ -15,6 +16,7 @@ import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.library.eventDetails.EventDetailsViewModel
+import be.hogent.faith.faith.library.eventList.EventListViewModel
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
@@ -65,6 +67,7 @@ val appModule = module(override = true) {
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { TakePhotoViewModel(get()) }
     viewModel { EventDetailsViewModel() }
+    viewModel { (user: User) -> EventListViewModel(user, get()) }
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.

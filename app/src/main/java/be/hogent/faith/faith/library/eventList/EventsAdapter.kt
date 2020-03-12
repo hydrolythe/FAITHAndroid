@@ -8,6 +8,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.faith.library.eventfilters.EventHasDetailTypeFilter
 import be.hogent.faith.faith.loadFirestorageImage
 import com.bumptech.glide.RequestManager
 import org.threeten.bp.format.DateTimeFormatter
@@ -40,6 +45,14 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
         private var eventTitle: TextView = view.findViewById(R.id.lbl_title)
         private var eventDate: TextView = view.findViewById(R.id.lbl_date)
         private var eventDesc: TextView = view.findViewById(R.id.lbl_description)
+        private var hasTextDetails: ImageView = view.findViewById(R.id.btn_library_event_hasText)
+        private var hasAudioDetails: ImageView = view.findViewById(R.id.btn_library_event_hasAudio)
+        private var hasPhotoDetails: ImageView = view.findViewById(R.id.btn_library_event_hasPhoto)
+        private var hasDrawingDetails: ImageView = view.findViewById(R.id.btn_library_event_hasDrawing)
+        private val textDetailFilter = EventHasDetailTypeFilter(TextDetail::class)
+        private val photoDetailFilter = EventHasDetailTypeFilter(PhotoDetail::class)
+        private val audioDetailFilter = EventHasDetailTypeFilter(AudioDetail::class)
+        private val drawingDetailFilter = EventHasDetailTypeFilter(DrawingDetail::class)
 
         fun bind(event: Event, position: Int) {
             eventTitle.text =
@@ -58,8 +71,13 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
 
             eventDesc.text = event.notes
 
+            hasTextDetails.visibility = if (textDetailFilter.invoke(event)) View.VISIBLE else View.GONE
+            hasAudioDetails.visibility = if (audioDetailFilter.invoke(event)) View.VISIBLE else View.GONE
+            hasPhotoDetails.visibility = if (photoDetailFilter.invoke(event)) View.VISIBLE else View.GONE
+            hasDrawingDetails.visibility = if (drawingDetailFilter.invoke(event)) View.VISIBLE else View.GONE
+
             itemView.setOnClickListener {
-                // eventListener.onEventClicked(position)
+                eventListener.onEventClicked(event.uuid)
             }
         }
     }

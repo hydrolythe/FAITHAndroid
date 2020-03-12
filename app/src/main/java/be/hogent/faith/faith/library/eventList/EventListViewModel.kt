@@ -11,6 +11,7 @@ import be.hogent.faith.faith.library.eventfilters.CombinedEventFilter
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import io.reactivex.subscribers.DisposableSubscriber
 import org.threeten.bp.LocalDate
+import java.util.UUID
 
 class EventListViewModel(
     user: User,
@@ -99,6 +100,10 @@ class EventListViewModel(
 
     fun onFilterAudioClicked() {
         audioFilterEnabled.value = audioFilterEnabled.value!!.not()
+    }
+
+    fun getEvent(eventUuid: UUID): Event? {
+        return events.find { it.uuid == eventUuid }
     }
 
     private inner class GetEventsUseCaseHandler : DisposableSubscriber<List<Event>>() {
