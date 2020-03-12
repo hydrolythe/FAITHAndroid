@@ -8,6 +8,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.library.eventfilters.CombinedEventFilter
+import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import io.reactivex.subscribers.DisposableSubscriber
 import org.threeten.bp.LocalDate
@@ -42,6 +43,12 @@ class EventListViewModel(
     val textFilterEnabled = MutableLiveData<Boolean>().apply {
         this.value = false
     }
+
+    private var _startDateClicked = SingleLiveEvent<Unit>()
+    val startDateClicked: LiveData<Unit> = _startDateClicked
+
+    private var _endDateClicked = SingleLiveEvent<Unit>()
+    val endDateClicked: LiveData<Unit> = _endDateClicked
 
     val filteredEvents: LiveData<List<Event>> = MediatorLiveData<List<Event>>().apply {
         addSource(searchString) { query ->
@@ -101,11 +108,16 @@ class EventListViewModel(
         audioFilterEnabled.value = audioFilterEnabled.value!!.not()
     }
 
-    private inner class GetEventsUseCaseHandler : DisposableSubscriber<List<Event>>() {
+    fun onStartDateClicked() {
+        _startDateClicked.call()
+    }
 
-        override fun onComplete() {
-            // NOP
-        }
+    fun onEndDateClicked() {
+        _endDateClicked.call()
+    }
+
+    private inner class GetEventsUseCaseHandler : DisposableSubscriber<List<Event>>() {
+        override fun onComplete() {}
 
         override fun onNext(t: List<Event>) {
             events = t
