@@ -189,4 +189,5 @@
     <string name="datumTot">tot</string>
     <string name="wat_zoek_je">wat zoek je?</string>
     <string name="potlood">potlood</string>
+    <string name="daterange">selecteer een datumbereik</string>
 </resources>

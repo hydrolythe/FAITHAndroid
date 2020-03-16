@@ -17,6 +17,10 @@ import be.hogent.faith.databinding.FragmentLibraryEventlistBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import com.bumptech.glide.Glide
+import com.google.android.material.picker.CalendarConstraints
+import com.google.android.material.picker.MaterialDatePicker
+import com.google.android.material.picker.Month
+import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_chooseDate
 import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_searchAudio
 import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_searchPhotos
 import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_searchDrawing
@@ -83,6 +87,10 @@ class EventListFragment : Fragment() {
     }
 
     private fun startListeners() {
+
+        eventListViewModel.dateRangeString.observe(
+            this, Observer { range -> btn_library_eventlist_chooseDate.text = range })
+
         eventListViewModel.filteredEvents.observe(this, Observer { list ->
             eventsAdapter.apply {
                 events = list
@@ -121,6 +129,38 @@ class EventListFragment : Fragment() {
                 R.drawable.ic_filterknop_tekeningen_selected
             )
         })
+
+        eventListViewModel.startDateClicked.observe(this, Observer {
+            showDateRangePicker()
+        })
+
+        eventListViewModel.endDateClicked.observe(this, Observer {
+            showDateRangePicker()
+        })
+
+        eventListViewModel.cancelButtonClicked.observe(this, Observer {
+            activity!!.onBackPressed()
+        })
+    }
+
+    /**
+     * show Material DatePicker. Sets the latest month that can be selected
+     */
+    private fun showDateRangePicker() {
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+        val picker: MaterialDatePicker<*>
+        builder
+            .setTitleTextResId(R.string.daterange)
+            .setCalendarConstraints(
+                CalendarConstraints.Builder()
+                    .setEnd(Month.today())
+                    .build()
+            )
+        picker = builder.build()
+        picker.show(this.fragmentManager!!, picker.toString())
+        picker.addOnPositiveButtonClickListener {
+            eventListViewModel.setDateRange(it.first, it.second)
+        }
     }
 
     private fun setDrawable(enabled: Boolean, button: ImageButton, image: Int, imageSelected: Int) {

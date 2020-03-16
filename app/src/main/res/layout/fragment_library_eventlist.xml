@@ -43,8 +43,8 @@
                 android:background="@drawable/ic_return"
                 android:contentDescription="@string/cancel"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-            <!--       android:onClick="@{() -> eventlistViewModel.onCancelClicked()}"-->
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{() -> eventlistViewModel.onCancelButtonClicked()}"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout_library_eventlist_search"
@@ -56,52 +56,41 @@
                 app:hintEnabled="false"
                 app:layout_constraintEnd_toStartOf="@+id/group_library_eventlist_dates"
                 app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toEndOf="@+id/guideline_library_eventlist_left"
                 app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel"
                 app:startIconDrawable="@drawable/ic_search"
-                app:startIconTint="@null"
-                app:layout_constraintHorizontal_chainStyle="spread"
->
+                app:startIconTint="@null">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:text="@={eventlistViewModel.searchString}"/>
+                    android:text="@={eventlistViewModel.searchString}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/group_library_eventlist_dates"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/shape_rounded_rectangle"
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/shape_rounded_rectangle"
                 app:layout_constraintEnd_toStartOf="@+id/btn_library_eventlist_searchText"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/textInputLayout_library_eventlist_search"
                 app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_library_eventlist_fromDate"
+                    android:id="@+id/btn_library_eventlist_chooseDate"
                     style="@style/faith_textbutton"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:gravity="center"
-                    android:text="@string/datumVan"
-                    app:icon="@drawable/ic_kalender"
-                    app:iconGravity="textStart"
-                    app:iconSize="34dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_library_eventlist_toDate"
-                    style="@style/faith_textbutton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:gravity="center"
-                    android:text="@string/datumTot"
+                    android:onClick="@{() -> eventlistViewModel.onStartDateClicked()}"
+                    android:text="@{eventlistViewModel.dateRangeString}"
                     app:icon="@drawable/ic_kalender"
                     app:iconGravity="textStart"
                     app:iconSize="34dp" />
@@ -112,55 +101,55 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_filterknop_teksten"
-                android:contentDescription="@string/tekst"
                 android:background="@null"
+                android:contentDescription="@string/tekst"
+                android:onClick="@{() -> eventlistViewModel.onFilterTextClicked()}"
+                android:src="@drawable/ic_filterknop_teksten"
                 app:layout_constraintEnd_toStartOf="@+id/btn_library_eventlist_searchAudio"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/group_library_eventlist_dates"
-                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel"
-                android:onClick="@{() -> eventlistViewModel.onFilterTextClicked()}"/>
+                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel" />
 
             <ImageButton
                 android:id="@+id/btn_library_eventlist_searchAudio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_filterknop_audio"
-                android:contentDescription="@string/audio_opnemen"
                 android:background="@null"
+                android:contentDescription="@string/audio_opnemen"
+                android:onClick="@{() -> eventlistViewModel.onFilterAudioClicked()}"
+                android:src="@drawable/ic_filterknop_audio"
                 app:layout_constraintEnd_toStartOf="@+id/btn_library_eventlist_searchPhotos"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btn_library_eventlist_searchText"
-                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel"
-                android:onClick="@{() -> eventlistViewModel.onFilterAudioClicked()}"/>
+                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel" />
 
             <ImageButton
                 android:id="@+id/btn_library_eventlist_searchPhotos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_filterknop_foto"
-                android:contentDescription="@string/take_photo_de_foto"
                 android:background="@null"
+                android:contentDescription="@string/take_photo_de_foto"
+                android:onClick="@{() -> eventlistViewModel.onFilterPhotosClicked()}"
+                android:src="@drawable/ic_filterknop_foto"
                 app:layout_constraintEnd_toStartOf="@+id/btn_library_eventlist_searchDrawing"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btn_library_eventlist_searchAudio"
-                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel"
-                android:onClick="@{() -> eventlistViewModel.onFilterPhotosClicked()}"/>
+                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel" />
 
             <ImageButton
                 android:id="@+id/btn_library_eventlist_searchDrawing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_filterknop_tekeningen"
-                android:contentDescription="@string/tekenen"
                 android:background="@null"
+                android:contentDescription="@string/tekenen"
+                android:onClick="@{() -> eventlistViewModel.onFilterDrawingClicked()}"
+                android:src="@drawable/ic_filterknop_tekeningen"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_library_eventlist_right"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btn_library_eventlist_searchPhotos"
-                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel"
-                android:onClick="@{() -> eventlistViewModel.onFilterDrawingClicked()}"/>
+                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel" />
 
             <ImageButton
                 android:id="@+id/btn_library_eventlist_delete"
@@ -168,22 +157,21 @@
                 android:layout_height="31dp"
                 android:background="@drawable/ic_prullenmand"
                 android:contentDescription="@string/cancel"
-                app:layout_constraintStart_toEndOf="@+id/guideline_library_eventlist_right"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel"
                 app:layout_constraintBottom_toBottomOf="@+id/btn_library_eventlist_cancel"
-/>
-            <!--       android:onClick="@{() -> eventlistViewModel.onCancelClicked()}"-->
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/guideline_library_eventlist_right"
+                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel"
+                 android:onClick="@{() -> eventlistViewModel.onCancelButtonClicked()}"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/podloodje"
                 android:contentDescription="@string/potlood"
-                app:layout_constraintStart_toEndOf="@+id/guideline_library_eventlist_right"
-                app:layout_constraintTop_toTopOf="@+id/cardview_library_eventlist"
+                android:src="@drawable/podloodje"
                 app:layout_constraintEnd_toEndOf="parent"
-                />
+                app:layout_constraintStart_toEndOf="@+id/guideline_library_eventlist_right"
+                app:layout_constraintTop_toTopOf="@+id/cardview_library_eventlist" />
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardview_library_eventlist"
                 android:layout_width="0dp"
@@ -191,17 +179,18 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="30dp"
-                app:layout_constraintStart_toEndOf="@+id/guideline_library_eventlist_left"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline_library_eventlist_right"
-                app:layout_constraintTop_toBottomOf="@+id/btn_library_eventlist_cancel"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintStart_toEndOf="@+id/guideline_library_eventlist_left"
+                app:layout_constraintTop_toBottomOf="@+id/btn_library_eventlist_cancel">
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView_library_eventlist"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scrollbars="vertical"
+                    android:layout_margin="8dp"
                     android:orientation="horizontal"
-                    android:layout_margin="8dp"/>
+                    android:scrollbars="vertical" />
             </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
