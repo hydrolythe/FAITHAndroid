@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import kotlinx.android.synthetic.main.fragment_city_screen.guide_pole_left_end
+
 import timber.log.Timber
 
 /**
@@ -26,24 +26,4 @@ internal fun Fragment.replaceChildFragment(fragment: Fragment, frameId: Int) {
     ft.replace(frameId, fragment)
     ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
     ft.commit()
-}
-
-/**
- * Adjusts the guideline (horizontally or vertically) based on the image which has been scaled.
- * @param guideline The guide line which needs to be scaled
- * @param padding The distance in pixels between the outer left (or top) side of the screen and the left side (top) of the background image
- * @param imageLength The length of the screen (width / height)
- */
-internal fun Fragment.adjustGuidelineAfterScaling(
-    guideline: Guideline,
-    padding: Float,
-    imageLength: Float,
-    screenLength: Float
-) {
-    // Calculate percentage after scaling
-    val originalPercentage =
-        (guideline.layoutParams as ConstraintLayout.LayoutParams).guidePercent
-    val newPercentage = ((originalPercentage * imageLength) + padding) / screenLength
-    guide_pole_left_end.setGuidelinePercent(newPercentage)
-    Timber.i("Changed %d from %f to %f", guideline.id, originalPercentage, newPercentage)
 }

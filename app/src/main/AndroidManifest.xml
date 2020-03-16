@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="be.hogent.faith">
-
     <!-- To access Google+ APIs: -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -32,6 +31,10 @@
         android:theme="@style/AppTheme.FullScreen"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
+            android:name=".faith.cityScreen.Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.FullScreen.NoActionBar"></activity>
+        <activity
             android:name=".faith.library.EventListActivity"
             android:label="@string/title_event_detail"
             android:parentActivityName=".faith.library.EventListActivity">
@@ -42,8 +45,8 @@
         <activity
             android:name=".faith.loginOrRegister.LoginOrRegisterActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.FullScreen"
             android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.FullScreen"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,15 +57,13 @@
         <activity
             android:name=".faith.cityScreen.CityScreenActivity"
             android:label="@string/lbl_activity_city"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".faith.emotionCapture.EmotionCaptureMainActivity"
             android:label="@string/lbl_activity_emotionCapture"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.FullScreen"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
-
     </application>
 
 </manifest>
