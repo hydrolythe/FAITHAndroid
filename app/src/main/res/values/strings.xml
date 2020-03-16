@@ -192,5 +192,6 @@
     <string name="backpack_btn_delete">Verwijderknop rugzak</string>
     <string name="backpack_btn_open_filter">Open zoekmenu rugzak</string>
     <string name="backpack_btn_add">"Knop voeg toe "</string>
+    <string name="selected_image">Selected image</string>
 
 </resources>
