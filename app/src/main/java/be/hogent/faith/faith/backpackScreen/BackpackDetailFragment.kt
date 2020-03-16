@@ -1,11 +1,13 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
@@ -24,6 +26,7 @@ import be.hogent.faith.faith.details.video.view.ViewVideoFragment
 import be.hogent.faith.faith.util.replaceChildFragment
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
+
 abstract class BackpackDetailFragment : Fragment() {
 
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
@@ -40,14 +43,15 @@ abstract class BackpackDetailFragment : Fragment() {
         editDetailBinding.lifecycleOwner = this
 
         backpackViewModel.showSaveDialog.observe(this, Observer {
+            if(it != null)
             showSaveDialog(it)
         })
 
         return editDetailBinding.root
     }
 
-    private fun showSaveDialog(it: Detail?) {
-        saveDialog = SaveDetailDialog.newInstance()
+    private fun showSaveDialog(detail: Detail) {
+       saveDialog = SaveDetailDialog.newInstance(detail)
         saveDialog.show(fragmentManager!!, null)
     }
 

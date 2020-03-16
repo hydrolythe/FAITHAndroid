@@ -52,6 +52,13 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         backpackViewModel.goToCityScreen.observe(this, Observer {
             closeBackpack()
         })
+
+        backpackViewModel.goToDetail.observe(this, Observer {
+            replaceFragment(
+                BackpackDetailFragment.newInstance(it),
+                R.id.fragment
+            )
+        })
     }
 
     // BackToBackpack overrides method already defined in details

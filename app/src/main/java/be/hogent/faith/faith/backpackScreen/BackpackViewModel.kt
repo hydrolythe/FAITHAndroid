@@ -75,6 +75,10 @@ class BackpackViewModel(
     val errorMessage: LiveData<Int>
         get() = _errorMessage
 
+    fun setErrorMessage(errorMsg : Int){
+        _errorMessage.postValue(errorMsg)
+    }
+
     private val _textSavedSuccessFully = SingleLiveEvent<Int>()
     val textDetailSavedSuccessFully: LiveData<Int> = _textSavedSuccessFully
 
@@ -105,8 +109,11 @@ class BackpackViewModel(
     private val _isInEditMode = MutableLiveData<Int>()
     val isInEditMode: LiveData<Int> = _isInEditMode
 
-    private val _showSaveDialog = MutableLiveData<Detail>()
+    private val _showSaveDialog = SingleLiveEvent<Detail>()
     val showSaveDialog: LiveData<Detail> = _showSaveDialog
+
+    private val _goToDetail = SingleLiveEvent<Detail>()
+    val goToDetail: LiveData<Detail> = _goToDetail
 
     init {
         _details = getBackPackFilesDummyUseCase.getDetails()
@@ -134,6 +141,10 @@ class BackpackViewModel(
 
     fun showSaveDialog(detail: Detail){
         _showSaveDialog.postValue(detail)
+    }
+
+    fun handleSaveDialog(){
+        _showSaveDialog.call()
     }
 
     fun saveCurrentDetail(detail : Detail){
@@ -327,5 +338,9 @@ class BackpackViewModel(
 
     fun deleteDetail(detail: Detail) {
        //TODO
+    }
+
+    fun goToDetail(detail: Detail) {
+      _goToDetail.postValue(detail)
     }
 }
