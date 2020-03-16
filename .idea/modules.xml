@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FAITH.iml" filepath="$PROJECT_DIR$/FAITH.iml" group="FAITH" />
-      <module fileurl="file://$PROJECT_DIR$/encryption/FAITH-encryption.iml" filepath="$PROJECT_DIR$/encryption/FAITH-encryption.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="FAITH/app" />
       <module fileurl="file://$PROJECT_DIR$/database/database.iml" filepath="$PROJECT_DIR$/database/database.iml" group="FAITH/database" />
       <module fileurl="file://$PROJECT_DIR$/domain/domain.iml" filepath="$PROJECT_DIR$/domain/domain.iml" group="FAITH/domain" />
