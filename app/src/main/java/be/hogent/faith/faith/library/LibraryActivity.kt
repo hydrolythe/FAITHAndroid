@@ -3,9 +3,17 @@ package be.hogent.faith.faith.library
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.library.eventDetails.EventDetailFragment
+import be.hogent.faith.faith.library.eventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.library.eventList.EventListFragment
 import be.hogent.faith.faith.library.eventList.EventListViewModel
 import be.hogent.faith.faith.util.replaceFragment
@@ -22,11 +30,14 @@ import java.util.UUID
  * event details. On bigger devices, the activity presents the list of events and
  * events details side-by-side using two vertical panes.
  */
-class LibraryActivity : AppCompatActivity(), EventListFragment.EventsListNavigationListener {
+class LibraryActivity : AppCompatActivity(), EventListFragment.EventsListNavigationListener,
+    DetailViewHolder.ExistingDetailNavigationListener {
 
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private val eventListViewModel: EventListViewModel by viewModel { parametersOf(userViewModel.user.value) }
+
+    private val eventDetailsViewModel: EventDetailsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +45,20 @@ class LibraryActivity : AppCompatActivity(), EventListFragment.EventsListNavigat
     }
 
     override fun startEventDetailsFragment(eventUuid: UUID) {
-        replaceFragment(EventDetailFragment.newInstance(eventUuid), R.id.fragment)
+        eventListViewModel.getEvent(eventUuid)?.let {
+            eventDetailsViewModel.setEvent(it)
+            replaceFragment(EventDetailFragment.newInstance(), R.id.library_fragment_container)
+        }
+    }
+
+    override fun openDetailScreenFor(detail: Detail) {
+        when (detail) {
+            is AudioDetail -> null // RecordAudioFragment.newInstance(detail)
+            is TextDetail -> null // TextDetailFragment.newInstance(detail)
+            is DrawingDetail -> null // DrawingDetailFragment.newInstance(detail)
+            is PhotoDetail -> ReviewPhotoFragment.newInstance(detail)
+        }?.let {
+            replaceFragment(it, R.id.library_fragment_container)
+        }
     }
 }

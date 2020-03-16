@@ -16,6 +16,7 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentLibraryEventlistBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.library.eventDetails.EventDetailsViewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.picker.CalendarConstraints
 import com.google.android.material.picker.MaterialDatePicker
@@ -52,6 +53,7 @@ class EventListFragment : Fragment() {
             userViewModel.user.value
         )
     }
+    private val eventDetailsViewModel: EventDetailsViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
