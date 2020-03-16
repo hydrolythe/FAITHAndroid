@@ -28,7 +28,7 @@ open class EventRepositoryImpl(
     override fun get(uuid: UUID): Observable<Event> {
         return firebaseEventRepository.get(uuid.toString())
             .map(eventMapper::mapFromEntity)
-            .flatMapSingle(eventEncryptionService::decryptEventData)
+            .flatMapSingle(eventEncryptionService::decrypt)
             .flatMap { fileStorageRepository.downloadEventFiles(it).andThen(Observable.just(it)) }
     }
 
