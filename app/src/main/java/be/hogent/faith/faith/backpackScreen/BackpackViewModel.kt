@@ -9,6 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
@@ -25,9 +27,11 @@ import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCas
 import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.subscribers.DisposableSubscriber
 import java.lang.Exception
 import java.lang.NullPointerException
 import java.util.Locale
+import java.util.UUID
 
 
 object OpenState {
@@ -44,10 +48,10 @@ class BackpackViewModel(
     private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
 ) : ViewModel() {
 
-    private var _details = listOf<Detail>()
+    private var _details = MutableLiveData<List<Detail>>()
 
     val details: LiveData<List<Detail>>
-        get() = applyFilters()
+        get() = _details
 
     private var filterDetailType = MutableLiveData<MutableMap<Int, Boolean>>().apply {
         postValue(
@@ -116,8 +120,28 @@ class BackpackViewModel(
     val goToDetail: LiveData<Detail> = _goToDetail
 
     init {
-        _details = getBackPackFilesDummyUseCase.getDetails()
+        getDetails()
+    }
 
+    //TODO tijdelijk
+    fun getDetails(){
+        val params = GetBackPackFilesDummyUseCase.Params("")
+        getBackPackFilesDummyUseCase.execute(params, GetBackPackFilesDummyUseCaseHandler())
+    }
+
+    private inner class GetBackPackFilesDummyUseCaseHandler : DisposableSubscriber<List<Detail>>() {
+        override fun onNext(t: List<Detail>?) {
+            if (t != null) {
+                _details.postValue(t)
+            }
+        }
+
+        override fun onComplete() {
+
+        }
+
+        override fun onError(e: Throwable) {
+        }
     }
 
     fun initialize() {
@@ -147,10 +171,10 @@ class BackpackViewModel(
         _showSaveDialog.call()
     }
 
-    fun saveCurrentDetail(detail : Detail){
+    fun saveCurrentDetail(user : User, detail : Detail){
         when (detail) {
             is DrawingDetail -> saveDrawingDetail(showSaveDialog.value as DrawingDetail)
-            is TextDetail -> saveTextDetail(showSaveDialog.value as TextDetail)
+            is TextDetail -> saveTextDetail(user, showSaveDialog.value as TextDetail)
             is PhotoDetail -> savePhotoDetail(showSaveDialog.value as PhotoDetail)
             is AudioDetail -> saveAudioDetail(showSaveDialog.value as AudioDetail)
         }
@@ -177,8 +201,8 @@ class BackpackViewModel(
         _goToCityScreen.call()
     }
 
-    fun saveTextDetail(detail: TextDetail) {
-        val params = SaveBackpackTextDetailUseCase.Params(detail)
+    fun saveTextDetail(user : User, detail: TextDetail) {
+        val params = SaveBackpackTextDetailUseCase.Params(user, detail)
         saveBackpackTextDetailUseCase.execute(params, SaveBackpackTextDetailUseCaseHandler())
     }
 
@@ -256,7 +280,7 @@ class BackpackViewModel(
         filterDetailType.postValue(newFilterValues)
     }
 
-    private fun applyFilters(): LiveData<List<Detail>> {
+  /*  private fun applyFilters(): LiveData<List<Detail>> {
         val typeFilterRes = Transformations.map(filterDetailType) { filter ->
             _details.filter { detail ->
 
@@ -312,7 +336,7 @@ class BackpackViewModel(
 
 
         }
-    }
+    }*/
 
     //Method to combine 2 livedata
     private fun <T, K, R> LiveData<T>.combineWith(

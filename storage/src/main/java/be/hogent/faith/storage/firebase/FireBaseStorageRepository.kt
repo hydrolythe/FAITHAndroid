@@ -11,6 +11,7 @@ import io.reactivex.Single
 import io.reactivex.rxkotlin.toFlowable
 import timber.log.Timber
 import java.io.File
+import java.util.UUID
 
 class FireBaseStorageRepository(
     private val pathProvider: StoragePathProvider,
@@ -27,6 +28,10 @@ class FireBaseStorageRepository(
                         saveDetailFile(event, it)
                     }
             ).toSingle { event }
+    }
+
+    override fun saveBackpackDetail(detail: Detail): Single<Detail> {
+        return saveBackpackDetailFile(detail).toSingle { detail }
     }
 
     /**
@@ -89,5 +94,12 @@ class FireBaseStorageRepository(
                 )
             }
         )
+    }
+
+    private fun saveBackpackDetailFile(detail: Detail): Completable{
+        return Completable.fromSingle(RxFirebaseStorage.putFile(
+            storageRef.child(pathProvider.getDetailPath(detail).path),
+            Uri.parse("file://${pathProvider.getLocalDetailPath(detail).path}")
+        ))
     }
 }

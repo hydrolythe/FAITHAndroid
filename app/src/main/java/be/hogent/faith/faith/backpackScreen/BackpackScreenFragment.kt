@@ -20,16 +20,19 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.DetailTypes.AUDIO_DETAIL
 import be.hogent.faith.faith.backpackScreen.DetailTypes.DRAW_DETAIL
 import be.hogent.faith.faith.backpackScreen.DetailTypes.PICTURE_DETAIL
 import be.hogent.faith.faith.backpackScreen.DetailTypes.TEXT_DETAIL
+import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
 import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_audio
 import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_foto
 import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_tekeningen
 import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_teksten
 import kotlinx.android.synthetic.main.backpack_menu_filter.view.search_bar
+import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 object DetailTypes {
@@ -45,7 +48,7 @@ class BackpackScreenFragment : Fragment() {
 
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
 
-    //   private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
@@ -81,6 +84,8 @@ class BackpackScreenFragment : Fragment() {
         startListeners()
         updateUI()
         initialiseMenu()
+        //TODO tijdelijk
+        backpackViewModel.getDetails()
     }
 
     private fun updateUI() {
@@ -101,9 +106,12 @@ class BackpackScreenFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private fun startListeners() {
 
-        backpackViewModel.details.observe(this, Observer { details ->
+       backpackViewModel.details.observe(this, Observer { details ->
             detailThumbnailsAdapter?.updateDetailsList(details)
         })
+ //       userViewModel.user.observe(this, Observer {
+ //           detailThumbnailsAdapter?.updateDetailsList(it.backpack.details)
+ //       })
 
         backpackBinding.btnBackpackAdd.setOnClickListener {
             backpackViewModel.setOnAddClicked(it)

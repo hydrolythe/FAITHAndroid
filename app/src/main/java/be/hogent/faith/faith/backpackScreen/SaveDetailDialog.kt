@@ -90,6 +90,6 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
 
     private fun saveFile(fileName : String){
         detail.fileName = fileName
-        backpackViewModel.saveCurrentDetail(detail)
+        backpackViewModel.saveCurrentDetail(userViewModel.user.value!!, detail)
     }
 }

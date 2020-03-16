@@ -1,14 +1,19 @@
 package be.hogent.faith.database.di
 
 import be.hogent.faith.database.firebase.FirebaseAuthManager
+import be.hogent.faith.database.firebase.FirebaseBackpackRepository
 import be.hogent.faith.database.firebase.FirebaseEventRepository
 import be.hogent.faith.database.firebase.FirebaseUserRepository
+import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
+import be.hogent.faith.database.mappers.Mapper
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.repositories.AuthManagerImpl
+import be.hogent.faith.database.repositories.BackpackRepositoryImpl
 import be.hogent.faith.database.repositories.EventRepositoryImpl
 import be.hogent.faith.database.repositories.UserRepositoryImpl
 import be.hogent.faith.domain.repository.AuthManager
+import be.hogent.faith.domain.repository.BackpackRepository
 import be.hogent.faith.domain.repository.EventRepository
 import be.hogent.faith.domain.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
@@ -18,6 +23,7 @@ import org.koin.dsl.module
 val databaseModule = module {
     single { EventMapper }
     single { UserMapper }
+    single { DetailMapper }
 /*
     single { constructEventDao(get()) }
     single { constructDetailDao(get()) }
@@ -29,10 +35,13 @@ val databaseModule = module {
     // Koin doesn't automatically see the Impl as an implementation of the interface,
     // so we have to explicitly mention it.
     single { EventRepositoryImpl(get(), get(), get()) as EventRepository }
+    single { BackpackRepositoryImpl(get(), get(), get()) as BackpackRepository}
     single { UserRepositoryImpl(get(), get()) as UserRepository }
     single { AuthManagerImpl(get()) as AuthManager }
     single { FirebaseAuthManager(constructFirebaseAuthInstance()) }
     single { FirebaseUserRepository(constructFirebaseAuthInstance(), constructFireStoreInstance()) }
+    single {FirebaseBackpackRepository(constructFirebaseAuthInstance(),
+        constructFireStoreInstance())}
     single {
         FirebaseEventRepository(
             constructFirebaseAuthInstance(),

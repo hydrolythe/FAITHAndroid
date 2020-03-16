@@ -1,5 +1,6 @@
 package be.hogent.faith.storage
 
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
@@ -7,6 +8,7 @@ import be.hogent.faith.storage.localStorage.ILocalStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.toFlowable
+import java.util.UUID
 
 /**
  * Repository providing access to both the internal and remote storage.
@@ -58,5 +60,15 @@ class StorageRepository(
                         getFile(it)
                     }
             )
+    }
+
+    override fun getBackpack(backpack: Backpack): Completable {
+        return backpack.details.toFlowable().concatMapCompletable {
+            getFile(it)
+        }
+    }
+
+    override fun saveBackpackDetail(detail: Detail): Single<Detail> {
+        return remoteStorage.saveBackpackDetail(detail)
     }
 }

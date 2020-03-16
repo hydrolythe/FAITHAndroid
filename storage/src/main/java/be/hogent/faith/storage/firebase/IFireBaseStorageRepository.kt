@@ -4,6 +4,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Completable
 import io.reactivex.Single
+import java.util.UUID
 
 interface IFireBaseStorageRepository {
     fun saveEvent(event: Event): Single<Event>
@@ -14,4 +15,6 @@ interface IFireBaseStorageRepository {
     fun makeFileLocallyAvailable(detail: Detail): Completable
 
     fun makeEmotionAvatarLocallyAvailable(event: Event): Completable
+
+    fun saveBackpackDetail(detail: Detail): Single<Detail>
 }
