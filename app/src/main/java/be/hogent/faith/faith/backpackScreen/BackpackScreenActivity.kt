@@ -1,15 +1,12 @@
 package be.hogent.faith.faith.backpackScreen
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.PopupWindow
+import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.*
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
@@ -21,13 +18,14 @@ import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.getViewModel
 
+
 class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.BackpackDetailsNavigationListener,
-    RecordAudioFragment.AudioScreenNavigation,
-    DrawFragment.DrawingScreenNavigation,
-    DetailFinishedListener,
-    TextDetailFragment.TextScreenNavigation,
-    TakePhotoFragment.PhotoScreenNavigation,
-    DetailViewHolder.ExistingDetailNavigationListener{
+        RecordAudioFragment.AudioScreenNavigation,
+        DrawFragment.DrawingScreenNavigation,
+        DetailFinishedListener,
+        TextDetailFragment.TextScreenNavigation,
+        TakePhotoFragment.PhotoScreenNavigation,
+        DetailViewHolder.ExistingDetailNavigationListener {
 
     private lateinit var backpackViewModel: BackpackViewModel
 
@@ -45,8 +43,8 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         if (savedInstanceState == null) {
             val fragment = BackpackScreenFragment.newInstance()
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment, fragment)
-                .commit()
+                    .add(R.id.fragment, fragment)
+                    .commit()
         }
 
         backpackViewModel.goToCityScreen.observe(this, Observer {
@@ -106,15 +104,18 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun startFileDetailFragment() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    override fun startExternalFileDetailFragment() {
+        replaceFragment(BackpackDetailFragment.ExternalFileFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+        backpackViewModel.viewButtons(false)
+        backpackViewModel.setDetailScreenOpen(true)
+        backpackViewModel.closePopUpMenu()
     }
 
     override fun openDetailScreenFor(detail: Detail) {
         backpackViewModel.setCurrentFile(detail)
         replaceFragment(
-            BackpackDetailFragment.newInstance(detail),
-            R.id.fragment
+                BackpackDetailFragment.newInstance(detail),
+                R.id.fragment
         )
         backpackViewModel.viewButtons(false)
         backpackViewModel.closePopUpMenu()
@@ -133,11 +134,11 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         }
     }
 
-    fun save (detail : Detail){
+    fun save(detail: Detail) {
         backpackViewModel.showSaveDialog(detail)
     }
 
-    override fun deleteDetail(detail : Detail){
+    override fun deleteDetail(detail: Detail) {
         backpackViewModel.deleteDetail(detail)
     }
 }

@@ -82,6 +82,7 @@ dependencies {
     def androidDependencies = rootProject.ext.androidDependencies
     def uiDependencies = rootProject.ext.uiDependencies
 
+
     implementation commonDependencies.kotlin
     implementation commonDependencies.threeTenABP
     implementation commonDependencies.rxjava
@@ -96,7 +97,7 @@ dependencies {
     implementation androidDependencies.appcompat
     implementation androidDependencies.lifecycle
     implementation androidDependencies.viewmodellifecycle
-
+    implementation 'com.linsea:universalvideoview:1.1.0@aar'
     implementation uiDependencies.glide
 
     implementation uiDependencies.legacysupport

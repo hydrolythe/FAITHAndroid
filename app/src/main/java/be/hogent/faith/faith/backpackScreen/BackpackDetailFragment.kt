@@ -157,4 +157,17 @@ abstract class BackpackDetailFragment : Fragment() {
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }
     }
+    class ExternalFileFragmentNoEmotionAvatar : BackpackDetailFragment() {
+
+        companion object {
+            fun newInstance(): ExternalFileFragmentNoEmotionAvatar {
+                return ExternalFileFragmentNoEmotionAvatar()
+            }
+        }
+
+        override fun setChildFragment(detail: Detail?) {
+            val childFragment = AddExternalFileFragment.newInstance()
+            replaceChildFragment(childFragment, R.id.fragment_container_editFile)
+        }
+    }
 }
