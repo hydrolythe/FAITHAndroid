@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.backpackScreen.externalFile
 
 import android.net.Uri
-import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,7 +16,9 @@ import timber.log.Timber
 import java.io.File
 
 
+
 class ExternalFileViewModel(private val createPhotoDetailUseCase: CreatePhotoDetailUseCase) : ViewModel(), DetailViewModel<PhotoDetail> {
+
 
     private val _cancelClicked = SingleLiveEvent<Unit>()
     val cancelClicked: LiveData<Unit>
@@ -37,7 +38,8 @@ class ExternalFileViewModel(private val createPhotoDetailUseCase: CreatePhotoDet
         get() = _errorMessage
 
     fun setCurrentFile(uri: Uri?) {
-        _currentFile.postValue(File(uri!!.path))
+
+        _currentFile.value = File(uri!!.path)
     }
 
     fun onCancelClicked() {
@@ -54,6 +56,7 @@ class ExternalFileViewModel(private val createPhotoDetailUseCase: CreatePhotoDet
         require(_currentFile.value != null)
         val params = CreatePhotoDetailUseCase.Params(_currentFile.value!!)
         createPhotoDetailUseCase.execute(params, CreatePhotoDetailUseCaseHandler())
+
 
     }
     private inner class CreatePhotoDetailUseCaseHandler :
