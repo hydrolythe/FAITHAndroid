@@ -45,8 +45,6 @@ class BackpackScreenFragment : Fragment() {
 
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
 
-    //   private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
-
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
     private lateinit var addDetailMenu: PopupMenu

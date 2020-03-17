@@ -95,25 +95,17 @@ class AddExternalFileFragment : Fragment(), DetailFragment<PhotoDetail> {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        val saveFile = tempFileProvider.tempPhotoFile
+
         if (resultCode == RESULT_OK) {
             val fileToAdd = data!!.data
 
-            if (fileToAdd.toString().contains("image")) {
+            if (fileToAdd!!.toString().contains("image")) {
                 binding.selectedImage.setImageURI(fileToAdd)
                 binding.videoLayout.visibility = View.GONE
 
                 val drawable = binding.selectedImage.drawable
                 // Get the bitmap from drawable object
                 val bitmap = (drawable as BitmapDrawable).bitmap
-
-                // Get the context wrapper instance
-                val wrapper = ContextWrapper(requireContext())
-
-                // Initializing a new file
-                // The bellow line return a directory in internal storage
-
-
 
                 // Create a file to save the image
                 val file = tempFileProvider.tempPhotoFile
@@ -131,7 +123,7 @@ class AddExternalFileFragment : Fragment(), DetailFragment<PhotoDetail> {
                 }
 
                 externalFileViewModel.setCurrentFile(Uri.parse(file.absolutePath))
-            } else if (fileToAdd!!.toString().contains("video")) {
+            } else if (fileToAdd.toString().contains("video")) {
 
                 binding.videoView.setMediaController(binding.mediaController)
                 binding.videoView.setVideoURI(fileToAdd)
