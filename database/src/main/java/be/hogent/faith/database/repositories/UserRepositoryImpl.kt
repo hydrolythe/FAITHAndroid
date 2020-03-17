@@ -1,6 +1,6 @@
 package be.hogent.faith.database.repositories
 
-import be.hogent.faith.database.firebase.FirebaseUserRepository
+import be.hogent.faith.database.firebase.UserDatabase
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
@@ -10,28 +10,28 @@ import io.reactivex.Flowable
 
 open class UserRepositoryImpl(
     private val userMapper: UserMapper,
-    private val firebaseUserRepository: FirebaseUserRepository
+    private val userDatabase: UserDatabase
 ) : UserRepository {
 
     /**
      * deletes the user. item must be the authenticated user
      */
     override fun delete(item: User): Completable {
-        return firebaseUserRepository.delete(userMapper.mapToEntity(item))
+        return userDatabase.delete(userMapper.mapToEntity(item))
     }
 
     /**
      * registers a user. A new user has no events yet
      */
     override fun insert(item: User): Completable {
-        return firebaseUserRepository.insert(userMapper.mapToEntity(item))
+        return userDatabase.insert(userMapper.mapToEntity(item))
     }
 
     /**
      * gets the current user. This must be the uid of the authenticated user
      */
     override fun get(uid: String): Flowable<User> {
-        return firebaseUserRepository.get(uid).map { userMapper.mapFromEntity(it) }
+        return userDatabase.get(uid).map { userMapper.mapFromEntity(it) }
     }
 
     /**

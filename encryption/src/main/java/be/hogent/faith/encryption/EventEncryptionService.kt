@@ -2,7 +2,7 @@ package be.hogent.faith.encryption
 
 import be.hogent.faith.database.encryption.EncryptedDetail
 import be.hogent.faith.database.encryption.EncryptedEvent
-import be.hogent.faith.database.encryption.EventEncryptionServiceInterface
+import be.hogent.faith.database.encryption.IEventEncryptionService
 import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
@@ -10,7 +10,6 @@ import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
 import com.google.crypto.tink.KeysetHandle
-import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
@@ -24,7 +23,7 @@ import org.threeten.bp.LocalDateTime
 class EventEncryptionService(
     private val keyGenerator: KeyGenerator,
     private val keyEncrypter: KeyEncrypter
-) : EventEncryptionServiceInterface {
+) : IEventEncryptionService {
 
     override fun encrypt(event: Event): Single<EncryptedEvent> {
         val dataKeysetHandle = keyGenerator.generateKeysetHandle()

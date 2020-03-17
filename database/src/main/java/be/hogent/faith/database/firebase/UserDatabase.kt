@@ -11,7 +11,7 @@ import io.reactivex.Flowable
  *  The ruleset in Firestorage are set so a user can only CRUD it's own documents
  *  currentUser is the user who is logged in
  */
-class FirebaseUserRepository(
+class UserDatabase(
     private val fbAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore
 ) {
@@ -38,13 +38,7 @@ class FirebaseUserRepository(
         val document = firestore.collection(USERS_KEY).document(currentUser.uid)
         return RxFirestore.setDocument(document, item)
             .onErrorResumeNext {
-                Completable.error(
-                    Throwable(
-                        java.lang.RuntimeException(
-                            "Failed to create user"
-                        )
-                    )
-                )
+                Completable.error(Throwable(java.lang.RuntimeException("Failed to create user")))
             }
     }
 

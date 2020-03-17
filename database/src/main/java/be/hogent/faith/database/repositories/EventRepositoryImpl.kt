@@ -1,7 +1,7 @@
 package be.hogent.faith.database.repositories
 
-import be.hogent.faith.database.encryption.EventEncryptionServiceInterface
-import be.hogent.faith.database.firebase.FirebaseEventRepository
+import be.hogent.faith.database.encryption.IEventEncryptionService
+import be.hogent.faith.database.firebase.EventDatabase
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.storage.IFileStorageRepository
@@ -14,8 +14,8 @@ import java.util.UUID
 
 open class EventRepositoryImpl(
     private val fileStorageRepository: IFileStorageRepository,
-    private val firebaseEventRepository: FirebaseEventRepository,
-    private val eventEncryptionService: EventEncryptionServiceInterface
+    private val eventDatabase: EventDatabase,
+    private val eventEncryptionService: IEventEncryptionService
 ) : EventRepository {
 
     private val userMapper = UserMapper
@@ -41,7 +41,7 @@ open class EventRepositoryImpl(
             .flatMap(fileStorageRepository::saveEventFiles)
             .map(eventMapper::mapToEntity)
             .flatMapCompletable { entity ->
-                firebaseEventRepository.insert(entity, userMapper.mapToEntity(user))
+                eventDatabase.insert(entity, userMapper.mapToEntity(user))
             }
     }
 
@@ -51,7 +51,7 @@ open class EventRepositoryImpl(
      * using [EventRepositoryImpl.get].
      */
     override fun getAll(): Observable<List<Event>> {
-        return firebaseEventRepository.getAll()
+        return eventDatabase.getAll()
             .map { eventMapper.mapFromEntities(it) }
             .flatMapSingle(eventEncryptionService::decryptList)
             .toObservable()

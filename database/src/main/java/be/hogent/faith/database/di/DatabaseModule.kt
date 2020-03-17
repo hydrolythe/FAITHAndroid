@@ -1,8 +1,8 @@
 package be.hogent.faith.database.di
 
 import be.hogent.faith.database.firebase.FirebaseAuthManager
-import be.hogent.faith.database.firebase.FirebaseEventRepository
-import be.hogent.faith.database.firebase.FirebaseUserRepository
+import be.hogent.faith.database.firebase.EventDatabase
+import be.hogent.faith.database.firebase.UserDatabase
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.repositories.AuthManagerImpl
@@ -27,9 +27,9 @@ val databaseModule = module {
     single { UserRepositoryImpl(get(), get()) as UserRepository }
     single { AuthManagerImpl(get()) as AuthManager }
     single { FirebaseAuthManager(constructFirebaseAuthInstance()) }
-    single { FirebaseUserRepository(constructFirebaseAuthInstance(), constructFireStoreInstance()) }
+    single { UserDatabase(constructFirebaseAuthInstance(), constructFireStoreInstance()) }
     single {
-        FirebaseEventRepository(
+        EventDatabase(
             constructFirebaseAuthInstance(),
             constructFireStoreInstance()
         )

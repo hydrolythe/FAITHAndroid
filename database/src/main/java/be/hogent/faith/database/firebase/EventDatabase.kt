@@ -15,7 +15,7 @@ import io.reactivex.Observable
  * storage hierarchy in Firestorage : idem
  * the ruleset on both storages is so that a user can only CRUD his documents
  */
-class FirebaseEventRepository(
+class EventDatabase(
     private val fbAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore
 ) {
@@ -45,14 +45,10 @@ class FirebaseEventRepository(
             return Flowable.error(RuntimeException("Unauthorized user."))
         }
         return RxFirestore.observeQueryRef(
-            firestore.collection(USERS_KEY).document(currentUser.uid).collection(
-                EVENTS_KEY
-            )
+            firestore.collection(USERS_KEY).document(currentUser.uid).collection(EVENTS_KEY)
         )
             .map {
-                it.map { document ->
-                    document.toObject(EncryptedEventEntity::class.java)
-                }
+                it.map { document -> document.toObject(EncryptedEventEntity::class.java) }
             }
     }
 
@@ -69,7 +65,7 @@ class FirebaseEventRepository(
         } else {
             // sets the document reference for saving the event in firestore
             val document =
-                firestore.collection(FirebaseUserRepository.USERS_KEY).document(currentUser.uid)
+                firestore.collection(UserDatabase.USERS_KEY).document(currentUser.uid)
                     .collection(EVENTS_KEY)
                     .document(item.uuid)
             return RxFirestore.setDocument(document, item) // ) // stores the event in firestore

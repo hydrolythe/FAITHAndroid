@@ -1,7 +1,7 @@
 package be.hogent.faith.database.repositories
 
-import be.hogent.faith.database.encryption.EventEncryptionServiceInterface
-import be.hogent.faith.database.firebase.FirebaseEventRepository
+import be.hogent.faith.database.encryption.IEventEncryptionService
+import be.hogent.faith.database.firebase.EventDatabase
 import be.hogent.faith.database.storage.IFileStorageRepository
 import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory
@@ -18,13 +18,13 @@ import org.junit.Test
 class EventRepositoryImplTest {
 
     private val storageRepository = mockk<IFileStorageRepository>()
-    private val firebaseEventRepository = mockk<FirebaseEventRepository>()
-    private val eventEncryptionService = mockk<EventEncryptionServiceInterface>()
+    private val eventDatabase = mockk<EventDatabase>()
+    private val eventEncryptionService = mockk<IEventEncryptionService>()
 
     private val eventRepository =
         EventRepositoryImpl(
             storageRepository,
-            firebaseEventRepository,
+            eventDatabase,
             eventEncryptionService
         )
 
@@ -34,7 +34,7 @@ class EventRepositoryImplTest {
     @Before
     fun setUpMocks() {
         every { storageRepository.saveEventFiles(any()) } returns Single.just(mockk(relaxed = true))
-        every { firebaseEventRepository.insert(any(), any()) } returns Completable.complete()
+        every { eventDatabase.insert(any(), any()) } returns Completable.complete()
         every { eventEncryptionService.encrypt(any()) } returns Single.just(mockk(relaxed = true))
     }
 
@@ -70,6 +70,6 @@ class EventRepositoryImplTest {
             .assertComplete()
             .dispose()
 
-        verify { firebaseEventRepository.insert(any(), any()) }
+        verify { eventDatabase.insert(any(), any()) }
     }
 }

@@ -4,7 +4,7 @@ import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.domain.models.Event
 import io.reactivex.Single
 
-interface EventEncryptionServiceInterface {
+interface IEventEncryptionService {
     /**
      * Encrypts an [EncryptedEventEntity] and all data belonging to that event.
      * The encrypted data is stored in the device's permanent storage.
