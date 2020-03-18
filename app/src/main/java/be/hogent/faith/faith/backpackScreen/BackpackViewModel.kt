@@ -34,12 +34,12 @@ object OpenState {
 }
 
 class BackpackViewModel(
-        private val saveBackpackTextDetailUseCase: SaveBackpackTextDetailUseCase,
-        private val saveBackpackAudioDetailUseCase: SaveBackpackAudioDetailUseCase,
-        private val saveBackpackPhotoDetailUseCase: SaveBackpackPhotoDetailUseCase,
-        private val saveBackpackDrawingDetailUseCase: SaveBackpackDrawingDetailUseCase,
-        private val deleteBackpackDetailUseCase: DeleteBackpackDetailUseCase,
-        private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
+    private val saveBackpackTextDetailUseCase: SaveBackpackTextDetailUseCase,
+    private val saveBackpackAudioDetailUseCase: SaveBackpackAudioDetailUseCase,
+    private val saveBackpackPhotoDetailUseCase: SaveBackpackPhotoDetailUseCase,
+    private val saveBackpackDrawingDetailUseCase: SaveBackpackDrawingDetailUseCase,
+    private val deleteBackpackDetailUseCase: DeleteBackpackDetailUseCase,
+    private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
 
 ) : ViewModel() {
 

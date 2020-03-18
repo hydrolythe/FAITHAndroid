@@ -18,7 +18,6 @@ import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 
-
 class BackpackViewModelDeleteDetailTest {
     private lateinit var viewModel: BackpackViewModel
     private val deleteBackpackDetailUseCase = mockk<DeleteBackpackDetailUseCase>(relaxed = true)
