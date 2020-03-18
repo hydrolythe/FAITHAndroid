@@ -18,7 +18,7 @@ import be.hogent.faith.faith.backpackScreen.DetailTypes.DRAW_DETAIL
 import be.hogent.faith.faith.backpackScreen.DetailTypes.PICTURE_DETAIL
 import be.hogent.faith.faith.backpackScreen.DetailTypes.TEXT_DETAIL
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.backpack.DeleteBackpackFileUseCase
+import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCase
@@ -34,12 +34,12 @@ object OpenState {
 }
 
 class BackpackViewModel(
-    private val saveBackpackTextDetailUseCase: SaveBackpackTextDetailUseCase,
-    private val saveBackpackAudioDetailUseCase: SaveBackpackAudioDetailUseCase,
-    private val saveBackpackPhotoDetailUseCase: SaveBackpackPhotoDetailUseCase,
-    private val saveBackpackDrawingDetailUseCase: SaveBackpackDrawingDetailUseCase,
-    private val deleteBackpackFileUseCase: DeleteBackpackFileUseCase,
-    private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
+        private val saveBackpackTextDetailUseCase: SaveBackpackTextDetailUseCase,
+        private val saveBackpackAudioDetailUseCase: SaveBackpackAudioDetailUseCase,
+        private val saveBackpackPhotoDetailUseCase: SaveBackpackPhotoDetailUseCase,
+        private val saveBackpackDrawingDetailUseCase: SaveBackpackDrawingDetailUseCase,
+        private val deleteBackpackDetailUseCase: DeleteBackpackDetailUseCase,
+        private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
 
 ) : ViewModel() {
 
@@ -106,8 +106,8 @@ class BackpackViewModel(
     private val _showSaveDialog = MutableLiveData<Detail>()
     val showSaveDialog: LiveData<Detail> = _showSaveDialog
 
-    private val _fileDeletedSuccessfully = SingleLiveEvent<Int>()
-    val fileDeletedSuccessfully: LiveData<Int> = _fileDeletedSuccessfully
+    private val _detailDeletedSuccessfully = SingleLiveEvent<Int>()
+    val detailDeletedSuccessfully: LiveData<Int> = _detailDeletedSuccessfully
 
     init {
         _details = getBackPackFilesDummyUseCase.getDetails()
@@ -231,7 +231,7 @@ class BackpackViewModel(
         saveBackpackAudioDetailUseCase.dispose()
         saveBackpackDrawingDetailUseCase.dispose()
         saveBackpackPhotoDetailUseCase.dispose()
-        deleteBackpackFileUseCase.dispose()
+        deleteBackpackDetailUseCase.dispose()
         super.onCleared()
     }
 
@@ -320,18 +320,18 @@ class BackpackViewModel(
     }
 
     fun deleteDetail(detail: Detail) {
-        // TODO
-        val params = DeleteBackpackFileUseCase.Params(detail)
-        deleteBackpackFileUseCase.execute(params, DeleteBackpackFileUseCaseHandler())
+
+        val params = DeleteBackpackDetailUseCase.Params(detail)
+        deleteBackpackDetailUseCase.execute(params, DeleteBackpackDetailUseCaseHandler())
     }
 
-    private inner class DeleteBackpackFileUseCaseHandler : DisposableCompletableObserver() {
+    private inner class DeleteBackpackDetailUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            _textSavedSuccessFully.postValue(R.string.save_text_success)
+            _detailDeletedSuccessfully.postValue(R.string.delete_detail_success)
         }
 
         override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_text_failed)
+            _errorMessage.postValue(R.string.error_delete_detail_failure)
         }
     }
 }

@@ -30,11 +30,12 @@ class BackpackViewModelSaveTextTest {
     @Before
     fun setUp() {
         viewModel = BackpackViewModel(
-            saveTextUseCase,
-            mockk(),
-            mockk(),
-            mockk(),
-            getBackPackFilesDummyUseCase
+                saveTextUseCase,
+                mockk(),
+                mockk(),
+                mockk(),
+                mockk(),
+                getBackPackFilesDummyUseCase
         )
     }
 

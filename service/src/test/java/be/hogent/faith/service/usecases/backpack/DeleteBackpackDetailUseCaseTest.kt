@@ -11,7 +11,7 @@ import org.junit.Before
 import org.junit.Test
 
 class DeleteBackpackDetailUseCaseTest {
-    private lateinit var deleteBackpackFileUseCase: DeleteBackpackFileUseCase
+    private lateinit var deleteBackpackDetailUseCase: DeleteBackpackDetailUseCase
     private val scheduler: Scheduler = mockk()
     private val repository: IDummyStorageRepository = mockk(relaxed = true)
 
@@ -19,8 +19,8 @@ class DeleteBackpackDetailUseCaseTest {
 
     @Before
     fun setUp() {
-        deleteBackpackFileUseCase =
-            DeleteBackpackFileUseCase(
+        deleteBackpackDetailUseCase =
+            DeleteBackpackDetailUseCase(
                 repository,
                 scheduler
             )
@@ -30,10 +30,10 @@ class DeleteBackpackDetailUseCaseTest {
     fun deleteDetailUC_deleteDetailFromStorage() {
         // Arrange
         every { repository.deleteDetail(detail) } returns Completable.complete()
-        val params = DeleteBackpackFileUseCase.Params(detail)
+        val params = DeleteBackpackDetailUseCase.Params(detail)
 
         // Act
-        deleteBackpackFileUseCase.buildUseCaseObservable(params).test()
+        deleteBackpackDetailUseCase.buildUseCaseObservable(params).test()
             .assertNoErrors()
             .assertComplete()
 

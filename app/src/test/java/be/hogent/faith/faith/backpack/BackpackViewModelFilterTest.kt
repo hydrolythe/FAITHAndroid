@@ -31,19 +31,20 @@ class BackpackViewModelFilterTest {
     @Before
     fun setUp() {
         val details = listOf(
-            mockk<AudioDetail>(), mockk<AudioDetail>(),
-            mockk<TextDetail>(), mockk<TextDetail>(),
-            mockk<PhotoDetail>(), mockk<PhotoDetail>(),
-            mockk<DrawingDetail>(), mockk<DrawingDetail>()
+                mockk<AudioDetail>(), mockk<AudioDetail>(),
+                mockk<TextDetail>(), mockk<TextDetail>(),
+                mockk<PhotoDetail>(), mockk<PhotoDetail>(),
+                mockk<DrawingDetail>(), mockk<DrawingDetail>()
         )
 
         every { getBackPackFilesDummyUseCase.getDetails() } returns details
         viewModel = BackpackViewModel(
-            mockk(),
-            mockk(),
-            mockk(),
-            mockk(),
-            getBackPackFilesDummyUseCase
+                mockk(),
+                mockk(),
+                mockk(),
+                mockk(),
+                mockk(),
+                getBackPackFilesDummyUseCase
         )
     }
 
@@ -51,20 +52,20 @@ class BackpackViewModelFilterTest {
     fun backpackViewModel_showsAllWithoutFilter() {
 
         assertThat(
-            viewModel.getFilterDetailType().value,
-            IsMapContaining.hasEntry(AUDIO_DETAIL, false)
+                viewModel.getFilterDetailType().value,
+                IsMapContaining.hasEntry(AUDIO_DETAIL, false)
         )
         assertThat(
-            viewModel.getFilterDetailType().value,
-            IsMapContaining.hasEntry(TEXT_DETAIL, false)
+                viewModel.getFilterDetailType().value,
+                IsMapContaining.hasEntry(TEXT_DETAIL, false)
         )
         assertThat(
-            viewModel.getFilterDetailType().value,
-            IsMapContaining.hasEntry(DRAW_DETAIL, false)
+                viewModel.getFilterDetailType().value,
+                IsMapContaining.hasEntry(DRAW_DETAIL, false)
         )
         assertThat(
-            viewModel.getFilterDetailType().value,
-            IsMapContaining.hasEntry(PICTURE_DETAIL, false)
+                viewModel.getFilterDetailType().value,
+                IsMapContaining.hasEntry(PICTURE_DETAIL, false)
         )
 
         assertEquals(8, TestUtils.getValue(viewModel.details).size)
@@ -74,8 +75,8 @@ class BackpackViewModelFilterTest {
     fun backpackViewModel_filterOn1DetailType_AUDIO_DETAIL() {
         viewModel.setFilters(AUDIO_DETAIL)
         assertThat(
-            viewModel.getFilterDetailType().value,
-            IsMapContaining.hasEntry(AUDIO_DETAIL, true)
+                viewModel.getFilterDetailType().value,
+                IsMapContaining.hasEntry(AUDIO_DETAIL, true)
         )
         viewModel.details.observeForever {
             assertEquals(2, it.size)
@@ -91,13 +92,13 @@ class BackpackViewModelFilterTest {
         viewModel.setFilters(TEXT_DETAIL)
 
         assertThat(
-            viewModel.getFilterDetailType().value,
-            IsMapContaining.hasEntry(AUDIO_DETAIL, true)
+                viewModel.getFilterDetailType().value,
+                IsMapContaining.hasEntry(AUDIO_DETAIL, true)
         )
 
         assertThat(
-            viewModel.getFilterDetailType().value,
-            IsMapContaining.hasEntry(TEXT_DETAIL, true)
+                viewModel.getFilterDetailType().value,
+                IsMapContaining.hasEntry(TEXT_DETAIL, true)
         )
         viewModel.details.observeForever {
             assertEquals(4, it.size)

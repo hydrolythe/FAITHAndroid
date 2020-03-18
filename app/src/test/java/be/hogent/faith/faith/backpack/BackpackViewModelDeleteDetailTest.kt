@@ -13,16 +13,17 @@ import org.junit.Assert.assertEquals
 import androidx.lifecycle.Observer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
+import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 
-class BackpackViewModelSavePhotoTest {
+
+class BackpackViewModelDeleteDetailTest {
     private lateinit var viewModel: BackpackViewModel
-    private val savePhotoUseCase = mockk<SaveBackpackPhotoDetailUseCase>(relaxed = true)
+    private val deleteBackpackDetailUseCase = mockk<DeleteBackpackDetailUseCase>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
-    private val detail = mockk<PhotoDetail>()
+    private val detail = mockk<Detail>()
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -32,54 +33,54 @@ class BackpackViewModelSavePhotoTest {
         viewModel = BackpackViewModel(
                 mockk(),
                 mockk(),
-                savePhotoUseCase,
                 mockk(),
                 mockk(),
+                deleteBackpackDetailUseCase,
                 getBackPackFilesDummyUseCase
         )
     }
 
     @Test
-    fun backpackViewModel_savePhoto_callsUseCase() {
-        val params = slot<SaveBackpackPhotoDetailUseCase.Params>()
+    fun backpackViewModel_deleteDetail_callsUseCase() {
+        val params = slot<DeleteBackpackDetailUseCase.Params>()
 
-        viewModel.savePhotoDetail(detail)
-        verify { savePhotoUseCase.execute(capture(params), any()) }
+        viewModel.deleteDetail(detail)
+        verify { deleteBackpackDetailUseCase.execute(capture(params), any()) }
 
-        assertEquals(detail, params.captured.photoDetail)
+        assertEquals(detail, params.captured.detail)
     }
 
     @Test
-    fun backpackViewModel_savePhoto_notifiesUseCaseSuccess() {
+    fun backpackViewModel_deleteDetail_notifiesUseCaseSuccess() {
         // Arrange
         val useCaseObserver = slot<DisposableCompletableObserver>()
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val successObserver = mockk<Observer<Int>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.photoDetailSavedSuccessFully.observeForever(successObserver)
+        viewModel.detailDeletedSuccessfully.observeForever(successObserver)
 
         // Act
-        viewModel.savePhotoDetail(detail)
-        verify { savePhotoUseCase.execute(any(), capture(useCaseObserver)) }
+        viewModel.deleteDetail(detail)
+        verify { deleteBackpackDetailUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onComplete()
 
         // Assert
-        verify { successObserver.onChanged(R.string.save_photo_success) }
+        verify { successObserver.onChanged(R.string.delete_detail_success) }
         verify { errorObserver wasNot called }
     }
 
     @Test
-    fun backpackViewModel_savePhoto_notifiesUseCaseFailure() {
+    fun backpackViewModel_deleteDetail_notifiesUseCaseFailure() {
         // Arrange
         val useCaseObserver = slot<DisposableCompletableObserver>()
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val successObserver = mockk<Observer<Int>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.photoDetailSavedSuccessFully.observeForever(successObserver)
+        viewModel.detailDeletedSuccessfully.observeForever(successObserver)
 
         // Act
-        viewModel.savePhotoDetail(detail)
-        verify { savePhotoUseCase.execute(any(), capture(useCaseObserver)) }
+        viewModel.deleteDetail(detail)
+        verify { deleteBackpackDetailUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onError(mockk(relaxed = true))
 
         // Assert

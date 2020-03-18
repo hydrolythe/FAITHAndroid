@@ -6,10 +6,10 @@ import be.hogent.faith.storage.backpack.IDummyStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
-class DeleteBackpackFileUseCase(
+class DeleteBackpackDetailUseCase(
     private val dummyStorageRepo: IDummyStorageRepository,
     observeScheduler: Scheduler
-) : CompletableUseCase<DeleteBackpackFileUseCase.Params>(
+) : CompletableUseCase<DeleteBackpackDetailUseCase.Params>(
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {

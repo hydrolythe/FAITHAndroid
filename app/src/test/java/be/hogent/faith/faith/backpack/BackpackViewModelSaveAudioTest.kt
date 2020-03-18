@@ -30,11 +30,12 @@ class BackpackViewModelSaveAudioTest {
     @Before
     fun setUp() {
         viewModel = BackpackViewModel(
-            mockk(),
-            saveAudioUseCase,
-            mockk(),
-            mockk(),
-            getBackPackFilesDummyUseCase
+                mockk(),
+                saveAudioUseCase,
+                mockk(),
+                mockk(),
+                mockk(),
+                getBackPackFilesDummyUseCase
         )
     }
 

@@ -192,5 +192,7 @@
     <string name="backpack_btn_delete">Verwijderknop rugzak</string>
     <string name="backpack_btn_open_filter">Open zoekmenu rugzak</string>
     <string name="backpack_btn_add">"Knop voeg toe "</string>
+    <string name="delete_detail_success">Succesvol verwijderd!</string>
+    <string name="error_delete_detail_failure">Er ging iets fout bij het verwijderen.</string>
 
 </resources>
