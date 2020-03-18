@@ -71,7 +71,7 @@ class SaveDetailDialog : DialogFragment() {
     }
 
     private fun saveFile(){
-        var detail = backpackViewModel.showSaveDialog.value
+        val detail = backpackViewModel.showSaveDialog.value
         detail!!.fileName = saveDetailBinding.txtSaveEventTitle.text.toString()
         backpackViewModel.saveCurrentDetail(detail)
     }

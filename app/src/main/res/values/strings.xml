@@ -193,5 +193,7 @@
     <string name="backpack_btn_open_filter">Open zoekmenu rugzak</string>
     <string name="backpack_btn_add">"Knop voeg toe "</string>
     <string name="selected_image">Selected image</string>
+    <string name="create_video_failed">Er ging iets fout bij het aanmaken van de video.</string>
+    <string name="save_video_success">Je video werd succesvol opgeslagen.</string>
 
 </resources>

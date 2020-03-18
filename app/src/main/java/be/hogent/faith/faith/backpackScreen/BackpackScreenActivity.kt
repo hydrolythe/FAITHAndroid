@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.*
+import be.hogent.faith.faith.backpackScreen.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
@@ -25,11 +26,11 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         DetailFinishedListener,
         TextDetailFragment.TextScreenNavigation,
         TakePhotoFragment.PhotoScreenNavigation,
-        DetailViewHolder.ExistingDetailNavigationListener {
+        DetailViewHolder.ExistingDetailNavigationListener,
+        AddExternalFileFragment.ExternalFileScreenNavigation{
 
     private lateinit var backpackViewModel: BackpackViewModel
 
-    // private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

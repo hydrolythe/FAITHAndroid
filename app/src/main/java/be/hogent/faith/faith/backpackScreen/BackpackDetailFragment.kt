@@ -8,13 +8,9 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.domain.models.detail.*
 import be.hogent.faith.faith.backpackScreen.externalFile.AddExternalFileFragment
+import be.hogent.faith.faith.details.externalVideo.view.ViewExternalVideoFragment
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
@@ -68,6 +64,7 @@ abstract class BackpackDetailFragment : Fragment() {
                 is PhotoDetail -> PhotoFragmentNoEmotionAvatar.newInstance()
                 is AudioDetail -> AudioFragmentNoEmotionAvatar.newInstance()
                 is VideoDetail -> VideoFragmentNoEmotionAvatar.newInstance()
+                is ExternalVideoDetail -> ExternalVideoFragmentNoEmotionAvatar.newInstance()
             }
         }
     }
@@ -155,6 +152,19 @@ abstract class BackpackDetailFragment : Fragment() {
             } else {
                 ViewVideoFragment.newInstance(detail as VideoDetail)
             }
+            replaceChildFragment(childFragment, R.id.fragment_container_editFile)
+        }
+    }
+    class ExternalVideoFragmentNoEmotionAvatar : BackpackDetailFragment() {
+
+        companion object {
+            fun newInstance(): ExternalVideoFragmentNoEmotionAvatar {
+                return ExternalVideoFragmentNoEmotionAvatar()
+            }
+        }
+
+        override fun setChildFragment(detail: Detail?) {
+            val childFragment = ViewExternalVideoFragment.newInstance(detail as ExternalVideoDetail)
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }
     }

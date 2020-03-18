@@ -2,7 +2,6 @@ package be.hogent.faith.faith.backpackScreen.externalFile
 
 import android.app.Activity.RESULT_OK
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -12,35 +11,31 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.MediaController
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentAddExternalFileBinding
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
-import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.util.TempFileProvider
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
-import java.util.*
+import java.io.*
 
 
-class AddExternalFileFragment : Fragment(), DetailFragment<PhotoDetail> {
+class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
 
 
     private lateinit var binding: FragmentAddExternalFileBinding
     private val externalFileViewModel: ExternalFileViewModel by viewModel()
 
     override lateinit var detailFinishedListener: DetailFinishedListener
-    private var navigation: TakePhotoFragment.PhotoScreenNavigation? = null
+    private var navigation: ExternalFileScreenNavigation? = null
     private val tempFileProvider by inject<TempFileProvider>()
 
     override fun onCreateView(
@@ -72,7 +67,7 @@ class AddExternalFileFragment : Fragment(), DetailFragment<PhotoDetail> {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is TakePhotoFragment.PhotoScreenNavigation) {
+        if (context is ExternalFileScreenNavigation) {
             navigation = context
         }
         if (context is DetailFinishedListener) {
@@ -84,10 +79,16 @@ class AddExternalFileFragment : Fragment(), DetailFragment<PhotoDetail> {
         externalFileViewModel.cancelClicked.observe(this, Observer {
             navigation!!.backToEvent()
         })
-        externalFileViewModel.savedDetail.observe(this, Observer { newPhotoDetail ->
-            Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
-                    .show()
-            detailFinishedListener.onDetailFinished(newPhotoDetail)
+        externalFileViewModel.savedDetail.observe(this, Observer { newDetail ->
+            if (newDetail is PhotoDetail) {
+                Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
+                        .show()
+            } else {
+                Toast.makeText(context, getString(R.string.save_video_success), Toast.LENGTH_SHORT)
+                        .show()
+            }
+
+            detailFinishedListener.onDetailFinished(newDetail)
             navigation?.backToEvent()
         })
 
@@ -97,11 +98,11 @@ class AddExternalFileFragment : Fragment(), DetailFragment<PhotoDetail> {
 
 
         if (resultCode == RESULT_OK) {
-            val fileToAdd = data!!.data
+            val uriToAdd = data!!.data
 
-            if (fileToAdd!!.toString().contains("image")) {
-                binding.selectedImage.setImageURI(fileToAdd)
-                binding.videoLayout.visibility = View.GONE
+            if (uriToAdd!!.toString().contains("image")) {
+                binding.selectedImage.setImageURI(uriToAdd)
+                binding.videoView.visibility = View.GONE
 
                 val drawable = binding.selectedImage.drawable
                 // Get the bitmap from drawable object
@@ -118,18 +119,35 @@ class AddExternalFileFragment : Fragment(), DetailFragment<PhotoDetail> {
                     stream.flush()
                     // Close stream
                     stream.close()
-                } catch (e: IOException) { // Catch the exception
+                } catch (e: IOException) {
                     e.printStackTrace()
                 }
 
-                externalFileViewModel.setCurrentFile(Uri.parse(file.absolutePath))
-            } else if (fileToAdd.toString().contains("video")) {
 
-                binding.videoView.setMediaController(binding.mediaController)
-                binding.videoView.setVideoURI(fileToAdd)
+                externalFileViewModel.setCurrentFile(file)
+            } else if (uriToAdd.toString().contains("video")) {
+                val file = tempFileProvider.tempExternalVideoFile
+                val inputStream: InputStream? = requireContext().contentResolver.openInputStream(uriToAdd)
+                val outputStream: OutputStream = FileOutputStream(file)
+                val buf = ByteArray(4096)
+                var len: Int
+                while (inputStream!!.read(buf).also { len = it } > 0) {
+                    outputStream.write(buf, 0, len)
+                }
+                outputStream.close()
+                inputStream.close()
+                val mediaController = MediaController(requireContext())
+                mediaController.setAnchorView(binding.videoView)
+                binding.videoView.setMediaController(mediaController)
+                binding.videoView.setVideoURI(uriToAdd)
+
+                externalFileViewModel.setCurrentFile(file)
+
             }
         }
+
     }
+
 
     companion object {
         private const val FILE_PICK_CODE = 1000
@@ -141,9 +159,7 @@ class AddExternalFileFragment : Fragment(), DetailFragment<PhotoDetail> {
     interface ExternalFileScreenNavigation {
         fun backToEvent()
     }
-
 }
-
 
 
 
