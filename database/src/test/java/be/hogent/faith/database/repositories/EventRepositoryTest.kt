@@ -22,14 +22,14 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class EventRepositoryImplTest {
+class EventRepositoryTest {
 
     private val storageRepository = mockk<IFileStorageRepository>()
     private val eventDatabase = mockk<EventDatabase>()
     private val eventEncryptionService = mockk<IEventEncryptionService>()
 
     private val eventRepository =
-        EventRepositoryImpl(
+        EventRepository(
             storageRepository,
             eventDatabase,
             eventEncryptionService

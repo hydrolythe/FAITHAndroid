@@ -2,7 +2,7 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.domain.repository.IEventRepository
 import be.hogent.faith.service.usecases.fakes.SingleUserFakeEventRepository
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.util.factory.EventFactory
@@ -17,7 +17,7 @@ import org.junit.Test
 
 class SaveEventUseCaseTest {
     private lateinit var saveEventUseCase: SaveEventUseCase
-    private lateinit var eventRepository: EventRepository
+    private lateinit var eventRepository: IEventRepository
 
     private lateinit var event: Event
     private lateinit var user: User

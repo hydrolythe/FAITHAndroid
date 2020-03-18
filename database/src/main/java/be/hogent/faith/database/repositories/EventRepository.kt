@@ -7,16 +7,16 @@ import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.storage.IFileStorageRepository
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.domain.repository.IEventRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.UUID
 
-open class EventRepositoryImpl(
+open class EventRepository(
     private val fileStorageRepository: IFileStorageRepository,
     private val eventDatabase: EventDatabase,
     private val eventEncryptionService: IEventEncryptionService
-) : EventRepository {
+) : IEventRepository {
 
     private val userMapper = UserMapper
     private val eventMapper = EventMapper

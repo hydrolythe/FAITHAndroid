@@ -3,7 +3,7 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.AuthManager
-import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.domain.repository.IEventRepository
 import be.hogent.faith.domain.repository.UserRepository
 import be.hogent.faith.service.usecases.base.FlowableUseCase
 import io.reactivex.Flowable
@@ -12,7 +12,7 @@ import io.reactivex.rxkotlin.Flowables.combineLatest
 
 class GetUserUseCase(
     private val userRepository: UserRepository,
-    private val eventRepository: EventRepository,
+    private val eventRepository: IEventRepository,
     private val authManager: AuthManager,
     observeScheduler: Scheduler
 ) : FlowableUseCase<User, GetUserUseCase.Params>(observeScheduler) {

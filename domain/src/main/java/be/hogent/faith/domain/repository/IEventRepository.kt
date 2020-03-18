@@ -6,7 +6,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.UUID
 
-interface EventRepository {
+interface IEventRepository {
     fun delete(event: Event, user: User): Completable
 
     /**

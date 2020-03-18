@@ -3,7 +3,7 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.AuthManager
-import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.domain.repository.IEventRepository
 import be.hogent.faith.domain.repository.UserRepository
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.every
@@ -25,7 +25,7 @@ class GetUserUseCaseTest {
     private lateinit var executor: Executor
     private lateinit var scheduler: Scheduler
     private lateinit var userRepository: UserRepository
-    private lateinit var eventRepository: EventRepository
+    private lateinit var eventRepository: IEventRepository
     private lateinit var authManager: AuthManager
 
     @Before

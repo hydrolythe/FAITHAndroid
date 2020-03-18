@@ -2,13 +2,13 @@ package be.hogent.faith.faith
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.domain.repository.IEventRepository
 import be.hogent.faith.util.factory.EventFactory
 import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.UUID
 
-class TestEventRepository : EventRepository {
+class TestEventRepository : IEventRepository {
     override fun delete(item: Event, user: User): Completable {
         return Completable.complete()
     }

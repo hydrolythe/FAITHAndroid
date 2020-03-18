@@ -1,6 +1,6 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.domain.repository.IEventRepository
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory
@@ -18,7 +18,7 @@ class GetEventsUseCaseTest {
     private lateinit var getEventsUC: GetEventsUseCase
     private lateinit var executor: Executor
     private lateinit var scheduler: Scheduler
-    private lateinit var repository: EventRepository
+    private lateinit var repository: IEventRepository
 
     @Before
     fun setUp() {
