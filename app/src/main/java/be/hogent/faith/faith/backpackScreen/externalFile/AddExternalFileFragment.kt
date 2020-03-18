@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
@@ -25,11 +24,12 @@ import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.util.TempFileProvider
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.io.*
-
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 
 class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
-
 
     private lateinit var binding: FragmentAddExternalFileBinding
     private val externalFileViewModel: ExternalFileViewModel by viewModel()
@@ -39,13 +39,12 @@ class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
     private val tempFileProvider by inject<TempFileProvider>()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_add_external_file, container, false)
-
 
         binding.externalFileViewModel = externalFileViewModel
         binding.lifecycleOwner = this
@@ -56,13 +55,10 @@ class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
         return binding.root
     }
 
-
     override fun onStart() {
         super.onStart()
 
         startListeners()
-
-
     }
 
     override fun onAttach(context: Context) {
@@ -91,11 +87,9 @@ class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
             detailFinishedListener.onDetailFinished(newDetail)
             navigation?.backToEvent()
         })
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
 
         if (resultCode == RESULT_OK) {
             val uriToAdd = data!!.data
@@ -123,7 +117,6 @@ class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
                     e.printStackTrace()
                 }
 
-
                 externalFileViewModel.setCurrentFile(file)
             } else if (uriToAdd.toString().contains("video")) {
                 val file = tempFileProvider.tempExternalVideoFile
@@ -142,12 +135,9 @@ class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
                 binding.videoView.setVideoURI(uriToAdd)
 
                 externalFileViewModel.setCurrentFile(file)
-
             }
         }
-
     }
-
 
     companion object {
         private const val FILE_PICK_CODE = 1000
@@ -160,6 +150,3 @@ class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
         fun backToEvent()
     }
 }
-
-
-

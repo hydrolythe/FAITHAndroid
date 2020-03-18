@@ -1,12 +1,15 @@
 package be.hogent.faith.faith.backpackScreen
 
-import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.*
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.backpackScreen.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
@@ -19,7 +22,6 @@ import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.getViewModel
 
-
 class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.BackpackDetailsNavigationListener,
         RecordAudioFragment.AudioScreenNavigation,
         DrawFragment.DrawingScreenNavigation,
@@ -27,10 +29,9 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         TextDetailFragment.TextScreenNavigation,
         TakePhotoFragment.PhotoScreenNavigation,
         DetailViewHolder.ExistingDetailNavigationListener,
-        AddExternalFileFragment.ExternalFileScreenNavigation{
+        AddExternalFileFragment.ExternalFileScreenNavigation {
 
     private lateinit var backpackViewModel: BackpackViewModel
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

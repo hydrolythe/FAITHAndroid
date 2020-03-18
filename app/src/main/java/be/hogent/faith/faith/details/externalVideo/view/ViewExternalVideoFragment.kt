@@ -19,18 +19,18 @@ class ViewExternalVideoFragment : Fragment() {
 
     private lateinit var binding: FragmentViewExternalVideoBinding
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
-        binding =  DataBindingUtil.inflate(inflater,R.layout.fragment_view_external_video, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_external_video, container, false)
         loadVideoFromDetail()
 
         return binding.root
     }
 
-
-    private fun loadVideoFromDetail(){
+    private fun loadVideoFromDetail() {
         val externalVideoDetail = arguments?.getSerializable(VIDEO_DETAIL) as ExternalVideoDetail
         binding.video.setVideoURI(Uri.fromFile(externalVideoDetail.file))
         val mediaController = MediaController(requireContext())
@@ -46,5 +46,4 @@ class ViewExternalVideoFragment : Fragment() {
             }
         }
     }
-
 }

@@ -16,7 +16,6 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.E
 import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.signature.MediaStoreSignature
 import kotlinx.android.synthetic.main.detail_item_rv.view.btn_delete_detailRv
 import kotlinx.android.synthetic.main.detail_item_rv.view.detail_img
@@ -26,9 +25,9 @@ import org.koin.core.inject
 
 object DetailViewHolderFactory {
     fun createViewHolder(
-            parent: ViewGroup,
-            viewType: Int,
-            existingDetailNavigationListener: ExistingDetailNavigationListener
+        parent: ViewGroup,
+        viewType: Int,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
     ): DetailViewHolder {
         val thumbnailView = LayoutInflater.from(parent.context).inflate(
                 R.layout.detail_item_rv,
@@ -55,38 +54,38 @@ object DetailViewHolderFactory {
     }
 
     private fun createAudioDetailViewHolder(
-            thumbnailView: LinearLayout,
-            existingDetailNavigationListener: ExistingDetailNavigationListener
+        thumbnailView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
     ): AudioDetailViewHolder {
         thumbnailView.background = null
         return AudioDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
 
     private fun createTextDetailViewHolder(
-            thumbnailView: LinearLayout,
-            existingDetailNavigationListener: ExistingDetailNavigationListener
+        thumbnailView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
     ): TextDetailViewHolder {
         thumbnailView.background = null
         return TextDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
 
     private fun createPictureDetailViewHolder(
-            thumbnailView: LinearLayout,
-            existingDetailNavigationListener: ExistingDetailNavigationListener
+        thumbnailView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
     ): PictureDetailViewHolder {
         return PictureDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
     private fun createExternalVideoDetailViewHolder(
-            thumbnailView: LinearLayout,
-            existingDetailNavigationListener: ExistingDetailNavigationListener
+        thumbnailView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
     ): ExternalVideoDetailViewHolder {
         return ExternalVideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
 }
 
 sealed class DetailViewHolder(
-        val thumbnailView: LinearLayout,
-        private val existingDetailNavigationListener: ExistingDetailNavigationListener
+    val thumbnailView: LinearLayout,
+    private val existingDetailNavigationListener: ExistingDetailNavigationListener
 ) : RecyclerView.ViewHolder(thumbnailView), KoinComponent {
 
     fun bind(detail: Detail) {
@@ -115,8 +114,8 @@ sealed class DetailViewHolder(
     abstract fun load(detail: Detail): RequestBuilder<Drawable>
 
     class TextDetailViewHolder(
-            imageView: LinearLayout,
-            existingDetailNavigationListener: ExistingDetailNavigationListener
+        imageView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {
@@ -125,8 +124,8 @@ sealed class DetailViewHolder(
     }
 
     class PictureDetailViewHolder(
-            imageView: LinearLayout,
-            existingDetailNavigationListener: ExistingDetailNavigationListener
+        imageView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
         val androidTempFileProvider: TempFileProvider by inject()
@@ -139,8 +138,8 @@ sealed class DetailViewHolder(
     }
 
     class AudioDetailViewHolder(
-            imageView: LinearLayout,
-            existingDetailNavigationListener: ExistingDetailNavigationListener
+        imageView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {
@@ -149,8 +148,8 @@ sealed class DetailViewHolder(
     }
 
     class ExternalVideoDetailViewHolder(
-            imageView: LinearLayout,
-            existingDetailNavigationListener: ExistingDetailNavigationListener
+        imageView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {

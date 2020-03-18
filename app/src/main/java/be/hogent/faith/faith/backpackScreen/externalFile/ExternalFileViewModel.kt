@@ -11,11 +11,10 @@ import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.util.SingleLiveEvent
 import java.io.File
-import java.util.*
+import java.util.Locale
+import java.util.UUID
 
-
-class ExternalFileViewModel: ViewModel(), DetailViewModel<Detail> {
-
+class ExternalFileViewModel : ViewModel(), DetailViewModel<Detail> {
 
     private val _cancelClicked = SingleLiveEvent<Unit>()
     val cancelClicked: LiveData<Unit>
@@ -24,7 +23,6 @@ class ExternalFileViewModel: ViewModel(), DetailViewModel<Detail> {
     private val _savedDetail = MutableLiveData<Detail>()
     override val savedDetail: LiveData<Detail>
         get() = _savedDetail
-
 
     private var navigation: TakePhotoFragment.PhotoScreenNavigation? = null
 
@@ -45,7 +43,6 @@ class ExternalFileViewModel: ViewModel(), DetailViewModel<Detail> {
         _cancelClicked.call()
     }
 
-
     override fun onSaveClicked() {
         require(_currentFile.value != null)
         val file = File(_currentFile.value!!.path)
@@ -54,14 +51,9 @@ class ExternalFileViewModel: ViewModel(), DetailViewModel<Detail> {
         } else {
             _savedDetail.value = ExternalVideoDetail(file, "", UUID.randomUUID())
         }
-
-
     }
-
 
     override fun loadExistingDetail(existingDetail: Detail) {
         throw NotImplementedError("Loading from BackpackViewModel")
     }
-
 }
-

@@ -18,7 +18,6 @@ import be.hogent.faith.R
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 
-
 class BackpackViewModelSaveExternalVideoTest {
     private lateinit var viewModel: BackpackViewModel
     private val saveExternalVideoUseCase = mockk<SaveBackpackExternalVideoDetailUseCase>(relaxed = true)

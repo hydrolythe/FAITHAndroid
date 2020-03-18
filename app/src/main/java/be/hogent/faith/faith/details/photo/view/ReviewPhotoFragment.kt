@@ -10,7 +10,6 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentReviewPhotoBinding
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 private const val PHOTO_DETAIL = "The photoDetail to be shown"
 

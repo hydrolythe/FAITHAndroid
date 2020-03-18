@@ -1,7 +1,6 @@
 package be.hogent.faith.service.usecases.backpack
 
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.storage.backpack.IDummyStorageRepository
 import io.mockk.every
 import io.mockk.mockk

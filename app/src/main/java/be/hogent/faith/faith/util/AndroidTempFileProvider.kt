@@ -29,5 +29,5 @@ class AndroidTempFileProvider(private val context: Context) : TempFileProvider {
     override val tempAudioRecordingFile: File
         get() = File(context.cacheDir, "tempRecording.3gp")
     override val tempExternalVideoFile: File
-        get() = File(context.cacheDir,"tempVideo.mp4")
+        get() = File(context.cacheDir, "tempVideo.mp4")
 }

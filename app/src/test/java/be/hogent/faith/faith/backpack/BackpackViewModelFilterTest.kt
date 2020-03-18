@@ -21,15 +21,12 @@ import org.junit.Assert.assertEquals
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.collection.IsMapContaining
 
-
 class BackpackViewModelFilterTest {
     private lateinit var viewModel: BackpackViewModel
-
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>()
-
 
     @Before
     fun setUp() {
@@ -51,7 +48,6 @@ class BackpackViewModelFilterTest {
         )
     }
 
-
     @Test
     fun backpackViewModel_showsAllWithoutFilter() {
 
@@ -72,11 +68,7 @@ class BackpackViewModelFilterTest {
                 IsMapContaining.hasEntry(PICTURE_DETAIL, false)
         )
 
-
-
         assertEquals(8, TestUtils.getValue(viewModel.details).size)
-
-
     }
 
     @Test
@@ -131,6 +123,4 @@ class BackpackViewModelFilterTest {
     fun backpackViewModel_filterOnTextAndType(){
 
     }*/
-
-
 }

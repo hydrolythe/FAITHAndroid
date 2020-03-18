@@ -48,7 +48,7 @@ class VideoDetail(
     uuid: UUID = UUID.randomUUID()
 ) : Detail(file, fileName, uuid)
 class ExternalVideoDetail(
-        file: File,
-        fileName: String = "",
-        uuid: UUID = UUID.randomUUID()
+    file: File,
+    fileName: String = "",
+    uuid: UUID = UUID.randomUUID()
 ) : Detail(file, fileName, uuid)

@@ -6,7 +6,12 @@ import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import be.hogent.faith.service.usecases.LoginUserUseCase
 import be.hogent.faith.service.usecases.LogoutUserUseCase
 import be.hogent.faith.service.usecases.RegisterUserUseCase
-import be.hogent.faith.service.usecases.backpack.*
+import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackExternalVideoDetailUseCase
+import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
@@ -55,5 +60,5 @@ val serviceModule = module {
     factory { SaveBackpackAudioDetailUseCase(get(), get()) }
     factory { SaveBackpackPhotoDetailUseCase(get(), get()) }
     factory { SaveBackpackDrawingDetailUseCase(get(), get()) }
-    factory { SaveBackpackExternalVideoDetailUseCase(get(),get()) }
+    factory { SaveBackpackExternalVideoDetailUseCase(get(), get()) }
 }
