@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.os.Bundle
-import android.widget.PopupWindow
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
@@ -27,7 +26,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     DetailFinishedListener,
     TextDetailFragment.TextScreenNavigation,
     TakePhotoFragment.PhotoScreenNavigation,
-    DetailViewHolder.ExistingDetailNavigationListener{
+    DetailViewHolder.ExistingDetailNavigationListener {
 
     private lateinit var backpackViewModel: BackpackViewModel
 
@@ -133,11 +132,11 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         }
     }
 
-    fun save (detail : Detail){
+    fun save(detail: Detail) {
         backpackViewModel.showSaveDialog(detail)
     }
 
-    override fun deleteDetail(detail : Detail){
+    override fun deleteDetail(detail: Detail) {
         backpackViewModel.deleteDetail(detail)
     }
 }

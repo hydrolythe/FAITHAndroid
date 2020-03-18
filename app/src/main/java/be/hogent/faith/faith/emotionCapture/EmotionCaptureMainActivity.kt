@@ -220,7 +220,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         eventViewModel.saveAudioDetail(audioDetail)
     }
 
-    override fun deleteDetail(detail : Detail){
+    override fun deleteDetail(detail: Detail) {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 

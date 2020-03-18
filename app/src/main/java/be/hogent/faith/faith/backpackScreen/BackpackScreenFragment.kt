@@ -50,7 +50,7 @@ class BackpackScreenFragment : Fragment() {
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
     private lateinit var addDetailMenu: PopupMenu
-    private var menuPopupHelper : MenuPopupHelper? = null
+    private var menuPopupHelper: MenuPopupHelper? = null
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     override fun onCreateView(
@@ -90,7 +90,6 @@ class BackpackScreenFragment : Fragment() {
         )
         backpackBinding.recyclerviewBackpack.layoutManager = GridLayoutManager(activity, 5)
         backpackBinding.recyclerviewBackpack.adapter = detailThumbnailsAdapter
-
     }
 
     override fun onStop() {
@@ -156,23 +155,21 @@ class BackpackScreenFragment : Fragment() {
             backpackViewModel.setIsInEditMode()
         }
 
-        backpackViewModel.isInEditMode.observe(this, Observer{
-            if(backpackViewModel.isInEditMode.value == OpenState.OPEN){
+        backpackViewModel.isInEditMode.observe(this, Observer {
+            if (backpackViewModel.isInEditMode.value == OpenState.OPEN) {
                 detailThumbnailsAdapter!!.hide(false)
                 backpackViewModel.viewButtons(false)
-            }
-            else{
+            } else {
             detailThumbnailsAdapter!!.hide(true)
                 backpackViewModel.viewButtons(true)
         }
         })
 
         backpackViewModel.isPopupMenuOpen.observe(this, Observer {
-            if(it == OpenState.OPEN){
+            if (it == OpenState.OPEN) {
                 openMenu()
                 backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
-            }
-            else if(it == OpenState.CLOSED){
+            } else if (it == OpenState.CLOSED) {
                 closeMenu()
                 backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.add_btn, null)
             }
@@ -182,15 +179,14 @@ class BackpackScreenFragment : Fragment() {
     }
 
     private fun setBtnState(it: View) {
-        if(it.backgroundTintList == ColorStateList.valueOf(Color.GRAY)){
+        if (it.backgroundTintList == ColorStateList.valueOf(Color.GRAY)) {
             it.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
-        }else{
+        } else {
             it.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
         }
-
     }
 
-    private fun initialiseMenu(){
+    private fun initialiseMenu() {
         addDetailMenu = PopupMenu(backpackBinding.btnBackpackAdd.context, backpackBinding.btnBackpackAdd, Gravity.END, 0, R.style.PopupMenu_AddDetail)
 
         addDetailMenu.menuInflater.inflate(R.menu.menu_backpack, addDetailMenu.menu)
@@ -224,7 +220,7 @@ class BackpackScreenFragment : Fragment() {
         menuPopupHelper!!.setForceShowIcon(true)
     }
 
-    private fun closeMenu(){
+    private fun closeMenu() {
         menuPopupHelper?.dismiss()
     }
 

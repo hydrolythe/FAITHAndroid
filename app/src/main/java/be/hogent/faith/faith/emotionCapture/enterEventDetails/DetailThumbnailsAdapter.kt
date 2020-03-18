@@ -39,7 +39,7 @@ class DetailThumbnailsAdapter(
         )
     }
 
-    fun hide(hide : Boolean){
+    fun hide(hide: Boolean) {
         this.hide = hide
         notifyDataSetChanged()
     }
