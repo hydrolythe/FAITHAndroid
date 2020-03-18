@@ -41,7 +41,7 @@ class SaveEventUseCaseTest {
         result.test()
             .dispose()
 
-        val foundEvent = eventRepository.get(event.uuid).test().values().first()
+        val foundEvent = eventRepository.getEventData(event.uuid).test().values().first()
         assertEquals(event, foundEvent)
     }
 

@@ -14,5 +14,13 @@ interface IFileStorageRepository {
      */
     fun saveEventFiles(encryptedEvent: EncryptedEvent): Single<EncryptedEvent>
 
+    /**
+     * Downloads the [event]s files. If they are already on the devices storage, this completes instantly.
+     */
     fun downloadEventFiles(event: Event): Completable
+
+    /**
+     * Files are considered ready to use if they are available on the device in an unencrypted format.
+     */
+    fun filesReadyToUse(event: Event): Boolean
 }

@@ -6,6 +6,7 @@ import be.hogent.faith.database.storage.ILocalFileStorageRepository
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.firebase.IOnlineFileStorageRepository
+import be.hogent.faith.storage.localStorage.TemporaryStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -16,6 +17,7 @@ import io.reactivex.Single
  *
  */
 class FileStorageRepository(
+    private val temporaryStorageRepository: TemporaryStorageRepository,
     private val localFileStorage: ILocalFileStorageRepository,
     private val remoteFileStorage: IOnlineFileStorageRepository
 ) : IFileStorageRepository {
@@ -65,5 +67,12 @@ class FileStorageRepository(
             Observable.fromIterable(event.details)
                 .flatMapCompletable(::getDetailFile)
         )
+    }
+
+    override fun filesReadyToUse(event: Event): Boolean {
+        return event.details.all { detail ->
+            // We  are using the fact that decrypted files are stored in the cache directory.
+            temporaryStorageRepository.isFilePresent(detail)
+        }
     }
 }

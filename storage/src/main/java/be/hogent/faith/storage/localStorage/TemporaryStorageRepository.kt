@@ -103,6 +103,10 @@ class TemporaryStorageRepository(
         }
     }
 
+    override fun isFilePresent(detail: Detail): Boolean {
+        return detail.file.exists() && detail.file.startsWith(context.cacheDir)
+    }
+
     override fun overwriteTextDetail(text: String, existingDetail: TextDetail): Completable {
         return Completable.fromCallable {
             existingDetail.file.writeText(text)

@@ -75,7 +75,7 @@ class EventEncryptionService(
             .toList()
     }
 
-    override fun decrypt(encryptedEvent: EncryptedEvent): Single<Event> {
+    override fun decryptData(encryptedEvent: EncryptedEvent): Single<Event> {
         val dek = keyEncrypter.decrypt(encryptedEvent.encryptedDEK)
         val streamingDEK = keyEncrypter.decrypt(encryptedEvent.encryptedStreamingDEK)
 
@@ -124,7 +124,7 @@ class EventEncryptionService(
 
     override fun decryptList(encryptedEvents: List<EncryptedEvent>): Single<List<Event>> {
         return Observable.fromIterable(encryptedEvents)
-            .flatMapSingle(this::decrypt)
+            .flatMapSingle(this::decryptData)
             .toList()
     }
 }

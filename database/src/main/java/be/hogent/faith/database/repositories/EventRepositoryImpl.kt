@@ -23,13 +23,26 @@ open class EventRepositoryImpl(
 
     /**
      * Gets the event with the given [uuid] for the currently authenticated user.
-     * Also downloads all files associated with it, so it is ready to be used.
+     * Does not download the files belonging to the event!
      */
-    override fun get(uuid: UUID): Observable<Event> {
-        return firebaseEventRepository.get(uuid.toString())
+    override fun getEventData(uuid: UUID): Observable<Event> {
+        return eventDatabase.get(uuid)
             .map(eventMapper::mapFromEntity)
-            .flatMapSingle(eventEncryptionService::decrypt)
-            .flatMap { fileStorageRepository.downloadEventFiles(it).andThen(Observable.just(it)) }
+            .flatMapSingle(eventEncryptionService::decryptData)
+    }
+
+    /**
+     * Makes sure all files associated with the given event are available.
+     */
+    override fun makeEventFilesAvailable(event: Event): Completable {
+        return fileStorageRepository.downloadEventFiles(event)
+            .andThen {
+                if (fileStorageRepository.filesReadyToUse(event)) {
+                    Completable.complete()
+                } else {
+                    eventEncryptionService.decryptFiles(event)
+                }
+            }
     }
 
     /**
@@ -47,8 +60,8 @@ open class EventRepositoryImpl(
 
     /**
      * Get all events for the authenticated user.
-     * Does <b>NOT</b> download the files for each event. This will have to be done separately
-     * using [EventRepositoryImpl.get].
+     * Does <b>NOT</b> download the files for each event. This will have to be done separately for
+     * each event by calling [makeEventFilesAvailable].
      */
     override fun getAll(): Observable<List<Event>> {
         return eventDatabase.getAll()

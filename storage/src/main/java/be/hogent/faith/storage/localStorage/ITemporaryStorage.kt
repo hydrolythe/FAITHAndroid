@@ -33,4 +33,5 @@ interface ITemporaryStorage {
     fun storeDetailWithEvent(detail: Detail, event: Event): Completable
 
     fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String>
+    fun isFilePresent(detail: Detail): Boolean
 }

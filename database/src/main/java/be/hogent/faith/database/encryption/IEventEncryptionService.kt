@@ -2,6 +2,7 @@ package be.hogent.faith.database.encryption
 
 import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.domain.models.Event
+import io.reactivex.Completable
 import io.reactivex.Single
 
 interface IEventEncryptionService {
@@ -13,7 +14,16 @@ interface IEventEncryptionService {
      */
     fun encrypt(event: Event): Single<EncryptedEvent>
 
-    fun decrypt(encryptedEvent: EncryptedEvent): Single<Event>
+    /**
+     * Decrypts the [encryptedEvent]s data, but not its files.
+     */
+    fun decryptData(encryptedEvent: EncryptedEvent): Single<Event>
+
+    /**
+     * Decrypts the files belonging to an event. After calling this, the paths inside the event
+     * will have been updated.
+     */
+    fun decryptFiles(event: Event): Completable
 
     fun decryptList(encryptedEvents: List<EncryptedEvent>): Single<List<Event>>
 }
