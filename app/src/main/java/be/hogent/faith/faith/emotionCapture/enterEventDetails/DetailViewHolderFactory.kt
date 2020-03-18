@@ -153,7 +153,7 @@ sealed class DetailViewHolder(
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {
-            return Glide.with(thumbnailView).load(R.drawable.event_detail_text)
+            return Glide.with(thumbnailView).load(R.drawable.event_detail_camera) //Vervangen door?
         }
     }
 
