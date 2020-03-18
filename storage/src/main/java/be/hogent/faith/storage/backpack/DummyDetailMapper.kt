@@ -1,11 +1,6 @@
 package be.hogent.faith.storage.backpack
 
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.domain.models.detail.*
 import java.io.File
 import java.util.UUID
 
@@ -45,6 +40,11 @@ object DummyDetailMapper {
                 entity.fileName,
                 UUID.fromString(entity.uuid)
             )
+            "EXTERNALVIDEO" -> ExternalVideoDetail(
+                    File(entity.file),
+                    entity.fileName,
+                    UUID.fromString(entity.uuid)
+            )
             else -> throw ClassCastException("Unknown DetailEntity subclass encountered")
         }
     }
@@ -57,6 +57,7 @@ object DummyDetailMapper {
                 is DrawingDetail -> "DRAWING"
                 is PhotoDetail -> "PHOTO"
                 is VideoDetail -> "VIDEO"
+                is ExternalVideoDetail -> "EXTERNALVIDEO"
                 else -> throw ClassCastException("Unknown Detail subclass encountered")
             }
         )

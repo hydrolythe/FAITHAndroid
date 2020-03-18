@@ -53,7 +53,7 @@ val appModule = module(override = true) {
     viewModel { CityScreenViewModel(get()) }
     viewModel { (event: Event) -> EventViewModel(get(), get(), get(), get(), get(), event) }
     viewModel { EventViewModel(get(), get(), get(), get(), get()) }
-    viewModel { BackpackViewModel(get(), get(), get(), get(), get()) }
+    viewModel { BackpackViewModel(get(), get(), get(), get(), get(),get()) }
     viewModel { DrawViewModel() }
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }
@@ -70,7 +70,7 @@ val appModule = module(override = true) {
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { TakePhotoViewModel(get()) }
     viewModel { SelectedItemViewModel() }
-    viewModel { ExternalFileViewModel(get(), get()) }
+    viewModel { ExternalFileViewModel() }
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.
     scope(named(USER_SCOPE_NAME)) {

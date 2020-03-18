@@ -9,21 +9,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.*
 import be.hogent.faith.faith.backpackScreen.DetailTypes.AUDIO_DETAIL
 import be.hogent.faith.faith.backpackScreen.DetailTypes.DRAW_DETAIL
 import be.hogent.faith.faith.backpackScreen.DetailTypes.PICTURE_DETAIL
 import be.hogent.faith.faith.backpackScreen.DetailTypes.TEXT_DETAIL
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
+import be.hogent.faith.service.usecases.backpack.*
 import io.reactivex.observers.DisposableCompletableObserver
 import java.lang.Exception
 import java.lang.NullPointerException
@@ -41,6 +33,7 @@ class BackpackViewModel(
     private val saveBackpackAudioDetailUseCase: SaveBackpackAudioDetailUseCase,
     private val saveBackpackPhotoDetailUseCase: SaveBackpackPhotoDetailUseCase,
     private val saveBackpackDrawingDetailUseCase: SaveBackpackDrawingDetailUseCase,
+    private val saveBackpackExternalVideoDetailUseCase: SaveBackpackExternalVideoDetailUseCase,
     private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
 ) : ViewModel() {
 
@@ -83,6 +76,9 @@ class BackpackViewModel(
 
     private val _drawingSavedSuccessFully = SingleLiveEvent<Int>()
     val drawingDetailSavedSuccessFully: LiveData<Int> = _drawingSavedSuccessFully
+
+    private val _externalVideoSavedSuccessFully = SingleLiveEvent<Int>()
+    val externalVideoSavedSuccessFully: LiveData<Int> = _externalVideoSavedSuccessFully
 
     private val _audioSavedSuccessFully = SingleLiveEvent<Int>()
     val audioDetailSavedSuccessFully: LiveData<Int> = _audioSavedSuccessFully
@@ -142,6 +138,7 @@ class BackpackViewModel(
             is TextDetail -> saveTextDetail(showSaveDialog.value as TextDetail)
             is PhotoDetail -> savePhotoDetail(showSaveDialog.value as PhotoDetail)
             is AudioDetail -> saveAudioDetail(showSaveDialog.value as AudioDetail)
+            is ExternalVideoDetail -> saveExternalVideoDetail(showSaveDialog.value as ExternalVideoDetail)
         }
     }
 
@@ -212,6 +209,7 @@ class BackpackViewModel(
         }
     }
 
+
     fun saveDrawingDetail(detail: DrawingDetail) {
         val params = SaveBackpackDrawingDetailUseCase.Params(detail)
         saveBackpackDrawingDetailUseCase.execute(params, SaveBackpackDrawingDetailUseCaseHandler())
@@ -224,6 +222,20 @@ class BackpackViewModel(
 
         override fun onError(e: Throwable) {
             _errorMessage.postValue(R.string.error_save_drawing_failed)
+        }
+    }
+    fun saveExternalVideoDetail(detail: ExternalVideoDetail) {
+        val params = SaveBackpackExternalVideoDetailUseCase.Params(detail)
+        saveBackpackExternalVideoDetailUseCase.execute(params, SaveBackpackExternalVideoDetailUseCaseHandler())
+    }
+
+    private inner class SaveBackpackExternalVideoDetailUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _externalVideoSavedSuccessFully.postValue(R.string.save_video_success)
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_external_video_failed)
         }
     }
 

@@ -195,5 +195,6 @@
     <string name="selected_image">Selected image</string>
     <string name="create_video_failed">Er ging iets fout bij het aanmaken van de video.</string>
     <string name="save_video_success">Je video werd succesvol opgeslagen.</string>
+    <string name="error_save_external_video_failed">Er ging iets fout bij het opslaan van je video.</string>
 
 </resources>

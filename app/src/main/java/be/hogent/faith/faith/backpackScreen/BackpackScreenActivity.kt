@@ -67,6 +67,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
             is TextDetail -> save(detail)
             is PhotoDetail -> save(detail)
             is AudioDetail -> save(detail)
+            is ExternalVideoDetail -> save(detail)
         }
         backpackViewModel.viewButtons(true)
         backpackViewModel.setDetailScreenOpen(false)

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.MediaController
 import androidx.databinding.DataBindingUtil
 
 import be.hogent.faith.R
@@ -21,8 +22,10 @@ class ViewExternalVideoFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        loadVideoFromDetail()
+
         binding =  DataBindingUtil.inflate(inflater,R.layout.fragment_view_external_video, container, false)
+        loadVideoFromDetail()
+
         return binding.root
     }
 
@@ -30,6 +33,9 @@ class ViewExternalVideoFragment : Fragment() {
     private fun loadVideoFromDetail(){
         val externalVideoDetail = arguments?.getSerializable(VIDEO_DETAIL) as ExternalVideoDetail
         binding.video.setVideoURI(Uri.fromFile(externalVideoDetail.file))
+        val mediaController = MediaController(requireContext())
+        mediaController.setAnchorView(binding.video)
+        binding.video.setMediaController(mediaController)
     }
     companion object {
         fun newInstance(videoDetail: ExternalVideoDetail): ViewExternalVideoFragment {

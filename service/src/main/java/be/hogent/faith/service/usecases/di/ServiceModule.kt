@@ -55,5 +55,5 @@ val serviceModule = module {
     factory { SaveBackpackAudioDetailUseCase(get(), get()) }
     factory { SaveBackpackPhotoDetailUseCase(get(), get()) }
     factory { SaveBackpackDrawingDetailUseCase(get(), get()) }
-    factory { CreateExternalVideoDetailUseCase(get()) }
+    factory { SaveBackpackExternalVideoDetailUseCase(get(),get()) }
 }

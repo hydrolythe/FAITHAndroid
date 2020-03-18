@@ -37,13 +37,13 @@ abstract class BackpackDetailFragment : Fragment() {
         editDetailBinding.lifecycleOwner = this
 
         backpackViewModel.showSaveDialog.observe(this, Observer {
-            showSaveDialog(it)
+            showSaveDialog()
         })
 
         return editDetailBinding.root
     }
 
-    private fun showSaveDialog(it: Detail?) {
+    private fun showSaveDialog() {
         saveDialog = SaveDetailDialog.newInstance()
         saveDialog.show(fragmentManager!!, null)
     }
