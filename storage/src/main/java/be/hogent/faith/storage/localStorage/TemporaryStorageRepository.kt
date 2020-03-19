@@ -15,7 +15,7 @@ import java.util.UUID
 class TemporaryStorageRepository(
     private val context: Context,
     private val storagePathProvider: StoragePathProvider
-) : ITemporaryStorage {
+) : ITemporaryStorageRepository {
 
     /**
      * Stores a detail in its event's folder, and sets the **relative** path in the detail

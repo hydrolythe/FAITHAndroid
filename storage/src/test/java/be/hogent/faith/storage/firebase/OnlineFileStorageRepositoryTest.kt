@@ -7,11 +7,13 @@ import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.storage.StoragePathProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
 import io.reactivex.Single
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import java.io.File
@@ -66,6 +68,11 @@ class OnlineFileStorageRepositoryTest {
         every { Uri.parse(any()) } returns mockk()
     }
 
+    @After
+    fun cleanUp() {
+        clearAllMocks()
+    }
+
     @Test
     fun `saveEvent saves the emotionAvatars file to online storage`() {
         // Arrange
@@ -84,7 +91,7 @@ class OnlineFileStorageRepositoryTest {
     }
 
     @Test
-    fun `saveEvent saves all detail's files to online storage`() {
+    fun `saveEvent saves all details' files to online storage`() {
         // Arrange
         every { rxFirebaseStorage.putFile(any(), any()) } returns Single.just(mockk())
         // Act
@@ -97,7 +104,9 @@ class OnlineFileStorageRepositoryTest {
         // Would be better to also check the reference to where it is put but I don't know
         // how to do that.
         // As such there's no difference between the test for storing the avatar and the details
-        verify { rxFirebaseStorage.putFile(any(), any()) }
+        verify(exactly = 2) {
+            rxFirebaseStorage.putFile(any(), any())
+        }
     }
 
     // TODO: find a way to test the avatar and the details separately

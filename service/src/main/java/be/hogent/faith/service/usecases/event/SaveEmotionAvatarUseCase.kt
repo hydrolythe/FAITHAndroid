@@ -3,7 +3,7 @@ package be.hogent.faith.service.usecases.event
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
+import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
@@ -12,7 +12,7 @@ import io.reactivex.Scheduler
  * Will overwrite a previously stored avatarName.
  */
 class SaveEmotionAvatarUseCase(
-    private val tempStorageRepo: ITemporaryStorage,
+    private val tempStorageRepo: ITemporaryStorageRepository,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEmotionAvatarUseCase.Params>(
     observeScheduler

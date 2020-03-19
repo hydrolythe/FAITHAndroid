@@ -1,7 +1,7 @@
 package be.hogent.faith.service.usecases.detail.drawingDetail
 
 import android.graphics.Bitmap
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
+import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Scheduler
@@ -16,7 +16,7 @@ class CreateDrawingDetailUseCaseTest {
     private lateinit var createDrawingDetailUseCase: CreateDrawingDetailUseCase
     private lateinit var executor: Executor
     private lateinit var scheduler: Scheduler
-    private lateinit var storageRepository: ITemporaryStorage
+    private lateinit var storageRepository: ITemporaryStorageRepository
 
     private val bitmap = mockk<Bitmap>()
 

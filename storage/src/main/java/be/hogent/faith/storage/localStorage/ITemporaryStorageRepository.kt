@@ -15,7 +15,7 @@ import java.io.File
  * Once the user is finished (and saves the event), these files can be moved to permanent storage
  * using the [LocalFileStorageRepository]
  */
-interface ITemporaryStorage {
+interface ITemporaryStorageRepository {
 
     /**
      * Stores text the device's cache directory

@@ -3,7 +3,7 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.service.usecases.event.SaveEventPhotoDetailUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
+import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -17,7 +17,7 @@ import java.io.IOException
 
 class SaveEventPhotoDetailUseCaseTest {
     private val observer = mockk<Scheduler>()
-    private val storageRepository = mockk<ITemporaryStorage>(relaxed = true)
+    private val storageRepository = mockk<ITemporaryStorageRepository>(relaxed = true)
 
     private val event = Event()
     private val photoDetail = mockk<PhotoDetail>()

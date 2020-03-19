@@ -4,7 +4,7 @@ import be.hogent.faith.domain.repository.AuthManager
 import be.hogent.faith.domain.repository.IEventRepository
 import be.hogent.faith.domain.repository.UserRepository
 import be.hogent.faith.storage.IStorageRepository
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
+import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
 import org.koin.dsl.module
 
 val androidTestModule = module(override = true) {
@@ -12,5 +12,5 @@ val androidTestModule = module(override = true) {
     single { TestUserRepository() as UserRepository }
     single { TestEventRepository() as IEventRepository }
     factory<IStorageRepository> { TestStorageRepository() }
-    factory<ITemporaryStorage> { TestITemporyStorage() }
+    factory<ITemporaryStorageRepository> { TestITemporyStorage() }
 }

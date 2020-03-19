@@ -3,7 +3,7 @@ package be.hogent.faith.service.usecases
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
+import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.every
 import io.mockk.mockk
@@ -20,7 +20,7 @@ import java.io.IOException
 class SaveEmotionAvatarUseCaseTest {
     private lateinit var saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase
     private lateinit var observer: Scheduler
-    private lateinit var storageRepository: ITemporaryStorage
+    private lateinit var storageRepository: ITemporaryStorageRepository
     private var bitmap = mockk<Bitmap>()
     private lateinit var event: Event
 

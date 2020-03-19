@@ -25,6 +25,7 @@ class OnlineFileStorageRepository(
      * Saves all files associated with an [EncryptedEventEntity] (detail files, emotionavatar)
      */
     override fun saveEvent(encryptedEvent: EncryptedEvent): Completable {
+        // TODO: do all the downloading in parallel using merge intead of concat
         return saveEventEmotionAvatar(encryptedEvent) // save avatar in firestorage
             .concatWith(
                 encryptedEvent.details.toFlowable() // save all detail files in firestorage
@@ -35,67 +36,69 @@ class OnlineFileStorageRepository(
     }
 
     /**
-     * Gets a detail's file from [firestorage] and stores it into the path provided for it by the
+     * Uploads the emotion avatar file to [firestorage]
+     */
+    private fun saveEventEmotionAvatar(encryptedEvent: EncryptedEvent): Completable {
+        if (encryptedEvent.emotionAvatar == null) {
+            return Completable.complete()
+        } else {
+            return rxFirebaseStorage.putFile(
+                storageRef.child(pathProvider.getEmotionAvatarPath(encryptedEvent).path),
+                Uri.parse("file://${encryptedEvent.emotionAvatar!!.path}")
+            ).doOnError {
+                Timber.e(
+                    "Problem saving emotionAvatar with path ${encryptedEvent.emotionAvatar}: ${it.localizedMessage}"
+                )
+            }.ignoreElement()
+        }
+    }
+
+    /**
+     * Uploads the detail file to [firestorage]
+     */
+    private fun saveDetailFile(event: EncryptedEvent, detail: EncryptedDetail): Completable {
+        return rxFirebaseStorage.putFile(
+            storageRef.child(pathProvider.getDetailPath(event, detail).path),
+            Uri.parse("file://${detail.file.path}")
+        ).doOnError {
+            Timber.e(
+                "Problems uploading detail file ${detail.file.path} : ${it.localizedMessage}"
+            )
+        }.ignoreElement()
+    }
+
+    /**
+     * Downloads a detail's file from [firestorage] and stores it into the path provided for it by the
      * [pathProvider].
      */
     override fun downloadDetail(detail: Detail): Completable {
         val fileToDownloadReference = storageRef.child(detail.file.path)
         val localFile: File = pathProvider.getLocalDetailPath(detail)
         return Completable.fromSingle(rxFirebaseStorage.getFile(fileToDownloadReference, localFile))
+            .andThen(Completable.fromCallable {
+                detail.file = localFile
+                Unit
+            })
     }
 
     /**
-     * Gets the emotion avatar file from [firestorage] and stores it into the path provided for it by the
-     * [pathProvider].
+     * Gets the emotion avatar file from [firestorage] and stores it into the path provided for it
+     * by the [pathProvider].
      */
     override fun downloadEmotionAvatar(event: Event): Completable {
-        if (event.emotionAvatar == null)
+        if (event.emotionAvatar == null) {
             return Completable.complete()
-        val fileToDownloadReference =
-            storageRef.child(pathProvider.getEmotionAvatarPath(event).path)
-        val localFile: File = pathProvider.getLocalEmotionAvatarPath(event)
-        return Completable.fromSingle(rxFirebaseStorage.getFile(fileToDownloadReference, localFile))
-    }
-
-    /**
-     * Uploads the emotion avatar file to [firestorage]
-     */
-    private fun saveEventEmotionAvatar(encryptedEvent: EncryptedEvent): Completable {
-        if (encryptedEvent.emotionAvatar == null)
-            return Completable.complete()
-        return Completable.fromSingle(
-            rxFirebaseStorage.putFile(
-                storageRef.child(pathProvider.getEmotionAvatarPath(encryptedEvent).path),
-                Uri.parse("file://${pathProvider.getLocalEmotionAvatarPath(encryptedEvent).path}")
+        } else {
+            return rxFirebaseStorage.getFile(
+                storageRef.child(pathProvider.getEmotionAvatarPath(event).path),
+                pathProvider.localStoragePath(event.emotionAvatar!!)
             )
-                .doOnError {
-                    Timber.e(
-                        "Firebase storage : Problems saving file ${pathProvider.getLocalEmotionAvatarPath(
-                            encryptedEvent
-                        ).path}: ${it.localizedMessage}"
-                    )
+                .flatMapCompletable {
+                    Completable.fromCallable {
+                        event.emotionAvatar = pathProvider.localStoragePath(event.emotionAvatar!!)
+                        Unit
+                    }
                 }
-        )
-    }
-
-    /**
-     * Uploads the detail file to [firestorage]
-     */
-    private fun saveDetailFile(
-        event: EncryptedEvent,
-        detail: EncryptedDetail
-    ): Completable {
-        return Completable.fromSingle(
-            rxFirebaseStorage.putFile(
-                storageRef.child(pathProvider.getDetailPath(event, detail).path),
-                Uri.parse("file://${pathProvider.getLocalDetailPath(detail).path}")
-            ).doOnError {
-                Timber.e(
-                    "Firebase storage : Problems saving file ${pathProvider.getLocalEmotionAvatarPath(
-                        event
-                    ).path} : ${it.localizedMessage}"
-                )
-            }
-        )
+        }
     }
 }

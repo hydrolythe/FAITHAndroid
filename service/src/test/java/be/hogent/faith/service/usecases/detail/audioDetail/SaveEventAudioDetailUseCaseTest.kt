@@ -3,7 +3,7 @@ package be.hogent.faith.service.usecases.detail.audioDetail
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.service.usecases.event.SaveEventAudioDetailUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
+import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -18,7 +18,7 @@ import java.io.IOException
 class SaveEventAudioDetailUseCaseTest {
     private lateinit var saveEventAudioDetailUseCase: SaveEventAudioDetailUseCase
     private val scheduler: Scheduler = mockk()
-    private val repository: ITemporaryStorage = mockk(relaxed = true)
+    private val repository: ITemporaryStorageRepository = mockk(relaxed = true)
 
     private val event = Event()
     private val audioDetail = mockk<AudioDetail>()

@@ -3,7 +3,7 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.service.usecases.event.SaveEventTextDetailUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
+import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -17,7 +17,7 @@ import org.junit.Test
 class SaveEventTextDetailUseCaseTest {
     private lateinit var saveEventTextDetailUseCase: SaveEventTextDetailUseCase
     private val scheduler: Scheduler = mockk()
-    private val repository: ITemporaryStorage = mockk(relaxed = true)
+    private val repository: ITemporaryStorageRepository = mockk(relaxed = true)
 
     private val event = Event()
     private val detail = mockk<TextDetail>()

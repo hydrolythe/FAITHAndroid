@@ -8,7 +8,7 @@ class EncryptedEvent(
     val title: EncryptedString,
     /**
      * The [emotionAvatar] of an event is nonsensitive information so it can stay unencrypted
-     * It is a var because the file will change when moving the file from temp to local storage.
+     * It is a var because the file can get moved around (for example while saving or encrypting)
      */
     var emotionAvatar: File?,
     val notes: EncryptedString?,

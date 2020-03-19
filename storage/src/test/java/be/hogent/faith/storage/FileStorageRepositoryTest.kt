@@ -3,6 +3,7 @@ package be.hogent.faith.storage
 import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.database.storage.ILocalFileStorageRepository
 import be.hogent.faith.storage.firebase.IOnlineFileStorageRepository
+import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.Called
 import io.mockk.every
@@ -19,7 +20,9 @@ class FileStorageRepositoryTest {
 
     private val localStorage = mockk<ILocalFileStorageRepository>()
     private val remoteStorage = mockk<IOnlineFileStorageRepository>()
-    private val storageRepository = FileStorageRepository(localStorage, remoteStorage)
+    private val temporaryStorage = mockk<ITemporaryStorageRepository>()
+    private val storageRepository =
+        FileStorageRepository(temporaryStorage, localStorage, remoteStorage)
 
     private val encryptedEvent = EncryptedEvent(
         dateTime = "encrypted DateTime",
