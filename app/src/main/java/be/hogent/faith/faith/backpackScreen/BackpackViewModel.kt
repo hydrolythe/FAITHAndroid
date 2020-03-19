@@ -5,7 +5,6 @@ import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
@@ -13,10 +12,6 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.backpackScreen.DetailTypes.AUDIO_DETAIL
-import be.hogent.faith.faith.backpackScreen.DetailTypes.DRAW_DETAIL
-import be.hogent.faith.faith.backpackScreen.DetailTypes.PICTURE_DETAIL
-import be.hogent.faith.faith.backpackScreen.DetailTypes.TEXT_DETAIL
 import be.hogent.faith.faith.backpackScreen.detailFilters.CombinedDetailFilter
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
@@ -26,8 +21,6 @@ import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCas
 import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
-import java.lang.NullPointerException
-import java.util.Locale
 
 object OpenState {
     const val OPEN = 2
@@ -89,8 +82,6 @@ class BackpackViewModel(
         }
     }
 
-
-
     private var _currentFile = MutableLiveData<Detail>()
     val currentFile: LiveData<Detail>
         get() = _currentFile
@@ -140,18 +131,18 @@ class BackpackViewModel(
     val detailDeletedSuccessfully: LiveData<Int> = _detailDeletedSuccessfully
 
     init {
-       loadDetails()
+        loadDetails()
     }
 
     private fun loadDetails() {
         details = getBackPackFilesDummyUseCase.getDetails()
-
     }
 
     fun initialize() {
         _isInEditMode.postValue(OpenState.CLOSED)
         _isPopupMenuOpen.postValue(OpenState.CLOSED)
     }
+
     fun onFilterPhotosClicked() {
         photoFilterEnabled.value = photoFilterEnabled.value!!.not()
     }
@@ -167,8 +158,13 @@ class BackpackViewModel(
     fun onFilterAudioClicked() {
         audioFilterEnabled.value = audioFilterEnabled.value!!.not()
     }
+
     fun onFilterVideoClicked() {
         videoFilterEnabled.value = videoFilterEnabled.value!!.not()
+    }
+
+    fun setSearchStringText(text: String) {
+        searchString.postValue(text)
     }
 
     fun setIsInEditMode() {
@@ -279,20 +275,6 @@ class BackpackViewModel(
         }
     }
 
-    override fun onCleared() {
-        saveBackpackTextDetailUseCase.dispose()
-        saveBackpackAudioDetailUseCase.dispose()
-        saveBackpackDrawingDetailUseCase.dispose()
-        saveBackpackPhotoDetailUseCase.dispose()
-        deleteBackpackDetailUseCase.dispose()
-        super.onCleared()
-    }
-
-
-
-
-
-
     fun deleteDetail(detail: Detail) {
 
         val params = DeleteBackpackDetailUseCase.Params(detail)
@@ -307,5 +289,14 @@ class BackpackViewModel(
         override fun onError(e: Throwable) {
             _errorMessage.postValue(R.string.error_delete_detail_failure)
         }
+    }
+
+    override fun onCleared() {
+        saveBackpackTextDetailUseCase.dispose()
+        saveBackpackAudioDetailUseCase.dispose()
+        saveBackpackDrawingDetailUseCase.dispose()
+        saveBackpackPhotoDetailUseCase.dispose()
+        deleteBackpackDetailUseCase.dispose()
+        super.onCleared()
     }
 }

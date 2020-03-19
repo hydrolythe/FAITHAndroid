@@ -58,7 +58,7 @@
                 android:id="@+id/filterknop_teksten"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="#FFFFFF"
+                android:backgroundTint="@{backpackViewModel.textFilterEnabled == true ? @color/md_lime_A700 : @color/red }"
                 android:onClick="@{() -> backpackViewModel.onFilterTextClicked()}"
                 android:contentDescription="@string/filter_btn_text"
                 app:srcCompat="@drawable/filterknop_teksten" />
@@ -67,7 +67,7 @@
                 android:id="@+id/filterknop_audio"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="#FFFFFF"
+                android:backgroundTint="@{backpackViewModel.audioFilterEnabled == true ? @color/md_lime_A700 : @color/red }"
                 android:onClick="@{() -> backpackViewModel.onFilterAudioClicked()}"
                 android:contentDescription="@string/filter_btn_audio"
                 app:srcCompat="@drawable/filterknop_audio" />
@@ -76,7 +76,7 @@
                 android:id="@+id/filterknop_foto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="#FFFFFF"
+                android:backgroundTint="@{backpackViewModel.photoFilterEnabled == true ? @color/md_lime_A700 : @color/red }"
                 android:onClick="@{() -> backpackViewModel.onFilterPhotosClicked()}"
                 android:contentDescription="@string/filter_btn_foto"
                 app:srcCompat="@drawable/filterknop_foto" />
@@ -90,7 +90,7 @@
                 android:id="@+id/filterknop_tekeningen"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="#FFFFFF"
+                android:backgroundTint="@{backpackViewModel.drawingFilterEnabled == true ? @color/md_lime_A700 : @color/red }"
                 android:onClick="@{() -> backpackViewModel.onFilterDrawingClicked()}"
                 android:contentDescription="@string/filter_btn_drawing"
                 app:srcCompat="@drawable/filterknop_tekeningen" />
