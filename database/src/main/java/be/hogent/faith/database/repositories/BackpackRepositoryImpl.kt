@@ -19,7 +19,7 @@ open class BackpackRepositoryImpl (
     private val detailMapper: DetailMapper,
     private val firebaseBackpackRepository: FirebaseBackpackRepository
 ): BackpackRepository {
-    override fun insertTextDetail(detail: TextDetail, user: User): Maybe<Detail> {
+    override fun insertDetail(detail: Detail, user: User): Maybe<Detail> {
         return firebaseBackpackRepository.insert(
             detailMapper.mapToEntity(detail),
             userMapper.mapToEntity(user)

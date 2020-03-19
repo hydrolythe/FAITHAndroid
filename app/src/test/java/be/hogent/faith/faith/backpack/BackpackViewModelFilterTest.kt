@@ -1,3 +1,4 @@
+/*
 package be.hogent.faith.faith.backpack
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -120,17 +121,21 @@ class BackpackViewModelFilterTest {
             }
         }
     }
-   /* @Test //Filter text is based on UUID actually, has to be changed to file title/description
+   */
+/* @Test //Filter text is based on UUID actually, has to be changed to file title/description
     fun backpackViewModel_filterOnTextOnly(){
 
-    }*/
+    }*//*
 
-    /*@Test //Filter text is based on UUID actually, has to be changed to file title/description
+
+    */
+/*@Test //Filter text is based on UUID actually, has to be changed to file title/description
     fun backpackViewModel_filterOnTextAndType(){
 
-    }*/
+    }*//*
 
 
 
 
-}
+
+}*/

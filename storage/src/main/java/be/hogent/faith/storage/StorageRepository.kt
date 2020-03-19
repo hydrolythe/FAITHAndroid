@@ -69,6 +69,6 @@ class StorageRepository(
     }
 
     override fun saveBackpackDetail(detail: Detail): Single<Detail> {
-        return remoteStorage.saveBackpackDetail(detail)
+        return localStorage.saveBackpackDetail(detail)
     }
 }

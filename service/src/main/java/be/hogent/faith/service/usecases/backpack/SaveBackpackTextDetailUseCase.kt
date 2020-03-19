@@ -12,7 +12,6 @@ import io.reactivex.Single
 
 class SaveBackpackTextDetailUseCase(
     private val backpackRepository: BackpackRepository,
-    private val storageRepository: IStorageRepository,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveBackpackTextDetailUseCase.Params>(
     observeScheduler
@@ -23,8 +22,8 @@ class SaveBackpackTextDetailUseCase(
         this.params = params
 
         return addDetailToBackpack(params.textDetail)
-         //   .flatMap { storageRepository.saveBackpackDetail(it) }
-            .flatMapMaybe { backpackRepository.insertTextDetail(params.textDetail, params.user) }
+        //    .flatMap { storageRepository.saveBackpackDetail(it) }
+            .flatMapMaybe { backpackRepository.insertDetail(params.textDetail, params.user) }
             .flatMapCompletable { Completable.complete() }
     }
 

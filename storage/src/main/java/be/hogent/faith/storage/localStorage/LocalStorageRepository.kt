@@ -12,6 +12,14 @@ class LocalStorageRepository(
     private val context: Context
 ) : ILocalStorageRepository {
 
+    override fun saveBackpackDetail(detail: Detail): Single<Detail> {
+        return Single.fromCallable{
+            moveFile(detail.file, pathProvider.getLocalDetailPath(detail))
+            detail.file = pathProvider.getDetailPath(detail)
+            detail
+        }
+    }
+
     /**
      * moves the files from tempory storage to local storage
      */

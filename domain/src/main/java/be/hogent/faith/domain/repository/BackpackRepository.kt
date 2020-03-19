@@ -9,7 +9,7 @@ import io.reactivex.Maybe
 import io.reactivex.Single
 
 interface BackpackRepository{
-    fun insertTextDetail(detail: TextDetail, user: User): Maybe<Detail>
+    fun insertDetail(detail: Detail, user: User): Maybe<Detail>
 
     fun get(): Flowable<List<Detail>>
 }

@@ -173,10 +173,10 @@ class BackpackViewModel(
 
     fun saveCurrentDetail(user : User, detail : Detail){
         when (detail) {
-            is DrawingDetail -> saveDrawingDetail(showSaveDialog.value as DrawingDetail)
+            is DrawingDetail -> saveDrawingDetail(user, showSaveDialog.value as DrawingDetail)
             is TextDetail -> saveTextDetail(user, showSaveDialog.value as TextDetail)
-            is PhotoDetail -> savePhotoDetail(showSaveDialog.value as PhotoDetail)
-            is AudioDetail -> saveAudioDetail(showSaveDialog.value as AudioDetail)
+            is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
+            is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
         }
     }
 
@@ -217,8 +217,8 @@ class BackpackViewModel(
         }
     }
 
-    fun saveAudioDetail(detail: AudioDetail) {
-        val params = SaveBackpackAudioDetailUseCase.Params(detail)
+    fun saveAudioDetail(user: User, detail: AudioDetail) {
+        val params = SaveBackpackAudioDetailUseCase.Params(user, detail)
         saveBackpackAudioDetailUseCase.execute(params, SaveBackpackAudioDetailUseCaseHandler())
     }
 
@@ -232,8 +232,8 @@ class BackpackViewModel(
         }
     }
 
-    fun savePhotoDetail(detail: PhotoDetail) {
-        val params = SaveBackpackPhotoDetailUseCase.Params(detail)
+    fun savePhotoDetail(user: User, detail: PhotoDetail) {
+        val params = SaveBackpackPhotoDetailUseCase.Params(user, detail)
         saveBackpackPhotoDetailUseCase.execute(params, SaveBackpackPhotoDetailUseCaseHandler())
     }
 
@@ -247,8 +247,8 @@ class BackpackViewModel(
         }
     }
 
-    fun saveDrawingDetail(detail: DrawingDetail) {
-        val params = SaveBackpackDrawingDetailUseCase.Params(detail)
+    fun saveDrawingDetail(user: User, detail: DrawingDetail) {
+        val params = SaveBackpackDrawingDetailUseCase.Params(user, detail)
         saveBackpackDrawingDetailUseCase.execute(params, SaveBackpackDrawingDetailUseCaseHandler())
     }
 

@@ -13,6 +13,7 @@ import org.junit.Assert.assertEquals
 import androidx.lifecycle.Observer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
@@ -23,6 +24,7 @@ class BackpackViewModelSavePhotoTest {
     private val savePhotoUseCase = mockk<SaveBackpackPhotoDetailUseCase>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<PhotoDetail>()
+    private val user : User = mockk()
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -42,7 +44,7 @@ class BackpackViewModelSavePhotoTest {
     fun backpackViewModel_savePhoto_callsUseCase() {
         val params = slot<SaveBackpackPhotoDetailUseCase.Params>()
 
-        viewModel.savePhotoDetail(detail)
+        viewModel.savePhotoDetail(user, detail)
         verify { savePhotoUseCase.execute(capture(params), any()) }
 
         assertEquals(detail, params.captured.photoDetail)
@@ -58,7 +60,7 @@ class BackpackViewModelSavePhotoTest {
         viewModel.photoDetailSavedSuccessFully.observeForever(successObserver)
 
         // Act
-        viewModel.savePhotoDetail(detail)
+        viewModel.savePhotoDetail(user, detail)
         verify { savePhotoUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onComplete()
 
@@ -77,7 +79,7 @@ class BackpackViewModelSavePhotoTest {
         viewModel.photoDetailSavedSuccessFully.observeForever(successObserver)
 
         // Act
-        viewModel.savePhotoDetail(detail)
+        viewModel.savePhotoDetail(user, detail)
         verify { savePhotoUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onError(mockk(relaxed = true))
 
