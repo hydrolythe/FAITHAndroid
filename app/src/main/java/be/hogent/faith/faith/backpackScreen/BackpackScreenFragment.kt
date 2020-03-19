@@ -105,12 +105,9 @@ class BackpackScreenFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private fun startListeners() {
 
-       backpackViewModel.details.observe(this, Observer { details ->
+        backpackViewModel.details.observe(this, Observer { details ->
             detailThumbnailsAdapter?.updateDetailsList(details)
-        })
- //       userViewModel.user.observe(this, Observer {
- //           detailThumbnailsAdapter?.updateDetailsList(it.backpack.details)
- //       })
+            })
 
         backpackBinding.btnBackpackAdd.setOnClickListener {
             backpackViewModel.setOnAddClicked(it)

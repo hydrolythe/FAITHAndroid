@@ -3,7 +3,6 @@ package be.hogent.faith.faith.backpackScreen
 import android.view.View
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
@@ -268,89 +267,11 @@ class BackpackViewModel(
         filterDetailType.postValue(newFilterValues)
     }
 
-  /*  private fun applyFilters(): LiveData<List<Detail>> {
-        val typeFilterRes = Transformations.map(filterDetailType) { filter ->
-            _details.filter { detail ->
-
-                if (!filter.containsValue(true)) true else {
-                    if (detail is AudioDetail && filter[AUDIO_DETAIL] == true) {
-                        return@filter true
-                    }
-                    if (detail is DrawingDetail && filter[DRAW_DETAIL] == true) {
-                        return@filter true
-                    }
-                    if (detail is PhotoDetail && filter[PICTURE_DETAIL] == true) {
-                        return@filter true
-                    }
-                    if (detail is TextDetail && filter[TEXT_DETAIL] == true) {
-                        return@filter true
-                    }
-                    return@filter false
-                }
-            }
-        }
-        val textFilterRes = Transformations.map(filterText) { filterText ->
-            _details.filter { detail ->
-                if (filterText.isEmpty()) return@filter true else
-                    return@filter detail.fileName.toLowerCase(Locale.getDefault())
-                        .contains(filterText.toLowerCase(Locale.getDefault()))
-            }
-        }
-
-        return textFilterRes.combineWith(typeFilterRes) { textRes, typeRes ->
-            val resultSet = mutableSetOf<Detail>()
-            try {
-                if (textRes!!.size > typeRes!!.size) {
-                    for (detail in textRes) {
-                        if (typeRes.contains(detail)) {
-                            resultSet.add(detail)
-                        }
-                    }
-                } else {
-                    for (detail in typeRes) {
-                        if (textRes.contains(detail)) {
-                            resultSet.add(detail)
-                        }
-                    }
-                }
-
-            } catch (e: NullPointerException) {
-
-            }
-
-            return@combineWith resultSet.toList().sortedBy {
-                it.javaClass.canonicalName
-            }
-
-
-        }
-    }*/
-
-    // Method to combine 2 livedata
-    private fun <T, K, R> LiveData<T>.combineWith(
-        liveData: LiveData<K>,
-        block: (T?, K?) -> R
-    ): LiveData<R> {
-        val result = MediatorLiveData<R>()
-        result.addSource(this) {
-            result.value = block.invoke(this.value, liveData.value)
-        }
-        result.addSource(liveData) {
-            result.value = block.invoke(this.value, liveData.value)
-        }
-        return result
-    }
-
-    // For testing purposes
-    fun getFilterDetailType(): MutableLiveData<MutableMap<Int, Boolean>> {
-        return filterDetailType
-    }
-
     fun deleteDetail(detail: Detail) {
-       // TODO
+        // TODO
     }
 
     fun goToDetail(detail: Detail) {
-      _goToDetail.postValue(detail)
+        _goToDetail.postValue(detail)
     }
 }

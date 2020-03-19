@@ -70,8 +70,8 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
         }
 
         saveDetailBinding.btnSaveBackpackCancel.setOnClickListener {
-           // backpackViewModel.goToDetail(detail)
             dismiss()
+            backpackViewModel.goToDetail(detail)
         }
 
         backpackViewModel.errorMessage.observe(this, Observer {

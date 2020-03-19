@@ -18,7 +18,7 @@ open class BackpackRepositoryImpl(
         return firebaseBackpackRepository.insert(
             detailMapper.mapToEntity(detail),
             userMapper.mapToEntity(user)
-       ).map {
+            ).map {
             detailMapper.mapFromEntity(it)
         }
     }

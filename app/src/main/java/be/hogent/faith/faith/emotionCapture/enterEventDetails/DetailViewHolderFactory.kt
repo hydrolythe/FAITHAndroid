@@ -96,7 +96,7 @@ sealed class DetailViewHolder(
         val deleteBtn = thumbnailView.btn_delete_detailRv
         if (hide) {
             deleteBtn.visibility = View.INVISIBLE
-           deleteBtn.isClickable = false
+            deleteBtn.isClickable = false
         } else {
             deleteBtn.visibility = View.VISIBLE
             deleteBtn.isClickable = true
