@@ -45,8 +45,6 @@ class BackpackScreenFragment : Fragment() {
 
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
 
-    //   private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
-
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
     private lateinit var addDetailMenu: PopupMenu
@@ -100,7 +98,7 @@ class BackpackScreenFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private fun startListeners() {
 
-        backpackViewModel.details.observe(this, Observer { details ->
+        backpackViewModel.filteredDetails.observe(this, Observer { details ->
             detailThumbnailsAdapter?.updateDetailsList(details)
         })
 
@@ -116,34 +114,34 @@ class BackpackScreenFragment : Fragment() {
             backpackViewModel.goToCityScreen()
         }
 
-        backpackBinding.backpackMenuFilter.search_bar.setOnQueryTextListener(object :
+        backpackBinding.backpackMenuFilter.searchBar.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
-                backpackViewModel.filterSearchBar(newText)
+               // backpackViewModel.filterSearchBar(newText)
                 return true
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                backpackViewModel.filterSearchBar(query)
+                //backpackViewModel.filterSearchBar(query)
                 return true
             }
         })
 
-        backpackBinding.backpackMenuFilter.filterknop_teksten.setOnClickListener {
-            backpackViewModel.setFilters(TEXT_DETAIL)
+        backpackBinding.backpackMenuFilter.filterknopTeksten.setOnClickListener {
+           // backpackViewModel.setFilters(TEXT_DETAIL)
             setBtnState(it)
         }
-        backpackBinding.backpackMenuFilter.filterknop_audio.setOnClickListener {
-            backpackViewModel.setFilters(AUDIO_DETAIL)
+        backpackBinding.backpackMenuFilter.filterknopAudio.setOnClickListener {
+           // backpackViewModel.setFilters(AUDIO_DETAIL)
             setBtnState(it)
         }
-        backpackBinding.backpackMenuFilter.filterknop_foto.setOnClickListener {
-            backpackViewModel.setFilters(PICTURE_DETAIL)
+        backpackBinding.backpackMenuFilter.filterknopFoto.setOnClickListener {
+            //backpackViewModel.setFilters(PICTURE_DETAIL)
             setBtnState(it)
         }
-        backpackBinding.backpackMenuFilter.filterknop_tekeningen.setOnClickListener {
-            backpackViewModel.setFilters(DRAW_DETAIL)
+        backpackBinding.backpackMenuFilter.filterknopTekeningen.setOnClickListener {
+           // backpackViewModel.setFilters(DRAW_DETAIL)
             setBtnState(it)
         }
 
