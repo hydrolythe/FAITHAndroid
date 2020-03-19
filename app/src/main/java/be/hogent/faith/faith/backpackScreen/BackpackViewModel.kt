@@ -30,6 +30,11 @@ object OpenState {
     const val CLOSED = 3
 }
 
+object OpenDetailType {
+    const val NEW = 1
+    const val EDIT = 2
+}
+
 class BackpackViewModel(
     private val saveBackpackTextDetailUseCase: SaveBackpackTextDetailUseCase,
     private val saveBackpackAudioDetailUseCase: SaveBackpackAudioDetailUseCase,
@@ -108,6 +113,9 @@ class BackpackViewModel(
     private val _goToDetail = SingleLiveEvent<Detail>()
     val goToDetail: LiveData<Detail> = _goToDetail
 
+    private val _openDetailType = SingleLiveEvent<Int>()
+    val openDetailType: LiveData<Int> = _openDetailType
+
     init {
         getDetails()
     }
@@ -155,10 +163,6 @@ class BackpackViewModel(
         _showSaveDialog.postValue(detail)
     }
 
-    fun handleSaveDialog() {
-        _showSaveDialog.call()
-    }
-
     fun saveCurrentDetail(user: User, detail: Detail) {
         when (detail) {
             is DrawingDetail -> saveDrawingDetail(user, showSaveDialog.value as DrawingDetail)
@@ -166,6 +170,10 @@ class BackpackViewModel(
             is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
             is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
         }
+    }
+
+    fun setOpenDetailType(openDetailType: Int) {
+        _openDetailType.postValue(openDetailType)
     }
 
     fun closePopUpMenu() {
@@ -273,5 +281,13 @@ class BackpackViewModel(
 
     fun goToDetail(detail: Detail) {
         _goToDetail.postValue(detail)
+    }
+
+    fun checkUniqueFilename(fileName: String): Boolean {
+        return (details.value!!.find { e -> (e.fileName == fileName) } == null)
+    }
+
+    fun clearSaveDialogErrorMessage() {
+        _errorMessage.postValue(null)
     }
 }

@@ -82,30 +82,29 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
 
     override fun startPhotoDetailFragment() {
         replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
-        backpackViewModel.viewButtons(false)
-        backpackViewModel.setDetailScreenOpen(true)
-        backpackViewModel.closePopUpMenu()
+        startFragmentInitialisers()
     }
 
     override fun startAudioDetailFragment() {
         replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
-        backpackViewModel.viewButtons(false)
-        backpackViewModel.setDetailScreenOpen(true)
-        backpackViewModel.closePopUpMenu()
+        startFragmentInitialisers()
     }
 
     override fun startDrawingDetailFragment() {
         replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
-        backpackViewModel.viewButtons(false)
-        backpackViewModel.setDetailScreenOpen(true)
-        backpackViewModel.closePopUpMenu()
+        startFragmentInitialisers()
     }
 
     override fun startTextDetailFragment() {
         replaceFragment(BackpackDetailFragment.TextFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+        startFragmentInitialisers()
+    }
+
+    private fun startFragmentInitialisers() {
         backpackViewModel.viewButtons(false)
         backpackViewModel.setDetailScreenOpen(true)
         backpackViewModel.closePopUpMenu()
+        backpackViewModel.setOpenDetailType(OpenDetailType.NEW)
     }
 
     override fun startVideoDetailFragment() {
@@ -117,6 +116,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun openDetailScreenFor(detail: Detail) {
+        backpackViewModel.setOpenDetailType(OpenDetailType.EDIT)
         backpackViewModel.setCurrentFile(detail)
         replaceFragment(
             BackpackDetailFragment.newInstance(detail),

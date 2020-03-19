@@ -14,6 +14,7 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
@@ -21,7 +22,9 @@ import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.details.video.create.CreateVideoFragment
 import be.hogent.faith.faith.details.video.view.ViewVideoFragment
+import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.util.replaceChildFragment
+import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 abstract class BackpackDetailFragment : Fragment() {
@@ -29,6 +32,7 @@ abstract class BackpackDetailFragment : Fragment() {
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
     private lateinit var editDetailBinding: be.hogent.faith.databinding.FragmentEditFileBinding
     private lateinit var saveDialog: SaveDetailDialog
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,8 +44,10 @@ abstract class BackpackDetailFragment : Fragment() {
         editDetailBinding.lifecycleOwner = this
 
         backpackViewModel.showSaveDialog.observe(this, Observer {
-            if (it != null)
-            showSaveDialog(it)
+            if (it != null && backpackViewModel.openDetailType.value != OpenDetailType.EDIT)
+                showSaveDialog(it)
+            else
+                backpackViewModel.saveCurrentDetail(userViewModel.user.value!!, it)
         })
 
         return editDetailBinding.root

@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -58,7 +59,8 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
             val fileName = saveDetailBinding.txtSaveEventTitle.text.toString()
             val noEmptyString = checkEmptyString(fileName)
             val notMaxCharacters = checkMaxCharacters(fileName)
-            if (noEmptyString && notMaxCharacters) {
+            val uniqueFilename = checkUniqueFilename(fileName)
+            if (noEmptyString && notMaxCharacters && uniqueFilename) {
                 saveFile(fileName)
                 dismiss()
             } else {
@@ -66,6 +68,8 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
                     backpackViewModel.setErrorMessage(R.string.save_detail_emptyString)
                 if (!notMaxCharacters)
                     backpackViewModel.setErrorMessage(R.string.save_detail_maxChar)
+                if (!uniqueFilename)
+                    backpackViewModel.setErrorMessage(R.string.save_detail_uniqueName)
             }
         }
 
@@ -75,8 +79,13 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
         }
 
         backpackViewModel.errorMessage.observe(this, Observer {
+            if (it != null)
             saveDetailBinding.textInputLayoutDetailTitle.setErrorMessage(it)
         })
+    }
+
+    private fun checkUniqueFilename(fileName: String): Boolean {
+        return backpackViewModel.checkUniqueFilename(fileName)
     }
 
     private fun checkMaxCharacters(fileName: String): Boolean {
@@ -90,5 +99,10 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
     private fun saveFile(fileName: String) {
         detail.fileName = fileName
         backpackViewModel.saveCurrentDetail(userViewModel.user.value!!, detail)
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        backpackViewModel.clearSaveDialogErrorMessage()
+        super.onDismiss(dialog)
     }
 }
