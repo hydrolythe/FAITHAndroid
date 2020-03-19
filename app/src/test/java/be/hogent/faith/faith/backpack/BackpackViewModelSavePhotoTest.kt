@@ -24,7 +24,7 @@ class BackpackViewModelSavePhotoTest {
     private val savePhotoUseCase = mockk<SaveBackpackPhotoDetailUseCase>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<PhotoDetail>()
-    private val user : User = mockk()
+    private val user: User = mockk()
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()

@@ -26,11 +26,10 @@ class SaveBackpackAudioDetailUseCase(
             .flatMapCompletable { Completable.complete() }
     }
 
-    private fun addDetailToBackpack(audioDetail: AudioDetail) : Single<Detail> = Single.fromCallable {
+    private fun addDetailToBackpack(audioDetail: AudioDetail): Single<Detail> = Single.fromCallable {
         params!!.user.backpack.addDetail(audioDetail)
         audioDetail
     }
 
-
-    data class Params(val user : User, val audioDetail: AudioDetail)
+    data class Params(val user: User, val audioDetail: AudioDetail)
 }

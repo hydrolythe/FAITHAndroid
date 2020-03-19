@@ -26,11 +26,10 @@ class SaveBackpackDrawingDetailUseCase(
             .flatMapCompletable { Completable.complete() }
     }
 
-    private fun addDetailToBackpack(drawingDetail: DrawingDetail) : Single<Detail> = Single.fromCallable {
+    private fun addDetailToBackpack(drawingDetail: DrawingDetail): Single<Detail> = Single.fromCallable {
         params!!.user.backpack.addDetail(drawingDetail)
         drawingDetail
     }
 
-
-    data class Params(val user : User, val drawingDetail: DrawingDetail)
+    data class Params(val user: User, val drawingDetail: DrawingDetail)
 }

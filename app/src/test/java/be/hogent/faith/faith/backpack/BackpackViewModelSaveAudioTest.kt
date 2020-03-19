@@ -24,7 +24,7 @@ class BackpackViewModelSaveAudioTest {
     private val saveAudioUseCase = mockk<SaveBackpackAudioDetailUseCase>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<AudioDetail>()
-    private val user : User = mockk()
+    private val user: User = mockk()
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()

@@ -27,11 +27,10 @@ class SaveBackpackPhotoDetailUseCase(
             .flatMapCompletable { Completable.complete() }
     }
 
-    private fun addDetailToBackpack(photoDetail: PhotoDetail) : Single<Detail> = Single.fromCallable {
+    private fun addDetailToBackpack(photoDetail: PhotoDetail): Single<Detail> = Single.fromCallable {
         params!!.user.backpack.addDetail(photoDetail)
         photoDetail
     }
 
-
-    data class Params(val user : User, val photoDetail: PhotoDetail)
+    data class Params(val user: User, val photoDetail: PhotoDetail)
 }

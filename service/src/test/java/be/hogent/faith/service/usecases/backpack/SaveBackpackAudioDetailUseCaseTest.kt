@@ -1,14 +1,11 @@
 package be.hogent.faith.service.usecases.backpack
 
-import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.repository.BackpackRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Scheduler
 import org.junit.Before

@@ -11,10 +11,10 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import timber.log.Timber
 
-class FirebaseBackpackRepository (
+class FirebaseBackpackRepository(
     private val fbAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore
-){
+) {
 
     fun insert(item: DetailEntity, user: UserEntity): Maybe<DetailEntity?> {
         val currentUser = fbAuth.currentUser

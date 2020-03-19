@@ -1,6 +1,5 @@
 package be.hogent.faith.domain.models
 
-import org.jetbrains.annotations.TestOnly
 import java.util.UUID
 
 data class User(
@@ -32,5 +31,4 @@ data class User(
     fun clearEvents() {
         _events = HashMap<UUID, Event>()
     }
-
 }

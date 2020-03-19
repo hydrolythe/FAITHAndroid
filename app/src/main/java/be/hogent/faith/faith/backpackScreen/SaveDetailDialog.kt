@@ -16,7 +16,6 @@ import be.hogent.faith.faith.util.setErrorMessage
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-
 class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
     private lateinit var saveDetailBinding: be.hogent.faith.databinding.DialogSaveBackpackdetailBinding
 
@@ -25,7 +24,7 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     companion object {
-        fun newInstance(detail : Detail): SaveDetailDialog {
+        fun newInstance(detail: Detail): SaveDetailDialog {
             return SaveDetailDialog(detail)
         }
     }
@@ -59,13 +58,13 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
             val fileName = saveDetailBinding.txtSaveEventTitle.text.toString()
             val noEmptyString = checkEmptyString(fileName)
             val notMaxCharacters = checkMaxCharacters(fileName)
-            if(noEmptyString && notMaxCharacters){
+            if (noEmptyString && notMaxCharacters) {
                 saveFile(fileName)
                 dismiss()
-            }else{
-                if(!noEmptyString)
+            } else {
+                if (!noEmptyString)
                     backpackViewModel.setErrorMessage(R.string.save_detail_emptyString)
-                if(!notMaxCharacters)
+                if (!notMaxCharacters)
                     backpackViewModel.setErrorMessage(R.string.save_detail_maxChar)
             }
         }
@@ -88,7 +87,7 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
         return fileName.isNotEmpty() || !fileName.isBlank()
     }
 
-    private fun saveFile(fileName : String){
+    private fun saveFile(fileName: String) {
         detail.fileName = fileName
         backpackViewModel.saveCurrentDetail(userViewModel.user.value!!, detail)
     }

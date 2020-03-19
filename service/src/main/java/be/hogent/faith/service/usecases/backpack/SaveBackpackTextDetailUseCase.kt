@@ -5,7 +5,6 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.repository.BackpackRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.storage.IStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.Single
@@ -27,10 +26,10 @@ class SaveBackpackTextDetailUseCase(
             .flatMapCompletable { Completable.complete() }
     }
 
-    private fun addDetailToBackpack(detail: TextDetail) : Single<Detail> = Single.fromCallable {
+    private fun addDetailToBackpack(detail: TextDetail): Single<Detail> = Single.fromCallable {
         params!!.user.backpack.addDetail(detail)
         detail
     }
 
-    data class Params(val user : User, val textDetail: TextDetail)
+    data class Params(val user: User, val textDetail: TextDetail)
 }

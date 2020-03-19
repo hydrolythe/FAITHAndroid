@@ -92,13 +92,12 @@ sealed class DetailViewHolder(
         thumbnailView.text_detail_title.text = detail.fileName
     }
 
-    fun hide(hide : Boolean){
+    fun hide(hide: Boolean) {
         val deleteBtn = thumbnailView.btn_delete_detailRv
-        if(hide){
+        if (hide) {
             deleteBtn.visibility = View.INVISIBLE
            deleteBtn.isClickable = false
-        }
-        else{
+        } else {
             deleteBtn.visibility = View.VISIBLE
             deleteBtn.isClickable = true
         }
@@ -142,6 +141,6 @@ sealed class DetailViewHolder(
 
     interface ExistingDetailNavigationListener {
         fun openDetailScreenFor(detail: Detail)
-        fun deleteDetail(detail : Detail)
+        fun deleteDetail(detail: Detail)
     }
 }

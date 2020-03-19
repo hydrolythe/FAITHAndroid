@@ -6,7 +6,6 @@ import be.hogent.faith.domain.repository.BackpackRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Scheduler
 import org.junit.Before

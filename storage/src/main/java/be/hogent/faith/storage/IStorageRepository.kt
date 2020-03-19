@@ -5,7 +5,6 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Completable
 import io.reactivex.Single
-import java.util.UUID
 
 interface IStorageRepository {
     /**
@@ -23,5 +22,5 @@ interface IStorageRepository {
 
     fun getBackpack(backpack: Backpack): Completable
 
-    fun saveBackpackDetail(detail : Detail) : Single<Detail>
+    fun saveBackpackDetail(detail: Detail): Single<Detail>
 }

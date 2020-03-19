@@ -13,7 +13,7 @@ class LocalStorageRepository(
 ) : ILocalStorageRepository {
 
     override fun saveBackpackDetail(detail: Detail): Single<Detail> {
-        return Single.fromCallable{
+        return Single.fromCallable {
             moveFile(detail.file, pathProvider.getLocalDetailPath(detail))
             detail.file = pathProvider.getDetailPath(detail)
             detail

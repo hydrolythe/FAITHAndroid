@@ -6,7 +6,6 @@ import be.hogent.faith.domain.models.detail.Detail
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import java.io.File
-import java.util.UUID
 
 class StoragePathProvider(
     private val context: Context,
@@ -30,7 +29,7 @@ class StoragePathProvider(
         return File("${getEventFolder(event).path}/${detail.uuid}")
     }
 
-    fun getDetailPath(detail: Detail): File{
+    fun getDetailPath(detail: Detail): File {
         return File("users/${user!!.uid}/backpack/${detail.uuid}")
     }
 
@@ -53,8 +52,8 @@ class StoragePathProvider(
     }
 
     fun getLocalDetailPath(detail: Detail): File {
-        //return File(context.filesDir, detail.file.path)
-        val child= "users/${user!!.uid}/backpack/${detail.uuid}"
+        // return File(context.filesDir, detail.file.path)
+        val child = "users/${user!!.uid}/backpack/${detail.uuid}"
         return File(context.filesDir, child)
     }
 }

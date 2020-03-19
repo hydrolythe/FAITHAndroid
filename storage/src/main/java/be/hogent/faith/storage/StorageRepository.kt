@@ -8,7 +8,6 @@ import be.hogent.faith.storage.localStorage.ILocalStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.toFlowable
-import java.util.UUID
 
 /**
  * Repository providing access to both the internal and remote storage.

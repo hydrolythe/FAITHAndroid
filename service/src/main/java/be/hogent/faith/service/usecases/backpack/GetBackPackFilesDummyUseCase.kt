@@ -9,11 +9,10 @@ import io.reactivex.Scheduler
 class GetBackPackFilesDummyUseCase(
     private val backpackRepository: BackpackRepository,
     observeScheduler: Scheduler
-    ) : FlowableUseCase<List<Detail>, GetBackPackFilesDummyUseCase.Params>(observeScheduler)
-{
+) : FlowableUseCase<List<Detail>, GetBackPackFilesDummyUseCase.Params>(observeScheduler) {
     override fun buildUseCaseObservable(params: Params): Flowable<List<Detail>> {
         return backpackRepository.get()
     }
 
-    data class Params(val backpack : String)
+    data class Params(val backpack: String)
 }

@@ -6,7 +6,6 @@ import be.hogent.faith.database.firebase.FirebaseEventRepository
 import be.hogent.faith.database.firebase.FirebaseUserRepository
 import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
-import be.hogent.faith.database.mappers.Mapper
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.repositories.AuthManagerImpl
 import be.hogent.faith.database.repositories.BackpackRepositoryImpl
@@ -35,13 +34,13 @@ val databaseModule = module {
     // Koin doesn't automatically see the Impl as an implementation of the interface,
     // so we have to explicitly mention it.
     single { EventRepositoryImpl(get(), get(), get()) as EventRepository }
-    single { BackpackRepositoryImpl(get(), get(), get()) as BackpackRepository}
+    single { BackpackRepositoryImpl(get(), get(), get()) as BackpackRepository }
     single { UserRepositoryImpl(get(), get()) as UserRepository }
     single { AuthManagerImpl(get()) as AuthManager }
     single { FirebaseAuthManager(constructFirebaseAuthInstance()) }
     single { FirebaseUserRepository(constructFirebaseAuthInstance(), constructFireStoreInstance()) }
-    single {FirebaseBackpackRepository(constructFirebaseAuthInstance(),
-        constructFireStoreInstance())}
+    single { FirebaseBackpackRepository(constructFirebaseAuthInstance(),
+        constructFireStoreInstance()) }
     single {
         FirebaseEventRepository(
             constructFirebaseAuthInstance(),
