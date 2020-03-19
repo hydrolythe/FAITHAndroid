@@ -5,7 +5,6 @@ import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
@@ -13,10 +12,7 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.backpackScreen.DetailTypes.AUDIO_DETAIL
-import be.hogent.faith.faith.backpackScreen.DetailTypes.DRAW_DETAIL
-import be.hogent.faith.faith.backpackScreen.DetailTypes.PICTURE_DETAIL
-import be.hogent.faith.faith.backpackScreen.DetailTypes.TEXT_DETAIL
+import be.hogent.faith.faith.backpackScreen.detailFilters.CombinedDetailFilter
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
@@ -25,8 +21,6 @@ import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCas
 import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
-import java.lang.NullPointerException
-import java.util.Locale
 
 object OpenState {
     const val OPEN = 2
@@ -43,23 +37,50 @@ class BackpackViewModel(
 
 ) : ViewModel() {
 
-    private var _details = listOf<Detail>()
+    private var details: List<Detail> = emptyList()
 
-    val details: LiveData<List<Detail>>
-        get() = applyFilters()
+    private val detailFilter = CombinedDetailFilter()
 
-    private var filterDetailType = MutableLiveData<MutableMap<Int, Boolean>>().apply {
-        postValue(
-            mutableMapOf(
-                AUDIO_DETAIL to false,
-                TEXT_DETAIL to false,
-                DRAW_DETAIL to false,
-                PICTURE_DETAIL to false
-            )
-        )
+    val searchString = MutableLiveData<String>()
+
+    val audioFilterEnabled = MutableLiveData<Boolean>().apply {
+        this.value = false
     }
-    private var filterText =
-        MutableLiveData<String>().apply { value = "" } // Starts with empty rv if not initialized
+    val drawingFilterEnabled = MutableLiveData<Boolean>().apply {
+        this.value = false
+    }
+    val photoFilterEnabled = MutableLiveData<Boolean>().apply {
+        this.value = false
+    }
+    val textFilterEnabled = MutableLiveData<Boolean>().apply {
+        this.value = false
+    }
+    val videoFilterEnabled = MutableLiveData<Boolean>().apply {
+        this.value = false
+    }
+
+    val filteredDetails: LiveData<List<Detail>> = MediatorLiveData<List<Detail>>().apply {
+        addSource(searchString) { query ->
+            detailFilter.titleFilter.searchString = query
+            value = detailFilter.filter(details)
+        }
+        addSource(drawingFilterEnabled) { enabled ->
+            detailFilter.hasDrawingDetailFilter.isEnabled = enabled
+            value = detailFilter.filter(details)
+        }
+        addSource(textFilterEnabled) { enabled ->
+            detailFilter.hasTextDetailFilter.isEnabled = enabled
+            value = detailFilter.filter(details)
+        }
+        addSource(photoFilterEnabled) { enabled ->
+            detailFilter.hasPhotoDetailFilter.isEnabled = enabled
+            value = detailFilter.filter(details)
+        }
+        addSource(audioFilterEnabled) { enabled ->
+            detailFilter.hasAudioDetailFilter.isEnabled = enabled
+            value = detailFilter.filter(details)
+        }
+    }
 
     private var _currentFile = MutableLiveData<Detail>()
     val currentFile: LiveData<Detail>
@@ -110,12 +131,40 @@ class BackpackViewModel(
     val detailDeletedSuccessfully: LiveData<Int> = _detailDeletedSuccessfully
 
     init {
-        _details = getBackPackFilesDummyUseCase.getDetails()
+        loadDetails()
+    }
+
+    private fun loadDetails() {
+        details = getBackPackFilesDummyUseCase.getDetails()
     }
 
     fun initialize() {
         _isInEditMode.postValue(OpenState.CLOSED)
         _isPopupMenuOpen.postValue(OpenState.CLOSED)
+    }
+
+    fun onFilterPhotosClicked() {
+        photoFilterEnabled.value = photoFilterEnabled.value!!.not()
+    }
+
+    fun onFilterTextClicked() {
+        textFilterEnabled.value = textFilterEnabled.value!!.not()
+    }
+
+    fun onFilterDrawingClicked() {
+        drawingFilterEnabled.value = drawingFilterEnabled.value!!.not()
+    }
+
+    fun onFilterAudioClicked() {
+        audioFilterEnabled.value = audioFilterEnabled.value!!.not()
+    }
+
+    fun onFilterVideoClicked() {
+        videoFilterEnabled.value = videoFilterEnabled.value!!.not()
+    }
+
+    fun setSearchStringText(text: String) {
+        searchString.postValue(text)
     }
 
     fun setIsInEditMode() {
@@ -226,99 +275,6 @@ class BackpackViewModel(
         }
     }
 
-    override fun onCleared() {
-        saveBackpackTextDetailUseCase.dispose()
-        saveBackpackAudioDetailUseCase.dispose()
-        saveBackpackDrawingDetailUseCase.dispose()
-        saveBackpackPhotoDetailUseCase.dispose()
-        deleteBackpackDetailUseCase.dispose()
-        super.onCleared()
-    }
-
-    fun filterSearchBar(text: String) {
-        filterText.value = text
-    }
-
-    fun setFilters(type: Int) {
-        val newFilterValues = filterDetailType.value
-        newFilterValues!![type] = newFilterValues[type]!!.not()
-        filterDetailType.postValue(newFilterValues)
-    }
-
-    private fun applyFilters(): LiveData<List<Detail>> {
-        val typeFilterRes = Transformations.map(filterDetailType) { filter ->
-            _details.filter { detail ->
-
-                if (!filter.containsValue(true)) true else {
-                    if (detail is AudioDetail && filter[AUDIO_DETAIL] == true) {
-                        return@filter true
-                    }
-                    if (detail is DrawingDetail && filter[DRAW_DETAIL] == true) {
-                        return@filter true
-                    }
-                    if (detail is PhotoDetail && filter[PICTURE_DETAIL] == true) {
-                        return@filter true
-                    }
-                    if (detail is TextDetail && filter[TEXT_DETAIL] == true) {
-                        return@filter true
-                    }
-                    return@filter false
-                }
-            }
-        }
-        val textFilterRes = Transformations.map(filterText) { filterText ->
-            _details.filter { detail ->
-                if (filterText.isEmpty()) return@filter true else
-                    return@filter detail.fileName.toLowerCase(Locale.getDefault())
-                        .contains(filterText.toLowerCase(Locale.getDefault()))
-            }
-        }
-
-        return textFilterRes.combineWith(typeFilterRes) { textRes, typeRes ->
-            val resultSet = mutableSetOf<Detail>()
-            try {
-                if (textRes!!.size > typeRes!!.size) {
-                    for (detail in textRes) {
-                        if (typeRes.contains(detail)) {
-                            resultSet.add(detail)
-                        }
-                    }
-                } else {
-                    for (detail in typeRes) {
-                        if (textRes.contains(detail)) {
-                            resultSet.add(detail)
-                        }
-                    }
-                }
-            } catch (e: NullPointerException) {
-            }
-
-            return@combineWith resultSet.toList().sortedBy {
-                it.javaClass.canonicalName
-            }
-        }
-    }
-
-    // Method to combine 2 livedata
-    private fun <T, K, R> LiveData<T>.combineWith(
-        liveData: LiveData<K>,
-        block: (T?, K?) -> R
-    ): LiveData<R> {
-        val result = MediatorLiveData<R>()
-        result.addSource(this) {
-            result.value = block.invoke(this.value, liveData.value)
-        }
-        result.addSource(liveData) {
-            result.value = block.invoke(this.value, liveData.value)
-        }
-        return result
-    }
-
-    // For testing purposes
-    fun getFilterDetailType(): MutableLiveData<MutableMap<Int, Boolean>> {
-        return filterDetailType
-    }
-
     fun deleteDetail(detail: Detail) {
 
         val params = DeleteBackpackDetailUseCase.Params(detail)
@@ -333,5 +289,14 @@ class BackpackViewModel(
         override fun onError(e: Throwable) {
             _errorMessage.postValue(R.string.error_delete_detail_failure)
         }
+    }
+
+    override fun onCleared() {
+        saveBackpackTextDetailUseCase.dispose()
+        saveBackpackAudioDetailUseCase.dispose()
+        saveBackpackDrawingDetailUseCase.dispose()
+        saveBackpackPhotoDetailUseCase.dispose()
+        deleteBackpackDetailUseCase.dispose()
+        super.onCleared()
     }
 }
