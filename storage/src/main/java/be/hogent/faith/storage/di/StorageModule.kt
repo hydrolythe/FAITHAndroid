@@ -4,7 +4,7 @@ import be.hogent.faith.database.storage.IFileStorageRepository
 import be.hogent.faith.storage.FileStorageRepository
 import be.hogent.faith.storage.StoragePathProvider
 import be.hogent.faith.storage.firebase.IOnlineFileStorageRepository
-import be.hogent.faith.storage.firebase.OnlineFileStorageRepository
+import be.hogent.faith.storage.firebase.FirebaseStorageRepository
 import be.hogent.faith.storage.firebase.RxFirebaseStorageWrapper
 import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
 import be.hogent.faith.storage.localStorage.LocalFileStorageRepository
@@ -25,7 +25,7 @@ val storageModule = module {
         )
     }
     factory<IOnlineFileStorageRepository> {
-        OnlineFileStorageRepository(
+        FirebaseStorageRepository(
             get(),
             constructFirebaseStorageInstance(),
             RxFirebaseStorageWrapper()

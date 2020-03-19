@@ -21,7 +21,7 @@ import java.util.UUID
 
 private const val userUID = "uid"
 
-class OnlineFileStorageRepositoryTest {
+class FirebaseStorageRepositoryTest {
 
     private val filesDir = File("local")
     private val context = mockk<Context>()
@@ -32,7 +32,7 @@ class OnlineFileStorageRepositoryTest {
     private val firebaseStorage = mockk<FirebaseStorage>()
     private val rxFirebaseStorage = mockk<IRxFireBaseStorage>()
     private lateinit var onlineFileStorageRepository:
-            OnlineFileStorageRepository
+            FirebaseStorageRepository
 
     private val detailFile = File("detail")
     private val encryptedDetail = EncryptedDetail(
@@ -57,7 +57,7 @@ class OnlineFileStorageRepositoryTest {
     fun setUp() {
         every { firebaseStorage.getReference() } returns mockk(relaxed = true)
         onlineFileStorageRepository =
-            OnlineFileStorageRepository(storagePathProvider, firebaseStorage, rxFirebaseStorage)
+            FirebaseStorageRepository(storagePathProvider, firebaseStorage, rxFirebaseStorage)
 
         every { context.filesDir } returns filesDir
         every { fbAuth.currentUser } returns mockk {

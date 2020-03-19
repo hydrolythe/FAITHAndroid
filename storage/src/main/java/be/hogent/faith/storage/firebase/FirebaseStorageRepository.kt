@@ -13,7 +13,7 @@ import io.reactivex.rxkotlin.toFlowable
 import timber.log.Timber
 import java.io.File
 
-class OnlineFileStorageRepository(
+class FirebaseStorageRepository(
     private val pathProvider: StoragePathProvider,
     private val firestorage: FirebaseStorage,
     private val rxFirebaseStorage: IRxFireBaseStorage
