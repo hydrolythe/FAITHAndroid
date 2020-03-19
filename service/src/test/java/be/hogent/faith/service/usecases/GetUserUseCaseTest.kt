@@ -53,7 +53,7 @@ class GetUserUseCaseTest {
     @Test
     fun getUserUC_execute_callsEventRepo() {
         getUserUC.buildUseCaseObservable(mockk())
-        verify { eventRepository.getAll() }
+        verify { eventRepository.getAllEventsData() }
     }
 
     @Test
@@ -65,7 +65,7 @@ class GetUserUseCaseTest {
         every { authManager.getLoggedInUserUUID() } returns userUuid
         every { userRepository.get(capture(userUuidArg)) } returns Flowable
             .just(user)
-        every { eventRepository.getAll() } returns Flowable
+        every { eventRepository.getAllEventsData() } returns Flowable
             .just(events)
 
         val result = getUserUC.buildUseCaseObservable(mockk())

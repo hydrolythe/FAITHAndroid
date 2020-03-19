@@ -2,6 +2,7 @@ package be.hogent.faith.encryption
 
 import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.encryption.di.encryptionModule
 import be.hogent.faith.encryption.encryptionService.DummyKeyEncryptionService
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
@@ -10,10 +11,13 @@ import be.hogent.faith.util.factory.EventFactory
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
+import org.koin.test.KoinTest
+import org.koin.test.KoinTestRule
 import java.io.File
 
-class EventEncryptionServiceTest {
+class EventEncryptionServiceTest : KoinTest {
     private val keyGenerator = KeyGenerator()
     private val keyEncrypter = KeyEncrypter(DummyKeyEncryptionService())
 
@@ -32,6 +36,11 @@ class EventEncryptionServiceTest {
         File("src/test/java/be/hogent/faith/encryption/testResources/image.png")
     private val backupFile =
         File("src/test/java/be/hogent/faith/encryption/testResources/image - copy.png")
+
+    @get:Rule
+    val koinTestRule = KoinTestRule.create {
+        modules(encryptionModule)
+    }
 
     @After
     fun cleanUpFiles() {

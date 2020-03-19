@@ -13,7 +13,7 @@ class GetEventsUseCase(
 ) : FlowableUseCase<List<Event>, GetEventsUseCase.Params>(observeScheduler) {
 
     override fun buildUseCaseObservable(params: Params): Flowable<List<Event>> {
-        return eventRepository.getAll()
+        return eventRepository.getAllEventsData()
     }
 
     data class Params(

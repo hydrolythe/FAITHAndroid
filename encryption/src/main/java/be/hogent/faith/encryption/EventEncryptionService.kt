@@ -10,10 +10,12 @@ import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
 import com.google.crypto.tink.KeysetHandle
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
-import io.reactivex.rxkotlin.zipWith
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
 
 /**
@@ -23,7 +25,8 @@ import org.threeten.bp.LocalDateTime
 class EventEncryptionService(
     private val keyGenerator: KeyGenerator,
     private val keyEncrypter: KeyEncrypter
-) : IEventEncryptionService {
+) : IEventEncryptionService, KoinComponent {
+    private val detailEncryptionService by inject<DetailEncryptionService>()
 
     override fun encrypt(event: Event): Single<EncryptedEvent> {
         val dataKeysetHandle = keyGenerator.generateKeysetHandle()
@@ -41,7 +44,6 @@ class EventEncryptionService(
         val encryptedDetails = encryptDetails(event, keysetHandle, streamingKeySetHandle)
 
         // Encrypt the DEKs so it can be placed next to the data it encrypted in the EncryptedEventEntity
-        // TODO: maybe wrap these two into 1 key object so they can be encrypted together
         val encryptedDEK = keyEncrypter.encrypt(keysetHandle)
         val encryptedStreamingDEK = keyEncrypter.encrypt(streamingKeySetHandle)
 
@@ -63,41 +65,24 @@ class EventEncryptionService(
 
     private fun encryptDetails(
         event: Event,
-        keysetHandle: KeysetHandle,
-        streamingKeySetHandle: KeysetHandle
+        dek: KeysetHandle,
+        sdek: KeysetHandle
     ): Single<List<EncryptedDetail>> {
-        val fileEncrypter = FileEncrypter(streamingKeySetHandle)
-        val detailEncrypter =
-            DetailEncryptionService(DataEncrypter((keysetHandle)), fileEncrypter)
 
         return Observable.fromIterable(event.details)
-            .flatMapSingle(detailEncrypter::encrypt)
+            .flatMapSingle { detailEncryptionService.encrypt(it, dek, sdek) }
             .toList()
     }
 
     override fun decryptData(encryptedEvent: EncryptedEvent): Single<Event> {
-        val dek = keyEncrypter.decrypt(encryptedEvent.encryptedDEK)
-        val streamingDEK = keyEncrypter.decrypt(encryptedEvent.encryptedStreamingDEK)
-
-        // TODO: checken of blockingGet goeie aanpak is
-        return dek.zipWith(streamingDEK) { dek, sdek ->
-            decryptEvent(
-                encryptedEvent,
-                dek,
-                sdek
-            ).blockingGet()
-        }
+        return keyEncrypter.decrypt(encryptedEvent.encryptedDEK)
+            .flatMap { dek -> decryptEventData(encryptedEvent, dek) }
     }
 
-    private fun decryptEvent(
-        encryptedEvent: EncryptedEvent,
-        dek: KeysetHandle,
-        streamingDEK: KeysetHandle
-    ): Single<Event> {
+    private fun decryptEventData(encryptedEvent: EncryptedEvent, dek: KeysetHandle): Single<Event> {
         val dataEncrypter = DataEncrypter(dek)
-        val fileEncrypter = FileEncrypter(streamingDEK)
 
-        return decryptDetails(dataEncrypter, encryptedEvent, fileEncrypter)
+        return decryptDetailsData(dek, encryptedEvent)
             .map { details ->
                 Event(
                     dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedEvent.dateTime)),
@@ -110,15 +95,13 @@ class EventEncryptionService(
             }
     }
 
-    private fun decryptDetails(
-        dataEncrypter: DataEncrypter,
-        encryptedEvent: EncryptedEvent,
-        fileEncrypter: FileEncrypter
+    private fun decryptDetailsData(
+        dek: KeysetHandle,
+        encryptedEvent: EncryptedEvent
     ): Single<List<Detail>> {
-        val detailEntityEncrypter = DetailEncryptionService(dataEncrypter, fileEncrypter)
 
         return Observable.fromIterable(encryptedEvent.details)
-            .flatMapSingle(detailEntityEncrypter::decrypt)
+            .flatMapSingle { detailEncryptionService.decryptData(it, dek) }
             .toList()
     }
 
@@ -126,5 +109,15 @@ class EventEncryptionService(
         return Observable.fromIterable(encryptedEvents)
             .flatMapSingle(this::decryptData)
             .toList()
+    }
+
+    override fun decryptFiles(encryptedEvent: EncryptedEvent): Completable {
+        return keyEncrypter.decrypt(encryptedEvent.encryptedStreamingDEK)
+            .flatMapCompletable { sdek ->
+                Completable.merge {
+                    Observable.fromIterable(encryptedEvent.details)
+                        .map { detail -> detailEncryptionService.decryptDetailFiles(detail, sdek) }
+                }
+            }
     }
 }

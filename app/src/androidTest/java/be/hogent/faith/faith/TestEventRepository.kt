@@ -21,11 +21,11 @@ class TestEventRepository : IEventRepository {
         return Observable.just(EventFactory.makeEvent())
     }
 
-    override fun getAll(): Observable<List<Event>> {
+    override fun getAllEventsData(): Observable<List<Event>> {
         return Observable.just(EventFactory.makeEventList())
     }
 
-    override fun makeEventFilesAvailable(uuid: UUID): Observable<Event> {
-        return Observable.just(EventFactory.makeEvent())
+    override fun makeEventFilesAvailable(event: Event): Completable {
+        return Completable.complete()
     }
 }

@@ -14,9 +14,9 @@ import com.google.crypto.tink.subtle.Base64
  * (as is more usual in encryption) because Firebase does not support storing byte-arrays.
  */
 class DataEncrypter(
-    keysetHandle: KeysetHandle
+    dek: KeysetHandle
 ) {
-    private val dataEncryptionKey = AeadFactory.getPrimitive(keysetHandle)
+    private val dataEncryptionKey = AeadFactory.getPrimitive(dek)
 
     /**
      * Returns a [Base64]-encoded, encrypted version of the given [plaintext]

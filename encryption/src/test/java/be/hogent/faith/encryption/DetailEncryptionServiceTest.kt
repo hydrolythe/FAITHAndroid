@@ -1,10 +1,10 @@
 package be.hogent.faith.encryption
 
 import be.hogent.faith.database.encryption.EncryptedDetail
-import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.util.contentEqual
 import be.hogent.faith.util.factory.DetailFactory
+import junit.framework.Assert.assertTrue
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -14,7 +14,7 @@ class DetailEncryptionServiceTest {
     private val dek by lazy { KeyGenerator().generateKeysetHandle() }
     private val sdek by lazy { KeyGenerator().generateStreamingKeysetHandle() }
 
-    private val detailEncrypter = DetailEncryptionService(DataEncrypter(dek), FileEncrypter(sdek))
+    private val detailEncrypter = DetailEncryptionService()
 
     private val detail = DetailFactory.makeRandomDetail()
 
@@ -37,7 +37,7 @@ class DetailEncryptionServiceTest {
     @Test
     fun `After encrypting a detail its data is no longer human readable`() {
         // Act
-        detailEncrypter.encrypt(detail)
+        detailEncrypter.encrypt(detail, dek, sdek)
             .test()
             .assertValue { encryptedDetail ->
                 encryptedDetail.type != detail.javaClass.canonicalName
@@ -48,7 +48,7 @@ class DetailEncryptionServiceTest {
     @Test
     fun `After encrypting a detail its associated file is no longer human readable`() {
         // Act
-        detailEncrypter.encrypt(detail)
+        detailEncrypter.encrypt(detail, dek, sdek)
             .test()
             .assertValue { encryptedDetail ->
                 encryptedDetail.file.contentEqual(backupFile).not()
@@ -58,15 +58,16 @@ class DetailEncryptionServiceTest {
 
     @Test
     fun `After decrypting an encrypted detail its data is back to the original values`() {
+        // Arrange
         lateinit var encryptedDetail: EncryptedDetail
-        detailEncrypter.encrypt(detail)
+        detailEncrypter.encrypt(detail, dek, sdek)
             .doOnSuccess { encryptedDetail = it }
             .test()
             .assertComplete()
             .dispose()
 
         // Act
-        detailEncrypter.decrypt(encryptedDetail)
+        detailEncrypter.decryptData(encryptedDetail, dek)
             .test()
             .assertComplete()
             .assertValue { decryptedDetail ->
@@ -77,18 +78,20 @@ class DetailEncryptionServiceTest {
 
     @Test
     fun `After decrypting a detail its associated file is back to the original`() {
+        // Arrange
         lateinit var encryptedDetail: EncryptedDetail
-        detailEncrypter.encrypt(detail)
+        detailEncrypter.encrypt(detail, dek, sdek)
             .doOnSuccess { encryptedDetail = it }
             .test()
             .dispose()
 
         // Act
-        detailEncrypter.decrypt(encryptedDetail)
+        detailEncrypter.decryptDetailFiles(encryptedDetail, sdek)
             .test()
-            .assertValue { decryptedDetail ->
-                decryptedDetail.file.contentEqual(backupFile)
-            }
+            .assertComplete()
             .dispose()
+
+        // Assert
+        assertTrue(encryptedDetail.file.contentEqual(backupFile))
     }
 }

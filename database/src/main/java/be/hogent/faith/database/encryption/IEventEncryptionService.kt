@@ -23,7 +23,7 @@ interface IEventEncryptionService {
      * Decrypts the files belonging to an event. After calling this, the paths inside the event
      * will have been updated.
      */
-    fun decryptFiles(event: Event): Completable
+    fun decryptFiles(encryptedEvent: EncryptedEvent): Completable
 
     fun decryptList(encryptedEvents: List<EncryptedEvent>): Single<List<Event>>
 }

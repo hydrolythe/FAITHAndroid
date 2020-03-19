@@ -34,14 +34,14 @@ class GetEventsUseCaseTest {
 
         getEventsUC.buildUseCaseObservable(params)
 
-        verify { repository.getAll() }
+        verify { repository.getAllEventsData() }
     }
 
     @Test
     fun getEventsUseCase_eventsPresent_returnsThem() {
         val params = GetEventsUseCase.Params(UserFactory.makeUser())
         // Simulate two events on the stream
-        every { repository.getAll() } returns Flowable.just(
+        every { repository.getAllEventsData() } returns Flowable.just(
             EventFactory.makeEventList(2),
             EventFactory.makeEventList(2)
         )
@@ -52,7 +52,7 @@ class GetEventsUseCaseTest {
     @Test
     fun getEventsUseCase_noEventsPresent_returnsNothing() {
         val params = GetEventsUseCase.Params(UserFactory.makeUser())
-        every { repository.getAll() } returns Flowable.empty()
+        every { repository.getAllEventsData() } returns Flowable.empty()
         val result = getEventsUC.buildUseCaseObservable(params)
         result.test().assertNoValues()
     }
@@ -60,7 +60,7 @@ class GetEventsUseCaseTest {
     @Test
     fun getEventsUseCase_userNotAuthenticated_fails() {
         val params = GetEventsUseCase.Params(UserFactory.makeUser())
-        every { repository.getAll() } returns Flowable.error(RuntimeException())
+        every { repository.getAllEventsData() } returns Flowable.error(RuntimeException())
         val result = getEventsUC.buildUseCaseObservable(params)
         result.test().assertNoValues().assertError(RuntimeException::class.java)
     }

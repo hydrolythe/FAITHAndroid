@@ -51,7 +51,7 @@ class FileStorageRepository(
     /**
      * download emotion avatar from firebase to localStorage if not present yet
      */
-    private fun getEmotionAvatar(event: Event): Completable {
+    private fun getEmotionAvatarFile(event: Event): Completable {
         if (event.emotionAvatar == null || localFileStorage.isEmotionAvatarPresent(event))
             return Completable.complete()
         else
@@ -63,7 +63,7 @@ class FileStorageRepository(
      */
     override fun downloadEventFiles(event: Event): Completable {
         return Completable.mergeArray(
-            getEmotionAvatar(event),
+            getEmotionAvatarFile(event),
             Observable.fromIterable(event.details)
                 .flatMapCompletable(::getDetailFile)
         )

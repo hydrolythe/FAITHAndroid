@@ -33,16 +33,21 @@ open class EventRepository(
 
     /**
      * Makes sure all files associated with the given event are available.
+     * The paths for each of the event's files will reflect the location of the decrypted file,
+     * so they can be used directly.
      */
     override fun makeEventFilesAvailable(event: Event): Completable {
         return fileStorageRepository.downloadEventFiles(event)
-            .andThen {
+            .andThen(
                 if (fileStorageRepository.filesReadyToUse(event)) {
                     Completable.complete()
                 } else {
-                    eventEncryptionService.decryptFiles(event)
+                    // Need to get the encrypted event again so we can get the encryption keys
+                    eventDatabase.get(event.uuid)
+                        .map(eventMapper::mapFromEntity)
+                        .flatMapCompletable(eventEncryptionService::decryptFiles)
                 }
-            }
+            )
     }
 
     /**
@@ -63,7 +68,7 @@ open class EventRepository(
      * Does <b>NOT</b> download the files for each event. This will have to be done separately for
      * each event by calling [makeEventFilesAvailable].
      */
-    override fun getAll(): Observable<List<Event>> {
+    override fun getAllEventsData(): Observable<List<Event>> {
         return eventDatabase.getAll()
             .map { eventMapper.mapFromEntities(it) }
             .flatMapSingle(eventEncryptionService::decryptList)

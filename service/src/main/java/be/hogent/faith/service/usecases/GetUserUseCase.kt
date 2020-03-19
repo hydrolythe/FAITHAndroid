@@ -21,7 +21,7 @@ class GetUserUseCase(
         val currentUser = authManager.getLoggedInUserUUID()
         if (currentUser == null)
             return Flowable.error(RuntimeException("You are not allowed to access the user, please log in"))
-        return combineLatest(userRepository.get(currentUser), eventRepository.getAll())
+        return combineLatest(userRepository.get(currentUser), eventRepository.getAllEventsData())
             .map { pair: Pair<User, List<Event>> -> addEventsToUser(pair.first, pair.second) }
     }
 

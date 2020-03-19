@@ -16,7 +16,7 @@ interface IEventRepository {
 
     fun getEventData(uuid: UUID): Observable<Event>
 
-    fun getAll(): Observable<List<Event>>
+    fun getAllEventsData(): Observable<List<Event>>
 
     fun makeEventFilesAvailable(event: Event): Completable
 }

@@ -7,7 +7,7 @@ ext {
     // APP LIBRARIES
     coroutines_version = '1.1.1'
     coroutines_android_version = '1.1.1'
-    koin_version = '2.0.1'
+    koin_version = '2.1.4'
     aac_core_version = '2.1.0'
     lifecycle_version = '2.1.0'
     appcompat_version = '1.1.0'

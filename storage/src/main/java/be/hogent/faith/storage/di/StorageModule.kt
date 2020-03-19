@@ -15,7 +15,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val storageModule = module {
-    factory<IFileStorageRepository> { FileStorageRepository(get(), get()) }
+    factory<IFileStorageRepository> { FileStorageRepository(get(), get(), get()) }
     factory { StoragePathProvider(androidContext(), constructFirebaseAuthInstance()) }
     factory<ITemporaryStorage> { TemporaryStorageRepository(androidContext(), get()) }
     factory<be.hogent.faith.database.storage.ILocalFileStorageRepository> {

@@ -39,6 +39,7 @@ dependencies {
 
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
+    testImplementation testDependencies.koinTesting
     // TODO: add deps to dependencies.gradle
 
     implementation("com.google.crypto.tink:tink:1.2.2")

@@ -24,13 +24,13 @@ import org.junit.Test
 
 class EventRepositoryTest {
 
-    private val storageRepository = mockk<IFileStorageRepository>()
+    private val fileStorageRepository = mockk<IFileStorageRepository>()
     private val eventDatabase = mockk<EventDatabase>()
     private val eventEncryptionService = mockk<IEventEncryptionService>()
 
     private val eventRepository =
         EventRepository(
-            storageRepository,
+            fileStorageRepository,
             eventDatabase,
             eventEncryptionService
         )
@@ -52,7 +52,7 @@ class EventRepositoryTest {
     @Test
     fun `When inserting an event its files are saved to storage`() {
         // Arrange
-        every { storageRepository.saveEventFiles(any()) } returns Single.just(mockk(relaxed = true))
+        every { fileStorageRepository.saveEventFiles(any()) } returns Single.just(mockk(relaxed = true))
         every { eventDatabase.insert(any(), any()) } returns Completable.complete()
         every { eventEncryptionService.encrypt(event) } returns Single.just(mockk())
 
@@ -61,13 +61,13 @@ class EventRepositoryTest {
             .assertComplete()
             .dispose()
 
-        verify { storageRepository.saveEventFiles(any()) }
+        verify { fileStorageRepository.saveEventFiles(any()) }
     }
 
     @Test
     fun `When inserting an event its data is encrypted`() {
         // Arrange
-        every { storageRepository.saveEventFiles(any()) } returns Single.just(mockk(relaxed = true))
+        every { fileStorageRepository.saveEventFiles(any()) } returns Single.just(mockk(relaxed = true))
         every { eventDatabase.insert(any(), any()) } returns Completable.complete()
         every { eventEncryptionService.encrypt(event) } returns Single.just(mockk())
 
@@ -82,7 +82,7 @@ class EventRepositoryTest {
     @Test
     fun `When inserting an event its data is stored in the database`() {
         // Arrange
-        every { storageRepository.saveEventFiles(any()) } returns Single.just(mockk(relaxed = true))
+        every { fileStorageRepository.saveEventFiles(any()) } returns Single.just(mockk(relaxed = true))
         every { eventDatabase.insert(any(), any()) } returns Completable.complete()
         every { eventEncryptionService.encrypt(event) } returns Single.just(mockk())
 
@@ -125,9 +125,15 @@ class EventRepositoryTest {
     }
 
     @Test
-    fun `when requesting an event's files and the files are already available, nothing has to be downloaded`() {
+    fun `when an events files are already downloaded, but not available decrypted, they are decrypted`() {
         // Arrange
-        every { storageRepository.filesReadyToUse(event) } returns true
+        val encryptedEventEntity = mockk<EncryptedEventEntity>(relaxed = true)
+        val encryptedEvent = mockk<EncryptedEvent>()
+        every { fileStorageRepository.downloadEventFiles(event) } returns Completable.complete()
+        every { fileStorageRepository.filesReadyToUse(event) } returns false
+        every { eventDatabase.get(event.uuid) } returns Observable.just(encryptedEventEntity)
+        every { EventMapper.mapFromEntity(encryptedEventEntity) } returns encryptedEvent
+        every { eventEncryptionService.decryptFiles(any()) } returns Completable.complete()
 
         // Act
         eventRepository.makeEventFilesAvailable(event)
@@ -135,25 +141,28 @@ class EventRepositoryTest {
             .assertComplete()
             .dispose()
 
-        verify { storageRepository.downloadEventFiles(event) wasNot Called }
+        // Assert
+        verify { eventEncryptionService.decryptFiles(any()) }
     }
 
     @Test
-    fun `when requesting an event's files and they are on the device but in an encrypted format, they are not downloaded again`() {
+    fun `when an events files are already downloaded, and available decrypted, they aren't decrypted again`() {
+        // Arrange
+        val encryptedEventEntity = mockk<EncryptedEventEntity>(relaxed = true)
+        val encryptedEvent = mockk<EncryptedEvent>()
+        every { fileStorageRepository.downloadEventFiles(event) } returns Completable.complete()
+        every { fileStorageRepository.filesReadyToUse(event) } returns true
+        every { eventDatabase.get(event.uuid) } returns Observable.just(encryptedEventEntity)
+        every { EventMapper.mapFromEntity(encryptedEventEntity) } returns encryptedEvent
+        every { eventEncryptionService.decryptFiles(any()) } returns Completable.complete()
+
         // Act
-        eventRepository.getEventData(event.uuid)
+        eventRepository.makeEventFilesAvailable(event)
             .test()
-            .assertValue { receivedEvent ->
-                receivedEvent == event
-            }
+            .assertComplete()
             .dispose()
-    }
 
-    @Test
-    fun `when an events files are already downloaded, nothing has to be downloaded`() {
-    }
-
-    @Test
-    fun `when an events files are downloaded, they are decrypted`() {
+        // Assert
+        verify { eventEncryptionService.decryptFiles(any()) wasNot Called }
     }
 }
