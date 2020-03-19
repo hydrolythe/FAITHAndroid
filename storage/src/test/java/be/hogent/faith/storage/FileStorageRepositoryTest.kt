@@ -109,7 +109,7 @@ class FileStorageRepositoryTest {
     fun `downloadEventFiles does not call remoteStorage when all files are locally available`() {
         // Arrange
         event.details.forEach {
-            every { localStorage.isFilePresent(it) } returns true
+            every { localStorage.isFilePresent(it, event) } returns true
         }
         every { localStorage.isEmotionAvatarPresent(event) } returns true
 
@@ -120,7 +120,7 @@ class FileStorageRepositoryTest {
 
         // Assert
         event.details.forEach {
-            verify { remoteStorage.downloadDetail(it) wasNot Called }
+            verify { remoteStorage.downloadDetail(it, event) wasNot Called }
         }
         verify { remoteStorage.downloadEmotionAvatar(event) wasNot Called }
     }
@@ -128,13 +128,23 @@ class FileStorageRepositoryTest {
     @Test
     fun `downloadEventFiles calls remoteStorage to download the details when they aren't locally available `() {
         // Arrange
-        every { localStorage.isFilePresent(event.details[0]) } returns false
-        every { localStorage.isFilePresent(event.details[1]) } returns false
+        every { localStorage.isFilePresent(event.details[0], event) } returns false
+        every { localStorage.isFilePresent(event.details[1], event) } returns false
 
         every { localStorage.isEmotionAvatarPresent(event) } returns true
 
-        every { remoteStorage.downloadDetail(event.details[0]) } returns Completable.complete()
-        every { remoteStorage.downloadDetail(event.details[1]) } returns Completable.complete()
+        every {
+            remoteStorage.downloadDetail(
+                event.details[0],
+                event
+            )
+        } returns Completable.complete()
+        every {
+            remoteStorage.downloadDetail(
+                event.details[1],
+                event
+            )
+        } returns Completable.complete()
 
         // Act
         storageRepository.downloadEventFiles(event)
@@ -143,8 +153,8 @@ class FileStorageRepositoryTest {
 
         // Assert
         verifyAll {
-            remoteStorage.downloadDetail(event.details[0])
-            remoteStorage.downloadDetail(event.details[1])
+            remoteStorage.downloadDetail(event.details[0], event)
+            remoteStorage.downloadDetail(event.details[1], event)
         }
         verify { remoteStorage.downloadEmotionAvatar(event) wasNot Called }
     }
@@ -152,8 +162,8 @@ class FileStorageRepositoryTest {
     @Test
     fun `downloadEventFiles calls remoteStorage to download the emotionAvatar when it is not locally available `() {
         // Arrange
-        every { localStorage.isFilePresent(event.details[0]) } returns true
-        every { localStorage.isFilePresent(event.details[1]) } returns true
+        every { localStorage.isFilePresent(event.details[0], event) } returns true
+        every { localStorage.isFilePresent(event.details[1], event) } returns true
 
         every { localStorage.isEmotionAvatarPresent(event) } returns false
         every { remoteStorage.downloadEmotionAvatar(event) } returns Completable.complete()
@@ -165,8 +175,8 @@ class FileStorageRepositoryTest {
 
         // Assert
         verifyAll {
-            remoteStorage.downloadDetail(event.details[0]) wasNot Called
-            remoteStorage.downloadDetail(event.details[1]) wasNot Called
+            remoteStorage.downloadDetail(event.details[0], event) wasNot Called
+            remoteStorage.downloadDetail(event.details[1], event) wasNot Called
         }
         verify { remoteStorage.downloadEmotionAvatar(event) }
     }

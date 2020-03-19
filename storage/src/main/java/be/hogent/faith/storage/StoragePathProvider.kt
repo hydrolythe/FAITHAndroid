@@ -49,30 +49,12 @@ class StoragePathProvider(
         return File("${getEventFolder(encryptedEvent).path}/emotionAvatar")
     }
 
+    fun getDetailPath(detail: Detail, event: Event): File {
+        return File("${getEventFolder(event).path}/${detail.uuid}")
+    }
+
     fun getEmotionAvatarPath(event: Event): File {
         return File("${getEventFolder(event).path}/emotionAvatar")
-    }
-
-    /**
-     * Returns the local path where one would save the emotionAvatar for an event.
-     */
-    fun getLocalEmotionAvatarPath(encryptedEvent: EncryptedEvent): File {
-        return File(context.filesDir, getEmotionAvatarPath(encryptedEvent).path)
-    }
-
-    /**
-     * Returns the local path where one would save an event's detail for an event.
-     */
-    fun getLocalDetailPath(event: EncryptedEvent, detail: EncryptedDetail): File {
-        return File(context.filesDir, getDetailPath(event, detail).path)
-    }
-
-    fun getLocalDetailPath(detail: Detail): File {
-        return File(context.filesDir, detail.file.path)
-    }
-
-    fun getLocalDetailPath(encryptedDetail: EncryptedDetail): File {
-        return File(context.filesDir, encryptedDetail.file.path)
     }
 
     /**
@@ -80,5 +62,12 @@ class StoragePathProvider(
      */
     fun localStoragePath(file: File): File {
         return File(context.filesDir, file.path)
+    }
+
+    /**
+     * Given a relative path, returns a version of this path in the device's temporary storage.
+     */
+    fun temporaryStoragePath(file: File): File {
+        return File(context.cacheDir, file.path)
     }
 }

@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -26,7 +27,7 @@ class LocalFileStorageRepositoryTest {
     private val filesDir = File("local")
 
     private val localFileStorageRepository =
-        LocalFileStorageRepository(storagePathProvider, context)
+        LocalFileStorageRepository(storagePathProvider)
 
     private val detailFile = File("detail")
     private val encryptedDetail = EncryptedDetail(
@@ -99,5 +100,35 @@ class LocalFileStorageRepositoryTest {
         val avatarLocation =
             File(filesDir, "users/$userUID/events/${encryptedEvent.uuid}/emotionAvatar")
         assertTrue(avatarLocation.exists())
+    }
+
+    @Test
+    fun `saveEvent updates the event's emotion avatar to the location where it has been saved`() {
+        // Act
+        localFileStorageRepository.saveEvent(encryptedEvent)
+            .test()
+            .assertComplete()
+            .assertNoErrors()
+            .dispose()
+
+        // Assert
+        val avatarLocation =
+            File(filesDir, "users/$userUID/events/${encryptedEvent.uuid}/emotionAvatar")
+        assertEquals(encryptedEvent.emotionAvatar, avatarLocation)
+    }
+
+    @Test
+    fun `saveEvent updates the event's detail's locations to the location where they have been saved`() {
+        // Act
+        localFileStorageRepository.saveEvent(encryptedEvent)
+            .test()
+            .assertComplete()
+            .assertNoErrors()
+            .dispose()
+
+        // Assert
+        assertTrue(encryptedEvent.details.all {
+            it.file == File(filesDir, "users/$userUID/events/${encryptedEvent.uuid}/${it.uuid}")
+        })
     }
 }

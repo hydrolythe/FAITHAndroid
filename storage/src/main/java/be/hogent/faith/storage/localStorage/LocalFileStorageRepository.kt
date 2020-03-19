@@ -1,6 +1,5 @@
 package be.hogent.faith.storage.localStorage
 
-import android.content.Context
 import be.hogent.faith.database.encryption.EncryptedDetail
 import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.database.storage.ILocalFileStorageRepository
@@ -13,8 +12,7 @@ import io.reactivex.Single
 import java.io.File
 
 class LocalFileStorageRepository(
-    private val pathProvider: StoragePathProvider,
-    private val context: Context
+    private val pathProvider: StoragePathProvider
 ) : ILocalFileStorageRepository {
 
     override fun saveEvent(encryptedEvent: EncryptedEvent): Single<EncryptedEvent> {
@@ -24,30 +22,6 @@ class LocalFileStorageRepository(
         ).andThen(
             Single.just(encryptedEvent)
         )
-    }
-
-    /**
-     * Moves all detail files of an event from temporary storage to local storage
-     * and updates the path.
-     */
-    private fun saveEventDetails(encryptedEvent: EncryptedEvent): Completable {
-        return Observable.fromIterable(encryptedEvent.details)
-            .flatMapCompletable { detail ->
-                Completable.fromCallable {
-                    moveDetailToLocalStorage(detail, encryptedEvent)
-                }
-            }
-    }
-
-    private fun moveDetailToLocalStorage(
-        it: EncryptedDetail,
-        encryptedEvent: EncryptedEvent
-    ) {
-        moveFile(
-            it.file,
-            pathProvider.getLocalDetailPath(encryptedEvent, it)
-        )
-        it.file = pathProvider.getDetailPath(encryptedEvent, it)
     }
 
     /**
@@ -64,12 +38,34 @@ class LocalFileStorageRepository(
         }
     }
 
+    /**
+     * Moves all detail files of an event from temporary storage to local storage
+     * and updates the path.
+     */
+    private fun saveEventDetails(encryptedEvent: EncryptedEvent): Completable {
+        return Observable.fromIterable(encryptedEvent.details)
+            .flatMapCompletable { detail ->
+                Completable.fromCallable {
+                    moveDetailToLocalStorage(detail, encryptedEvent)
+                }
+            }
+    }
+
+    private fun moveDetailToLocalStorage(
+        encryptedDetail: EncryptedDetail,
+        encryptedEvent: EncryptedEvent
+    ) {
+        val relativePath = pathProvider.getDetailPath(encryptedEvent, encryptedDetail)
+        val finalPath = pathProvider.localStoragePath(relativePath)
+        moveFile(encryptedDetail.file, finalPath)
+        encryptedDetail.file = finalPath
+    }
+
     private fun moveAvatarToLocalStorage(encryptedEvent: EncryptedEvent) {
-        moveFile(
-            encryptedEvent.emotionAvatar!!,
-            pathProvider.getLocalEmotionAvatarPath(encryptedEvent)
-        )
-        encryptedEvent.emotionAvatar = pathProvider.getEmotionAvatarPath(encryptedEvent)
+        val relativePath = pathProvider.getEmotionAvatarPath(encryptedEvent)
+        val finalPath = pathProvider.localStoragePath(relativePath)
+        moveFile(encryptedEvent.emotionAvatar!!, finalPath)
+        encryptedEvent.emotionAvatar = finalPath
     }
 
     /**
@@ -80,13 +76,15 @@ class LocalFileStorageRepository(
         from.delete()
     }
 
-    override fun isFilePresent(detail: Detail): Boolean {
-        return File(context.filesDir, detail.file.path).exists()
+    override fun isFilePresent(detail: Detail, event: Event): Boolean {
+        return with(pathProvider) { localStoragePath(getDetailPath(detail, event)).exists() }
     }
 
     override fun isEmotionAvatarPresent(event: Event): Boolean {
-        if (event.emotionAvatar == null)
+        if (event.emotionAvatar == null) {
             return true
-        return File(context.filesDir, event.emotionAvatar!!.path).exists()
+        } else {
+            return with(pathProvider) { localStoragePath(getEmotionAvatarPath(event)).exists() }
+        }
     }
 }

@@ -39,13 +39,15 @@ class FileStorageRepository(
     /**
      * Transfers a [detail]'s file(s) from online storage to local storage.
      * If the files were already in local storage, completes immediately.
+     *
+     * @param event: the event this detail belongs to. Used to determine the path where the
+     * file should be stored.
      */
-    // TODO ("Timestamp checking? What als de file op een andere tablet werd aangepast?")
-    private fun getDetailFile(detail: Detail): Completable {
-        if (localFileStorage.isFilePresent(detail))
+    private fun getDetailFile(detail: Detail, event: Event): Completable {
+        if (localFileStorage.isFilePresent(detail, event))
             return Completable.complete()
         else
-            return remoteFileStorage.downloadDetail(detail)
+            return remoteFileStorage.downloadDetail(detail, event)
     }
 
     /**
@@ -65,7 +67,7 @@ class FileStorageRepository(
         return Completable.mergeArray(
             getEmotionAvatarFile(event),
             Observable.fromIterable(event.details)
-                .flatMapCompletable(::getDetailFile)
+                .flatMapCompletable { getDetailFile(it, event) }
         )
     }
 

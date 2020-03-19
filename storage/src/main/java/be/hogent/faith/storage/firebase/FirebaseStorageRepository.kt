@@ -71,9 +71,9 @@ class FirebaseStorageRepository(
      * Downloads a detail's file from [firestorage] and stores it into the path provided for it by the
      * [pathProvider].
      */
-    override fun downloadDetail(detail: Detail): Completable {
+    override fun downloadDetail(detail: Detail, event: Event): Completable {
         val fileToDownloadReference = storageRef.child(detail.file.path)
-        val localFile: File = pathProvider.getLocalDetailPath(detail)
+        val localFile: File = with(pathProvider) { localStoragePath(getDetailPath(detail, event)) }
         return Completable.fromSingle(rxFirebaseStorage.getFile(fileToDownloadReference, localFile))
             .andThen(Completable.fromCallable {
                 detail.file = localFile

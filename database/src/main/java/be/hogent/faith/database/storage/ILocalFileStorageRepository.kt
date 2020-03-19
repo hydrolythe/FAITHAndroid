@@ -5,8 +5,6 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Single
 
-// TODO: maybe split in multiple interfaces depending on what is needed?
-// e.g. an encryptedStorageRepository and an "isXAvailableChecker"
 interface ILocalFileStorageRepository {
 
     /**
@@ -17,12 +15,12 @@ interface ILocalFileStorageRepository {
     fun saveEvent(encryptedEvent: EncryptedEvent): Single<EncryptedEvent>
 
     /**
-     * checks if file is present in localStorage
+     * Checks if file is present in localStorage
      */
-    fun isFilePresent(detail: Detail): Boolean
+    fun isFilePresent(detail: Detail, event: Event): Boolean
 
     /**
-     * checks if emotion avatar is present in localStorage
+     * Checks if emotion avatar is present in localStorage
      */
     fun isEmotionAvatarPresent(event: Event): Boolean
 }

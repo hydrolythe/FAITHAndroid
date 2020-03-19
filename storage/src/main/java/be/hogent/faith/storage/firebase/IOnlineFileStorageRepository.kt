@@ -12,7 +12,7 @@ interface IOnlineFileStorageRepository {
     /**
      * Ensures a detail's file is locally available.
      */
-    fun downloadDetail(detail: Detail): Completable
+    fun downloadDetail(detail: Detail, event: Event): Completable
 
     /**
      * Ensures the emotion avatar for the given [event] is locally available.
