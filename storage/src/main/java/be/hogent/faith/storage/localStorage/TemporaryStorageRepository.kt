@@ -14,15 +14,15 @@ import java.util.UUID
 
 class TemporaryStorageRepository(
     private val context: Context,
-    private val storagePathProvider: StoragePathProvider
+    private val pathProvider: StoragePathProvider
 ) : ITemporaryStorageRepository {
 
     /**
-     * Stores a detail in its event's folder, and sets the **relative** path in the detail
-     * (the path without context.cachedir)
+     * Stores a detail in its event's folder, and sets the the details path to that location
      */
     override fun storeDetailWithEvent(detail: Detail, event: Event): Completable {
-        val saveFile = File(getEventDirectory(event), detail.uuid.toString())
+        val saveFile =
+            with(pathProvider) { temporaryStoragePath(getDetailPath(detail, event)) }
         return moveFile(detail.file, saveFile)
             .doOnComplete {
                 detail.file = saveFile // relativePath
@@ -51,8 +51,7 @@ class TemporaryStorageRepository(
     private fun storeBitmap(bitmap: Bitmap, file: File): Completable {
         return Completable.fromCallable {
             require(!file.isDirectory) {
-                "Must provide a file, not a directory, in which to store the bitmap." +
-                        "${file.path} is a directory."
+                "Must provide a file, not a directory, in which to store the bitmap. ${file.path} is a directory."
             }
             file.outputStream().use {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
@@ -76,12 +75,6 @@ class TemporaryStorageRepository(
         return storeBitmap(bitmap, saveFile).andThen(Single.just(saveFile))
     }
 
-    private fun getEventDirectory(event: Event): File {
-        val eventDir = File(context.cacheDir, storagePathProvider.getEventFolder(event).path)
-        eventDir.mkdirs()
-        return eventDir
-    }
-
     private fun moveFile(sourceFile: File, destinationFile: File): Completable {
         return Completable.fromCallable {
             sourceFile.copyTo(target = destinationFile, overwrite = true)
@@ -103,13 +96,17 @@ class TemporaryStorageRepository(
         }
     }
 
-    override fun isFilePresent(detail: Detail): Boolean {
-        return detail.file.exists() && detail.file.startsWith(context.cacheDir)
-    }
-
     override fun overwriteTextDetail(text: String, existingDetail: TextDetail): Completable {
         return Completable.fromCallable {
             existingDetail.file.writeText(text)
         }
+    }
+
+    override fun isFilePresent(detail: Detail, event: Event): Boolean {
+        return with(pathProvider) { temporaryStoragePath(getDetailPath(detail, event)).exists() }
+    }
+
+    override fun isEmotionAvatarPresent(event: Event): Boolean {
+        return with(pathProvider) { temporaryStoragePath(getEmotionAvatarPath(event)).exists() }
     }
 }

@@ -72,9 +72,10 @@ class FileStorageRepository(
     }
 
     override fun filesReadyToUse(event: Event): Boolean {
-        return event.details.all { detail ->
-            // We  are using the fact that decrypted files are stored in the cache directory.
-            temporaryStorageRepository.isFilePresent(detail)
-        }
+        return temporaryStorageRepository.isEmotionAvatarPresent(event) &&
+                event.details.all { detail ->
+                    // We  are using the fact that decrypted files are stored in the cache directory.
+                    temporaryStorageRepository.isFilePresent(detail, event)
+                }
     }
 }

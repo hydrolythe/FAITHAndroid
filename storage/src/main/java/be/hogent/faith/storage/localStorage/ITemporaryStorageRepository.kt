@@ -33,5 +33,11 @@ interface ITemporaryStorageRepository {
     fun storeDetailWithEvent(detail: Detail, event: Event): Completable
 
     fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String>
-    fun isFilePresent(detail: Detail): Boolean
+
+    fun isFilePresent(detail: Detail, event: Event): Boolean
+
+    /**
+     * Checks if emotion avatar is present in localStorage
+     */
+    fun isEmotionAvatarPresent(event: Event): Boolean
 }
