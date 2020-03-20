@@ -33,11 +33,12 @@ class BackpackViewModelSaveDrawingTest {
     @Before
     fun setUp() {
         viewModel = BackpackViewModel(
-            mockk(),
-            mockk(),
-            mockk(),
-            saveDrawingUseCase,
-            getBackPackFilesDummyUseCase
+                mockk(),
+                mockk(),
+                mockk(),
+                saveDrawingUseCase,
+                mockk(),
+                getBackPackFilesDummyUseCase
         )
     }
 

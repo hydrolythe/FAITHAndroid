@@ -1,8 +1,6 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -21,17 +19,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.backpackScreen.DetailTypes.AUDIO_DETAIL
-import be.hogent.faith.faith.backpackScreen.DetailTypes.DRAW_DETAIL
-import be.hogent.faith.faith.backpackScreen.DetailTypes.PICTURE_DETAIL
-import be.hogent.faith.faith.backpackScreen.DetailTypes.TEXT_DETAIL
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
-import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_audio
-import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_foto
-import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_tekeningen
-import kotlinx.android.synthetic.main.backpack_menu_filter.view.filterknop_teksten
-import kotlinx.android.synthetic.main.backpack_menu_filter.view.search_bar
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -45,11 +34,8 @@ object DetailTypes {
 class BackpackScreenFragment : Fragment() {
 
     private var navigation: BackpackDetailsNavigationListener? = null
-
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
-
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
-
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
     private lateinit var addDetailMenu: PopupMenu
@@ -84,8 +70,6 @@ class BackpackScreenFragment : Fragment() {
         startListeners()
         updateUI()
         initialiseMenu()
-        // TODO tijdelijk
-        backpackViewModel.getDetails()
     }
 
     private fun updateUI() {
@@ -105,7 +89,7 @@ class BackpackScreenFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private fun startListeners() {
 
-        backpackViewModel.details.observe(this, Observer { details ->
+        backpackViewModel.filteredDetails.observe(this, Observer { details ->
             detailThumbnailsAdapter?.updateDetailsList(details)
             })
 
@@ -121,36 +105,19 @@ class BackpackScreenFragment : Fragment() {
             backpackViewModel.goToCityScreen()
         }
 
-        backpackBinding.backpackMenuFilter.search_bar.setOnQueryTextListener(object :
+        backpackBinding.backpackMenuFilter.searchBar.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(newText: String): Boolean {
-                backpackViewModel.filterSearchBar(newText)
+                backpackViewModel.setSearchStringText(newText)
                 return true
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                backpackViewModel.filterSearchBar(query)
+                backpackViewModel.setSearchStringText(query)
                 return true
             }
         })
-
-        backpackBinding.backpackMenuFilter.filterknop_teksten.setOnClickListener {
-            backpackViewModel.setFilters(TEXT_DETAIL)
-            setBtnState(it)
-        }
-        backpackBinding.backpackMenuFilter.filterknop_audio.setOnClickListener {
-            backpackViewModel.setFilters(AUDIO_DETAIL)
-            setBtnState(it)
-        }
-        backpackBinding.backpackMenuFilter.filterknop_foto.setOnClickListener {
-            backpackViewModel.setFilters(PICTURE_DETAIL)
-            setBtnState(it)
-        }
-        backpackBinding.backpackMenuFilter.filterknop_tekeningen.setOnClickListener {
-            backpackViewModel.setFilters(DRAW_DETAIL)
-            setBtnState(it)
-        }
 
         backpackViewModel.isDetailScreenOpen.observe(this, Observer {
             if (!it) { closeMenu() }
@@ -181,14 +148,6 @@ class BackpackScreenFragment : Fragment() {
         })
 
         backpackViewModel.initialize()
-    }
-
-    private fun setBtnState(it: View) {
-        if (it.backgroundTintList == ColorStateList.valueOf(Color.GRAY)) {
-            it.backgroundTintList = ColorStateList.valueOf(Color.WHITE)
-        } else {
-            it.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-        }
     }
 
     private fun initialiseMenu() {

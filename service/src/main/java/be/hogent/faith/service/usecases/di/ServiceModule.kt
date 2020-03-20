@@ -6,6 +6,7 @@ import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import be.hogent.faith.service.usecases.LoginUserUseCase
 import be.hogent.faith.service.usecases.LogoutUserUseCase
 import be.hogent.faith.service.usecases.RegisterUserUseCase
+import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCase
@@ -59,4 +60,5 @@ val serviceModule = module {
     factory { SaveBackpackAudioDetailUseCase(get(), get()) }
     factory { SaveBackpackPhotoDetailUseCase(get(), get()) }
     factory { SaveBackpackDrawingDetailUseCase(get(), get()) }
+    factory { DeleteBackpackDetailUseCase(get(), get()) }
 }
