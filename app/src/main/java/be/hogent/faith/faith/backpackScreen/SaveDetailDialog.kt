@@ -51,27 +51,18 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
+        backpackViewModel.clearSaveDialogErrorMessage()
         startListeners()
     }
 
     private fun startListeners() {
         saveDetailBinding.btnSaveBackpack.setOnClickListener {
-            val fileName = saveDetailBinding.txtSaveEventTitle.text.toString()
-            val noEmptyString = checkEmptyString(fileName)
-            val notMaxCharacters = checkMaxCharacters(fileName)
-            val uniqueFilename = checkUniqueFilename(fileName)
-            if (noEmptyString && notMaxCharacters && uniqueFilename) {
-                saveFile(fileName)
-                dismiss()
-            } else {
-                if (!noEmptyString)
-                    backpackViewModel.setErrorMessage(R.string.save_detail_emptyString)
-                if (!notMaxCharacters)
-                    backpackViewModel.setErrorMessage(R.string.save_detail_maxChar)
-                if (!uniqueFilename)
-                    backpackViewModel.setErrorMessage(R.string.save_detail_uniqueName)
-            }
+            backpackViewModel.onSaveClicked(saveDetailBinding.txtSaveEventTitle.text.toString(), userViewModel.user.value!!, detail)
         }
+
+        backpackViewModel.detailIsSaved.observe(this, Observer {
+            dismiss()
+        })
 
         saveDetailBinding.btnSaveBackpackCancel.setOnClickListener {
             dismiss()
@@ -80,25 +71,8 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
 
         backpackViewModel.errorMessage.observe(this, Observer {
             if (it != null)
-            saveDetailBinding.textInputLayoutDetailTitle.setErrorMessage(it)
+            saveDetailBinding.textInputLayoutDetailTitle.error = resources.getString(it)
         })
-    }
-
-    private fun checkUniqueFilename(fileName: String): Boolean {
-        return backpackViewModel.checkUniqueFilename(fileName)
-    }
-
-    private fun checkMaxCharacters(fileName: String): Boolean {
-        return fileName.length <= 30
-    }
-
-    private fun checkEmptyString(fileName: String): Boolean {
-        return fileName.isNotEmpty() || !fileName.isBlank()
-    }
-
-    private fun saveFile(fileName: String) {
-        detail.fileName = fileName
-        backpackViewModel.saveCurrentDetail(userViewModel.user.value!!, detail)
     }
 
     override fun onDismiss(dialog: DialogInterface) {

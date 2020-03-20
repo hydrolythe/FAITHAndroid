@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.backpackScreen
 
-import android.view.View
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -23,6 +22,7 @@ import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.subscribers.DisposableSubscriber
+import org.jetbrains.annotations.TestOnly
 
 object OpenState {
     const val OPEN = 2
@@ -48,7 +48,7 @@ class BackpackViewModel(
 
     private val detailFilter = CombinedDetailFilter()
 
-    val searchString = MutableLiveData<String>()
+    private val searchString = MutableLiveData<String>()
 
     val audioFilterEnabled = MutableLiveData<Boolean>().apply {
         this.value = false
@@ -101,7 +101,7 @@ class BackpackViewModel(
     val errorMessage: LiveData<Int>
         get() = _errorMessage
 
-    fun setErrorMessage(errorMsg: Int) {
+    private fun setErrorMessage(errorMsg: Int) {
         _errorMessage.postValue(errorMsg)
     }
 
@@ -117,11 +117,11 @@ class BackpackViewModel(
     private val _audioSavedSuccessFully = SingleLiveEvent<Int>()
     val audioDetailSavedSuccessFully: LiveData<Int> = _audioSavedSuccessFully
 
+    private val _detailIsSaved = SingleLiveEvent<Any>()
+    val detailIsSaved: LiveData<Any> = _detailIsSaved
+
     private val _viewButtons = MutableLiveData<Boolean>()
     val viewButtons: LiveData<Boolean> = _viewButtons
-
-    private val _onAddClicked = MutableLiveData<View>()
-    val onAddClicked: LiveData<View> = _onAddClicked
 
     private val _goToCityScreen = SingleLiveEvent<Any>()
     val goToCityScreen: LiveData<Any> = _goToCityScreen
@@ -149,7 +149,7 @@ class BackpackViewModel(
     }
 
     // TODO tijdelijk
-    fun loadDetails() {
+    private fun loadDetails() {
         val params = GetBackPackFilesDummyUseCase.Params("")
         getBackPackFilesDummyUseCase.execute(params, GetBackPackFilesDummyUseCaseHandler())
     }
@@ -157,6 +157,7 @@ class BackpackViewModel(
     private inner class GetBackPackFilesDummyUseCaseHandler : DisposableSubscriber<List<Detail>>() {
         override fun onNext(t: List<Detail>?) {
             if (t != null) {
+                setSearchStringText("")
                 details = t
             }
         }
@@ -225,6 +226,7 @@ class BackpackViewModel(
             is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
             is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
         }
+        _currentFile.postValue(null)
     }
 
     fun setOpenDetailType(openDetailType: Int) {
@@ -240,16 +242,46 @@ class BackpackViewModel(
         _isPopupMenuOpen.postValue(OpenState.CLOSED)
     }
 
-    fun setOnAddClicked(view: View) {
-        _onAddClicked.postValue(view)
-    }
-
     fun viewButtons(viewButtons: Boolean) {
         _viewButtons.postValue(viewButtons)
     }
 
     fun goToCityScreen() {
         _goToCityScreen.call()
+    }
+
+    fun onSaveClicked(fileName : String, user: User, detail: Detail){
+        val noEmptyString = checkEmptyString(fileName)
+        val notMaxCharacters = checkMaxCharacters(fileName)
+        val uniqueFilename = checkUniqueFilename(fileName)
+        if (noEmptyString && notMaxCharacters && uniqueFilename) {
+            saveFile(fileName, user, detail)
+            _detailIsSaved.call()
+        } else {
+            if (!noEmptyString)
+                setErrorMessage(R.string.save_detail_emptyString)
+            if (!notMaxCharacters)
+                setErrorMessage(R.string.save_detail_maxChar)
+            if (!uniqueFilename)
+                setErrorMessage(R.string.save_detail_uniqueName)
+        }
+    }
+
+    private fun checkUniqueFilename(fileName: String): Boolean {
+        return (details.find { e -> (e.fileName == fileName) } == null)
+    }
+
+    private fun checkMaxCharacters(fileName: String): Boolean {
+        return fileName.length <= 30
+    }
+
+    private fun checkEmptyString(fileName: String): Boolean {
+        return fileName.isNotEmpty() || !fileName.isBlank()
+    }
+
+    private fun saveFile(fileName: String, user: User, detail: Detail) {
+        detail.fileName = fileName
+        saveCurrentDetail(user, detail)
     }
 
     fun saveTextDetail(user: User, detail: TextDetail) {
@@ -316,10 +348,6 @@ class BackpackViewModel(
         _goToDetail.postValue(detail)
     }
 
-    fun checkUniqueFilename(fileName: String): Boolean {
-        return (details.find { e -> (e.fileName == fileName) } == null)
-    }
-
     fun clearSaveDialogErrorMessage() {
         _errorMessage.postValue(null)
     }
@@ -337,6 +365,11 @@ class BackpackViewModel(
         override fun onError(e: Throwable) {
             _errorMessage.postValue(R.string.error_delete_detail_failure)
         }
+    }
+
+    @TestOnly
+    fun addDetails(details: List<Detail>){
+        this.details = details
     }
 
     override fun onCleared() {

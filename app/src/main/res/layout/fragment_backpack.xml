@@ -104,6 +104,7 @@
             android:background="@drawable/prullenbak"
             app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_end"
             app:layout_constraintTop_toTopOf="@+id/guide_rv_horizontal_2"
+            android:onClick="@{() -> backpackViewModel.setIsInEditMode()}"
             app:srcCompat="@drawable/prullenbak" />
 
         <ImageButton
@@ -124,6 +125,7 @@
             android:background="@drawable/add_btn"
             android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
+            android:onClick="@{() -> backpackViewModel.changePopupMenuState()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -131,11 +133,13 @@
             android:id="@+id/btn_backpack_draw_cancel"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
-            android:background="@drawable/ic_return"
+            android:layout_marginStart="16dp"
             android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
+            android:background="@drawable/ic_return"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             android:contentDescription="@string/cancel"
-            app:layout_constraintStart_toStartOf="@+id/guide_search_btn"
+            android:onClick="@{() -> backpackViewModel.goToCityScreen()}"
+            app:layout_constraintStart_toStartOf="@+id/btn_backpack_search"
             app:layout_constraintTop_toTopOf="@+id/guide_undo_horizontal" />
 
 

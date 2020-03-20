@@ -24,18 +24,10 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAd
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-object DetailTypes {
-    const val AUDIO_DETAIL = 1
-    const val TEXT_DETAIL = 2
-    const val PICTURE_DETAIL = 3
-    const val DRAW_DETAIL = 4
-}
-
 class BackpackScreenFragment : Fragment() {
 
     private var navigation: BackpackDetailsNavigationListener? = null
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
-    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
     private lateinit var addDetailMenu: PopupMenu
@@ -93,18 +85,6 @@ class BackpackScreenFragment : Fragment() {
             detailThumbnailsAdapter?.updateDetailsList(details)
             })
 
-        backpackBinding.btnBackpackAdd.setOnClickListener {
-            backpackViewModel.setOnAddClicked(it)
-        }
-
-        backpackViewModel.onAddClicked.observe(this, Observer {
-            backpackViewModel.changePopupMenuState()
-        })
-
-        backpackBinding.btnBackpackDrawCancel.setOnClickListener {
-            backpackViewModel.goToCityScreen()
-        }
-
         backpackBinding.backpackMenuFilter.searchBar.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
 
@@ -122,10 +102,6 @@ class BackpackScreenFragment : Fragment() {
         backpackViewModel.isDetailScreenOpen.observe(this, Observer {
             if (!it) { closeMenu() }
         })
-
-        backpackBinding.btnBackpackDelete.setOnClickListener {
-            backpackViewModel.setIsInEditMode()
-        }
 
         backpackViewModel.isInEditMode.observe(this, Observer {
             if (backpackViewModel.isInEditMode.value == OpenState.OPEN) {
