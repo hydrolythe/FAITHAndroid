@@ -7,6 +7,7 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.UserRepository
 import io.reactivex.Completable
 import io.reactivex.Flowable
+import io.reactivex.Observable
 
 open class UserRepositoryImpl(
     private val userMapper: UserMapper,
@@ -30,8 +31,8 @@ open class UserRepositoryImpl(
     /**
      * gets the current user. This must be the uid of the authenticated user
      */
-    override fun get(uid: String): Flowable<User> {
-        return userDatabase.get(uid).map { userMapper.mapFromEntity(it) }
+    override fun get(uid: String): Observable<User> {
+        return userDatabase.get(uid).map { userMapper.mapFromEntity(it) }.toObservable()
     }
 
     /**

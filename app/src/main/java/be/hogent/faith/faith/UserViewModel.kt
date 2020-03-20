@@ -14,7 +14,7 @@ import be.hogent.faith.service.usecases.GetUserUseCase
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
-import io.reactivex.subscribers.DisposableSubscriber
+import io.reactivex.observers.DisposableObserver
 import timber.log.Timber
 
 /**
@@ -67,9 +67,9 @@ class UserViewModel(
         _eventSavedState.postValue(null)
     }
 
-    private inner class GetUserUseCaseHandler : DisposableSubscriber<User>() {
+    private inner class GetUserUseCaseHandler : DisposableObserver<User>() {
 
-        override fun onNext(t: User?) {
+        override fun onNext(t: User) {
             Timber.i("success $t")
             _user.postValue(t)
             _getLoggedInUserState.postValue(Resource(ResourceState.SUCCESS, Unit, null))

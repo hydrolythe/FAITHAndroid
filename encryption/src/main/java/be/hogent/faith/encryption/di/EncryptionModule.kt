@@ -11,6 +11,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.koin.dsl.module
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 val encryptionModule = module {
@@ -31,6 +32,7 @@ fun provideMoshi(): Moshi {
 fun provideKeyEncryptionService(moshi: Moshi): KeyEncryptionService {
     return Retrofit.Builder()
         .baseUrl(ENDPOINT)
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(
             MoshiConverterFactory.create(moshi)
         )

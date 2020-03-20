@@ -8,6 +8,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Scheduler
 import org.junit.Before
 import org.junit.Test
@@ -41,7 +42,7 @@ class GetEventsUseCaseTest {
     fun getEventsUseCase_eventsPresent_returnsThem() {
         val params = GetEventsUseCase.Params(UserFactory.makeUser())
         // Simulate two events on the stream
-        every { repository.getAllEventsData() } returns Flowable.just(
+        every { repository.getAllEventsData() } returns Observable.just(
             EventFactory.makeEventList(2),
             EventFactory.makeEventList(2)
         )
@@ -52,7 +53,7 @@ class GetEventsUseCaseTest {
     @Test
     fun getEventsUseCase_noEventsPresent_returnsNothing() {
         val params = GetEventsUseCase.Params(UserFactory.makeUser())
-        every { repository.getAllEventsData() } returns Flowable.empty()
+        every { repository.getAllEventsData() } returns Observable.empty()
         val result = getEventsUC.buildUseCaseObservable(params)
         result.test().assertNoValues()
     }
@@ -60,7 +61,7 @@ class GetEventsUseCaseTest {
     @Test
     fun getEventsUseCase_userNotAuthenticated_fails() {
         val params = GetEventsUseCase.Params(UserFactory.makeUser())
-        every { repository.getAllEventsData() } returns Flowable.error(RuntimeException())
+        every { repository.getAllEventsData() } returns Observable.error(RuntimeException())
         val result = getEventsUC.buildUseCaseObservable(params)
         result.test().assertNoValues().assertError(RuntimeException::class.java)
     }

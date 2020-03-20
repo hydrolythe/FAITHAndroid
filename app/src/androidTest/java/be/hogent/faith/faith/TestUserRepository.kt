@@ -4,7 +4,7 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.UserRepository
 import be.hogent.faith.util.factory.UserFactory
 import io.reactivex.Completable
-import io.reactivex.Flowable
+import io.reactivex.Observable
 
 class TestUserRepository : UserRepository {
     override fun delete(item: User): Completable {
@@ -15,7 +15,7 @@ class TestUserRepository : UserRepository {
         return Completable.complete()
     }
 
-    override fun get(uid: String): Flowable<User> {
-        return Flowable.just(UserFactory.makeUser())
+    override fun get(uid: String): Observable<User> {
+        return Observable.just(UserFactory.makeUser())
     }
 }

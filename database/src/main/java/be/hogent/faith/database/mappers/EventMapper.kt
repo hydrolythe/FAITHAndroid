@@ -11,7 +11,7 @@ internal object EventMapper : Mapper<EncryptedEventEntity, EncryptedEvent> {
         return EncryptedEvent(
             dateTime = entity.dateTime,
             title = entity.title,
-            emotionAvatar = File(entity.emotionAvatar),
+            emotionAvatar = entity.emotionAvatar?.let { File(it) },
             notes = entity.notes,
             uuid = UUID.fromString(entity.uuid),
             details = DetailMapper.mapFromEntities(entity.details),

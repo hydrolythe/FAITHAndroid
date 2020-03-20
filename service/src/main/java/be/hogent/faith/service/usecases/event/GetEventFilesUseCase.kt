@@ -1,8 +1,8 @@
 package be.hogent.faith.service.usecases.event
 
+import be.hogent.faith.database.storage.IFileStorageRepository
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.storage.IFileStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
