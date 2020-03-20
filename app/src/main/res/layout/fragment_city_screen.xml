@@ -11,7 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background_city">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/left_margin_vertical"
@@ -73,6 +74,7 @@
             android:id="@+id/left_top"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/div_top_horizontal"
             app:layout_constraintEnd_toStartOf="@+id/div_start_vertical"
             app:layout_constraintStart_toStartOf="@+id/left_margin_vertical"
@@ -86,6 +88,7 @@
             android:id="@+id/bib"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/div_top_horizontal"
             app:layout_constraintEnd_toStartOf="@+id/div_end_vertical"
             app:layout_constraintStart_toEndOf="@+id/left_top"
@@ -99,6 +102,7 @@
             android:id="@+id/right_top"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/div_top_horizontal"
             app:layout_constraintEnd_toStartOf="@+id/right_margin_vertical"
             app:layout_constraintStart_toStartOf="@+id/div_end_vertical"
@@ -126,6 +130,7 @@
             android:id="@+id/park"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/div_botom_horizontal"
             app:layout_constraintEnd_toStartOf="@+id/div_end_vertical"
             app:layout_constraintStart_toEndOf="@id/div_start_vertical"
@@ -139,6 +144,7 @@
             android:id="@+id/kantoor"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/div_botom_horizontal"
             app:layout_constraintEnd_toStartOf="@+id/right_margin_vertical"
             app:layout_constraintStart_toEndOf="@id/div_end_vertical"
@@ -152,6 +158,7 @@
             android:id="@+id/left_bottom"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/bottom_margin_horizontal"
             app:layout_constraintEnd_toStartOf="@+id/div_start_vertical"
             app:layout_constraintStart_toStartOf="@+id/left_margin_vertical"
@@ -165,6 +172,7 @@
             android:id="@+id/rugzak"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/bottom_margin_horizontal"
             app:layout_constraintEnd_toStartOf="@+id/div_end_vertical"
             app:layout_constraintStart_toEndOf="@id/div_start_vertical"
@@ -178,14 +186,15 @@
             android:id="@+id/boomhut"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/bottom_margin_horizontal"
             app:layout_constraintEnd_toStartOf="@+id/right_margin_vertical"
             app:layout_constraintStart_toStartOf="@+id/div_end_vertical"
             app:layout_constraintTop_toTopOf="@+id/div_botom_horizontal"
-            app:srcCompat="@drawable/avatar_placeholder"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/boomhut"/>
+            app:lottie_rawRes="@raw/boomhut"
+            app:srcCompat="@drawable/avatar_placeholder" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
