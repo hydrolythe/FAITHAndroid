@@ -250,7 +250,7 @@ class BackpackViewModel(
         _goToCityScreen.call()
     }
 
-    fun onSaveClicked(fileName : String, user: User, detail: Detail){
+    fun onSaveClicked(fileName: String, user: User, detail: Detail) {
         val noEmptyString = checkEmptyString(fileName)
         val notMaxCharacters = checkMaxCharacters(fileName)
         val uniqueFilename = checkUniqueFilename(fileName)
@@ -368,7 +368,7 @@ class BackpackViewModel(
     }
 
     @TestOnly
-    fun addDetails(details: List<Detail>){
+    fun addDetails(details: List<Detail>) {
         this.details = details
     }
 

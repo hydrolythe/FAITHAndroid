@@ -13,7 +13,6 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.faith.util.setErrorMessage
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 

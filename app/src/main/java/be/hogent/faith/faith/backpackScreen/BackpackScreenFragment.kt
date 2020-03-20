@@ -18,10 +18,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
-import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class BackpackScreenFragment : Fragment() {
