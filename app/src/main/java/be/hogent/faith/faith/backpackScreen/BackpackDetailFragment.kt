@@ -8,13 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.domain.models.detail.*
 import be.hogent.faith.faith.backpackScreen.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.externalVideo.view.ViewExternalVideoFragment
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
@@ -22,8 +16,6 @@ import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
-import be.hogent.faith.faith.details.video.create.CreateVideoFragment
-import be.hogent.faith.faith.details.video.view.ViewVideoFragment
 import be.hogent.faith.faith.util.replaceChildFragment
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
@@ -69,8 +61,8 @@ abstract class BackpackDetailFragment : Fragment() {
                 is DrawingDetail -> DrawingFragmentNoEmotionAvatar.newInstance()
                 is PhotoDetail -> PhotoFragmentNoEmotionAvatar.newInstance()
                 is AudioDetail -> AudioFragmentNoEmotionAvatar.newInstance()
-                is VideoDetail -> VideoFragmentNoEmotionAvatar.newInstance()
                 is ExternalVideoDetail -> ExternalVideoFragmentNoEmotionAvatar.newInstance()
+                is VideoDetail -> TODO()
             }
         }
     }
@@ -144,23 +136,7 @@ abstract class BackpackDetailFragment : Fragment() {
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }
     }
-    class VideoFragmentNoEmotionAvatar : BackpackDetailFragment() {
 
-        companion object {
-            fun newInstance(): VideoFragmentNoEmotionAvatar {
-                return VideoFragmentNoEmotionAvatar()
-            }
-        }
-
-        override fun setChildFragment(detail: Detail?) {
-            val childFragment = if (detail == null) {
-                CreateVideoFragment.newInstance()
-            } else {
-                ViewVideoFragment.newInstance(detail as VideoDetail)
-            }
-            replaceChildFragment(childFragment, R.id.fragment_container_editFile)
-        }
-    }
     class ExternalVideoFragmentNoEmotionAvatar : BackpackDetailFragment() {
 
         companion object {

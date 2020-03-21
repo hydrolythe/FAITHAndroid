@@ -132,7 +132,6 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                 is PhotoDetail -> PhotoFragmentWithEmotionAvatar.newInstance(
                     avatarOutLineId, detail
                 )
-                // TODO vragen of hier een video moet kunnen geopend worden
                 else -> TextFragmentWithEmotionAvatar.newInstance(
                     avatarOutLineId, detail as TextDetail
                 )

@@ -4,27 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="externalFileViewModel"
             type="be.hogent.faith.faith.backpackScreen.externalFile.ExternalFileViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:id="@+id/file_preview_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background_backpack">
 
         <ImageButton
-            android:id="@+id/btn_takePhoto_cancel"
+            android:id="@+id/btn_cancel"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/ic_return"
-            android:onClick="@{() -> externalFileViewModel.onCancelClicked()}"
             android:contentDescription="@string/cancel"
+            android:onClick="@{() -> externalFileViewModel.onCancelClicked()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <ImageButton
             android:id="@+id/btn_save_file"
             android:layout_width="@dimen/material_icon_width"
@@ -32,8 +36,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/save_btn"
-            android:onClick="@{() -> externalFileViewModel.onSaveClicked()}"
             android:contentDescription="@string/ok"
+            android:onClick="@{() -> externalFileViewModel.onSaveClicked()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,26 +52,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <ImageView
-            android:id="@+id/selectedImage"
+        <ProgressBar
+            android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/selected_image"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <VideoView
-            android:id="@+id/videoView"
-            android:layout_width="600dp"
-            android:layout_height="400dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </layout>

@@ -31,7 +31,7 @@ class ViewExternalVideoFragment : Fragment() {
     }
 
     private fun loadVideoFromDetail() {
-        val externalVideoDetail = arguments?.getSerializable(VIDEO_DETAIL) as ExternalVideoDetail
+        val externalVideoDetail = arguments!!.getSerializable(VIDEO_DETAIL) as ExternalVideoDetail
         binding.video.setVideoURI(Uri.fromFile(externalVideoDetail.file))
         val mediaController = MediaController(requireContext())
         mediaController.setAnchorView(binding.video)

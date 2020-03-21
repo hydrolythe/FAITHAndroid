@@ -62,6 +62,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         backpackViewModel.closePopUpMenu()
     }
 
+
     override fun onDetailFinished(detail: Detail) {
         when (detail) {
             is DrawingDetail -> save(detail)
@@ -144,4 +145,6 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     override fun deleteDetail(detail: Detail) {
         backpackViewModel.deleteDetail(detail)
     }
+
+
 }
