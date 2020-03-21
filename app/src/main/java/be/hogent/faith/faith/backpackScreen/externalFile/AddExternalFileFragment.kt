@@ -46,7 +46,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
     private lateinit var detailFinishedListener: DetailFinishedListener
     private var navigation: ExternalFileScreenNavigation? = null
     private val tempFileProvider by inject<TempFileProvider>()
-
+    private lateinit var selectedView: View
     private lateinit var mJob: Job
     override val coroutineContext: CoroutineContext
         get() = mJob + Dispatchers.Main
@@ -63,9 +63,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
         binding.externalFileViewModel = externalFileViewModel
         binding.lifecycleOwner = this
 
-        val pickIntent = Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
-        startActivityForResult(pickIntent, FILE_PICK_CODE)
+        selectFile()
         return binding.root
     }
 
@@ -102,7 +100,15 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
             detailFinishedListener.onDetailFinished(newDetail)
             navigation?.backToEvent()
         })
+        binding.btnRemoveFile.setOnClickListener{
+            removeFile()
+            selectFile()
+        }
 
+    }
+
+    private fun removeFile() {
+        binding.filePreviewContainer.removeView(selectedView)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -117,7 +123,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
                 imgView.setImageURI(uriToAdd)
                 binding.filePreviewContainer.addView(imgView)
                 centerView(imgView)
-                //binding.videoView.visibility = View.GONE
+                selectedView = imgView
 
                 val drawable = imgView.drawable
                 // Get the bitmap from drawable object
@@ -180,7 +186,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
                     centerView(videoView)
                     videoView.layoutParams.height = 480
                     videoView.layoutParams.height = 640
-
+                    selectedView = videoView
 
 
                     externalFileViewModel.setCurrentFile(file)
@@ -204,6 +210,11 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
         set.connect(view.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
         set.connect(view.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         set.applyTo(binding.filePreviewContainer)
+    }
+    private fun selectFile(){
+        val pickIntent = Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
+        startActivityForResult(pickIntent, FILE_PICK_CODE)
     }
 
     companion object {
