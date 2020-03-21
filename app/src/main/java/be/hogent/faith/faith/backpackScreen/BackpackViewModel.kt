@@ -255,7 +255,8 @@ class BackpackViewModel(
         val notMaxCharacters = checkMaxCharacters(fileName)
         val uniqueFilename = checkUniqueFilename(fileName)
         if (noEmptyString && notMaxCharacters && uniqueFilename) {
-            saveFile(fileName, user, detail)
+            detail.fileName = fileName
+            saveCurrentDetail(user, detail)
             _detailIsSaved.call()
         } else {
             if (!noEmptyString)
@@ -277,11 +278,6 @@ class BackpackViewModel(
 
     private fun checkEmptyString(fileName: String): Boolean {
         return fileName.isNotEmpty() || !fileName.isBlank()
-    }
-
-    private fun saveFile(fileName: String, user: User, detail: Detail) {
-        detail.fileName = fileName
-        saveCurrentDetail(user, detail)
     }
 
     fun saveTextDetail(user: User, detail: TextDetail) {
