@@ -14,7 +14,7 @@ import be.hogent.faith.databinding.FragmentLibraryEventdetailsBinding
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
 import be.hogent.faith.faith.library.LibraryActivity
-import be.hogent.faith.faith.loadFirestorageImage
+import be.hogent.faith.faith.loadImageIntoView
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 /**
@@ -49,7 +49,7 @@ class EventDetailFragment : Fragment() {
     private fun setListeners() {
         eventDetailsViewModel.avatarImage.observe(this, Observer { image ->
             if (image != null)
-                loadFirestorageImage(context!!, image.path, binding.imgAvatar)
+                loadImageIntoView(context!!, image.path, binding.imgAvatar)
             else
                 binding.imgAvatar.setImageDrawable(null)
         })

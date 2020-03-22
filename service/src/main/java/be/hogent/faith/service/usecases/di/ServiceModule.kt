@@ -6,6 +6,7 @@ import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import be.hogent.faith.service.usecases.LoginUserUseCase
 import be.hogent.faith.service.usecases.LogoutUserUseCase
 import be.hogent.faith.service.usecases.RegisterUserUseCase
+import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
@@ -41,7 +42,7 @@ val serviceModule = module {
     factory { SaveEventPhotoDetailUseCase(get(), get()) }
     factory { SaveEventAudioDetailUseCase(get(), get()) }
     factory { SaveEventDrawingDetailUseCase(get(), get()) }
-    factory { LoadTextDetailUseCase(get(), get()) }
+    factory { LoadTextDetailUseCase(get(), get(), get()) }
     factory { CreateDrawingDetailUseCase(get(), get()) }
     factory { OverwriteDrawingDetailUseCase(get(), get()) }
     factory { OverwriteTextDetailUseCase(get(), get()) }
@@ -49,4 +50,5 @@ val serviceModule = module {
     factory { CreateAudioDetailUseCase(get()) }
     factory { CreateTextDetailUseCase(get(), get()) }
     factory { GetEventFilesUseCase(get(), get()) }
+    factory { LoadDetailFileUseCase(get(), get()) }
 }

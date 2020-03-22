@@ -7,6 +7,7 @@ import be.hogent.faith.storage.localStorage.ILocalStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.toFlowable
+import java.io.File
 
 /**
  * Repository providing access to both the internal and remote storage.
@@ -15,7 +16,8 @@ import io.reactivex.rxkotlin.toFlowable
  */
 class StorageRepository(
     private val localStorage: ILocalStorageRepository,
-    private val remoteStorage: IFireBaseStorageRepository
+    private val remoteStorage: IFireBaseStorageRepository,
+    private val pathProvider: StoragePathProvider
 ) : IStorageRepository {
 
     /**
@@ -30,11 +32,15 @@ class StorageRepository(
      * download file from firebase to localStorage if not present yet
      */
     // TODO ("Timestamp checking? What als de file op een andere tablet werd aangepast?")
-    private fun getFile(detail: Detail): Completable {
+    private fun getFileLocally(detail: Detail): Completable {
         if (localStorage.isFilePresent(detail))
             return Completable.complete()
         else
             return remoteStorage.makeFileLocallyAvailable(detail)
+    }
+
+    override fun getFile(detail: Detail): Single<File> {
+        return getFileLocally(detail).toSingle { pathProvider.getLocalDetailPath(detail) }
     }
 
     /**
@@ -55,7 +61,7 @@ class StorageRepository(
             .concatWith(
                 event.details.toFlowable()
                     .concatMapCompletable {
-                        getFile(it)
+                        getFileLocally(it)
                     }
             )
     }

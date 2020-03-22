@@ -9,7 +9,10 @@ import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProviderFromResources
+import be.hogent.faith.faith.details.drawing.view.ViewDrawingDetailViewModel
 import be.hogent.faith.faith.details.photo.create.TakePhotoViewModel
+import be.hogent.faith.faith.details.photo.view.ViewPhotoDetailViewModel
+import be.hogent.faith.faith.details.text.view.ViewTextDetailViewModel
 import be.hogent.faith.faith.details.text.create.TextDetailViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
@@ -58,7 +61,7 @@ val appModule = module(override = true) {
     viewModel { TextDetailViewModel(get(), get(), get()) }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { WelcomeViewModel(get()) }
-    viewModel { AudioDetailViewModel(get(), get()) }
+    viewModel { AudioDetailViewModel(get(), get(), get()) }
     viewModel { WelcomeViewModel(get()) }
     viewModel { RegisterUserViewModel(get()) }
     viewModel { RegisterUserInfoViewModel(get()) }
@@ -68,6 +71,13 @@ val appModule = module(override = true) {
     viewModel { TakePhotoViewModel(get()) }
     viewModel { (user: User) -> EventListViewModel(user, get()) }
     viewModel { EventDetailsViewModel() }
+    viewModel { ViewPhotoDetailViewModel() }
+    viewModel { ViewDrawingDetailViewModel() }
+    viewModel {
+        ViewTextDetailViewModel(
+            get()
+        )
+    }
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.

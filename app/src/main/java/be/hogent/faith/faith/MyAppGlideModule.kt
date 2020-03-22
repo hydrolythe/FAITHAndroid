@@ -16,11 +16,18 @@ import java.io.InputStream
 /**
  * load a firestore image using GlideApp, given a referencepath /users/uuid/projects/projectid/xxx.png
  */
-fun loadFirestorageImage(context: Context, referencePath: String, image: ImageView) {
-    GlideApp.with(context)
-        .load(FirebaseStorage.getInstance().reference.child(referencePath)) // load the storagereference
-        .apply(RequestOptions.centerCropTransform())
-        .into(image)
+fun loadImageIntoView(context: Context, referencePath: String, image: ImageView) {
+    if (referencePath.startsWith("users")) {
+        GlideApp.with(context)
+            .load(FirebaseStorage.getInstance().reference.child(referencePath)) // load the storagereference
+            .apply(RequestOptions.centerCropTransform())
+            .into(image)
+    } else {
+        Glide.with(context)
+            .load(referencePath)
+            .apply(RequestOptions.centerInsideTransform())
+            .into(image)
+    }
 }
 
 /**

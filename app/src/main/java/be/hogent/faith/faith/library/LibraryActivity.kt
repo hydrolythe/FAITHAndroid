@@ -9,7 +9,10 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.details.audio.RecordAudioFragment
+import be.hogent.faith.faith.details.drawing.view.ViewDrawingFragment
 import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
+import be.hogent.faith.faith.details.text.view.ViewTextDetailFragment
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.library.eventDetails.EventDetailFragment
@@ -41,24 +44,31 @@ class LibraryActivity : AppCompatActivity(), EventListFragment.EventsListNavigat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_library)
+        setContentView(R.layout.activity_main)
+
+        if (savedInstanceState == null) {
+            val fragment = EventListFragment.newInstance()
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_container, fragment)
+                .commit()
+        }
     }
 
     override fun startEventDetailsFragment(eventUuid: UUID) {
         eventListViewModel.getEvent(eventUuid)?.let {
             eventDetailsViewModel.setEvent(it)
-            replaceFragment(EventDetailFragment.newInstance(), R.id.library_fragment_container)
+            replaceFragment(EventDetailFragment.newInstance(), R.id.fragment_container)
         }
     }
 
     override fun openDetailScreenFor(detail: Detail) {
         when (detail) {
-            is AudioDetail -> null // RecordAudioFragment.newInstance(detail)
-            is TextDetail -> null // TextDetailFragment.newInstance(detail)
-            is DrawingDetail -> null // DrawingDetailFragment.newInstance(detail)
+            is AudioDetail -> RecordAudioFragment.newInstance(detail)
+            is TextDetail -> ViewTextDetailFragment.newInstance(detail)
+            is DrawingDetail -> ViewDrawingFragment.newInstance(detail)
             is PhotoDetail -> ReviewPhotoFragment.newInstance(detail)
-        }?.let {
-            replaceFragment(it, R.id.library_fragment_container)
+        }.let {
+            replaceFragment(it, R.id.fragment_container)
         }
     }
 }

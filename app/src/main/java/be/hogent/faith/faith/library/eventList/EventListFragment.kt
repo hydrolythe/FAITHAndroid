@@ -177,4 +177,10 @@ class EventListFragment : Fragment() {
     interface EventsListNavigationListener {
         fun startEventDetailsFragment(eventUuid: UUID)
     }
+
+    companion object {
+        fun newInstance(): EventListFragment {
+            return EventListFragment()
+        }
+    }
 }

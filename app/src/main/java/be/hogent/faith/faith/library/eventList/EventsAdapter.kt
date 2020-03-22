@@ -13,7 +13,7 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.library.eventfilters.EventHasDetailTypeFilter
-import be.hogent.faith.faith.loadFirestorageImage
+import be.hogent.faith.faith.loadImageIntoView
 import com.bumptech.glide.RequestManager
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
@@ -65,7 +65,7 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
             eventDate.text = eventDateString
 
             if (event.emotionAvatar != null)
-                loadFirestorageImage(this.itemView.context, event.emotionAvatar!!.path, avatarImage)
+                loadImageIntoView(this.itemView.context, event.emotionAvatar!!.path, avatarImage)
             else
                 avatarImage.setImageDrawable(null)
 
