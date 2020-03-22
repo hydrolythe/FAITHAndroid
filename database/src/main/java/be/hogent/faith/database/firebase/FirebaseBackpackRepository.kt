@@ -7,6 +7,7 @@ import be.hogent.faith.util.TAG
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import durdinapps.rxfirebase2.RxFirestore
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import timber.log.Timber
@@ -50,6 +51,15 @@ class FirebaseBackpackRepository(
                     document.toObject(DetailEntity::class.java)
                 }
             }
+    }
+
+    fun delete(item: DetailEntity): Completable {
+        val currentUser = fbAuth.currentUser
+        return if (currentUser == null) {
+            Completable.error(RuntimeException("User not set."))
+        } else {
+            RxFirestore.deleteDocument(firestore.collection(USERS_KEY).document(currentUser.uid).collection(BACKPACK).document(item.uuid))
+        }
     }
 
     companion object {

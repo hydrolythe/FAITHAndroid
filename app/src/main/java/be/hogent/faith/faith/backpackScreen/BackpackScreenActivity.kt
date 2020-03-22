@@ -2,6 +2,7 @@ package be.hogent.faith.faith.backpackScreen
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
@@ -26,7 +27,8 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     DetailFinishedListener,
     TextDetailFragment.TextScreenNavigation,
     TakePhotoFragment.PhotoScreenNavigation,
-    DetailViewHolder.ExistingDetailNavigationListener {
+    DetailViewHolder.ExistingDetailNavigationListener,
+    DeleteDetailDialog.DeleteDetailDialogListener {
 
     private lateinit var backpackViewModel: BackpackViewModel
 
@@ -144,6 +146,15 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun deleteDetail(detail: Detail) {
+        val dialog = DeleteDetailDialog.newInstance(detail)
+        dialog.show(supportFragmentManager, "DeleteDetailDialog")
+    }
+
+    override fun onDetailDeleteClick(dialog: DialogFragment, detail: Detail) {
         backpackViewModel.deleteDetail(detail)
+    }
+
+    override fun onDetailCancelClick(dialog: DialogFragment) {
+        dialog.dismiss()
     }
 }

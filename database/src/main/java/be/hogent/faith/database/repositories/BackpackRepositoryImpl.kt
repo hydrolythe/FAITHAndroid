@@ -30,6 +30,6 @@ open class BackpackRepositoryImpl(
     } }
 
     override fun deleteDetail(detail: Detail): Completable {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        return firebaseBackpackRepository.delete(detailMapper.mapToEntity(detail))
     }
 }
