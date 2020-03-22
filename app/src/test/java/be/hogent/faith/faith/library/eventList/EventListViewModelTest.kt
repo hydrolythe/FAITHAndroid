@@ -142,9 +142,7 @@ class EventListViewModelTest {
     @Test
     fun `when setting the start and end date filters, only events that in between those dates are shown`() {
         // Arrange
-        viewModel.startDate.value = LocalDate.of(2020, Month.FEBRUARY, 1)
-        viewModel.endDate.value = LocalDate.of(2020, Month.MARCH, 1)
-
+        viewModel.setDateRange(LocalDate.of(2020, Month.FEBRUARY, 1).toEpochDay(), LocalDate.of(2020, Month.MARCH, 1).toEpochDay())
         // Act
         val filteredEvents = getValue(viewModel.filteredEvents)
 
@@ -157,8 +155,7 @@ class EventListViewModelTest {
     @Test
     fun `when combining a text and a date filter, only events with text details from the given date range are shown`() {
         // Arrange
-        viewModel.startDate.value = LocalDate.of(2020, Month.FEBRUARY, 1)
-        viewModel.endDate.value = LocalDate.of(2020, Month.MARCH, 1)
+        viewModel.setDateRange(LocalDate.of(2020, Month.FEBRUARY, 1).toEpochDay(), LocalDate.of(2020, Month.MARCH, 1).toEpochDay())
         viewModel.onFilterTextClicked()
 
         // Act
