@@ -100,7 +100,6 @@ class BackpackScreenFragment : Fragment() {
             if (!it) { closeMenu() }
         })
 
-
         backpackViewModel.isInEditMode.observe(this, Observer {
             if (backpackViewModel.isInEditMode.value == OpenState.OPEN) {
                 detailThumbnailsAdapter!!.hide(false)

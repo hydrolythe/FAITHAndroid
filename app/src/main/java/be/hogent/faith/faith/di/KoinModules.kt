@@ -70,7 +70,7 @@ val appModule = module(override = true) {
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { TakePhotoViewModel(get()) }
     viewModel { SelectedItemViewModel() }
-    viewModel { ExternalFileViewModel(get(),get()) }
+    viewModel { ExternalFileViewModel(get(), get()) }
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.
     scope(named(USER_SCOPE_NAME)) {

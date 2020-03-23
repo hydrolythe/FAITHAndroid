@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.backpackScreen
 
-import android.view.View
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -24,10 +23,7 @@ import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
-import java.lang.NullPointerException
-import java.util.Locale
 import io.reactivex.subscribers.DisposableSubscriber
-import org.jetbrains.annotations.TestOnly
 
 object OpenState {
     const val OPEN = 2
@@ -244,7 +240,7 @@ class BackpackViewModel(
             is TextDetail -> saveTextDetail(user, showSaveDialog.value as TextDetail)
             is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
             is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
-            is ExternalVideoDetail -> saveExternalVideoDetail(user,showSaveDialog.value as ExternalVideoDetail)
+            is ExternalVideoDetail -> saveExternalVideoDetail(user, showSaveDialog.value as ExternalVideoDetail)
         }
         _currentFile.postValue(null)
     }
@@ -360,8 +356,8 @@ class BackpackViewModel(
         }
     }
 
-    fun saveExternalVideoDetail(user:User,detail: ExternalVideoDetail) {
-        val params = SaveBackpackExternalVideoDetailUseCase.Params(user,detail)
+    fun saveExternalVideoDetail(user: User, detail: ExternalVideoDetail) {
+        val params = SaveBackpackExternalVideoDetailUseCase.Params(user, detail)
         saveBackpackExternalVideoDetailUseCase.execute(params, SaveBackpackExternalVideoDetailUseCaseHandler())
     }
 

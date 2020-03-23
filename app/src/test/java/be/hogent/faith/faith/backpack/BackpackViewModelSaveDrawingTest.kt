@@ -38,6 +38,7 @@ class BackpackViewModelSaveDrawingTest {
                 mockk(),
                 saveDrawingUseCase,
                 mockk(),
+                mockk(),
                 getBackPackFilesDummyUseCase
         )
     }
