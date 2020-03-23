@@ -13,13 +13,13 @@
 
     </Transition>
     <Transition
-        app:constraintSetEnd="@id/start"
-        app:constraintSetStart="@id/end"
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@id/start"
         app:duration="1000"
         app:motionInterpolator="easeIn">
 
         <OnClick
-            app:clickAction="transitionToStart"
+            app:clickAction="toggle"
             app:targetId="@+id/search_close_btn" />
 
     </Transition>
