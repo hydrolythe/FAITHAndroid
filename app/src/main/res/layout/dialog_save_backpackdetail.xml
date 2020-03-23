@@ -77,13 +77,12 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputLayout_detailTitle"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="0dp"
+                        android:layout_width="250dp"
                         android:layout_height="@dimen/event_textInput_height"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:hint="@string/save_event_title"
-                        app:errorResId='@{userViewModel.titleErrorMessage}'
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -96,6 +95,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="text"
+                            android:maxLength="30"
                             android:nextFocusDown="@+id/txt_save_event_notes" />
                     </com.google.android.material.textfield.TextInputLayout>
 

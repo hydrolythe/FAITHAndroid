@@ -7,10 +7,11 @@ import be.hogent.faith.service.usecases.LoginUserUseCase
 import be.hogent.faith.service.usecases.LogoutUserUseCase
 import be.hogent.faith.service.usecases.RegisterUserUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
+import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
+import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackExternalVideoDetailUseCase
-import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
@@ -57,10 +58,11 @@ val serviceModule = module {
     factory { CreateTextDetailUseCase(get(), get()) }
     factory { CreateExternalVideoDetailUseCase(get()) }
     factory { GetEventFilesUseCase(get(), get()) }
-    factory { GetBackPackFilesDummyUseCase(get()) }
+    factory { GetBackPackFilesDummyUseCase(get(), get()) }
     factory { SaveBackpackTextDetailUseCase(get(), get()) }
     factory { SaveBackpackAudioDetailUseCase(get(), get()) }
     factory { SaveBackpackPhotoDetailUseCase(get(), get()) }
     factory { SaveBackpackDrawingDetailUseCase(get(), get()) }
     factory { SaveBackpackExternalVideoDetailUseCase(get(), get()) }
+    factory { DeleteBackpackDetailUseCase(get(), get()) }
 }

@@ -29,6 +29,10 @@ class FireBaseStorageRepository(
             ).toSingle { event }
     }
 
+    override fun saveBackpackDetail(detail: Detail): Single<Detail> {
+        return saveBackpackDetailFile(detail).toSingle { detail }
+    }
+
     /**
      * Gets a detail's file from [firestorage] and stores it into the path provided for it by the
      * [pathProvider].
@@ -89,5 +93,12 @@ class FireBaseStorageRepository(
                 )
             }
         )
+    }
+
+    private fun saveBackpackDetailFile(detail: Detail): Completable {
+        return Completable.fromSingle(RxFirebaseStorage.putFile(
+            storageRef.child(pathProvider.getDetailPath(detail).path),
+            Uri.parse("file://${pathProvider.getLocalDetailPath(detail).path}")
+        ))
     }
 }

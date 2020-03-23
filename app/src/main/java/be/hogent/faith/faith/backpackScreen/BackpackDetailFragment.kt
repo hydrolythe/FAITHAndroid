@@ -1,22 +1,31 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.*
 import be.hogent.faith.faith.backpackScreen.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.externalVideo.view.ViewExternalVideoFragment
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
+import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.util.replaceChildFragment
+import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 abstract class BackpackDetailFragment : Fragment() {
@@ -24,6 +33,7 @@ abstract class BackpackDetailFragment : Fragment() {
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
     private lateinit var editDetailBinding: be.hogent.faith.databinding.FragmentEditFileBinding
     private lateinit var saveDialog: SaveDetailDialog
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,15 +45,19 @@ abstract class BackpackDetailFragment : Fragment() {
         editDetailBinding.lifecycleOwner = this
 
         backpackViewModel.showSaveDialog.observe(this, Observer {
-            showSaveDialog()
+            if (it != null && backpackViewModel.openDetailType.value != OpenDetailType.EDIT)
+                showSaveDialog(it)
+            else
+                backpackViewModel.saveCurrentDetail(userViewModel.user.value!!, it)
         })
 
         return editDetailBinding.root
     }
 
-    private fun showSaveDialog() {
-        saveDialog = SaveDetailDialog.newInstance()
+    private fun showSaveDialog(detail: Detail) {
+        saveDialog = SaveDetailDialog.newInstance(detail)
         saveDialog.show(fragmentManager!!, null)
+        backpackViewModel.setCurrentFile(detail)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

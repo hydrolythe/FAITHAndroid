@@ -1,20 +1,22 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
-import kotlinx.android.synthetic.main.dialog_save_event.progress
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-class SaveDetailDialog : DialogFragment() {
+class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
     private lateinit var saveDetailBinding: be.hogent.faith.databinding.DialogSaveBackpackdetailBinding
 
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
@@ -22,8 +24,8 @@ class SaveDetailDialog : DialogFragment() {
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     companion object {
-        fun newInstance(): SaveDetailDialog {
-            return SaveDetailDialog()
+        fun newInstance(detail: Detail): SaveDetailDialog {
+            return SaveDetailDialog(detail)
         }
     }
 
@@ -48,31 +50,32 @@ class SaveDetailDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
+        backpackViewModel.clearSaveDialogErrorMessage()
         startListeners()
-    }
-
-    fun showProgressBar() {
-        progress.visibility = View.VISIBLE
-    }
-
-    fun hideProgressBar() {
-        progress.visibility = View.GONE
     }
 
     private fun startListeners() {
         saveDetailBinding.btnSaveBackpack.setOnClickListener {
-            saveFile()
-            dismiss()
+            backpackViewModel.onSaveClicked(saveDetailBinding.txtSaveEventTitle.text.toString(), userViewModel.user.value!!, detail)
         }
+
+        backpackViewModel.detailIsSaved.observe(this, Observer {
+            dismiss()
+        })
 
         saveDetailBinding.btnSaveBackpackCancel.setOnClickListener {
             dismiss()
+            backpackViewModel.goToDetail(detail)
         }
+
+        backpackViewModel.errorMessage.observe(this, Observer {
+            if (it != null)
+                saveDetailBinding.textInputLayoutDetailTitle.error = resources.getString(it)
+        })
     }
 
-    private fun saveFile() {
-        val detail = backpackViewModel.showSaveDialog.value
-        detail!!.fileName = saveDetailBinding.txtSaveEventTitle.text.toString()
-        backpackViewModel.saveCurrentDetail(detail)
+    override fun onDismiss(dialog: DialogInterface) {
+        backpackViewModel.clearSaveDialogErrorMessage()
+        super.onDismiss(dialog)
     }
 }

@@ -11,6 +11,7 @@ import io.reactivex.observers.DisposableCompletableObserver
 import org.junit.Assert.assertEquals
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import io.mockk.Called
 import io.mockk.called
@@ -23,6 +24,7 @@ class BackpackViewModelSaveTextTest {
     private val saveTextUseCase = mockk<SaveBackpackTextDetailUseCase>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<TextDetail>()
+    private val user: User = mockk()
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -43,7 +45,7 @@ class BackpackViewModelSaveTextTest {
     fun backpackViewModel_saveText_callsUseCase() {
         val params = slot<SaveBackpackTextDetailUseCase.Params>()
 
-        viewModel.saveTextDetail(detail)
+        viewModel.saveTextDetail(user, detail)
         verify { saveTextUseCase.execute(capture(params), any()) }
 
         assertEquals(detail, params.captured.textDetail)
@@ -59,7 +61,7 @@ class BackpackViewModelSaveTextTest {
         viewModel.textDetailSavedSuccessFully.observeForever(successObserver)
 
         // Act
-        viewModel.saveTextDetail(detail)
+        viewModel.saveTextDetail(user, detail)
         verify { saveTextUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onComplete()
 
@@ -78,7 +80,7 @@ class BackpackViewModelSaveTextTest {
         viewModel.textDetailSavedSuccessFully.observeForever(successObserver)
 
         // Act
-        viewModel.saveTextDetail(detail)
+        viewModel.saveTextDetail(user, detail)
         verify { saveTextUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onError(mockk(relaxed = true))
 
