@@ -71,6 +71,9 @@ class BackpackViewModel(
     val videoFilterEnabled = MutableLiveData<Boolean>().apply {
         this.value = false
     }
+    val externalVideoFilterEnabled = MutableLiveData<Boolean>().apply {
+        this.value = false
+    }
 
     val filteredDetails: LiveData<List<Detail>> = MediatorLiveData<List<Detail>>().apply {
         addSource(searchString) { query ->
@@ -91,6 +94,10 @@ class BackpackViewModel(
         }
         addSource(audioFilterEnabled) { enabled ->
             detailFilter.hasAudioDetailFilter.isEnabled = enabled
+            value = detailFilter.filter(details)
+        }
+        addSource(externalVideoFilterEnabled) { enabled ->
+            detailFilter.hasExternalVideoDetailFilter.isEnabled = enabled
             value = detailFilter.filter(details)
         }
     }
@@ -205,6 +212,9 @@ class BackpackViewModel(
     fun onFilterVideoClicked() {
         videoFilterEnabled.value = videoFilterEnabled.value!!.not()
     }
+    fun onFilterExternalVideoClicked() {
+        externalVideoFilterEnabled.value = externalVideoFilterEnabled.value!!.not()
+    }
 
     fun setSearchStringText(text: String) {
         searchString.postValue(text)
@@ -234,7 +244,7 @@ class BackpackViewModel(
             is TextDetail -> saveTextDetail(user, showSaveDialog.value as TextDetail)
             is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
             is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
-            is ExternalVideoDetail -> saveExternalVideoDetail(showSaveDialog.value as ExternalVideoDetail)
+            is ExternalVideoDetail -> saveExternalVideoDetail(user,showSaveDialog.value as ExternalVideoDetail)
         }
         _currentFile.postValue(null)
     }
@@ -350,8 +360,8 @@ class BackpackViewModel(
         }
     }
 
-    fun saveExternalVideoDetail(detail: ExternalVideoDetail) {
-        val params = SaveBackpackExternalVideoDetailUseCase.Params(detail)
+    fun saveExternalVideoDetail(user:User,detail: ExternalVideoDetail) {
+        val params = SaveBackpackExternalVideoDetailUseCase.Params(user,detail)
         saveBackpackExternalVideoDetailUseCase.execute(params, SaveBackpackExternalVideoDetailUseCaseHandler())
     }
 

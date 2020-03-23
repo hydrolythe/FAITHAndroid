@@ -10,5 +10,5 @@ data class DetailEntity(
 )
 
 enum class DetailType {
-    TEXT, AUDIO, DRAWING, PHOTO, VIDEO
+    TEXT, AUDIO, DRAWING, PHOTO, VIDEO, EXTERNAL_VIDEO
 }

@@ -56,7 +56,7 @@ private val createExternalVideoDetailUseCase: CreateExternalVideoDetailUseCase) 
             createPhotoDetailUseCase.execute(params, CreatePhotoDetailUseCaseHandler())
 
         } else {
-            //_savedDetail.value = ExternalVideoDetail(file, "", UUID.randomUUID())
+
             val params = CreateExternalVideoDetailUseCase.Params(_currentFile.value!!)
             createExternalVideoDetailUseCase.execute(params, CreateExternalVideoDetailUseCaseHandler())
         }
