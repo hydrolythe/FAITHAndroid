@@ -20,6 +20,7 @@ import org.junit.Test
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.Month
+import org.threeten.bp.ZoneOffset
 
 class EventListViewModelTest {
 
@@ -29,33 +30,33 @@ class EventListViewModelTest {
 
     private lateinit var viewModel: EventListViewModel
 
-    private val event_1_feb_photo = Event(
-        dateTime = LocalDateTime.of(2020, Month.FEBRUARY, 10, 10, 30),
+    private val event_1_jan_photo = Event(
+        dateTime = LocalDateTime.of(2020, Month.JANUARY, 10, 10, 30),
         title = "title 1"
     ).apply {
         addDetail(DetailFactory.makePhotoDetail())
     }
-    private val event_2_feb_text = Event(
-        dateTime = LocalDateTime.of(2020, Month.FEBRUARY, 15, 10, 30),
+    private val event_2_jan_text = Event(
+        dateTime = LocalDateTime.of(2020, Month.JANUARY, 15, 10, 30),
         title = "title 2"
     ).apply {
         addDetail(DetailFactory.makeTextDetail())
     }
-    private val event_3_june_drawing = Event(
-        dateTime = LocalDateTime.of(2020, Month.JUNE, 15, 10, 30),
+    private val event_3_feb_drawing = Event(
+        dateTime = LocalDateTime.of(2020, Month.FEBRUARY, 15, 10, 30),
         title = "title 3"
     ).apply {
         addDetail(DetailFactory.makeDrawingDetail())
     }
     private val event_4_july_audio = Event(
-        dateTime = LocalDateTime.of(2020, Month.JULY, 15, 10, 30),
+        dateTime = LocalDateTime.of(2020, Month.MARCH, 15, 10, 30),
         title = "title 4"
     ).apply {
         addDetail(DetailFactory.makeAudioDetail())
     }
 
     private val events =
-        listOf(event_4_july_audio, event_1_feb_photo, event_2_feb_text, event_3_june_drawing)
+        listOf(event_4_july_audio, event_1_jan_photo, event_2_jan_text, event_3_feb_drawing)
 
     // We need to immediatly observe on the [EventListViewModel.filteredEvents] or otherwise
     // the MediatorLiveData will not start processing updates from its sources.
@@ -105,7 +106,7 @@ class EventListViewModelTest {
         val filteredEvents = getValue(viewModel.filteredEvents)
 
         assertEquals(1, filteredEvents.size)
-        assertTrue(filteredEvents.contains(event_2_feb_text))
+        assertTrue(filteredEvents.contains(event_2_jan_text))
     }
 
     @Test
@@ -115,7 +116,7 @@ class EventListViewModelTest {
         val filteredEvents = getValue(viewModel.filteredEvents)
 
         assertEquals(1, filteredEvents.size)
-        assertTrue(filteredEvents.contains(event_1_feb_photo))
+        assertTrue(filteredEvents.contains(event_1_jan_photo))
     }
 
     @Test
@@ -125,7 +126,7 @@ class EventListViewModelTest {
         val filteredEvents = getValue(viewModel.filteredEvents)
 
         assertEquals(1, filteredEvents.size)
-        assertTrue(filteredEvents.contains(event_3_june_drawing))
+        assertTrue(filteredEvents.contains(event_3_feb_drawing))
     }
 
     @Test
@@ -142,20 +143,24 @@ class EventListViewModelTest {
     @Test
     fun `when setting the start and end date filters, only events that in between those dates are shown`() {
         // Arrange
-        viewModel.setDateRange(LocalDate.of(2020, Month.FEBRUARY, 1).toEpochDay(), LocalDate.of(2020, Month.MARCH, 1).toEpochDay())
+        viewModel.setDateRange(LocalDate.of(2020, Month.JANUARY, 1).atStartOfDay().toInstant(
+            ZoneOffset.of("+01:00")).toEpochMilli(), LocalDate.of(2020, Month.FEBRUARY, 1).atStartOfDay().toInstant(
+            ZoneOffset.of("+01:00")).toEpochMilli())
         // Act
         val filteredEvents = getValue(viewModel.filteredEvents)
 
         // Assert
         assertEquals(2, filteredEvents.size)
-        assertTrue(filteredEvents.contains(event_1_feb_photo))
-        assertTrue(filteredEvents.contains(event_2_feb_text))
+        assertTrue(filteredEvents.contains(event_1_jan_photo))
+        assertTrue(filteredEvents.contains(event_2_jan_text))
     }
 
     @Test
     fun `when combining a text and a date filter, only events with text details from the given date range are shown`() {
         // Arrange
-        viewModel.setDateRange(LocalDate.of(2020, Month.FEBRUARY, 1).toEpochDay(), LocalDate.of(2020, Month.MARCH, 1).toEpochDay())
+        viewModel.setDateRange(LocalDate.of(2020, Month.JANUARY, 1).atStartOfDay().toInstant(
+            ZoneOffset.of("+01:00")).toEpochMilli(), LocalDate.of(2020, Month.FEBRUARY, 1).atStartOfDay().toInstant(
+            ZoneOffset.of("+01:00")).toEpochMilli())
         viewModel.onFilterTextClicked()
 
         // Act
@@ -163,7 +168,7 @@ class EventListViewModelTest {
 
         // Assert
         assertEquals(1, filteredEvents.size)
-        assertTrue(filteredEvents.contains(event_2_feb_text))
+        assertTrue(filteredEvents.contains(event_2_jan_text))
     }
 
     @Test
