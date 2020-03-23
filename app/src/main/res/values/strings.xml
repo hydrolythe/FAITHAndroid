@@ -184,4 +184,5 @@
     <string name="slide">schuif avatar open</string>
     <string name="tekstgrootte">tekstgrootte</string>
     <string name="kies_tekstgrootte">kies tekstgrootte</string>
+    <string name="avatar_nog_niet_ingekleurd">Avatar is nog niet ingekleurd. Klik op potlood om avatar in te kleuren</string>
 </resources>
