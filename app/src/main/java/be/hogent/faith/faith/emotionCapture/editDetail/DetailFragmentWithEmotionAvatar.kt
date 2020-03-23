@@ -2,13 +2,11 @@ package be.hogent.faith.faith.emotionCapture.editDetail
 
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -29,6 +27,7 @@ import be.hogent.faith.faith.util.replaceChildFragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_edit_detail.image_editDetail_avatar
+import kotlinx.android.synthetic.main.fragment_edit_detail.textView_editDetail_avatar
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -91,24 +90,23 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
     }
 
     private fun loadAvatarImage(event: Event) {
-        val image =
-            event.emotionAvatar ?: ContextCompat.getDrawable(
-                this.context!!,
-                avatarOutlineResId
-            ) as BitmapDrawable
+        if (event.emotionAvatar != null) {
+            textView_editDetail_avatar.text = ""
 
-        val width = Resources.getSystem().displayMetrics.widthPixels
-        val height = Resources.getSystem().displayMetrics.heightPixels
+            val width = Resources.getSystem().displayMetrics.widthPixels
+            val height = Resources.getSystem().displayMetrics.heightPixels
 
-        Glide.with(this)
-            .load(image)
-            // to refresh the picture and not get it from the glide cache
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
-            // scaling, otherwise picture is blurry
-            .override((width * 0.3).toInt(), height)
-            .fitCenter()
-            .into(image_editDetail_avatar)
+            Glide.with(this)
+                .load(event.emotionAvatar)
+                // to refresh the picture and not get it from the glide cache
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                // scaling, otherwise picture is blurry
+                .override((width * 0.3).toInt(), height)
+                .fitCenter()
+                .into(image_editDetail_avatar)
+        } else
+            textView_editDetail_avatar.visibility = View.VISIBLE
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

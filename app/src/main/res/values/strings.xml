@@ -193,4 +193,5 @@
     <string name="library_verwijder_event_message">Ben je zeker? Ook alle bijhorende tekeningen, foto\'s,... worden verwijderd</string>
     <string name="library_verwijder_event_title">Wil je dit event verwijderen?</string>
     <string name="delete">verwijder</string>
+    <string name="avatar_nog_niet_ingekleurd">Avatar is nog niet ingekleurd. Klik op potlood om avatar in te kleuren</string>
 </resources>
