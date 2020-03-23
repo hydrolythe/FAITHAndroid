@@ -27,6 +27,7 @@
 
         <!-- KNOPPEN -->
         <!-- Invisible to make it transparent -->
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_login"
             android:layout_width="match_parent"

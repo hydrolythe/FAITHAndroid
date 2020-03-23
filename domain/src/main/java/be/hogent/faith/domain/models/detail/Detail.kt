@@ -15,25 +15,40 @@ sealed class Detail(
      * added before the path.
      */
     var file: File,
+    var fileName: String = "",
     val uuid: UUID = UUID.randomUUID()
 ) : Serializable
 
 class DrawingDetail(
     file: File,
+    fileName: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, uuid)
+) : Detail(file, fileName, uuid)
 
 class PhotoDetail(
     file: File,
+    fileName: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, uuid)
+) : Detail(file, fileName, uuid)
 
 class TextDetail(
     file: File,
+    fileName: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, uuid)
+) : Detail(file, fileName, uuid)
 
 class AudioDetail(
     file: File,
+    fileName: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, uuid)
+) : Detail(file, fileName, uuid)
+class VideoDetail(
+    file: File,
+    fileName: String = "",
+    uuid: UUID = UUID.randomUUID()
+) : Detail(file, fileName, uuid)
+class ExternalVideoDetail(
+    file: File,
+    fileName: String = "",
+    uuid: UUID = UUID.randomUUID()
+) : Detail(file, fileName, uuid)

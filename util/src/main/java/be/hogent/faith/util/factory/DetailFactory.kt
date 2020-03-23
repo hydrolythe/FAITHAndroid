@@ -17,11 +17,11 @@ object DetailFactory {
     }
 
     fun makeTextDetail(): TextDetail =
-        TextDetail(DataFactory.randomFile(), DataFactory.randomUUID())
+        TextDetail(DataFactory.randomFile(), "", DataFactory.randomUUID())
 
     fun makeDrawingDetail(): DrawingDetail =
-        DrawingDetail(DataFactory.randomFile(), DataFactory.randomUUID())
+        DrawingDetail(DataFactory.randomFile(), "", DataFactory.randomUUID())
 
     fun makeAudioDetail(): AudioDetail =
-        AudioDetail(DataFactory.randomFile(), DataFactory.randomUUID())
+        AudioDetail(DataFactory.randomFile(), "", DataFactory.randomUUID())
 }

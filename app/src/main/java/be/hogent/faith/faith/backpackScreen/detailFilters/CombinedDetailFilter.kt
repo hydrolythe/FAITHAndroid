@@ -1,0 +1,37 @@
+package be.hogent.faith.faith.backpackScreen.detailFilters
+
+import be.hogent.faith.domain.models.detail.*
+
+class CombinedDetailFilter {
+    val titleFilter = DetailNameFilter("")
+
+    val hasTextDetailFilter = ToggleableDetailFilter(DetailTypeFilter(TextDetail::class))
+    val hasPhotoDetailFilter = ToggleableDetailFilter(DetailTypeFilter(PhotoDetail::class))
+    val hasAudioDetailFilter = ToggleableDetailFilter(DetailTypeFilter(AudioDetail::class))
+    val hasDrawingDetailFilter = ToggleableDetailFilter(DetailTypeFilter(DrawingDetail::class))
+    val hasExternalVideoDetailFilter = ToggleableDetailFilter(DetailTypeFilter(ExternalVideoDetail::class))
+
+    fun filter(details: List<Detail>): List<Detail> {
+        val filteredDetails = mutableListOf<Detail>()
+        if (hasTextDetailFilter.isEnabled) {
+            filteredDetails.addAll(details.filter(hasTextDetailFilter))
+        }
+        if (hasAudioDetailFilter.isEnabled) {
+            filteredDetails.addAll(details.filter(hasAudioDetailFilter))
+        }
+        if (hasDrawingDetailFilter.isEnabled) {
+            filteredDetails.addAll(details.filter(hasDrawingDetailFilter))
+        }
+        if (hasPhotoDetailFilter.isEnabled) {
+            filteredDetails.addAll(details.filter(hasPhotoDetailFilter))
+        }
+        if (hasExternalVideoDetailFilter.isEnabled) {
+            filteredDetails.addAll(details.filter(hasExternalVideoDetailFilter))
+        }
+
+        if (filteredDetails.isEmpty()) {
+            return details.filter(titleFilter)
+        }
+        return filteredDetails.filter(titleFilter)
+    }
+}
