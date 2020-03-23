@@ -37,6 +37,7 @@ class BackpackViewModelSaveTextTest {
                 mockk(),
                 mockk(),
                 mockk(),
+                mockk(),
                 getBackPackFilesDummyUseCase
         )
     }

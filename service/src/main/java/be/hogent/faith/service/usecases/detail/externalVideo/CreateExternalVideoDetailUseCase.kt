@@ -7,7 +7,7 @@ import io.reactivex.Single
 import java.io.File
 
 class CreateExternalVideoDetailUseCase(
-        observeScheduler: Scheduler
+    observeScheduler: Scheduler
 ) : SingleUseCase<ExternalVideoDetail, CreateExternalVideoDetailUseCase.Params>(observeScheduler) {
 
     override fun buildUseCaseSingle(params: Params): Single<ExternalVideoDetail> {
@@ -15,6 +15,6 @@ class CreateExternalVideoDetailUseCase(
     }
 
     class Params(
-            val tempExternalVideoSaveFile: File
+        val tempExternalVideoSaveFile: File
     )
 }

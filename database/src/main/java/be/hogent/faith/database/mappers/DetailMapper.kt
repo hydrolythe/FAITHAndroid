@@ -3,7 +3,13 @@ package be.hogent.faith.database.mappers
 import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.DetailType
-import be.hogent.faith.domain.models.detail.*
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import java.util.UUID
 
 /**

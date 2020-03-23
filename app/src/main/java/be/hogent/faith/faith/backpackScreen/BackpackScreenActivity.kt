@@ -72,7 +72,6 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         backpackViewModel.closePopUpMenu()
     }
 
-
     override fun onDetailFinished(detail: Detail) {
         when (detail) {
             is DrawingDetail -> save(detail)
@@ -114,7 +113,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun startVideoDetailFragment() {
-        Toast.makeText(this,"Nog niet beschikbaar",Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Nog niet beschikbaar", Toast.LENGTH_SHORT).show()
     }
 
     override fun startExternalFileDetailFragment() {
@@ -164,5 +163,4 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     override fun onDetailCancelClick(dialog: DialogFragment) {
         dialog.dismiss()
     }
-
 }

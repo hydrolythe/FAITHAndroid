@@ -8,7 +8,6 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.externalVideo.CreateExternalVideoDetailUseCase
@@ -17,10 +16,11 @@ import io.reactivex.observers.DisposableSingleObserver
 import timber.log.Timber
 import java.io.File
 import java.util.Locale
-import java.util.UUID
 
-class ExternalFileViewModel(private val createPhotoDetailUseCase: CreatePhotoDetailUseCase,
-private val createExternalVideoDetailUseCase: CreateExternalVideoDetailUseCase) : ViewModel() {
+class ExternalFileViewModel(
+    private val createPhotoDetailUseCase: CreatePhotoDetailUseCase,
+    private val createExternalVideoDetailUseCase: CreateExternalVideoDetailUseCase
+) : ViewModel() {
 
     private val _cancelClicked = SingleLiveEvent<Unit>()
     val cancelClicked: LiveData<Unit>
@@ -33,7 +33,6 @@ private val createExternalVideoDetailUseCase: CreateExternalVideoDetailUseCase) 
     private var navigation: TakePhotoFragment.PhotoScreenNavigation? = null
 
     private var _currentFile = MutableLiveData<File>()
-
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
@@ -54,7 +53,6 @@ private val createExternalVideoDetailUseCase: CreateExternalVideoDetailUseCase) 
         if (file.path.toLowerCase(Locale.ROOT).contains("photo")) {
             val params = CreatePhotoDetailUseCase.Params(_currentFile.value!!)
             createPhotoDetailUseCase.execute(params, CreatePhotoDetailUseCaseHandler())
-
         } else {
 
             val params = CreateExternalVideoDetailUseCase.Params(_currentFile.value!!)
@@ -84,6 +82,4 @@ private val createExternalVideoDetailUseCase: CreateExternalVideoDetailUseCase) 
             Timber.e(e)
         }
     }
-
-
 }

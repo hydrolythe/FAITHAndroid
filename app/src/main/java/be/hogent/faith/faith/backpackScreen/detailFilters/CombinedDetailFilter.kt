@@ -1,6 +1,11 @@
 package be.hogent.faith.faith.backpackScreen.detailFilters
 
-import be.hogent.faith.domain.models.detail.*
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 
 class CombinedDetailFilter {
     val titleFilter = DetailNameFilter("")

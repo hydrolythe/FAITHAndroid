@@ -15,6 +15,7 @@ import org.junit.Assert.assertEquals
 import androidx.lifecycle.Observer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 
@@ -23,7 +24,7 @@ class BackpackViewModelSaveExternalVideoTest {
     private val saveExternalVideoUseCase = mockk<SaveBackpackExternalVideoDetailUseCase>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<ExternalVideoDetail>()
-
+    private val user = mockk<User>()
     @get:Rule
     val testRule = InstantTaskExecutorRule()
 
@@ -34,7 +35,8 @@ class BackpackViewModelSaveExternalVideoTest {
                 mockk(),
                 mockk(),
                 mockk(),
-                saveExternalVideoUseCase,
+                mockk(),
+                mockk(),
                 getBackPackFilesDummyUseCase
         )
     }
@@ -43,7 +45,7 @@ class BackpackViewModelSaveExternalVideoTest {
     fun backpackViewModel_saveExternalVideo_callsUseCase() {
         val params = slot<SaveBackpackExternalVideoDetailUseCase.Params>()
 
-        viewModel.saveExternalVideoDetail(detail)
+        viewModel.saveExternalVideoDetail(user, detail)
         verify { saveExternalVideoUseCase.execute(capture(params), any()) }
 
         assertEquals(detail, params.captured.externalVideoDetail)
@@ -59,7 +61,7 @@ class BackpackViewModelSaveExternalVideoTest {
         viewModel.externalVideoSavedSuccessFully.observeForever(successObserver)
 
         // Act
-        viewModel.saveExternalVideoDetail(detail)
+        viewModel.saveExternalVideoDetail(user, detail)
         verify { saveExternalVideoUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onComplete()
 
@@ -78,7 +80,7 @@ class BackpackViewModelSaveExternalVideoTest {
         viewModel.photoDetailSavedSuccessFully.observeForever(successObserver)
 
         // Act
-        viewModel.saveExternalVideoDetail(detail)
+        viewModel.saveExternalVideoDetail(user, detail)
         verify { saveExternalVideoUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onError(mockk(relaxed = true))
 

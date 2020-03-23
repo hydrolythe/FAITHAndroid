@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.backpackScreen.externalFile
 
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
@@ -15,21 +14,20 @@ import android.widget.ImageView
 import android.widget.MediaController
 import android.widget.Toast
 import android.widget.VideoView
-import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentAddExternalFileBinding
-import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
 import be.hogent.faith.faith.details.DetailFinishedListener
-import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.util.TempFileProvider
-import kotlinx.android.synthetic.main.dialog_save_event.view.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.io.FileOutputStream
@@ -52,9 +50,9 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
         get() = mJob + Dispatchers.Main
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         mJob = Job()
         binding =
@@ -96,15 +94,13 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
                         .show()
             }
 
-
             detailFinishedListener.onDetailFinished(newDetail)
             navigation?.backToEvent()
         })
-        binding.btnRemoveFile.setOnClickListener{
+        binding.btnRemoveFile.setOnClickListener {
             removeFile()
             selectFile()
         }
-
     }
 
     private fun removeFile() {
@@ -150,7 +146,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
             } else if (uriToAdd.toString().contains("video")) {
                 val file = tempFileProvider.tempExternalVideoFile
                 try {
-                    //Zolang het niet omgezet werd naar een file zal een progressbard verschijnen i.p.v de save button
+                    // Zolang het niet omgezet werd naar een file zal een progressbard verschijnen i.p.v de save button
                     binding.progress.visibility = View.VISIBLE
                     binding.btnSaveFile.visibility = View.GONE
                     launch {
@@ -165,14 +161,11 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
                             }
                             outputStream.close()
                             inputStream.close()
-
                         }
                         job.await()
                         binding.progress.visibility = View.GONE
                         binding.btnSaveFile.visibility = View.VISIBLE
-
                     }
-
 
                     val videoView = VideoView(requireContext())
                     videoView.id = View.generateViewId()
@@ -188,7 +181,6 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
                     videoView.layoutParams.height = 640
                     selectedView = videoView
 
-
                     externalFileViewModel.setCurrentFile(file)
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -197,7 +189,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
                     navigation?.backToEvent()
                 }
             }
-        }else{
+        } else {
             navigation!!.backToEvent()
         }
     }
@@ -211,7 +203,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
         set.connect(view.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         set.applyTo(binding.filePreviewContainer)
     }
-    private fun selectFile(){
+    private fun selectFile() {
         val pickIntent = Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))
         startActivityForResult(pickIntent, FILE_PICK_CODE)
@@ -226,6 +218,5 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
 
     interface ExternalFileScreenNavigation {
         fun backToEvent()
-
     }
 }

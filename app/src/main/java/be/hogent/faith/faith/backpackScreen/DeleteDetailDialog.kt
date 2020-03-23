@@ -8,7 +8,7 @@ import androidx.fragment.app.DialogFragment
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 
-class DeleteDetailDialog(private var detail: Detail) : DialogFragment(){
+class DeleteDetailDialog(private var detail: Detail) : DialogFragment() {
 
     internal lateinit var listener: DeleteDetailDialogListener
 
@@ -48,5 +48,4 @@ class DeleteDetailDialog(private var detail: Detail) : DialogFragment(){
         fun onDetailDeleteClick(dialog: DialogFragment, detail: Detail)
         fun onDetailCancelClick(dialog: DialogFragment)
     }
-
 }
