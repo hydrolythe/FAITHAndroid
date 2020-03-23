@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -113,7 +114,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun startVideoDetailFragment() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        Toast.makeText(this,"Nog niet beschikbaar",Toast.LENGTH_SHORT).show()
     }
 
     override fun startExternalFileDetailFragment() {

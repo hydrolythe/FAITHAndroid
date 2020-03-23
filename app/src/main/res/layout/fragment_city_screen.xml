@@ -153,7 +153,7 @@
                 android:id="@+id/btn_backpack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Button"
+                android:text="Rugzak"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guide_pole_left_start"
                 app:layout_constraintStart_toStartOf="@+id/guide_pole_right_start"
