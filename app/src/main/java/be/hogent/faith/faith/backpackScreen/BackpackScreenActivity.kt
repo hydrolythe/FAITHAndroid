@@ -2,6 +2,7 @@ package be.hogent.faith.faith.backpackScreen
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
@@ -26,7 +27,8 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     DetailFinishedListener,
     TextDetailFragment.TextScreenNavigation,
     TakePhotoFragment.PhotoScreenNavigation,
-    DetailViewHolder.ExistingDetailNavigationListener {
+    DetailViewHolder.ExistingDetailNavigationListener,
+    DeleteDetailDialog.DeleteDetailDialogListener {
 
     private lateinit var backpackViewModel: BackpackViewModel
 
@@ -50,6 +52,13 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
 
         backpackViewModel.goToCityScreen.observe(this, Observer {
             closeBackpack()
+        })
+
+        backpackViewModel.goToDetail.observe(this, Observer {
+            replaceFragment(
+                BackpackDetailFragment.newInstance(it),
+                R.id.fragment
+            )
         })
     }
 
@@ -75,30 +84,29 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
 
     override fun startPhotoDetailFragment() {
         replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
-        backpackViewModel.viewButtons(false)
-        backpackViewModel.setDetailScreenOpen(true)
-        backpackViewModel.closePopUpMenu()
+        startFragmentInitialisers()
     }
 
     override fun startAudioDetailFragment() {
         replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
-        backpackViewModel.viewButtons(false)
-        backpackViewModel.setDetailScreenOpen(true)
-        backpackViewModel.closePopUpMenu()
+        startFragmentInitialisers()
     }
 
     override fun startDrawingDetailFragment() {
         replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
-        backpackViewModel.viewButtons(false)
-        backpackViewModel.setDetailScreenOpen(true)
-        backpackViewModel.closePopUpMenu()
+        startFragmentInitialisers()
     }
 
     override fun startTextDetailFragment() {
         replaceFragment(BackpackDetailFragment.TextFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+        startFragmentInitialisers()
+    }
+
+    private fun startFragmentInitialisers() {
         backpackViewModel.viewButtons(false)
         backpackViewModel.setDetailScreenOpen(true)
         backpackViewModel.closePopUpMenu()
+        backpackViewModel.setOpenDetailType(OpenDetailType.NEW)
     }
 
     override fun startVideoDetailFragment() {
@@ -110,6 +118,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun openDetailScreenFor(detail: Detail) {
+        backpackViewModel.setOpenDetailType(OpenDetailType.EDIT)
         backpackViewModel.setCurrentFile(detail)
         replaceFragment(
             BackpackDetailFragment.newInstance(detail),
@@ -137,6 +146,15 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun deleteDetail(detail: Detail) {
+        val dialog = DeleteDetailDialog.newInstance(detail)
+        dialog.show(supportFragmentManager, "DeleteDetailDialog")
+    }
+
+    override fun onDetailDeleteClick(dialog: DialogFragment, detail: Detail) {
         backpackViewModel.deleteDetail(detail)
+    }
+
+    override fun onDetailCancelClick(dialog: DialogFragment) {
+        dialog.dismiss()
     }
 }

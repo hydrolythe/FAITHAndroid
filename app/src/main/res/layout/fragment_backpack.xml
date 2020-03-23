@@ -91,7 +91,11 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
-            android:scrollbars="horizontal|vertical"
+            android:scrollbarSize="16dp"
+            android:scrollbarThumbVertical="@drawable/scrollbarthumb_circle_rv"
+            android:scrollbarTrackVertical="@drawable/scrollbartrack_rectangle_rv"
+            android:scrollbars="vertical"
+            android:verticalScrollbarPosition="right"
             app:layout_constraintBottom_toTopOf="@+id/guide_rv_horizontal_2"
             app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_end"
             app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_start"
@@ -101,8 +105,10 @@
             android:id="@+id/btn_backpack_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:background="@drawable/prullenbak"
-            app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_end"
+            android:onClick="@{() -> backpackViewModel.setIsInEditMode()}"
+            app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_end"
             app:layout_constraintTop_toTopOf="@+id/guide_rv_horizontal_2"
             app:srcCompat="@drawable/prullenbak" />
 
@@ -121,9 +127,10 @@
             android:id="@+id/btn_backpack_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/add_btn"
             android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
+            android:background="@drawable/add_btn"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
+            android:onClick="@{() -> backpackViewModel.changePopupMenuState()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -131,11 +138,13 @@
             android:id="@+id/btn_backpack_draw_cancel"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
-            android:background="@drawable/ic_return"
+            android:layout_marginStart="16dp"
             android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
+            android:background="@drawable/ic_return"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             android:contentDescription="@string/cancel"
-            app:layout_constraintStart_toStartOf="@+id/guide_search_btn"
+            android:onClick="@{() -> backpackViewModel.goToCityScreen()}"
+            app:layout_constraintStart_toStartOf="@+id/btn_backpack_search"
             app:layout_constraintTop_toTopOf="@+id/guide_undo_horizontal" />
 
 

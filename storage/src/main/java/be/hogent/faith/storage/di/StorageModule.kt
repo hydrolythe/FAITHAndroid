@@ -1,7 +1,5 @@
 package be.hogent.faith.storage.di
 
-import be.hogent.faith.storage.backpack.DummyStorageRepository
-import be.hogent.faith.storage.backpack.IDummyStorageRepository
 import be.hogent.faith.storage.IStorageRepository
 import be.hogent.faith.storage.StoragePathProvider
 import be.hogent.faith.storage.StorageRepository
@@ -22,14 +20,6 @@ val storageModule = module {
     factory<ITemporaryStorage> { TemporaryStorageRepository(androidContext(), get()) }
     factory<ILocalStorageRepository> { LocalStorageRepository(get(), androidContext()) }
     factory<IFireBaseStorageRepository> { FireBaseStorageRepository(get(), constructFirebaseStorageInstance()) }
-    factory<IDummyStorageRepository> {
-        DummyStorageRepository(
-            get(),
-            get()
-        )
-    }
-
-    single { DummyStorageRepository(get(), get()) }
 }
 
 fun constructFirebaseStorageInstance(): FirebaseStorage {

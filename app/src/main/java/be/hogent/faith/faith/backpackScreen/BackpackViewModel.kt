@@ -1,12 +1,12 @@
 package be.hogent.faith.faith.backpackScreen
 
-import android.view.View
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
@@ -21,10 +21,17 @@ import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCas
 import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.subscribers.DisposableSubscriber
+import org.jetbrains.annotations.TestOnly
 
 object OpenState {
     const val OPEN = 2
     const val CLOSED = 3
+}
+
+object OpenDetailType {
+    const val NEW = 1
+    const val EDIT = 2
 }
 
 class BackpackViewModel(
@@ -41,7 +48,7 @@ class BackpackViewModel(
 
     private val detailFilter = CombinedDetailFilter()
 
-    val searchString = MutableLiveData<String>()
+    private val searchString = MutableLiveData<String>()
 
     val audioFilterEnabled = MutableLiveData<Boolean>().apply {
         this.value = false
@@ -94,6 +101,10 @@ class BackpackViewModel(
     val errorMessage: LiveData<Int>
         get() = _errorMessage
 
+    private fun setErrorMessage(errorMsg: Int) {
+        _errorMessage.postValue(errorMsg)
+    }
+
     private val _textSavedSuccessFully = SingleLiveEvent<Int>()
     val textDetailSavedSuccessFully: LiveData<Int> = _textSavedSuccessFully
 
@@ -106,11 +117,11 @@ class BackpackViewModel(
     private val _audioSavedSuccessFully = SingleLiveEvent<Int>()
     val audioDetailSavedSuccessFully: LiveData<Int> = _audioSavedSuccessFully
 
+    private val _detailIsSaved = SingleLiveEvent<Any>()
+    val detailIsSaved: LiveData<Any> = _detailIsSaved
+
     private val _viewButtons = MutableLiveData<Boolean>()
     val viewButtons: LiveData<Boolean> = _viewButtons
-
-    private val _onAddClicked = MutableLiveData<View>()
-    val onAddClicked: LiveData<View> = _onAddClicked
 
     private val _goToCityScreen = SingleLiveEvent<Any>()
     val goToCityScreen: LiveData<Any> = _goToCityScreen
@@ -124,19 +135,42 @@ class BackpackViewModel(
     private val _isInEditMode = MutableLiveData<Int>()
     val isInEditMode: LiveData<Int> = _isInEditMode
 
-    private val _showSaveDialog = MutableLiveData<Detail>()
+    private val _showSaveDialog = SingleLiveEvent<Detail>()
     val showSaveDialog: LiveData<Detail> = _showSaveDialog
 
-    private val _detailDeletedSuccessfully = SingleLiveEvent<Int>()
-    val detailDeletedSuccessfully: LiveData<Int> = _detailDeletedSuccessfully
+    private val _goToDetail = SingleLiveEvent<Detail>()
+    val goToDetail: LiveData<Detail> = _goToDetail
+
+    private val _openDetailType = SingleLiveEvent<Int>()
+    val openDetailType: LiveData<Int> = _openDetailType
 
     init {
         loadDetails()
     }
 
+    // TODO tijdelijk
     private fun loadDetails() {
-        details = getBackPackFilesDummyUseCase.getDetails()
+        val params = GetBackPackFilesDummyUseCase.Params("")
+        getBackPackFilesDummyUseCase.execute(params, GetBackPackFilesDummyUseCaseHandler())
     }
+
+    private inner class GetBackPackFilesDummyUseCaseHandler : DisposableSubscriber<List<Detail>>() {
+        override fun onNext(t: List<Detail>?) {
+            if (t != null) {
+                setSearchStringText("")
+                details = t
+            }
+        }
+
+        override fun onComplete() {
+        }
+
+        override fun onError(e: Throwable) {
+        }
+    }
+
+    private val _detailDeletedSuccessfully = SingleLiveEvent<Int>()
+    val detailDeletedSuccessfully: LiveData<Int> = _detailDeletedSuccessfully
 
     fun initialize() {
         _isInEditMode.postValue(OpenState.CLOSED)
@@ -185,13 +219,18 @@ class BackpackViewModel(
         _showSaveDialog.postValue(detail)
     }
 
-    fun saveCurrentDetail(detail: Detail) {
+    fun saveCurrentDetail(user: User, detail: Detail) {
         when (detail) {
-            is DrawingDetail -> saveDrawingDetail(showSaveDialog.value as DrawingDetail)
-            is TextDetail -> saveTextDetail(showSaveDialog.value as TextDetail)
-            is PhotoDetail -> savePhotoDetail(showSaveDialog.value as PhotoDetail)
-            is AudioDetail -> saveAudioDetail(showSaveDialog.value as AudioDetail)
+            is DrawingDetail -> saveDrawingDetail(user, showSaveDialog.value as DrawingDetail)
+            is TextDetail -> saveTextDetail(user, showSaveDialog.value as TextDetail)
+            is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
+            is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
         }
+        _currentFile.postValue(null)
+    }
+
+    fun setOpenDetailType(openDetailType: Int) {
+        _openDetailType.postValue(openDetailType)
     }
 
     fun closePopUpMenu() {
@@ -203,10 +242,6 @@ class BackpackViewModel(
         _isPopupMenuOpen.postValue(OpenState.CLOSED)
     }
 
-    fun setOnAddClicked(view: View) {
-        _onAddClicked.postValue(view)
-    }
-
     fun viewButtons(viewButtons: Boolean) {
         _viewButtons.postValue(viewButtons)
     }
@@ -215,8 +250,38 @@ class BackpackViewModel(
         _goToCityScreen.call()
     }
 
-    fun saveTextDetail(detail: TextDetail) {
-        val params = SaveBackpackTextDetailUseCase.Params(detail)
+    fun onSaveClicked(fileName: String, user: User, detail: Detail) {
+        val noEmptyString = checkEmptyString(fileName)
+        val notMaxCharacters = checkMaxCharacters(fileName)
+        val uniqueFilename = checkUniqueFilename(fileName)
+        if (noEmptyString && notMaxCharacters && uniqueFilename) {
+            detail.fileName = fileName
+            saveCurrentDetail(user, detail)
+            _detailIsSaved.call()
+        } else {
+            if (!noEmptyString)
+                setErrorMessage(R.string.save_detail_emptyString)
+            if (!notMaxCharacters)
+                setErrorMessage(R.string.save_detail_maxChar)
+            if (!uniqueFilename)
+                setErrorMessage(R.string.save_detail_uniqueName)
+        }
+    }
+
+    private fun checkUniqueFilename(fileName: String): Boolean {
+        return (details.find { e -> (e.fileName == fileName) } == null)
+    }
+
+    private fun checkMaxCharacters(fileName: String): Boolean {
+        return fileName.length <= 30
+    }
+
+    private fun checkEmptyString(fileName: String): Boolean {
+        return fileName.isNotEmpty() || !fileName.isBlank()
+    }
+
+    fun saveTextDetail(user: User, detail: TextDetail) {
+        val params = SaveBackpackTextDetailUseCase.Params(user, detail)
         saveBackpackTextDetailUseCase.execute(params, SaveBackpackTextDetailUseCaseHandler())
     }
 
@@ -230,8 +295,8 @@ class BackpackViewModel(
         }
     }
 
-    fun saveAudioDetail(detail: AudioDetail) {
-        val params = SaveBackpackAudioDetailUseCase.Params(detail)
+    fun saveAudioDetail(user: User, detail: AudioDetail) {
+        val params = SaveBackpackAudioDetailUseCase.Params(user, detail)
         saveBackpackAudioDetailUseCase.execute(params, SaveBackpackAudioDetailUseCaseHandler())
     }
 
@@ -245,8 +310,8 @@ class BackpackViewModel(
         }
     }
 
-    fun savePhotoDetail(detail: PhotoDetail) {
-        val params = SaveBackpackPhotoDetailUseCase.Params(detail)
+    fun savePhotoDetail(user: User, detail: PhotoDetail) {
+        val params = SaveBackpackPhotoDetailUseCase.Params(user, detail)
         saveBackpackPhotoDetailUseCase.execute(params, SaveBackpackPhotoDetailUseCaseHandler())
     }
 
@@ -260,8 +325,8 @@ class BackpackViewModel(
         }
     }
 
-    fun saveDrawingDetail(detail: DrawingDetail) {
-        val params = SaveBackpackDrawingDetailUseCase.Params(detail)
+    fun saveDrawingDetail(user: User, detail: DrawingDetail) {
+        val params = SaveBackpackDrawingDetailUseCase.Params(user, detail)
         saveBackpackDrawingDetailUseCase.execute(params, SaveBackpackDrawingDetailUseCaseHandler())
     }
 
@@ -275,8 +340,15 @@ class BackpackViewModel(
         }
     }
 
-    fun deleteDetail(detail: Detail) {
+    fun goToDetail(detail: Detail) {
+        _goToDetail.postValue(detail)
+    }
 
+    fun clearSaveDialogErrorMessage() {
+        _errorMessage.postValue(null)
+    }
+
+    fun deleteDetail(detail: Detail) {
         val params = DeleteBackpackDetailUseCase.Params(detail)
         deleteBackpackDetailUseCase.execute(params, DeleteBackpackDetailUseCaseHandler())
     }
@@ -289,6 +361,11 @@ class BackpackViewModel(
         override fun onError(e: Throwable) {
             _errorMessage.postValue(R.string.error_delete_detail_failure)
         }
+    }
+
+    @TestOnly
+    fun addDetails(details: List<Detail>) {
+        this.details = details
     }
 
     override fun onCleared() {

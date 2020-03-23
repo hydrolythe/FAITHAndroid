@@ -1,20 +1,22 @@
+/*
 package be.hogent.faith.service.usecases.backpack
 
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.repository.BackpackRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
+import be.hogent.faith.storage.IStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
+import io.reactivex.rxkotlin.toFlowable
 
-class DeleteBackpackDetailUseCase(
-    private val backpackRepository: BackpackRepository,
+class GetBackpackFilesUseCase(
+    private val storageRepository : IStorageRepository,
     observeScheduler: Scheduler
-) : CompletableUseCase<DeleteBackpackDetailUseCase.Params>(
+) : CompletableUseCase<GetBackpackFilesUseCase.Params>(
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {
-        return backpackRepository.deleteDetail(params.detail)
+        return storageRepository.getBackpack(params.details.toFlowable())
     }
 
-    data class Params(val detail: Detail)
-}
+    data class Params(val details : List<Detail>)
+}*/

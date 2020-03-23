@@ -29,6 +29,10 @@ class StoragePathProvider(
         return File("${getEventFolder(event).path}/${detail.uuid}")
     }
 
+    fun getDetailPath(detail: Detail): File {
+        return File("users/${user!!.uid}/backpack/${detail.uuid}")
+    }
+
     fun getEmotionAvatarPath(event: Event): File {
         return File("${getEventFolder(event).path}/avatar")
     }
@@ -48,6 +52,8 @@ class StoragePathProvider(
     }
 
     fun getLocalDetailPath(detail: Detail): File {
-        return File(context.filesDir, detail.file.path)
+        // return File(context.filesDir, detail.file.path)
+        val child = "users/${user!!.uid}/backpack/${detail.uuid}"
+        return File(context.filesDir, child)
     }
 }

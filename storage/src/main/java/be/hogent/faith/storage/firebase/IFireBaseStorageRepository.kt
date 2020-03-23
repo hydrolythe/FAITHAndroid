@@ -14,4 +14,6 @@ interface IFireBaseStorageRepository {
     fun makeFileLocallyAvailable(detail: Detail): Completable
 
     fun makeEmotionAvatarLocallyAvailable(event: Event): Completable
+
+    fun saveBackpackDetail(detail: Detail): Single<Detail>
 }

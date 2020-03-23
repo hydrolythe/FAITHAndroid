@@ -1,7 +1,7 @@
 package be.hogent.faith.faith.backpackScreen.detailFilters
 
 import be.hogent.faith.domain.models.detail.Detail
-import java.util.*
+import java.util.Locale
 
 class DetailNameFilter(var searchString: String) : DetailFilter {
 
