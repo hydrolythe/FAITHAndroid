@@ -1,14 +1,16 @@
 package be.hogent.faith.faith.details.text.create
 
-import android.graphics.Color
+import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.details.DetailViewModel
+import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.textDetail.CreateTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.OverwriteTextDetailUseCase
@@ -50,6 +52,10 @@ class TextDetailViewModel(
     private val _selectedTextColor = MutableLiveData<@ColorRes Int>()
     val selectedTextColor: LiveData<Int> = _selectedTextColor
 
+    protected val _customTextColor = MutableLiveData<@ColorInt Int>()
+    val customTextColor: LiveData<Int>
+        get() = _customTextColor
+
     private val _selectedFontSize = MutableLiveData<FontSize>()
     val selectedFontSize: LiveData<FontSize> = _selectedFontSize
 
@@ -62,11 +68,29 @@ class TextDetailViewModel(
     private val _underlineClicked = MutableLiveData<Boolean?>()
     val underlineClicked: LiveData<Boolean?> = _underlineClicked
 
+    private val _fontsizeClicked = MutableLiveData<Boolean>()
+    val fontsizeClicked: LiveData<Boolean> = _fontsizeClicked
+
+    private val _customTextColorClicked = SingleLiveEvent<Unit>()
+    val customTextColorClicked: LiveData<Unit>
+        get() = _customTextColorClicked
+
+    private val _cancelClicked = SingleLiveEvent<Unit>()
+    val cancelClicked: LiveData<Unit>
+        get() = _cancelClicked
+
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int> = _errorMessage
 
+    val customTextColorSelected: LiveData<Boolean> =
+        Transformations.map<Int, Boolean>(_selectedTextColor) { color ->
+            color == _customTextColor.value
+        }
+
     init {
-        _selectedTextColor.value = Color.BLACK
+        _selectedTextColor.value = R.color.black
+        _customTextColor.value = R.color.green
+        _fontsizeClicked.value = false
         _selectedFontSize.value =
             FontSize.NORMAL
         // Start with empty String so contents are never null
@@ -74,27 +98,49 @@ class TextDetailViewModel(
     }
 
     fun onBoldClicked() {
-        _boldClicked.value = _boldClicked.value?.not()
+        _boldClicked.value =
+            if (_boldClicked.value != null && _boldClicked.value == true) false else true
     }
 
     fun onItalicClicked() {
-        _italicClicked.value = _italicClicked.value?.not()
+        _italicClicked.value =
+            if (_italicClicked.value != null && _italicClicked.value == true) false else true
     }
 
     fun onUnderlineClicked() {
-        _underlineClicked.value = _underlineClicked.value?.not()
+        _underlineClicked.value =
+            if (_underlineClicked.value != null && _underlineClicked.value == true) false else true
+    }
+
+    fun onCustomTextColorClicked() {
+        _customTextColorClicked.call()
+        _selectedTextColor.value = _customTextColor.value
+    }
+
+    fun pickFontsizeClicked() {
+        _fontsizeClicked.value = true
     }
 
     fun pickTextColor(@ColorRes color: Int) {
         _selectedTextColor.value = color
     }
 
+    fun pickCustomTextColor(@ColorInt color: Int) {
+        _customTextColor.value = color
+        _selectedTextColor.value = color
+    }
+
     fun pickFontSize(fontSize: FontSize) {
         _selectedFontSize.value = fontSize
+        _fontsizeClicked.value = false
     }
 
     fun setText(text: String) {
         _text.value = text
+    }
+
+    fun onCancelClicked() {
+        _cancelClicked.call()
     }
 
     override fun onSaveClicked() {

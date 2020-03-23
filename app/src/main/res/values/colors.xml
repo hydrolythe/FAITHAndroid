@@ -29,6 +29,8 @@
     <color name="onError">#FFFFFF</color>
     <color name="background_register_info_color">#A7FFEB</color>
     <color name="background_record_audio">#91C6A8</color>
+    <color name="background_save_event">#CDF9EC</color>
+    <color name="background_enter_text">#F21040</color>
 
     <color name="blue">#00FFFF</color>
     <color name="red">#DA1D45</color>
@@ -37,6 +39,9 @@
     <color name="yellow">#FFFF00</color>
 
     <color name="caption">#0000FF</color>
+    <color name="recorderIcons">#F21040</color>
+
+    <color name="dark_green">#44786B</color>
 
     <color name="skin_blank">#FFC18E</color>
     <color name="skin_lightbrown">#D39751</color>

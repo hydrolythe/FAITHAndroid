@@ -110,6 +110,9 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         eventViewModel.errorMessage.observe(this, Observer { errorMessageResId ->
             Toast.makeText(this, errorMessageResId, Toast.LENGTH_SHORT).show()
         })
+        eventViewModel.cancelButtonClicked.observe(this, Observer {
+            onBackPressed()
+        })
     }
 
     private fun showExitAlert() {
@@ -131,7 +134,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
 
     public override fun onDestroy() {
         super.onDestroy()
-        if (alertDialog != null && alertDialog!!.isShowing()) {
+        if (alertDialog != null && alertDialog!!.isShowing) {
             alertDialog!!.cancel()
         }
     }

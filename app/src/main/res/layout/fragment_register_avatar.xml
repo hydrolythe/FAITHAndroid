@@ -32,7 +32,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_register_naar_de_stad"
-                style="@style/login_button"
+                style="@style/faith_button"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="32dp"
                 android:gravity="center"

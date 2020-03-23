@@ -46,6 +46,17 @@ class TextDetailViewModelTest {
     }
 
     @Test
+    fun enterTextVM_pickNewCustomTextColor_isSelected() {
+        viewModel.pickCustomTextColor(Color.BLACK)
+        Assert.assertEquals(Color.BLACK, TestUtils.getValue(viewModel.selectedTextColor))
+        Assert.assertEquals(Color.BLACK, TestUtils.getValue(viewModel.customTextColor))
+
+        viewModel.pickCustomTextColor(Color.RED)
+        Assert.assertEquals(Color.RED, TestUtils.getValue(viewModel.selectedTextColor))
+        Assert.assertEquals(Color.RED, TestUtils.getValue(viewModel.customTextColor))
+    }
+
+    @Test
     fun enterTextVM_pickNewFontSize_isSelected() {
         viewModel.pickFontSize(TextDetailViewModel.FontSize.NORMAL)
         Assert.assertEquals(
@@ -58,6 +69,31 @@ class TextDetailViewModelTest {
             TextDetailViewModel.FontSize.LARGE,
             TestUtils.getValue(viewModel.selectedFontSize)
         )
+    }
+
+    @Test
+    fun enterTextVM_onFontSizeClicked_setsFontSizeClicked() {
+        viewModel.pickFontsizeClicked()
+        Assert.assertEquals(
+            true,
+            TestUtils.getValue(viewModel.fontsizeClicked)
+        )
+
+        viewModel.pickFontSize(TextDetailViewModel.FontSize.LARGE)
+        Assert.assertEquals(
+            false,
+            TestUtils.getValue(viewModel.fontsizeClicked)
+        )
+    }
+
+    @Test
+    fun enterTextVM_onCustomColorClicked_callsListeners() {
+        val observer = mockk<Observer<Unit>>(relaxed = true)
+        viewModel.customTextColorClicked.observeForever(observer)
+
+        viewModel.onCustomTextColorClicked()
+
+        verify { observer.onChanged(any()) }
     }
 
     @Test

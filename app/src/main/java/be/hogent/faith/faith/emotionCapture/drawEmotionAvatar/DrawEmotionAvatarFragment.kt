@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -16,6 +17,8 @@ import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import com.divyanshu.draw.widget.DrawView
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.android.synthetic.main.panel_drawing_colors.hr_customColor
+import kotlinx.android.synthetic.main.panel_drawing_colors.paintpot_customColor
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -42,7 +45,7 @@ class DrawEmotionAvatarFragment : DrawFragment() {
     override val drawViewModel: DrawViewModel by viewModel()
 
     override val drawView: DrawView
-        get() = drawAvatarBinding.drawView
+        get() = drawAvatarBinding.drawAvatarDrawView
 
     override val colorAlpha: Int
         get() = COLOR_ALPHA
@@ -86,6 +89,8 @@ class DrawEmotionAvatarFragment : DrawFragment() {
         super.onStart()
         configureDrawingCanvas()
         startListeners()
+        hr_customColor.visibility = View.GONE
+        paintpot_customColor.visibility = View.GONE
     }
 
     private fun configureDrawingCanvas() {
@@ -124,8 +129,21 @@ class DrawEmotionAvatarFragment : DrawFragment() {
 
     private fun startListeners() {
         drawViewModel.restartClicked.observe(this, Observer {
-            drawView.clearCanvas()
-            drawAvatar()
+            val alertDialog: AlertDialog = this.run {
+                val builder = AlertDialog.Builder(this.requireContext()).apply {
+                    setTitle(R.string.dialog_to_restart_drawavatar_title)
+                    setMessage(R.string.dialog_to_restart_drawavatar_message)
+                    setPositiveButton(R.string.ok) { _, _ ->
+                        drawView.clearCanvas()
+                        drawAvatar()
+                    }
+                    setNegativeButton(R.string.cancel) { dialog, _ ->
+                        dialog.cancel()
+                    }
+                }
+                builder.create()
+            }
+            alertDialog.show()
         })
     }
 

@@ -2,12 +2,14 @@
 
 //All dependencies are gathered in this file
 apply from: 'dependencies.gradle'
+
 buildscript {
     ext.kotlin_version = '1.3.50'
-    ext.gradle_version = '3.5.2'
+    ext.gradle_version = '3.6.0'
     ext.oss_licenses_version = '0.9.5'
     ext.google_services = '4.3.3'
     ext.fabric_version = '1.31.2'
+    ext.performance_version = '1.3.1'
     repositories {
         google()
         jcenter()
@@ -22,6 +24,7 @@ buildscript {
         classpath "com.google.gms:google-services:$google_services"
         classpath "com.google.android.gms:oss-licenses-plugin:$oss_licenses_version"
         classpath "io.fabric.tools:gradle:$fabric_version"
+        classpath "com.google.firebase:perf-plugin:$performance_version"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

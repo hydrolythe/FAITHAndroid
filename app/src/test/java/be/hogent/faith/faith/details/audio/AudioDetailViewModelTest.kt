@@ -2,10 +2,12 @@ package be.hogent.faith.faith.details.audio
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import be.hogent.faith.faith.TestUtils.getValue
+import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener
 import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.faith.testModule
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import io.mockk.mockk
+import junit.framework.Assert.assertEquals
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -39,128 +41,131 @@ class AudioDetailViewModelTest : KoinTest {
     }
 
     @Test
-    fun audioDetailVM_existingDetail_recordButtonNotAvailable() {
-        // Act
-        viewModel.loadExistingDetail(mockk())
-
-        // Assert
-        assertFalse(getValue(viewModel.recordButtonEnabled))
-    }
-
-    @Test
-    fun audioDetailVM_existingDetail_saveButtonNotVisible() {
-        // Act
-        viewModel.loadExistingDetail(mockk())
-
-        // Assert
-        assertFalse(getValue(viewModel.saveButtonVisible))
-    }
-
-    @Test
-    fun audioDetailVM_initial_correctButtonsEnabled() {
-        // Assert
-        assertFalse(getValue(viewModel.playButtonEnabled))
-        assertFalse(getValue(viewModel.pauseButtonEnabled))
-        assertFalse(getValue(viewModel.stopButtonEnabled))
-        assertTrue(getValue(viewModel.recordButtonEnabled))
-
-        assertFalse(getValue(viewModel.saveButtonVisible))
-    }
-
-    @Test
-    fun audioDetailVM_onRecording_pauseSupported_correctButtonsEnabled() {
+    fun `on startUp the UI is in the Initial state`() {
         // Arrange
-        viewModel.pauseSupported = true
+        viewModel.initialiseState()
 
-        // Act
-        viewModel.onRecordButtonClicked()
-
-        // Assert
-        assertFalse(getValue(viewModel.playButtonEnabled))
-        assertTrue(getValue(viewModel.pauseButtonEnabled))
-        assertTrue(getValue(viewModel.stopButtonEnabled))
-        assertFalse(getValue(viewModel.recordButtonEnabled))
-
-        assertFalse(getValue(viewModel.saveButtonVisible))
+        assertEquals(AudioViewState.Initial, getValue(viewModel.viewState))
     }
 
     @Test
-    fun audioDetailVM_onRecording_pauseNotSupported_correctButtonsEnabled() {
-        // Act
+    fun `when given an existing detail the UI starts in the finishedRecording state`() {
+        // Arrange
+        viewModel.loadExistingDetail(mockk())
+        viewModel.initialiseState()
+
+        assertEquals(AudioViewState.FinishedRecording, getValue(viewModel.viewState))
+    }
+
+    @Test
+    fun `the pause button is not visible when recording when pausing is not supported`() {
+        // Arrange
+        viewModel.initialiseState()
+        viewModel.onRecordingStateChanged(RecordingInfoListener.RecordingState.RECORDING)
         viewModel.pauseSupported = false
-        viewModel.onRecordButtonClicked()
 
-        // Assert
-        assertFalse(getValue(viewModel.playButtonEnabled))
-        assertFalse(getValue(viewModel.pauseButtonEnabled))
-        assertTrue(getValue(viewModel.stopButtonEnabled))
-        assertFalse(getValue(viewModel.recordButtonEnabled))
-
-        assertFalse(getValue(viewModel.saveButtonVisible))
-    }
-
-    @Test
-    fun audioDetailVM_onRecordingPaused_correctButtonsEnabled() {
         // Act
-        viewModel.onRecordButtonClicked()
-        viewModel.onPauseButtonClicked()
+        val pauseVisible = getValue(viewModel.pauseRecordingVisible)
 
         // Assert
-        assertFalse(getValue(viewModel.playButtonEnabled))
-        assertFalse(getValue(viewModel.pauseButtonEnabled))
-        assertTrue(getValue(viewModel.stopButtonEnabled))
-        assertTrue(getValue(viewModel.recordButtonEnabled))
-
-        assertFalse(getValue(viewModel.saveButtonVisible))
+        assertFalse(pauseVisible)
     }
 
     @Test
-    fun audioDetailVM_onRecordingStopped_correctButtonsEnabled() {
-        // Act
-        viewModel.onRecordButtonClicked()
-        viewModel.onStopButtonClicked()
-
-        // Assert
-        assertTrue(getValue(viewModel.playButtonEnabled))
-        assertFalse(getValue(viewModel.pauseButtonEnabled))
-        assertFalse(getValue(viewModel.stopButtonEnabled))
-        assertTrue(getValue(viewModel.recordButtonEnabled))
-
-        assertTrue(getValue(viewModel.saveButtonVisible))
-    }
-
-    @Test
-    fun audioDetailVM_onRecordingPlaying_correctButtonsEnabled() {
+    fun `the pause button is visible when recording when pausing is supported`() {
+        // Arrange
+        viewModel.initialiseState()
+        viewModel.onRecordingStateChanged(RecordingInfoListener.RecordingState.RECORDING)
         viewModel.pauseSupported = true
+
         // Act
-        viewModel.onRecordButtonClicked()
-        viewModel.onStopButtonClicked()
-        viewModel.onPlayButtonClicked()
+        val pauseVisible = getValue(viewModel.pauseRecordingVisible)
 
         // Assert
-        assertFalse(getValue(viewModel.playButtonEnabled))
-        assertTrue(getValue(viewModel.pauseButtonEnabled))
-        assertTrue(getValue(viewModel.stopButtonEnabled))
-        assertFalse(getValue(viewModel.recordButtonEnabled))
-
-        assertTrue(getValue(viewModel.saveButtonVisible))
+        assertTrue(pauseVisible)
     }
 
     @Test
-    fun audioDetailVM_onRecordingPlayingPaused_correctButtonsEnabled() {
+    fun `when pausing the recording the pause button is invisible`() {
+        // Arrange
+        viewModel.initialiseState()
+        viewModel.onRecordingStateChanged(RecordingInfoListener.RecordingState.RECORDING)
         viewModel.pauseSupported = true
+
         // Act
-        viewModel.onRecordButtonClicked()
-        viewModel.onStopButtonClicked()
-        viewModel.onPlayButtonClicked()
-        viewModel.onPauseButtonClicked()
+        viewModel.onRecordingStateChanged(RecordingInfoListener.RecordingState.PAUSED)
+        val pauseVisible = getValue(viewModel.pauseRecordingVisible)
 
         // Assert
-        assertTrue(getValue(viewModel.playButtonEnabled))
-        assertFalse(getValue(viewModel.pauseButtonEnabled))
-        assertTrue(getValue(viewModel.stopButtonEnabled))
-        assertFalse(getValue(viewModel.recordButtonEnabled))
+        assertFalse(pauseVisible)
+    }
 
-        assertTrue(getValue(viewModel.saveButtonVisible))
+    @Test
+    fun `when pausing the recording the record button is visible`() {
+        // Arrange
+        viewModel.initialiseState()
+        viewModel.onRecordingStateChanged(RecordingInfoListener.RecordingState.RECORDING)
+        viewModel.pauseSupported = true
+
+        // Act
+        viewModel.onRecordingStateChanged(RecordingInfoListener.RecordingState.PAUSED)
+        val restartRecordingButtonVisible = getValue(viewModel.restartRecordingVisible)
+
+        // Assert
+        assertTrue(restartRecordingButtonVisible)
+    }
+
+    @Test
+    fun `resetting the recording is not available when playing an existing detail`() {
+        // Arrange
+        viewModel.loadExistingDetail(mockk())
+        viewModel.initialiseState()
+        viewModel.onRecordingStateChanged(RecordingInfoListener.RecordingState.STOPPED)
+
+        // Act
+        val resetVisible = getValue(viewModel.deleteButtonVisible)
+
+        // Assert
+        assertFalse(resetVisible)
+    }
+
+    @Test
+    fun `resetting the recording is available when playing a recording you just recorded`() {
+        // Arrange
+        viewModel.initialiseState()
+        viewModel.onRecordingStateChanged(RecordingInfoListener.RecordingState.STOPPED)
+
+        // Act
+        val resetVisible = getValue(viewModel.deleteButtonVisible)
+
+        // Assert
+        assertTrue(resetVisible)
+    }
+
+    @Test
+    fun `when setting the final recording duration it is shown in a mm_colon_ss format`() {
+        // Act
+        viewModel.setRecordingFinalDuration(125_000) // 125 seconds
+
+        // Assert
+        assertEquals("02:05", getValue(viewModel.recordingDuration))
+    }
+
+    @Test
+    fun `when setting the final recording duration the time is rounded up to the nearest second`() {
+        // Act
+        viewModel.setRecordingFinalDuration(600)
+
+        // Assert
+        assertEquals("00:01", getValue(viewModel.recordingDuration))
+    }
+
+    @Test
+    fun `when setting the final recording duration the time is rounded down to the nearest second`() {
+        // Act
+        viewModel.setRecordingFinalDuration(400)
+
+        // Assert
+        assertEquals("00:00", getValue(viewModel.recordingDuration))
     }
 }

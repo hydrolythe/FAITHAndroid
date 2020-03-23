@@ -34,13 +34,24 @@
             android:focusable="true"
             android:focusableInTouchMode="true">
 
+            <ImageButton
+                android:id="@+id/btn_draw_cancel"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="@dimen/material_icon_height"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/ic_return"
+                android:contentDescription="@string/cancel"
+                android:onClick="@{() -> eventViewModel.onCancelButtonClicked()}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
             <ImageView
                 android:id="@+id/img_wegwijzerpaal"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/guide_recyclerview_top"
                 app:layout_constraintEnd_toStartOf="@+id/guide_center_pole"
-                app:layout_constraintHeight_percent="0.50"
                 app:layout_constraintStart_toStartOf="@+id/guide_center_pole"
                 app:layout_constraintTop_toBottomOf="@+id/guide_top_pole"
                 app:srcCompat="@drawable/wegwijzerpaal"
@@ -134,8 +145,10 @@
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/guide_recyclerview_end"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/guide_recyclerview_start"
                 app:layout_constraintTop_toBottomOf="@+id/guide_recyclerview_top"
+                app:layout_constraintVertical_bias="1.0"
                 tools:listitem="@layout/item_event_detail_thumbnail" />
 
             <ImageButton

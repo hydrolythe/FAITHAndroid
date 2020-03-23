@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Linting') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                catchError {
                     sh './gradlew ktlint'
                 }
             }
@@ -29,7 +29,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                catchError {
                     sh './gradlew :app:assembleDebug'
                     sh './gradlew :app:assembleDebugAndroidTest'
                 }
@@ -37,7 +37,7 @@ pipeline {
         }
         stage('Unit Test') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                catchError {
                     sh './gradlew testDebugUnitTest testDebugUnitTest'
                     junit '**/TEST-*.xml'
                 }
@@ -46,7 +46,7 @@ pipeline {
 
         stage('Integration tests') {
             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                catchError {
                     sh 'gcloud firebase test android run ' +
                             '--type instrumentation ' +
                             '--app app/build/outputs/apk/debug/app-debug.apk ' +

@@ -28,7 +28,7 @@ ext {
     firebase_analytics ='17.2.0'
 
     // UI LIBRARIES
-    constraint_layout_version = '2.0.0-beta1'
+    constraint_layout_version = '2.0.0-beta4'
     fragment_version = '1.1.0'
 
     recyclerview_version = '1.0.0'
@@ -61,7 +61,7 @@ ext {
     firebase_test_version = '17.2.1'
     crashlytics_dep_version = '2.10.1'
     hamcrest_version = '2.2'
-
+    firebase_performance = '19.0.5'
     uiAutomator_version = '2.2.0'
     junit_version = '4.12'
     mockk_version = '1.9.2'
@@ -151,7 +151,9 @@ ext {
             firebaseauth :"com.google.firebase:firebase-auth:$firebaseauth_version",
             firestore :"com.google.firebase:firebase-firestore:$firestore_version",
             firebasestorage :"com.google.firebase:firebase-storage:$firebasestorage_version",
-            firebasestorageui:"com.firebaseui:firebase-ui-storage:$firebasestorageui_version"
+            firebasestorageui:"com.firebaseui:firebase-ui-storage:$firebasestorageui_version",
+            // Add the dependency for the Performance Monitoring library
+            performance: "com.google.firebase:firebase-perf:$firebase_performance"
     ]
 
     uiDependencies = [

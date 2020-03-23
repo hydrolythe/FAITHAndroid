@@ -24,17 +24,17 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout_username"
-                style="@style/login_textInputLayout"
+                style="@style/faith_textInputLayout"
                 android:hint="@string/username"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
-                app:errorResId="@{welcomeViewModel.userNameErrorMessage}">
+                app:errorResId="@{welcomeViewModel.userNameErrorMessage}"
+                app:startIconDrawable="@drawable/ic_login_wrap">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_welcome_userName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_login_wrap"
                     android:imeOptions="flagNoExtractUi"
                     android:inputType="text"
                     android:nextFocusRight="@+id/txt_welcome_password"
@@ -46,18 +46,18 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout_pwd"
-                style="@style/login_textInputLayout"
+                style="@style/faith_textInputLayout"
                 android:layout_marginTop="10dp"
                 android:hint="@string/password"
                 app:endIconMode="password_toggle"
                 app:errorEnabled="true"
-                app:errorResId="@{welcomeViewModel.passwordErrorMessage}">
+                app:errorResId="@{welcomeViewModel.passwordErrorMessage}"
+                app:startIconDrawable="@drawable/ic_lock_wrap">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txt_welcome_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_lock_wrap"
                     android:imeOptions="flagNoExtractUi"
                     android:inputType="textPassword"
                     android:nextFocusLeft="@+id/txt_welcome_userName"
@@ -67,7 +67,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_register_naar_de_stad"
-                style="@style/login_button"
+                style="@style/faith_button"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:onClick="@{() -> welcomeViewModel.loginButtonClicked()}"

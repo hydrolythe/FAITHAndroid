@@ -9,16 +9,19 @@
             type="be.hogent.faith.faith.details.text.create.TextDetailViewModel" />
 
         <import type="android.graphics.Color" />
-        <import type="be.hogent.faith.faith.details.text.create.TextDetailViewModel.FontSize"/>
+
+        <import type="be.hogent.faith.faith.details.text.create.TextDetailViewModel.FontSize" />
 
         <import type="be.hogent.faith.faith.details.text.create.TextDetailViewModel" />
+
+        <import type="android.view.View" />
 
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent"
+        android:background="@color/background_enter_text"
         android:orientation="vertical">
         <!--ACHTERGROND-->
 
@@ -37,159 +40,264 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/save_btn"
+                android:contentDescription="@string/save"
                 android:elevation="2dp"
                 android:onClick="@{() -> textDetailViewModel.onSaveClicked()}"
-                android:contentDescription="@string/save"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageButton
+                android:id="@+id/btn_enter_text_cancel"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="@dimen/material_icon_height"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/ic_return"
+                android:contentDescription="@string/cancel"
+                android:onClick="@{() -> textDetailViewModel.onCancelClicked()}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView_bold"
+                android:id="@+id/cardView_text"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="@dimen/panel_corner_radius"
-                app:layout_constraintBottom_toTopOf="@+id/scrollView2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btn_enter_text_save"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/cardView_size"
+                app:layout_constraintBottom_toTopOf="@+id/scrollView_enter_text"
+                app:layout_constraintEnd_toEndOf="@+id/scrollView_enter_text"
+                app:layout_constraintStart_toEndOf="@+id/guidelineCenter"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="8dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/btn_enter_text_setBold"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
+                        android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="17dp"
+                        android:contentDescription="@string/pijl"
+                        android:src="@drawable/ic_selected_down"
+                        android:visibility="@{(textDetailViewModel.fontsizeClicked.booleanValue()==true)? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <ImageView
+                        android:id="@+id/btn_enter_text_setSizeText"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(textDetailViewModel.boldClicked)? @drawable/background : @drawable/background_noborder}"
+                        android:contentDescription="@string/kies_tekstgrootte"
+                        android:gravity="center_horizontal"
+                        android:onClick="@{() -> textDetailViewModel.pickFontsizeClicked()}"
+                        android:padding="5dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_tekst"
+                        android:tint="@{textDetailViewModel.selectedTextColor}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:layout_width="1dip"
+                        android:layout_height="match_parent"
+                        android:background="@color/black" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/img_enter_text_setBold_selected"
+                        android:layout_width="20dp"
+                        android:layout_height="17dp"
+                        android:contentDescription="@string/pijl"
+                        android:src="@drawable/ic_selected_down"
+                        android:visibility="@{ textDetailViewModel.boldClicked ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/btn_enter_text_setBold"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
                         android:contentDescription="@string/choose_bold"
                         android:gravity="center_horizontal"
                         android:onClick="@{() -> textDetailViewModel.onBoldClicked()}"
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/bold"
-                        android:text="@string/bold"
-                        android:textSize="@dimen/font_size_enter_text"
-                        android:textStyle="bold" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <TextView
-                        android:id="@+id/btn_enter_text_setItalic"
+                    <View
+                        android:layout_width="1dip"
+                        android:layout_height="match_parent"
+                        android:background="@color/black" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
+                        android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/img_enter_text_setItalic_selected"
+                        android:layout_width="20dp"
+                        android:layout_height="17dp"
+                        android:contentDescription="@string/pijl"
+                        android:src="@drawable/ic_selected_down"
+                        android:visibility="@{ textDetailViewModel.italicClicked ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/btn_enter_text_setItalic"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(textDetailViewModel.italicClicked)? @drawable/background : @drawable/background_noborder}"
                         android:contentDescription="@string/choose_italic"
                         android:gravity="center_horizontal"
                         android:onClick="@{() -> textDetailViewModel.onItalicClicked()}"
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/italic"
-                        android:text="@string/italic"
-                        android:textSize="@dimen/font_size_enter_text"
-                        android:textStyle="italic" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <TextView
-                        android:id="@+id/btn_enter_text_setUnderline"
+                    <View
+                        android:layout_width="1dip"
+                        android:layout_height="match_parent"
+                        android:background="@color/black" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/img_enter_text_setUnderline_selected"
+                        android:layout_width="20dp"
+                        android:layout_height="17dp"
+                        android:contentDescription="@string/pijl"
+                        android:src="@drawable/ic_selected_down"
+                        android:visibility="@{ textDetailViewModel.underlineClicked ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/btn_enter_text_setUnderline"
+                        android:layout_width="0dp"
+                        android:layout_height="50dp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(textDetailViewModel.underlineClicked)? @drawable/background : @drawable/background_noborder}"
                         android:contentDescription="@string/choose_underline"
-                        android:gravity="center_horizontal"
                         android:onClick="@{() -> textDetailViewModel.onUnderlineClicked()}"
+                        android:gravity="center_horizontal"
                         android:padding="5dp"
                         android:scaleType="centerInside"
                         android:src="@drawable/underline"
-                        android:text="@string/underline"
-                        android:textSize="@dimen/font_size_enter_text" />
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView_size"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="16dp"
+                android:visibility="@{textDetailViewModel.fontsizeClicked ? View.VISIBLE : View.GONE}"
                 app:cardCornerRadius="@dimen/panel_corner_radius"
-                app:layout_constraintBottom_toTopOf="@+id/guideline8"
-                app:layout_constraintEnd_toStartOf="@+id/cardView_bold"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/cardView_colors"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintStart_toEndOf="@+id/guidelineCenter"
+                app:layout_constraintTop_toBottomOf="@+id/cardView_text">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:baselineAligned="true"
+                    android:layout_width="200dp"
+                    android:layout_height="100dp"
+                    android:focusable="true"
                     android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/btn_enter_text_setFontSmall"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:background="@{textDetailViewModel.selectedFontSize==FontSize.SMALL? @drawable/background : @drawable/background_noborder}"
-                        android:gravity="bottom|center_horizontal"
-                        android:onClick="@{() -> textDetailViewModel.pickFontSize(FontSize.SMALL)}"
-                        android:padding="5dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/font_sizesmall"
-                        android:text="@string/textSize_a"
-                        android:textSize="@dimen/textIcon_fontsize_small" />
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="100dp" />
 
-                    <TextView
-                        android:id="@+id/btn_enter_text_setFontNormal"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:background="@{textDetailViewModel.selectedFontSize==FontSize.NORMAL?@drawable/background : @drawable/background_noborder}"
-                        android:gravity="bottom|center_horizontal"
-                        android:onClick="@{() -> textDetailViewModel.pickFontSize(FontSize.NORMAL)}"
-                        android:padding="5dp"
-                        android:scaleType="centerInside"
-
-                        android:src="@drawable/font_sizemedium"
-                        android:text="@string/textSize_a"
-                        android:textSize="@dimen/textIcon_fontsize_medium" />
-
-                    <TextView
+                    <ImageView
                         android:id="@+id/btn_enter_text_setFontLarge"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
                         android:adjustViewBounds="true"
-                        android:background="@{textDetailViewModel.selectedFontSize==FontSize.LARGE? @drawable/background : @drawable/background_noborder}"
-                        android:gravity="center_horizontal"
+                        android:contentDescription="@string/fontsize_large"
                         android:onClick="@{() -> textDetailViewModel.pickFontSize(FontSize.LARGE)}"
-                        android:padding="5dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/font_sizelarge"
-                        android:text="@string/textSize_a"
-                        android:textSize="@dimen/textIcon_fontsize_large" />
+                        android:src="@drawable/ic_tekst"
+                        android:tint="@{textDetailViewModel.selectedFontSize==FontSize.LARGE ? textDetailViewModel.selectedTextColor : Color.BLACK}" />
+
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="100dp" />
+
+                    <ImageView
+                        android:id="@+id/btn_enter_text_setFontNormal"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="@string/fontsize_normal"
+                        android:onClick="@{() -> textDetailViewModel.pickFontSize(FontSize.NORMAL)}"
+                        android:src="@drawable/ic_tekst"
+                        android:tint="@{textDetailViewModel.selectedFontSize==FontSize.NORMAL ? textDetailViewModel.selectedTextColor : Color.BLACK}" />
+
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="100dp" />
+
+                    <ImageView
+                        android:id="@+id/btn_enter_text_setFontSmall"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/fontsize_small"
+                        android:adjustViewBounds="true"
+                        android:onClick="@{() -> textDetailViewModel.pickFontSize(FontSize.SMALL)}"
+                        android:src="@drawable/ic_tekst"
+                        android:tint="@{textDetailViewModel.selectedFontSize==FontSize.SMALL ? textDetailViewModel.selectedTextColor : Color.BLACK}" />
+
+
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="100dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -198,103 +306,225 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
                 app:cardCornerRadius="@dimen/panel_corner_radius"
                 app:layout_constraintBottom_toTopOf="@+id/guideline8"
-                app:layout_constraintEnd_toStartOf="@+id/cardView_size"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/scrollView_enter_text"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_margin="8dp"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/btn_enter_text_setColorBlue"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(textDetailViewModel.selectedTextColor)==@color/blue ? @drawable/background : @drawable/background_noborder}"
-                        android:contentDescription="@string/choose_blue"
-                        android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/blue)}"
-                        android:padding="5dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/paintpot_blue" />
+                        android:layout_weight="1">
 
-                    <ImageView
-                        android:id="@+id/btn_enter_text_setColorRed"
+                        <ImageView
+                            android:id="@+id/img_enter_text_black_Selected"
+                            android:layout_width="20dp"
+                            android:layout_height="17dp"
+                            android:contentDescription="@string/pijl"
+                            android:src="@drawable/ic_selected_down"
+                            android:visibility="@{(textDetailViewModel.selectedTextColor.intValue()==@color/black) ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/btn_enter_text_setColorBlack"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:adjustViewBounds="true"
+                            android:contentDescription="@string/choose_black"
+                            android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/black)}"
+                            android:src="@drawable/paintpot_black"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(textDetailViewModel.selectedTextColor)==@color/red ? @drawable/background : @drawable/background_noborder}"
-                        android:contentDescription="@string/choose_red"
-                        android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/red)}"
+                        android:layout_weight="1">
 
-                        android:padding="5dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/paintpot_red" />
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="17dp"
+                            android:contentDescription="@string/pijl"
+                            android:src="@drawable/ic_selected_down"
+                            android:visibility="@{((int)textDetailViewModel.selectedTextColor)==@color/blue ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/btn_enter_text_setColorYellow"
+                        <ImageView
+                            android:id="@+id/btn_enter_text_setColorBlue"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:adjustViewBounds="true"
+                            android:contentDescription="@string/choose_black"
+                            android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/blue)}"
+                            android:src="@drawable/paintpot_blue"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(textDetailViewModel.selectedTextColor)==@color/yellow ? @drawable/background : @drawable/background_noborder}"
-                        android:contentDescription="@string/choose_yellow"
-                        android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/yellow)}"
-                        android:padding="5dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/paintpot_yellow" />
+                        android:layout_weight="1">
 
-                    <ImageView
-                        android:id="@+id/btn_enter_text_setColorGreen"
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="17dp"
+                            android:contentDescription="@string/pijl"
+                            android:src="@drawable/ic_selected_down"
+                            android:visibility="@{((int)textDetailViewModel.selectedTextColor)==@color/red ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/btn_enter_text_setColorRed"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:adjustViewBounds="true"
+                            android:contentDescription="@string/choose_black"
+                            android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/red)}"
+                            android:src="@drawable/paintpot_red"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:background="@{textDetailViewModel.selectedTextColor==@color/green ? @drawable/background : @drawable/background_noborder}"
-                        android:contentDescription="@string/choose_green"
-                        android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/green)}"
-                        android:padding="5dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/paintpot_green" />
+                        android:layout_weight="1">
 
-                    <ImageView
-                        android:id="@+id/btn_enter_text_setColorBlack"
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="17dp"
+                            android:contentDescription="@string/pijl"
+                            android:src="@drawable/ic_selected_down"
+                            android:visibility="@{((int)textDetailViewModel.selectedTextColor)==@color/yellow ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/btn_enter_text_setColorYellow"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:adjustViewBounds="true"
+                            android:contentDescription="@string/choose_black"
+                            android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/yellow)}"
+                            android:src="@drawable/paintpot_yellow"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:adjustViewBounds="true"
-                        android:background="@{safeUnbox(textDetailViewModel.selectedTextColor)==@color/black ? @drawable/background : @drawable/background_noborder}"
-                        android:contentDescription="@string/choose_black"
-                        android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/black)}"
-                        android:padding="5dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/paintpot_black" />
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="17dp"
+                            android:contentDescription="@string/pijl"
+                            android:src="@drawable/ic_selected_down"
+                            android:visibility="@{((int)textDetailViewModel.selectedTextColor)==@color/green ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/btn_enter_text_setColorGreen"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:adjustViewBounds="true"
+                            android:contentDescription="@string/choose_black"
+                            android:onClick="@{() -> textDetailViewModel.pickTextColor(@color/green)}"
+                            android:src="@drawable/paintpot_green"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:layout_width="1dip"
+                        android:layout_height="match_parent"
+                        android:background="@color/black" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/paintpot_customColor"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="17dp"
+                            android:contentDescription="@string/pijl"
+                            android:src="@drawable/ic_selected_down"
+                            android:visibility="@{textDetailViewModel.customTextColorSelected? View.VISIBLE : View.GONE}"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/btn_enter_text_setCustomColor"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_weight="1"
+                            android:adjustViewBounds="true"
+                            android:contentDescription="@string/choose_green"
+                            android:onClick="@{()->textDetailViewModel.onCustomTextColorClicked()}"
+                            android:src="@drawable/paintpot_general"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                 </LinearLayout>
+
             </androidx.cardview.widget.CardView>
 
             <ScrollView
-                android:id="@+id/scrollView2"
+                android:id="@+id/scrollView_enter_text"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:fillViewport="true"
                 android:scrollbars="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineEndText"
+                app:layout_constraintStart_toStartOf="@+id/guidelineStartText"
                 app:layout_constraintTop_toTopOf="@+id/guideline8">
 
 
@@ -312,6 +542,27 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.18" />
+
+            <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineStartText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.10" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineEndText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.90" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

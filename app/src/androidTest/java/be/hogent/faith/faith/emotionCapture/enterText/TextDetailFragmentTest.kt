@@ -36,10 +36,6 @@ class TextDetailFragmentTest {
         onView(withId(R.id.btn_enter_text_setColorYellow)).perform(click())
         onView(withId(R.id.btn_enter_text_setColorGreen)).perform(click())
         onView(withId(R.id.btn_enter_text_setColorRed)).perform(click())
-
-        onView(withId(R.id.btn_enter_text_setFontLarge)).perform(click())
-        onView(withId(R.id.btn_enter_text_setFontNormal)).perform(click())
-        onView(withId(R.id.btn_enter_text_setFontSmall)).perform(click())
     }
 
     /*
