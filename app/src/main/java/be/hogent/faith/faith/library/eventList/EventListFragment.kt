@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
@@ -79,6 +80,10 @@ class EventListFragment : Fragment() {
             override fun onEventClicked(eventUUID: UUID) {
                 navigation?.startEventDetailsFragment(eventUUID)
             }
+
+            override fun onEventDeleteClicked(eventUUID: UUID) {
+                showDeleteAlert(eventUUID)
+            }
         }
         eventsAdapter = EventsAdapter(eventListener, Glide.with(this))
         recyclerView.apply {
@@ -94,11 +99,9 @@ class EventListFragment : Fragment() {
             this, Observer { range -> btn_library_eventlist_chooseDate.text = range })
 
         eventListViewModel.filteredEvents.observe(this, Observer { list ->
-            eventsAdapter.apply {
-                events = list
-                notifyDataSetChanged()
-            }
+            eventsAdapter.updateEventsList(list, eventListViewModel.deleteEnabled.value!!)
         })
+
         eventListViewModel.audioFilterEnabled.observe(this, Observer { enabled ->
             setDrawable(
                 enabled,
@@ -143,6 +146,10 @@ class EventListFragment : Fragment() {
         eventListViewModel.cancelButtonClicked.observe(this, Observer {
             activity!!.onBackPressed()
         })
+
+        eventListViewModel.deleteEnabled.observe(this, Observer { enabled ->
+            eventsAdapter.updateEventsList(eventListViewModel.filteredEvents.value!!, enabled)
+        })
     }
 
     /**
@@ -163,6 +170,23 @@ class EventListFragment : Fragment() {
         picker.addOnPositiveButtonClickListener {
             eventListViewModel.setDateRange(it.first, it.second)
         }
+    }
+
+    private fun showDeleteAlert(eventUUID: UUID) {
+        val alertDialog: AlertDialog = this.run {
+            val builder = AlertDialog.Builder(this.requireContext()).apply {
+                setTitle(getString(R.string.library_verwijder_event_title))
+                setMessage(getString(R.string.library_verwijder_event_message))
+                setPositiveButton(R.string.ok) { _, _ ->
+                    eventListViewModel.deleteEvent(eventUUID)
+                }
+                setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.cancel()
+                }
+            }
+            builder.create()
+        }
+        alertDialog.show()
     }
 
     private fun setDrawable(enabled: Boolean, button: ImageButton, image: Int, imageSelected: Int) {

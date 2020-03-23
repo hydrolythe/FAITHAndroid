@@ -15,6 +15,7 @@ import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
+import timber.log.Timber
 import java.util.UUID
 
 class EventListViewModel(
@@ -51,6 +52,9 @@ class EventListViewModel(
         this.value = false
     }
     val textFilterEnabled = MutableLiveData<Boolean>().apply {
+        this.value = false
+    }
+    val deleteEnabled = MutableLiveData<Boolean>().apply {
         this.value = false
     }
 
@@ -138,6 +142,10 @@ class EventListViewModel(
         audioFilterEnabled.value = audioFilterEnabled.value!!.not()
     }
 
+    fun onDeleteClicked() {
+        deleteEnabled.value = deleteEnabled.value!!.not()
+    }
+
     fun onStartDateClicked() {
         _startDateClicked.call()
     }
@@ -160,6 +168,11 @@ class EventListViewModel(
         _endDate.value = if (endDate != null) toLocalDate(endDate) else LocalDate.now()
     }
 
+    fun deleteEvent(eventUUID: UUID) {
+        // TODO must be implemented
+        Timber.d("Item deleted")
+    }
+
     private fun toLocalDate(milliseconds: Long): LocalDate? {
         return Instant.ofEpochMilli(milliseconds) // Convert count-of-milliseconds-since-epoch into a date-time in UTC (`Instant`).
             .atZone(ZoneId.of("Europe/Brussels")) // Adjust into the wall-clock time used by the people of a particular region (a time zone). Produces a `ZonedDateTime` object.
@@ -171,7 +184,8 @@ class EventListViewModel(
 
         override fun onNext(t: List<Event>) {
             events = t
-            audioFilterEnabled.value = audioFilterEnabled.value // anders wordt de lijst niet getoond
+            audioFilterEnabled.value =
+                audioFilterEnabled.value // anders wordt de lijst niet getoond
         }
 
         override fun onError(e: Throwable) {

@@ -4,4 +4,5 @@ import java.util.UUID
 
 interface EventListener {
     fun onEventClicked(eventUUID: UUID)
+    fun onEventDeleteClicked(eventUUID: UUID)
 }

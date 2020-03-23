@@ -190,4 +190,7 @@
     <string name="wat_zoek_je">wat zoek je?</string>
     <string name="potlood">potlood</string>
     <string name="daterange">selecteer een datumbereik</string>
+    <string name="library_verwijder_event_message">Ben je zeker? Ook alle bijhorende tekeningen, foto\'s,... worden verwijderd</string>
+    <string name="library_verwijder_event_title">Wil je dit event verwijderen?</string>
+    <string name="delete">verwijder</string>
 </resources>

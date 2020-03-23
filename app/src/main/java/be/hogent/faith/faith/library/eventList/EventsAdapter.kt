@@ -3,8 +3,11 @@ package be.hogent.faith.faith.library.eventList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
@@ -21,7 +24,8 @@ import org.threeten.bp.format.FormatStyle
 class EventsAdapter(private val eventListener: EventListener, private val glide: RequestManager) :
     RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
 
-    var events: List<Event> = emptyList()
+    private var _events = emptyList<Event>().toMutableList()
+    private var _showDelete: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -32,11 +36,20 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
     }
 
     override fun getItemCount(): Int {
-        return events.size
+        return _events.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(events[position], position)
+        holder.bind(_events[position], _showDelete, position)
+    }
+
+    fun updateEventsList(newEvents: List<Event>, newShowDelete: Boolean) {
+        val diffCallback = EventListDiffCallback(_events, newEvents, _showDelete, newShowDelete)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        _events.clear()
+        _events.addAll(newEvents)
+        _showDelete = newShowDelete
+        diffResult.dispatchUpdatesTo(this)
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -48,13 +61,16 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
         private var hasTextDetails: ImageView = view.findViewById(R.id.btn_library_event_hasText)
         private var hasAudioDetails: ImageView = view.findViewById(R.id.btn_library_event_hasAudio)
         private var hasPhotoDetails: ImageView = view.findViewById(R.id.btn_library_event_hasPhoto)
-        private var hasDrawingDetails: ImageView = view.findViewById(R.id.btn_library_event_hasDrawing)
+        private var hasDrawingDetails: ImageView =
+            view.findViewById(R.id.btn_library_event_hasDrawing)
+        private var cardView: CardView = view.findViewById(R.id.cardView_library)
+        private var deleteImage: ImageButton = view.findViewById(R.id.img_delete)
         private val textDetailFilter = EventHasDetailTypeFilter(TextDetail::class)
         private val photoDetailFilter = EventHasDetailTypeFilter(PhotoDetail::class)
         private val audioDetailFilter = EventHasDetailTypeFilter(AudioDetail::class)
         private val drawingDetailFilter = EventHasDetailTypeFilter(DrawingDetail::class)
 
-        fun bind(event: Event, position: Int) {
+        fun bind(event: Event, showDelete: Boolean, position: Int) {
             eventTitle.text =
                 if (event.title!!.length < 50) event.title!! else "${event.title!!.substring(
                     0,
@@ -71,12 +87,21 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
 
             eventDesc.text = event.notes
 
-            hasTextDetails.visibility = if (textDetailFilter.invoke(event)) View.VISIBLE else View.GONE
-            hasAudioDetails.visibility = if (audioDetailFilter.invoke(event)) View.VISIBLE else View.GONE
-            hasPhotoDetails.visibility = if (photoDetailFilter.invoke(event)) View.VISIBLE else View.GONE
-            hasDrawingDetails.visibility = if (drawingDetailFilter.invoke(event)) View.VISIBLE else View.GONE
+            hasTextDetails.visibility =
+                if (textDetailFilter.invoke(event)) View.VISIBLE else View.GONE
+            hasAudioDetails.visibility =
+                if (audioDetailFilter.invoke(event)) View.VISIBLE else View.GONE
+            hasPhotoDetails.visibility =
+                if (photoDetailFilter.invoke(event)) View.VISIBLE else View.GONE
+            hasDrawingDetails.visibility =
+                if (drawingDetailFilter.invoke(event)) View.VISIBLE else View.GONE
+            deleteImage.visibility = if (showDelete) View.VISIBLE else View.GONE
 
-            itemView.setOnClickListener {
+            deleteImage.setOnClickListener {
+                eventListener.onEventDeleteClicked(event.uuid)
+            }
+
+            cardView.setOnClickListener {
                 eventListener.onEventClicked(event.uuid)
             }
         }
