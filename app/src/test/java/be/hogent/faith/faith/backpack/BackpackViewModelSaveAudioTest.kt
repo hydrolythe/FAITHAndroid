@@ -37,6 +37,7 @@ class BackpackViewModelSaveAudioTest {
                 mockk(),
                 mockk(),
                 mockk(),
+                mockk(),
                 getBackPackFilesDummyUseCase
         )
     }

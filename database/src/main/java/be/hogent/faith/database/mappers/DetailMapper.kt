@@ -3,12 +3,7 @@ package be.hogent.faith.database.mappers
 import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.DetailType
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.domain.models.detail.*
 import java.util.UUID
 
 /**
@@ -53,6 +48,11 @@ object DetailMapper : Mapper<DetailEntity, Detail> {
                 entity.fileName,
                 UUID.fromString(entity.uuid)
             )
+            DetailType.EXTERNAL_VIDEO -> ExternalVideoDetail(
+                    FileConverter().toFile(entity.file),
+                    entity.fileName,
+                    UUID.fromString(entity.uuid)
+            )
             else -> throw ClassCastException("Unknown DetailEntity subclass encountered")
         }
     }
@@ -65,6 +65,7 @@ object DetailMapper : Mapper<DetailEntity, Detail> {
                 is DrawingDetail -> DetailType.DRAWING
                 is PhotoDetail -> DetailType.PHOTO
                 is VideoDetail -> DetailType.VIDEO
+                is ExternalVideoDetail -> DetailType.EXTERNAL_VIDEO
                 else -> throw ClassCastException("Unknown Detail subclass encountered")
             }
         )

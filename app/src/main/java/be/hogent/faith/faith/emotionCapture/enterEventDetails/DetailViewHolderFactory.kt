@@ -12,6 +12,7 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.A
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExistingDetailNavigationListener
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.PictureDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.TextDetailViewHolder
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExternalVideoDetailViewHolder
 import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -29,24 +30,25 @@ object DetailViewHolderFactory {
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): DetailViewHolder {
         val thumbnailView = LayoutInflater.from(parent.context).inflate(
-            R.layout.detail_item_rv,
-            parent,
-            false
+                R.layout.detail_item_rv,
+                parent,
+                false
         ) as LinearLayout
 
         return when (viewType) {
             DetailTypes.AUDIO_DETAIL -> createAudioDetailViewHolder(
-                thumbnailView,
-                existingDetailNavigationListener
+                    thumbnailView,
+                    existingDetailNavigationListener
             )
             DetailTypes.PICTURE_DETAIL -> createPictureDetailViewHolder(
-                thumbnailView,
-                existingDetailNavigationListener
+                    thumbnailView,
+                    existingDetailNavigationListener
             )
+            DetailTypes.EXTERNAL_VIDEO_DETAIL -> createExternalVideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
             // TEXT_DETAIL
             else -> createTextDetailViewHolder(
-                thumbnailView,
-                existingDetailNavigationListener
+                    thumbnailView,
+                    existingDetailNavigationListener
             )
         }
     }
@@ -72,6 +74,12 @@ object DetailViewHolderFactory {
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): PictureDetailViewHolder {
         return PictureDetailViewHolder(thumbnailView, existingDetailNavigationListener)
+    }
+    private fun createExternalVideoDetailViewHolder(
+        thumbnailView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
+    ): ExternalVideoDetailViewHolder {
+        return ExternalVideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
 }
 
@@ -123,9 +131,9 @@ sealed class DetailViewHolder(
         val androidTempFileProvider: TempFileProvider by inject()
         override fun load(detail: Detail): RequestBuilder<Drawable> {
             return Glide.with(thumbnailView)
-                .load(androidTempFileProvider.getFile(detail))
-                // Signature is required to force Glide to reload overwritten pictures
-                .signature(MediaStoreSignature("", detail.file.lastModified(), 0))
+                    .load(androidTempFileProvider.getFile(detail))
+                    // Signature is required to force Glide to reload overwritten pictures
+                    .signature(MediaStoreSignature("", detail.file.lastModified(), 0))
         }
     }
 
@@ -136,6 +144,16 @@ sealed class DetailViewHolder(
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {
             return Glide.with(thumbnailView).load(R.drawable.event_detail_audio)
+        }
+    }
+
+    class ExternalVideoDetailViewHolder(
+        imageView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
+    ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
+
+        override fun load(detail: Detail): RequestBuilder<Drawable> {
+            return Glide.with(thumbnailView).load(R.drawable.event_detail_camera) //Vervangen door?
         }
     }
 

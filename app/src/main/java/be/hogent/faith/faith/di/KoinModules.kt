@@ -3,6 +3,7 @@ package be.hogent.faith.faith.di
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
+import be.hogent.faith.faith.backpackScreen.externalFile.ExternalFileViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.details.audio.AudioDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
@@ -52,7 +53,7 @@ val appModule = module(override = true) {
     viewModel { CityScreenViewModel(get()) }
     viewModel { (event: Event) -> EventViewModel(get(), get(), get(), get(), get(), event) }
     viewModel { EventViewModel(get(), get(), get(), get(), get()) }
-    viewModel { BackpackViewModel(get(), get(), get(), get(), get(), get()) }
+    viewModel { BackpackViewModel(get(), get(), get(), get(), get(), get(), get()) }
     viewModel { DrawViewModel() }
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }
@@ -69,7 +70,7 @@ val appModule = module(override = true) {
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { TakePhotoViewModel(get()) }
     viewModel { SelectedItemViewModel() }
-
+    viewModel { ExternalFileViewModel(get(),get()) }
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.
     scope(named(USER_SCOPE_NAME)) {

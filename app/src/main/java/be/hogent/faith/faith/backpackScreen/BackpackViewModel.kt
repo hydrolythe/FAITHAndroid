@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.backpackScreen
 
+import android.view.View
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -10,17 +11,21 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.backpackScreen.detailFilters.CombinedDetailFilter
+import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.backpack.SaveBackpackExternalVideoDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
+import be.hogent.faith.faith.backpackScreen.detailFilters.CombinedDetailFilter
 import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
+import java.lang.NullPointerException
+import java.util.Locale
 import io.reactivex.subscribers.DisposableSubscriber
 import org.jetbrains.annotations.TestOnly
 
@@ -39,6 +44,7 @@ class BackpackViewModel(
     private val saveBackpackAudioDetailUseCase: SaveBackpackAudioDetailUseCase,
     private val saveBackpackPhotoDetailUseCase: SaveBackpackPhotoDetailUseCase,
     private val saveBackpackDrawingDetailUseCase: SaveBackpackDrawingDetailUseCase,
+    private val saveBackpackExternalVideoDetailUseCase: SaveBackpackExternalVideoDetailUseCase,
     private val deleteBackpackDetailUseCase: DeleteBackpackDetailUseCase,
     private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
 
@@ -65,6 +71,9 @@ class BackpackViewModel(
     val videoFilterEnabled = MutableLiveData<Boolean>().apply {
         this.value = false
     }
+    val externalVideoFilterEnabled = MutableLiveData<Boolean>().apply {
+        this.value = false
+    }
 
     val filteredDetails: LiveData<List<Detail>> = MediatorLiveData<List<Detail>>().apply {
         addSource(searchString) { query ->
@@ -85,6 +94,10 @@ class BackpackViewModel(
         }
         addSource(audioFilterEnabled) { enabled ->
             detailFilter.hasAudioDetailFilter.isEnabled = enabled
+            value = detailFilter.filter(details)
+        }
+        addSource(externalVideoFilterEnabled) { enabled ->
+            detailFilter.hasExternalVideoDetailFilter.isEnabled = enabled
             value = detailFilter.filter(details)
         }
     }
@@ -113,6 +126,9 @@ class BackpackViewModel(
 
     private val _drawingSavedSuccessFully = SingleLiveEvent<Int>()
     val drawingDetailSavedSuccessFully: LiveData<Int> = _drawingSavedSuccessFully
+
+    private val _externalVideoSavedSuccessFully = SingleLiveEvent<Int>()
+    val externalVideoSavedSuccessFully: LiveData<Int> = _externalVideoSavedSuccessFully
 
     private val _audioSavedSuccessFully = SingleLiveEvent<Int>()
     val audioDetailSavedSuccessFully: LiveData<Int> = _audioSavedSuccessFully
@@ -196,6 +212,9 @@ class BackpackViewModel(
     fun onFilterVideoClicked() {
         videoFilterEnabled.value = videoFilterEnabled.value!!.not()
     }
+    fun onFilterExternalVideoClicked() {
+        externalVideoFilterEnabled.value = externalVideoFilterEnabled.value!!.not()
+    }
 
     fun setSearchStringText(text: String) {
         searchString.postValue(text)
@@ -225,6 +244,7 @@ class BackpackViewModel(
             is TextDetail -> saveTextDetail(user, showSaveDialog.value as TextDetail)
             is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
             is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
+            is ExternalVideoDetail -> saveExternalVideoDetail(user,showSaveDialog.value as ExternalVideoDetail)
         }
         _currentFile.postValue(null)
     }
@@ -340,6 +360,21 @@ class BackpackViewModel(
         }
     }
 
+    fun saveExternalVideoDetail(user:User,detail: ExternalVideoDetail) {
+        val params = SaveBackpackExternalVideoDetailUseCase.Params(user,detail)
+        saveBackpackExternalVideoDetailUseCase.execute(params, SaveBackpackExternalVideoDetailUseCaseHandler())
+    }
+
+    private inner class SaveBackpackExternalVideoDetailUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _externalVideoSavedSuccessFully.postValue(R.string.save_video_success)
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_external_video_failed)
+        }
+    }
+
     fun goToDetail(detail: Detail) {
         _goToDetail.postValue(detail)
     }
@@ -361,11 +396,6 @@ class BackpackViewModel(
         override fun onError(e: Throwable) {
             _errorMessage.postValue(R.string.error_delete_detail_failure)
         }
-    }
-
-    @TestOnly
-    fun addDetails(details: List<Detail>) {
-        this.details = details
     }
 
     override fun onCleared() {

@@ -100,6 +100,7 @@ class BackpackScreenFragment : Fragment() {
             if (!it) { closeMenu() }
         })
 
+
         backpackViewModel.isInEditMode.observe(this, Observer {
             if (backpackViewModel.isInEditMode.value == OpenState.OPEN) {
                 detailThumbnailsAdapter!!.hide(false)
@@ -142,7 +143,7 @@ class BackpackScreenFragment : Fragment() {
                 R.id.backpack_menu_addDrawing ->
                     navigation?.startDrawingDetailFragment()
                 R.id.backpack_menu_addFile ->
-                    navigation?.startFileDetailFragment()
+                    navigation?.startExternalFileDetailFragment()
                 R.id.backpack_menu_addFoto ->
                     navigation?.startPhotoDetailFragment()
                 R.id.backpack_menu_addText ->
@@ -171,7 +172,7 @@ class BackpackScreenFragment : Fragment() {
         fun startDrawingDetailFragment()
         fun startTextDetailFragment()
         fun startVideoDetailFragment()
-        fun startFileDetailFragment()
+        fun startExternalFileDetailFragment()
 
         fun openDetailScreenFor(detail: Detail)
 

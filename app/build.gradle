@@ -82,6 +82,7 @@ dependencies {
     def androidDependencies = rootProject.ext.androidDependencies
     def uiDependencies = rootProject.ext.uiDependencies
 
+
     implementation commonDependencies.kotlin
     implementation commonDependencies.threeTenABP
     implementation commonDependencies.rxjava

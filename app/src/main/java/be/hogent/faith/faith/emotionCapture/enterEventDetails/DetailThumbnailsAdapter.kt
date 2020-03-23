@@ -6,10 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.AUDIO_DETAIL
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.EXTERNAL_VIDEO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.PICTURE_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.TEXT_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.VIDEO_DETAIL
@@ -20,6 +23,7 @@ object DetailTypes {
     const val PICTURE_DETAIL = 3
     const val DRAW_DETAIL = 4
     const val VIDEO_DETAIL = 5
+    const val EXTERNAL_VIDEO_DETAIL = 6
 }
 
 class DetailThumbnailsAdapter(
@@ -55,6 +59,7 @@ class DetailThumbnailsAdapter(
             is TextDetail -> TEXT_DETAIL
             is PhotoDetail -> PICTURE_DETAIL
             is VideoDetail -> VIDEO_DETAIL
+            is ExternalVideoDetail -> EXTERNAL_VIDEO_DETAIL
         }
     }
 

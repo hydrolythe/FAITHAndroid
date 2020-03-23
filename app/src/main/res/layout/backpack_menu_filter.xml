@@ -99,7 +99,7 @@
                 android:id="@+id/filterknop_film"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="#FFFFFF"
+                android:backgroundTint="@{backpackViewModel.videoFilterEnabled == true ? @color/md_lime_A700 : @color/red }"
                 android:onClick="@{() -> backpackViewModel.onFilterVideoClicked()}"
                 android:contentDescription="@string/filter_btn_video"
                 app:srcCompat="@drawable/filterknop_film" />
@@ -108,8 +108,8 @@
                 android:id="@+id/filterknop_extern_bestand"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:backgroundTint="#FFFFFF"
-
+                android:backgroundTint="@{backpackViewModel.externalVideoFilterEnabled == true ? @color/md_lime_A700 : @color/red }"
+                android:onClick="@{() -> backpackViewModel.onFilterExternalVideoClicked()}"
                 android:contentDescription="@string/filter_btn_file"
                 app:srcCompat="@drawable/filterknop_extern_bestand" />
         </TableRow>

@@ -12,7 +12,7 @@ interface DetailFragment<T : Detail> {
 
 interface DetailFinishedListener {
     /**
-     * Will be called when the used has finished creating or editing a detail.
+     * Will be called when the user has finished creating or editing a detail.
      * When the user wants to edit a new detail, it will get back the same detail object, but the
      * actual contents in the [Detail]'s file might have been changed.
      */

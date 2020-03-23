@@ -70,7 +70,7 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
 
         backpackViewModel.errorMessage.observe(this, Observer {
             if (it != null)
-            saveDetailBinding.textInputLayoutDetailTitle.error = resources.getString(it)
+                saveDetailBinding.textInputLayoutDetailTitle.error = resources.getString(it)
         })
     }
 

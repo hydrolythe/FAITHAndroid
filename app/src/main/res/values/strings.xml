@@ -192,6 +192,10 @@
     <string name="backpack_btn_delete">Verwijderknop rugzak</string>
     <string name="backpack_btn_open_filter">Open zoekmenu rugzak</string>
     <string name="backpack_btn_add">"Knop voeg toe "</string>
+    <string name="selected_image">Selected image</string>
+    <string name="create_video_failed">Er ging iets fout bij het aanmaken van de video.</string>
+    <string name="save_video_success">Je video werd succesvol opgeslagen.</string>
+    <string name="error_save_external_video_failed">Er ging iets fout bij het opslaan van je video.</string>
     <string name="save_detail_maxChar">"Bestandsnaam max 30 karakters"</string>
     <string name="save_detail_emptyString">"Gelieve een bestandsnaam in te geven"</string>
     <string name="save_detail_uniqueName">"Deze bestandsnaam bestaat al"</string>
