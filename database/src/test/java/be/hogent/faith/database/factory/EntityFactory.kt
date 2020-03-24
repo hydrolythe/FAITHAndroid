@@ -21,21 +21,25 @@ object EntityFactory {
         return when {
             rand < 0.25 -> DetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
+                "",
                 DataFactory.randomUUID().toString(),
                 DetailType.PHOTO
             )
             rand < 0.50 -> DetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
+                "",
                 DataFactory.randomUUID().toString(),
                 DetailType.DRAWING
             )
             rand < 0.75 -> DetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
+                "",
                 DataFactory.randomUUID().toString(),
                 DetailType.AUDIO
             )
             else -> DetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
+                "",
                 DataFactory.randomUUID().toString(),
                 DetailType.TEXT
             )

@@ -31,7 +31,7 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
         return ViewHolder(
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.event_list_content, parent, false)
+                .inflate(R.layout.library_rv_item, parent, false)
         )
     }
 
@@ -40,7 +40,7 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(_events[position], _showDelete, position)
+        holder.bind(_events[position], _showDelete)
     }
 
     fun updateEventsList(newEvents: List<Event>, newShowDelete: Boolean) {
@@ -70,7 +70,7 @@ class EventsAdapter(private val eventListener: EventListener, private val glide:
         private val audioDetailFilter = EventHasDetailTypeFilter(AudioDetail::class)
         private val drawingDetailFilter = EventHasDetailTypeFilter(DrawingDetail::class)
 
-        fun bind(event: Event, showDelete: Boolean, position: Int) {
+        fun bind(event: Event, showDelete: Boolean) {
             eventTitle.text =
                 if (event.title!!.length < 50) event.title!! else "${event.title!!.substring(
                     0,

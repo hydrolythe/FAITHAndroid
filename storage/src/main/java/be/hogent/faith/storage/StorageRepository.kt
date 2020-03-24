@@ -1,5 +1,6 @@
 package be.hogent.faith.storage
 
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
@@ -64,5 +65,15 @@ class StorageRepository(
                         getFileLocally(it)
                     }
             )
+    }
+
+    override fun getBackpack(backpack: Backpack): Completable {
+        return backpack.details.toFlowable().concatMapCompletable {
+            getFileLocally(it)
+        }
+    }
+
+    override fun saveBackpackDetail(detail: Detail): Single<Detail> {
+        return localStorage.saveBackpackDetail(detail)
     }
 }

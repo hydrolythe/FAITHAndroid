@@ -22,7 +22,7 @@ class CityScreenFragmentTest : KoinTest {
 
     @get:Rule
     var activityScenarioRule =
-        ActivityTestRule<LoginOrRegisterActivity>(LoginOrRegisterActivity::class.java, true, true)
+        ActivityTestRule(LoginOrRegisterActivity::class.java, true, true)
 
     @Before
     fun goToScreen() {

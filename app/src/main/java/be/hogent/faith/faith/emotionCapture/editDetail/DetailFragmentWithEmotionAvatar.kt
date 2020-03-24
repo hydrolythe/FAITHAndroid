@@ -130,6 +130,9 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                 is PhotoDetail -> PhotoFragmentWithEmotionAvatar.newInstance(
                     avatarOutLineId, detail
                 )
+                else -> TextFragmentWithEmotionAvatar.newInstance(
+                    avatarOutLineId, detail as TextDetail
+                )
             }
         }
 

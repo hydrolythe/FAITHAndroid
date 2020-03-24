@@ -2,19 +2,26 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.GlideApp
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.AudioDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExistingDetailNavigationListener
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.PictureDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.TextDetailViewHolder
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExternalVideoDetailViewHolder
 import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.signature.MediaStoreSignature
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.detail_item_rv.view.btn_delete_detailRv
+import kotlinx.android.synthetic.main.detail_item_rv.view.detail_img
+import kotlinx.android.synthetic.main.detail_item_rv.view.text_detail_title
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -25,10 +32,10 @@ object DetailViewHolderFactory {
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): DetailViewHolder {
         val thumbnailView = LayoutInflater.from(parent.context).inflate(
-            R.layout.item_event_detail_thumbnail,
+            R.layout.detail_item_rv,
             parent,
             false
-        ) as ImageView
+        ) as LinearLayout
 
         return when (viewType) {
             DetailTypes.AUDIO_DETAIL -> createAudioDetailViewHolder(
@@ -36,6 +43,10 @@ object DetailViewHolderFactory {
                 existingDetailNavigationListener
             )
             DetailTypes.PICTURE_DETAIL -> createPictureDetailViewHolder(
+                thumbnailView,
+                existingDetailNavigationListener
+            )
+            DetailTypes.EXTERNAL_VIDEO_DETAIL -> createExternalVideoDetailViewHolder(
                 thumbnailView,
                 existingDetailNavigationListener
             )
@@ -48,7 +59,7 @@ object DetailViewHolderFactory {
     }
 
     private fun createAudioDetailViewHolder(
-        thumbnailView: ImageView,
+        thumbnailView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): AudioDetailViewHolder {
         thumbnailView.background = null
@@ -56,7 +67,7 @@ object DetailViewHolderFactory {
     }
 
     private fun createTextDetailViewHolder(
-        thumbnailView: ImageView,
+        thumbnailView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): TextDetailViewHolder {
         thumbnailView.background = null
@@ -64,46 +75,73 @@ object DetailViewHolderFactory {
     }
 
     private fun createPictureDetailViewHolder(
-        thumbnailView: ImageView,
+        thumbnailView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): PictureDetailViewHolder {
         return PictureDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
+
+    private fun createExternalVideoDetailViewHolder(
+        thumbnailView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
+    ): ExternalVideoDetailViewHolder {
+        return ExternalVideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
+    }
 }
 
 sealed class DetailViewHolder(
-    val imageView: ImageView,
+    val thumbnailView: LinearLayout,
     private val existingDetailNavigationListener: ExistingDetailNavigationListener
-) : RecyclerView.ViewHolder(imageView), KoinComponent {
+) : RecyclerView.ViewHolder(thumbnailView), KoinComponent {
 
     fun bind(detail: Detail) {
-        load(detail).into(imageView)
-        imageView.setTag(R.id.TAG_DETAIL, detail)
-        imageView.setOnClickListener {
-            existingDetailNavigationListener.openDetailScreenFor(imageView.getTag(R.id.TAG_DETAIL) as Detail)
+        load(detail).into(thumbnailView.detail_img)
+        thumbnailView.setTag(R.id.TAG_DETAIL, detail)
+        thumbnailView.detail_img.setOnClickListener {
+            existingDetailNavigationListener.openDetailScreenFor(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
+        }
+        thumbnailView.btn_delete_detailRv.setOnClickListener {
+            existingDetailNavigationListener.deleteDetail(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
+        }
+        thumbnailView.text_detail_title.text = detail.fileName
+    }
+
+    fun hide(hide: Boolean) {
+        val deleteBtn = thumbnailView.btn_delete_detailRv
+        if (hide) {
+            deleteBtn.visibility = View.INVISIBLE
+            deleteBtn.isClickable = false
+        } else {
+            deleteBtn.visibility = View.VISIBLE
+            deleteBtn.isClickable = true
         }
     }
 
     abstract fun load(detail: Detail): RequestBuilder<Drawable>
 
     class TextDetailViewHolder(
-        imageView: ImageView,
+        imageView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {
-            return Glide.with(imageView).load(R.drawable.event_detail_text)
+            return Glide.with(thumbnailView).load(R.drawable.event_detail_text)
         }
     }
 
     class PictureDetailViewHolder(
-        imageView: ImageView,
+        imageView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
         val androidTempFileProvider: TempFileProvider by inject()
         override fun load(detail: Detail): RequestBuilder<Drawable> {
-            return Glide.with(imageView)
+            // TODO : encryptie
+            if (detail.file.path.startsWith("users")) {
+                return GlideApp.with(thumbnailView)
+                    .load(FirebaseStorage.getInstance().reference.child(detail.file.path)) // load the storagereference
+            }
+            return Glide.with(thumbnailView)
                 .load(androidTempFileProvider.getFile(detail))
                 // Signature is required to force Glide to reload overwritten pictures
                 .signature(MediaStoreSignature("", detail.file.lastModified(), 0))
@@ -111,16 +149,27 @@ sealed class DetailViewHolder(
     }
 
     class AudioDetailViewHolder(
-        imageView: ImageView,
+        imageView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {
-            return Glide.with(imageView).load(R.drawable.event_detail_audio)
+            return Glide.with(thumbnailView).load(R.drawable.event_detail_audio)
+        }
+    }
+
+    class ExternalVideoDetailViewHolder(
+        imageView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
+    ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
+
+        override fun load(detail: Detail): RequestBuilder<Drawable> {
+            return Glide.with(thumbnailView).load(R.drawable.event_detail_camera) // Vervangen door?
         }
     }
 
     interface ExistingDetailNavigationListener {
         fun openDetailScreenFor(detail: Detail)
+        fun deleteDetail(detail: Detail)
     }
 }

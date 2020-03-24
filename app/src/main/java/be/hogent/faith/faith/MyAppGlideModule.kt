@@ -17,6 +17,7 @@ import java.io.InputStream
  * load a firestore image using GlideApp, given a referencepath /users/uuid/projects/projectid/xxx.png
  */
 fun loadImageIntoView(context: Context, referencePath: String, image: ImageView) {
+    // TODO : encryptie
     if (referencePath.startsWith("users")) {
         GlideApp.with(context)
             .load(FirebaseStorage.getInstance().reference.child(referencePath)) // load the storagereference

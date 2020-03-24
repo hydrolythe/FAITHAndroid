@@ -17,6 +17,6 @@
             android:layout_marginRight="16dp"
             app:layoutManager="LinearLayoutManager"
             tools:context=".faith.library.LibraryActivity"
-            tools:listitem="@layout/event_list_content" />
+            tools:listitem="@layout/library_rv_item" />
     </LinearLayout>
 </layout>

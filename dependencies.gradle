@@ -60,9 +60,8 @@ ext {
     robolectric_version = '4.3'
     firebase_test_version = '17.2.1'
     crashlytics_dep_version = '2.10.1'
+    hamcrest_version = '2.2'
     firebase_performance = '19.0.5'
-
-
     uiAutomator_version = '2.2.0'
     junit_version = '4.12'
     mockk_version = '1.9.2'
@@ -115,6 +114,8 @@ ext {
             threeTenBP : "org.threeten:threetenbp:$threeTenBP_version",
             koinTesting: "org.koin:koin-test:$koin_version",
             robolectric: "org.robolectric:robolectric:$robolectric_version",
+            hamcrest: "org.hamcrest:hamcrest:$hamcrest_version",
+            hamcrestLibrary: "org.hamcrest:hamcrest-library:$hamcrest_version",
             //Add Analytics
             firebase_analytics: "com.google.firebase:firebase-analytics:$firebase_test_version",
             crashlytics: "com.crashlytics.sdk.android:crashlytics:$crashlytics_dep_version"

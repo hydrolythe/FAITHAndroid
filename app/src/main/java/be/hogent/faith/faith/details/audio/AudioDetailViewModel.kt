@@ -189,7 +189,7 @@ class AudioDetailViewModel(
         this.existingDetail = existingDetail
         _saveButtonEnabled.value = false
         _deleteButtonEnabled.value = false
-        // tijdelijk tot encryptie
+        // TODO tijdelijk tot encryptie
         if (existingDetail.file.path.startsWith("users")) {
             val params = LoadDetailFileUseCase.LoadFileParams(existingDetail)
             loadDetailFile.execute(params, LoadFileUseCaseHandler())
@@ -224,13 +224,13 @@ class AudioDetailViewModel(
     }
 
     private inner class LoadFileUseCaseHandler : DisposableSingleObserver<File>() {
-        override fun onSuccess(loadedFile: File) {
-            _file.value = loadedFile
-        }
-
-        override fun onError(e: Throwable) {
-            Timber.e(e)
-            _errorMessage.postValue(R.string.error_load_events)
-        }
+    override fun onSuccess(loadedFile: File) {
+        _file.value = loadedFile
     }
+
+    override fun onError(e: Throwable) {
+        Timber.e(e)
+        _errorMessage.postValue(R.string.error_load_events)
+    }
+}
 }

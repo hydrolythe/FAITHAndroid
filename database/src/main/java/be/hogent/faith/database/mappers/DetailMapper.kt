@@ -3,11 +3,13 @@ package be.hogent.faith.database.mappers
 import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.DetailType
-import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import java.util.UUID
 
 /**
@@ -29,19 +31,33 @@ object DetailMapper : Mapper<DetailEntity, Detail> {
         return when (entity.type) {
             DetailType.AUDIO -> AudioDetail(
                 FileConverter().toFile(entity.file),
+                entity.fileName,
                 UUID.fromString(entity.uuid)
             )
             DetailType.TEXT -> TextDetail(
                 FileConverter().toFile(entity.file),
+                entity.fileName,
                 UUID.fromString(entity.uuid)
             )
             DetailType.DRAWING -> DrawingDetail(
                 FileConverter().toFile(entity.file),
+                entity.fileName,
                 UUID.fromString(entity.uuid)
             )
             DetailType.PHOTO -> PhotoDetail(
                 FileConverter().toFile(entity.file),
+                entity.fileName,
                 UUID.fromString(entity.uuid)
+            )
+            DetailType.VIDEO -> VideoDetail(
+                FileConverter().toFile(entity.file),
+                entity.fileName,
+                UUID.fromString(entity.uuid)
+            )
+            DetailType.EXTERNAL_VIDEO -> ExternalVideoDetail(
+                    FileConverter().toFile(entity.file),
+                    entity.fileName,
+                    UUID.fromString(entity.uuid)
             )
             else -> throw ClassCastException("Unknown DetailEntity subclass encountered")
         }
@@ -49,11 +65,13 @@ object DetailMapper : Mapper<DetailEntity, Detail> {
 
     override fun mapToEntity(model: Detail): DetailEntity {
         return DetailEntity(
-            FileConverter().toString(model.file), model.uuid.toString(), when (model) {
+            FileConverter().toString(model.file), model.fileName, model.uuid.toString(), when (model) {
                 is AudioDetail -> DetailType.AUDIO
                 is TextDetail -> DetailType.TEXT
                 is DrawingDetail -> DetailType.DRAWING
                 is PhotoDetail -> DetailType.PHOTO
+                is VideoDetail -> DetailType.VIDEO
+                is ExternalVideoDetail -> DetailType.EXTERNAL_VIDEO
                 else -> throw ClassCastException("Unknown Detail subclass encountered")
             }
         )
