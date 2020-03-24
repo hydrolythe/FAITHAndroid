@@ -7,7 +7,6 @@ import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import org.junit.Before

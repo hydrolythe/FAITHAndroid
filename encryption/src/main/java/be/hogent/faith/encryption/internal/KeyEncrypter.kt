@@ -14,27 +14,29 @@ import java.io.ByteArrayOutputStream
 class KeyEncrypter(private val encryptionService: KeyEncryptionService) {
 
     internal fun encrypt(keysetHandle: KeysetHandle): Single<EncryptedString> {
+        return convertKeysetHandleToString(keysetHandle)
+            .map(::EncryptionRequest)
+            .flatMap(encryptionService::encrypt)
+    }
+
+    private fun convertKeysetHandleToString(keysetHandle: KeysetHandle): Single<String> {
         return Single.fromCallable {
             val byteArrayOutputStream = ByteArrayOutputStream()
             CleartextKeysetHandle.write(
-                keysetHandle, JsonKeysetWriter.withOutputStream(
-                    byteArrayOutputStream
-                )
+                keysetHandle, JsonKeysetWriter.withOutputStream(byteArrayOutputStream)
             )
             val stringToEncrypt = byteArrayOutputStream.toString()
             stringToEncrypt
         }
-            .map(::EncryptionRequest)
-            .flatMap(encryptionService::encrypt)
     }
 
     internal fun decrypt(encryptedKey: EncryptedString): Single<KeysetHandle> {
         return encryptionService
             .decrypt(DecryptionRequest(encryptedKey))
-            .map(::recreateKeySetHandle)
+            .map(::convertStringToKeysetHandle)
     }
 
-    private fun recreateKeySetHandle(jsonKeysetHandle: String): KeysetHandle {
+    private fun convertStringToKeysetHandle(jsonKeysetHandle: String): KeysetHandle {
         val keySetInputStream = jsonKeysetHandle.byteInputStream()
         return CleartextKeysetHandle.read(JsonKeysetReader.withInputStream(keySetInputStream))
     }

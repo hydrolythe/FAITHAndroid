@@ -1,8 +1,8 @@
 package be.hogent.faith.service.usecases
 
+import be.hogent.faith.database.storage.IFileStorageRepository
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.service.usecases.event.GetEventFilesUseCase
-import be.hogent.faith.storage.IFileStorageRepository
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.every
 import io.mockk.mockk

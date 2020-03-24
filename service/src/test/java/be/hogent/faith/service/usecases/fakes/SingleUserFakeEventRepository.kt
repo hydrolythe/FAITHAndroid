@@ -4,8 +4,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.IEventRepository
 import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Maybe
+import io.reactivex.Observable
 import java.util.UUID
 
 class SingleUserFakeEventRepository : IEventRepository {
@@ -18,15 +17,20 @@ class SingleUserFakeEventRepository : IEventRepository {
     }
 
     override fun insert(event: Event, user: User): Completable {
-        events.add(event)
-        return Maybe.just(event)
+        return Completable.fromCallable {
+            events.add(event)
+        }
     }
 
-    override fun get(uuid: UUID): Flowable<Event> {
-        return Flowable.just(events.first { it.uuid == uuid })
+    override fun getEventData(uuid: UUID): Observable<Event> {
+        return Observable.just(events.first { it.uuid == uuid })
     }
 
-    override fun getAll(): Flowable<List<Event>> {
-        return Flowable.just(events)
+    override fun getAllEventsData(): Observable<List<Event>> {
+        return Observable.just(events)
+    }
+
+    override fun makeEventFilesAvailable(event: Event): Completable {
+        return Completable.complete()
     }
 }

@@ -4,8 +4,8 @@ import be.hogent.faith.database.encryption.EncryptedDetail
 import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.util.contentEqual
 import be.hogent.faith.util.factory.DetailFactory
-import junit.framework.Assert.assertTrue
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.io.File

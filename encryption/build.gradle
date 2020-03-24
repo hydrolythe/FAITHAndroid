@@ -20,6 +20,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    defaultConfig {
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
 }
 
 dependencies {
@@ -40,6 +43,7 @@ dependencies {
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
     testImplementation testDependencies.koinTesting
+    androidTestImplementation testDependencies.koinTesting
     // TODO: add deps to dependencies.gradle
 
     implementation("com.google.crypto.tink:tink-android:1.2.2")
@@ -51,6 +55,9 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-moshi:2.6.2"
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
     implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
 }
 
 repositories {

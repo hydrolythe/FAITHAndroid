@@ -17,5 +17,5 @@ data class EncryptedEventEntity(
     /**
      * @see [be.hogent.faith.database.encryption.EncryptedEvent.encryptedStreamingDEK]
      */
-    val encryptedStreamingDEK: String= ""
+    val encryptedStreamingDEK: String = ""
 )

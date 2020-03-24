@@ -10,7 +10,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Scheduler
 import org.junit.Assert
 import org.junit.Before
@@ -63,10 +63,8 @@ class GetUserUseCaseTest {
         val events = listOf(Event(LocalDateTime.now(), "title", mockk<File>(), "notes"))
         val user = User("username", "avatar", UUID.randomUUID().toString())
         every { authManager.getLoggedInUserUUID() } returns userUuid
-        every { userRepository.get(capture(userUuidArg)) } returns Flowable
-            .just(user)
-        every { eventRepository.getAllEventsData() } returns Flowable
-            .just(events)
+        every { userRepository.get(capture(userUuidArg)) } returns Observable.just(user)
+        every { eventRepository.getAllEventsData() } returns Observable.just(events)
 
         val result = getUserUC.buildUseCaseObservable(mockk())
 

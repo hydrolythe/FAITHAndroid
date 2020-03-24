@@ -6,7 +6,6 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.UserRepository
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import io.reactivex.Observable
 
 open class UserRepositoryImpl(
