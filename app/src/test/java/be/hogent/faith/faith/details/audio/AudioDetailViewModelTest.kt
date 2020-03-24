@@ -7,9 +7,9 @@ import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.faith.testModule
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import io.mockk.mockk
-import junit.framework.Assert.assertEquals
 import org.junit.After
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -65,7 +65,7 @@ class AudioDetailViewModelTest : KoinTest {
         viewModel.pauseSupported = false
 
         // Act
-        val pauseVisible = getValue(viewModel.pauseRecordingVisible)
+        val pauseVisible = getValue(viewModel.recordPauseButtonVisible)
 
         // Assert
         assertFalse(pauseVisible)
@@ -79,7 +79,7 @@ class AudioDetailViewModelTest : KoinTest {
         viewModel.pauseSupported = true
 
         // Act
-        val pauseVisible = getValue(viewModel.pauseRecordingVisible)
+        val pauseVisible = getValue(viewModel.recordPauseButtonVisible)
 
         // Assert
         assertTrue(pauseVisible)
@@ -94,7 +94,7 @@ class AudioDetailViewModelTest : KoinTest {
 
         // Act
         viewModel.onRecordingStateChanged(RecordingInfoListener.RecordingState.PAUSED)
-        val pauseVisible = getValue(viewModel.pauseRecordingVisible)
+        val pauseVisible = getValue(viewModel.recordPauseButtonVisible)
 
         // Assert
         assertFalse(pauseVisible)
@@ -109,7 +109,7 @@ class AudioDetailViewModelTest : KoinTest {
 
         // Act
         viewModel.onRecordingStateChanged(RecordingInfoListener.RecordingState.PAUSED)
-        val restartRecordingButtonVisible = getValue(viewModel.restartRecordingVisible)
+        val restartRecordingButtonVisible = getValue(viewModel.recordRestartButtonVisible)
 
         // Assert
         assertTrue(restartRecordingButtonVisible)

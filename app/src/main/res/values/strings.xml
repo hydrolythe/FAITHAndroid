@@ -212,5 +212,10 @@
     <string name="slide">schuif avatar open</string>
     <string name="tekstgrootte">tekstgrootte</string>
     <string name="kies_tekstgrootte">kies tekstgrootte</string>
+    <string name="recordaudio_record_description">Druk op de rode bol om\neen geluidsfragment op te nemen!</string>
+    <string name="recordaudio_record">Opnemen</string>
+    <string name="recordaudio_play">Fragment afspelen</string>
+    <string name="recordaudio_pause">Fragment pauzeren</string>
+    <string name="recordaudio_stop">Opname stoppen</string>
     <string name="avatar_nog_niet_ingekleurd">Avatar is nog niet ingekleurd. Klik op potlood om avatar in te kleuren</string>
 </resources>
