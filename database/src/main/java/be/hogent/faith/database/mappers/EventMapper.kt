@@ -17,7 +17,7 @@ object EventMapper : Mapper<EventEntity, Event> {
             emotionAvatar = entity.emotionAvatar?.let { FileConverter().toFile(it) },
             uuid = UUID.fromString(entity.uuid)
         )
-        entity.details?.let {
+        entity.details.let {
             DetailMapper.mapFromEntities(it.toMutableList())
                 .forEach { event.addDetail(it) }
         }
