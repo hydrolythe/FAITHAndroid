@@ -7,9 +7,9 @@ import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.faith.testModule
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import io.mockk.mockk
-import junit.framework.Assert.assertEquals
 import org.junit.After
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
