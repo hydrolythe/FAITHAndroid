@@ -183,7 +183,7 @@
     <string name="foto_nemen">Foto\nnemen</string>
     <string name="add_video">Filmen</string>
     <string name="title_backpack">Backpack</string>
-    <string name="add_detail_menu_backpack">Detail toevoegen aan rugzak</string>
+    <string name="add_detail_menu_backpack">Bestand toevoegen aan rugzak</string>
     <string name="filter_menu_background">Filter menu achtergrond</string>
     <string name="filter_menu_content">Filter menu inhoud</string>
     <string name="filter_boy">Filter jongen afbeelding</string>
@@ -221,6 +221,14 @@
     <string name="library_verwijder_event_message">Ben je zeker? Ook alle bijhorende tekeningen, foto\'s,... worden verwijderd</string>
     <string name="library_verwijder_event_title">Wil je dit event verwijderen?</string>
     <string name="delete">verwijder</string>
+    <string name="recordaudio_record_description">Druk op de rode bol om\neen geluidsfragment op te nemen!</string>
+    <string name="recordaudio_record">Opnemen</string>
+    <string name="recordaudio_play">Fragment afspelen</string>
+    <string name="recordaudio_pause">Fragment pauzeren</string>
+    <string name="recordaudio_stop">Opname stoppen</string>
     <string name="avatar_nog_niet_ingekleurd">Avatar is nog niet ingekleurd. Klik op potlood om avatar in te kleuren</string>
     <string name="error_ophalen_textdetail">Er ging iets fout bij het ophalen van de tekst</string>
+    <string name="rv_btn_detail">Knop bekijk bestand</string>
+    <string name="rv_btn_delete_detail">Knop verwijder bestand</string>
+    <string name="rv_detail_title">Detail Title</string>
 </resources>

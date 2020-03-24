@@ -10,20 +10,21 @@ import be.hogent.faith.domain.models.detail.Detail
 
 class DeleteDetailDialog(private var detail: Detail) : DialogFragment() {
 
-    internal lateinit var listener: DeleteDetailDialogListener
+    private lateinit var listener: DeleteDetailDialogListener
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             builder.setMessage(R.string.confirmation_delete_detail)
-                .setPositiveButton(R.string.ok
-                ) { _, id ->
-                    listener.onDetailDeleteClick(this, detail)
-                }
-                .setNegativeButton(R.string.cancel
-                ) { _, id ->
-                    listener.onDetailCancelClick(this)
-                }
+                    .setPositiveButton(R.string.ok
+
+                    ) { _, id ->
+                        listener.onDetailDeleteClick(this, detail)
+                    }
+                    .setNegativeButton(R.string.cancel
+                    ) { _, id ->
+                        listener.onDetailCancelClick(this)
+                    }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }

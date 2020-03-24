@@ -15,15 +15,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas".toString())
-            }
-        }
-        sourceSets {
-            androidTest.assets.srcDirs +=
-                    files("$projectDir/schemas".toString())
-        }
     }
 
     buildTypes {
@@ -46,7 +37,6 @@ dependencies {
     def testDependencies = rootProject.ext.testDependencies
     def androidTestDependencies = rootProject.ext.androidTestDependencies
     def androidDependencies = rootProject.ext.androidDependencies
-    def databaseDependencies = rootProject.ext.databaseDependencies
 
     implementation commonDependencies.kotlin
     implementation commonDependencies.threeTenABP
@@ -57,11 +47,6 @@ dependencies {
     implementation androidDependencies.appcompat
 
     implementation injectionDependencies.koin
-
-    // Room components
-    implementation databaseDependencies.room
-    implementation databaseDependencies.room_rxjava
-    kapt databaseDependencies.room_compiler
 
     //firebase components
     implementation firebaseDependencies.rxfirebase
@@ -81,7 +66,6 @@ dependencies {
     androidTestImplementation androidTestDependencies.androidJunit
     androidTestImplementation androidTestDependencies.espresso
     androidTestImplementation androidTestDependencies.aac_core
-    androidTestImplementation databaseDependencies.room_testing
 }
 repositories {
     mavenCentral()

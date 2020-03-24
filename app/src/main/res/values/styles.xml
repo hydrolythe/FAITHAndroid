@@ -238,8 +238,10 @@
         <item name="android:color">@color/dark_green</item>
     </style>
 
+
     <style name="CardView.Transparant">
         <item name="cardBackgroundColor">@color/colorTransparent</item>
     </style>
+
 
 </resources>

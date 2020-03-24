@@ -57,13 +57,16 @@ class AudioDetailViewModel(
             deleteEnabled!! && viewState == AudioViewState.FinishedRecording
         }
 
-    val pauseRecordingVisible: LiveData<Boolean> = Transformations.map(viewState) { state ->
-        state == AudioViewState.Recording && pauseSupported
-    }
+    private val _recordingPaused = MutableLiveData<Boolean>()
 
-    val restartRecordingVisible: LiveData<Boolean> = Transformations.map(viewState) { state ->
-        state == AudioViewState.RecordingPaused && pauseSupported
-    }
+    val recordPauseButtonVisible: LiveData<Boolean> =
+        Transformations.map(_recordingPaused) { paused ->
+            !paused && pauseSupported
+        }
+    val recordRestartButtonVisible: LiveData<Boolean> =
+        Transformations.map(_recordingPaused) { paused ->
+            paused && pauseSupported
+        }
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int> = _errorMessage
@@ -119,6 +122,7 @@ class AudioDetailViewModel(
         // Can be set to false once an existing Detail is added
         _saveButtonEnabled.value = true
         _deleteButtonEnabled.value = true
+        _recordingPaused.value = false
 
         _recordingTime.value = 0
     }
@@ -198,16 +202,20 @@ class AudioDetailViewModel(
     }
 
     fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {
-        // NOP
     }
 
     fun onRecordingStateChanged(state: RecordingState) {
         when (state) {
             RecordingState.INVALID, RecordingState.RESET -> _viewState.value =
                 AudioViewState.Initial
-            RecordingState.RECORDING -> _viewState.value = AudioViewState.Recording
+
+            RecordingState.RECORDING -> {
+                _viewState.value = AudioViewState.Recording
+                _recordingPaused.value = false
+            }
+
             RecordingState.STOPPED -> _viewState.value = AudioViewState.FinishedRecording
-            RecordingState.PAUSED -> _viewState.value = AudioViewState.RecordingPaused
+            RecordingState.PAUSED -> _recordingPaused.value = true
         }
     }
 

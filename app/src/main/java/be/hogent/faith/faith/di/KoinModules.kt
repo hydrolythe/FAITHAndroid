@@ -79,7 +79,7 @@ val appModule = module(override = true) {
     viewModel { ViewDrawingDetailViewModel() }
     viewModel {
         ViewTextDetailViewModel(
-            get()
+                get()
         )
     }
 
@@ -109,9 +109,9 @@ val appModule = module(override = true) {
     // We are using SharedPrefs to store tokens, in PRIVATE mode
     single {
         SecureCredentialsManager(
-            get(),
-            get() as AuthenticationAPIClient,
-            get() as SharedPreferencesStorage
+                get(),
+                get() as AuthenticationAPIClient,
+                get() as SharedPreferencesStorage
         )
     }
     single { SharedPreferencesStorage(androidContext()) }

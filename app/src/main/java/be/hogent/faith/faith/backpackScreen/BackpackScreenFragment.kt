@@ -1,14 +1,14 @@
 package be.hogent.faith.faith.backpackScreen
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import androidx.annotation.RequiresApi
+
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.appcompat.widget.PopupMenu
@@ -30,7 +30,6 @@ class BackpackScreenFragment : Fragment() {
     private lateinit var addDetailMenu: PopupMenu
     private var menuPopupHelper: MenuPopupHelper? = null
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -75,7 +74,6 @@ class BackpackScreenFragment : Fragment() {
         detailThumbnailsAdapter = null
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private fun startListeners() {
 
         backpackViewModel.filteredDetails.observe(this, Observer { details ->
@@ -123,6 +121,7 @@ class BackpackScreenFragment : Fragment() {
         backpackViewModel.initialize()
     }
 
+    @SuppressLint("RestrictedApi")
     private fun initialiseMenu() {
         addDetailMenu = PopupMenu(backpackBinding.btnBackpackAdd.context, backpackBinding.btnBackpackAdd, Gravity.END, 0, R.style.PopupMenu_AddDetail)
 
@@ -157,10 +156,12 @@ class BackpackScreenFragment : Fragment() {
         menuPopupHelper!!.setForceShowIcon(true)
     }
 
+    @SuppressLint("RestrictedApi")
     private fun closeMenu() {
         menuPopupHelper?.dismiss()
     }
 
+    @SuppressLint("RestrictedApi")
     private fun openMenu() {
         menuPopupHelper!!.show()
     }
