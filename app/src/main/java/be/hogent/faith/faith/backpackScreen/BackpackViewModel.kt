@@ -266,12 +266,12 @@ class BackpackViewModel(
         _goToCityScreen.call()
     }
 
-    fun onSaveClicked(fileName: String, user: User, detail: Detail) {
-        val noEmptyString = checkEmptyString(fileName)
-        val notMaxCharacters = checkMaxCharacters(fileName)
-        val uniqueFilename = checkUniqueFilename(fileName)
+    fun onSaveClicked(title: String, user: User, detail: Detail) {
+        val noEmptyString = checkEmptyString(title)
+        val notMaxCharacters = checkMaxCharacters(title)
+        val uniqueFilename = checkUniqueFilename(title)
         if (noEmptyString && notMaxCharacters && uniqueFilename) {
-            detail.fileName = fileName
+            detail.title = title
             saveCurrentDetail(user, detail)
             _detailIsSaved.call()
         } else {
@@ -284,8 +284,8 @@ class BackpackViewModel(
         }
     }
 
-    private fun checkUniqueFilename(fileName: String): Boolean {
-        return (details.find { e -> (e.fileName == fileName) } == null)
+    private fun checkUniqueFilename(title: String): Boolean {
+        return (details.find { e -> (e.title == title) } == null)
     }
 
     private fun checkMaxCharacters(fileName: String): Boolean {

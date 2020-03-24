@@ -16,6 +16,7 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.E
 import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.signature.MediaStoreSignature
 import kotlinx.android.synthetic.main.detail_item_rv.view.btn_delete_detailRv
 import kotlinx.android.synthetic.main.detail_item_rv.view.detail_img
@@ -97,7 +98,7 @@ sealed class DetailViewHolder(
         thumbnailView.btn_delete_detailRv.setOnClickListener {
             existingDetailNavigationListener.deleteDetail(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
         }
-        thumbnailView.text_detail_title.text = detail.fileName
+        thumbnailView.text_detail_title.text = detail.title
     }
 
     fun hide(hide: Boolean) {

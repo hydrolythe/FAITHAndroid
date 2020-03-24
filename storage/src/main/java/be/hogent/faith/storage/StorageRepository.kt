@@ -61,13 +61,6 @@ class StorageRepository(
             )
     }
 
-    override fun getBackpack(backpack: Backpack): Completable {
-        return backpack.details.toFlowable().concatMapCompletable {
-            getFile(it)
-        }
-    }
 
-    override fun saveBackpackDetail(detail: Detail): Single<Detail> {
-        return localStorage.saveBackpackDetail(detail)
-    }
+
 }

@@ -10,7 +10,7 @@ import be.hogent.faith.domain.models.detail.Detail
 
 class DeleteDetailDialog(private var detail: Detail) : DialogFragment() {
 
-    internal lateinit var listener: DeleteDetailDialogListener
+    private lateinit var listener: DeleteDetailDialogListener
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {

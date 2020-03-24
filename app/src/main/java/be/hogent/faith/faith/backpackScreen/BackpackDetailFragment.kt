@@ -164,11 +164,11 @@ abstract class BackpackDetailFragment : Fragment() {
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }
     }
-    class ExternalFileFragmentNoEmotionAvatar : BackpackDetailFragment() {
+    class ExternalFileFragment : BackpackDetailFragment() {
 
         companion object {
-            fun newInstance(): ExternalFileFragmentNoEmotionAvatar {
-                return ExternalFileFragmentNoEmotionAvatar()
+            fun newInstance(): ExternalFileFragment {
+                return ExternalFileFragment()
             }
         }
 

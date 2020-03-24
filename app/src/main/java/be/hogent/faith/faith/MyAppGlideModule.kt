@@ -17,7 +17,7 @@ import java.io.InputStream
  * load a firestore image using GlideApp, given a referencepath /users/uuid/projects/projectid/xxx.png
  */
 fun loadFirestorageImage(context: Context, referencePath: String, image: ImageView) {
-    GlideApp.with(context)
+    Glide.with(context)
         .load(FirebaseStorage.getInstance().reference.child(referencePath)) // load the storagereference
         .apply(RequestOptions.circleCropTransform())
         .into(image)

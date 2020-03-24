@@ -27,19 +27,18 @@ object DetailTypes {
 }
 
 class DetailThumbnailsAdapter(
-    details: List<Detail>,
-    private val existingDetailNavigationListener: DetailViewHolder.ExistingDetailNavigationListener
+        details: List<Detail>,
+        private val existingDetailNavigationListener: DetailViewHolder.ExistingDetailNavigationListener
 ) : RecyclerView.Adapter<DetailViewHolder>() {
 
     private var _details = details.toMutableList()
-    private var _detailsCopy = details.toMutableList()
     private var hide = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         return DetailViewHolderFactory.createViewHolder(
-            parent,
-            viewType,
-            existingDetailNavigationListener
+                parent,
+                viewType,
+                existingDetailNavigationListener
         )
     }
 
@@ -71,7 +70,6 @@ class DetailThumbnailsAdapter(
     fun updateDetailsList(newDetails: List<Detail>) {
         val diffCallback = ThumbnailDiffCallback(_details, newDetails)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-        _detailsCopy.addAll(newDetails)
         _details.clear()
         _details.addAll(newDetails)
         diffResult.dispatchUpdatesTo(this)

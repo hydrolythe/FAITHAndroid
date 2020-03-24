@@ -52,8 +52,7 @@ class StoragePathProvider(
     }
 
     fun getLocalDetailPath(detail: Detail): File {
-        // return File(context.filesDir, detail.file.path)
-        val child = "users/${user!!.uid}/backpack/${detail.uuid}"
-        return File(context.filesDir, child)
+        return File(context.filesDir, detail.file.path)
+
     }
 }

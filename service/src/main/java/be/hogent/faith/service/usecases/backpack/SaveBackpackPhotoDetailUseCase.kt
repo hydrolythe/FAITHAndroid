@@ -22,7 +22,7 @@ class SaveBackpackPhotoDetailUseCase(
         this.params = params
 
         return addDetailToBackpack(params.photoDetail)
-            //    .flatMap { storageRepository.saveBackpackDetail(it) }
+
             .flatMapMaybe { backpackRepository.insertDetail(params.photoDetail, params.user) }
             .flatMapCompletable { Completable.complete() }
     }

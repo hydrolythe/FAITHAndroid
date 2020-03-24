@@ -12,5 +12,5 @@ interface ILocalStorageRepository {
 
     fun isFilePresent(detail: Detail): Boolean
     fun isEmotionAvatarPresent(event: Event): Boolean
-    fun saveBackpackDetail(detail: Detail): Single<Detail>
+
 }

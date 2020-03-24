@@ -117,7 +117,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun startExternalFileDetailFragment() {
-        replaceFragment(BackpackDetailFragment.ExternalFileFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.ExternalFileFragment.newInstance(), R.id.fragment)
         backpackViewModel.viewButtons(false)
         backpackViewModel.setDetailScreenOpen(true)
         backpackViewModel.closePopUpMenu()
