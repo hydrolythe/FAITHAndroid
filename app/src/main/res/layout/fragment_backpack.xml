@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="backpackViewModel"
+            type="be.hogent.faith.faith.backpackScreen.BackpackViewModel" />
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.motion.widget.MotionLayout
+        android:id="@+id/motionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_backpack"
+        app:layoutDescription="@xml/filtermenu_slide">
+
+
+        <ImageView
+            android:id="@+id/background_backpack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/backpack"
+            tools:srcCompat="@drawable/backpack" />
+
+
+        <include
+            android:id="@+id/backpack_menu_filter"
+            layout="@layout/backpack_menu_filter"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            bind:backpackViewModel="@{backpackViewModel}"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_undo_horizontal"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.02" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rv_horizontal_1"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.34" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rv_horizontal_2"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.88" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_items_vertical_start"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.22" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_filtermenu_vertical"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.33" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_items_vertical_end"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.80" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_backpack"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:scrollbarSize="16dp"
+            android:scrollbarThumbVertical="@drawable/scrollbarthumb_circle_rv"
+            android:scrollbarTrackVertical="@drawable/scrollbartrack_rectangle_rv"
+            android:scrollbars="vertical"
+            android:verticalScrollbarPosition="right"
+            app:layout_constraintBottom_toTopOf="@+id/guide_rv_horizontal_2"
+            app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_rv_horizontal_1" />
+
+        <ImageButton
+            android:id="@+id/btn_backpack_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/prullenbak"
+            android:onClick="@{() -> backpackViewModel.setIsInEditMode()}"
+            app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_end"
+            app:layout_constraintTop_toTopOf="@+id/guide_rv_horizontal_2"
+            app:srcCompat="@drawable/prullenbak" />
+
+        <ImageButton
+            android:id="@+id/btn_backpack_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_btn"
+            android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
+            android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/search_btn" />
+
+        <ImageButton
+            android:id="@+id/btn_backpack_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
+            android:background="@drawable/add_btn"
+            android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
+            android:onClick="@{() -> backpackViewModel.changePopupMenuState()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_backpack_draw_cancel"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginStart="16dp"
+            android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
+            android:background="@drawable/ic_return"
+            android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
+            android:contentDescription="@string/cancel"
+            android:onClick="@{() -> backpackViewModel.goToCityScreen()}"
+            app:layout_constraintStart_toStartOf="@+id/btn_backpack_search"
+            app:layout_constraintTop_toTopOf="@+id/guide_undo_horizontal" />
+
+
+    </androidx.constraintlayout.motion.widget.MotionLayout>
+</layout>

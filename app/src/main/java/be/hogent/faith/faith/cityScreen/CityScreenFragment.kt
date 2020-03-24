@@ -137,6 +137,9 @@ class CityScreenFragment : Fragment() {
     }
 
     private fun registerListeners() {
+        mainScreenBinding.btnBackpack.setOnClickListener {
+            navigation?.startBackpackFragment()
+        }
         cityScreenViewModel.archiveClicked.observe(this, Observer {
             navigation?.startOverviewEventsFragment()
         })
@@ -167,5 +170,6 @@ class CityScreenFragment : Fragment() {
         fun startEmotionCapture()
         fun startOverviewEventsFragment()
         fun logOut()
+        fun startBackpackFragment()
     }
 }

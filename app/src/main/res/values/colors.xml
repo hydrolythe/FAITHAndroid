@@ -5,6 +5,8 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorTransparent">#B3FFFFFF</color>
 
+    <color name="background_backpack">#CDF9EC</color>
+
     <color name="park_sky">#C1FCEE</color>
     <color name="park_gras">#16F48A</color>
     <color name="background_city">#009688</color>
@@ -44,6 +46,8 @@
     <color name="skin_blank">#FFC18E</color>
     <color name="skin_lightbrown">#D39751</color>
     <color name="skin_darkbrown">#9C6231</color>
+
+    <color name="green_light">#95E8CD</color>
 </resources>
 
 

@@ -15,7 +15,7 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:3.6.0'
     }
 }
 
@@ -83,6 +83,7 @@ dependencies {
     def androidDependencies = rootProject.ext.androidDependencies
     def uiDependencies = rootProject.ext.uiDependencies
 
+
     implementation commonDependencies.kotlin
     implementation commonDependencies.threeTenABP
     implementation commonDependencies.rxjava
@@ -99,11 +100,11 @@ dependencies {
     implementation androidDependencies.viewmodellifecycle
 
     implementation uiDependencies.glide
-   // implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
     implementation uiDependencies.legacysupport
     implementation uiDependencies.googleplay
-    //implementation 'com.google.android.gms:play-services-plus:16.0.0'
-    //implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
     implementation uiDependencies.rv_selection
@@ -136,7 +137,8 @@ dependencies {
     testImplementation testDependencies.mockk
     testImplementation testDependencies.coreTesting
     testImplementation testDependencies.koinTesting
-
+    testImplementation testDependencies.hamcrest
+    testImplementation testDependencies.hamcrestLibrary
     implementation testDependencies.firebase_analytics
     implementation testDependencies.crashlytics
     implementation firebaseDependencies.performance

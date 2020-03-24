@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
+import be.hogent.faith.domain.repository.InvalidCredentialsException
 import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.domain.repository.SignInException
 import be.hogent.faith.faith.state.Resource
@@ -114,10 +115,11 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
         }
 
         override fun onError(e: Throwable) {
-            Timber.e("$TAG: ${ e.localizedMessage }")
+            Timber.e("$TAG: ${e.localizedMessage}")
             _userLoggedInState.postValue(
                 Resource(
                     ResourceState.ERROR, null, when (e) {
+                        is InvalidCredentialsException -> R.string.login_error_wrong_username_or_password
                         is NetworkError -> R.string.login_error_internet
                         is SignInException -> R.string.login_error_wrong_username_or_password
                         else -> R.string.login_error
