@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -60,6 +61,7 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
         }
 
         backpackViewModel.detailIsSaved.observe(this, Observer {
+            Toast.makeText(context, R.string.save_success, Toast.LENGTH_SHORT).show() // Mag deze algemeen blijven of best per detail ?
             dismiss()
         })
 

@@ -219,4 +219,5 @@
     <string name="recordaudio_stop">Opname stoppen</string>
     <string name="avatar_nog_niet_ingekleurd">Avatar is nog niet ingekleurd. Klik op potlood om avatar in te kleuren</string>
     <string name="dialog_to_the_backpack">\"Wil je teruggaan naar je rugzak?</string>
+    <string name="save_success">Succesvol opgeslagen.</string>
 </resources>

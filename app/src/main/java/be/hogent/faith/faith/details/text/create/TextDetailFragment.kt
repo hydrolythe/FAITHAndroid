@@ -17,6 +17,7 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import kotlinx.android.synthetic.main.fragment_enter_text.enterText_editor
@@ -135,7 +136,9 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
             Toast.makeText(context, errorMessageResourceId, Toast.LENGTH_SHORT).show()
         })
         textDetailDetailViewModel.savedDetail.observe(this, Observer { savedTextDetail ->
+            if (requireActivity() is EmotionCaptureMainActivity) {
             Toast.makeText(context, R.string.save_text_success, Toast.LENGTH_SHORT).show()
+            }
             detailFinishedListener.onDetailFinished(savedTextDetail)
             navigation?.backToEvent()
         })

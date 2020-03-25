@@ -19,6 +19,7 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -114,8 +115,10 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
         })
 
         takePhotoViewModel.savedDetail.observe(this, Observer { newPhotoDetail ->
+            if (requireActivity() is EmotionCaptureMainActivity) {
             Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
                 .show()
+            }
             detailFinishedListener.onDetailFinished(newPhotoDetail)
             navigation?.backToEvent()
         })
