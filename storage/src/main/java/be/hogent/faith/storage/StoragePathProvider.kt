@@ -53,6 +53,5 @@ class StoragePathProvider(
 
     fun getLocalDetailPath(detail: Detail): File {
         return File(context.filesDir, detail.file.path)
-
     }
 }

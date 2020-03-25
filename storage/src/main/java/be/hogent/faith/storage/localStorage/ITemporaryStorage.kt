@@ -2,10 +2,8 @@ package be.hogent.faith.storage.localStorage
 
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -35,9 +33,4 @@ interface ITemporaryStorage {
     fun storeDetailWithEvent(detail: Detail, event: Event): Completable
 
     fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String>
-
-
-
-
-
 }

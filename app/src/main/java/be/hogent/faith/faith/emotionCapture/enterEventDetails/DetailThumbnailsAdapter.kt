@@ -27,8 +27,8 @@ object DetailTypes {
 }
 
 class DetailThumbnailsAdapter(
-        details: List<Detail>,
-        private val existingDetailNavigationListener: DetailViewHolder.ExistingDetailNavigationListener
+    details: List<Detail>,
+    private val existingDetailNavigationListener: DetailViewHolder.ExistingDetailNavigationListener
 ) : RecyclerView.Adapter<DetailViewHolder>() {
 
     private var _details = details.toMutableList()

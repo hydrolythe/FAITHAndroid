@@ -1,11 +1,8 @@
 package be.hogent.faith.domain.models
 
 import be.hogent.faith.domain.models.detail.Detail
-import java.util.UUID
 
-class Backpack(
-    val uuid: UUID = UUID.randomUUID()
-) {
+class Backpack {
     private var _details = mutableListOf<Detail>()
     val details: List<Detail>
         get() = _details.toList()

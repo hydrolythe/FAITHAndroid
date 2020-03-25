@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
 import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.util.TempFileProvider
@@ -50,7 +51,7 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
     private var navigation: PhotoScreenNavigation? = null
 
     private val tempFileProvider by inject<TempFileProvider>()
-
+    private var bundle = Bundle.EMPTY
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -68,6 +69,7 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
             lensPosition = back(),
             logger = logcat()
         )
+        bundle = arguments
         return takePhotoBinding.root
     }
 
@@ -119,7 +121,7 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
         })
 
         takePhotoViewModel.cancelClicked.observe(this, Observer {
-            navigation!!.backToEvent()
+            showExitAlert()
         })
     }
 
@@ -151,7 +153,11 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
     private fun showExitAlert() {
         val alertDialog: AlertDialog = this.run {
             val builder = AlertDialog.Builder(this.requireContext()).apply {
-                setTitle(R.string.dialog_to_the_event_title)
+                if (requireActivity() is BackpackScreenActivity) {
+                    setTitle(R.string.dialog_to_the_backpack)
+                } else {
+                    setTitle(R.string.dialog_to_the_event_title)
+                }
                 setMessage(R.string.dialog_takePhoto_cancel_message)
                 setPositiveButton(R.string.ok) { _, _ ->
                     navigation!!.backToEvent()

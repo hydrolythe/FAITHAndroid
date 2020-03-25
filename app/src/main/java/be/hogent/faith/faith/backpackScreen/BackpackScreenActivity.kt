@@ -86,22 +86,22 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun startPhotoDetailFragment() {
-        replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.PhotoFragment.newInstance(), R.id.fragment)
         startFragmentInitialisers()
     }
 
     override fun startAudioDetailFragment() {
-        replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.AudioFragment.newInstance(), R.id.fragment)
         startFragmentInitialisers()
     }
 
     override fun startDrawingDetailFragment() {
-        replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.DrawingFragment.newInstance(), R.id.fragment)
         startFragmentInitialisers()
     }
 
     override fun startTextDetailFragment() {
-        replaceFragment(BackpackDetailFragment.TextFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.TextFragment.newInstance(), R.id.fragment)
         startFragmentInitialisers()
     }
 

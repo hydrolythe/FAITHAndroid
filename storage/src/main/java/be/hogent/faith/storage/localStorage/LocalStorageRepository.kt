@@ -12,7 +12,6 @@ class LocalStorageRepository(
     private val context: Context
 ) : ILocalStorageRepository {
 
-
     /**
      * moves the files from tempory storage to local storage
      */
