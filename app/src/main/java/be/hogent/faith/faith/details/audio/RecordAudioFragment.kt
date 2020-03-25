@@ -135,7 +135,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
     }
 
     private fun initialiseSeekBar() {
-        recordAudioBinding.seekBar.setOnSeekBarChangeListener(object :
+        recordAudioBinding.playRecording.seekBar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             var userSelectedPosition = 0
             override fun onProgressChanged(
@@ -243,16 +243,16 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     inner class PlaybackListener : PlaybackInfoListener {
         override fun onDurationChanged(duration: Int) {
-            recordAudioBinding.seekBar.max = duration
+            recordAudioBinding.playRecording.seekBar.max = duration
             audioDetailViewModel.setRecordingFinalDuration(duration)
         }
 
         override fun onPositionChanged(position: Int) {
             if (!userIsSeeking) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    recordAudioBinding.seekBar.setProgress(position, true)
+                    recordAudioBinding.playRecording.seekBar.setProgress(position, true)
                 } else {
-                    recordAudioBinding.seekBar.progress = position
+                    recordAudioBinding.playRecording.seekBar.progress = position
                 }
             }
         }
@@ -262,8 +262,8 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             audioDetailViewModel.onPlayStateChanged(state)
         }
 
-        override fun onLogUpdated(message: String?) {
-            Timber.i(message)
+        override fun onLogUpdated(formattedMessage: String?) {
+            Timber.i(formattedMessage)
         }
     }
 
