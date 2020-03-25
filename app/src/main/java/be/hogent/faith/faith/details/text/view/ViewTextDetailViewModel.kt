@@ -29,7 +29,7 @@ class ViewTextDetailViewModel(
 
         override fun onError(e: Throwable) {
             Timber.e(e)
-            _errorMessage.postValue(R.string.error_save_text_failed)
+            _errorMessage.postValue(R.string.error_load_text_failed)
         }
     }
 }

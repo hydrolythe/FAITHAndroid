@@ -18,11 +18,11 @@ class DeleteDetailDialog(private var detail: Detail) : DialogFragment() {
             builder.setMessage(R.string.confirmation_delete_detail)
                     .setPositiveButton(R.string.ok
 
-                    ) { _, id ->
+                    ) { _, _ ->
                         listener.onDetailDeleteClick(this, detail)
                     }
                     .setNegativeButton(R.string.cancel
-                    ) { _, id ->
+                    ) { _, _ ->
                         listener.onDetailCancelClick(this)
                     }
             builder.create()

@@ -74,8 +74,8 @@ class ViewTextDetailFragment : Fragment() {
 
     private fun initEditor() {
         with(binding.editorViewText) {
-            setEditorWidth(10) // dpToPx(binding.cardViewText.width))
-            setEditorHeight(100) //  binding.cardViewText.height)
+            setEditorWidth(dpToPx(binding.cardViewText.width))
+            setEditorHeight(dpToPx(binding.cardViewText.height))
             setPadding(10, 10, 10, 10)
             setInputEnabled(false)
         }

@@ -28,12 +28,7 @@ import org.koin.core.parameter.parametersOf
 import java.util.UUID
 
 /**
- * An activity representing a list of Events of the user. This activity
- * has different presentations for small and bigger devices. On
- * smaller devices, the activity presents a list of events, which when touched,
- * lead to a another screen representing
- * event details. On bigger devices, the activity presents the list of events and
- * events details side-by-side using two vertical panes.
+ * An activity representing a list of Events of the user.
  */
 class LibraryActivity : AppCompatActivity(), EventListFragment.EventsListNavigationListener,
     DetailViewHolder.ExistingDetailNavigationListener {

@@ -111,7 +111,20 @@ class EventListViewModel(
     }
 
     private fun loadEvents(user: User) {
-        getEventsUseCase.execute(GetEventsUseCase.Params(user), GetEventsUseCaseHandler())
+        getEventsUseCase.execute(GetEventsUseCase.Params(user),
+            object : DisposableSubscriber<List<Event>>() {
+                override fun onComplete() {}
+
+                override fun onNext(t: List<Event>) {
+                    events = t.sortedByDescending { it.dateTime }
+                    audioFilterEnabled.value =
+                        audioFilterEnabled.value // anders wordt de lijst niet getoond
+                }
+
+                override fun onError(e: Throwable) {
+                    _errorMessage.postValue(R.string.error_load_events)
+                }
+            })
     }
 
     private fun combineLatestDates(
@@ -177,19 +190,5 @@ class EventListViewModel(
         return Instant.ofEpochMilli(milliseconds) // Convert count-of-milliseconds-since-epoch into a date-time in UTC (`Instant`).
             .atZone(ZoneId.of("Europe/Brussels")) // Adjust into the wall-clock time used by the people of a particular region (a time zone). Produces a `ZonedDateTime` object.
             .toLocalDate()
-    }
-
-    private inner class GetEventsUseCaseHandler : DisposableSubscriber<List<Event>>() {
-        override fun onComplete() {}
-
-        override fun onNext(t: List<Event>) {
-            events = t
-            audioFilterEnabled.value =
-                audioFilterEnabled.value // anders wordt de lijst niet getoond
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_load_events)
-        }
     }
 }
