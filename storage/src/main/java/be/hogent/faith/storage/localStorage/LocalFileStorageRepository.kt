@@ -9,6 +9,7 @@ import be.hogent.faith.storage.StoragePathProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
+import timber.log.Timber
 import java.io.File
 
 class LocalFileStorageRepository(
@@ -19,9 +20,13 @@ class LocalFileStorageRepository(
         return Completable.mergeArray(
             saveEmotionAvatar(encryptedEvent),
             saveEventDetails(encryptedEvent)
-        ).andThen(
-            Single.just(encryptedEvent)
         )
+            .andThen(
+                Single.just(encryptedEvent)
+            )
+            .doOnSuccess {
+                Timber.d("Saved encrypted event to local storage")
+            }
     }
 
     /**

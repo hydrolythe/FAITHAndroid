@@ -9,6 +9,7 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.storage.StoragePathProvider
 import io.reactivex.Completable
 import io.reactivex.Single
+import timber.log.Timber
 import java.io.File
 import java.util.UUID
 
@@ -24,8 +25,14 @@ class TemporaryStorageRepository(
         val saveFile =
             with(pathProvider) { temporaryStoragePath(getDetailPath(detail, event)) }
         return moveFile(detail.file, saveFile)
+            .andThen(
+                Completable.fromCallable {
+                    detail.file = saveFile // relativePath
+                    Unit
+                }
+            )
             .doOnComplete {
-                detail.file = saveFile // relativePath
+                Timber.d("Saved detail $detail with event ${event.uuid}")
             }
     }
 
@@ -35,6 +42,7 @@ class TemporaryStorageRepository(
             saveDirectory.mkdirs()
             val saveFile = File(saveDirectory, UUID.randomUUID().toString())
             saveFile.writeText(text)
+            Timber.d("Saved text $text temporarily at $saveFile")
             saveFile
         }
     }
@@ -56,6 +64,7 @@ class TemporaryStorageRepository(
             file.outputStream().use {
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
             }
+            Timber.d("Saved bitmap temporarily at $file")
         }
     }
 

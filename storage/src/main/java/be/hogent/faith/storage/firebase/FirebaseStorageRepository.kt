@@ -33,6 +33,9 @@ class FirebaseStorageRepository(
                         saveDetailFile(encryptedEvent, it)
                     }
             )
+            .doOnComplete {
+                Timber.d("Event saved online")
+            }
     }
 
     /**
@@ -45,11 +48,15 @@ class FirebaseStorageRepository(
             return rxFirebaseStorage.putFile(
                 storageRef.child(pathProvider.getEmotionAvatarPath(encryptedEvent).path),
                 Uri.parse("file://${encryptedEvent.emotionAvatar!!.path}")
-            ).doOnError {
-                Timber.e(
-                    "Problem saving emotionAvatar with path ${encryptedEvent.emotionAvatar}: ${it.localizedMessage}"
-                )
-            }.ignoreElement()
+            )
+                .doOnSuccess {
+                    Timber.d("Uploaded detail file ${encryptedEvent.emotionAvatar?.path} ")
+                }
+                .doOnError {
+                    Timber.e(
+                        "Problem saving emotionAvatar with path ${encryptedEvent.emotionAvatar}: ${it.localizedMessage}"
+                    )
+                }.ignoreElement()
         }
     }
 
@@ -60,11 +67,15 @@ class FirebaseStorageRepository(
         return rxFirebaseStorage.putFile(
             storageRef.child(pathProvider.getDetailPath(event, detail).path),
             Uri.parse("file://${detail.file.path}")
-        ).doOnError {
-            Timber.e(
-                "Problems uploading detail file ${detail.file.path} : ${it.localizedMessage}"
-            )
-        }.ignoreElement()
+        )
+            .doOnSuccess {
+                Timber.d("Uploaded detail file ${detail.file.path} ")
+            }
+            .doOnError {
+                Timber.e(
+                    "Problems uploading detail file ${detail.file.path} : ${it.localizedMessage}"
+                )
+            }.ignoreElement()
     }
 
     /**

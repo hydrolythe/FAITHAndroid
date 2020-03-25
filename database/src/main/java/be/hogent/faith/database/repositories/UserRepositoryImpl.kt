@@ -2,7 +2,6 @@ package be.hogent.faith.database.repositories
 
 import be.hogent.faith.database.firebase.UserDatabase
 import be.hogent.faith.database.mappers.UserMapper
-import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.UserRepository
 import io.reactivex.Completable
@@ -32,13 +31,5 @@ open class UserRepositoryImpl(
      */
     override fun get(uid: String): Observable<User> {
         return userDatabase.get(uid).map { userMapper.mapFromEntity(it) }.toObservable()
-    }
-
-    /**
-    * Add events to the user
-    */
-    private fun addEventsToUser(user: User, events: List<Event>): User {
-        events.forEach { user.addEvent(it) }
-        return user
     }
 }

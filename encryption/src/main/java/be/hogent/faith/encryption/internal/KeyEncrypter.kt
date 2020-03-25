@@ -9,6 +9,7 @@ import com.google.crypto.tink.JsonKeysetReader
 import com.google.crypto.tink.JsonKeysetWriter
 import com.google.crypto.tink.KeysetHandle
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import java.io.ByteArrayOutputStream
 
 class KeyEncrypter(private val encryptionService: KeyEncryptionService) {
@@ -33,6 +34,8 @@ class KeyEncrypter(private val encryptionService: KeyEncryptionService) {
     internal fun decrypt(encryptedKey: EncryptedString): Single<KeysetHandle> {
         return encryptionService
             .decrypt(DecryptionRequest(encryptedKey))
+                // TEMP FIX: because somehow the UC starting this is not doing its thing off the main thread
+            .subscribeOn(Schedulers.io())
             .map(::convertStringToKeysetHandle)
     }
 

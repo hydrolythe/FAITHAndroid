@@ -44,7 +44,7 @@ object KoinModules {
 
 val appModule = module(override = true) {
 
-    // Scheduler for use cases
+    // Observing scheduler for use cases
     single { AndroidSchedulers.mainThread() }
 
     // ViewModels

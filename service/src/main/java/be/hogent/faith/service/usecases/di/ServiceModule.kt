@@ -25,7 +25,7 @@ import org.koin.dsl.module
 
 /**
  * Module containing all the use cases.
- * Don't forget to add any use  case that you write here so it can be injected in the app module.
+ * Don't forget to add any use case that you write here so it can be injected in the app module.
  */
 val serviceModule = module {
     factory { GetEventsUseCase(get(), get()) }
