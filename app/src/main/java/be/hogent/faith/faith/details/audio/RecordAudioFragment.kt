@@ -262,8 +262,8 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             audioDetailViewModel.onPlayStateChanged(state)
         }
 
-        override fun onLogUpdated(message: String?) {
-            Timber.i(message)
+        override fun onLogUpdated(formattedMessage: String?) {
+            Timber.i(formattedMessage)
         }
     }
 

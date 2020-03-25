@@ -3,12 +3,13 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.repository.IEventRepository
-import be.hogent.faith.service.usecases.fakes.SingleUserFakeEventRepository
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
+import be.hogent.faith.service.usecases.fakes.SingleUserFakeEventRepository
 import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
+import io.reactivex.Completable
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -59,22 +60,22 @@ class SaveEventUseCaseTest {
 
     @Test
     fun `When an error occurs in the EventRepository it returns an Error`() {
+        // Arrange
         eventRepository = mockk()
-        every { eventRepository.insert(any(), any()) } throws RuntimeException()
-        saveEventUseCase =
-            SaveEventUseCase(eventRepository, mockk(relaxed = true))
+        every { eventRepository.insert(any(), any()) } returns Completable.error(RuntimeException())
+        saveEventUseCase = SaveEventUseCase(eventRepository, mockk(relaxed = true))
 
         val params = SaveEventUseCase.Params(eventTitle, event, user)
 
-        val result = saveEventUseCase.buildUseCaseObservable(params)
-        result.test()
+        saveEventUseCase.buildUseCaseObservable(params)
+            .test()
             .assertError(RuntimeException::class.java)
     }
 
     @Test
     fun `When an error occurs in the EventRepository the event is not added to the user's events`() {
         eventRepository = mockk()
-        every { eventRepository.insert(any(), any()) } throws RuntimeException()
+        every { eventRepository.insert(any(), any()) } returns Completable.error(RuntimeException())
         saveEventUseCase =
             SaveEventUseCase(eventRepository, mockk(relaxed = true))
 

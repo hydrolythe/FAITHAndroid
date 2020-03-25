@@ -79,6 +79,7 @@ class EventEncryptionServiceTest : KoinTest {
         eventEncrypter.decryptData(encryptedEvent!!)
             .doOnSuccess { decryptedEvent = it }
             .test()
+            .assertNoErrors()
             .dispose()
 
         // Assert
