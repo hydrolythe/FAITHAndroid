@@ -24,5 +24,4 @@ class SaveEventPhotoDetailUseCase(
         val photoDetail: PhotoDetail,
         val event: Event
     )
-
 }
