@@ -1,6 +1,7 @@
 package be.hogent.faith.service.usecases.detail.textDetail
 
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.storage.IStorageRepository
 import be.hogent.faith.storage.localStorage.ITemporaryStorage
 import io.mockk.every
 import io.mockk.mockk
@@ -14,6 +15,7 @@ class LoadTextDetailUseCaseTest {
     private lateinit var loadTextUseCase: LoadTextDetailUseCase
     private val scheduler: Scheduler = mockk()
     private val repository: ITemporaryStorage = mockk(relaxed = true)
+    private val storageRepo: IStorageRepository = mockk(relaxed = true)
 
     private val text = "<font size='5'>Hello <b>World</b></font>"
     private val existingDetail = mockk<TextDetail>()
@@ -21,7 +23,7 @@ class LoadTextDetailUseCaseTest {
     @Before
     fun setUp() {
         loadTextUseCase =
-            LoadTextDetailUseCase(repository, scheduler)
+            LoadTextDetailUseCase(repository, storageRepo, scheduler)
     }
 
     @Test
@@ -45,6 +47,8 @@ class LoadTextDetailUseCaseTest {
         every { repository.loadTextFromExistingDetail(existingDetail) } returns Single.error(
             RuntimeException()
         )
+        every { storageRepo.getFile(existingDetail) } returns Single.error(
+            RuntimeException())
 
         // Act & Assert
         loadTextUseCase.buildUseCaseSingle(

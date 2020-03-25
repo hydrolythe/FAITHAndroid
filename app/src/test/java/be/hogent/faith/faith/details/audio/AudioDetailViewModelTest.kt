@@ -1,13 +1,16 @@
 package be.hogent.faith.faith.details.audio
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.TestUtils.getValue
 import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener
 import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.faith.testModule
+import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import io.mockk.mockk
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -22,6 +25,7 @@ import org.koin.test.get
 class AudioDetailViewModelTest : KoinTest {
 
     private val createAudioDetailUseCase = mockk<CreateAudioDetailUseCase>()
+    private val loadDetailFileUseCase = mockk<LoadDetailFileUseCase>(relaxed = true)
 
     private lateinit var viewModel: AudioDetailViewModel
 
@@ -31,7 +35,7 @@ class AudioDetailViewModelTest : KoinTest {
     @Before
     fun setUp() {
         startKoin { modules(listOf(appModule, testModule)) }
-        viewModel = AudioDetailViewModel(createAudioDetailUseCase, get())
+        viewModel = AudioDetailViewModel(createAudioDetailUseCase, get(), loadDetailFileUseCase)
         viewModel.initialiseState()
     }
 
@@ -51,7 +55,7 @@ class AudioDetailViewModelTest : KoinTest {
     @Test
     fun `when given an existing detail the UI starts in the finishedRecording state`() {
         // Arrange
-        viewModel.loadExistingDetail(mockk())
+        viewModel.loadExistingDetail(mockk<AudioDetail> (relaxed = true))
         viewModel.initialiseState()
 
         assertEquals(AudioViewState.FinishedRecording, getValue(viewModel.viewState))
@@ -118,7 +122,7 @@ class AudioDetailViewModelTest : KoinTest {
     @Test
     fun `resetting the recording is not available when playing an existing detail`() {
         // Arrange
-        viewModel.loadExistingDetail(mockk())
+        viewModel.loadExistingDetail(mockk<AudioDetail> (relaxed = true))
         viewModel.initialiseState()
         viewModel.onRecordingStateChanged(RecordingInfoListener.RecordingState.STOPPED)
 

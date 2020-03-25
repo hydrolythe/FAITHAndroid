@@ -71,7 +71,8 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
     private fun loadExistingAudioDetail() {
         val existingDetail = arguments?.getSerializable(AUDIO_DETAIL) as AudioDetail
         audioDetailViewModel.loadExistingDetail(existingDetail)
-        audioPlayer.loadMedia(existingDetail.file)
+        // TODO : als encryptie geimplementeerd
+        // audioPlayer.loadMedia(existingDetail.file)
     }
 
     private fun existingDetailGiven(): Boolean {
@@ -105,6 +106,9 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
             navigation?.backToEvent()
         })
+        audioDetailViewModel.file.observe(this, Observer { file ->
+            audioPlayer.loadMedia(file)
+        })
         audioDetailViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
         })
@@ -131,6 +135,11 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
         audioDetailViewModel.resetButtonClicked.observe(this, Observer {
             audioPlayer.reset()
             audioRecorder.reset()
+        })
+        audioDetailViewModel.cancelClicked.observe(this, Observer {
+            audioPlayer.reset()
+            audioRecorder.reset()
+            activity!!.onBackPressed()
         })
     }
 

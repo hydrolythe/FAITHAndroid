@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="textDetailViewModel"
+            type="be.hogent.faith.faith.details.text.view.ViewTextDetailViewModel" />
+    </data>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_enter_text"
+        android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000">
+
+    <ImageButton
+        android:layout_width="@dimen/material_icon_width"
+        android:layout_height="@dimen/material_icon_height"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/ic_return"
+        android:contentDescription="@string/cancel"
+        android:onClick="@{() -> textDetailViewModel.onCancelClicked()}"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_text"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="60dp"
+        app:cardCornerRadius="@dimen/panel_corner_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <jp.wasabeef.richeditor.RichEditor
+        android:id="@+id/editor_viewText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+ />
+    </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+
+</layout>

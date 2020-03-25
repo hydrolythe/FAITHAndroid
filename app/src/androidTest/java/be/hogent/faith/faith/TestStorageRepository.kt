@@ -1,13 +1,13 @@
 package be.hogent.faith.faith
 
-import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.IStorageRepository
-import be.hogent.faith.util.factory.DetailFactory
+import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
 import io.reactivex.Completable
 import io.reactivex.Single
+import java.io.File
 
 class TestStorageRepository : IStorageRepository {
     override fun saveEvent(event: Event): Single<Event> {
@@ -18,11 +18,7 @@ class TestStorageRepository : IStorageRepository {
         return Completable.complete()
     }
 
-    override fun getBackpack(backpack: Backpack): Completable {
-        return Completable.complete()
-    }
-
-    override fun saveBackpackDetail(detail: Detail): Single<Detail> {
-        return Single.just(DetailFactory.makeRandomDetail())
+    override fun getFile(detail: Detail): Single<File> {
+        return Single.just(DataFactory.randomFile())
     }
 }

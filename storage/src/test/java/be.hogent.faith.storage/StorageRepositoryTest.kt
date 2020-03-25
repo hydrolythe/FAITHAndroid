@@ -4,6 +4,8 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
 import be.hogent.faith.storage.localStorage.ILocalStorageRepository
+import be.hogent.faith.util.factory.DataFactory
+import be.hogent.faith.util.factory.DetailFactory
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.called
 import io.mockk.every
@@ -19,7 +21,8 @@ class StorageRepositoryTest {
 
     private val localStorage = mockk<ILocalStorageRepository>()
     private val remoteStorage = mockk<IFireBaseStorageRepository>()
-    private val storageRepository = StorageRepository(localStorage, remoteStorage)
+    private val pathProvider = mockk<StoragePathProvider> (relaxed = true)
+    private val storageRepository = StorageRepository(localStorage, remoteStorage, pathProvider)
 
     @Test
     fun saveEvent_eventCorrectlyPassedToLocalStorage() {
@@ -114,5 +117,15 @@ class StorageRepositoryTest {
         verify(exactly = 1) { remoteStorage.makeEmotionAvatarLocallyAvailable(event) }
         verify(exactly = 1) { remoteStorage.makeFileLocallyAvailable(event.details[0]) }
         result.assertComplete()
+    }
+
+    @Test
+    fun getFile_returnsLocalFile() {
+        val detail = DetailFactory.makeTextDetail()
+        val file = DataFactory.randomFile()
+        every { localStorage.isFilePresent(detail) } returns true
+        every { pathProvider.getLocalDetailPath(detail) } returns file
+        val result = storageRepository.getFile(detail).test()
+        result.assertValue(file)
     }
 }
