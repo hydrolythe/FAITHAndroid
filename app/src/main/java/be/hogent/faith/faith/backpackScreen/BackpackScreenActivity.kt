@@ -69,7 +69,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         supportFragmentManager.popBackStack()
         backpackViewModel.viewButtons(true)
         backpackViewModel.setDetailScreenOpen(false)
-        backpackViewModel.closePopUpMenu()
+
     }
 
     override fun onDetailFinished(detail: Detail) {
@@ -82,7 +82,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         }
         backpackViewModel.viewButtons(true)
         backpackViewModel.setDetailScreenOpen(false)
-        backpackViewModel.closePopUpMenu()
+
     }
 
     override fun startPhotoDetailFragment() {
@@ -108,7 +108,6 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     private fun startFragmentInitialisers() {
         backpackViewModel.viewButtons(false)
         backpackViewModel.setDetailScreenOpen(true)
-        backpackViewModel.closePopUpMenu()
         backpackViewModel.setOpenDetailType(OpenDetailType.NEW)
     }
 
@@ -120,7 +119,6 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         replaceFragment(BackpackDetailFragment.ExternalFileFragment.newInstance(), R.id.fragment)
         backpackViewModel.viewButtons(false)
         backpackViewModel.setDetailScreenOpen(true)
-        backpackViewModel.closePopUpMenu()
     }
 
     override fun openDetailScreenFor(detail: Detail) {
@@ -131,7 +129,6 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
                 R.id.fragment
         )
         backpackViewModel.viewButtons(false)
-        backpackViewModel.closePopUpMenu()
     }
 
     override fun closeBackpack() {

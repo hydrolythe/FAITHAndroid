@@ -130,7 +130,6 @@
             android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
             android:background="@drawable/add_btn"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
-            android:onClick="@{() -> backpackViewModel.changePopupMenuState()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

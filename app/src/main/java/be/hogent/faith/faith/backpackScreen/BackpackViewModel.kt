@@ -141,9 +141,6 @@ class BackpackViewModel(
     private val _isDetailScreenOpen = MutableLiveData<Boolean>()
     val isDetailScreenOpen: LiveData<Boolean> = _isDetailScreenOpen
 
-    private val _isPopupMenuOpen = MutableLiveData<Int>()
-    val isPopupMenuOpen: LiveData<Int> = _isPopupMenuOpen
-
     private val _isInEditMode = MutableLiveData<Int>()
     val isInEditMode: LiveData<Int> = _isInEditMode
 
@@ -186,7 +183,6 @@ class BackpackViewModel(
 
     fun initialize() {
         _isInEditMode.postValue(OpenState.CLOSED)
-        _isPopupMenuOpen.postValue(OpenState.CLOSED)
     }
 
     fun onFilterPhotosClicked() {
@@ -224,12 +220,6 @@ class BackpackViewModel(
             _isInEditMode.postValue(OpenState.CLOSED)
     }
 
-    fun changePopupMenuState() {
-        if (isPopupMenuOpen.value == OpenState.CLOSED)
-            _isPopupMenuOpen.postValue(OpenState.OPEN)
-        else if (isPopupMenuOpen.value == OpenState.OPEN)
-            _isPopupMenuOpen.postValue(OpenState.CLOSED)
-    }
 
     fun showSaveDialog(detail: Detail) {
         _showSaveDialog.postValue(detail)
@@ -250,13 +240,9 @@ class BackpackViewModel(
         _openDetailType.postValue(openDetailType)
     }
 
-    fun closePopUpMenu() {
-        _isPopupMenuOpen.postValue(OpenState.CLOSED)
-    }
 
     fun setDetailScreenOpen(isOpen: Boolean) {
         _isDetailScreenOpen.postValue(isOpen)
-        _isPopupMenuOpen.postValue(OpenState.CLOSED)
     }
 
     fun viewButtons(viewButtons: Boolean) {
