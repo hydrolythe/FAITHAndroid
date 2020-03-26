@@ -33,24 +33,7 @@ data class Event(
     var notes: String? = null,
 
     val uuid: UUID = UUID.randomUUID()
-) {
-
-    private val _details = mutableListOf<Detail>()
-    val details: List<Detail>
-        get() = _details
-
-    fun getLastDetail(): Detail {
-        return _details.last()
-    }
-
-    fun getDetail(uuid: UUID): Detail? {
-        return details.find { it.uuid == uuid }
-    }
-
-    @TestOnly
-    fun addDetail(detail: Detail) {
-        _details += detail
-    }
+): DetailsContainer() {
 
     fun addNewPhotoDetail(saveFile: File): PhotoDetail {
         val newDetail = PhotoDetail(saveFile)
