@@ -12,7 +12,7 @@ import org.junit.Before
 import org.junit.Test
 
 class SaveBackpackDrawingDetailUseCaseTest {
-    private lateinit var saveBackpackDrawingDetailUseCase: SaveBackpackDrawingDetailUseCase
+    private lateinit var saveBackpackDrawingDetailUseCase: SaveBackpackDetailUseCase
     private val scheduler: Scheduler = mockk()
     private val repository: BackpackRepository = mockk(relaxed = true)
     private val user: User = mockk(relaxed = true)
@@ -22,7 +22,7 @@ class SaveBackpackDrawingDetailUseCaseTest {
     @Before
     fun setUp() {
         saveBackpackDrawingDetailUseCase =
-            SaveBackpackDrawingDetailUseCase(
+            SaveBackpackDetailUseCase(
                 repository,
                 scheduler
             )
@@ -32,7 +32,7 @@ class SaveBackpackDrawingDetailUseCaseTest {
     fun saveDrawingUC_saveDrawingNormal_savedToStorage() {
         // Arrange
         every { repository.insertDetail(detail, user) } returns Maybe.fromSingle { detail }
-        val params = SaveBackpackDrawingDetailUseCase.Params(user, detail)
+        val params = SaveBackpackDetailUseCase.Params(user, detail)
 
         // Act
         saveBackpackDrawingDetailUseCase.buildUseCaseObservable(params).test()

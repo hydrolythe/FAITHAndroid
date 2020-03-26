@@ -8,7 +8,7 @@ import io.reactivex.Scheduler
 import org.junit.Before
 
 class SaveBackpackExternalVideoDetailUseCaseTest {
-    private lateinit var saveBackpackExternalVideoDetailUseCase: SaveBackpackExternalVideoDetailUseCase
+    private lateinit var saveBackpackExternalVideoDetailUseCase: SaveBackpackDetailUseCase
     private val scheduler: Scheduler = mockk()
     private val repository: BackpackRepository = mockk(relaxed = true)
 
@@ -18,7 +18,7 @@ class SaveBackpackExternalVideoDetailUseCaseTest {
     @Before
     fun setUp() {
         saveBackpackExternalVideoDetailUseCase =
-                SaveBackpackExternalVideoDetailUseCase(
+                SaveBackpackDetailUseCase(
                         repository,
                         scheduler
                 )

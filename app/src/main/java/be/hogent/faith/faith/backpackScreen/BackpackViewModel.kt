@@ -14,14 +14,10 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.backpack.SaveBackpackExternalVideoDetailUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.faith.backpackScreen.detailFilters.CombinedDetailFilter
 import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.subscribers.DisposableSubscriber
 
@@ -36,11 +32,7 @@ object OpenDetailType {
 }
 
 class BackpackViewModel(
-    private val saveBackpackTextDetailUseCase: SaveBackpackTextDetailUseCase,
-    private val saveBackpackAudioDetailUseCase: SaveBackpackAudioDetailUseCase,
-    private val saveBackpackPhotoDetailUseCase: SaveBackpackPhotoDetailUseCase,
-    private val saveBackpackDrawingDetailUseCase: SaveBackpackDrawingDetailUseCase,
-    private val saveBackpackExternalVideoDetailUseCase: SaveBackpackExternalVideoDetailUseCase,
+    private val saveBackpackDetailUseCase: SaveBackpackDetailUseCase,
     private val deleteBackpackDetailUseCase: DeleteBackpackDetailUseCase,
     private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
 
@@ -297,8 +289,8 @@ class BackpackViewModel(
     }
 
     fun saveTextDetail(user: User, detail: TextDetail) {
-        val params = SaveBackpackTextDetailUseCase.Params(user, detail)
-        saveBackpackTextDetailUseCase.execute(params, SaveBackpackTextDetailUseCaseHandler())
+        val params = SaveBackpackDetailUseCase.Params(user, detail)
+        saveBackpackDetailUseCase.execute(params, SaveBackpackTextDetailUseCaseHandler())
     }
 
     private inner class SaveBackpackTextDetailUseCaseHandler : DisposableCompletableObserver() {
@@ -312,8 +304,8 @@ class BackpackViewModel(
     }
 
     fun saveAudioDetail(user: User, detail: AudioDetail) {
-        val params = SaveBackpackAudioDetailUseCase.Params(user, detail)
-        saveBackpackAudioDetailUseCase.execute(params, SaveBackpackAudioDetailUseCaseHandler())
+        val params = SaveBackpackDetailUseCase.Params(user, detail)
+        saveBackpackDetailUseCase.execute(params, SaveBackpackAudioDetailUseCaseHandler())
     }
 
     private inner class SaveBackpackAudioDetailUseCaseHandler : DisposableCompletableObserver() {
@@ -327,8 +319,8 @@ class BackpackViewModel(
     }
 
     fun savePhotoDetail(user: User, detail: PhotoDetail) {
-        val params = SaveBackpackPhotoDetailUseCase.Params(user, detail)
-        saveBackpackPhotoDetailUseCase.execute(params, SaveBackpackPhotoDetailUseCaseHandler())
+        val params = SaveBackpackDetailUseCase.Params(user, detail)
+        saveBackpackDetailUseCase.execute(params, SaveBackpackPhotoDetailUseCaseHandler())
     }
 
     private inner class SaveBackpackPhotoDetailUseCaseHandler : DisposableCompletableObserver() {
@@ -342,8 +334,8 @@ class BackpackViewModel(
     }
 
     fun saveDrawingDetail(user: User, detail: DrawingDetail) {
-        val params = SaveBackpackDrawingDetailUseCase.Params(user, detail)
-        saveBackpackDrawingDetailUseCase.execute(params, SaveBackpackDrawingDetailUseCaseHandler())
+        val params = SaveBackpackDetailUseCase.Params(user, detail)
+        saveBackpackDetailUseCase.execute(params, SaveBackpackDrawingDetailUseCaseHandler())
     }
 
     private inner class SaveBackpackDrawingDetailUseCaseHandler : DisposableCompletableObserver() {
@@ -357,8 +349,8 @@ class BackpackViewModel(
     }
 
     fun saveExternalVideoDetail(user: User, detail: ExternalVideoDetail) {
-        val params = SaveBackpackExternalVideoDetailUseCase.Params(user, detail)
-        saveBackpackExternalVideoDetailUseCase.execute(params, SaveBackpackExternalVideoDetailUseCaseHandler())
+        val params = SaveBackpackDetailUseCase.Params(user, detail)
+        saveBackpackDetailUseCase.execute(params, SaveBackpackExternalVideoDetailUseCaseHandler())
     }
 
     private inner class SaveBackpackExternalVideoDetailUseCaseHandler : DisposableCompletableObserver() {
@@ -395,10 +387,7 @@ class BackpackViewModel(
     }
 
     override fun onCleared() {
-        saveBackpackTextDetailUseCase.dispose()
-        saveBackpackAudioDetailUseCase.dispose()
-        saveBackpackDrawingDetailUseCase.dispose()
-        saveBackpackPhotoDetailUseCase.dispose()
+        saveBackpackDetailUseCase.dispose()
         deleteBackpackDetailUseCase.dispose()
         super.onCleared()
     }

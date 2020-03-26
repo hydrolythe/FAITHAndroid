@@ -7,7 +7,7 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackDetailUseCase
 import io.mockk.Called
 import io.mockk.called
 import io.mockk.mockk
@@ -22,7 +22,7 @@ import org.junit.Assert.assertEquals
 class BackpackViewModelSaveDrawingTest {
 
     private lateinit var viewModel: BackpackViewModel
-    private val saveDrawingUseCase = mockk<SaveBackpackDrawingDetailUseCase>(relaxed = true)
+    private val saveDrawingUseCase = mockk<SaveBackpackDetailUseCase>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<DrawingDetail>()
     private val user: User = mockk()
@@ -33,11 +33,7 @@ class BackpackViewModelSaveDrawingTest {
     @Before
     fun setUp() {
         viewModel = BackpackViewModel(
-                mockk(),
-                mockk(),
-                mockk(),
                 saveDrawingUseCase,
-                mockk(),
                 mockk(),
                 getBackPackFilesDummyUseCase
         )
@@ -45,12 +41,12 @@ class BackpackViewModelSaveDrawingTest {
 
     @Test
     fun backpackViewModel_saveDrawing_callsUseCase() {
-        val params = slot<SaveBackpackDrawingDetailUseCase.Params>()
+        val params = slot<SaveBackpackDetailUseCase.Params>()
 
         viewModel.saveDrawingDetail(user, detail)
         verify { saveDrawingUseCase.execute(capture(params), any()) }
 
-        assertEquals(detail, params.captured.drawingDetail)
+        assertEquals(detail, params.captured.detail)
     }
 
     @Test
