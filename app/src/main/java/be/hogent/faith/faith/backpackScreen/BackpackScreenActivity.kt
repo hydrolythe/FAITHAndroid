@@ -68,8 +68,6 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     override fun backToEvent() {
         supportFragmentManager.popBackStack()
         backpackViewModel.viewButtons(true)
-        backpackViewModel.setDetailScreenOpen(false)
-
     }
 
     override fun onDetailFinished(detail: Detail) {
@@ -81,8 +79,6 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
             is ExternalVideoDetail -> save(detail)
         }
         backpackViewModel.viewButtons(true)
-        backpackViewModel.setDetailScreenOpen(false)
-
     }
 
     override fun startPhotoDetailFragment() {
@@ -107,7 +103,6 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
 
     private fun startFragmentInitialisers() {
         backpackViewModel.viewButtons(false)
-        backpackViewModel.setDetailScreenOpen(true)
         backpackViewModel.setOpenDetailType(OpenDetailType.NEW)
     }
 
@@ -118,7 +113,6 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     override fun startExternalFileDetailFragment() {
         replaceFragment(BackpackDetailFragment.ExternalFileFragment.newInstance(), R.id.fragment)
         backpackViewModel.viewButtons(false)
-        backpackViewModel.setDetailScreenOpen(true)
     }
 
     override fun openDetailScreenFor(detail: Detail) {

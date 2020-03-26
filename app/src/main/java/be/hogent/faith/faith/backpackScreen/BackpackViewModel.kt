@@ -138,9 +138,6 @@ class BackpackViewModel(
     private val _goToCityScreen = SingleLiveEvent<Any>()
     val goToCityScreen: LiveData<Any> = _goToCityScreen
 
-    private val _isDetailScreenOpen = MutableLiveData<Boolean>()
-    val isDetailScreenOpen: LiveData<Boolean> = _isDetailScreenOpen
-
     private val _isInEditMode = MutableLiveData<Int>()
     val isInEditMode: LiveData<Int> = _isInEditMode
 
@@ -220,7 +217,6 @@ class BackpackViewModel(
             _isInEditMode.postValue(OpenState.CLOSED)
     }
 
-
     fun showSaveDialog(detail: Detail) {
         _showSaveDialog.postValue(detail)
     }
@@ -238,11 +234,6 @@ class BackpackViewModel(
 
     fun setOpenDetailType(openDetailType: Int) {
         _openDetailType.postValue(openDetailType)
-    }
-
-
-    fun setDetailScreenOpen(isOpen: Boolean) {
-        _isDetailScreenOpen.postValue(isOpen)
     }
 
     fun viewButtons(viewButtons: Boolean) {

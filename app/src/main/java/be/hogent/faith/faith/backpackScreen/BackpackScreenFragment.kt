@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -27,7 +26,6 @@ class BackpackScreenFragment : Fragment() {
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
     private lateinit var addDetailMenu: PopupMenu
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,7 +71,6 @@ class BackpackScreenFragment : Fragment() {
         detailThumbnailsAdapter = null
     }
 
-
     private fun startListeners() {
 
         backpackViewModel.filteredDetails.observe(this, Observer { details ->
@@ -107,16 +104,13 @@ class BackpackScreenFragment : Fragment() {
             addDetailMenu.show()
         }
 
-
         backpackViewModel.initialize()
     }
-
 
     private fun initialiseMenu() {
         addDetailMenu = PopupMenu(backpackBinding.btnBackpackAdd.context, backpackBinding.btnBackpackAdd, Gravity.END, 0, R.style.PopupMenu_AddDetail)
 
         addDetailMenu.menuInflater.inflate(R.menu.menu_backpack, addDetailMenu.menu)
-
 
         addDetailMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -142,11 +136,9 @@ class BackpackScreenFragment : Fragment() {
             mPopup.javaClass
                     .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
                     .invoke(mPopup, true)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Timber.e("Error showing icons")
         }
-
-
     }
 
     interface BackpackDetailsNavigationListener {
@@ -167,5 +159,4 @@ class BackpackScreenFragment : Fragment() {
             return BackpackScreenFragment()
         }
     }
-
 }
