@@ -25,6 +25,7 @@ class BackpackViewModelSaveExternalVideoTest {
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<ExternalVideoDetail>()
     private val user = mockk<User>()
+
     @get:Rule
     val testRule = InstantTaskExecutorRule()
 

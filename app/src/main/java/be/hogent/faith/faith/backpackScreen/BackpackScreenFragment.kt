@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.backpackScreen
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.Gravity
@@ -107,6 +108,7 @@ class BackpackScreenFragment : Fragment() {
         backpackViewModel.initialize()
     }
 
+    @SuppressLint("RestrictedApi")
     private fun initialiseMenu() {
         addDetailMenu = PopupMenu(backpackBinding.btnBackpackAdd.context, backpackBinding.btnBackpackAdd, Gravity.END, 0, R.style.PopupMenu_AddDetail)
 

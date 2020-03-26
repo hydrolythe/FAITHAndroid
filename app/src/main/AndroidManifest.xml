@@ -39,12 +39,12 @@
 
         </activity>
         <activity
-            android:name=".faith.library.EventListActivity"
+            android:name=".faith.library.LibraryActivity"
             android:label="@string/title_event_detail"
-            android:parentActivityName=".faith.library.EventListActivity">
+            android:parentActivityName=".faith.library.LibraryActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="be.hogent.faith.faith.library.EventListActivity" />
+                android:value="be.hogent.faith.faith.library.LibraryActivity" />
         </activity>
         <activity
             android:name=".faith.loginOrRegister.LoginOrRegisterActivity"

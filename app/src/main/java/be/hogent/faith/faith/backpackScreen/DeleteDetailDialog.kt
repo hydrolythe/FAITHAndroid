@@ -16,14 +16,15 @@ class DeleteDetailDialog(private var detail: Detail) : DialogFragment() {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             builder.setMessage(R.string.confirmation_delete_detail)
-                .setPositiveButton(R.string.ok
-                ) { dialog, id ->
-                    listener.onDetailDeleteClick(this, detail)
-                }
-                .setNegativeButton(R.string.cancel
-                ) { dialog, id ->
-                    listener.onDetailCancelClick(this)
-                }
+                    .setPositiveButton(R.string.ok
+
+                    ) { _, _ ->
+                        listener.onDetailDeleteClick(this, detail)
+                    }
+                    .setNegativeButton(R.string.cancel
+                    ) { _, _ ->
+                        listener.onDetailCancelClick(this)
+                    }
             builder.create()
         } ?: throw IllegalStateException("Activity cannot be null")
     }
