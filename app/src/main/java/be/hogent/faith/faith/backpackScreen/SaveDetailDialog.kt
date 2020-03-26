@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.databinding.DialogSaveBackpackdetailBinding
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
@@ -18,7 +19,7 @@ import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
-    private lateinit var saveDetailBinding: be.hogent.faith.databinding.DialogSaveBackpackdetailBinding
+    private lateinit var saveDetailBinding: DialogSaveBackpackdetailBinding
 
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
 
@@ -42,7 +43,7 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         saveDetailBinding =
-            DataBindingUtil.inflate(inflater, R.layout.dialog_save_backpackdetail, container, false)
+                DataBindingUtil.inflate(inflater, R.layout.dialog_save_backpackdetail, container, false)
         saveDetailBinding.backpackViewModel = backpackViewModel
         saveDetailBinding.userViewModel = userViewModel
         saveDetailBinding.lifecycleOwner = this@SaveDetailDialog
@@ -77,7 +78,12 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        backpackViewModel.clearSaveDialogErrorMessage()
         super.onDismiss(dialog)
+        backpackViewModel.clearSaveDialogErrorMessage()
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        backpackViewModel.goToDetail(detail)
     }
 }

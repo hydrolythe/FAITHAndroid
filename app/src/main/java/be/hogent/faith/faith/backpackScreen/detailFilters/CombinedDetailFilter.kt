@@ -41,8 +41,8 @@ class CombinedDetailFilter {
         }
 
         if (filteredDetails.isEmpty() && !isDetailTypeFilterActive.containsValue(true)) {
-            return details
+            return details.sortedBy { it.javaClass.canonicalName }
         }
-        return filteredDetails.filter(titleFilter)
+        return filteredDetails.filter(titleFilter).sortedBy { it.javaClass.canonicalName }
     }
 }

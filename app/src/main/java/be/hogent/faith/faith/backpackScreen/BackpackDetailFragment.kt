@@ -56,6 +56,7 @@ abstract class BackpackDetailFragment : Fragment() {
     }
 
     private fun showSaveDialog(detail: Detail) {
+
         saveDialog = SaveDetailDialog.newInstance(detail)
         saveDialog.show(fragmentManager!!, null)
         backpackViewModel.setCurrentFile(detail)
