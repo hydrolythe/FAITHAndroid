@@ -22,13 +22,10 @@ import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseC
 import be.hogent.faith.service.usecases.detail.textDetail.CreateTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.OverwriteTextDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import be.hogent.faith.service.usecases.event.GetEventFilesUseCase
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
-import be.hogent.faith.service.usecases.event.SaveEventAudioDetailUseCase
-import be.hogent.faith.service.usecases.event.SaveEventDrawingDetailUseCase
-import be.hogent.faith.service.usecases.event.SaveEventPhotoDetailUseCase
-import be.hogent.faith.service.usecases.event.SaveEventTextDetailUseCase
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import org.koin.dsl.module
 
@@ -41,15 +38,17 @@ val serviceModule = module {
     factory { SaveEventUseCase(get(), get(), get()) }
     factory { CreateUserUseCase(get(), get()) }
     factory { SaveEmotionAvatarUseCase(get(), get()) }
+    factory {
+        SaveEventDetailUseCase(
+            get(),
+            get()
+        )
+    }
     factory { GetUserUseCase(get(), get(), get(), get()) }
     factory { RegisterUserUseCase(get(), get(), get()) }
     factory { IsUsernameUniqueUseCase(get(), get()) }
     factory { LoginUserUseCase(get(), get()) }
     factory { LogoutUserUseCase(get(), get()) }
-    factory { SaveEventTextDetailUseCase(get(), get()) }
-    factory { SaveEventPhotoDetailUseCase(get(), get()) }
-    factory { SaveEventAudioDetailUseCase(get(), get()) }
-    factory { SaveEventDrawingDetailUseCase(get(), get()) }
     factory { LoadTextDetailUseCase(get(), get(), get()) }
     factory { CreateDrawingDetailUseCase(get(), get()) }
     factory { OverwriteDrawingDetailUseCase(get(), get()) }

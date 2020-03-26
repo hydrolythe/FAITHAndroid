@@ -1,6 +1,8 @@
 package be.hogent.faith.storage.localStorage
 
 import android.content.Context
+import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.StoragePathProvider
@@ -12,16 +14,18 @@ class LocalStorageRepository(
     private val context: Context
 ) : ILocalStorageRepository {
 
-    override fun saveBackpackDetail(detail: Detail): Single<Detail> {
+    /**
+     * moves a detailfile from tempory storage to local storage, deletes the file in tempory storage, update details path and returns the detail
+     */
+    override fun saveDetailFileForContainer(detailsContainer: DetailsContainer, detail:Detail): Single<Detail> {
         return Single.fromCallable {
-            moveFile(detail.file, pathProvider.getLocalDetailPath(detail))
-            detail.file = pathProvider.getDetailPath(detail)
+            moveDetail(detailsContainer, detail)
             detail
         }
     }
 
     /**
-     * moves the files from tempory storage to local storage
+     * moves the files (avatar and details) from tempory storage to local storage for an event
      */
     override fun saveEvent(event: Event): Single<Event> {
         return Single.fromCallable {
@@ -31,19 +35,7 @@ class LocalStorageRepository(
         }
     }
 
-    /**
-     * moves all detail files of an event from tempory storage to local storage
-     * and updates the path
-     */
-    private fun saveEventDetails(event: Event) {
-
-        event.details.map { detail ->
-            moveFile(detail.file, pathProvider.getLocalDetailPath(event, detail))
-            detail.file = pathProvider.getDetailPath(event, detail)
-        }
-    }
-
-    /**
+     /**
      * moves the emotion avatar of an event from tempory storage to local storage
      * and updates the path
      */
@@ -58,11 +50,27 @@ class LocalStorageRepository(
     }
 
     /**
+     * moves all detail files of an event from tempory storage to local storage
+     * and updates the path
+     */
+    private fun saveEventDetails(event: Event) {
+        event.details.map { detail -> moveDetail(event, detail) }
+    }
+
+    /**
      * moves a file from tempory storage to local storage and deletes the file in tempory storage
      */
     private fun moveFile(from: File, to: File) {
         from.copyTo(target = to, overwrite = true)
         from.delete()
+    }
+
+    /**
+     * moves a detailfile from tempory storage to local storage and deletes the file in tempory storage and updates the detail
+     */
+    private fun moveDetail(detailsContainer:DetailsContainer, detail:Detail) {
+        moveFile(detail.file, pathProvider.getLocalDetailPath(detailsContainer, detail))
+        detail.file = pathProvider.getDetailPath(detailsContainer, detail)
     }
 
     /**

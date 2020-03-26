@@ -1,6 +1,7 @@
 package be.hogent.faith.faith
 
 import android.graphics.Bitmap
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
@@ -32,7 +33,10 @@ class TestITemporyStorage : ITemporaryStorage {
         return Completable.complete()
     }
 
-    override fun storeDetailWithEvent(detail: Detail, event: Event): Completable {
+    override fun storeDetailWithContainer(
+        detail: Detail,
+        detailsContainer: DetailsContainer
+    ): Completable {
         return Completable.complete()
     }
 
