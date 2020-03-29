@@ -4,6 +4,7 @@ import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.repository.DetailContainerRepository
+import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import be.hogent.faith.storage.IStorageRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -15,7 +16,7 @@ import org.junit.Before
 import org.junit.Test
 
 class SaveBackpackAudioDetailUseCaseTest {
-    private lateinit var saveBackpackAudioDetailUseCase: SaveBackpackDetailUseCase
+    private lateinit var saveBackpackAudioDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>
     private val scheduler: Scheduler = mockk()
     private val repository: DetailContainerRepository<Backpack> = mockk(relaxed = true)
     private val storageRepository: IStorageRepository = mockk(relaxed = true)
@@ -26,7 +27,7 @@ class SaveBackpackAudioDetailUseCaseTest {
     @Before
     fun setUp() {
         saveBackpackAudioDetailUseCase =
-            SaveBackpackDetailUseCase(
+            SaveDetailsContainerDetailUseCase(
                 repository,
                 storageRepository,
                 scheduler
@@ -43,7 +44,7 @@ class SaveBackpackAudioDetailUseCaseTest {
                 detail
             )
         } returns Single.just(detail)
-        val params = SaveBackpackDetailUseCase.Params(user, detail)
+        val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
 
         // Act
         saveBackpackAudioDetailUseCase.buildUseCaseObservable(params).test()

@@ -10,9 +10,10 @@ import io.reactivex.observers.DisposableCompletableObserver
 import org.junit.Assert.assertEquals
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackDetailUseCase
+import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.mockk.Called
 import io.mockk.called
 import org.junit.Before
@@ -21,10 +22,10 @@ import org.junit.Test
 
 class BackpackViewModelSaveTextTest {
     private lateinit var viewModel: BackpackViewModel
-    private val saveTextUseCase = mockk<SaveBackpackDetailUseCase>(relaxed = true)
+    private val saveTextUseCase = mockk<SaveDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<TextDetail>()
-    private val user: User = mockk()
+    private val user: User = mockk(relaxed = true)
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -40,7 +41,7 @@ class BackpackViewModelSaveTextTest {
 
     @Test
     fun backpackViewModel_saveText_callsUseCase() {
-        val params = slot<SaveBackpackDetailUseCase.Params>()
+        val params = slot<SaveDetailsContainerDetailUseCase.Params>()
 
         viewModel.saveTextDetail(user, detail)
         verify { saveTextUseCase.execute(capture(params), any()) }
@@ -55,7 +56,7 @@ class BackpackViewModelSaveTextTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val successObserver = mockk<Observer<Int>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.textDetailSavedSuccessFully.observeForever(successObserver)
+        viewModel.infoMessage.observeForever(successObserver)
 
         // Act
         viewModel.saveTextDetail(user, detail)
@@ -74,7 +75,7 @@ class BackpackViewModelSaveTextTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val successObserver = mockk<Observer<Int>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.textDetailSavedSuccessFully.observeForever(successObserver)
+        viewModel.infoMessage.observeForever(successObserver)
 
         // Act
         viewModel.saveTextDetail(user, detail)

@@ -13,18 +13,19 @@ import org.junit.Assert.assertEquals
 import androidx.lifecycle.Observer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackDetailUseCase
+import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 
 class BackpackViewModelSavePhotoTest {
     private lateinit var viewModel: BackpackViewModel
-    private val savePhotoUseCase = mockk<SaveBackpackDetailUseCase>(relaxed = true)
+    private val savePhotoUseCase = mockk<SaveDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<PhotoDetail>()
-    private val user: User = mockk()
+    private val user = mockk<User>(relaxed = true)
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -41,7 +42,7 @@ class BackpackViewModelSavePhotoTest {
 
     @Test
     fun backpackViewModel_savePhoto_callsUseCase() {
-        val params = slot<SaveBackpackDetailUseCase.Params>()
+        val params = slot<SaveDetailsContainerDetailUseCase.Params>()
 
         viewModel.savePhotoDetail(user, detail)
         verify { savePhotoUseCase.execute(capture(params), any()) }
@@ -56,7 +57,7 @@ class BackpackViewModelSavePhotoTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val successObserver = mockk<Observer<Int>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.photoDetailSavedSuccessFully.observeForever(successObserver)
+        viewModel.infoMessage.observeForever(successObserver)
 
         // Act
         viewModel.savePhotoDetail(user, detail)
@@ -75,7 +76,7 @@ class BackpackViewModelSavePhotoTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val successObserver = mockk<Observer<Int>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.photoDetailSavedSuccessFully.observeForever(successObserver)
+        viewModel.infoMessage.observeForever(successObserver)
 
         // Act
         viewModel.savePhotoDetail(user, detail)

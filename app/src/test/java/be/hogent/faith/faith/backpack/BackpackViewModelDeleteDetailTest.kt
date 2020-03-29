@@ -13,14 +13,15 @@ import org.junit.Assert.assertEquals
 import androidx.lifecycle.Observer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
-import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
+import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 
 class BackpackViewModelDeleteDetailTest {
     private lateinit var viewModel: BackpackViewModel
-    private val deleteBackpackDetailUseCase = mockk<DeleteBackpackDetailUseCase>(relaxed = true)
+    private val deleteBackpackDetailUseCase = mockk<DeleteDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<Detail>()
 
@@ -38,7 +39,7 @@ class BackpackViewModelDeleteDetailTest {
 
     @Test
     fun backpackViewModel_deleteDetail_callsUseCase() {
-        val params = slot<DeleteBackpackDetailUseCase.Params>()
+        val params = slot<DeleteDetailsContainerDetailUseCase.Params>()
 
         viewModel.deleteDetail(detail)
         verify { deleteBackpackDetailUseCase.execute(capture(params), any()) }
@@ -53,7 +54,7 @@ class BackpackViewModelDeleteDetailTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val successObserver = mockk<Observer<Int>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.detailDeletedSuccessfully.observeForever(successObserver)
+        viewModel.infoMessage.observeForever(successObserver)
 
         // Act
         viewModel.deleteDetail(detail)
@@ -72,7 +73,7 @@ class BackpackViewModelDeleteDetailTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val successObserver = mockk<Observer<Int>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.detailDeletedSuccessfully.observeForever(successObserver)
+        viewModel.infoMessage.observeForever(successObserver)
 
         // Act
         viewModel.deleteDetail(detail)

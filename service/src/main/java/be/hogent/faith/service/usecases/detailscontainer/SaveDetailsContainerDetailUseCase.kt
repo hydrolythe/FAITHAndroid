@@ -1,6 +1,6 @@
-package be.hogent.faith.service.usecases.backpack
+package be.hogent.faith.service.usecases.detailscontainer
 
-import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.repository.DetailContainerRepository
@@ -10,11 +10,11 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 
-class SaveBackpackDetailUseCase(
-    private val backpackRepository: DetailContainerRepository<Backpack>,
+class SaveDetailsContainerDetailUseCase<T : DetailsContainer>(
+    private val backpackRepository: DetailContainerRepository<T>,
     private val storageRepository: IStorageRepository,
     observeScheduler: Scheduler
-) : CompletableUseCase<SaveBackpackDetailUseCase.Params>(
+) : CompletableUseCase<SaveDetailsContainerDetailUseCase.Params>(
     observeScheduler
 ) {
     private var params: Params? = null
@@ -25,7 +25,7 @@ class SaveBackpackDetailUseCase(
         return addDetailToBackpack(params.detail)
             .flatMap {
                 storageRepository.saveDetailFileForContainer(
-                    params.user.backpack,
+                    params.detailsContainer,
                     params.detail
                 )
             }
@@ -38,5 +38,5 @@ class SaveBackpackDetailUseCase(
         detail
     }
 
-    data class Params(val user: User, val detail: Detail)
+    data class Params(val user: User, val detailsContainer: DetailsContainer, val detail: Detail)
 }

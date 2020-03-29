@@ -3,6 +3,7 @@ package be.hogent.faith.service.usecases.backpack
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.repository.DetailContainerRepository
+import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -12,7 +13,7 @@ import org.junit.Before
 import org.junit.Test
 
 class DeleteBackpackDetailUseCaseTest {
-    private lateinit var deleteBackpackDetailUseCase: DeleteBackpackDetailUseCase
+    private lateinit var deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>
     private val scheduler: Scheduler = mockk()
     private val repository: DetailContainerRepository<Backpack> = mockk(relaxed = true)
 
@@ -21,7 +22,7 @@ class DeleteBackpackDetailUseCaseTest {
     @Before
     fun setUp() {
         deleteBackpackDetailUseCase =
-            DeleteBackpackDetailUseCase(
+            DeleteDetailsContainerDetailUseCase(
                 repository,
                 scheduler
             )
@@ -31,7 +32,7 @@ class DeleteBackpackDetailUseCaseTest {
     fun deleteDetailUC_deleteDetailFromStorage() {
         // Arrange
         every { repository.deleteDetail(detail) } returns Completable.complete()
-        val params = DeleteBackpackDetailUseCase.Params(detail)
+        val params = DeleteDetailsContainerDetailUseCase.Params(detail)
 
         // Act
         deleteBackpackDetailUseCase.buildUseCaseObservable(params).test()

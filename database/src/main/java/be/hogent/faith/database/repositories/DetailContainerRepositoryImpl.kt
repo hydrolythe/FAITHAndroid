@@ -11,11 +11,11 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 
-open class DetailContainerRepositoryImpl<DetailsContainer>(
+open class DetailContainerRepositoryImpl<T : DetailsContainer>(
     private val userMapper: UserMapper,
     private val detailMapper: DetailMapper,
-    private val firebaseDetailContainerRepository: FirebaseDetailContainerRepository<DetailsContainer>
-) : DetailContainerRepository<DetailsContainer> {
+    private val firebaseDetailContainerRepository: FirebaseDetailContainerRepository<T>
+) : DetailContainerRepository<T> {
 
     override fun insertDetail(detail: Detail, user: User): Maybe<Detail> {
         return firebaseDetailContainerRepository.insert(
