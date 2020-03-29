@@ -2,7 +2,6 @@ package be.hogent.faith.storage.localStorage
 
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.DetailsContainer
-import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail

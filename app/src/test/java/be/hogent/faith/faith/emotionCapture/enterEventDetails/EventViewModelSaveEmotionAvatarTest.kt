@@ -35,9 +35,6 @@ class EventViewModelSaveEmotionAvatarTest : KoinTest {
         startKoin { modules(appModule) }
         viewModel = EventViewModel(
             saveEmotionAvatarUseCase,
-            mockk(),
-            mockk(),
-            mockk(),
             mockk()
         )
 

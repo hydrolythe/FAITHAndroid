@@ -28,8 +28,7 @@ class EventViewModelSaveDrawingTest {
     fun setUp() {
         viewModel = EventViewModel(
             mockk(),
-            saveEventDrawingUseCase,
-            mockk()
+            saveEventDrawingUseCase
         )
     }
 

@@ -56,6 +56,6 @@ val serviceModule = module {
     factory { GetEventFilesUseCase(get(), get()) }
     factory { LoadDetailFileUseCase(get(), get()) }
     factory { GetBackPackFilesDummyUseCase(get(), get()) }
-    factory { SaveBackpackDetailUseCase(get(), get()) }
+    factory { SaveBackpackDetailUseCase(get(), get(), get()) }
     factory { DeleteBackpackDetailUseCase(get(), get()) }
 }

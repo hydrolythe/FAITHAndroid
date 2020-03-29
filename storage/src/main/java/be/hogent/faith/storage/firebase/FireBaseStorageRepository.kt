@@ -30,7 +30,7 @@ class FireBaseStorageRepository(
             ).toSingle { event }
     }
 
-    override fun saveDetailFileForContainer(detailsContainer: DetailsContainer, detail:Detail): Single<Detail> {
+    override fun saveDetailFileForContainer(detailsContainer: DetailsContainer, detail: Detail): Single<Detail> {
         return saveDetailFile(detailsContainer, detail).toSingle { detail }
     }
 
@@ -95,6 +95,4 @@ class FireBaseStorageRepository(
             }
         )
     }
-
-
 }

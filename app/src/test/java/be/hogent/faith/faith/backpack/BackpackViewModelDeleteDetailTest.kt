@@ -31,10 +31,6 @@ class BackpackViewModelDeleteDetailTest {
     fun setUp() {
         viewModel = BackpackViewModel(
                 mockk(),
-                mockk(),
-                mockk(),
-                mockk(),
-                mockk(),
                 deleteBackpackDetailUseCase,
                 getBackPackFilesDummyUseCase
         )

@@ -1,6 +1,5 @@
 package be.hogent.faith.storage.firebase
 
-import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
@@ -17,5 +16,5 @@ interface IFireBaseStorageRepository {
 
     fun makeEmotionAvatarLocallyAvailable(event: Event): Completable
 
-    fun saveDetailFileForContainer(detailsContainer: DetailsContainer, detail:Detail): Single<Detail>
+    fun saveDetailFileForContainer(detailsContainer: DetailsContainer, detail: Detail): Single<Detail>
 }

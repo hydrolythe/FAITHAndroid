@@ -3,6 +3,7 @@ package be.hogent.faith.service.usecases.backpack
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.repository.BackpackRepository
+import be.hogent.faith.storage.IStorageRepository
 import io.mockk.mockk
 import io.reactivex.Scheduler
 import org.junit.Before
@@ -10,6 +11,7 @@ import org.junit.Before
 class SaveBackpackExternalVideoDetailUseCaseTest {
     private lateinit var saveBackpackExternalVideoDetailUseCase: SaveBackpackDetailUseCase
     private val scheduler: Scheduler = mockk()
+    private val storageRepository: IStorageRepository = mockk(relaxed = true)
     private val repository: BackpackRepository = mockk(relaxed = true)
 
     private val detail = mockk<ExternalVideoDetail>()
@@ -20,6 +22,7 @@ class SaveBackpackExternalVideoDetailUseCaseTest {
         saveBackpackExternalVideoDetailUseCase =
                 SaveBackpackDetailUseCase(
                         repository,
+                    storageRepository,
                         scheduler
                 )
     }

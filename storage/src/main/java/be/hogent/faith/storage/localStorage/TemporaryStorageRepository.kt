@@ -3,7 +3,6 @@ package be.hogent.faith.storage.localStorage
 import android.content.Context
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.DetailsContainer
-import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
@@ -82,12 +81,15 @@ class TemporaryStorageRepository(
     }
 
     private fun getDetailsContainerDirectory(detailsContainer: DetailsContainer): File {
-        val eventDir = File(context.cacheDir, storagePathProvider.getDetailsContainerFolder(detailsContainer).path)
+        val eventDir = File(
+            context.cacheDir,
+            storagePathProvider.getDetailsContainerFolder(detailsContainer).path
+        )
         eventDir.mkdirs()
         return eventDir
     }
 
-   private fun moveFile(sourceFile: File, destinationFile: File): Completable {
+    private fun moveFile(sourceFile: File, destinationFile: File): Completable {
         return Completable.fromCallable {
             sourceFile.copyTo(target = destinationFile, overwrite = true)
             sourceFile.delete()

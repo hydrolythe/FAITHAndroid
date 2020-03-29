@@ -32,8 +32,7 @@ class EventViewModelSaveAudioTest {
     fun setUp() {
         viewModel = EventViewModel(
             mockk(),
-            saveEventAudioUC,
-            mockk()
+            saveEventAudioUC
         )
     }
 
@@ -45,7 +44,7 @@ class EventViewModelSaveAudioTest {
         verify { saveEventAudioUC.execute(capture(params), any()) }
 
         assertEquals(detail, params.captured.detail)
-        assertEquals(event, params.captured.detailsContainer)
+        assertEquals(event, params.captured.event)
     }
 
     @Test

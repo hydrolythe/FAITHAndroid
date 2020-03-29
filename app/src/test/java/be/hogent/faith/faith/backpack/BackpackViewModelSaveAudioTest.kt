@@ -7,7 +7,7 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackDetailUseCase
 import io.mockk.Called
 import io.mockk.called
 import io.mockk.mockk
@@ -21,7 +21,7 @@ import org.junit.Assert.assertEquals
 
 class BackpackViewModelSaveAudioTest {
     private lateinit var viewModel: BackpackViewModel
-    private val saveAudioUseCase = mockk<SaveBackpackAudioDetailUseCase>(relaxed = true)
+    private val saveAudioUseCase = mockk<SaveBackpackDetailUseCase>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<AudioDetail>()
     private val user: User = mockk()
@@ -32,11 +32,7 @@ class BackpackViewModelSaveAudioTest {
     @Before
     fun setUp() {
         viewModel = BackpackViewModel(
-                mockk(),
                 saveAudioUseCase,
-                mockk(),
-                mockk(),
-                mockk(),
                 mockk(),
                 getBackPackFilesDummyUseCase
         )
@@ -44,12 +40,12 @@ class BackpackViewModelSaveAudioTest {
 
     @Test
     fun backpackViewModel_saveAudio_callsUseCase() {
-        val params = slot<SaveBackpackAudioDetailUseCase.Params>()
+        val params = slot<SaveBackpackDetailUseCase.Params>()
 
         viewModel.saveAudioDetail(user, detail)
         verify { saveAudioUseCase.execute(capture(params), any()) }
 
-        assertEquals(detail, params.captured.audioDetail)
+        assertEquals(detail, params.captured.detail)
     }
 
     @Test

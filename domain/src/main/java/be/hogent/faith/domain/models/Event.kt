@@ -1,11 +1,9 @@
 package be.hogent.faith.domain.models
 
 import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import org.jetbrains.annotations.TestOnly
 import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.util.UUID
@@ -33,7 +31,7 @@ data class Event(
     var notes: String? = null,
 
     val uuid: UUID = UUID.randomUUID()
-): DetailsContainer() {
+) : DetailsContainer() {
 
     fun addNewPhotoDetail(saveFile: File): PhotoDetail {
         val newDetail = PhotoDetail(saveFile)

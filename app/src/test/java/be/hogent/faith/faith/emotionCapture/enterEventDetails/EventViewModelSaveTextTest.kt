@@ -28,7 +28,7 @@ class EventViewModelSaveTextTest {
     fun setUp() {
         viewModel = EventViewModel(
             mockk(),
-            saveTextUseCase        )
+            saveTextUseCase)
     }
 
     @Test
@@ -39,7 +39,7 @@ class EventViewModelSaveTextTest {
         verify { saveTextUseCase.execute(capture(params), any()) }
 
         assertEquals(detail, params.captured.detail)
-        assertEquals(viewModel.event.value, params.captured.detailsContainer)
+        assertEquals(viewModel.event.value, params.captured.event)
     }
 
     @Test

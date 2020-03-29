@@ -1,7 +1,6 @@
 package be.hogent.faith.storage.localStorage
 
 import android.content.Context
-import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
@@ -17,7 +16,10 @@ class LocalStorageRepository(
     /**
      * moves a detailfile from tempory storage to local storage, deletes the file in tempory storage, update details path and returns the detail
      */
-    override fun saveDetailFileForContainer(detailsContainer: DetailsContainer, detail:Detail): Single<Detail> {
+    override fun saveDetailFileForContainer(
+        detailsContainer: DetailsContainer,
+        detail: Detail
+    ): Single<Detail> {
         return Single.fromCallable {
             moveDetail(detailsContainer, detail)
             detail
@@ -35,7 +37,7 @@ class LocalStorageRepository(
         }
     }
 
-     /**
+    /**
      * moves the emotion avatar of an event from tempory storage to local storage
      * and updates the path
      */
@@ -68,7 +70,7 @@ class LocalStorageRepository(
     /**
      * moves a detailfile from tempory storage to local storage and deletes the file in tempory storage and updates the detail
      */
-    private fun moveDetail(detailsContainer:DetailsContainer, detail:Detail) {
+    private fun moveDetail(detailsContainer: DetailsContainer, detail: Detail) {
         moveFile(detail.file, pathProvider.getLocalDetailPath(detailsContainer, detail))
         detail.file = pathProvider.getDetailPath(detailsContainer, detail)
     }

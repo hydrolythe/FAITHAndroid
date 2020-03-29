@@ -23,7 +23,7 @@ class StoragePathProvider(
     fun getDetailsContainerFolder(detailsContainer: DetailsContainer): File {
         return when (detailsContainer) {
             is Event -> File("users/${user!!.uid}/events/${(detailsContainer as Event).uuid}")
-            is Backpack -> File("users/${user!!.uid}/backpack}")
+            is Backpack -> File("users/${user!!.uid}/backpack")
             else -> throw NotImplementedError()
         }
     }
