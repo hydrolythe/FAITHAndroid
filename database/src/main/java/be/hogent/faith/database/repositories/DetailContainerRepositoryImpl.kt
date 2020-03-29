@@ -1,23 +1,24 @@
 package be.hogent.faith.database.repositories
 
-import be.hogent.faith.database.firebase.FirebaseBackpackRepository
+import be.hogent.faith.database.firebase.FirebaseDetailContainerRepository
 import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.UserMapper
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.repository.BackpackRepository
+import be.hogent.faith.domain.repository.DetailContainerRepository
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 
-open class BackpackRepositoryImpl(
+open class DetailContainerRepositoryImpl<DetailsContainer>(
     private val userMapper: UserMapper,
     private val detailMapper: DetailMapper,
-    private val firebaseBackpackRepository: FirebaseBackpackRepository
-) : BackpackRepository {
+    private val firebaseDetailContainerRepository: FirebaseDetailContainerRepository<DetailsContainer>
+) : DetailContainerRepository<DetailsContainer> {
 
     override fun insertDetail(detail: Detail, user: User): Maybe<Detail> {
-        return firebaseBackpackRepository.insert(
+        return firebaseDetailContainerRepository.insert(
             detailMapper.mapToEntity(detail),
             userMapper.mapToEntity(user)
             ).map {
@@ -26,10 +27,10 @@ open class BackpackRepositoryImpl(
     }
 
     override fun get(): Flowable<List<Detail>> {
-        return firebaseBackpackRepository.get().map { detailMapper.mapFromEntities(it)
+        return firebaseDetailContainerRepository.get().map { detailMapper.mapFromEntities(it)
     } }
 
     override fun deleteDetail(detail: Detail): Completable {
-        return firebaseBackpackRepository.delete(detailMapper.mapToEntity(detail))
+        return firebaseDetailContainerRepository.delete(detailMapper.mapToEntity(detail))
     }
 }

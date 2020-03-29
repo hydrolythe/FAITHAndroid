@@ -1,13 +1,14 @@
 package be.hogent.faith.service.usecases.backpack
 
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.repository.BackpackRepository
+import be.hogent.faith.domain.repository.DetailContainerRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
 class DeleteBackpackDetailUseCase(
-    private val backpackRepository: BackpackRepository,
+    private val backpackRepository: DetailContainerRepository<Backpack>,
     observeScheduler: Scheduler
 ) : CompletableUseCase<DeleteBackpackDetailUseCase.Params>(
     observeScheduler
