@@ -16,11 +16,8 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.event.DeleteEventDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
-import be.hogent.faith.service.usecases.event.SaveEventAudioDetailUseCase
-import be.hogent.faith.service.usecases.event.SaveEventDrawingDetailUseCase
-import be.hogent.faith.service.usecases.event.SaveEventPhotoDetailUseCase
-import be.hogent.faith.service.usecases.event.SaveEventTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import org.koin.core.KoinComponent
 import org.threeten.bp.LocalDateTime
@@ -29,10 +26,7 @@ import timber.log.Timber
 
 class EventViewModel(
     private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase,
-    private val saveEventPhotoDetailUseCase: SaveEventPhotoDetailUseCase,
-    private val saveEventAudioDetailUseCase: SaveEventAudioDetailUseCase,
-    private val saveEventDrawingDetailUseCase: SaveEventDrawingDetailUseCase,
-    private val saveEventTextDetailUseCase: SaveEventTextDetailUseCase,
+    private val saveEventDetailUseCase: SaveEventDetailUseCase,
     private val deleteDetailUseCase: DeleteEventDetailUseCase,
     givenEvent: Event? = null
 ) : ViewModel(), KoinComponent {
@@ -217,8 +211,8 @@ class EventViewModel(
 
     //region saveAudio
     fun saveAudioDetail(audioDetail: AudioDetail) {
-        val params = SaveEventAudioDetailUseCase.Params(audioDetail, event.value!!)
-        saveEventAudioDetailUseCase.execute(params, SaveEventAudioUseCaseHandler())
+        val params = SaveEventDetailUseCase.Params(audioDetail, event.value!!)
+        saveEventDetailUseCase.execute(params, SaveEventAudioUseCaseHandler())
     }
 
     private inner class SaveEventAudioUseCaseHandler : DisposableCompletableObserver() {
@@ -234,8 +228,8 @@ class EventViewModel(
 
     //region savePhoto
     fun savePhotoDetail(photoDetail: PhotoDetail) {
-        val params = SaveEventPhotoDetailUseCase.Params(photoDetail, event.value!!)
-        saveEventPhotoDetailUseCase.execute(params, TakeEventPhotoUseCaseHandler())
+        val params = SaveEventDetailUseCase.Params(photoDetail, event.value!!)
+        saveEventDetailUseCase.execute(params, TakeEventPhotoUseCaseHandler())
     }
 
     private inner class TakeEventPhotoUseCaseHandler : DisposableCompletableObserver() {
@@ -250,8 +244,8 @@ class EventViewModel(
     //endregion
 
     fun saveTextDetail(detail: TextDetail) {
-        val params = SaveEventTextDetailUseCase.Params(detail, event.value!!)
-        saveEventTextDetailUseCase.execute(params, SaveEventTextDetailUseCaseHandler())
+        val params = SaveEventDetailUseCase.Params(detail, event.value!!)
+        saveEventDetailUseCase.execute(params, SaveEventTextDetailUseCaseHandler())
     }
 
     private inner class SaveEventTextDetailUseCaseHandler : DisposableCompletableObserver() {
@@ -265,8 +259,8 @@ class EventViewModel(
     }
 
     fun saveDrawingDetail(detail: DrawingDetail) {
-        val params = SaveEventDrawingDetailUseCase.Params(detail, event.value!!)
-        saveEventDrawingDetailUseCase.execute(params, SaveEventDrawingUseCaseHandler())
+        val params = SaveEventDetailUseCase.Params(detail, event.value!!)
+        saveEventDetailUseCase.execute(params, SaveEventDrawingUseCaseHandler())
     }
 
     private inner class SaveEventDrawingUseCaseHandler : DisposableCompletableObserver() {
@@ -280,11 +274,8 @@ class EventViewModel(
     }
 
     override fun onCleared() {
-        saveEventAudioDetailUseCase.dispose()
-        saveEventPhotoDetailUseCase.dispose()
+        saveEventDetailUseCase.dispose()
         saveEmotionAvatarUseCase.dispose()
-        saveEventDrawingDetailUseCase.dispose()
-        saveEventTextDetailUseCase.dispose()
         deleteDetailUseCase.dispose()
         super.onCleared()
     }

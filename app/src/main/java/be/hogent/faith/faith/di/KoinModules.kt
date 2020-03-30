@@ -14,8 +14,8 @@ import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImage
 import be.hogent.faith.faith.details.drawing.view.ViewDrawingDetailViewModel
 import be.hogent.faith.faith.details.photo.create.TakePhotoViewModel
 import be.hogent.faith.faith.details.photo.view.ViewPhotoDetailViewModel
-import be.hogent.faith.faith.details.text.view.ViewTextDetailViewModel
 import be.hogent.faith.faith.details.text.create.TextDetailViewModel
+import be.hogent.faith.faith.details.text.view.ViewTextDetailViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
@@ -55,9 +55,9 @@ val appModule = module(override = true) {
 
     // ViewModels
     viewModel { CityScreenViewModel(get()) }
-    viewModel { (event: Event) -> EventViewModel(get(), get(), get(), get(), get(), get(), event) }
-    viewModel { EventViewModel(get(), get(), get(), get(), get(), get()) }
-    viewModel { BackpackViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { (event: Event) -> EventViewModel(get(), get(), get(), event) }
+    viewModel { EventViewModel(get(), get(), get()) }
+    viewModel { BackpackViewModel(get(), get(), get()) }
     viewModel { DrawViewModel() }
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }
@@ -79,7 +79,7 @@ val appModule = module(override = true) {
     viewModel { ViewDrawingDetailViewModel() }
     viewModel {
         ViewTextDetailViewModel(
-                get()
+            get()
         )
     }
 
@@ -109,9 +109,9 @@ val appModule = module(override = true) {
     // We are using SharedPrefs to store tokens, in PRIVATE mode
     single {
         SecureCredentialsManager(
-                get(),
-                get() as AuthenticationAPIClient,
-                get() as SharedPreferencesStorage
+            get(),
+            get() as AuthenticationAPIClient,
+            get() as SharedPreferencesStorage
         )
     }
     single { SharedPreferencesStorage(androidContext()) }
