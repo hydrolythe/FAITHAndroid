@@ -10,17 +10,14 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackVideoDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.io.File
 
 class YoutubeVideoDetailViewModel (
-    private val getYoutubeVideosFromSearchUseCase: GetYoutubeVideosFromSearchUseCase,
-    private val saveBackpackVideoDetailUseCase: SaveBackpackVideoDetailUseCase
+    private val getYoutubeVideosFromSearchUseCase: GetYoutubeVideosFromSearchUseCase
 ):  ViewModel(){
 
     private var _snippets = MutableLiveData<List<YoutubeVideoDetail>>()
@@ -39,15 +36,9 @@ class YoutubeVideoDetailViewModel (
     val savedDetail: LiveData<YoutubeVideoDetail>
         get() = _savedDetail
 
-    private var _currentUser = MutableLiveData<User>()
-
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
-
-    private val _videoIsSaved = SingleLiveEvent<Detail>()
-    val videoIsSaved: LiveData<Detail>
-        get() = _videoIsSaved
 
     private val _backToBackpack = SingleLiveEvent<Any>()
     val backToBackpack: LiveData<Any>
@@ -77,25 +68,12 @@ class YoutubeVideoDetailViewModel (
     }
 
     fun onSaveClicked(){
-        saveVideoDetail(_selectedSnippet.value!!, _currentUser.value!!)
+        saveVideoDetail(_selectedSnippet.value!!)
     }
 
     //Public for testing purposes
-    fun saveVideoDetail(detail: YoutubeVideoDetail, user: User){
-        if(detail.fileName.length > 29)
-            detail.fileName = detail.fileName.substring(0, 29)
-        val params = SaveBackpackVideoDetailUseCase.Params(user, detail)
-        saveBackpackVideoDetailUseCase.execute(params, SaveVideoDetailUseCaseHandler())
-    }
-
-    private inner class SaveVideoDetailUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _videoIsSaved.postValue(_selectedSnippet.value)
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_audio_failed)
-        }
+    fun saveVideoDetail(detail: YoutubeVideoDetail){
+        _savedDetail.postValue(detail)
     }
 
     fun goBackToBackpack(){
@@ -120,15 +98,6 @@ class YoutubeVideoDetailViewModel (
 
     fun hidePreview() {
         _showPreview.postValue(ShowPreview.HIDE)
-    }
-
-    fun setCurrentUser(user: User){
-        _currentUser.postValue(user)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        saveBackpackVideoDetailUseCase.dispose()
     }
 }
 

@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.service.usecases.event.SaveEventTextDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import io.mockk.Called
 import io.mockk.called
 import io.mockk.mockk
@@ -18,7 +18,7 @@ import org.junit.Test
 
 class EventViewModelSaveTextTest {
     private lateinit var viewModel: EventViewModel
-    private val saveTextUseCase = mockk<SaveEventTextDetailUseCase>(relaxed = true)
+    private val saveTextUseCase = mockk<SaveEventDetailUseCase>(relaxed = true)
     private val detail = mockk<TextDetail>()
 
     @get:Rule
@@ -28,16 +28,12 @@ class EventViewModelSaveTextTest {
     fun setUp() {
         viewModel = EventViewModel(
             mockk(),
-            mockk(),
-            mockk(),
-            mockk(),
-            saveTextUseCase
-        )
+            saveTextUseCase)
     }
 
     @Test
     fun eventViewModel_saveText_callsUseCase() {
-        val params = slot<SaveEventTextDetailUseCase.Params>()
+        val params = slot<SaveEventDetailUseCase.Params>()
 
         viewModel.saveTextDetail(detail)
         verify { saveTextUseCase.execute(capture(params), any()) }

@@ -1,7 +1,7 @@
 package be.hogent.faith.storage.localStorage
 
 import android.graphics.Bitmap
-import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
@@ -30,7 +30,6 @@ interface ITemporaryStorage {
     fun overwriteExistingDrawingDetail(bitmap: Bitmap, drawingDetail: DrawingDetail): Completable
     fun overwriteTextDetail(text: String, existingDetail: TextDetail): Completable
 
-    fun storeDetailWithEvent(detail: Detail, event: Event): Completable
-
+    fun storeDetailWithContainer(detail: Detail, detailsContainer: DetailsContainer): Completable
     fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String>
 }

@@ -2,13 +2,13 @@ package be.hogent.faith.faith.backpack
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
+import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackVideoDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveYoutubeDetailUseCase
 import io.mockk.Called
 import io.mockk.called
 import io.mockk.mockk
@@ -20,21 +20,23 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import java.io.File
-import java.util.UUID
 
 class SaveYoutubeVideoTest {
-    private lateinit var viewModel: YoutubeVideoDetailViewModel
-    private val saveVideoUseCase = mockk<SaveBackpackVideoDetailUseCase>(relaxed = true)
+    private lateinit var viewModel: BackpackViewModel
+    private val saveVideoUseCase = mockk<SaveYoutubeDetailUseCase>(relaxed = true)
     private lateinit var detail : YoutubeVideoDetail
     private val user: User = mockk()
+    private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {
-        viewModel = YoutubeVideoDetailViewModel(
+        viewModel = BackpackViewModel(
             mockk(),
+            mockk(),
+            getBackPackFilesDummyUseCase,
             saveVideoUseCase
         )
 
@@ -43,12 +45,12 @@ class SaveYoutubeVideoTest {
 
     @Test
     fun youtubeViewModel_saveVideo_callsUseCase() {
-        val params = slot<SaveBackpackVideoDetailUseCase.Params>()
+        val params = slot<SaveYoutubeDetailUseCase.Params>()
 
-        viewModel.saveVideoDetail(detail, user)
+        viewModel.saveYoutubeDetail(user, detail)
         verify { saveVideoUseCase.execute(capture(params), any()) }
 
-        assertEquals(detail, params.captured.videoDetail)
+        assertEquals(detail, params.captured.youtubeDetail)
     }
 
     @Test
@@ -59,7 +61,7 @@ class SaveYoutubeVideoTest {
         viewModel.errorMessage.observeForever(errorObserver)
 
         // Act
-        viewModel.saveVideoDetail(detail, user)
+        viewModel.saveYoutubeDetail(user, detail)
         verify { saveVideoUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onComplete()
 
@@ -74,10 +76,9 @@ class SaveYoutubeVideoTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val successObserver = mockk<Observer<Detail>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.videoIsSaved.observeForever(successObserver)
 
         // Act
-        viewModel.saveVideoDetail(detail, user)
+        viewModel.saveYoutubeDetail(user, detail)
         verify { saveVideoUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onError(mockk(relaxed = true))
 

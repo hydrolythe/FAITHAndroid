@@ -2,7 +2,7 @@ package be.hogent.faith.storage.localStorage
 
 import android.content.Context
 import android.graphics.Bitmap
-import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
@@ -21,8 +21,12 @@ class TemporaryStorageRepository(
      * Stores a detail in its event's folder, and sets the **relative** path in the detail
      * (the path without context.cachedir)
      */
-    override fun storeDetailWithEvent(detail: Detail, event: Event): Completable {
-        val saveFile = File(getEventDirectory(event), detail.uuid.toString())
+
+    override fun storeDetailWithContainer(
+        detail: Detail,
+        detailsContainer: DetailsContainer
+    ): Completable {
+        val saveFile = File(getDetailsContainerDirectory(detailsContainer), detail.uuid.toString())
         return moveFile(detail.file, saveFile)
             .doOnComplete {
                 detail.file = saveFile // relativePath
@@ -76,8 +80,11 @@ class TemporaryStorageRepository(
         return storeBitmap(bitmap, saveFile).andThen(Single.just(saveFile))
     }
 
-    private fun getEventDirectory(event: Event): File {
-        val eventDir = File(context.cacheDir, storagePathProvider.getEventFolder(event).path)
+    private fun getDetailsContainerDirectory(detailsContainer: DetailsContainer): File {
+        val eventDir = File(
+            context.cacheDir,
+            storagePathProvider.getDetailsContainerFolder(detailsContainer).path
+        )
         eventDir.mkdirs()
         return eventDir
     }

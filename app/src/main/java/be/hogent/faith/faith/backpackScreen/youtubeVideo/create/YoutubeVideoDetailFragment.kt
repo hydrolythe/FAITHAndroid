@@ -20,6 +20,7 @@ import be.hogent.faith.databinding.FragmentCreateYoutubeVideoBinding
 import be.hogent.faith.databinding.PopupPreviewVideoBinding
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.di.KoinModules
@@ -31,6 +32,7 @@ import kotlinx.android.synthetic.main.popup_preview_video.view.btn_back_video
 import kotlinx.android.synthetic.main.popup_preview_video.view.btn_save_video
 import kotlinx.android.synthetic.main.popup_preview_video.view.youtube_player_view
 import org.koin.android.ext.android.getKoin
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.Timer
 import java.util.TimerTask
@@ -51,6 +53,7 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
     override lateinit var detailFinishedListener: DetailFinishedListener
     private var navigation: YoutubeVideoDetailScreenNavigation? = null
     private var timer : Timer? = null
+    private val backpackViewModel: BackpackViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,11 +62,6 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
         youtubeVideoDetailBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_youtube_video, container, false)
 
         youtubeVideoDetailBinding.youtubeViewModel = youtubeVideoDetailViewModel
-
-        /**
-         * TODO Misschien zou dit logischer zijn om in userViewModel de save te doen maar ik wil er momenteel vanblijven van userviewmodel
-         */
-        youtubeVideoDetailViewModel.setCurrentUser(userViewModel.user.value!!)
 
         return youtubeVideoDetailBinding.root
     }
@@ -133,6 +131,10 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
             }
         })
 
+        youtubeVideoDetailViewModel.savedDetail.observe(this, Observer {
+            backpackViewModel.saveYoutubeVideoDetail(it.fileName, userViewModel.user.value!!, it)
+        })
+
         /**
          * Based on Instagram search. Delay of 400ms to lower the amount of requests send to the YouTube Data API.
          * Delay starts when the user stops writing
@@ -159,14 +161,14 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
             }
         })
 
-        youtubeVideoDetailViewModel.videoIsSaved.observe(this, Observer {
+     /*   youtubeVideoDetailViewModel.videoIsSaved.observe(this, Observer {
             Toast.makeText(context, getString(R.string.save_video_success), Toast.LENGTH_SHORT)
                 .show()
 
             popupWindow.dismiss()
             detailFinishedListener.onDetailFinished(it)
             navigation?.backToEvent()
-        })
+        })*/
 
         youtubeVideoDetailViewModel.backToBackpack.observe(this, Observer {
             navigation?.backToEvent()

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
+import be.hogent.faith.faith.GlideApp
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.AudioDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExistingDetailNavigationListener
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.PictureDetailViewHolder
@@ -19,6 +20,7 @@ import be.hogent.faith.faith.util.getDefaultThumbnailUrl
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.signature.MediaStoreSignature
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.detail_item_rv.view.btn_delete_detailRv
 import kotlinx.android.synthetic.main.detail_item_rv.view.detail_img
 import kotlinx.android.synthetic.main.detail_item_rv.view.text_detail_title
@@ -139,6 +141,11 @@ sealed class DetailViewHolder(
 
         val androidTempFileProvider: TempFileProvider by inject()
         override fun load(detail: Detail): RequestBuilder<Drawable> {
+            // TODO : encryptie
+            if (detail.file.path.startsWith("users")) {
+                return GlideApp.with(thumbnailView)
+                    .load(FirebaseStorage.getInstance().reference.child(detail.file.path)) // load the storagereference
+            }
             return Glide.with(thumbnailView)
                     .load(androidTempFileProvider.getFile(detail))
                     // Signature is required to force Glide to reload overwritten pictures

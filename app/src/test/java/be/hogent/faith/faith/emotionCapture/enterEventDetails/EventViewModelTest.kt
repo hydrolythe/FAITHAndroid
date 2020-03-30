@@ -32,15 +32,11 @@ class EventViewModelTest {
     fun setUp() {
         viewModel = EventViewModel(
             mockk(),
-            mockk(),
-            mockk(),
-            mockk(),
             mockk()
         )
 
         // We have to add an observer so event changes when title/notes/date are given a new value
         viewModel.event.observeForever(mockk(relaxed = true))
-
         viewModel.eventTitle.value = eventTitle
         viewModel.eventNotes.value = eventNotes
         viewModel.eventDate.value = eventDateTime

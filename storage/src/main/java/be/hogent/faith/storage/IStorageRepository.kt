@@ -1,10 +1,11 @@
 package be.hogent.faith.storage
 
-import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Completable
 import io.reactivex.Single
+import java.io.File
 
 interface IStorageRepository {
     /**
@@ -20,7 +21,7 @@ interface IStorageRepository {
      */
     fun getEvent(event: Event): Completable
 
-    fun getBackpack(backpack: Backpack): Completable
+    fun getFile(detail: Detail): Single<File>
 
-    fun saveBackpackDetail(detail: Detail): Single<Detail>
+    fun saveDetailFileForContainer(detailsContainer: DetailsContainer, detail: Detail): Single<Detail>
 }

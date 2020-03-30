@@ -1,6 +1,6 @@
 package be.hogent.faith.storage
 
-import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
@@ -8,6 +8,7 @@ import be.hogent.faith.storage.localStorage.ILocalStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.toFlowable
+import java.io.File
 
 /**
  * Repository providing access to both the internal and remote storage.
@@ -16,7 +17,8 @@ import io.reactivex.rxkotlin.toFlowable
  */
 class StorageRepository(
     private val localStorage: ILocalStorageRepository,
-    private val remoteStorage: IFireBaseStorageRepository
+    private val remoteStorage: IFireBaseStorageRepository,
+    private val pathProvider: StoragePathProvider
 ) : IStorageRepository {
 
     /**
@@ -24,18 +26,30 @@ class StorageRepository(
      */
     override fun saveEvent(event: Event): Single<Event> {
         return localStorage.saveEvent(event)
-            .flatMap { remoteStorage.saveEvent(it) }
+                .flatMap { remoteStorage.saveEvent(it) }
     }
 
     /**
      * download file from firebase to localStorage if not present yet
      */
     // TODO ("Timestamp checking? What als de file op een andere tablet werd aangepast?")
-    private fun getFile(detail: Detail): Completable {
+    private fun getFileLocally(detail: Detail): Completable {
         if (localStorage.isFilePresent(detail))
             return Completable.complete()
         else
             return remoteStorage.makeFileLocallyAvailable(detail)
+    }
+
+    override fun getFile(detail: Detail): Single<File> {
+        return getFileLocally(detail).toSingle { pathProvider.getLocalDetailPath(detail) }
+    }
+
+    override fun saveDetailFileForContainer(
+        detailsContainer: DetailsContainer,
+        detail: Detail
+    ): Single<Detail> {
+        return localStorage.saveDetailFileForContainer(detailsContainer, detail)
+            .flatMap { remoteStorage.saveDetailFileForContainer(detailsContainer, it) }
     }
 
     /**
@@ -53,21 +67,11 @@ class StorageRepository(
      */
     override fun getEvent(event: Event): Completable {
         return getEmotionAvatar(event)
-            .concatWith(
-                event.details.toFlowable()
-                    .concatMapCompletable {
-                        getFile(it)
-                    }
-            )
-    }
-
-    override fun getBackpack(backpack: Backpack): Completable {
-        return backpack.details.toFlowable().concatMapCompletable {
-            getFile(it)
-        }
-    }
-
-    override fun saveBackpackDetail(detail: Detail): Single<Detail> {
-        return localStorage.saveBackpackDetail(detail)
+                .concatWith(
+                        event.details.toFlowable()
+                                .concatMapCompletable {
+                                    getFileLocally(it)
+                                }
+                )
     }
 }
