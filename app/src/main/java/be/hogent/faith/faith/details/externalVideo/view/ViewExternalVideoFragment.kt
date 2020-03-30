@@ -37,14 +37,12 @@ class ViewExternalVideoFragment : Fragment() {
         })
         loadExistingVideo()
 
-
         return binding.root
     }
 
     private fun loadExistingVideo() {
         val externalVideoDetail = arguments!!.getSerializable(VIDEO_DETAIL) as ExternalVideoDetail
         externalFileViewModel.loadExistingDetail(externalVideoDetail)
-
     }
     companion object {
         fun newInstance(videoDetail: ExternalVideoDetail): ViewExternalVideoFragment {

@@ -19,9 +19,9 @@ import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDet
 import io.reactivex.subscribers.DisposableSubscriber
 
 class BackpackViewModel(
-        saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
-        deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>,
-        private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
+    saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
+    deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>,
+    private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
 ) : DetailsContainerViewModel(saveBackpackDetailUseCase, deleteBackpackDetailUseCase) {
 
     private val _detailIsSaved = SingleLiveEvent<Any>()
@@ -36,10 +36,8 @@ class BackpackViewModel(
     private val _showSaveDialog = SingleLiveEvent<Detail>()
     val showSaveDialog: LiveData<Detail> = _showSaveDialog
 
-
     private val _openDetailMode = SingleLiveEvent<OpenDetailMode>()
     val openDetailMode: LiveData<OpenDetailMode> = _openDetailMode
-
 
     init {
         loadDetails()
@@ -69,8 +67,6 @@ class BackpackViewModel(
     fun initialize() {
         _isInEditMode.postValue(EditModeState.CLOSED)
     }
-
-
 
     fun setIsInEditMode() {
         if (isInEditMode.value == EditModeState.CLOSED)
@@ -105,7 +101,6 @@ class BackpackViewModel(
         _viewButtons.postValue(viewButtons)
     }
 
-
     fun onSaveClicked(title: String, user: User, detail: Detail) {
         val notMaxCharacters = checkMaxCharacters(title)
         val uniqueFilename = checkUniqueFilename(title)
@@ -132,12 +127,9 @@ class BackpackViewModel(
         return title.length <= 30
     }
 
-
-
     fun clearSaveDialogErrorMessage() {
         _errorMessage.postValue(null)
     }
-
 }
 
 /**
@@ -150,7 +142,3 @@ enum class EditModeState { OPEN, CLOSED }
  * When editing an existing detail --> savedialog isn't shown
  */
 enum class OpenDetailMode { NEW, EDIT }
-
-
-
-

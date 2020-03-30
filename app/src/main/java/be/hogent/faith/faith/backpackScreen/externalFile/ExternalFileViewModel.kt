@@ -32,7 +32,7 @@ class ExternalFileViewModel(
         get() = _savedDetail
 
     private var _currentFile = MutableLiveData<File>()
-    val currentFile : LiveData<File>
+    val currentFile: LiveData<File>
         get() = _currentFile
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
@@ -98,4 +98,3 @@ class ExternalFileViewModel(
             }
         }
     }
-

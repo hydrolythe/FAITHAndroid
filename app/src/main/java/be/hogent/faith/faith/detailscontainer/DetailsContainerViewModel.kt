@@ -21,8 +21,8 @@ import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDet
 import io.reactivex.observers.DisposableCompletableObserver
 
 abstract class DetailsContainerViewModel(
-        private val saveDetailsContainerDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
-        private val deleteDetailsContainerDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>
+    private val saveDetailsContainerDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
+    private val deleteDetailsContainerDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>
 ) : ViewModel() {
 
     protected var details: List<Detail> = emptyList()
@@ -200,7 +200,6 @@ abstract class DetailsContainerViewModel(
                     }
                 })
     }
-
 
     fun goToDetail(detail: Detail) {
         _goToDetail.postValue(detail)
