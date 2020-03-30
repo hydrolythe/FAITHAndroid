@@ -1,14 +1,10 @@
 package be.hogent.faith.faith.util
 
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.Guideline
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-
-import timber.log.Timber
 
 /**
  * Returns a ViewModel of a certain type.

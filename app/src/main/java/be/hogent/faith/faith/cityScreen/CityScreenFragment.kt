@@ -1,14 +1,10 @@
 package be.hogent.faith.faith.cityScreen
 
 import android.content.Context
-import android.graphics.Matrix
-import android.graphics.Point
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
-import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -17,7 +13,9 @@ import be.hogent.faith.databinding.FragmentCityScreenBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
-
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import kotlinx.android.synthetic.main.fragment_city_screen.image_main_avatar
 
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
@@ -50,7 +48,7 @@ class CityScreenFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_city_screen, container, false)
         mainScreenBinding.cityScreenViewModel = cityScreenViewModel
         mainScreenBinding.lifecycleOwner = this
-        //avatarView = mainScreenBinding.imageMainAvatar
+        // avatarView = mainScreenBinding.imageMainAvatar
 
         return mainScreenBinding.root
     }
@@ -60,8 +58,6 @@ class CityScreenFragment : Fragment() {
         registerListeners()
     }
 
-
-
     private fun registerListeners() {
         cityScreenViewModel.archiveClicked.observe(this, Observer {
             navigation?.startOverviewEventsFragment()
@@ -69,17 +65,19 @@ class CityScreenFragment : Fragment() {
         cityScreenViewModel.parkClicked.observe(this, Observer {
             navigation?.startEmotionCapture()
         })
-
         cityScreenViewModel.logoutSuccessFull.observe(this, Observer {
             navigation?.logOut()
         })
+        cityScreenViewModel.backpackClicked.observe(this, Observer {
+            // TODO Backpack
+        })
 
-        /*userViewModel.user.observe(this, Observer { user ->
+        userViewModel.user.observe(this, Observer { user ->
             Glide.with(context!!).load(avatarProvider.getAvatarDrawableStaan(user.avatarName))
                 .diskCacheStrategy(
                     DiskCacheStrategy.ALL
                 ).into(image_main_avatar)
-        })*/
+        })
     }
 
     override fun onAttach(context: Context) {

@@ -70,7 +70,7 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.65" />
 
-        <com.airbnb.lottie.LottieAnimationView
+        <ImageView
             android:id="@+id/left_top"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -79,10 +79,7 @@
             app:layout_constraintEnd_toStartOf="@+id/div_start_vertical"
             app:layout_constraintStart_toStartOf="@+id/left_margin_vertical"
             app:layout_constraintTop_toTopOf="@+id/top_margin_horizontal"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/bib"
-            app:srcCompat="@drawable/avatar_placeholder" />
+            app:srcCompat="@drawable/serre" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/bib"
@@ -96,9 +93,10 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/bib"
+            android:onClick="@{() -> cityScreenViewModel.onArchiveClicked()}"
             app:srcCompat="@drawable/avatar_placeholder" />
 
-        <com.airbnb.lottie.LottieAnimationView
+        <ImageView
             android:id="@+id/right_top"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -107,10 +105,7 @@
             app:layout_constraintEnd_toStartOf="@+id/right_margin_vertical"
             app:layout_constraintStart_toStartOf="@+id/div_end_vertical"
             app:layout_constraintTop_toTopOf="@+id/top_margin_horizontal"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/bib"
-            app:srcCompat="@drawable/avatar_placeholder" />
+            app:srcCompat="@drawable/podium" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/cinema"
@@ -138,6 +133,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/park"
+            android:onClick="@{() -> cityScreenViewModel.onParkClicked()}"
             app:srcCompat="@drawable/avatar_placeholder" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -154,7 +150,7 @@
             app:lottie_rawRes="@raw/kantoor"
             app:srcCompat="@drawable/avatar_placeholder" />
 
-        <com.airbnb.lottie.LottieAnimationView
+        <ImageView
             android:id="@+id/left_bottom"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -163,10 +159,7 @@
             app:layout_constraintEnd_toStartOf="@+id/div_start_vertical"
             app:layout_constraintStart_toStartOf="@+id/left_margin_vertical"
             app:layout_constraintTop_toTopOf="@+id/div_botom_horizontal"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/bib"
-            app:srcCompat="@drawable/avatar_placeholder" />
+            app:srcCompat="@drawable/bomen" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/rugzak"
@@ -180,6 +173,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/rugzak"
+            android:onClick="@{() -> cityScreenViewModel.onBackpackClicked()}"
             app:srcCompat="@drawable/avatar_placeholder" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -195,6 +189,22 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/boomhut"
             app:srcCompat="@drawable/avatar_placeholder" />
+
+        <ImageView
+            android:id="@+id/image_main_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/rugzak"
+            app:layout_constraintEnd_toStartOf="@+id/boomhut"
+            app:layout_constraintTop_toTopOf="@+id/guideline2"
+            app:srcCompat="@drawable/jongen_voetballer_lb" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
