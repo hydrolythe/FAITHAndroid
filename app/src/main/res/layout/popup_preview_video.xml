@@ -26,7 +26,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:backgroundTint="@color/background"
-            android:tint="@color/color_white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_opslaan_wit" />
@@ -37,10 +36,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:tint="@color/color_white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_btn_back_white" />
+            app:srcCompat="@drawable/ic_btn_back_white_ytvideo" />
 
         <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
             android:id="@+id/youtube_player_view"

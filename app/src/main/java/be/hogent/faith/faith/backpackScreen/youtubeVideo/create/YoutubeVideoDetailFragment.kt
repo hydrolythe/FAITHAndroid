@@ -95,8 +95,8 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
             }
         })
 
-     //   val manager = GridLayoutManager(context, 3)
-     //   youtubeVideoDetailBinding.rvYoutubeView.layoutManager = manager
+        val manager = GridLayoutManager(context, 4)
+        youtubeVideoDetailBinding.rvYoutubeView.layoutManager = manager
 
         youtubeVideoDetailBinding.rvYoutubeView.adapter = youtubeSnippetAdapter
 
@@ -153,7 +153,7 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
                         else
                             youtubeVideoDetailViewModel.clearSnippetsList()
                     }
-                }, 100)
+                }, 500)
             }
         })
 
@@ -168,10 +168,16 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
     }
 
     private fun hidePreviewScreen() {
+        youtubeVideoDetailBinding.rvYoutubeView.visibility = View.VISIBLE
+        youtubeVideoDetailBinding.editTextSearchVideo.isEnabled = true
+
         popupWindow.dismiss()
     }
 
     private fun showPreviewScreen() {
+        youtubeVideoDetailBinding.rvYoutubeView.visibility = View.GONE
+        youtubeVideoDetailBinding.editTextSearchVideo.isEnabled = false
+
         popupview = layoutInflater.inflate(R.layout.popup_preview_video, null, false)
         popupWindow = PopupWindow(popupview, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 

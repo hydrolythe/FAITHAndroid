@@ -73,9 +73,14 @@ class YoutubeVideoDetailViewModel (
     }
 
     fun onSaveClicked(){
-        if(_selectedSnippet.value!!.fileName.length > 29)
-            _selectedSnippet.value!!.fileName = _selectedSnippet.value!!.fileName.substring(0, 29)
-        val params = SaveBackpackVideoDetailUseCase.Params(_currentUser.value!!, _selectedSnippet.value!!)
+        saveVideoDetail(_selectedSnippet.value!!, _currentUser.value!!)
+    }
+
+    //Public for testing purposes
+    fun saveVideoDetail(detail: YoutubeVideoDetail, user: User){
+        if(detail.fileName.length > 29)
+            detail.fileName = detail.fileName.substring(0, 29)
+        val params = SaveBackpackVideoDetailUseCase.Params(user, detail)
         saveBackpackVideoDetailUseCase.execute(params, SaveVideoDetailUseCaseHandler())
     }
 
