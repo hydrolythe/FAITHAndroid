@@ -190,8 +190,7 @@ abstract class BackpackDetailFragment : Fragment() {
         override fun setChildFragment(detail: Detail?) {
             val childFragment = if (detail == null) {
                 YoutubeVideoDetailFragment.newInstance()
-            }
-            else{
+            } else {
                 ViewYoutubeVideoFragment.newInstance(detail as YoutubeVideoDetail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)

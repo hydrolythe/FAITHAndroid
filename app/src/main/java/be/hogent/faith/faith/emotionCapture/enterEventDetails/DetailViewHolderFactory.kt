@@ -8,7 +8,6 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.GlideApp
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.AudioDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExistingDetailNavigationListener
@@ -178,7 +177,7 @@ sealed class DetailViewHolder(
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
-        override fun load(detail: Detail) : RequestBuilder<Drawable> {
+        override fun load(detail: Detail): RequestBuilder<Drawable> {
             return Glide.with(thumbnailView).load(getDefaultThumbnailUrl(detail.videoId))
         }
     }

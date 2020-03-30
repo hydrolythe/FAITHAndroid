@@ -20,7 +20,6 @@ import be.hogent.faith.service.usecases.backpack.SaveYoutubeDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.subscribers.DisposableSubscriber
-import java.util.Calendar
 import java.util.Date
 
 object OpenState {
@@ -182,10 +181,10 @@ class BackpackViewModel(
         val notMaxCharacters = checkMaxCharacters(fileName)
         val uniqueFilename = checkUniqueFilename(fileName)
 
-        if(!notMaxCharacters)
+        if (!notMaxCharacters)
             detail.fileName = fileName.substring(0, 29)
 
-        if(!uniqueFilename){
+        if (!uniqueFilename) {
             detail.fileName = detail.fileName + " (" + Date() + ")"
         }
         saveCurrentDetail(user, detail)

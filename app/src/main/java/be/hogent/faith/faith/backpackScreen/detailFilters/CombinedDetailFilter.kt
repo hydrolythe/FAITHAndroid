@@ -35,7 +35,7 @@ class CombinedDetailFilter {
         if (hasExternalVideoDetailFilter.isEnabled) {
             filteredDetails.addAll(details.filter(hasExternalVideoDetailFilter))
         }
-        if (hasVideoDetailFilter.isEnabled){
+        if (hasVideoDetailFilter.isEnabled) {
             filteredDetails.addAll(details.filter(hasVideoDetailFilter))
         }
 

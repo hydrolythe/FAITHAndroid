@@ -1,9 +1,6 @@
 package be.hogent.faith.faith.backpackScreen.youtubeVideo.view
 
 import android.view.View
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
-import android.view.animation.Animation.AnimationListener
 import android.widget.Chronometer
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -29,27 +26,27 @@ class YoutubePlayerController(
     customPlayerUi: View,
     private val youTubePlayer: YouTubePlayer,
     private val youtubeVideoDetail: YoutubeVideoDetail
-) : AbstractYouTubePlayerListener(){
+) : AbstractYouTubePlayerListener() {
 
     private var playerTracker: YouTubePlayerTracker? = null
     private var seekBar: SeekBar? = null
-    private var playButton : ImageButton? = null
-    private var pauseButton : ImageButton? = null
-    private var stopButton : ImageButton? = null
-    private var chronometer : Chronometer? = null
-    private var currentTimeLabel : TextView? = null
-    private var durationLabel : TextView? = null
-    private var title : TextView? = null
-    private var thumbnailImg : ImageView? = null
-    private var gradient : ImageView? = null
-    private var pauseScreen : ConstraintLayout? = null
-    private var playerContainer : ConstraintLayout? = null
-    private var playerOnTouchScreen : ConstraintLayout? = null
-    private var seekBarContainer : ConstraintLayout? = null
+    private var playButton: ImageButton? = null
+    private var pauseButton: ImageButton? = null
+    private var stopButton: ImageButton? = null
+    private var chronometer: Chronometer? = null
+    private var currentTimeLabel: TextView? = null
+    private var durationLabel: TextView? = null
+    private var title: TextView? = null
+    private var thumbnailImg: ImageView? = null
+    private var gradient: ImageView? = null
+    private var pauseScreen: ConstraintLayout? = null
+    private var playerContainer: ConstraintLayout? = null
+    private var playerOnTouchScreen: ConstraintLayout? = null
+    private var seekBarContainer: ConstraintLayout? = null
     private var max = 0F
-  //  private var alphaAnim : AlphaAnimation? = null
+    //  private var alphaAnim : AlphaAnimation? = null
 
-    private var currentState : YoutubePlayerState = YoutubePlayerState.PLAYER_SCREEN
+    private var currentState: YoutubePlayerState = YoutubePlayerState.PLAYER_SCREEN
 
     init {
         playerTracker = YouTubePlayerTracker()
@@ -59,7 +56,7 @@ class YoutubePlayerController(
         startListeners()
     }
 
-    private fun updateUi(customPlayerUi: View){
+    private fun updateUi(customPlayerUi: View) {
         playButton = customPlayerUi.findViewById(R.id.play_pause_button)
         pauseButton = customPlayerUi.findViewById(R.id.btn_pause_video)
         title = customPlayerUi.findViewById(R.id.txt_title_player)
@@ -77,7 +74,6 @@ class YoutubePlayerController(
         seekBarContainer = customPlayerUi.findViewById(R.id.container_player_seekbar)
 
         title!!.text = youtubeVideoDetail.fileName
-        
 
         /**
          * Thumbnail image from YouTube is the background of the pause screen
@@ -85,7 +81,7 @@ class YoutubePlayerController(
         Glide.with(thumbnailImg!!).load(getHighQualityThumbnailUrl(youtubeVideoDetail.videoId)).into(thumbnailImg!!)
     }
 
-    fun startListeners(){
+    fun startListeners() {
         playButton!!.setOnClickListener {
             youTubePlayer.play()
             viewPlayerScreen()
@@ -105,22 +101,20 @@ class YoutubePlayerController(
          * When the playerscreen is touched the seekbar, back button and pause button are shown for 5 seconds
          */
         playerContainer!!.setOnClickListener {
-            if(currentState == YoutubePlayerState.PLAYER_SCREEN){
+            if (currentState == YoutubePlayerState.PLAYER_SCREEN) {
                 viewPlayerScreenWithOptions()
-            }
-            else if (currentState == YoutubePlayerState.PLAYER_SCREEN_OPTIONS
-                && currentState != YoutubePlayerState.PLAYER_SCREEN_SEEKING && currentState != YoutubePlayerState.PAUSE_MENU_SEEKING){
+            } else if (currentState == YoutubePlayerState.PLAYER_SCREEN_OPTIONS &&
+                currentState != YoutubePlayerState.PLAYER_SCREEN_SEEKING && currentState != YoutubePlayerState.PAUSE_MENU_SEEKING) {
                 playerOnTouchScreen!!.visibility = View.GONE
                 seekBarContainer!!.visibility = View.GONE
                 currentState = YoutubePlayerState.PLAYER_SCREEN
-            }
-            else if(currentState == YoutubePlayerState.PAUSE_MENU_SEEKING)
+            } else if (currentState == YoutubePlayerState.PAUSE_MENU_SEEKING)
                 viewPauseMenu()
         }
 
         seekBar!!.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if(fromUser){
+                if (fromUser) {
                     seekBarContainer!!.visibility = View.VISIBLE
                     youTubePlayer.seekTo(progress.toFloat())
                     currentTimeLabel!!.text = createTimeLabel(progress)
@@ -146,12 +140,11 @@ class YoutubePlayerController(
 
     override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
         super.onStateChange(youTubePlayer, state)
-        if(state == PlayerConstants.PlayerState.PAUSED){
-          //  if(alphaAnim != null)
-         //   alphaAnim!!.cancel()
+        if (state == PlayerConstants.PlayerState.PAUSED) {
+            //  if(alphaAnim != null)
+            //   alphaAnim!!.cancel()
             viewPauseMenu()
-        }
-        else if(state == PlayerConstants.PlayerState.BUFFERING){
+        } else if (state == PlayerConstants.PlayerState.BUFFERING) {
             viewPlayerScreen()
         }
     }
@@ -170,7 +163,7 @@ class YoutubePlayerController(
     /**
      * A screen with pause button, seekbar and back button appears on player screen clicked
      */
-    private fun viewPlayerScreenWithOptions(){
+    private fun viewPlayerScreenWithOptions() {
         currentState = YoutubePlayerState.PLAYER_SCREEN_OPTIONS
 
         playerOnTouchScreen!!.visibility = View.VISIBLE
@@ -209,26 +202,25 @@ class YoutubePlayerController(
     /**
      * When seeking in pause state a current video preview is shown
      */
-    private fun startSeeking(){
+    private fun startSeeking() {
         seekBarContainer!!.visibility = View.VISIBLE
 
         if (currentState == YoutubePlayerState.PAUSE_MENU)
             currentState = YoutubePlayerState.PAUSE_MENU_SEEKING
-        else{
+        else {
             currentState = YoutubePlayerState.PLAYER_SCREEN_SEEKING
-          //  alphaAnim!!.cancel()
+            //  alphaAnim!!.cancel()
         }
         playerOnTouchScreen!!.visibility = View.GONE
         pauseScreen!!.visibility = View.GONE
         seekBarContainer!!.visibility = View.VISIBLE
     }
 
-    private fun stopSeeking(){
-        if(currentState == YoutubePlayerState.PAUSE_MENU_SEEKING){
+    private fun stopSeeking() {
+        if (currentState == YoutubePlayerState.PAUSE_MENU_SEEKING) {
             playerOnTouchScreen!!.visibility = View.GONE
             pauseScreen!!.visibility = View.VISIBLE
-        }
-        else if (currentState == YoutubePlayerState.PLAYER_SCREEN_SEEKING){
+        } else if (currentState == YoutubePlayerState.PLAYER_SCREEN_SEEKING) {
             playerOnTouchScreen!!.visibility = View.VISIBLE
         }
         seekBarContainer!!.visibility = View.VISIBLE
@@ -247,19 +239,19 @@ class YoutubePlayerController(
     /**
      * Creates a label like this: 2:45
      */
-    private fun createTimeLabel(time : Int) : String{
-        val min : Int = time / 60
-        val sec : Int = time % 60
+    private fun createTimeLabel(time: Int): String {
+        val min: Int = time / 60
+        val sec: Int = time % 60
 
         var timeLabel = min.toString()
         timeLabel += ":"
-        if(sec < 10)
+        if (sec < 10)
             timeLabel += "0"
         timeLabel += sec
         return timeLabel
     }
 }
 
-enum class YoutubePlayerState{
+enum class YoutubePlayerState {
     PLAYER_SCREEN, PLAYER_SCREEN_OPTIONS, PLAYER_SCREEN_SEEKING, PAUSE_MENU, PAUSE_MENU_SEEKING
 }

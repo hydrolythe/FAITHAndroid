@@ -4,21 +4,17 @@ import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import be.hogent.faith.R
-import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
-import io.reactivex.observers.DisposableCompletableObserver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class YoutubeVideoDetailViewModel (
+class YoutubeVideoDetailViewModel(
     private val getYoutubeVideosFromSearchUseCase: GetYoutubeVideosFromSearchUseCase
-):  ViewModel(){
+) : ViewModel() {
 
     private var _snippets = MutableLiveData<List<YoutubeVideoDetail>>()
     val snippets: LiveData<List<YoutubeVideoDetail>>
@@ -59,7 +55,7 @@ class YoutubeVideoDetailViewModel (
      * checks if the request was successful
      * if successful --> updates the list of video snippets
      */
-    fun onSearch(searchString : String){
+    fun onSearch(searchString: String) {
         uiScope.launch {
             val dataResult = getYoutubeVideosFromSearchUseCase.getYoutubeVideos(searchString)
             if (dataResult is ApiResult.Success<List<YoutubeVideoDetail>>)
@@ -67,16 +63,16 @@ class YoutubeVideoDetailViewModel (
         }
     }
 
-    fun onSaveClicked(){
+    fun onSaveClicked() {
         saveVideoDetail(_selectedSnippet.value!!)
     }
 
-    //Public for testing purposes
-    fun saveVideoDetail(detail: YoutubeVideoDetail){
+    // Public for testing purposes
+    fun saveVideoDetail(detail: YoutubeVideoDetail) {
         _savedDetail.postValue(detail)
     }
 
-    fun goBackToBackpack(){
+    fun goBackToBackpack() {
         _backToBackpack.call()
     }
 
@@ -84,7 +80,7 @@ class YoutubeVideoDetailViewModel (
         _snippets.postValue(emptyList())
     }
 
-    fun clearSelectedSnippet(){
+    fun clearSelectedSnippet() {
         _selectedSnippet.postValue(null)
     }
 

@@ -15,7 +15,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
-
 /**
  * Uses: https://github.com/PierfrancescoSoffritti/android-youtube-player
  * Why? - Customisable lay-out if we use a video player screen
@@ -25,15 +24,16 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 */
 class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetail) : Fragment() {
 
-    private lateinit var viewYoutubeVideoBinding : FragmentViewYoutubeVideoBinding
-    private lateinit var youTubePlayerView : YouTubePlayerView
+    private lateinit var viewYoutubeVideoBinding: FragmentViewYoutubeVideoBinding
+    private lateinit var youTubePlayerView: YouTubePlayerView
     private var navigation: ViewYoutubeVideoNavigation? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewYoutubeVideoBinding =  DataBindingUtil.inflate(inflater, R.layout.fragment_view_youtube_video, container, false)
+        viewYoutubeVideoBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_youtube_video, container, false)
 
         return viewYoutubeVideoBinding.root
     }
@@ -52,7 +52,6 @@ class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetai
         lifecycle.addObserver(youTubePlayerView)
 
         val customPlayerUi = youTubePlayerView.inflateCustomPlayerUi(R.layout.player_youtube_custom)
-
 
         youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
             override fun onReady(youTubePlayer: YouTubePlayer) {
@@ -75,7 +74,7 @@ class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetai
                 youTubePlayer: YouTubePlayer,
                 state: PlayerConstants.PlayerState
             ) {
-                if(state == PlayerConstants.PlayerState.ENDED)
+                if (state == PlayerConstants.PlayerState.ENDED)
                     navigation!!.backToEvent()
 
                 super.onStateChange(youTubePlayer, state)

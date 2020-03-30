@@ -17,7 +17,7 @@ sealed class Detail(
     var file: File,
     var fileName: String = "",
     val uuid: UUID = UUID.randomUUID(),
-    //YoutubeVideo
+    // YoutubeVideo
     val videoId: String = ""
 ) : Serializable
 

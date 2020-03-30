@@ -10,14 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.YoutubeSnippetItemRvBinding
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
-import be.hogent.faith.faith.util.getDefaultThumbnailUrl
 import be.hogent.faith.faith.util.getHighQualityThumbnailUrl
 import com.bumptech.glide.Glide
 
-class YoutubeSnippetAdapter(private val context: Context?, private val clickListener : SnippetClickListener):
+class YoutubeSnippetAdapter(private val context: Context?, private val clickListener: SnippetClickListener) :
     ListAdapter<YoutubeVideoDetail, YoutubeSnippetAdapter.SnippetViewHolder>(SnippetDiffCallback()) {
 
-    override fun onBindViewHolder(holder: SnippetViewHolder, position : Int){
+    override fun onBindViewHolder(holder: SnippetViewHolder, position: Int) {
         holder.binding.containerSnippet.setOnClickListener {
             clickListener.onSnippetClick(getItem(position)!!)
         }
@@ -31,11 +30,11 @@ class YoutubeSnippetAdapter(private val context: Context?, private val clickList
             AnimationUtils.loadAnimation(context, R.xml.videothumbs_slide)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SnippetViewHolder{
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SnippetViewHolder {
         return SnippetViewHolder.from(parent)
     }
 
-    class SnippetViewHolder private constructor(val binding: YoutubeSnippetItemRvBinding): RecyclerView.ViewHolder(binding.root){
+    class SnippetViewHolder private constructor(val binding: YoutubeSnippetItemRvBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun fillViewItems(
             snippet: YoutubeVideoDetail,

@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -36,7 +35,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         AddExternalFileFragment.ExternalFileScreenNavigation,
         DeleteDetailDialog.DeleteDetailDialogListener,
         YoutubeVideoDetailFragment.YoutubeVideoDetailScreenNavigation,
-        ViewYoutubeVideoFragment.ViewYoutubeVideoNavigation{
+        ViewYoutubeVideoFragment.ViewYoutubeVideoNavigation {
 
     private lateinit var backpackViewModel: BackpackViewModel
 

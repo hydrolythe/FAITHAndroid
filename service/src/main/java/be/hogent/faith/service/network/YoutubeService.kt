@@ -9,7 +9,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-
 interface IYoutubeService {
 
     /**
@@ -48,7 +47,6 @@ object YoutubeApi {
     }
 }
 
-
 val gson: Gson =
     GsonBuilder().setLenient().create()
 
@@ -77,7 +75,7 @@ class YoutubeConfig() {
         return API_KEY
     }
 
-    fun getBaseURL() : String{
+    fun getBaseURL(): String {
         return BASE_URL
     }
 }

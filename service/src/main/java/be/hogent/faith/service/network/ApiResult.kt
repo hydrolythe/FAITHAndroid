@@ -11,4 +11,3 @@ sealed class ApiResult<out T : Any> {
      * */
     data class Error(val exception: Exception) : ApiResult<Nothing>()
 }
-

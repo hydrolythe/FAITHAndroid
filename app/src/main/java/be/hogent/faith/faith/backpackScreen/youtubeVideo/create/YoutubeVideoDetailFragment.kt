@@ -9,15 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
-import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCreateYoutubeVideoBinding
-import be.hogent.faith.databinding.PopupPreviewVideoBinding
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
@@ -26,7 +23,6 @@ import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.di.KoinModules
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import kotlinx.android.synthetic.main.popup_preview_video.view.btn_back_video
 import kotlinx.android.synthetic.main.popup_preview_video.view.btn_save_video
@@ -37,26 +33,26 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.Timer
 import java.util.TimerTask
 
-
 /**
  * A simple [Fragment] subclass.
  */
 class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail> {
 
-    private val youtubeVideoDetailViewModel : YoutubeVideoDetailViewModel by viewModel()
+    private val youtubeVideoDetailViewModel: YoutubeVideoDetailViewModel by viewModel()
     private var youtubeSnippetAdapter: YoutubeSnippetAdapter? = null
-    private lateinit var youtubeVideoDetailBinding : FragmentCreateYoutubeVideoBinding
-    private var youtubePlayerView : YouTubePlayerView? = null
-    private lateinit var popupWindow : PopupWindow
-    private var popupview : View? = null
+    private lateinit var youtubeVideoDetailBinding: FragmentCreateYoutubeVideoBinding
+    private var youtubePlayerView: YouTubePlayerView? = null
+    private lateinit var popupWindow: PopupWindow
+    private var popupview: View? = null
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     override lateinit var detailFinishedListener: DetailFinishedListener
     private var navigation: YoutubeVideoDetailScreenNavigation? = null
-    private var timer : Timer? = null
+    private var timer: Timer? = null
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         youtubeVideoDetailBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_youtube_video, container, false)
@@ -88,8 +84,8 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
                 /**
                  * Opens a preview screen only when no other preview screen is already opened
                  */
-                if(youtubeVideoDetailViewModel.showPreview.value != ShowPreview.SHOW)
-               youtubeVideoDetailViewModel.setSelectedSnippet(snippet)
+                if (youtubeVideoDetailViewModel.showPreview.value != ShowPreview.SHOW)
+                    youtubeVideoDetailViewModel.setSelectedSnippet(snippet)
             }
         })
 
@@ -97,7 +93,6 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
         youtubeVideoDetailBinding.rvYoutubeView.layoutManager = manager
 
         youtubeVideoDetailBinding.rvYoutubeView.adapter = youtubeSnippetAdapter
-
     }
 
     private fun startListeners() {
@@ -106,25 +101,24 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
         })
 
         youtubeVideoDetailBinding.btnSearchVideo.setOnClickListener {
-            if(youtubeVideoDetailBinding.editTextSearchVideo.text.toString().isNotEmpty())
+            if (youtubeVideoDetailBinding.editTextSearchVideo.text.toString().isNotEmpty())
                 youtubeVideoDetailViewModel.onSearch(youtubeVideoDetailBinding.editTextSearchVideo.text.toString())
             else
                 youtubeVideoDetailViewModel.clearSnippetsList()
         }
 
         youtubeVideoDetailViewModel.selectedSnippet.observe(this, Observer {
-            if(it != null)
+            if (it != null)
                 youtubeVideoDetailViewModel.showPreview()
             else
                 youtubeVideoDetailViewModel.hidePreview()
         })
 
         youtubeVideoDetailViewModel.showPreview.observe(this, Observer {
-            if(it == ShowPreview.SHOW){
+            if (it == ShowPreview.SHOW) {
                 showPreviewScreen()
                 startYoutubePlayer()
-            }
-            else if (it == ShowPreview.HIDE){
+            } else if (it == ShowPreview.HIDE) {
                 hidePreviewScreen()
                 stopYoutubePlayer()
                 youtubeVideoDetailViewModel.clearSelectedSnippet()
@@ -152,16 +146,16 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
                 timer = Timer()
                 timer!!.schedule(object : TimerTask() {
                     override fun run() {
-                        if(c.toString().isNotEmpty())
+                        if (c.toString().isNotEmpty())
                             youtubeVideoDetailViewModel.onSearch(c.toString())
                         else
                             youtubeVideoDetailViewModel.clearSnippetsList()
                     }
                 }, 500)
             }
-        })
+            })
 
-     /*   youtubeVideoDetailViewModel.videoIsSaved.observe(this, Observer {
+        /*   youtubeVideoDetailViewModel.videoIsSaved.observe(this, Observer {
             Toast.makeText(context, getString(R.string.save_video_success), Toast.LENGTH_SHORT)
                 .show()
 

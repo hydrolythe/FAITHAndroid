@@ -6,7 +6,6 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import be.hogent.faith.service.usecases.backpack.SaveYoutubeDetailUseCase
 import io.mockk.Called
@@ -24,7 +23,7 @@ import java.io.File
 class SaveYoutubeVideoTest {
     private lateinit var viewModel: BackpackViewModel
     private val saveVideoUseCase = mockk<SaveYoutubeDetailUseCase>(relaxed = true)
-    private lateinit var detail : YoutubeVideoDetail
+    private lateinit var detail: YoutubeVideoDetail
     private val user: User = mockk()
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
 
