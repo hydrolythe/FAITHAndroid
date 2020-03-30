@@ -1,5 +1,6 @@
 package be.hogent.faith.storage
 
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
@@ -41,6 +42,14 @@ class StorageRepository(
 
     override fun getFile(detail: Detail): Single<File> {
         return getFileLocally(detail).toSingle { pathProvider.getLocalDetailPath(detail) }
+    }
+
+    override fun saveDetailFileForContainer(
+        detailsContainer: DetailsContainer,
+        detail: Detail
+    ): Single<Detail> {
+        return localStorage.saveDetailFileForContainer(detailsContainer, detail)
+            .flatMap { remoteStorage.saveDetailFileForContainer(detailsContainer, it) }
     }
 
     /**

@@ -1,6 +1,7 @@
 package be.hogent.faith.storage.firebase
 
 import android.net.Uri
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.StoragePathProvider
@@ -29,8 +30,8 @@ class FireBaseStorageRepository(
             ).toSingle { event }
     }
 
-    override fun saveBackpackDetail(detail: Detail): Single<Detail> {
-        return saveBackpackDetailFile(detail).toSingle { detail }
+    override fun saveDetailFileForContainer(detailsContainer: DetailsContainer, detail: Detail): Single<Detail> {
+        return saveDetailFile(detailsContainer, detail).toSingle { detail }
     }
 
     /**
@@ -80,25 +81,18 @@ class FireBaseStorageRepository(
     /**
      * Uploads the detail file to [firestorage]
      */
-    private fun saveDetailFile(event: Event, detail: Detail): Completable {
+    private fun saveDetailFile(detailsContainer: DetailsContainer, detail: Detail): Completable {
         return Completable.fromSingle(
             RxFirebaseStorage.putFile(
-                storageRef.child(pathProvider.getDetailPath(event, detail).path),
+                storageRef.child(pathProvider.getDetailPath(detailsContainer, detail).path),
                 Uri.parse("file://${pathProvider.getLocalDetailPath(detail).path}")
             ).doOnError {
                 Timber.e(
-                    "Firebase storage : Problems saving file ${pathProvider.getLocalEmotionAvatarPath(
-                        event
+                    "Firebase storage : Problems saving file ${pathProvider.getLocalDetailPath(
+                        detail
                     ).path} : ${it.localizedMessage}"
                 )
             }
         )
-    }
-
-    private fun saveBackpackDetailFile(detail: Detail): Completable {
-        return Completable.fromSingle(RxFirebaseStorage.putFile(
-            storageRef.child(pathProvider.getDetailPath(detail).path),
-            Uri.parse("file://${pathProvider.getLocalDetailPath(detail).path}")
-        ))
     }
 }

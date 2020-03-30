@@ -1,5 +1,6 @@
 package be.hogent.faith.storage
 
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Completable
@@ -21,4 +22,6 @@ interface IStorageRepository {
     fun getEvent(event: Event): Completable
 
     fun getFile(detail: Detail): Single<File>
+
+    fun saveDetailFileForContainer(detailsContainer: DetailsContainer, detail: Detail): Single<Detail>
 }
