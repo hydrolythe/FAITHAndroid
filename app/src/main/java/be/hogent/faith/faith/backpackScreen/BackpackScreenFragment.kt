@@ -78,7 +78,7 @@ class BackpackScreenFragment : Fragment() {
 
         backpackViewModel.filteredDetails.observe(this, Observer { details ->
             detailThumbnailsAdapter?.updateDetailsList(details)
-            })
+        })
 
         backpackBinding.backpackMenuFilter.searchBar.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
@@ -95,7 +95,9 @@ class BackpackScreenFragment : Fragment() {
         })
 
         backpackViewModel.isDetailScreenOpen.observe(this, Observer {
-            if (!it) { closeMenu() }
+            if (!it) {
+                closeMenu()
+            }
         })
 
         backpackViewModel.isInEditMode.observe(this, Observer {
@@ -103,18 +105,20 @@ class BackpackScreenFragment : Fragment() {
                 detailThumbnailsAdapter!!.hide(false)
                 backpackViewModel.viewButtons(false)
             } else {
-            detailThumbnailsAdapter!!.hide(true)
+                detailThumbnailsAdapter!!.hide(true)
                 backpackViewModel.viewButtons(true)
-        }
+            }
         })
 
         backpackViewModel.isPopupMenuOpen.observe(this, Observer {
             if (it == OpenState.OPEN) {
                 openMenu()
-                backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.ic_add_btn_selected, null)
+                backpackBinding.btnBackpackAdd.background =
+                    resources.getDrawable(R.drawable.ic_add_btn_selected, null)
             } else if (it == OpenState.CLOSED) {
                 closeMenu()
-                backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.add_btn, null)
+                backpackBinding.btnBackpackAdd.background =
+                    resources.getDrawable(R.drawable.add_btn, null)
             }
         })
 
@@ -123,15 +127,26 @@ class BackpackScreenFragment : Fragment() {
 
     @SuppressLint("RestrictedApi")
     private fun initialiseMenu() {
-        addDetailMenu = PopupMenu(backpackBinding.btnBackpackAdd.context, backpackBinding.btnBackpackAdd, Gravity.END, 0, R.style.PopupMenu_AddDetail)
+        addDetailMenu = PopupMenu(
+            backpackBinding.btnBackpackAdd.context,
+            backpackBinding.btnBackpackAdd,
+            Gravity.END,
+            0,
+            R.style.PopupMenu_AddDetail
+        )
 
         addDetailMenu.menuInflater.inflate(R.menu.menu_backpack, addDetailMenu.menu)
 
-        menuPopupHelper = MenuPopupHelper(backpackBinding.btnBackpackAdd.context, addDetailMenu.menu as MenuBuilder, backpackBinding.btnBackpackAdd)
+        menuPopupHelper = MenuPopupHelper(
+            backpackBinding.btnBackpackAdd.context,
+            addDetailMenu.menu as MenuBuilder,
+            backpackBinding.btnBackpackAdd
+        )
 
         menuPopupHelper!!.setOnDismissListener {
             menuPopupHelper!!.dismiss()
-            backpackBinding.btnBackpackAdd.background = resources.getDrawable(R.drawable.add_btn, null)
+            backpackBinding.btnBackpackAdd.background =
+                resources.getDrawable(R.drawable.add_btn, null)
         }
 
         addDetailMenu.setOnMenuItemClickListener { item ->
