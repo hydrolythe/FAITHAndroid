@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="snippet"
+            type="be.hogent.faith.domain.models.detail.YoutubeVideoDetail" />
+        <variable
+            name="clickListener"
+            type="be.hogent.faith.faith.backpackScreen.youtubeVideo.create.SnippetClickListener" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/container_snippet"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rv_background_youtubeview"
+        app:cardCornerRadius="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_video_snippet">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/img_snippet_thumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="190dp"
+                    android:background="@drawable/rv_background_youtubeview"
+                    android:contentDescription="@string/youtube_snippet_thumbnail"
+                    app:srcCompat="@drawable/icoon_tekst_bestand" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/textView_snippet_title"
+                snippet_title="@{snippet}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
+
+            <TextView
+                android:id="@+id/textView_snippet_description"
+                snippet_description="@{snippet}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:text="TextView"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/img_snippet_thumbnail"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

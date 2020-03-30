@@ -17,4 +17,5 @@ class Backpack(
     fun removeDetail(detail: Detail) {
         _details.remove(detail)
     }
+
 }

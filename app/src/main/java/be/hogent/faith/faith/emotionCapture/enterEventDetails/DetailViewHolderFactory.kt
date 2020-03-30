@@ -8,12 +8,14 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.AudioDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExistingDetailNavigationListener
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.PictureDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.TextDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExternalVideoDetailViewHolder
 import be.hogent.faith.faith.util.TempFileProvider
+import be.hogent.faith.faith.util.getDefaultThumbnailUrl
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.signature.MediaStoreSignature
@@ -45,6 +47,7 @@ object DetailViewHolderFactory {
                     existingDetailNavigationListener
             )
             DetailTypes.EXTERNAL_VIDEO_DETAIL -> createExternalVideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
+            DetailTypes.VIDEO_DETAIL -> createYoutubeVideoDetailViewholder(thumbnailView, existingDetailNavigationListener)
             // TEXT_DETAIL
             else -> createTextDetailViewHolder(
                     thumbnailView,
@@ -80,6 +83,12 @@ object DetailViewHolderFactory {
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): ExternalVideoDetailViewHolder {
         return ExternalVideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
+    }
+    private fun createYoutubeVideoDetailViewholder(
+        thumbnailView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
+    ): DetailViewHolder.YoutubeVideoDetailViewHolder {
+        return DetailViewHolder.YoutubeVideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
 }
 
@@ -154,6 +163,16 @@ sealed class DetailViewHolder(
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {
             return Glide.with(thumbnailView).load(R.drawable.event_detail_camera) // Vervangen door?
+        }
+    }
+
+    class YoutubeVideoDetailViewHolder(
+        imageView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
+    ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
+
+        override fun load(detail: Detail) : RequestBuilder<Drawable> {
+            return Glide.with(thumbnailView).load(getDefaultThumbnailUrl(detail.videoId))
         }
     }
 

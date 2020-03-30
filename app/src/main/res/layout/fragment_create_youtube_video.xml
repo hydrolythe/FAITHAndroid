@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="youtubeViewModel"
+            type="be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel" />
+        <variable
+            name="preview"
+            type="be.hogent.faith.faith.backpackScreen.youtubeVideo.create.ShowPreview" />
+        <import type="android.view.View" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#CDF9EC"
+        tools:context=".faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailFragment">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_youtubeView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="128dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="128dp"
+            android:layout_marginBottom="64dp"
+            android:background="@drawable/rv_background_youtubeview"
+            android:padding="8dp"
+            android:scrollbarSize="16dp"
+            android:scrollbarThumbVertical="@drawable/scrollbarthumb_circle_rv"
+            android:scrollbarTrackVertical="@drawable/scrollbartrack_rectangle_rv"
+            android:scrollbars="vertical"
+            android:verticalScrollbarPosition="right"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout_search_video">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_search_video"
+            style="@style/faith_textInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/event_textInput_height"
+            android:layout_marginStart="64dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="64dp"
+            android:background="@drawable/rv_background_youtubeview"
+            android:hint="@string/search_youtube"
+            android:padding="10dp"
+            app:endIconMode="clear_text"
+            app:errorEnabled="false"
+            app:layout_constraintEnd_toEndOf="@+id/rv_youtubeView"
+            app:layout_constraintStart_toStartOf="@+id/rv_youtubeView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:startIconDrawable="@drawable/ic_search"
+            app:startIconTint="@null">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editText_search_video"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_white"
+                android:ems="10"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="text"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_search_video"
+            style="@style/faith_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="128dp"
+            android:gravity="center"
+            android:text="@string/search_btn"
+            android:visibility="gone"
+            app:backgroundTint="@android:color/transparent"
+            app:iconGravity="textStart"
+            app:iconSize="34dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_search_video"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textInputLayout_search_video"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

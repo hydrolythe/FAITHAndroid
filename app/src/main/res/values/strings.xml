@@ -218,4 +218,9 @@
     <string name="recordaudio_pause">Fragment pauzeren</string>
     <string name="recordaudio_stop">Opname stoppen</string>
     <string name="avatar_nog_niet_ingekleurd">Avatar is nog niet ingekleurd. Klik op potlood om avatar in te kleuren</string>
+    <string name="search">Zoeken...</string>
+    <string name="save_video">Save je video</string>
+    <string name="youtube_snippet_thumbnail">Youtube video thumbnail</string>
+    <string name="search_btn">ZOEKEN</string>
+    <string name="search_youtube">Zoek een filmpje op YouTube...</string>
 </resources>

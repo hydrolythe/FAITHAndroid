@@ -15,14 +15,16 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailFragment
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.util.replaceChildFragment
 import org.koin.android.ext.android.getKoin
@@ -76,7 +78,7 @@ abstract class BackpackDetailFragment : Fragment() {
                 is PhotoDetail -> PhotoFragmentNoEmotionAvatar.newInstance()
                 is AudioDetail -> AudioFragmentNoEmotionAvatar.newInstance()
                 is ExternalVideoDetail -> ExternalVideoFragmentNoEmotionAvatar.newInstance()
-                is VideoDetail -> TODO()
+                is YoutubeVideoDetail -> YoutubeVideoFragment.newInstance()
             }
         }
     }
@@ -174,6 +176,24 @@ abstract class BackpackDetailFragment : Fragment() {
 
         override fun setChildFragment(detail: Detail?) {
             val childFragment = AddExternalFileFragment.newInstance()
+            replaceChildFragment(childFragment, R.id.fragment_container_editFile)
+        }
+    }
+    class YoutubeVideoFragment : BackpackDetailFragment() {
+
+        companion object {
+            fun newInstance(): YoutubeVideoFragment {
+                return YoutubeVideoFragment()
+            }
+        }
+
+        override fun setChildFragment(detail: Detail?) {
+            val childFragment = if (detail == null) {
+                YoutubeVideoDetailFragment.newInstance()
+            }
+            else{
+                ViewYoutubeVideoFragment.newInstance(detail as YoutubeVideoDetail)
+            }
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }
     }

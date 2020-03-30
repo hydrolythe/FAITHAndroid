@@ -39,6 +39,17 @@ dependencies {
     implementation commonDependencies.rxjava
     implementation commonDependencies.rxkotlin
 
+    // Moshi
+    implementation "com.squareup.moshi:moshi:1.9.1"
+    implementation "com.squareup.moshi:moshi-kotlin:1.9.1"
+
+    // Retrofit with Moshi Converter
+    implementation "com.squareup.retrofit2:retrofit:2.5.0"
+    implementation "com.squareup.retrofit2:converter-moshi:2.5.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.5.0"
+
+    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+
     implementation injectionDependencies.koin
 
     testImplementation testDependencies.junit
@@ -48,5 +59,7 @@ dependencies {
     testImplementation(testDependencies.threeTenBP) {
         exclude group:'com.jakewharton.threetenabp', module:'threetenabp'
     }
+
+
 
 }
