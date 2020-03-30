@@ -95,8 +95,8 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
             }
         })
 
-        val manager = GridLayoutManager(context, 3)
-        youtubeVideoDetailBinding.rvYoutubeView.layoutManager = manager
+     //   val manager = GridLayoutManager(context, 3)
+     //   youtubeVideoDetailBinding.rvYoutubeView.layoutManager = manager
 
         youtubeVideoDetailBinding.rvYoutubeView.adapter = youtubeSnippetAdapter
 

@@ -12,15 +12,16 @@
             type="be.hogent.faith.faith.backpackScreen.youtubeVideo.create.SnippetClickListener" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/container_snippet"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/rv_background_youtubeview"
-        app:cardCornerRadius="30dp"
+        android:backgroundTint="@color/color_white"
+        app:cardBackgroundColor="@color/color_white"
+        app:cardCornerRadius="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,24 +30,43 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/card_video_snippet">
+            android:background="@drawable/card_video_snippet"
+            android:backgroundTint="@color/color_white">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="30dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:backgroundTint="@color/color_white"
+                app:cardBackgroundColor="@color/color_white"
+                app:cardCornerRadius="45dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/img_snippet_thumbnail"
-                    android:layout_width="match_parent"
+                    android:layout_width="250dp"
                     android:layout_height="190dp"
                     android:background="@drawable/rv_background_youtubeview"
                     android:contentDescription="@string/youtube_snippet_thumbnail"
                     app:srcCompat="@drawable/icoon_tekst_bestand" />
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="250dp"
+                    android:layout_height="190dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginBottom="5dp"
+                    android:alpha="0.06"
+                    android:src="#FFFF00"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView
@@ -54,11 +74,13 @@
                 snippet_title="@{snippet}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
                 android:text="TextView"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
+                app:layout_constraintStart_toStartOf="@+id/textView_snippet_description"
+                app:layout_constraintTop_toTopOf="@+id/materialCardView" />
 
             <TextView
                 android:id="@+id/textView_snippet_description"
@@ -67,10 +89,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:text="TextView"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/img_snippet_thumbnail"
+                app:layout_constraintStart_toEndOf="@+id/materialCardView"
                 app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </layout>
