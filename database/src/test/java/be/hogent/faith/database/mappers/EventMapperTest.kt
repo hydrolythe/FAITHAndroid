@@ -18,6 +18,7 @@ class EventMapperTest {
 
     private val encryptedDetail = EncryptedDetail(
         file = DataFactory.randomFile(),
+        fileName = DataFactory.randomString(),
         uuid = DataFactory.randomUUID(),
         type = "Encrypted type"
     )

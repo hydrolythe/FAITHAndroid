@@ -1,12 +1,12 @@
 package be.hogent.faith.faith
 
-import be.hogent.faith.domain.repository.AuthManager
+import be.hogent.faith.domain.repository.IAuthManager
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import java.util.UUID
 
-class TestAuthManager : AuthManager {
+class TestAuthManager : IAuthManager {
     override fun isUsernameUnique(email: String): Single<Boolean> {
         return Single.just(true)
     }

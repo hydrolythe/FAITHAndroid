@@ -1,7 +1,7 @@
 package be.hogent.faith.database.repositories
 
 import be.hogent.faith.database.factory.EntityFactory
-import be.hogent.faith.database.firebase.UserDatabase
+import be.hogent.faith.database.firebase.FirebaseUserDatabase
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.domain.models.User
@@ -14,10 +14,10 @@ import org.junit.Test
 
 class UserRepositoryImplTest {
 
-    private val firebaseUserRepository = mockk<UserDatabase>(relaxed = true)
+    private val firebaseUserRepository = mockk<FirebaseUserDatabase>(relaxed = true)
     private val userMapper = mockk<UserMapper>()
 
-    private val userRepository = UserRepositoryImpl(userMapper, firebaseUserRepository)
+    private val userRepository = UserRepository(userMapper, firebaseUserRepository)
 
     private val userWithoutEvents = UserFactory.makeUser(0)
     private val userEntity = EntityFactory.makeUserEntity()

@@ -2,9 +2,9 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.AuthManager
+import be.hogent.faith.domain.repository.IAuthManager
 import be.hogent.faith.domain.repository.IEventRepository
-import be.hogent.faith.domain.repository.UserRepository
+import be.hogent.faith.domain.repository.IUserRepository
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.every
 import io.mockk.mockk
@@ -24,9 +24,9 @@ class GetUserUseCaseTest {
     private lateinit var getUserUC: GetUserUseCase
     private lateinit var executor: Executor
     private lateinit var scheduler: Scheduler
-    private lateinit var userRepository: UserRepository
+    private lateinit var userRepository: IUserRepository
     private lateinit var eventRepository: IEventRepository
-    private lateinit var authManager: AuthManager
+    private lateinit var authManager: IAuthManager
 
     @Before
     fun setUp() {

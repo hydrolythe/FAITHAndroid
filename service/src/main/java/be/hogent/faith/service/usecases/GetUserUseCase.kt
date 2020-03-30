@@ -2,18 +2,18 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.AuthManager
+import be.hogent.faith.domain.repository.IAuthManager
 import be.hogent.faith.domain.repository.IEventRepository
-import be.hogent.faith.domain.repository.UserRepository
+import be.hogent.faith.domain.repository.IUserRepository
 import be.hogent.faith.service.usecases.base.ObservableUseCase
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.Observables.combineLatest
 
 class GetUserUseCase(
-    private val userRepository: UserRepository,
+    private val userRepository: IUserRepository,
     private val eventRepository: IEventRepository,
-    private val authManager: AuthManager,
+    private val authManager: IAuthManager,
     observeScheduler: Scheduler
 ) : ObservableUseCase<User, GetUserUseCase.Params>(observeScheduler) {
 

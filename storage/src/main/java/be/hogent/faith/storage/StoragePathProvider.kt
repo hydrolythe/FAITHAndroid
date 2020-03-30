@@ -53,6 +53,10 @@ class StoragePathProvider(
         return File("${getEventFolder(event).path}/${detail.uuid}")
     }
 
+    fun getDetailPath(detail: Detail): File {
+        return File("users/${user!!.uid}/backpack/${detail.uuid}")
+    }
+
     fun getEmotionAvatarPath(event: Event): File {
         return File("${getEventFolder(event).path}/emotionAvatar")
     }

@@ -48,6 +48,22 @@ class RegisterUserInfoViewModelTest {
     }
 
     @Test
+    fun registerUserInfoViewModel_onConfirmUserInfoClicked_usernamewithInvalidCharacter_noUseCaseCall_errorMessage() {
+        // Arrange
+        registerUserInfoViewModel.userName.postValue("$username@faith.be")
+        registerUserInfoViewModel.passwordRepeated.postValue(password)
+        val errorMessageObserver = mockk<Observer<Int>>(relaxed = true)
+        registerUserInfoViewModel.userNameErrorMessage.observeForever(errorMessageObserver)
+
+        // Act
+        registerUserInfoViewModel.onConfirmUserInfoClicked()
+
+        // Assert
+        verify { isUsernameUniqueUseCase wasNot called }
+        verify { errorMessageObserver.onChanged(any()) }
+    }
+
+    @Test
     fun registerUserInfoViewModel_onConfirmUserInfoClicked_nullPassword_noUseCaseCall_errorMessage() {
         // Arrange
         registerUserInfoViewModel.userName.postValue(username)

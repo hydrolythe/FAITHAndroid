@@ -1,13 +1,13 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.UserRepository
+import be.hogent.faith.domain.repository.IUserRepository
 import be.hogent.faith.service.usecases.base.SingleUseCase
 import io.reactivex.Scheduler
 import io.reactivex.Single
 
 class CreateUserUseCase(
-    private val userRepository: UserRepository,
+    private val userRepository: IUserRepository,
     observer: Scheduler
 ) : SingleUseCase<User, CreateUserUseCase.Params>(observer) {
 

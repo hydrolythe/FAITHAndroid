@@ -19,8 +19,6 @@ ext {
     rxjava_android_version = '2.1.1'
     rxkotlin_version = '2.3.0'
 
-    room_version = '2.2.3'
-
     fotoApparat_version = '2.7.0'
 
     annotation_version = '1.1.0'
@@ -61,9 +59,8 @@ ext {
     robolectric_version = '4.3.1'
     firebase_test_version = '17.2.1'
     crashlytics_dep_version = '2.10.1'
+    hamcrest_version = '2.2'
     firebase_performance = '19.0.5'
-
-
     uiAutomator_version = '2.2.0'
     junit_version = '4.13'
     mockk_version = '1.9.3.kotlin12'
@@ -116,6 +113,8 @@ ext {
             threeTenBP : "org.threeten:threetenbp:$threeTenBP_version",
             koinTesting: "org.koin:koin-test:$koin_version",
             robolectric: "org.robolectric:robolectric:$robolectric_version",
+            hamcrest: "org.hamcrest:hamcrest:$hamcrest_version",
+            hamcrestLibrary: "org.hamcrest:hamcrest-library:$hamcrest_version",
             //Add Analytics
             firebase_analytics: "com.google.firebase:firebase-analytics:$firebase_test_version",
             crashlytics: "com.crashlytics.sdk.android:crashlytics:$crashlytics_dep_version"
@@ -135,13 +134,6 @@ ext {
     injectionDependencies = [
             koin          : "org.koin:koin-android:$koin_version",
             koin_viewModel: "org.koin:koin-android-viewmodel:$koin_version"
-    ]
-
-    databaseDependencies = [
-            room         : "androidx.room:room-runtime:$room_version",
-            room_rxjava  : "androidx.room:room-rxjava2:$room_version",
-            room_compiler: "androidx.room:room-compiler:$room_version",
-            room_testing : "androidx.room:room-testing:$room_version"
     ]
 
     firebaseDependencies = [

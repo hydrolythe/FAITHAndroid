@@ -15,6 +15,8 @@ data class User(
     val events: List<Event>
         get() = _events.values.toList()
 
+    val backpack = Backpack()
+
     fun addEvent(event: Event) {
         if (event.title.isNullOrBlank()) {
             throw IllegalArgumentException("Een gebeurtenis moet een ingevulde titel hebben.")

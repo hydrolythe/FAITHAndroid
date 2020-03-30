@@ -5,8 +5,10 @@ import be.hogent.faith.database.models.EncryptedDetailEntity
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.encryption.internal.DataEncrypter
 import com.google.crypto.tink.KeysetHandle
 import io.reactivex.Completable
@@ -35,12 +37,15 @@ class DetailEncryptionService {
             EncryptedDetail(
                 file = detail.file,
                 uuid = detail.uuid,
+                fileName = detail.fileName,
                 type = dataEncrypter.encrypt(
                     when (detail) {
                         is AudioDetail -> DetailType.Audio
                         is TextDetail -> DetailType.Text
                         is DrawingDetail -> DetailType.Drawing
                         is PhotoDetail -> DetailType.Photo
+                        is VideoDetail -> DetailType.Video
+                        is ExternalVideoDetail -> DetailType.ExternalVideo
                     }.toString()
                 )
             )
@@ -56,10 +61,36 @@ class DetailEncryptionService {
 
         return Single.just(
             when (DetailType.valueOf(detailTypeString)) {
-                DetailType.Audio -> AudioDetail(encryptedDetail.file, encryptedDetail.uuid)
-                DetailType.Text -> TextDetail(encryptedDetail.file, encryptedDetail.uuid)
-                DetailType.Drawing -> DrawingDetail(encryptedDetail.file, encryptedDetail.uuid)
-                DetailType.Photo -> PhotoDetail(encryptedDetail.file, encryptedDetail.uuid)
+                DetailType.Audio -> AudioDetail(
+                    encryptedDetail.file,
+                    encryptedDetail.fileName,
+                    encryptedDetail.uuid
+                )
+                DetailType.Text -> TextDetail(
+                    encryptedDetail.file,
+                    encryptedDetail.fileName,
+                    encryptedDetail.uuid
+                )
+                DetailType.Drawing -> DrawingDetail(
+                    encryptedDetail.file,
+                    encryptedDetail.fileName,
+                    encryptedDetail.uuid
+                )
+                DetailType.Photo -> PhotoDetail(
+                    encryptedDetail.file,
+                    encryptedDetail.fileName,
+                    encryptedDetail.uuid
+                )
+                DetailType.Video -> VideoDetail(
+                    encryptedDetail.file,
+                    encryptedDetail.fileName,
+                    encryptedDetail.uuid
+                )
+                DetailType.ExternalVideo -> ExternalVideoDetail(
+                    encryptedDetail.file,
+                    encryptedDetail.fileName,
+                    encryptedDetail.uuid
+                )
             }
         )
     }
@@ -77,5 +108,7 @@ internal enum class DetailType {
     Audio,
     Text,
     Drawing,
-    Photo
+    Photo,
+    Video,
+    ExternalVideo
 }

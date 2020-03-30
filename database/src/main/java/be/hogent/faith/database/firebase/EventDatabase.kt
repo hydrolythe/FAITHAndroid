@@ -66,7 +66,7 @@ class EventDatabase(
         } else {
             // sets the document reference for saving the event in firestore
             val document =
-                firestore.collection(UserDatabase.USERS_KEY).document(currentUser.uid)
+                firestore.collection(FirebaseUserDatabase.USERS_KEY).document(currentUser.uid)
                     .collection(EVENTS_KEY)
                     .document(item.uuid)
             return RxFirestore.setDocument(document, item) // ) // stores the event in firestore

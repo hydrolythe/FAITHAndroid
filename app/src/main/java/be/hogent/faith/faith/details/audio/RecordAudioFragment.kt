@@ -71,7 +71,8 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
     private fun loadExistingAudioDetail() {
         val existingDetail = arguments?.getSerializable(AUDIO_DETAIL) as AudioDetail
         audioDetailViewModel.loadExistingDetail(existingDetail)
-        audioPlayer.loadMedia(existingDetail.file)
+        // TODO : als encryptie geimplementeerd
+        // audioPlayer.loadMedia(existingDetail.file)
     }
 
     private fun existingDetailGiven(): Boolean {
@@ -105,6 +106,9 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
             navigation?.backToEvent()
         })
+        audioDetailViewModel.file.observe(this, Observer { file ->
+            audioPlayer.loadMedia(file)
+        })
         audioDetailViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
             Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
         })
@@ -132,10 +136,15 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             audioPlayer.reset()
             audioRecorder.reset()
         })
+        audioDetailViewModel.cancelClicked.observe(this, Observer {
+            audioPlayer.reset()
+            audioRecorder.reset()
+            activity!!.onBackPressed()
+        })
     }
 
     private fun initialiseSeekBar() {
-        recordAudioBinding.seekBar.setOnSeekBarChangeListener(object :
+        recordAudioBinding.playRecording.seekBar.setOnSeekBarChangeListener(object :
             SeekBar.OnSeekBarChangeListener {
             var userSelectedPosition = 0
             override fun onProgressChanged(
@@ -243,16 +252,16 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     inner class PlaybackListener : PlaybackInfoListener {
         override fun onDurationChanged(duration: Int) {
-            recordAudioBinding.seekBar.max = duration
+            recordAudioBinding.playRecording.seekBar.max = duration
             audioDetailViewModel.setRecordingFinalDuration(duration)
         }
 
         override fun onPositionChanged(position: Int) {
             if (!userIsSeeking) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    recordAudioBinding.seekBar.setProgress(position, true)
+                    recordAudioBinding.playRecording.seekBar.setProgress(position, true)
                 } else {
-                    recordAudioBinding.seekBar.progress = position
+                    recordAudioBinding.playRecording.seekBar.progress = position
                 }
             }
         }

@@ -2,8 +2,10 @@ package be.hogent.faith.database.storage
 
 import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Completable
 import io.reactivex.Single
+import java.io.File
 
 interface IFileStorageRepository {
 
@@ -23,4 +25,11 @@ interface IFileStorageRepository {
      * Files are considered ready to use if they are available on the device in an unencrypted format.
      */
     fun filesReadyToUse(event: Event): Boolean
+
+    /**
+     * Downloads a detail's file, and returns it.
+     */
+    fun downloadFile(detail: Detail): Single<File> {
+
+    }
 }

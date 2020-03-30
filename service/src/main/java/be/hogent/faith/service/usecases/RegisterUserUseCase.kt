@@ -1,15 +1,15 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.AuthManager
-import be.hogent.faith.domain.repository.UserRepository
+import be.hogent.faith.domain.repository.IAuthManager
+import be.hogent.faith.domain.repository.IUserRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
 class RegisterUserUseCase(
-    private val authManager: AuthManager,
-    private val userRepository: UserRepository,
+    private val authManager: IAuthManager,
+    private val userRepository: IUserRepository,
     observer: Scheduler
 ) : CompletableUseCase<RegisterUserUseCase.Params>(observer) {
 

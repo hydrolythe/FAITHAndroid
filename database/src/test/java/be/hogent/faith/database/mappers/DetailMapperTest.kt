@@ -24,6 +24,7 @@ class DetailMapperTest {
     fun `should map to DetailEntity when Detail is given`() {
         val model = EncryptedDetail(
             file = DataFactory.randomFile(),
+            fileName = DataFactory.randomString(),
             uuid = UUID.randomUUID(),
             type = "encrypted type"
         )

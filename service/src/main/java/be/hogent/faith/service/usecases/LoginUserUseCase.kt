@@ -1,12 +1,12 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.repository.AuthManager
+import be.hogent.faith.domain.repository.IAuthManager
 import be.hogent.faith.service.usecases.base.MaybeUseCase
 import io.reactivex.Maybe
 import io.reactivex.Scheduler
 
 class LoginUserUseCase(
-    private val authManager: AuthManager,
+    private val authManager: IAuthManager,
     observer: Scheduler
 ) : MaybeUseCase<String?, LoginUserUseCase.Params>(observer) {
 

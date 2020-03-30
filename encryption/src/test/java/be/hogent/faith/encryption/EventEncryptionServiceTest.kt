@@ -8,8 +8,6 @@ import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.util.contentEqual
 import be.hogent.faith.util.factory.EventFactory
-import io.reactivex.Completable
-import io.reactivex.schedulers.Schedulers
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

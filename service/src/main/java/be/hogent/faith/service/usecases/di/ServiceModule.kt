@@ -6,9 +6,18 @@ import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import be.hogent.faith.service.usecases.LoginUserUseCase
 import be.hogent.faith.service.usecases.LogoutUserUseCase
 import be.hogent.faith.service.usecases.RegisterUserUseCase
+import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
+import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
+import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackExternalVideoDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
+import be.hogent.faith.service.usecases.detail.externalVideo.CreateExternalVideoDetailUseCase
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.CreateTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
@@ -41,12 +50,21 @@ val serviceModule = module {
     factory { SaveEventPhotoDetailUseCase(get(), get()) }
     factory { SaveEventAudioDetailUseCase(get(), get()) }
     factory { SaveEventDrawingDetailUseCase(get(), get()) }
-    factory { LoadTextDetailUseCase(get(), get()) }
+    factory { LoadTextDetailUseCase(get(), get(), get()) }
     factory { CreateDrawingDetailUseCase(get(), get()) }
     factory { OverwriteDrawingDetailUseCase(get(), get()) }
     factory { OverwriteTextDetailUseCase(get(), get()) }
     factory { CreatePhotoDetailUseCase(get()) }
     factory { CreateAudioDetailUseCase(get()) }
     factory { CreateTextDetailUseCase(get(), get()) }
+    factory { CreateExternalVideoDetailUseCase(get()) }
     factory { GetEventFilesUseCase(get(), get()) }
+    factory { LoadDetailFileUseCase(get(), get()) }
+    factory { GetBackPackFilesDummyUseCase(get(), get()) }
+    factory { SaveBackpackTextDetailUseCase(get(), get()) }
+    factory { SaveBackpackAudioDetailUseCase(get(), get()) }
+    factory { SaveBackpackPhotoDetailUseCase(get(), get()) }
+    factory { SaveBackpackDrawingDetailUseCase(get(), get()) }
+    factory { SaveBackpackExternalVideoDetailUseCase(get(), get()) }
+    factory { DeleteBackpackDetailUseCase(get(), get()) }
 }

@@ -2,15 +2,18 @@ package be.hogent.faith.database.di
 
 import be.hogent.faith.database.firebase.FirebaseAuthManager
 import be.hogent.faith.database.firebase.EventDatabase
-import be.hogent.faith.database.firebase.UserDatabase
+import be.hogent.faith.database.firebase.FirebaseUserDatabase
+import be.hogent.faith.database.firebase.FirebaseBackpackRepository
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.UserMapper
-import be.hogent.faith.database.repositories.AuthManagerImpl
+import be.hogent.faith.database.repositories.AuthManager
+import be.hogent.faith.database.repositories.BackpackRepository
 import be.hogent.faith.database.repositories.EventRepository
-import be.hogent.faith.database.repositories.UserRepositoryImpl
-import be.hogent.faith.domain.repository.AuthManager
+import be.hogent.faith.database.repositories.UserRepository
+import be.hogent.faith.domain.repository.IAuthManager
+import be.hogent.faith.domain.repository.IBackpackRepository
 import be.hogent.faith.domain.repository.IEventRepository
-import be.hogent.faith.domain.repository.UserRepository
+import be.hogent.faith.domain.repository.IUserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.dsl.module
@@ -24,10 +27,13 @@ val databaseModule = module {
     // Koin doesn't automatically see the Impl as an implementation of the interface,
     // so we have to explicitly mention it.
     single { EventRepository(get(), get(), get()) as IEventRepository }
-    single { UserRepositoryImpl(get(), get()) as UserRepository }
-    single { AuthManagerImpl(get()) as AuthManager }
+    single { BackpackRepository(get(), get(), get()) as IBackpackRepository }
+    single { UserRepository(get(), get()) as IUserRepository }
+    single { AuthManager(get()) as IAuthManager }
     single { FirebaseAuthManager(constructFirebaseAuthInstance()) }
-    single { UserDatabase(constructFirebaseAuthInstance(), constructFireStoreInstance()) }
+    single { FirebaseUserDatabase(constructFirebaseAuthInstance(), constructFireStoreInstance()) }
+    single { FirebaseBackpackRepository(constructFirebaseAuthInstance(),
+        constructFireStoreInstance()) }
     single {
         EventDatabase(
             constructFirebaseAuthInstance(),

@@ -4,6 +4,7 @@ import android.content.Context
 import be.hogent.faith.database.encryption.EncryptedDetail
 import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.storage.StoragePathProvider
+import be.hogent.faith.util.factory.DataFactory
 import com.google.firebase.auth.FirebaseAuth
 import io.mockk.every
 import io.mockk.mockk
@@ -32,6 +33,7 @@ class LocalFileStorageRepositoryTest {
     private val detailFile = File("detail")
     private val encryptedDetail = EncryptedDetail(
         file = detailFile,
+        fileName = DataFactory.randomString(),
         uuid = UUID.randomUUID(),
         type = "encrypted type"
     )

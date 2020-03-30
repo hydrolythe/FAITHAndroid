@@ -5,6 +5,7 @@ import android.net.Uri
 import be.hogent.faith.database.encryption.EncryptedDetail
 import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.storage.StoragePathProvider
+import be.hogent.faith.util.factory.DataFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import io.mockk.clearAllMocks
@@ -37,6 +38,7 @@ class FirebaseStorageRepositoryTest {
     private val detailFile = File("detail")
     private val encryptedDetail = EncryptedDetail(
         file = detailFile,
+        fileName = DataFactory.randomString(),
         uuid = UUID.randomUUID(),
         type = "encrypted type"
     )

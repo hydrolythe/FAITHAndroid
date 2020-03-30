@@ -25,7 +25,6 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
-import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.util.replaceFragment
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_drawer_layout
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_nav_view
@@ -33,11 +32,9 @@ import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.util.UUID
 
 class EmotionCaptureMainActivity : AppCompatActivity(),
     EventDetailsFragment.EventDetailsNavigationListener,
-    OverviewEventsFragment.OverviewEventsNavigationListener,
     DetailFragmentWithEmotionAvatar.EditDetailNavigationListener,
     RecordAudioFragment.AudioScreenNavigation,
     DrawFragment.DrawingScreenNavigation,
@@ -156,13 +153,6 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         )
     }
 
-    override fun startEventDetailsFragment(eventUuid: UUID) {
-        replaceFragment(
-            EventDetailsFragment.newInstance(eventUuid),
-            R.id.emotionCapture_fragment_container
-        )
-    }
-
     override fun openDetailScreenFor(detail: Detail) {
         val avatar = getAvatarOutline()
         replaceFragment(
@@ -221,6 +211,10 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
 
     private fun save(audioDetail: AudioDetail) {
         eventViewModel.saveAudioDetail(audioDetail)
+    }
+
+    override fun deleteDetail(detail: Detail) {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun startTextDetailFragment() {

@@ -1,6 +1,6 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.repository.AuthManager
+import be.hogent.faith.domain.repository.IAuthManager
 import be.hogent.faith.domain.repository.SignInException
 import io.mockk.every
 import io.mockk.mockk
@@ -16,7 +16,7 @@ class LoginUserUseCaseTest {
     private lateinit var loginUserUseCase: LoginUserUseCase
     private lateinit var executor: Executor
     private lateinit var scheduler: Scheduler
-    private lateinit var authManager: AuthManager
+    private lateinit var authManager: IAuthManager
 
     @Before
     fun setUp() {

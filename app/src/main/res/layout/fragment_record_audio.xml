@@ -35,6 +35,17 @@
             <ImageButton
                 android:layout_width="@dimen/material_icon_width"
                 android:layout_height="@dimen/material_icon_height"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/ic_return"
+                android:contentDescription="@string/cancel"
+                android:onClick="@{() -> audioDetailViewModel.onCancelClicked()}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="@dimen/material_icon_height"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
@@ -46,219 +57,49 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-            <SeekBar
-                android:id="@+id/seekBar"
-                android:layout_width="700dp"
-                android:layout_height="58dp"
-                android:layout_marginTop="16dp"
-                android:progressDrawable="@drawable/audio_seekbar_progress"
-                android:splitTrack="false"
-                android:thumb="@drawable/audio_seekbar_thumb"
-                android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.FinishedRecording ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toTopOf="@+id/cardView_audio_center"
-                app:layout_constraintEnd_toEndOf="@+id/cardView_audio_center"
-                app:layout_constraintStart_toStartOf="@+id/cardView_audio_center"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:progress="25" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardView_audio_center"
+            <include
+                bind:audioDetailViewModel="@{audioDetailViewModel}"
+                layout="@layout/layout_recordaudio_startrecording"
                 android:layout_width="wrap_content"
-                android:layout_height="120dp"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="@dimen/panel_corner_radius"
+                android:layout_height="wrap_content"
+                android:visibility="@{audioDetailViewModel.viewState == AudioViewState.Initial ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/seekBar">
+                tools:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/audio_initial"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="8dp"
-                    android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.Initial ? View.VISIBLE : View.GONE}"
-                    tools:visibility="gone">
+            <include
+                bind:audioDetailViewModel="@{audioDetailViewModel}"
+                layout="@layout/layout_recordaudio_recording"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="@{audioDetailViewModel.viewState == AudioViewState.Recording ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
 
-                    <ImageButton
-                        android:id="@+id/btn_recordAudio_recorderStart"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="40dp"
-                        android:background="@drawable/button_record_start"
-                        android:contentDescription="@string/description_start_recording"
-                        android:onClick="@{() -> audioDetailViewModel.onRecorderStartButtonClicked()}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+            <include
+                android:id="@+id/playRecording"
+                bind:audioDetailViewModel="@{audioDetailViewModel}"
+                layout="@layout/layout_recordaudio_playrecording"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{audioDetailViewModel.viewState == AudioViewState.FinishedRecording ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toTopOf="@+id/guide_recordAudio_bottom"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/audio_recording"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="8dp"
-                    android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.Recording ? View.VISIBLE : View.GONE}">
-
-                    <ImageButton
-                        android:id="@+id/btn_recordAudio_recorderStop"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="40dp"
-                        android:background="@drawable/button_record_stop"
-                        android:contentDescription="@string/description_stop_recording"
-                        android:onClick="@{() -> audioDetailViewModel.onRecorderStopButtonClicked()}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/btn_recordAudio_recorderPause"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageButton
-                        android:id="@+id/btn_recordAudio_recorderPause"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="40dp"
-                        android:background="@drawable/button_record_pause"
-                        android:contentDescription="@string/description_recording_pause"
-                        android:onClick="@{() -> audioDetailViewModel.onRecorderPauseButtonClicked()}"
-                        android:visibility="@{audioDetailViewModel.pauseRecordingVisible ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/btn_recordAudio_recorderStop"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageButton
-                        android:id="@+id/btn_recordAudio_recorderRestartRecording"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="40dp"
-                        android:background="@drawable/button_record_start"
-                        android:contentDescription="@string/description_start_recording"
-                        android:onClick="@{() -> audioDetailViewModel.onRecorderPauseButtonClicked()}"
-                        android:visibility="@{audioDetailViewModel.restartRecordingVisible ? View.VISIBLE : View.GONE}"
-                        app:layout_constraintBottom_toBottomOf="@id/btn_recordAudio_recorderPause"
-                        app:layout_constraintEnd_toEndOf="@id/btn_recordAudio_recorderPause"
-                        app:layout_constraintStart_toStartOf="@id/btn_recordAudio_recorderPause"
-                        app:layout_constraintTop_toTopOf="@id/btn_recordAudio_recorderPause" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/audio_doneRecording"
-                    android:layout_width="270dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:layout_margin="8dp"
-                    android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.FinishedRecording ? View.VISIBLE : View.GONE}"
-                    tools:visibility="gone">
-
-                    <ImageButton
-                        android:id="@+id/btn_recordAudio_playerPause"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:background="@drawable/button_audio_pause"
-                        android:contentDescription="@string/description_pause_recording"
-                        android:onClick="@{() -> audioDetailViewModel.onPlayerPauseButtonClicked()}"
-                        app:layout_constraintBottom_toBottomOf="@+id/btn_recordAudio_playerPlay"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/btn_recordAudio_playerPlay"
-                        app:layout_constraintTop_toTopOf="@+id/btn_recordAudio_playerPlay" />
-
-                    <ImageButton
-                        android:id="@+id/btn_recordAudio_playerPlay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:background="@drawable/button_audio_play"
-                        android:contentDescription="@string/description_play_recording"
-                        android:onClick="@{() -> audioDetailViewModel.onPlayerPlayButtonClicked()}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/btn_recordAudio_playerPause"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_recordAudio_bottom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.43" />
-
-            <TextView
-                android:id="@+id/lbl_audio_startTime"
-                style="@style/recordingTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0:00"
-                android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.FinishedRecording ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toTopOf="@+id/seekBar"
-                app:layout_constraintEnd_toStartOf="@+id/seekBar"
-                app:layout_constraintStart_toStartOf="@+id/seekBar" />
-
-            <TextView
-                android:id="@+id/lbl_audio_recordingDuration"
-                style="@style/recordingTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{audioDetailViewModel.recordingDuration}"
-                android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.FinishedRecording ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toTopOf="@+id/seekBar"
-                app:layout_constraintEnd_toEndOf="@+id/seekBar"
-                app:layout_constraintStart_toEndOf="@+id/seekBar"
-                tools:text="01:23" />
-
-            <ImageButton
-                android:id="@+id/btn_recordAudio_reset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> audioDetailViewModel.onResetButtonClicked()}"
-                android:visibility="@{audioDetailViewModel.deleteButtonVisible ? View.VISIBLE: View.GONE}"
-                app:layout_constraintBottom_toBottomOf="@+id/seekBar"
-                app:layout_constraintStart_toEndOf="@+id/seekBar"
-                app:layout_constraintTop_toTopOf="@+id/seekBar"
-                app:srcCompat="@drawable/trashcan" />
-
-            <TextView
-                android:id="@+id/lbl_recordAudio_startInstructions"
-                style="@style/AppTheme.caption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Druk op de rode bol om\neen geluidsfragment op te nemen!"
-                android:textAlignment="center"
-                android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.Initial ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toTopOf="@+id/cardView_audio_center"
-                app:layout_constraintEnd_toEndOf="@+id/cardView_audio_center"
-                app:layout_constraintStart_toStartOf="@+id/cardView_audio_center"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/lbl_recordAudio_recordingTimer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rectangle_white"
-                android:padding="16dp"
-                android:text="@{audioDetailViewModel.recordingTime}"
-                android:textColor="@color/caption"
-                android:textSize="45sp"
-                android:textStyle="bold"
-                android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.Recording ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toTopOf="@+id/cardView_audio_center"
-                app:layout_constraintEnd_toEndOf="@+id/cardView_audio_center"
-                app:layout_constraintStart_toStartOf="@+id/cardView_audio_center"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="01:23"
-                tools:visibility="gone" />
+                app:layout_constraintGuide_percent="0.45" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>

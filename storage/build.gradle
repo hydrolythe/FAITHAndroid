@@ -30,7 +30,6 @@ dependencies {
     implementation project(':database')
     implementation project(':util')
 
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     def commonDependencies = rootProject.ext.commonDependencies
@@ -61,4 +60,7 @@ dependencies {
 
     androidTestImplementation androidTestDependencies.androidJunit
     androidTestImplementation androidTestDependencies.espresso
+
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.7', changing: true
+
 }
