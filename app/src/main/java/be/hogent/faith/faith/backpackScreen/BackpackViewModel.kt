@@ -32,7 +32,6 @@ class BackpackViewModel(
     saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
     deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>,
     private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
-
 ) : DetailsContainerViewModel(saveBackpackDetailUseCase, deleteBackpackDetailUseCase) {
 
     private val _detailIsSaved = SingleLiveEvent<Any>()

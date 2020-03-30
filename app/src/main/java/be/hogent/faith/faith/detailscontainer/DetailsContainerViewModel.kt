@@ -27,9 +27,9 @@ abstract class DetailsContainerViewModel(
 
     protected var details: List<Detail> = emptyList()
 
-    protected val detailFilter = CombinedDetailFilter()
+    private val detailFilter = CombinedDetailFilter()
 
-    protected val searchString = MutableLiveData<String>()
+    private val searchString = MutableLiveData<String>()
 
     val audioFilterEnabled = MutableLiveData<Boolean>().apply {
         this.value = false

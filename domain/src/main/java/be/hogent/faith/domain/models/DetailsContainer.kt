@@ -5,13 +5,9 @@ import java.util.UUID
 
 abstract class DetailsContainer {
 
-    protected val _details = mutableListOf<Detail>()
+    private val _details = mutableListOf<Detail>()
     val details: List<Detail>
         get() = _details
-
-    open fun getLastDetail(): Detail {
-        return _details.last()
-    }
 
     open fun getDetail(uuid: UUID): Detail? {
         return details.find { it.uuid == uuid }
