@@ -54,7 +54,7 @@ class EventDetailFragment : Fragment() {
                 binding.imgAvatar.setImageDrawable(null)
         })
 
-        eventDetailsViewModel.details.observe(this, Observer { details ->
+        eventDetailsViewModel.details.observe(this, Observer {
             binding.recyclerViewLibraryEventdetails.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)

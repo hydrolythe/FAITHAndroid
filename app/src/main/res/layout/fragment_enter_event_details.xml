@@ -46,6 +46,17 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
+            <ImageButton
+                android:id="@+id/btn_park_delete"
+                android:layout_width="@dimen/icon_small"
+                android:layout_height="@dimen/icon_small"
+                android:layout_margin="16dp"
+                android:background="@drawable/ic_trashcan"
+                android:contentDescription="@string/cancel"
+                android:onClick="@{() -> eventViewModel.onTrashcanClicked()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
             <ImageView
                 android:id="@+id/img_wegwijzerpaal"
                 android:layout_width="wrap_content"

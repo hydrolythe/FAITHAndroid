@@ -35,6 +35,7 @@ class EventViewModelSavePhotoTest {
             saveEventPhotoUC,
             mockk(),
             mockk(),
+            mockk(),
             mockk()
         )
     }

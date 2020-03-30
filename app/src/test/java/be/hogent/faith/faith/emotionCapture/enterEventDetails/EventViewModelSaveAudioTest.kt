@@ -35,6 +35,7 @@ class EventViewModelSaveAudioTest {
             mockk(),
             saveEventAudioUC,
             mockk(),
+            mockk(),
             mockk()
         )
     }

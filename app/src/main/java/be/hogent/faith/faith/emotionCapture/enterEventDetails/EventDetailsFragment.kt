@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.view_button_color_avatar.img_event_details
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import timber.log.Timber
 import java.util.UUID
 
 private const val ARG_EVENTUUID = "eventUUID"
@@ -114,17 +115,19 @@ class EventDetailsFragment : Fragment() {
      * to gone when no items are shown, will set visible when at least one detail is present.
      */
     private fun determineRVVisibility() {
-        if (detailThumbnailsAdapter!!.itemCount > 0) {
-            eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.VISIBLE
-        } else {
+        if (detailThumbnailsAdapter!!.currentList.isEmpty()) {
             eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.GONE
+        } else {
+            eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.VISIBLE
         }
     }
 
     private fun startListeners() {
         // Update adapter when event changes
-        eventViewModel.event.observe(this, Observer { event ->
-            detailThumbnailsAdapter?.submitList(event.details)
+        eventViewModel.eventDetails.observe(this, Observer { details ->
+            Timber.d(details.size.toString())
+            detailThumbnailsAdapter?.submitList(details)
+            detailThumbnailsAdapter?.notifyDataSetChanged()
             // check whether there are detail in de adapter. If so, show the RV, of not leave hidden
             determineRVVisibility()
         })
@@ -156,10 +159,13 @@ class EventDetailsFragment : Fragment() {
             // navigation?.startMakeDrawingFragment()
             navigation?.startDrawingDetailFragment()
         })
-
         eventViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
             saveDialog.show(fragmentManager!!, null)
+        })
+
+        eventViewModel.deleteEnabled.observe(this, Observer { deleteEnabled ->
+            detailThumbnailsAdapter?.setItemsAsDeletable(deleteEnabled)
         })
 
         userViewModel.eventSavedState.observe(this, Observer {

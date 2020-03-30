@@ -31,7 +31,8 @@ class EventViewModelSaveTextTest {
             mockk(),
             mockk(),
             mockk(),
-            saveTextUseCase
+            saveTextUseCase,
+            mockk()
         )
     }
 

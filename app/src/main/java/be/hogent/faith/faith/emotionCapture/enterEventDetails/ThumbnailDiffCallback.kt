@@ -9,6 +9,6 @@ class ThumbnailDiffCallback : DiffUtil.ItemCallback<Detail>() {
     }
 
     override fun areContentsTheSame(oldItem: Detail, newItem: Detail): Boolean {
-        return oldItem.fileName == newItem.fileName && oldItem.file == newItem.file
+        return oldItem == newItem
     }
 }

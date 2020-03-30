@@ -2,8 +2,6 @@ package be.hogent.faith.domain.models
 
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import org.jetbrains.annotations.TestOnly
 import org.threeten.bp.LocalDateTime
@@ -39,10 +37,6 @@ data class Event(
     val details: List<Detail>
         get() = _details
 
-    fun getLastDetail(): Detail {
-        return _details.last()
-    }
-
     fun getDetail(uuid: UUID): Detail? {
         return details.find { it.uuid == uuid }
     }
@@ -52,16 +46,8 @@ data class Event(
         _details += detail
     }
 
-    fun addNewPhotoDetail(saveFile: File): PhotoDetail {
-        val newDetail = PhotoDetail(saveFile)
-        addDetail(newDetail)
-        return newDetail
-    }
-
-    fun addNewDrawingDetail(saveFile: File): DrawingDetail {
-        val newDetail = DrawingDetail(saveFile)
-        addDetail(newDetail)
-        return newDetail
+    fun removeDetail(detail: Detail) {
+        _details.remove(detail)
     }
 
     fun addNewAudioDetail(saveFile: File) {

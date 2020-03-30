@@ -38,6 +38,7 @@ class EventViewModelSaveEmotionAvatarTest : KoinTest {
             mockk(),
             mockk(),
             mockk(),
+            mockk(),
             mockk()
         )
 

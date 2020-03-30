@@ -6,14 +6,14 @@ import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import be.hogent.faith.service.usecases.LoginUserUseCase
 import be.hogent.faith.service.usecases.LogoutUserUseCase
 import be.hogent.faith.service.usecases.RegisterUserUseCase
-import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackAudioDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackDrawingDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackExternalVideoDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveBackpackPhotoDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
+import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
@@ -22,6 +22,7 @@ import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseC
 import be.hogent.faith.service.usecases.detail.textDetail.CreateTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.OverwriteTextDetailUseCase
+import be.hogent.faith.service.usecases.event.DeleteEventDetailUseCase
 import be.hogent.faith.service.usecases.event.GetEventFilesUseCase
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
@@ -67,4 +68,5 @@ val serviceModule = module {
     factory { SaveBackpackDrawingDetailUseCase(get(), get()) }
     factory { SaveBackpackExternalVideoDetailUseCase(get(), get()) }
     factory { DeleteBackpackDetailUseCase(get(), get()) }
+    factory { DeleteEventDetailUseCase(get(), get(), get()) }
 }

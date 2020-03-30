@@ -25,7 +25,7 @@ class StorageRepository(
      */
     override fun saveEvent(event: Event): Single<Event> {
         return localStorage.saveEvent(event)
-                .flatMap { remoteStorage.saveEvent(it) }
+            .flatMap { remoteStorage.saveEvent(it) }
     }
 
     /**
@@ -43,6 +43,11 @@ class StorageRepository(
         return getFileLocally(detail).toSingle { pathProvider.getLocalDetailPath(detail) }
     }
 
+    override fun deleteDetail(detail: Detail, event: Event): Completable {
+        // TODO: aanvullen met encryptie
+        return Completable.complete()
+    }
+
     /**
      * download emotion avatar from firebase to localStorage if not present yet
      */
@@ -58,11 +63,11 @@ class StorageRepository(
      */
     override fun getEvent(event: Event): Completable {
         return getEmotionAvatar(event)
-                .concatWith(
-                        event.details.toFlowable()
-                                .concatMapCompletable {
-                                    getFileLocally(it)
-                                }
-                )
+            .concatWith(
+                event.details.toFlowable()
+                    .concatMapCompletable {
+                        getFileLocally(it)
+                    }
+            )
     }
 }

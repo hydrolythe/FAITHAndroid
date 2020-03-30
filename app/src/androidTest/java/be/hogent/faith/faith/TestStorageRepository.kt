@@ -21,4 +21,8 @@ class TestStorageRepository : IStorageRepository {
     override fun getFile(detail: Detail): Single<File> {
         return Single.just(DataFactory.randomFile())
     }
+
+    override fun deleteDetail(detail: Detail, event: Event): Completable {
+        return Completable.complete()
+    }
 }

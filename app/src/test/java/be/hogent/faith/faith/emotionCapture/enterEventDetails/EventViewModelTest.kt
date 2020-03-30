@@ -35,6 +35,7 @@ class EventViewModelTest {
             mockk(),
             mockk(),
             mockk(),
+            mockk(),
             mockk()
         )
 

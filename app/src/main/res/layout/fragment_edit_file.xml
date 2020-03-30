@@ -8,14 +8,9 @@
             type="be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel" />
     </data>
 
-
-        <FrameLayout
-            android:id="@+id/fragment_container_editFile"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-
-
-
+    <FrameLayout
+        android:id="@+id/fragment_container_editFile"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </layout>

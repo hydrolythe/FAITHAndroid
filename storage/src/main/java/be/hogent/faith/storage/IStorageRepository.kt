@@ -21,4 +21,6 @@ interface IStorageRepository {
     fun getEvent(event: Event): Completable
 
     fun getFile(detail: Detail): Single<File>
+
+    fun deleteDetail(detail: Detail, event: Event): Completable
 }

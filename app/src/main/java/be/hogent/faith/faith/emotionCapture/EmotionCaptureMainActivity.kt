@@ -214,7 +214,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     }
 
     override fun deleteDetail(detail: Detail) {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        eventViewModel.deleteDetail(detail)
     }
 
     override fun startTextDetailFragment() {

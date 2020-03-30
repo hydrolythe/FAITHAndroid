@@ -5,6 +5,7 @@ import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.repository.EventRepository
 import io.reactivex.Completable
 import io.reactivex.Flowable
@@ -40,6 +41,11 @@ open class EventRepositoryImpl(
      */
     override fun getAll(): Flowable<List<Event>> {
         return firebaseEventRepository.getAll().map { eventMapper.mapFromEntities(it) }
+    }
+
+    override fun deleteDetail(deail: Detail, event: Event): Completable {
+        // TODO: aanvullen met encryptie
+        return Completable.complete()
     }
 
     override fun delete(item: Event, user: User): Completable {

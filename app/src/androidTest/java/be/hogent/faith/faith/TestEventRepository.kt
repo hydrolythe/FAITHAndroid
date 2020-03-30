@@ -2,6 +2,7 @@ package be.hogent.faith.faith
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.repository.EventRepository
 import be.hogent.faith.util.factory.EventFactory
 import io.reactivex.Completable
@@ -24,5 +25,9 @@ class TestEventRepository : EventRepository {
 
     override fun getAll(): Flowable<List<Event>> {
         return Flowable.just(EventFactory.makeEventList())
+    }
+
+    override fun deleteDetail(deail: Detail, event: Event): Completable {
+        return Completable.complete()
     }
 }

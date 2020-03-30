@@ -201,9 +201,6 @@ class AudioDetailViewModel(
             _file.value = existingDetail.file
     }
 
-    fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {
-    }
-
     fun onRecordingStateChanged(state: RecordingState) {
         when (state) {
             RecordingState.INVALID, RecordingState.RESET -> _viewState.value =
