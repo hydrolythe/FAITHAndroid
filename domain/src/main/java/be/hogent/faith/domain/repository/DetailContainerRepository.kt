@@ -6,7 +6,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 
-interface BackpackRepository {
+interface DetailContainerRepository<DetailsContainer> {
     fun insertDetail(detail: Detail, user: User): Maybe<Detail>
 
     fun get(): Flowable<List<Detail>>

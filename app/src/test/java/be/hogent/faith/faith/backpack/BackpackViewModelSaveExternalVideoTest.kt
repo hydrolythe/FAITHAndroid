@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.backpack
 
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
-import be.hogent.faith.service.usecases.backpack.SaveBackpackExternalVideoDetailUseCase
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
@@ -15,16 +14,18 @@ import org.junit.Assert.assertEquals
 import androidx.lifecycle.Observer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
+import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 
 class BackpackViewModelSaveExternalVideoTest {
     private lateinit var viewModel: BackpackViewModel
-    private val saveExternalVideoUseCase = mockk<SaveBackpackExternalVideoDetailUseCase>(relaxed = true)
+    private val saveExternalVideoUseCase = mockk<SaveDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<ExternalVideoDetail>()
-    private val user = mockk<User>()
+    private val user = mockk<User>(relaxed = true)
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -32,10 +33,6 @@ class BackpackViewModelSaveExternalVideoTest {
     @Before
     fun setUp() {
         viewModel = BackpackViewModel(
-                mockk(),
-                mockk(),
-                mockk(),
-                mockk(),
                 saveExternalVideoUseCase,
                 mockk(),
                 getBackPackFilesDummyUseCase
@@ -44,12 +41,12 @@ class BackpackViewModelSaveExternalVideoTest {
 
     @Test
     fun backpackViewModel_saveExternalVideo_callsUseCase() {
-        val params = slot<SaveBackpackExternalVideoDetailUseCase.Params>()
+        val params = slot<SaveDetailsContainerDetailUseCase.Params>()
 
         viewModel.saveExternalVideoDetail(user, detail)
         verify { saveExternalVideoUseCase.execute(capture(params), any()) }
 
-        assertEquals(detail, params.captured.externalVideoDetail)
+        assertEquals(detail, params.captured.detail)
     }
 
     @Test
@@ -59,7 +56,7 @@ class BackpackViewModelSaveExternalVideoTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val successObserver = mockk<Observer<Int>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.externalVideoSavedSuccessFully.observeForever(successObserver)
+        viewModel.infoMessage.observeForever(successObserver)
 
         // Act
         viewModel.saveExternalVideoDetail(user, detail)
@@ -78,7 +75,7 @@ class BackpackViewModelSaveExternalVideoTest {
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val successObserver = mockk<Observer<Int>>(relaxed = true)
         viewModel.errorMessage.observeForever(errorObserver)
-        viewModel.photoDetailSavedSuccessFully.observeForever(successObserver)
+        viewModel.infoMessage.observeForever(successObserver)
 
         // Act
         viewModel.saveExternalVideoDetail(user, detail)
