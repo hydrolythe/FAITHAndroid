@@ -62,7 +62,6 @@ class BackpackScreenFragment : Fragment() {
 
     private fun updateUI() {
         detailThumbnailsAdapter = DetailThumbnailsAdapter(
-            emptyList(),
             requireNotNull(activity) as BackpackScreenActivity
         )
         backpackBinding.recyclerviewBackpack.layoutManager = GridLayoutManager(activity, 5)
@@ -77,7 +76,7 @@ class BackpackScreenFragment : Fragment() {
     private fun startListeners() {
 
         backpackViewModel.filteredDetails.observe(this, Observer { details ->
-            detailThumbnailsAdapter?.updateDetailsList(details)
+            detailThumbnailsAdapter?.submitList(details)
         })
 
         backpackBinding.backpackMenuFilter.searchBar.setOnQueryTextListener(object :

@@ -60,7 +60,6 @@ class EventDetailFragment : Fragment() {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 // Start with empty list and then fill it in
                 adapter = DetailThumbnailsAdapter(
-                    details,
                     requireNotNull(activity) as LibraryActivity
                 )
             }

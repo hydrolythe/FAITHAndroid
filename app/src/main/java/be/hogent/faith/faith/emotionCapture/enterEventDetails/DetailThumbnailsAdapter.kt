@@ -1,16 +1,14 @@
 package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
-
+import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.AUDIO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.EXTERNAL_VIDEO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.PICTURE_DETAIL
@@ -27,12 +25,9 @@ object DetailTypes {
 }
 
 class DetailThumbnailsAdapter(
-    details: List<Detail>,
     private val existingDetailNavigationListener: DetailViewHolder.ExistingDetailNavigationListener
-) : RecyclerView.Adapter<DetailViewHolder>() {
+) : ListAdapter<Detail, DetailViewHolder>(ThumbnailDiffCallback()) {
 
-    private var _details = details.toMutableList()
-    private var _detailsCopy = details.toMutableList()
     private var hide = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
@@ -48,12 +43,8 @@ class DetailThumbnailsAdapter(
         notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int {
-        return _details.size
-    }
-
     override fun getItemViewType(position: Int): Int {
-        return when (_details[position]) {
+        return when (getItem(position)) {
             is AudioDetail -> AUDIO_DETAIL
             is DrawingDetail -> PICTURE_DETAIL
             is TextDetail -> TEXT_DETAIL
@@ -64,16 +55,7 @@ class DetailThumbnailsAdapter(
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
-        holder.bind(_details[position])
+        holder.bind(getItem(position))
         holder.hide(this.hide)
-    }
-
-    fun updateDetailsList(newDetails: List<Detail>) {
-        val diffCallback = ThumbnailDiffCallback(_details, newDetails)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-        _detailsCopy.addAll(newDetails)
-        _details.clear()
-        _details.addAll(newDetails)
-        diffResult.dispatchUpdatesTo(this)
     }
 }

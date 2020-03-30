@@ -95,7 +95,6 @@ class EventDetailsFragment : Fragment() {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             // Start with empty list and then fill it in
             adapter = DetailThumbnailsAdapter(
-                emptyList(),
                 requireNotNull(activity) as EmotionCaptureMainActivity
             )
         }
@@ -125,7 +124,7 @@ class EventDetailsFragment : Fragment() {
     private fun startListeners() {
         // Update adapter when event changes
         eventViewModel.event.observe(this, Observer { event ->
-            detailThumbnailsAdapter?.updateDetailsList(event.details)
+            detailThumbnailsAdapter?.submitList(event.details)
             // check whether there are detail in de adapter. If so, show the RV, of not leave hidden
             determineRVVisibility()
         })
