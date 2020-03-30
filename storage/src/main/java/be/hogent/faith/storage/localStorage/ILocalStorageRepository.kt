@@ -1,5 +1,6 @@
 package be.hogent.faith.storage.localStorage
 
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Single
@@ -12,4 +13,5 @@ interface ILocalStorageRepository {
 
     fun isFilePresent(detail: Detail): Boolean
     fun isEmotionAvatarPresent(event: Event): Boolean
+    fun saveDetailFileForContainer(detailsContainer: DetailsContainer, detail: Detail): Single<Detail>
 }

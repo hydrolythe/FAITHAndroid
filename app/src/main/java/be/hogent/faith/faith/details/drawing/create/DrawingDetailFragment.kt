@@ -129,7 +129,7 @@ class DrawingDetailFragment : DrawFragment(),
                         drawViewModel.setCustomColor(envelope.color) })
                 .setNegativeButton(
                     getString(R.string.cancel)
-                ) { dialogInterface, i -> dialogInterface.dismiss() }
+                ) { dialogInterface, _ -> dialogInterface.dismiss() }
             builder.show()
         })
 

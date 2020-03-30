@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
+import be.hogent.faith.domain.repository.InvalidCredentialsException
 import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
@@ -11,6 +12,8 @@ import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableSingleObserver
 import timber.log.Timber
+
+const val USERNAME_REGEX = "([A-Z0-9a-z._%+-]+)"
 
 /**
  * Represents the [ViewModel] for the user during the registering process - Part 1
@@ -60,6 +63,9 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
             _userNameErrorMessage.value = R.string.registerOrLogin_username_empty
+            return false
+        } else if (!USERNAME_REGEX.toRegex().matches(userName.value!!)) {
+            _userNameErrorMessage.value = R.string.register_error_invalid_username
             return false
         }
         _userNameErrorMessage.value = R.string.empty
@@ -118,6 +124,7 @@ class RegisterUserInfoViewModel(private val isUsernameUniqueUseCase: IsUsernameU
                 Resource(
                     ResourceState.ERROR, Unit,
                     when (e) {
+                        is InvalidCredentialsException -> R.string.register_error_invalid_username
                         is NetworkError -> R.string.login_error_internet
                         else -> R.string.register_error_create_user
                     }

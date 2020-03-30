@@ -31,13 +31,13 @@ class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : Vi
         parkClicked.call()
     }
 
-    fun onBackpackClicked() {
-        Timber.i("Clicked on Backpack")
-    }
-
     fun thirdLocationClicked() {
         Timber.i("third location clicked")
         thirdLocation.call()
+    }
+    fun onBackpackClicked() {
+        Timber.i("Fourth location clicked")
+        backpackClicked.call()
     }
 
     fun onLogOutClicked() {

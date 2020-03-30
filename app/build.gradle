@@ -57,8 +57,8 @@ android {
         enabled = true
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
     }
     buildToolsVersion = '28.0.3'
 
@@ -91,6 +91,7 @@ dependencies {
     def androidDependencies = rootProject.ext.androidDependencies
     def uiDependencies = rootProject.ext.uiDependencies
 
+
     implementation commonDependencies.kotlin
     implementation commonDependencies.threeTenABP
     implementation commonDependencies.rxjava
@@ -107,16 +108,13 @@ dependencies {
     implementation androidDependencies.viewmodellifecycle
 
     implementation uiDependencies.glide
-    // implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
     implementation uiDependencies.legacysupport
     implementation uiDependencies.googleplay
-    //implementation 'com.google.android.gms:play-services-plus:16.0.0'
-    //implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
+
+    implementation uiDependencies.lottie
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
     implementation uiDependencies.rv_selection
@@ -129,8 +127,6 @@ dependencies {
     implementation uiDependencies.materialdrawer
     implementation uiDependencies.annotation
     implementation uiDependencies.material
-
-    implementation uiDependencies.lottie
 
 
     implementation "com.github.skydoves:colorpickerpreference:2.0.0"
@@ -151,7 +147,8 @@ dependencies {
     testImplementation testDependencies.mockk
     testImplementation testDependencies.coreTesting
     testImplementation testDependencies.koinTesting
-
+    testImplementation testDependencies.hamcrest
+    testImplementation testDependencies.hamcrestLibrary
     implementation testDependencies.firebase_analytics
     implementation testDependencies.crashlytics
     implementation firebaseDependencies.performance
@@ -169,7 +166,7 @@ dependencies {
     androidTestImplementation testDependencies.koinTesting
 
     androidTestImplementation androidTestDependencies.uiAutomator
-    implementation 'androidx.gridlayout:gridlayout:1.0.0'
+
 
 
 }

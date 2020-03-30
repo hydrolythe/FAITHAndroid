@@ -69,7 +69,7 @@ class CityScreenFragment : Fragment() {
             navigation?.logOut()
         })
         cityScreenViewModel.backpackClicked.observe(this, Observer {
-            // TODO Backpack
+            navigation?.startBackpackFragment()
         })
 
         userViewModel.user.observe(this, Observer { user ->
@@ -91,5 +91,6 @@ class CityScreenFragment : Fragment() {
         fun startEmotionCapture()
         fun startOverviewEventsFragment()
         fun logOut()
+        fun startBackpackFragment()
     }
 }
