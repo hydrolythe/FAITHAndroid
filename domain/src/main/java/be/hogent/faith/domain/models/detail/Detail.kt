@@ -18,8 +18,7 @@ sealed class Detail(
     var fileName: String = "",
     val uuid: UUID = UUID.randomUUID(),
     //YoutubeVideo
-    val videoId: String = "",
-    val description: String = ""
+    val videoId: String = ""
 ) : Serializable
 
 class DrawingDetail(
@@ -54,6 +53,5 @@ class YoutubeVideoDetail(
     file: File,
     fileName: String = "",
     uuid: UUID = UUID.randomUUID(),
-    videoId: String,
-    description: String
-) : Detail(file, fileName, uuid, videoId, description)
+    videoId: String
+) : Detail(file, fileName, uuid, videoId)

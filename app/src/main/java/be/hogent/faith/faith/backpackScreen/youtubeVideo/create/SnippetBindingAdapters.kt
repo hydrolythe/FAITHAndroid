@@ -10,10 +10,3 @@ fun TextView.setSnippetTitle(item: YoutubeVideoDetail?) {
         text = item.fileName
     }
 }
-
-@BindingAdapter("snippet_description")
-fun TextView.setSnippetDescription(item: YoutubeVideoDetail?) {
-    item?.let {
-        text = item.description
-    }
-}

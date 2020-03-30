@@ -49,6 +49,10 @@ class YoutubeVideoDetailViewModel (
     val videoIsSaved: LiveData<Detail>
         get() = _videoIsSaved
 
+    private val _backToBackpack = SingleLiveEvent<Any>()
+    val backToBackpack: LiveData<Any>
+        get() = _backToBackpack
+
     private val viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
@@ -92,6 +96,10 @@ class YoutubeVideoDetailViewModel (
         override fun onError(e: Throwable) {
             _errorMessage.postValue(R.string.error_save_audio_failed)
         }
+    }
+
+    fun goBackToBackpack(){
+        _backToBackpack.call()
     }
 
     fun clearSnippetsList() {

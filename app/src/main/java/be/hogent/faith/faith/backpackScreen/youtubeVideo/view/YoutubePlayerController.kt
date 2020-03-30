@@ -21,6 +21,9 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTube
 
 /**
  * Custom YoutubePlayer UI controller
+ * Used to customize our player and make it fit our lay-outs
+ * Written to make sure we have complete control over each player state
+ * Consists of 3 screens: empty player screen, on touch screen with pause button and a pause screen
  */
 class YoutubePlayerController(
     customPlayerUi: View,
@@ -30,7 +33,6 @@ class YoutubePlayerController(
 
     private var playerTracker: YouTubePlayerTracker? = null
     private var seekBar: SeekBar? = null
-    private var panel : View? = null
     private var playButton : ImageButton? = null
     private var pauseButton : ImageButton? = null
     private var stopButton : ImageButton? = null
@@ -38,10 +40,8 @@ class YoutubePlayerController(
     private var currentTimeLabel : TextView? = null
     private var durationLabel : TextView? = null
     private var title : TextView? = null
-    private var description : TextView? = null
     private var thumbnailImg : ImageView? = null
     private var gradient : ImageView? = null
-    private var slash : TextView? = null
     private var pauseScreen : ConstraintLayout? = null
     private var playerContainer : ConstraintLayout? = null
     private var playerOnTouchScreen : ConstraintLayout? = null
@@ -55,15 +55,14 @@ class YoutubePlayerController(
         playerTracker = YouTubePlayerTracker()
         youTubePlayer.addListener(playerTracker!!)
 
-        initViews(customPlayerUi)
+        updateUi(customPlayerUi)
+        startListeners()
     }
 
-    private fun initViews(customPlayerUi: View){
-        panel = customPlayerUi.findViewById(R.id.panel)
+    private fun updateUi(customPlayerUi: View){
         playButton = customPlayerUi.findViewById(R.id.play_pause_button)
         pauseButton = customPlayerUi.findViewById(R.id.btn_pause_video)
         title = customPlayerUi.findViewById(R.id.txt_title_player)
-        description = customPlayerUi.findViewById(R.id.txt_description_player)
         thumbnailImg = customPlayerUi.findViewById(R.id.img_thumbnail_player)
         gradient = customPlayerUi.findViewById(R.id.gradient_blue_player)
         pauseScreen = customPlayerUi.findViewById(R.id.container_player_pause)
@@ -75,25 +74,25 @@ class YoutubePlayerController(
         currentTimeLabel = customPlayerUi.findViewById(R.id.video_current_time)
         chronometer = customPlayerUi.findViewById(R.id.video_current_time_chrono)
         durationLabel = customPlayerUi.findViewById(R.id.video_duration)
-        slash = customPlayerUi.findViewById(R.id.txt_slash_player)
         seekBarContainer = customPlayerUi.findViewById(R.id.container_player_seekbar)
 
         title!!.text = youtubeVideoDetail.fileName
-        description!!.text = youtubeVideoDetail.description
         
 
         /**
          * Thumbnail image from YouTube is the background of the pause screen
          */
         Glide.with(thumbnailImg!!).load(getHighQualityThumbnailUrl(youtubeVideoDetail.videoId)).into(thumbnailImg!!)
+    }
 
+    fun startListeners(){
         playButton!!.setOnClickListener {
             youTubePlayer.play()
             viewPlayerScreen()
         }
 
         pauseButton!!.setOnClickListener {
-          //  alphaAnim!!.cancel()
+            //  alphaAnim!!.cancel()
             youTubePlayer.pause()
             viewPauseMenu()
         }
@@ -107,7 +106,7 @@ class YoutubePlayerController(
          */
         playerContainer!!.setOnClickListener {
             if(currentState == YoutubePlayerState.PLAYER_SCREEN){
-            viewPlayerScreenWithOptions()
+                viewPlayerScreenWithOptions()
             }
             else if (currentState == YoutubePlayerState.PLAYER_SCREEN_OPTIONS
                 && currentState != YoutubePlayerState.PLAYER_SCREEN_SEEKING && currentState != YoutubePlayerState.PAUSE_MENU_SEEKING){
@@ -150,12 +149,16 @@ class YoutubePlayerController(
         if(state == PlayerConstants.PlayerState.PAUSED){
           //  if(alphaAnim != null)
          //   alphaAnim!!.cancel()
+            viewPauseMenu()
         }
         else if(state == PlayerConstants.PlayerState.BUFFERING){
             viewPlayerScreen()
         }
     }
 
+    /**
+     * Empty player screen
+     */
     private fun viewPlayerScreen() {
         currentState = YoutubePlayerState.PLAYER_SCREEN
 
@@ -164,6 +167,9 @@ class YoutubePlayerController(
         pauseScreen!!.visibility = View.GONE
     }
 
+    /**
+     * A screen with pause button, seekbar and back button appears on player screen clicked
+     */
     private fun viewPlayerScreenWithOptions(){
         currentState = YoutubePlayerState.PLAYER_SCREEN_OPTIONS
 
@@ -187,6 +193,9 @@ class YoutubePlayerController(
         playerOnTouchScreen!!.animation = alphaAnim*/
     }
 
+    /**
+     * Screen that's when in pause state consisting of video thumbnail as background, seek bar and play button
+     */
     private fun viewPauseMenu() {
         currentState = YoutubePlayerState.PAUSE_MENU
 
@@ -197,6 +206,9 @@ class YoutubePlayerController(
         seekBarContainer!!.visibility = View.VISIBLE
     }
 
+    /**
+     * When seeking in pause state a current video preview is shown
+     */
     private fun startSeeking(){
         seekBarContainer!!.visibility = View.VISIBLE
 

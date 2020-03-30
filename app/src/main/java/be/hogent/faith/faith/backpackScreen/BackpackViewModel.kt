@@ -96,6 +96,10 @@ class BackpackViewModel(
             detailFilter.hasExternalVideoDetailFilter.isEnabled = enabled
             value = detailFilter.filter(details)
         }
+        addSource(videoFilterEnabled){ enabled ->
+            detailFilter.hasVideoDetailFilter.isEnabled = enabled
+            value = detailFilter.filter(details)
+        }
     }
 
     private var _currentFile = MutableLiveData<Detail>()

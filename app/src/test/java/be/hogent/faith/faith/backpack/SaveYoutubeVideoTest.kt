@@ -38,7 +38,7 @@ class SaveYoutubeVideoTest {
             saveVideoUseCase
         )
 
-        detail = YoutubeVideoDetail(File(""), "Video", UUID.randomUUID(), "", "")
+        detail = YoutubeVideoDetail(File(""), "Video", videoId = "")
     }
 
     @Test

@@ -50,16 +50,15 @@ object DetailMapper : Mapper<DetailEntity, Detail> {
                 UUID.fromString(entity.uuid)
             )
             DetailType.EXTERNAL_VIDEO -> ExternalVideoDetail(
-                    FileConverter().toFile(entity.file),
-                    entity.fileName,
-                    UUID.fromString(entity.uuid)
+                FileConverter().toFile(entity.file),
+                entity.fileName,
+                UUID.fromString(entity.uuid)
             )
             DetailType.VIDEO -> YoutubeVideoDetail(
                 FileConverter().toFile(entity.file),
                 entity.fileName,
                 UUID.fromString(entity.uuid),
-                entity.videoId,
-                entity.description
+                entity.videoId
             )
             else -> throw ClassCastException("Unknown DetailEntity subclass encountered")
         }
@@ -67,7 +66,7 @@ object DetailMapper : Mapper<DetailEntity, Detail> {
 
     override fun mapToEntity(model: Detail): DetailEntity {
         return DetailEntity(
-            FileConverter().toString(model.file), model.fileName, model.uuid.toString(), model.videoId, model.description, when (model) {
+            FileConverter().toString(model.file), model.fileName, model.uuid.toString(), model.videoId, when (model) {
                 is AudioDetail -> DetailType.AUDIO
                 is TextDetail -> DetailType.TEXT
                 is DrawingDetail -> DetailType.DRAWING

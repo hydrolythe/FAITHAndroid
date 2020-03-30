@@ -136,6 +136,8 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
         /**
          * Based on Instagram search. Delay of 400ms to lower the amount of requests send to the YouTube Data API.
          * Delay starts when the user stops writing
+         *
+         * TODO request and usage monitoring: if too much --> use a button instead
          */
         youtubeVideoDetailBinding.editTextSearchVideo.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(c: CharSequence, start: Int, before: Int, count: Int) {
@@ -163,6 +165,10 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
 
             popupWindow.dismiss()
             detailFinishedListener.onDetailFinished(it)
+            navigation?.backToEvent()
+        })
+
+        youtubeVideoDetailViewModel.backToBackpack.observe(this, Observer {
             navigation?.backToEvent()
         })
     }

@@ -2,6 +2,7 @@ package be.hogent.faith.service.network
 
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import java.io.File
+import java.util.UUID
 
 /**
  * Generated from JSON-file to capture the YouTube API results
@@ -29,9 +30,7 @@ fun asDomainModel(items: List<Item>): List<YoutubeVideoDetail> {
         YoutubeVideoDetail(
             file = File(""),
             fileName = it.snippet.title,
-            videoId = it.id.videoId,
-            description = it.snippet.description
+            videoId =  it.id.videoId
         )
     }
 }
-

@@ -6,6 +6,7 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 
 class CombinedDetailFilter {
     val titleFilter = DetailNameFilter("")
@@ -15,6 +16,7 @@ class CombinedDetailFilter {
     val hasAudioDetailFilter = ToggleableDetailFilter(DetailTypeFilter(AudioDetail::class))
     val hasDrawingDetailFilter = ToggleableDetailFilter(DetailTypeFilter(DrawingDetail::class))
     val hasExternalVideoDetailFilter = ToggleableDetailFilter(DetailTypeFilter(ExternalVideoDetail::class))
+    val hasVideoDetailFilter = ToggleableDetailFilter(DetailTypeFilter(YoutubeVideoDetail::class))
 
     fun filter(details: List<Detail>): List<Detail> {
         val filteredDetails = mutableListOf<Detail>()
@@ -32,6 +34,9 @@ class CombinedDetailFilter {
         }
         if (hasExternalVideoDetailFilter.isEnabled) {
             filteredDetails.addAll(details.filter(hasExternalVideoDetailFilter))
+        }
+        if (hasVideoDetailFilter.isEnabled){
+            filteredDetails.addAll(details.filter(hasVideoDetailFilter))
         }
 
         if (filteredDetails.isEmpty()) {
