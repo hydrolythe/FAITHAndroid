@@ -100,19 +100,16 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         replaceFragment(BackpackDetailFragment.TextFragment.newInstance(), R.id.fragment)
         setLayoutListenersOnNewDetailOpened()
     }
-
-    private fun setLayoutListenersOnNewDetailOpened() {
-        backpackViewModel.viewButtons(false)
-        backpackViewModel.setOpenDetailType(OpenDetailMode.NEW)
+    override fun startExternalFileDetailFragment() {
+        replaceFragment(BackpackDetailFragment.ExternalFileFragment.newInstance(), R.id.fragment)
+        setLayoutListenersOnNewDetailOpened()
     }
-
     override fun startVideoDetailFragment() {
         Toast.makeText(this, "Nog niet beschikbaar", Toast.LENGTH_SHORT).show()
     }
-
-    override fun startExternalFileDetailFragment() {
-        replaceFragment(BackpackDetailFragment.ExternalFileFragment.newInstance(), R.id.fragment)
+    private fun setLayoutListenersOnNewDetailOpened() {
         backpackViewModel.viewButtons(false)
+        backpackViewModel.setOpenDetailType(OpenDetailMode.NEW)
     }
 
     override fun openDetailScreenFor(detail: Detail) {
