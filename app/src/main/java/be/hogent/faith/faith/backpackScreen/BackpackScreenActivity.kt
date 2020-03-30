@@ -83,27 +83,27 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
 
     override fun startPhotoDetailFragment() {
         replaceFragment(BackpackDetailFragment.PhotoFragment.newInstance(), R.id.fragment)
-        startFragmentInitialisers()
+        setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startAudioDetailFragment() {
         replaceFragment(BackpackDetailFragment.AudioFragment.newInstance(), R.id.fragment)
-        startFragmentInitialisers()
+        setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startDrawingDetailFragment() {
         replaceFragment(BackpackDetailFragment.DrawingFragment.newInstance(), R.id.fragment)
-        startFragmentInitialisers()
+        setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startTextDetailFragment() {
         replaceFragment(BackpackDetailFragment.TextFragment.newInstance(), R.id.fragment)
-        startFragmentInitialisers()
+        setLayoutListenersOnNewDetailOpened()
     }
 
-    private fun startFragmentInitialisers() {
+    private fun setLayoutListenersOnNewDetailOpened() {
         backpackViewModel.viewButtons(false)
-        backpackViewModel.setOpenDetailType(OpenDetailType.NEW)
+        backpackViewModel.setOpenDetailType(OpenDetailMode.NEW)
     }
 
     override fun startVideoDetailFragment() {
@@ -116,7 +116,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun openDetailScreenFor(detail: Detail) {
-        backpackViewModel.setOpenDetailType(OpenDetailType.EDIT)
+        backpackViewModel.setOpenDetailType(OpenDetailMode.EDIT)
         backpackViewModel.setCurrentFile(detail)
         replaceFragment(
                 BackpackDetailFragment.newInstance(detail),

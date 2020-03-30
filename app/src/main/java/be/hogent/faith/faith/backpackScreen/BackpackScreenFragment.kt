@@ -93,7 +93,7 @@ class BackpackScreenFragment : Fragment() {
         })
 
         backpackViewModel.isInEditMode.observe(this, Observer {
-            if (backpackViewModel.isInEditMode.value == OpenState.OPEN) {
+            if (backpackViewModel.isInEditMode.value == EditModeState.OPEN) {
                 detailThumbnailsAdapter!!.hide(false)
                 backpackViewModel.viewButtons(false)
             } else {

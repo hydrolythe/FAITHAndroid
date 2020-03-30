@@ -9,6 +9,9 @@
         <variable
             name="backpackViewModel"
             type="be.hogent.faith.faith.backpackScreen.BackpackViewModel" />
+        <variable
+            name="editModeState"
+            type="be.hogent.faith.faith.backpackScreen.EditModeState" />
         <import type="android.view.View" />
     </data>
 
@@ -117,7 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/search_btn"
-            android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
+            android:alpha="@{backpackViewModel.isInEditMode == editModeState.OPEN ? 0.5F : 1F}"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -127,7 +130,7 @@
             android:id="@+id/btn_backpack_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
+            android:alpha="@{backpackViewModel.isInEditMode == editModeState.OPEN ? 0.5F : 1F}"
             android:background="@drawable/add_btn"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -138,7 +141,7 @@
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
             android:layout_marginStart="16dp"
-            android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
+            android:alpha="@{backpackViewModel.isInEditMode == editModeState.OPEN ? 0.5F : 1F}"
             android:background="@drawable/ic_return"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             android:contentDescription="@string/cancel"

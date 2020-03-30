@@ -25,16 +25,6 @@ import be.hogent.faith.service.usecases.backpack.SaveBackpackTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.subscribers.DisposableSubscriber
 
-object OpenState {
-    const val OPEN = 2
-    const val CLOSED = 3
-}
-
-object OpenDetailType {
-    const val NEW = 1
-    const val EDIT = 2
-}
-
 class BackpackViewModel(
     private val saveBackpackTextDetailUseCase: SaveBackpackTextDetailUseCase,
     private val saveBackpackAudioDetailUseCase: SaveBackpackAudioDetailUseCase,
@@ -138,8 +128,8 @@ class BackpackViewModel(
     private val _goToCityScreen = SingleLiveEvent<Any>()
     val goToCityScreen: LiveData<Any> = _goToCityScreen
 
-    private val _isInEditMode = MutableLiveData<Int>()
-    val isInEditMode: LiveData<Int> = _isInEditMode
+    private val _isInEditMode = MutableLiveData<EditModeState>()
+    val isInEditMode: LiveData<EditModeState> = _isInEditMode
 
     private val _showSaveDialog = SingleLiveEvent<Detail>()
     val showSaveDialog: LiveData<Detail> = _showSaveDialog
@@ -147,8 +137,8 @@ class BackpackViewModel(
     private val _goToDetail = SingleLiveEvent<Detail>()
     val goToDetail: LiveData<Detail> = _goToDetail
 
-    private val _openDetailType = SingleLiveEvent<Int>()
-    val openDetailType: LiveData<Int> = _openDetailType
+    private val _openDetailMode = SingleLiveEvent<OpenDetailMode>()
+    val openDetailMode: LiveData<OpenDetailMode> = _openDetailMode
 
     init {
         loadDetails()
@@ -179,7 +169,7 @@ class BackpackViewModel(
     val detailDeletedSuccessfully: LiveData<Int> = _detailDeletedSuccessfully
 
     fun initialize() {
-        _isInEditMode.postValue(OpenState.CLOSED)
+        _isInEditMode.postValue(EditModeState.CLOSED)
     }
 
     fun onFilterPhotosClicked() {
@@ -211,10 +201,10 @@ class BackpackViewModel(
     }
 
     fun setIsInEditMode() {
-        if (isInEditMode.value == OpenState.CLOSED)
-            _isInEditMode.postValue(OpenState.OPEN)
-        else if (isInEditMode.value == OpenState.OPEN)
-            _isInEditMode.postValue(OpenState.CLOSED)
+        if (isInEditMode.value == EditModeState.CLOSED)
+            _isInEditMode.postValue(EditModeState.OPEN)
+        else if (isInEditMode.value == EditModeState.OPEN)
+            _isInEditMode.postValue(EditModeState.CLOSED)
     }
 
     fun showSaveDialog(detail: Detail) {
@@ -232,8 +222,8 @@ class BackpackViewModel(
         _currentFile.postValue(null)
     }
 
-    fun setOpenDetailType(openDetailType: Int) {
-        _openDetailType.postValue(openDetailType)
+    fun setOpenDetailType(openDetailMode: OpenDetailMode) {
+        _openDetailMode.postValue(openDetailMode)
     }
 
     fun viewButtons(viewButtons: Boolean) {
@@ -365,3 +355,14 @@ class BackpackViewModel(
         super.onCleared()
     }
 }
+
+/**
+ * Holds the state of the edit mode: open or closed
+ */
+enum class EditModeState { OPEN, CLOSED }
+
+/**
+ * If a detail is new --> savedialog is shown
+ * When editing an existing detail --> savedialog isn't shown
+ */
+enum class OpenDetailMode {NEW, EDIT}

@@ -46,7 +46,7 @@ abstract class BackpackDetailFragment : Fragment() {
         editDetailBinding.lifecycleOwner = this
 
         backpackViewModel.showSaveDialog.observe(this, Observer {
-            if (it != null && backpackViewModel.openDetailType.value != OpenDetailType.EDIT)
+            if (it != null && backpackViewModel.openDetailMode.value != OpenDetailMode.EDIT)
                 showSaveDialog(it)
             else
                 backpackViewModel.saveCurrentDetail(userViewModel.user.value!!, it)
