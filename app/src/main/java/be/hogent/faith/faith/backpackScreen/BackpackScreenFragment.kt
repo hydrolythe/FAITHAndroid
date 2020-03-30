@@ -101,10 +101,10 @@ class BackpackScreenFragment : Fragment() {
 
         backpackViewModel.isInEditMode.observe(this, Observer {
             if (backpackViewModel.isInEditMode.value == OpenState.OPEN) {
-                detailThumbnailsAdapter!!.hide(false)
+                detailThumbnailsAdapter!!.setItemsAsDeletable(true)
                 backpackViewModel.viewButtons(false)
             } else {
-                detailThumbnailsAdapter!!.hide(true)
+                detailThumbnailsAdapter!!.setItemsAsDeletable(false)
                 backpackViewModel.viewButtons(true)
             }
         })

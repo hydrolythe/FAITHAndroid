@@ -90,7 +90,7 @@ sealed class DetailViewHolder(
     private val existingDetailNavigationListener: ExistingDetailNavigationListener
 ) : RecyclerView.ViewHolder(thumbnailView), KoinComponent {
 
-    fun bind(detail: Detail) {
+    fun bind(detail: Detail, isDeletable: Boolean) {
         load(detail).into(thumbnailView.detail_img)
         thumbnailView.setTag(R.id.TAG_DETAIL, detail)
         thumbnailView.detail_img.setOnClickListener {
@@ -100,11 +100,12 @@ sealed class DetailViewHolder(
             existingDetailNavigationListener.deleteDetail(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
         }
         thumbnailView.text_detail_title.text = detail.fileName
+        setDeletable(isDeletable)
     }
 
-    fun hide(hide: Boolean) {
+    private fun setDeletable(deletable: Boolean) {
         val deleteBtn = thumbnailView.btn_delete_detailRv
-        if (hide) {
+        if (!deletable) {
             deleteBtn.visibility = View.INVISIBLE
             deleteBtn.isClickable = false
         } else {

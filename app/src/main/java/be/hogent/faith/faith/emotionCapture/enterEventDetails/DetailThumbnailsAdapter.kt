@@ -28,7 +28,11 @@ class DetailThumbnailsAdapter(
     private val existingDetailNavigationListener: DetailViewHolder.ExistingDetailNavigationListener
 ) : ListAdapter<Detail, DetailViewHolder>(ThumbnailDiffCallback()) {
 
-    private var hide = true
+    /**
+     * Indicates whether the items shown in the RecyclerView should show a "delete" icon, and respond
+     * to clicks on this icon.
+     */
+    private var itemsAreDeletable = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         return DetailViewHolderFactory.createViewHolder(
@@ -38,8 +42,8 @@ class DetailThumbnailsAdapter(
         )
     }
 
-    fun hide(hide: Boolean) {
-        this.hide = hide
+    fun setItemsAsDeletable(deletable: Boolean) {
+        this.itemsAreDeletable = deletable
         notifyDataSetChanged()
     }
 
@@ -55,7 +59,6 @@ class DetailThumbnailsAdapter(
     }
 
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
-        holder.bind(getItem(position))
-        holder.hide(this.hide)
+        holder.bind(getItem(position), itemsAreDeletable)
     }
 }
