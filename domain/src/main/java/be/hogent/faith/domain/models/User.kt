@@ -17,6 +17,8 @@ data class User(
 
     val backpack = Backpack()
 
+    val cinema = Cinema()
+
     fun addEvent(event: Event) {
         if (event.title.isNullOrBlank()) {
             throw IllegalArgumentException("Een gebeurtenis moet een ingevulde titel hebben.")

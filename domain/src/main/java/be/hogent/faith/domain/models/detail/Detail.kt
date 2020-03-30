@@ -7,6 +7,7 @@ import java.util.UUID
 /**
  * A detail that can be part of an event, solution,...
  */
+const val DURATION_DEFAULT = 5
 
 sealed class Detail(
     /**
@@ -17,7 +18,12 @@ sealed class Detail(
     var file: File,
     var fileName: String = "",
     val uuid: UUID = UUID.randomUUID()
-) : Serializable
+) : Serializable {
+    open fun getDuration(): Int {
+        // TODO implement for the classes that do not return the default
+        return DURATION_DEFAULT
+    }
+}
 
 class DrawingDetail(
     file: File,
@@ -42,11 +48,13 @@ class AudioDetail(
     fileName: String = "",
     uuid: UUID = UUID.randomUUID()
 ) : Detail(file, fileName, uuid)
+
 class VideoDetail(
     file: File,
     fileName: String = "",
     uuid: UUID = UUID.randomUUID()
 ) : Detail(file, fileName, uuid)
+
 class ExternalVideoDetail(
     file: File,
     fileName: String = "",
