@@ -48,7 +48,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="#1A2E3F" />
+            android:src="#1A2E3F" />
 
         <ImageView
             android:id="@+id/gradient_blue_player"
