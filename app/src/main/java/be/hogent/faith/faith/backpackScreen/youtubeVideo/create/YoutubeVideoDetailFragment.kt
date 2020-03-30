@@ -129,6 +129,14 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
             backpackViewModel.saveYoutubeVideoDetail(it.fileName, userViewModel.user.value!!, it)
         })
 
+        backpackViewModel.infoMessage.observe(this, Observer {
+            if (it == R.string.save_video_success) {
+                popupWindow.dismiss()
+                detailFinishedListener.onDetailFinished(youtubeVideoDetailViewModel.savedDetail.value!!)
+                navigation?.backToEvent()
+            }
+        })
+
         /**
          * Based on Instagram search. Delay of 400ms to lower the amount of requests send to the YouTube Data API.
          * Delay starts when the user stops writing
@@ -154,15 +162,6 @@ class YoutubeVideoDetailFragment : Fragment(), DetailFragment<YoutubeVideoDetail
                 }, 500)
             }
             })
-
-        /*   youtubeVideoDetailViewModel.videoIsSaved.observe(this, Observer {
-            Toast.makeText(context, getString(R.string.save_video_success), Toast.LENGTH_SHORT)
-                .show()
-
-            popupWindow.dismiss()
-            detailFinishedListener.onDetailFinished(it)
-            navigation?.backToEvent()
-        })*/
 
         youtubeVideoDetailViewModel.backToBackpack.observe(this, Observer {
             navigation?.backToEvent()

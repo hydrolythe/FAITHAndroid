@@ -21,6 +21,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTube
  * Used to customize our player and make it fit our lay-outs
  * Written to make sure we have complete control over each player state
  * Consists of 3 screens: empty player screen, on touch screen with pause button and a pause screen
+ * It's easy to change the screens and lay-out
  */
 class YoutubePlayerController(
     customPlayerUi: View,
@@ -93,6 +94,9 @@ class YoutubePlayerController(
             viewPauseMenu()
         }
 
+        /**
+         * Stop = when the video ends to avoid seeing the "watch more videos" screen
+         */
         stopButton!!.setOnClickListener {
             youTubePlayer.seekTo(max)
         }
@@ -101,15 +105,16 @@ class YoutubePlayerController(
          * When the playerscreen is touched the seekbar, back button and pause button are shown for 5 seconds
          */
         playerContainer!!.setOnClickListener {
-            if (currentState == YoutubePlayerState.PLAYER_SCREEN) {
-                viewPlayerScreenWithOptions()
-            } else if (currentState == YoutubePlayerState.PLAYER_SCREEN_OPTIONS &&
-                currentState != YoutubePlayerState.PLAYER_SCREEN_SEEKING && currentState != YoutubePlayerState.PAUSE_MENU_SEEKING) {
-                playerOnTouchScreen!!.visibility = View.GONE
-                seekBarContainer!!.visibility = View.GONE
-                currentState = YoutubePlayerState.PLAYER_SCREEN
-            } else if (currentState == YoutubePlayerState.PAUSE_MENU_SEEKING)
-                viewPauseMenu()
+            if (currentState != YoutubePlayerState.PAUSE_MENU_SEEKING || currentState != YoutubePlayerState.PAUSE_MENU) {
+                if (currentState == YoutubePlayerState.PLAYER_SCREEN) {
+                    viewPlayerScreenWithOptions()
+                } else if (currentState == YoutubePlayerState.PLAYER_SCREEN_OPTIONS &&
+                    currentState != YoutubePlayerState.PLAYER_SCREEN_SEEKING && currentState != YoutubePlayerState.PAUSE_MENU_SEEKING) {
+                    playerOnTouchScreen!!.visibility = View.GONE
+                    seekBarContainer!!.visibility = View.GONE
+                    currentState = YoutubePlayerState.PLAYER_SCREEN
+                }
+            }
         }
 
         seekBar!!.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -169,6 +174,8 @@ class YoutubePlayerController(
         playerOnTouchScreen!!.visibility = View.VISIBLE
         seekBarContainer!!.visibility = View.VISIBLE
         pauseScreen!!.visibility = View.GONE
+
+        // TODO add animation when everything else is working
 /*
         alphaAnim = AlphaAnimation(1.0f, 0.0f)
         alphaAnim!!.startOffset = 3000
