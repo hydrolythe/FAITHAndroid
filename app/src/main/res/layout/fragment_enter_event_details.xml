@@ -47,7 +47,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <ImageButton
-                android:id="@+id/btn_park_delete"
+                android:id="@+id/btn_event_delete"
                 android:layout_width="@dimen/icon_small"
                 android:layout_height="@dimen/icon_small"
                 android:layout_margin="16dp"

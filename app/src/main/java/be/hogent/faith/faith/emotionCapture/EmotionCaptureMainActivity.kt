@@ -22,7 +22,7 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailFragmentWithEmotionAvatar
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.util.replaceFragment
@@ -34,7 +34,7 @@ import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class EmotionCaptureMainActivity : AppCompatActivity(),
-    EventDetailsFragment.EventDetailsNavigationListener,
+    EventFragment.EventDetailsNavigationListener,
     DetailFragmentWithEmotionAvatar.EditDetailNavigationListener,
     RecordAudioFragment.AudioScreenNavigation,
     DrawFragment.DrawingScreenNavigation,
@@ -71,7 +71,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
         // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
-            val fragment = EventDetailsFragment.newInstance()
+            val fragment = EventFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .add(R.id.emotionCapture_fragment_container, fragment)
                 .commit()
@@ -237,7 +237,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     override fun onBackPressed() {
         val f =
             supportFragmentManager.findFragmentById(R.id.emotionCapture_fragment_container)
-        if (f is EventDetailsFragment) {
+        if (f is EventFragment) {
             showExitAlert()
         } else {
             super.onBackPressed()

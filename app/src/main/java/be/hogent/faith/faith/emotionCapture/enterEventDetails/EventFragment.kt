@@ -31,7 +31,7 @@ import java.util.UUID
 
 private const val ARG_EVENTUUID = "eventUUID"
 
-class EventDetailsFragment : Fragment() {
+class EventFragment : Fragment() {
 
     private var navigation: EventDetailsNavigationListener? = null
 
@@ -70,7 +70,7 @@ class EventDetailsFragment : Fragment() {
                 false
             )
         eventDetailsBinding.eventViewModel = eventViewModel
-        eventDetailsBinding.lifecycleOwner = this@EventDetailsFragment
+        eventDetailsBinding.lifecycleOwner = this@EventFragment
 
         return eventDetailsBinding.root
     }
@@ -117,8 +117,10 @@ class EventDetailsFragment : Fragment() {
     private fun determineRVVisibility() {
         if (detailThumbnailsAdapter!!.currentList.isEmpty()) {
             eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.GONE
+            eventDetailsBinding.btnEventDelete.visibility = View.GONE
         } else {
             eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.VISIBLE
+            eventDetailsBinding.btnEventDelete.visibility = View.VISIBLE
         }
     }
 
@@ -220,8 +222,8 @@ class EventDetailsFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(eventUuid: UUID? = null): EventDetailsFragment {
-            return EventDetailsFragment().apply {
+        fun newInstance(eventUuid: UUID? = null): EventFragment {
+            return EventFragment().apply {
                 arguments = Bundle().apply {
                     eventUuid?.let {
                         putSerializable(ARG_EVENTUUID, it)
