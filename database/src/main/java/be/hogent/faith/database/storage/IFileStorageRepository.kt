@@ -30,6 +30,5 @@ interface IFileStorageRepository {
      * Downloads a detail's file, and returns it.
      */
     fun downloadFile(detail: Detail): Single<File> {
-
     }
 }

@@ -76,7 +76,6 @@ object DetailMapper : Mapper<EncryptedDetailEntity, EncryptedDetail> {
         }
     }
 
-
     override fun mapToEntity(model: EncryptedDetail): EncryptedDetailEntity {
         return EncryptedDetailEntity(
             file = model.file.path,
@@ -105,5 +104,4 @@ object DetailMapper : Mapper<EncryptedDetailEntity, EncryptedDetail> {
     override fun mapFromEntities(entities: List<EncryptedDetailEntity>): List<EncryptedDetail> {
         return entities.map(DetailMapper::mapFromEntity)
     }
-
 }

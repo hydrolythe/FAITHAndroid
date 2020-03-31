@@ -7,7 +7,7 @@ import java.util.UUID
  */
 data class DetailEntity(
     var file: String = "",
-    var fileName : String = "",
+    var fileName: String = "",
     val uuid: String = UUID.randomUUID().toString(),
     val type: DetailType? = null
 )
@@ -15,4 +15,3 @@ data class DetailEntity(
 enum class DetailType {
     TEXT, AUDIO, DRAWING, PHOTO, VIDEO, EXTERNAL_VIDEO
 }
-
