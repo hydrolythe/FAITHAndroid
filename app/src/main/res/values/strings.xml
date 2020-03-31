@@ -233,5 +233,6 @@
     <string name="rv_btn_detail">Knop bekijk bestand</string>
     <string name="rv_btn_delete_detail">Knop verwijder bestand</string>
     <string name="rv_detail_title">Detail Title</string>
->>>>>>> dev
+    <string name="unauthorized_file_type">Dit bestandstype is niet toegelaten.</string>
+    >>>>>>> dev
 </resources>

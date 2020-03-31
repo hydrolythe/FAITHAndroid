@@ -188,17 +188,15 @@ abstract class DetailsContainerViewModel(
 
     fun saveExternalVideoDetail(user: User, detail: ExternalVideoDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
-        saveDetailsContainerDetailUseCase.execute(
-                params,
-                object : DisposableCompletableObserver() {
-                    override fun onComplete() {
-                        _infoMessage.postValue(R.string.save_video_success)
-                    }
+        saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _infoMessage.postValue(R.string.save_video_success)
+            }
 
-                    override fun onError(e: Throwable) {
-                        _errorMessage.postValue(R.string.error_save_external_video_failed)
-                    }
-                })
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_save_external_video_failed)
+            }
+        })
     }
 
     fun goToDetail(detail: Detail) {

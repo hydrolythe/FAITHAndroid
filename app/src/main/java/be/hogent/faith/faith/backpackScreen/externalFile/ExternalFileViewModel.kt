@@ -67,10 +67,13 @@ class ExternalFileViewModel(
             _errorMessage.postValue(R.string.error_load_events)
         }
     }
-        fun onSaveClicked() {
-            require(_currentFile.value != null)
-            val file = File(_currentFile.value!!.path)
-            if (file.path.toLowerCase(Locale.ROOT).contains("photo")) {
+
+    fun onSaveClicked() {
+        require(_currentFile.value != null)
+        val file = File(_currentFile.value!!.path)
+
+        when (file.path.toLowerCase(Locale.ROOT).substring(file.path.toLowerCase(Locale.ROOT).lastIndexOf("."))) {
+            ".png" -> {
                 val params = CreatePhotoDetailUseCase.Params(_currentFile.value!!)
                 createPhotoDetailUseCase.execute(params, object : DisposableSingleObserver<PhotoDetail>() {
                     override fun onSuccess(createdDetail: PhotoDetail) {
@@ -82,8 +85,8 @@ class ExternalFileViewModel(
                         Timber.e(e)
                     }
                 })
-            } else {
-
+            }
+            ".mp4" -> {
                 val params = CreateExternalVideoDetailUseCase.Params(_currentFile.value!!)
                 createExternalVideoDetailUseCase.execute(params, object : DisposableSingleObserver<ExternalVideoDetail>() {
                     override fun onSuccess(createdDetail: ExternalVideoDetail) {
@@ -96,5 +99,7 @@ class ExternalFileViewModel(
                     }
                 })
             }
+            else -> _errorMessage.postValue(R.string.unauthorized_file_type)
         }
     }
+}

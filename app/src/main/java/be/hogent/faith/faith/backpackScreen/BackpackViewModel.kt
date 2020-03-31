@@ -103,8 +103,8 @@ class BackpackViewModel(
 
     fun onSaveClicked(title: String, user: User, detail: Detail) {
         val notMaxCharacters = checkMaxCharacters(title)
-        val uniqueFilename = checkUniqueFilename(title)
-        if (title.isNotEmpty() && notMaxCharacters && uniqueFilename) {
+        val uniqueTitle = checkUniqueTitle(title)
+        if (title.isNotEmpty() && notMaxCharacters && uniqueTitle) {
             detail.title = title
 
             saveCurrentDetail(user, detail)
@@ -114,12 +114,12 @@ class BackpackViewModel(
                 setErrorMessage(R.string.save_detail_emptyString)
             if (!notMaxCharacters)
                 setErrorMessage(R.string.save_detail_maxChar)
-            if (!uniqueFilename)
+            if (!uniqueTitle)
                 setErrorMessage(R.string.save_detail_uniqueName)
         }
     }
 
-    private fun checkUniqueFilename(title: String): Boolean {
+    private fun checkUniqueTitle(title: String): Boolean {
         return (details.find { e -> (e.title == title) } == null)
     }
 

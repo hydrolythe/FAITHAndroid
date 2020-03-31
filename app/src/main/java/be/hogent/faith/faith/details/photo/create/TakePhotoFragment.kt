@@ -52,7 +52,7 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
     private var navigation: PhotoScreenNavigation? = null
 
     private val tempFileProvider by inject<TempFileProvider>()
-    private var bundle = Bundle.EMPTY
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -70,7 +70,6 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
             lensPosition = back(),
             logger = logcat()
         )
-        bundle = arguments
         return takePhotoBinding.root
     }
 
