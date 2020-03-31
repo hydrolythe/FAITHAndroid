@@ -159,6 +159,15 @@
                 app:layout_constraintStart_toStartOf="@+id/guide_pole_right_start"
                 app:layout_constraintTop_toTopOf="@+id/guide_avatar_top" />
 
+            <Button
+                android:id="@+id/btn_cinema"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cinema"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/image_main_avatar"
+                app:layout_constraintTop_toTopOf="@+id/guide_avatar_top" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>

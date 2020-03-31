@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/achtergrond_cinema">
+
+
+
+
+        <Button
+            android:id="@+id/btn_films"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:text="@string/mijn_filmpjes"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintEnd_toStartOf="@+id/guide_btns_vertical"
+            android:background="@android:color/transparent"/>
+
+        <Button
+            android:id="@+id/btn_bestanden"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:text="@string/mijn_bestanden"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintStart_toStartOf="@+id/guide_btns_vertical"
+            />
+
+
+        <ImageButton
+            android:id="@+id/btn_backpack_draw_cancel"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:background="@drawable/knop_terug_wit"
+            android:contentDescription="@string/cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/rv_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/achtergrond_publiek"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical2"
+            app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
+            app:layout_constraintTop_toTopOf="@+id/guide_rv_container_horizontal"
+            app:srcCompat="@drawable/cinema_film_container"
+            tools:srcCompat="@drawable/cinema_film_container" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_btns_vertical"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rv_container_vertical1"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.15" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rv_container_vertical2"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.85" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rv_container_horizontal"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.15" />
+
+        <ImageButton
+            android:id="@+id/btn_cinema_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/prullenbak"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintStart_toStartOf="@+id/rv_container"
+            app:srcCompat="@drawable/prullenbak"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="15dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_cinema_view_films"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scrollbarSize="16dp"
+            android:scrollbarThumbVertical="@drawable/scrollbarthumb_circle_rv"
+            android:scrollbarTrackVertical="@drawable/scrollbartrack_rectangle_rv"
+            android:scrollbars="vertical"
+            android:verticalScrollbarPosition="right"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintEnd_toEndOf="@+id/rv_container"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/rv_container"
+            app:layout_constraintTop_toTopOf="@+id/rv_container"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/achtergrond_publiek"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/publiek_cinema"
+            tools:srcCompat="@drawable/publiek_cinema" />
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/achtergrond_publiek"
+            app:layout_constraintEnd_toEndOf="@+id/achtergrond_publiek"
+            app:layout_constraintStart_toStartOf="@+id/achtergrond_publiek"
+            app:layout_constraintTop_toBottomOf="@+id/rv_container"
+            app:srcCompat="@drawable/ic_btn_maak_filmpje"
+            android:background="@android:color/transparent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

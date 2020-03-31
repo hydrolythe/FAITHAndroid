@@ -231,4 +231,6 @@
     <string name="rv_btn_detail">Knop bekijk bestand</string>
     <string name="rv_btn_delete_detail">Knop verwijder bestand</string>
     <string name="rv_detail_title">Detail Title</string>
+    <string name="mijn_filmpjes">mijn filmpjes</string>
+    <string name="mijn_bestanden">mijn bestanden</string>
 </resources>

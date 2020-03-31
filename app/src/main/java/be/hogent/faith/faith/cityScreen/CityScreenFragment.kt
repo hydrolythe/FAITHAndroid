@@ -151,6 +151,10 @@ class CityScreenFragment : Fragment() {
             navigation?.logOut()
         })
 
+        mainScreenBinding.btnCinema.setOnClickListener {
+            navigation?.startCinemaFragment()
+        }
+
         userViewModel.user.observe(this, Observer { user ->
             Glide.with(context!!).load(avatarProvider.getAvatarDrawableStaan(user.avatarName))
                 .diskCacheStrategy(
@@ -171,5 +175,6 @@ class CityScreenFragment : Fragment() {
         fun startOverviewEventsFragment()
         fun logOut()
         fun startBackpackFragment()
+        fun startCinemaFragment()
     }
 }

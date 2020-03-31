@@ -48,7 +48,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         if (savedInstanceState == null) {
             val fragment = BackpackScreenFragment.newInstance()
             supportFragmentManager.beginTransaction()
-                    .add(R.id.fragment, fragment)
+                    .add(R.id.backpack_fragment_container, fragment)
                     .commit()
         }
 
@@ -59,7 +59,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         backpackViewModel.goToDetail.observe(this, Observer {
             replaceFragment(
                 BackpackDetailFragment.newInstance(it),
-                R.id.fragment
+                R.id.backpack_fragment_container
             )
         })
     }
@@ -86,22 +86,22 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun startPhotoDetailFragment() {
-        replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(), R.id.backpack_fragment_container)
         startFragmentInitialisers()
     }
 
     override fun startAudioDetailFragment() {
-        replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(), R.id.backpack_fragment_container)
         startFragmentInitialisers()
     }
 
     override fun startDrawingDetailFragment() {
-        replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(), R.id.backpack_fragment_container)
         startFragmentInitialisers()
     }
 
     override fun startTextDetailFragment() {
-        replaceFragment(BackpackDetailFragment.TextFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.TextFragmentNoEmotionAvatar.newInstance(), R.id.backpack_fragment_container)
         startFragmentInitialisers()
     }
 
@@ -117,7 +117,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     }
 
     override fun startExternalFileDetailFragment() {
-        replaceFragment(BackpackDetailFragment.ExternalFileFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.ExternalFileFragmentNoEmotionAvatar.newInstance(), R.id.backpack_fragment_container)
         backpackViewModel.viewButtons(false)
         backpackViewModel.setDetailScreenOpen(true)
         backpackViewModel.closePopUpMenu()
@@ -128,7 +128,7 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         backpackViewModel.setCurrentFile(detail)
         replaceFragment(
                 BackpackDetailFragment.newInstance(detail),
-                R.id.fragment
+                R.id.backpack_fragment_container
         )
         backpackViewModel.viewButtons(false)
         backpackViewModel.closePopUpMenu()
