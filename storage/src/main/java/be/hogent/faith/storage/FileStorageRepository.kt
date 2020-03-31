@@ -5,8 +5,8 @@ import be.hogent.faith.database.storage.IFileStorageRepository
 import be.hogent.faith.database.storage.ILocalFileStorageRepository
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.storage.firebase.IOnlineFileStorageRepository
-import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
+import be.hogent.faith.storage.onlinestorage.IOnlineFileStorageRepository
+import be.hogent.faith.storage.localstorage.ITemporaryStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single

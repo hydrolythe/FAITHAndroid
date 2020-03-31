@@ -1,4 +1,4 @@
-package be.hogent.faith.storage.localStorage
+package be.hogent.faith.storage.localstorage
 
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event

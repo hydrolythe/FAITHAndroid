@@ -2,8 +2,8 @@ package be.hogent.faith.storage
 
 import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.database.storage.ILocalFileStorageRepository
-import be.hogent.faith.storage.firebase.IOnlineFileStorageRepository
-import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
+import be.hogent.faith.storage.onlinestorage.IOnlineFileStorageRepository
+import be.hogent.faith.storage.localstorage.ITemporaryStorageRepository
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.Called
 import io.mockk.every

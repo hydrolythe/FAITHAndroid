@@ -1,4 +1,4 @@
-package be.hogent.faith.storage.localStorage
+package be.hogent.faith.storage.localstorage
 
 import be.hogent.faith.database.encryption.EncryptedDetail
 import be.hogent.faith.database.encryption.EncryptedEvent

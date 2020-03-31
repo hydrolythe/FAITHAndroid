@@ -1,4 +1,4 @@
-package be.hogent.faith.storage.firebase
+package be.hogent.faith.storage.onlinestorage
 
 import be.hogent.faith.database.encryption.EncryptedEvent
 import be.hogent.faith.domain.models.Event

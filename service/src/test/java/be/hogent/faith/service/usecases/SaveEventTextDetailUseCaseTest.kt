@@ -3,7 +3,7 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.service.usecases.event.SaveEventTextDetailUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
+import be.hogent.faith.storage.localstorage.ITemporaryStorageRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

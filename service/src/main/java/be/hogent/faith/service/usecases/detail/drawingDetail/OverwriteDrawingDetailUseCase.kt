@@ -3,7 +3,7 @@ package be.hogent.faith.service.usecases.detail.drawingDetail
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
+import be.hogent.faith.storage.localstorage.ITemporaryStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 

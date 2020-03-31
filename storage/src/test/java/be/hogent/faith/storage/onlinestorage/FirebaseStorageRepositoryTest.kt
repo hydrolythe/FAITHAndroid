@@ -1,4 +1,4 @@
-package be.hogent.faith.storage.firebase
+package be.hogent.faith.storage.onlinestorage
 
 import android.content.Context
 import android.net.Uri

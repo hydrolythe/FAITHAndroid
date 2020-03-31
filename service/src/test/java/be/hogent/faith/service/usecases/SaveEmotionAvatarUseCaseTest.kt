@@ -3,7 +3,7 @@ package be.hogent.faith.service.usecases
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
+import be.hogent.faith.storage.localstorage.ITemporaryStorageRepository
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.every
 import io.mockk.mockk

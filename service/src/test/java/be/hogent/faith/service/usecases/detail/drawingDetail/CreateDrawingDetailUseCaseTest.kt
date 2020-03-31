@@ -1,7 +1,7 @@
 package be.hogent.faith.service.usecases.detail.drawingDetail
 
 import android.graphics.Bitmap
-import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
+import be.hogent.faith.storage.localstorage.ITemporaryStorageRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Scheduler

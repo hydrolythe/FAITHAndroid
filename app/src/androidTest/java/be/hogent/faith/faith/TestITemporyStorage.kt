@@ -5,7 +5,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.storage.localStorage.ITemporaryStorageRepository
+import be.hogent.faith.storage.localstorage.ITemporaryStorageRepository
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.FileFactory
 import io.reactivex.Completable
