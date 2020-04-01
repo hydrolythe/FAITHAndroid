@@ -58,6 +58,7 @@
             android:backgroundTint="@color/color_white"
             android:src="@drawable/ic_play_arrow_white_24dp"
             android:tint="#F21040"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/img_thumbnail_player"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
