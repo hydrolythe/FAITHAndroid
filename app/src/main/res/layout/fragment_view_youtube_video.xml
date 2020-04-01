@@ -30,7 +30,9 @@
             <SeekBar
                 android:id="@+id/seekbar_yt_video"
                 android:layout_width="443dp"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:progressTint="#FFFF00"
+                android:secondaryProgressTint="#DED920" />
 
             <TextView
                 android:id="@+id/text_duration_yt_video"
@@ -126,7 +128,7 @@
                 android:layout_height="100dp"
                 android:layout_marginStart="64dp"
                 android:background="@drawable/rv_background_youtubeview"
-                android:backgroundTint="#1A2E3F"
+                android:backgroundTint="#233D4C"
                 app:layout_constraintBottom_toTopOf="@+id/imageView6"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView8" />
@@ -137,7 +139,7 @@
                 android:layout_height="100dp"
                 android:layout_marginStart="64dp"
                 android:background="@drawable/rv_background_youtubeview"
-                android:backgroundTint="#1A2E3F"
+                android:backgroundTint="#233D4C"
                 app:layout_constraintBottom_toTopOf="@+id/imageView7"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView5" />
@@ -148,7 +150,7 @@
                 android:layout_height="100dp"
                 android:layout_marginStart="64dp"
                 android:background="@drawable/rv_background_youtubeview"
-                android:backgroundTint="#1A2E3F"
+                android:backgroundTint="#233D4C"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView6" />
@@ -159,7 +161,7 @@
                 android:layout_height="100dp"
                 android:layout_marginStart="64dp"
                 android:background="@drawable/rv_background_youtubeview"
-                android:backgroundTint="#1A2E3F"
+                android:backgroundTint="#233D4C"
                 app:layout_constraintBottom_toTopOf="@+id/imageView5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btn_back_yt_video" />
@@ -180,7 +182,7 @@
                 android:layout_height="100dp"
                 android:layout_marginEnd="64dp"
                 android:background="@drawable/rv_background_youtubeview"
-                android:backgroundTint="#1A2E3F"
+                android:backgroundTint="#233D4C"
                 app:layout_constraintBottom_toTopOf="@+id/imageView11"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btn_back_yt_video" />
@@ -191,7 +193,7 @@
                 android:layout_height="100dp"
                 android:layout_marginEnd="64dp"
                 android:background="@drawable/rv_background_youtubeview"
-                android:backgroundTint="#1A2E3F"
+                android:backgroundTint="#233D4C"
                 app:layout_constraintBottom_toTopOf="@+id/imageView12"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView9" />
@@ -202,7 +204,7 @@
                 android:layout_height="100dp"
                 android:layout_marginEnd="64dp"
                 android:background="@drawable/rv_background_youtubeview"
-                android:backgroundTint="#1A2E3F"
+                android:backgroundTint="#233D4C"
                 app:layout_constraintBottom_toTopOf="@+id/imageView13"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView11" />
@@ -213,7 +215,7 @@
                 android:layout_height="100dp"
                 android:layout_marginEnd="64dp"
                 android:background="@drawable/rv_background_youtubeview"
-                android:backgroundTint="#1A2E3F"
+                android:backgroundTint="#233D4C"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView12" />
@@ -249,6 +251,7 @@
                 android:layout_height="80dp"
                 android:layout_marginEnd="16dp"
                 android:backgroundTint="@android:color/transparent"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/save_btn" />
