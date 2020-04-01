@@ -233,4 +233,6 @@
     <string name="rv_detail_title">Detail Title</string>
     <string name="mijn_filmpjes">mijn filmpjes</string>
     <string name="mijn_bestanden">mijn bestanden</string>
+    <string name="create_film">Maak filmpje</string>
+    <string name="search_hint_cinema">Zoek hier een bestand of filmpje op naam</string>
 </resources>
