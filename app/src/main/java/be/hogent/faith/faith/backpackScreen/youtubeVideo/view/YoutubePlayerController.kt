@@ -16,7 +16,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 
 /**
@@ -30,7 +29,7 @@ class YoutubePlayerController (
     private val customPlayerUi: View,
     private val youTubePlayer: YouTubePlayer,
     private val youtubeVideoDetail: YoutubeVideoDetail
-) : IVideoPlayer, AbstractYouTubePlayerListener() {
+) : IVideoPlayer, YouTubePlayerFullScreenListener, AbstractYouTubePlayerListener() {
 
     private var playerTracker: YouTubePlayerTracker? = null
     private var seekBar: SeekBar? = null
@@ -142,6 +141,20 @@ class YoutubePlayerController (
 
     override fun setFullScreen() {
 
+    }
+
+    override fun onYouTubePlayerEnterFullScreen() {
+        val viewParams: ViewGroup.LayoutParams = customPlayerUi.layoutParams
+        viewParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+        viewParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+        customPlayerUi.layoutParams = viewParams
+    }
+
+    override fun onYouTubePlayerExitFullScreen() {
+        val viewParams: ViewGroup.LayoutParams = customPlayerUi.layoutParams
+        viewParams.height = ViewGroup.LayoutParams.MATCH_PARENT
+        viewParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+        customPlayerUi.layoutParams = viewParams
     }
 
 }

@@ -26,7 +26,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 *
 * Read more: https://medium.com/@soffritti.pierfrancesco/how-to-play-youtube-videos-in-your-android-app-c40427215230
 */
-class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetail) : IVideoPlayer, YouTubePlayerFullScreenListener, Fragment() {
+class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetail) : IVideoPlayer, Fragment() {
 
     private lateinit var viewYoutubeVideoBinding: FragmentViewYoutubeVideoBinding
     private lateinit var youTubePlayerView: YouTubePlayerView
@@ -167,7 +167,6 @@ class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetai
 
     override fun setFullScreen() {
         if(fullscreen) {
-            youTubePlayerView.exitFullScreen()
             onYouTubePlayerExitFullScreen()
         }
         else{
@@ -177,7 +176,7 @@ class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetai
         fullscreen = !fullscreen
     }
 
-    override fun onYouTubePlayerEnterFullScreen() {
+    private fun onYouTubePlayerEnterFullScreen() {
         viewYoutubeVideoBinding.layerFullscreenYtPlayer.visibility = View.VISIBLE
         val viewParams: ViewGroup.LayoutParams = viewYoutubeVideoBinding.cardYoutubePlayer.layoutParams
         viewParams.height = ViewGroup.LayoutParams.MATCH_PARENT
@@ -185,11 +184,11 @@ class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetai
         viewYoutubeVideoBinding.cardYoutubePlayer.layoutParams = viewParams
     }
 
-    override fun onYouTubePlayerExitFullScreen() {
+    private fun onYouTubePlayerExitFullScreen() {
         viewYoutubeVideoBinding.layerFullscreenYtPlayer.visibility = View.GONE
         val viewParams: ViewGroup.LayoutParams = viewYoutubeVideoBinding.cardYoutubePlayer.layoutParams
-        viewParams.height = 0
-        viewParams.width = 0
+        viewParams.height = resources.getDimension(R.dimen.match_constraint).toInt()
+        viewParams.width = resources.getDimension(R.dimen.match_constraint).toInt()
         viewYoutubeVideoBinding.cardYoutubePlayer.layoutParams = viewParams
     }
 
