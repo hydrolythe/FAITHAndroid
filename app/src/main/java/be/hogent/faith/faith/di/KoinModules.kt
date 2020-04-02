@@ -17,7 +17,7 @@ import be.hogent.faith.faith.details.photo.view.ViewPhotoDetailViewModel
 import be.hogent.faith.faith.details.text.view.ViewTextDetailViewModel
 import be.hogent.faith.faith.details.text.create.TextDetailViewModel
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.view.VideoPlayerStateViewModel
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
@@ -76,7 +76,7 @@ val appModule = module(override = true) {
     viewModel { TakePhotoViewModel(get()) }
     viewModel { ExternalFileViewModel(get(), get()) }
     viewModel { YoutubeVideoDetailViewModel(get()) }
-    viewModel { VideoPlayerStateViewModel() }
+    viewModel { FaithYoutubePlayerViewModel() }
     viewModel { (user: User) -> EventListViewModel(user, get()) }
     viewModel { EventDetailsViewModel() }
     viewModel { ViewPhotoDetailViewModel() }

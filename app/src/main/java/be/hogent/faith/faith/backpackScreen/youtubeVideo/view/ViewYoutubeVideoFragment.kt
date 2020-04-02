@@ -5,35 +5,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.SeekBar
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentViewYoutubeVideoBinding
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerFullScreenListener
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayer
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerFragment
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import org.koin.android.viewmodel.ext.android.viewModel
 
-/**
- * Uses: https://github.com/PierfrancescoSoffritti/android-youtube-player
- * Why? - Customisable lay-out if we use a video player screen
- *      - Ability to disable YouTube buttons
-*
-* Read more: https://medium.com/@soffritti.pierfrancesco/how-to-play-youtube-videos-in-your-android-app-c40427215230
-*/
-class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetail) : IVideoPlayer, Fragment() {
+class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetail) : FaithYoutubePlayerFragment() {
 
     private lateinit var viewYoutubeVideoBinding: FragmentViewYoutubeVideoBinding
-    private lateinit var youTubePlayerView: YouTubePlayerView
     private var navigation: ViewYoutubeVideoNavigation? = null
-    private var ytController: YoutubePlayerController? = null
-    private val videoPlayerStateViewModel : VideoPlayerStateViewModel by viewModel()
-    private var fullscreen : Boolean = false
+    private var youtubePlayerView: YouTubePlayerView? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,80 +42,39 @@ class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetai
 
     override fun onStart() {
         super.onStart()
-        youTubePlayerView = viewYoutubeVideoBinding.youtubePlayerView
 
-        lifecycle.addObserver(youTubePlayerView)
+        youtubePlayerView = viewYoutubeVideoBinding.youtubePlayerView
 
-        val customPlayerUi = youTubePlayerView.inflateCustomPlayerUi(R.layout.player_youtube_custom)
+        val faithYoutubePlayer =
+            FaithYoutubePlayer(
+                youtubeVideoDetail = youtubeVideoDetail,
+                youtubePlayerView = youtubePlayerView!!,
+                playerParentView = viewYoutubeVideoBinding.cardYoutubePlayer,
+                playButton = viewYoutubeVideoBinding.btnPlayYtVideo as ImageButton,
+                pauseButton = viewYoutubeVideoBinding.btnPauseYtVideo as ImageButton
+            )
 
-        youTubePlayerView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-            override fun onReady(youTubePlayer: YouTubePlayer) {
-                ytController = YoutubePlayerController(
-                    customPlayerUi,
-                    youTubePlayer,
-                    youtubeVideoDetail
-                )
+        faithYoutubePlayer.currentTimeField = viewYoutubeVideoBinding.textCurrentimeYtVideo as TextView
+        faithYoutubePlayer.durationField = viewYoutubeVideoBinding.textDurationYtVideo as TextView
+        faithYoutubePlayer.seekBar = viewYoutubeVideoBinding.seekbarYtVideo as SeekBar
+        faithYoutubePlayer.stopButton = viewYoutubeVideoBinding.btnStopYtVideo as ImageButton
+        faithYoutubePlayer.fullscreenButton = viewYoutubeVideoBinding.btnFullscreenYtVideo as ImageButton
 
-                youTubePlayer.addListener(ytController!!)
-
-                val videoId = youtubeVideoDetail.videoId
-                youTubePlayer.loadVideo(videoId, 0F)
-            }
-
-            /**
-             * Sets the max progress for seekbar and the duration label
-             */
-            override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
-                super.onVideoDuration(youTubePlayer, duration)
-                viewYoutubeVideoBinding.seekbarYtVideo.max = duration.toInt()
-                viewYoutubeVideoBinding.textDurationYtVideo.text = createTimeLabel(duration)
-            }
-
-            override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
-                viewYoutubeVideoBinding.seekbarYtVideo.progress = second.toInt()
-                viewYoutubeVideoBinding.textCurrentimeYtVideo.text = createTimeLabel(second)
-            }
-
-        })
-
-        viewYoutubeVideoBinding.seekbarYtVideo.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                if (fromUser) {
-                   seekTo(videoPlayerStateViewModel.currentState.value!!, progress.toFloat())
-                }
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar) {}
-        })
-
-        viewYoutubeVideoBinding.btnPlayYtVideo.setOnClickListener {
-            videoPlayerStateViewModel.setVideoPlayerState(VideoPlayerState.PLAYING)
-        }
-
-        viewYoutubeVideoBinding.btnPauseYtVideo.setOnClickListener {
-            videoPlayerStateViewModel.setVideoPlayerState(VideoPlayerState.PAUSED)
-        }
-
-        viewYoutubeVideoBinding.btnStopYtVideo.setOnClickListener {
-            videoPlayerStateViewModel.setVideoPlayerState(VideoPlayerState.STOPPED)
-        }
+        setFaithYoutubePlayer(faithYoutubePlayer)
 
         viewYoutubeVideoBinding.btnBackYtVideo.setOnClickListener {
             navigation!!.backToEvent()
         }
+    }
 
-        viewYoutubeVideoBinding.btnFullscreenYtVideo.setOnClickListener {
-            setFullScreen()
-        }
+    override fun onYouTubePlayerEnterFullScreen() {
+        super.onYouTubePlayerEnterFullScreen()
+        viewYoutubeVideoBinding.layerFullscreenYtPlayer.visibility = View.VISIBLE
+    }
 
-        videoPlayerStateViewModel.currentState.observe(this, Observer {
-            if (it == VideoPlayerState.PLAYING)
-                playVideo(it)
-            if (it == VideoPlayerState.PAUSED)
-                pauseVideo(it)
-            if (it == VideoPlayerState.STOPPED)
-                stopVideo(it)
-        })
+    override fun onYouTubePlayerExitFullScreen() {
+        super.onYouTubePlayerExitFullScreen()
+        viewYoutubeVideoBinding.layerFullscreenYtPlayer.visibility = View.GONE
     }
 
     companion object {
@@ -136,74 +83,7 @@ class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetai
         }
     }
 
-    /**
-     * Behaviour required by Play Store. The audio must be stopped when the video isn't visible.
-     */
-    override fun onDestroy() {
-        super.onDestroy()
-        youTubePlayerView.release()
-    }
-
     interface ViewYoutubeVideoNavigation {
         fun backToEvent()
-    }
-
-    override fun playVideo(currentState: VideoPlayerState) {
-        ytController!!.playVideo(currentState)
-    }
-
-    override fun pauseVideo(currentState: VideoPlayerState) {
-       ytController!!.pauseVideo(currentState)
-    }
-
-    override fun stopVideo(currentState: VideoPlayerState) {
-        ytController!!.stopVideo(currentState)
-    }
-
-    override fun seekTo(currentState: VideoPlayerState, time: Float) {
-        ytController!!.seekTo(currentState, time)
-        viewYoutubeVideoBinding.textCurrentimeYtVideo.text = createTimeLabel(time)
-    }
-
-    override fun setFullScreen() {
-        if(fullscreen) {
-            onYouTubePlayerExitFullScreen()
-        }
-        else{
-            youTubePlayerView.enterFullScreen()
-            onYouTubePlayerEnterFullScreen()
-        }
-        fullscreen = !fullscreen
-    }
-
-    private fun onYouTubePlayerEnterFullScreen() {
-        viewYoutubeVideoBinding.layerFullscreenYtPlayer.visibility = View.VISIBLE
-        val viewParams: ViewGroup.LayoutParams = viewYoutubeVideoBinding.cardYoutubePlayer.layoutParams
-        viewParams.height = ViewGroup.LayoutParams.MATCH_PARENT
-        viewParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-        viewYoutubeVideoBinding.cardYoutubePlayer.layoutParams = viewParams
-    }
-
-    private fun onYouTubePlayerExitFullScreen() {
-        viewYoutubeVideoBinding.layerFullscreenYtPlayer.visibility = View.GONE
-        val viewParams: ViewGroup.LayoutParams = viewYoutubeVideoBinding.cardYoutubePlayer.layoutParams
-        viewParams.height = resources.getDimension(R.dimen.match_constraint).toInt()
-        viewParams.width = resources.getDimension(R.dimen.match_constraint).toInt()
-        viewYoutubeVideoBinding.cardYoutubePlayer.layoutParams = viewParams
-    }
-
-    /**
-     * Creates a label like this: 2:45
-     */
-    private fun createTimeLabel(time: Float): String {
-        val min: Int = time.toInt() / 60
-        val sec: Int = time.toInt() % 60
-
-        var timeLabel = min.toString()
-        timeLabel += ":"
-        if (sec < 10)
-            timeLabel += "0"
-        timeLabel += sec
-        return timeLabel
     }
 }

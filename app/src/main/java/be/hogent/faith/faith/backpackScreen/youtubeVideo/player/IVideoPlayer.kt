@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.backpackScreen.youtubeVideo.view
+package be.hogent.faith.faith.backpackScreen.youtubeVideo.player
 
 interface IVideoPlayer {
 

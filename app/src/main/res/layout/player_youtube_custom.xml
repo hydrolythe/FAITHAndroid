@@ -163,6 +163,7 @@
             android:progressBackgroundTint="#33FFFFFF"
             android:progressTint="#F21040"
             android:thumbTint="#F21040"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
