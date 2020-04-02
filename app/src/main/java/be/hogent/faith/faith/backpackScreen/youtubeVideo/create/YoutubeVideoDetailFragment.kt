@@ -35,9 +35,11 @@ import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_save_
 import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_stop_yt_video
 import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.card_youtube_player
 import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.layer_fullscreen_yt_player
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.menu_container_yt_video
 import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.seekbar_yt_video
 import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.text_currentime_yt_video
 import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.text_duration_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.time_container_yt_video
 import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.youtube_player_view
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -248,6 +250,8 @@ class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<
         faithYoutubePlayer.seekBar = popupview!!.seekbar_yt_video as SeekBar
         faithYoutubePlayer.stopButton = popupview!!.btn_stop_yt_video as ImageButton
         faithYoutubePlayer.fullscreenButton = popupview!!.btn_fullscreen_yt_video as ImageButton
+        faithYoutubePlayer.menuContainer = popupview!!.menu_container_yt_video
+        faithYoutubePlayer.timeContainer = popupview!!.time_container_yt_video
 
         setFaithYoutubePlayer(faithYoutubePlayer)
     }

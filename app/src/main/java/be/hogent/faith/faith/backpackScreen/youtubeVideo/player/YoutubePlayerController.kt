@@ -1,6 +1,8 @@
 package be.hogent.faith.faith.backpackScreen.youtubeVideo.player
 
 import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -14,6 +16,11 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstan
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
+import kotlinx.android.synthetic.main.player_youtube_custom.view.container_player_pause
+import kotlinx.android.synthetic.main.player_youtube_custom.view.container_youtube_playerview
+import kotlinx.android.synthetic.main.player_youtube_custom.view.gradient_blue_player
+import kotlinx.android.synthetic.main.player_youtube_custom.view.img_thumbnail_player
+import kotlinx.android.synthetic.main.player_youtube_custom.view.txt_title_player
 
 
 /**
@@ -36,6 +43,8 @@ class YoutubePlayerController (
     private var thumbnailImg: ImageView? = null
     private var gradient: ImageView? = null
     private var startScreen: ConstraintLayout? = null
+    private var alphaAnim : AlphaAnimation? = null
+    private var customPlayerContainer : ConstraintLayout? = null
 
     init {
         playerTracker = YouTubePlayerTracker()
@@ -45,10 +54,11 @@ class YoutubePlayerController (
     }
 
     private fun createCustomUiLayerAbovePlayerView(customPlayerUi: View) {
-        title = customPlayerUi.findViewById(R.id.txt_title_player)
-        thumbnailImg = customPlayerUi.findViewById(R.id.img_thumbnail_player)
-        gradient = customPlayerUi.findViewById(R.id.gradient_blue_player)
-        startScreen = customPlayerUi.findViewById(R.id.container_player_pause)
+        title = customPlayerUi.txt_title_player
+        thumbnailImg = customPlayerUi.img_thumbnail_player
+        gradient = customPlayerUi.gradient_blue_player
+        startScreen = customPlayerUi.container_player_pause
+        customPlayerContainer = customPlayerUi.container_youtube_playerview
 
         title!!.text = faithYoutubePlayer.youtubeVideoDetail.fileName
 
@@ -56,6 +66,32 @@ class YoutubePlayerController (
          * Thumbnail image from YouTube is the background of the stop screen
          */
         Glide.with(thumbnailImg!!).load(getHighQualityThumbnailUrl(faithYoutubePlayer.youtubeVideoDetail.videoId)).into(thumbnailImg!!)
+
+        initFullScreenOnClickListener()
+    }
+
+    /**
+     * Very useful because it prevents users from clicking on default YouTube buttons , instead our menu and seekbar appear
+     * It's a layer between our UI and the default YouTube UI
+     */
+    private fun initFullScreenOnClickListener(){
+        customPlayerContainer!!.setOnClickListener {
+            if(faithYoutubePlayer.isFullscreen){
+                startAnimation()
+            }
+            else
+                cancelAnim()
+        }
+
+        faithYoutubePlayer.timeContainer!!.setOnClickListener {
+            if(faithYoutubePlayer.isFullscreen)
+                cancelAnim()
+        }
+
+        faithYoutubePlayer.menuContainer!!.setOnClickListener {
+            if(faithYoutubePlayer.isFullscreen)
+                cancelAnim()
+        }
     }
 
     override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
@@ -67,6 +103,10 @@ class YoutubePlayerController (
         if(state == PlayerConstants.PlayerState.PLAYING){
             startScreen!!.visibility = View.GONE
         }
+        if(state == PlayerConstants.PlayerState.PAUSED){
+            if(alphaAnim != null)
+                cancelAnim()
+        }
         if(state == PlayerConstants.PlayerState.ENDED)
             showStartScreen()
     }
@@ -75,7 +115,34 @@ class YoutubePlayerController (
         //TODO
     }
 
+    private fun startAnimation(){
+        faithYoutubePlayer.menuContainer!!.visibility = View.VISIBLE
+        faithYoutubePlayer.timeContainer!!.visibility = View.VISIBLE
+
+        alphaAnim = AlphaAnimation(1.0f, 0.0f)
+        alphaAnim!!.startOffset = 3000
+        alphaAnim!!.duration = 400
+        alphaAnim!!.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(p0: Animation?) {}
+
+            override fun onAnimationEnd(animation: Animation) {
+                faithYoutubePlayer.menuContainer!!.visibility = View.GONE
+                faithYoutubePlayer.timeContainer!!.visibility = View.GONE
+            }
+
+            override fun onAnimationStart(p0: Animation?) {}
+        })
+    }
+
+    private fun cancelAnim(){
+        alphaAnim?.cancel()
+        alphaAnim = null
+        faithYoutubePlayer.menuContainer!!.visibility = View.VISIBLE
+        faithYoutubePlayer.timeContainer!!.visibility = View.VISIBLE
+    }
+
     private fun showStartScreen(){
+        cancelAnim()
         startScreen!!.visibility = View.VISIBLE
     }
 

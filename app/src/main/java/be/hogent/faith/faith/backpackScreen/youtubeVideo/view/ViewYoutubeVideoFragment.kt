@@ -65,6 +65,8 @@ class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetai
         faithYoutubePlayer.seekBar = viewYoutubeVideoBinding.seekbarYtVideo as SeekBar
         faithYoutubePlayer.stopButton = viewYoutubeVideoBinding.btnStopYtVideo as ImageButton
         faithYoutubePlayer.fullscreenButton = viewYoutubeVideoBinding.btnFullscreenYtVideo as ImageButton
+        faithYoutubePlayer.timeContainer = viewYoutubeVideoBinding.timeContainerYtVideo
+        faithYoutubePlayer.menuContainer = viewYoutubeVideoBinding.menuContainerYtVideo
 
         setFaithYoutubePlayer(faithYoutubePlayer)
 

@@ -25,6 +25,8 @@ class FaithYoutubePlayer(
     var durationField : TextView? = null
     var stopButton : View? = null
     var fullscreenButton : View? = null
+    var timeContainer : View? = null
+    var menuContainer : View? = null
 
     fun hasSeekbar() : Boolean{
         return seekBar!=null

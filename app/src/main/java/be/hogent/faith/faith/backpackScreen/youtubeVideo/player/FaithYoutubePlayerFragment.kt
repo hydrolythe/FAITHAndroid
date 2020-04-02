@@ -1,6 +1,9 @@
 package be.hogent.faith.faith.backpackScreen.youtubeVideo.player
 
+import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -32,20 +35,20 @@ abstract class FaithYoutubePlayerFragment() : IVideoPlayer, Fragment() {
     override fun onStart() {
         super.onStart()
 
-        playerViewModel.player.observe(this, Observer {
-            if(faithPlayerListener == null && it != null){
+        playerViewModel.player.observe(this, Observer { player ->
+            if(faithPlayerListener == null && player != null){
                 /**
                  * Creates a listener from our player with the new track to play
                  */
                 faithPlayerListener =
                     FaithYoutubePlayerListener(
-                        it,
-                        it.youtubePlayerView.inflateCustomPlayerUi(R.layout.player_youtube_custom)
+                        player,
+                        player.youtubePlayerView.inflateCustomPlayerUi(R.layout.player_youtube_custom)
                     )
 
-                it.youtubePlayerView.addYouTubePlayerListener(faithPlayerListener!!)
+                player.youtubePlayerView.addYouTubePlayerListener(faithPlayerListener!!)
 
-                lifecycle.addObserver(it.youtubePlayerView)
+                lifecycle.addObserver(player.youtubePlayerView)
 
                 playerViewModel.player.value!!.playButton.setOnClickListener {
                     playerViewModel.onPlayClicked()

@@ -11,6 +11,7 @@
         android:backgroundTint="@color/black">
 
         <LinearLayout
+            android:id="@+id/time_container_yt_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -31,8 +32,9 @@
                 android:id="@+id/seekbar_yt_video"
                 android:layout_width="443dp"
                 android:layout_height="wrap_content"
-                android:progressTint="#FFFF00"
-                android:secondaryProgressTint="#DED920" />
+                android:progressBackgroundTint="#A5F2C9"
+                android:progressTint="#16F48A"
+                android:thumbTint="#0000FF" />
 
             <TextView
                 android:id="@+id/text_duration_yt_video"
@@ -43,7 +45,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linearLayout2"
+            android:id="@+id/menu_container_yt_video"
             android:layout_width="373dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rv_background_youtubeview"
@@ -174,7 +176,7 @@
                 android:backgroundTint="@android:color/transparent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_return" />
+                app:srcCompat="@drawable/ic_btn_back_video" />
 
             <ImageView
                 android:id="@+id/imageView9"
@@ -247,14 +249,15 @@
 
             <ImageButton
                 android:id="@+id/btn_save_yt_video"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:backgroundTint="@android:color/transparent"
-                android:visibility="gone"
+                android:cropToPadding="false"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/save_btn" />
+                app:srcCompat="@drawable/ic_save_video" />
 
             <ImageView
                 android:id="@+id/layer_fullscreen_yt_player"
