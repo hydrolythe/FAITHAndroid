@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
+import io.reactivex.subscribers.DisposableSubscriber
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -56,10 +58,19 @@ class YoutubeVideoDetailViewModel(
      * if successful --> updates the list of video snippets
      */
     fun onSearch(searchString: String) {
-        uiScope.launch {
-            val dataResult = getYoutubeVideosFromSearchUseCase.getYoutubeVideos(searchString)
-            if (dataResult is ApiResult.Success<List<YoutubeVideoDetail>>)
-            _snippets.postValue(dataResult.data)
+        val params = GetYoutubeVideosFromSearchUseCase.Params(searchString)
+        getYoutubeVideosFromSearchUseCase.execute(params, GetYoutubeSnippetsUseCaseHandler())
+    }
+
+    private inner class GetYoutubeSnippetsUseCaseHandler : DisposableSubscriber<List<YoutubeVideoDetail>>() {
+        override fun onNext(t: List<YoutubeVideoDetail>?) {
+            _snippets.postValue(t)
+        }
+
+        override fun onComplete() {
+        }
+
+        override fun onError(e: Throwable) {
         }
     }
 

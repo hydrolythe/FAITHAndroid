@@ -2,8 +2,9 @@ package be.hogent.faith.service.network
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import kotlinx.coroutines.Deferred
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import io.reactivex.Flowable
+import io.reactivex.Single
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -30,7 +31,7 @@ interface IYoutubeService {
         @Query("type") type: String?,
         @Query("maxResults") maxResults: String?,
         @Query("fields") fields: String?
-    ): Deferred<NetworkVideo>
+    ): Single<NetworkVideo>
 }
 
 /**
@@ -57,7 +58,7 @@ fun provideRetrofit(): Retrofit {
     return Retrofit.Builder()
         .baseUrl(YoutubeConfig().getBaseURL())
         .addConverterFactory(GsonConverterFactory.create(gson))
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
 }
 

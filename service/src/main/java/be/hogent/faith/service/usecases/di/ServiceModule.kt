@@ -59,7 +59,7 @@ val serviceModule = module {
     factory { GetEventFilesUseCase(get(), get()) }
     factory { LoadDetailFileUseCase(get(), get()) }
     factory { GetBackPackFilesDummyUseCase(get(), get()) }
-    factory { GetYoutubeVideosFromSearchUseCase() }
+    factory { GetYoutubeVideosFromSearchUseCase(get()) }
     factory { SaveYoutubeDetailUseCase(get(), get()) }
     factory { SaveDetailsContainerDetailUseCase<Backpack>(get(), get(), get()) }
     factory {
