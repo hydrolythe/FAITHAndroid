@@ -62,7 +62,7 @@ class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<
     private var navigation: YoutubeVideoDetailScreenNavigation? = null
     private var timer: Timer? = null
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
-    private var youtubePlayerListener : YouTubePlayerListener? = null
+    private var youtubePlayerListener: YouTubePlayerListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -122,10 +122,9 @@ class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<
         }
 
         youtubeVideoDetailViewModel.selectedSnippet.observe(this, Observer {
-            if (it != null){
+            if (it != null) {
                 youtubeVideoDetailViewModel.showPreview()
-            }
-            else
+            } else
                 youtubeVideoDetailViewModel.hidePreview()
         })
 

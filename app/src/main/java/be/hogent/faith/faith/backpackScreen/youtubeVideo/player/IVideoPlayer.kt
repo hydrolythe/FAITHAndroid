@@ -8,6 +8,6 @@ interface IVideoPlayer {
     fun playVideo(currentState: VideoPlayerState)
     fun pauseVideo(currentState: VideoPlayerState)
     fun stopVideo(currentState: VideoPlayerState)
-    fun seekTo(currentState: VideoPlayerState, time : Float)
+    fun seekTo(currentState: VideoPlayerState, time: Float)
     fun setFullScreen()
 }

@@ -6,13 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
 import io.reactivex.subscribers.DisposableSubscriber
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
 class YoutubeVideoDetailViewModel(
     private val getYoutubeVideosFromSearchUseCase: GetYoutubeVideosFromSearchUseCase

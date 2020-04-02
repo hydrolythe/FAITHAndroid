@@ -75,6 +75,10 @@ abstract class DetailsContainerViewModel(
             detailFilter.hasExternalVideoDetailFilter.isEnabled = enabled
             value = detailFilter.filter(details)
         }
+        addSource(videoFilterEnabled) { enabled ->
+            detailFilter.hasVideoDetailFilter.isEnabled = enabled
+            value = detailFilter.filter(details)
+        }
     }
 
     protected var _currentFile = MutableLiveData<Detail>()

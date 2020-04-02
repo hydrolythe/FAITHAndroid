@@ -157,7 +157,6 @@ class BackpackViewModel(
         saveCurrentDetail(user, detail)
     }
 
-
     private fun checkUniqueTitle(title: String): Boolean {
         return (details.find { e -> (e.title == title) } == null)
     }

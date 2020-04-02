@@ -6,10 +6,6 @@ import android.view.animation.Animation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import be.hogent.faith.R
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayer
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.IVideoPlayer
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.VideoPlayerState
 import be.hogent.faith.faith.util.getHighQualityThumbnailUrl
 import com.bumptech.glide.Glide
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
@@ -22,7 +18,6 @@ import kotlinx.android.synthetic.main.player_youtube_custom.view.gradient_blue_p
 import kotlinx.android.synthetic.main.player_youtube_custom.view.img_thumbnail_player
 import kotlinx.android.synthetic.main.player_youtube_custom.view.txt_title_player
 
-
 /**
  * Custom YoutubePlayer UI controller
  * Used to customize our player and make it fit our lay-outs
@@ -32,7 +27,7 @@ import kotlinx.android.synthetic.main.player_youtube_custom.view.txt_title_playe
  *
  * The controller puts a custom lay-out on top of the youtubeplayerview declared in the xml files
  */
-class YoutubePlayerController (
+class YoutubePlayerController(
     private val customPlayerUi: View,
     private val youTubePlayer: YouTubePlayer,
     private val faithYoutubePlayer: FaithYoutubePlayer
@@ -43,8 +38,8 @@ class YoutubePlayerController (
     private var thumbnailImg: ImageView? = null
     private var gradient: ImageView? = null
     private var startScreen: ConstraintLayout? = null
-    private var alphaAnim : AlphaAnimation? = null
-    private var customPlayerContainer : ConstraintLayout? = null
+    private var alphaAnim: AlphaAnimation? = null
+    private var customPlayerContainer: ConstraintLayout? = null
 
     init {
         playerTracker = YouTubePlayerTracker()
@@ -74,48 +69,47 @@ class YoutubePlayerController (
      * Very useful because it prevents users from clicking on default YouTube buttons , instead our menu and seekbar appear
      * It's a layer between our UI and the default YouTube UI
      */
-    private fun initFullScreenOnClickListener(){
+    private fun initFullScreenOnClickListener() {
         customPlayerContainer!!.setOnClickListener {
-            if(faithYoutubePlayer.isFullscreen){
+            if (faithYoutubePlayer.isFullscreen) {
                 startAnimation()
-            }
-            else
+            } else
                 cancelAnim()
         }
 
         faithYoutubePlayer.timeContainer!!.setOnClickListener {
-            if(faithYoutubePlayer.isFullscreen)
+            if (faithYoutubePlayer.isFullscreen)
                 cancelAnim()
         }
 
         faithYoutubePlayer.menuContainer!!.setOnClickListener {
-            if(faithYoutubePlayer.isFullscreen)
+            if (faithYoutubePlayer.isFullscreen)
                 cancelAnim()
         }
     }
 
     override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
         super.onStateChange(youTubePlayer, state)
-        if(state == PlayerConstants.PlayerState.BUFFERING)
+        if (state == PlayerConstants.PlayerState.BUFFERING)
             showLoadingScreen()
-        if(state == PlayerConstants.PlayerState.UNSTARTED)
+        if (state == PlayerConstants.PlayerState.UNSTARTED)
             showStartScreen()
-        if(state == PlayerConstants.PlayerState.PLAYING){
+        if (state == PlayerConstants.PlayerState.PLAYING) {
             startScreen!!.visibility = View.GONE
         }
-        if(state == PlayerConstants.PlayerState.PAUSED){
-            if(alphaAnim != null)
+        if (state == PlayerConstants.PlayerState.PAUSED) {
+            if (alphaAnim != null)
                 cancelAnim()
         }
-        if(state == PlayerConstants.PlayerState.ENDED)
+        if (state == PlayerConstants.PlayerState.ENDED)
             showStartScreen()
     }
 
-    private fun showLoadingScreen(){
-        //TODO
+    private fun showLoadingScreen() {
+        // TODO
     }
 
-    private fun startAnimation(){
+    private fun startAnimation() {
         faithYoutubePlayer.menuContainer!!.visibility = View.VISIBLE
         faithYoutubePlayer.timeContainer!!.visibility = View.VISIBLE
 
@@ -134,14 +128,14 @@ class YoutubePlayerController (
         })
     }
 
-    private fun cancelAnim(){
+    private fun cancelAnim() {
         alphaAnim?.cancel()
         alphaAnim = null
         faithYoutubePlayer.menuContainer!!.visibility = View.VISIBLE
         faithYoutubePlayer.timeContainer!!.visibility = View.VISIBLE
     }
 
-    private fun showStartScreen(){
+    private fun showStartScreen() {
         cancelAnim()
         startScreen!!.visibility = View.VISIBLE
     }
@@ -164,7 +158,7 @@ class YoutubePlayerController (
     override fun seekTo(currentState: VideoPlayerState, time: Float) {
         youTubePlayer.seekTo(time)
 
-        if(currentState == VideoPlayerState.PLAYING)
+        if (currentState == VideoPlayerState.PLAYING)
             youTubePlayer.play()
     }
 

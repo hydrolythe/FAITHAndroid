@@ -46,6 +46,6 @@ class CombinedDetailFilter {
         return filteredDetails.filter(titleFilter)
     }
     private fun isDetailTypeFilterActive(): Boolean {
-        return hasExternalVideoDetailFilter.isEnabled || hasPhotoDetailFilter.isEnabled || hasDrawingDetailFilter.isEnabled || hasTextDetailFilter.isEnabled || hasAudioDetailFilter.isEnabled
+        return hasExternalVideoDetailFilter.isEnabled || hasPhotoDetailFilter.isEnabled || hasDrawingDetailFilter.isEnabled || hasTextDetailFilter.isEnabled || hasAudioDetailFilter.isEnabled || hasVideoDetailFilter.isEnabled
     }
 }

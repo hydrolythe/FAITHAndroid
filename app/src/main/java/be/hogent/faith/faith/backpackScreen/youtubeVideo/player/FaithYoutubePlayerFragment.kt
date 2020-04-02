@@ -1,9 +1,6 @@
 package be.hogent.faith.faith.backpackScreen.youtubeVideo.player
 
-import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -26,7 +23,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 abstract class FaithYoutubePlayerFragment() : IVideoPlayer, Fragment() {
 
-    private val playerViewModel : FaithYoutubePlayerViewModel by viewModel()
+    private val playerViewModel: FaithYoutubePlayerViewModel by viewModel()
     private var faithPlayerListener: FaithYoutubePlayerListener? = null
 
     /**
@@ -36,7 +33,7 @@ abstract class FaithYoutubePlayerFragment() : IVideoPlayer, Fragment() {
         super.onStart()
 
         playerViewModel.player.observe(this, Observer { player ->
-            if(faithPlayerListener == null && player != null){
+            if (faithPlayerListener == null && player != null) {
                 /**
                  * Creates a listener from our player with the new track to play
                  */
@@ -58,7 +55,7 @@ abstract class FaithYoutubePlayerFragment() : IVideoPlayer, Fragment() {
                     playerViewModel.onPauseClicked()
                 }
 
-                if(playerViewModel.player.value!!.hasStopButton()){
+                if (playerViewModel.player.value!!.hasStopButton()) {
                     playerViewModel.player.value!!.stopButton!!.setOnClickListener {
                         playerViewModel.onStopClicked()
                     }
@@ -68,7 +65,7 @@ abstract class FaithYoutubePlayerFragment() : IVideoPlayer, Fragment() {
                     setFullScreen()
                 }
 
-                if(playerViewModel.player.value!!.hasSeekbar()){
+                if (playerViewModel.player.value!!.hasSeekbar()) {
                     playerViewModel.player.value!!.seekBar!!.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                             if (fromUser) {
@@ -92,12 +89,12 @@ abstract class FaithYoutubePlayerFragment() : IVideoPlayer, Fragment() {
         })
     }
 
-    fun setFaithYoutubePlayer(faithYoutubePlayer: FaithYoutubePlayer){
+    fun setFaithYoutubePlayer(faithYoutubePlayer: FaithYoutubePlayer) {
         playerViewModel.setPlayer(faithYoutubePlayer)
     }
 
     override fun playVideo(currentState: VideoPlayerState) {
-       faithPlayerListener!!.playVideo(currentState)
+        faithPlayerListener!!.playVideo(currentState)
     }
 
     override fun pauseVideo(currentState: VideoPlayerState) {
@@ -105,36 +102,32 @@ abstract class FaithYoutubePlayerFragment() : IVideoPlayer, Fragment() {
     }
 
     override fun stopVideo(currentState: VideoPlayerState) {
-       faithPlayerListener!!.stopVideo(currentState)
+        faithPlayerListener!!.stopVideo(currentState)
     }
 
     override fun seekTo(currentState: VideoPlayerState, time: Float) {
-       faithPlayerListener!!.seekTo(currentState, time)
-       playerViewModel.player.value!!.currentTimeField!!.text =
-           createTimeLabel(
-               time
-           )
+        faithPlayerListener!!.seekTo(currentState, time)
+        playerViewModel.player.value!!.currentTimeField!!.text = createTimeLabel(time)
     }
 
     override fun setFullScreen() {
-        if(playerViewModel.player.value!!.isFullscreen) {
+        if (playerViewModel.player.value!!.isFullscreen) {
             onYouTubePlayerExitFullScreen()
-        }
-        else{
+        } else {
             playerViewModel.player.value!!.youtubePlayerView.enterFullScreen()
             onYouTubePlayerEnterFullScreen()
         }
         playerViewModel.player.value!!.isFullscreen = !playerViewModel.player.value!!.isFullscreen
     }
 
-    open fun onYouTubePlayerEnterFullScreen(){
+    open fun onYouTubePlayerEnterFullScreen() {
         val viewParams: ViewGroup.LayoutParams = playerViewModel.player.value!!.playerParentView.layoutParams
         viewParams.height = ViewGroup.LayoutParams.MATCH_PARENT
         viewParams.width = ViewGroup.LayoutParams.MATCH_PARENT
         playerViewModel.player.value!!.playerParentView.layoutParams = viewParams
     }
 
-    open fun onYouTubePlayerExitFullScreen(){
+    open fun onYouTubePlayerExitFullScreen() {
         val viewParams: ViewGroup.LayoutParams = playerViewModel.player.value!!.playerParentView.layoutParams
         viewParams.height = resources.getDimension(R.dimen.match_constraint).toInt()
         viewParams.width = resources.getDimension(R.dimen.match_constraint).toInt()
@@ -149,14 +142,14 @@ abstract class FaithYoutubePlayerFragment() : IVideoPlayer, Fragment() {
         stopPlayer()
     }
 
-    fun resetPlayer(){
+    fun resetPlayer() {
         stopPlayer()
         faithPlayerListener = null
         playerViewModel.resetPlayer()
     }
 
     private fun stopPlayer() {
-        if(playerViewModel.player.value != null)
+        if (playerViewModel.player.value != null)
         playerViewModel.player.value!!.youtubePlayerView.release()
     }
 }

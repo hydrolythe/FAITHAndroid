@@ -14,7 +14,6 @@ import be.hogent.faith.databinding.FragmentViewYoutubeVideoBinding
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayer
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerFragment
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
 /**
@@ -51,7 +50,7 @@ class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetai
 
         youtubePlayerView = viewYoutubeVideoBinding.youtubePlayerView
 
-        //Casts are needed, stop playing with me compiler
+        // Casts are needed, stop playing with me compiler
         val faithYoutubePlayer =
             FaithYoutubePlayer(
                 youtubeVideoDetail = youtubeVideoDetail,

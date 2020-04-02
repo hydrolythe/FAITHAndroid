@@ -11,11 +11,11 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
  */
 class FaithYoutubePlayerListener(
     private val faithYoutubePlayer: FaithYoutubePlayer,
-    private val customPlayerUi : View
-    ) : AbstractYouTubePlayerListener(),
+    private val customPlayerUi: View
+) : AbstractYouTubePlayerListener(),
     IVideoPlayer {
 
-    private var ytController : YoutubePlayerController? = null
+    private var ytController: YoutubePlayerController? = null
 
     override fun onReady(youTubePlayer: YouTubePlayer) {
         ytController =
@@ -36,9 +36,9 @@ class FaithYoutubePlayerListener(
      */
     override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
         super.onVideoDuration(youTubePlayer, duration)
-        if(faithYoutubePlayer.hasSeekbar())
+        if (faithYoutubePlayer.hasSeekbar())
         faithYoutubePlayer.seekBar!!.max = duration.toInt()
-        if(faithYoutubePlayer.hasDurationField())
+        if (faithYoutubePlayer.hasDurationField())
         faithYoutubePlayer.durationField!!.text =
             createTimeLabel(
                 duration
@@ -46,9 +46,9 @@ class FaithYoutubePlayerListener(
     }
 
     override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
-        if(faithYoutubePlayer.hasSeekbar())
+        if (faithYoutubePlayer.hasSeekbar())
         faithYoutubePlayer.seekBar!!.progress = second.toInt()
-        if(faithYoutubePlayer.hasCurrentTimeField())
+        if (faithYoutubePlayer.hasCurrentTimeField())
         faithYoutubePlayer.currentTimeField!!.text =
             createTimeLabel(
                 second
