@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentAddExternalFileBinding
-import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.util.TempFileProvider
 import kotlinx.coroutines.CoroutineScope
@@ -86,13 +85,6 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
             navigation!!.backToEvent()
         })
         externalFileViewModel.savedDetail.observe(this, Observer { newDetail ->
-            if (newDetail is PhotoDetail) {
-                Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
-                        .show()
-            } else {
-                Toast.makeText(context, getString(R.string.save_video_success), Toast.LENGTH_SHORT)
-                        .show()
-            }
 
             detailFinishedListener.onDetailFinished(newDetail)
             navigation?.backToEvent()
@@ -203,6 +195,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
         set.connect(view.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
         set.applyTo(binding.filePreviewContainer)
     }
+
     private fun selectFile() {
         val pickIntent = Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         pickIntent.putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/*", "video/*"))

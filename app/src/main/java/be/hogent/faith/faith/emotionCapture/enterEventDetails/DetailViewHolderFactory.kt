@@ -107,7 +107,7 @@ sealed class DetailViewHolder(
         thumbnailView.btn_delete_detailRv.setOnClickListener {
             existingDetailNavigationListener.deleteDetail(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
         }
-        thumbnailView.text_detail_title.text = detail.fileName
+        thumbnailView.text_detail_title.text = detail.title
     }
 
     fun hide(hide: Boolean) {

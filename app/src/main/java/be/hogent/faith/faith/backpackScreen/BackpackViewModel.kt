@@ -22,16 +22,6 @@ import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.subscribers.DisposableSubscriber
 import java.util.Date
 
-object OpenState {
-    const val OPEN = 2
-    const val CLOSED = 3
-}
-
-object OpenDetailType {
-    const val NEW = 1
-    const val EDIT = 2
-}
-
 class BackpackViewModel(
     saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
     deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>,
@@ -45,20 +35,14 @@ class BackpackViewModel(
     private val _viewButtons = MutableLiveData<Boolean>()
     val viewButtons: LiveData<Boolean> = _viewButtons
 
-    private val _isDetailScreenOpen = MutableLiveData<Boolean>()
-    val isDetailScreenOpen: LiveData<Boolean> = _isDetailScreenOpen
-
-    private val _isPopupMenuOpen = MutableLiveData<Int>()
-    val isPopupMenuOpen: LiveData<Int> = _isPopupMenuOpen
-
-    private val _isInEditMode = MutableLiveData<Int>()
-    val isInEditMode: LiveData<Int> = _isInEditMode
+    private val _isInEditMode = MutableLiveData<EditModeState>()
+    val isInEditMode: LiveData<EditModeState> = _isInEditMode
 
     private val _showSaveDialog = SingleLiveEvent<Detail>()
     val showSaveDialog: LiveData<Detail> = _showSaveDialog
 
-    private val _openDetailType = SingleLiveEvent<Int>()
-    val openDetailType: LiveData<Int> = _openDetailType
+    private val _openDetailMode = SingleLiveEvent<OpenDetailMode>()
+    val openDetailMode: LiveData<OpenDetailMode> = _openDetailMode
 
     init {
         loadDetails()
@@ -86,22 +70,14 @@ class BackpackViewModel(
     }
 
     fun initialize() {
-        _isInEditMode.postValue(OpenState.CLOSED)
-        _isPopupMenuOpen.postValue(OpenState.CLOSED)
+        _isInEditMode.postValue(EditModeState.CLOSED)
     }
 
     fun setIsInEditMode() {
-        if (isInEditMode.value == OpenState.CLOSED)
-            _isInEditMode.postValue(OpenState.OPEN)
-        else if (isInEditMode.value == OpenState.OPEN)
-            _isInEditMode.postValue(OpenState.CLOSED)
-    }
-
-    fun changePopupMenuState() {
-        if (isPopupMenuOpen.value == OpenState.CLOSED)
-            _isPopupMenuOpen.postValue(OpenState.OPEN)
-        else if (isPopupMenuOpen.value == OpenState.OPEN)
-            _isPopupMenuOpen.postValue(OpenState.CLOSED)
+        if (isInEditMode.value == EditModeState.CLOSED)
+            _isInEditMode.postValue(EditModeState.OPEN)
+        else if (isInEditMode.value == EditModeState.OPEN)
+            _isInEditMode.postValue(EditModeState.CLOSED)
     }
 
     fun showSaveDialog(detail: Detail) {
@@ -115,45 +91,36 @@ class BackpackViewModel(
             is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
             is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
             is ExternalVideoDetail -> saveExternalVideoDetail(
-                user,
-                showSaveDialog.value as ExternalVideoDetail
+                    user,
+                    showSaveDialog.value as ExternalVideoDetail
             )
             is YoutubeVideoDetail -> saveYoutubeDetail(user, detail)
         }
         _currentFile.postValue(null)
     }
 
-    fun setOpenDetailType(openDetailType: Int) {
-        _openDetailType.postValue(openDetailType)
-    }
-
-    fun closePopUpMenu() {
-        _isPopupMenuOpen.postValue(OpenState.CLOSED)
-    }
-
-    fun setDetailScreenOpen(isOpen: Boolean) {
-        _isDetailScreenOpen.postValue(isOpen)
-        _isPopupMenuOpen.postValue(OpenState.CLOSED)
+    fun setOpenDetailType(openDetailMode: OpenDetailMode) {
+        _openDetailMode.postValue(openDetailMode)
     }
 
     fun viewButtons(viewButtons: Boolean) {
         _viewButtons.postValue(viewButtons)
     }
 
-    fun onSaveClicked(fileName: String, user: User, detail: Detail) {
-        val noEmptyString = checkEmptyString(fileName)
-        val notMaxCharacters = checkMaxCharacters(fileName)
-        val uniqueFilename = checkUniqueFilename(fileName)
-        if (noEmptyString && notMaxCharacters && uniqueFilename) {
-            detail.fileName = fileName
+    fun onSaveClicked(title: String, user: User, detail: Detail) {
+        val notMaxCharacters = checkMaxCharacters(title)
+        val uniqueTitle = checkUniqueTitle(title)
+        if (title.isNotEmpty() && notMaxCharacters && uniqueTitle) {
+            detail.title = title
+
             saveCurrentDetail(user, detail)
             _detailIsSaved.call()
         } else {
-            if (!noEmptyString)
+            if (title.isBlank())
                 setErrorMessage(R.string.save_detail_emptyString)
             if (!notMaxCharacters)
                 setErrorMessage(R.string.save_detail_maxChar)
-            if (!uniqueFilename)
+            if (!uniqueTitle)
                 setErrorMessage(R.string.save_detail_uniqueName)
         }
     }
@@ -177,32 +144,40 @@ class BackpackViewModel(
         }
     }
 
-    fun saveYoutubeVideoDetail(fileName: String, user: User, detail: Detail) {
-        val notMaxCharacters = checkMaxCharacters(fileName)
-        val uniqueFilename = checkUniqueFilename(fileName)
+    fun saveYoutubeVideoDetail(title: String, user: User, detail: Detail) {
+        val notMaxCharacters = checkMaxCharacters(title)
+        val uniqueFilename = checkUniqueTitle(title)
 
         if (!notMaxCharacters)
-            detail.fileName = fileName.substring(0, 29)
+            detail.title = title.substring(0, 29)
 
         if (!uniqueFilename) {
-            detail.fileName = detail.fileName + " (" + Date() + ")"
+            detail.title = detail.title + " (" + Date() + ")"
         }
         saveCurrentDetail(user, detail)
     }
 
-    private fun checkUniqueFilename(fileName: String): Boolean {
-        return (details.find { e -> (e.fileName == fileName) } == null)
+
+    private fun checkUniqueTitle(title: String): Boolean {
+        return (details.find { e -> (e.title == title) } == null)
     }
 
-    private fun checkMaxCharacters(fileName: String): Boolean {
-        return fileName.length <= 30
-    }
-
-    private fun checkEmptyString(fileName: String): Boolean {
-        return fileName.isNotEmpty() || !fileName.isBlank()
+    private fun checkMaxCharacters(title: String): Boolean {
+        return title.length <= 30
     }
 
     fun clearSaveDialogErrorMessage() {
         _errorMessage.postValue(null)
     }
 }
+
+/**
+ * Holds the state of the edit mode: open or closed
+ */
+enum class EditModeState { OPEN, CLOSED }
+
+/**
+ * If a detail is new --> savedialog is shown
+ * When editing an existing detail --> savedialog isn't shown
+ */
+enum class OpenDetailMode { NEW, EDIT }

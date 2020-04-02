@@ -51,6 +51,7 @@ class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetai
 
         youtubePlayerView = viewYoutubeVideoBinding.youtubePlayerView
 
+        //Casts are needed, stop playing with me compiler
         val faithYoutubePlayer =
             FaithYoutubePlayer(
                 youtubeVideoDetail = youtubeVideoDetail,

@@ -8,8 +8,8 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detail.externalVideo.CreateExternalVideoDetailUseCase
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
 import io.reactivex.observers.DisposableSingleObserver
@@ -19,7 +19,8 @@ import java.util.Locale
 
 class ExternalFileViewModel(
     private val createPhotoDetailUseCase: CreatePhotoDetailUseCase,
-    private val createExternalVideoDetailUseCase: CreateExternalVideoDetailUseCase
+    private val createExternalVideoDetailUseCase: CreateExternalVideoDetailUseCase,
+    private val loadDetailFile: LoadDetailFileUseCase
 ) : ViewModel() {
 
     private val _cancelClicked = SingleLiveEvent<Unit>()
@@ -30,9 +31,9 @@ class ExternalFileViewModel(
     val savedDetail: LiveData<Detail>
         get() = _savedDetail
 
-    private var navigation: TakePhotoFragment.PhotoScreenNavigation? = null
-
     private var _currentFile = MutableLiveData<File>()
+    val currentFile: LiveData<File>
+        get() = _currentFile
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
@@ -47,39 +48,58 @@ class ExternalFileViewModel(
         _cancelClicked.call()
     }
 
+    fun loadExistingDetail(detail: Detail) {
+        // TODO tijdelijk tot encryptie
+        if (detail.file.path.startsWith("users")) {
+            val params = LoadDetailFileUseCase.LoadFileParams(detail)
+            loadDetailFile.execute(params, LoadFileUseCaseHandler())
+        } else
+            _currentFile.value = detail.file
+    }
+
+    private inner class LoadFileUseCaseHandler : DisposableSingleObserver<File>() {
+        override fun onSuccess(loadedFile: File) {
+            _currentFile.value = loadedFile
+        }
+
+        override fun onError(e: Throwable) {
+            Timber.e(e)
+            _errorMessage.postValue(R.string.error_load_events)
+        }
+    }
+
     fun onSaveClicked() {
         require(_currentFile.value != null)
         val file = File(_currentFile.value!!.path)
-        if (file.path.toLowerCase(Locale.ROOT).contains("photo")) {
-            val params = CreatePhotoDetailUseCase.Params(_currentFile.value!!)
-            createPhotoDetailUseCase.execute(params, CreatePhotoDetailUseCaseHandler())
-        } else {
 
-            val params = CreateExternalVideoDetailUseCase.Params(_currentFile.value!!)
-            createExternalVideoDetailUseCase.execute(params, CreateExternalVideoDetailUseCaseHandler())
-        }
-    }
+        when (file.path.toLowerCase(Locale.ROOT).substring(file.path.toLowerCase(Locale.ROOT).lastIndexOf("."))) {
+            ".png" -> {
+                val params = CreatePhotoDetailUseCase.Params(_currentFile.value!!)
+                createPhotoDetailUseCase.execute(params, object : DisposableSingleObserver<PhotoDetail>() {
+                    override fun onSuccess(createdDetail: PhotoDetail) {
+                        _savedDetail.postValue(createdDetail)
+                    }
 
-    private inner class CreatePhotoDetailUseCaseHandler :
-            DisposableSingleObserver<PhotoDetail>() {
-        override fun onSuccess(createdDetail: PhotoDetail) {
-            _savedDetail.value = createdDetail
-        }
+                    override fun onError(e: Throwable) {
+                        _errorMessage.postValue(R.string.create_photo_failed)
+                        Timber.e(e)
+                    }
+                })
+            }
+            ".mp4" -> {
+                val params = CreateExternalVideoDetailUseCase.Params(_currentFile.value!!)
+                createExternalVideoDetailUseCase.execute(params, object : DisposableSingleObserver<ExternalVideoDetail>() {
+                    override fun onSuccess(createdDetail: ExternalVideoDetail) {
+                        _savedDetail.postValue(createdDetail)
+                    }
 
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.create_photo_failed)
-            Timber.e(e)
-        }
-    }
-    private inner class CreateExternalVideoDetailUseCaseHandler :
-            DisposableSingleObserver<ExternalVideoDetail>() {
-        override fun onSuccess(createdDetail: ExternalVideoDetail) {
-            _savedDetail.value = createdDetail
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.create_video_failed)
-            Timber.e(e)
+                    override fun onError(e: Throwable) {
+                        _errorMessage.postValue(R.string.create_video_failed)
+                        Timber.e(e)
+                    }
+                })
+            }
+            else -> _errorMessage.postValue(R.string.unauthorized_file_type)
         }
     }
 }

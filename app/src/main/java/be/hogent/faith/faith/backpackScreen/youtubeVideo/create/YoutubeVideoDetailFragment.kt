@@ -141,7 +141,7 @@ class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<
         })
 
         youtubeVideoDetailViewModel.savedDetail.observe(this, Observer {
-            backpackViewModel.saveYoutubeVideoDetail(it.fileName, userViewModel.user.value!!, it)
+            backpackViewModel.saveYoutubeVideoDetail(it.title, userViewModel.user.value!!, it)
         })
 
         backpackViewModel.infoMessage.observe(this, Observer {

@@ -7,6 +7,6 @@ import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 @BindingAdapter("snippet_title")
 fun TextView.setSnippetTitle(item: YoutubeVideoDetail?) {
     item?.let {
-        text = item.fileName
+        text = item.title
     }
 }

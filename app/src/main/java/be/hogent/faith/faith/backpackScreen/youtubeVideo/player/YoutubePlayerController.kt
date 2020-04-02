@@ -60,7 +60,7 @@ class YoutubePlayerController (
         startScreen = customPlayerUi.container_player_pause
         customPlayerContainer = customPlayerUi.container_youtube_playerview
 
-        title!!.text = faithYoutubePlayer.youtubeVideoDetail.fileName
+        title!!.text = faithYoutubePlayer.youtubeVideoDetail.title
 
         /**
          * Thumbnail image from YouTube is the background of the stop screen
