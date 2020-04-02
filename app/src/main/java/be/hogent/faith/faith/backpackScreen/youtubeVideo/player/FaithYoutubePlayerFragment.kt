@@ -147,11 +147,13 @@ abstract class FaithYoutubePlayerFragment() : IVideoPlayer, Fragment() {
     }
 
     fun resetPlayer(){
+        stopPlayer()
         faithPlayerListener = null
         playerViewModel.resetPlayer()
     }
 
     private fun stopPlayer() {
+        if(playerViewModel.player.value != null)
         playerViewModel.player.value!!.youtubePlayerView.release()
     }
 }
