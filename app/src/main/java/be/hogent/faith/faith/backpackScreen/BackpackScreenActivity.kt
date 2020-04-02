@@ -68,8 +68,6 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     override fun backToEvent() {
         supportFragmentManager.popBackStack()
         backpackViewModel.viewButtons(true)
-        backpackViewModel.setDetailScreenOpen(false)
-        backpackViewModel.closePopUpMenu()
     }
 
     override fun onDetailFinished(detail: Detail) {
@@ -81,57 +79,47 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
             is ExternalVideoDetail -> save(detail)
         }
         backpackViewModel.viewButtons(true)
-        backpackViewModel.setDetailScreenOpen(false)
-        backpackViewModel.closePopUpMenu()
     }
 
     override fun startPhotoDetailFragment() {
-        replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
-        startFragmentInitialisers()
+        replaceFragment(BackpackDetailFragment.PhotoFragment.newInstance(), R.id.fragment)
+        setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startAudioDetailFragment() {
-        replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
-        startFragmentInitialisers()
+        replaceFragment(BackpackDetailFragment.AudioFragment.newInstance(), R.id.fragment)
+        setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startDrawingDetailFragment() {
-        replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
-        startFragmentInitialisers()
+        replaceFragment(BackpackDetailFragment.DrawingFragment.newInstance(), R.id.fragment)
+        setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startTextDetailFragment() {
-        replaceFragment(BackpackDetailFragment.TextFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
-        startFragmentInitialisers()
+        replaceFragment(BackpackDetailFragment.TextFragment.newInstance(), R.id.fragment)
+        setLayoutListenersOnNewDetailOpened()
     }
-
-    private fun startFragmentInitialisers() {
-        backpackViewModel.viewButtons(false)
-        backpackViewModel.setDetailScreenOpen(true)
-        backpackViewModel.closePopUpMenu()
-        backpackViewModel.setOpenDetailType(OpenDetailType.NEW)
+    override fun startExternalFileDetailFragment() {
+        replaceFragment(BackpackDetailFragment.ExternalFileFragment.newInstance(), R.id.fragment)
+        setLayoutListenersOnNewDetailOpened()
     }
-
     override fun startVideoDetailFragment() {
         Toast.makeText(this, "Nog niet beschikbaar", Toast.LENGTH_SHORT).show()
     }
-
-    override fun startExternalFileDetailFragment() {
-        replaceFragment(BackpackDetailFragment.ExternalFileFragmentNoEmotionAvatar.newInstance(), R.id.fragment)
+    private fun setLayoutListenersOnNewDetailOpened() {
         backpackViewModel.viewButtons(false)
-        backpackViewModel.setDetailScreenOpen(true)
-        backpackViewModel.closePopUpMenu()
+        backpackViewModel.setOpenDetailType(OpenDetailMode.NEW)
     }
 
     override fun openDetailScreenFor(detail: Detail) {
-        backpackViewModel.setOpenDetailType(OpenDetailType.EDIT)
+        backpackViewModel.setOpenDetailType(OpenDetailMode.EDIT)
         backpackViewModel.setCurrentFile(detail)
         replaceFragment(
                 BackpackDetailFragment.newInstance(detail),
                 R.id.fragment
         )
         backpackViewModel.viewButtons(false)
-        backpackViewModel.closePopUpMenu()
     }
 
     override fun closeBackpack() {

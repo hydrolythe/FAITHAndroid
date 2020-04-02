@@ -65,7 +65,7 @@ object DetailMapper : Mapper<DetailEntity, Detail> {
 
     override fun mapToEntity(model: Detail): DetailEntity {
         return DetailEntity(
-            FileConverter().toString(model.file), model.fileName, model.uuid.toString(), when (model) {
+            FileConverter().toString(model.file), model.title, model.uuid.toString(), when (model) {
                 is AudioDetail -> DetailType.AUDIO
                 is TextDetail -> DetailType.TEXT
                 is DrawingDetail -> DetailType.DRAWING

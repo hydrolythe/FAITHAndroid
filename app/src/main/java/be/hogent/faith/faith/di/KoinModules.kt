@@ -72,7 +72,7 @@ val appModule = module(override = true) {
     viewModel { RegisterUserInfoViewModel(get()) }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { TakePhotoViewModel(get()) }
-    viewModel { ExternalFileViewModel(get(), get()) }
+    viewModel { ExternalFileViewModel(get(), get(), get()) }
     viewModel { (user: User) -> EventListViewModel(user, get()) }
     viewModel { EventDetailsViewModel() }
     viewModel { ViewPhotoDetailViewModel() }

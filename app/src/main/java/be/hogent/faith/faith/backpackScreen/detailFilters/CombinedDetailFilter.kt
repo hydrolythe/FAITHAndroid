@@ -18,6 +18,7 @@ class CombinedDetailFilter {
 
     fun filter(details: List<Detail>): List<Detail> {
         val filteredDetails = mutableListOf<Detail>()
+
         if (hasTextDetailFilter.isEnabled) {
             filteredDetails.addAll(details.filter(hasTextDetailFilter))
         }
@@ -34,9 +35,12 @@ class CombinedDetailFilter {
             filteredDetails.addAll(details.filter(hasExternalVideoDetailFilter))
         }
 
-        if (filteredDetails.isEmpty()) {
-            return details.filter(titleFilter)
+        if (filteredDetails.isEmpty() && !isDetailTypeFilterActive()) {
+            return details.sortedBy { it.javaClass.canonicalName }
         }
         return filteredDetails.filter(titleFilter)
+    }
+    private fun isDetailTypeFilterActive(): Boolean {
+        return hasExternalVideoDetailFilter.isEnabled || hasPhotoDetailFilter.isEnabled || hasDrawingDetailFilter.isEnabled || hasTextDetailFilter.isEnabled || hasAudioDetailFilter.isEnabled
     }
 }

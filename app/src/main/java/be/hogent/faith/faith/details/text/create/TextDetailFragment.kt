@@ -14,8 +14,10 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterTextBinding
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import kotlinx.android.synthetic.main.fragment_enter_text.enterText_editor
@@ -134,7 +136,9 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
             Toast.makeText(context, errorMessageResourceId, Toast.LENGTH_SHORT).show()
         })
         textDetailDetailViewModel.savedDetail.observe(this, Observer { savedTextDetail ->
+            if (requireActivity() is EmotionCaptureMainActivity) {
             Toast.makeText(context, R.string.save_text_success, Toast.LENGTH_SHORT).show()
+            }
             detailFinishedListener.onDetailFinished(savedTextDetail)
             navigation?.backToEvent()
         })
@@ -163,7 +167,11 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
     private fun showExitAlert() {
         val alertDialog: AlertDialog = this.run {
             val builder = AlertDialog.Builder(this.requireContext()).apply {
-                setTitle(R.string.dialog_to_the_event_title)
+                if (requireActivity() is BackpackScreenActivity) {
+                    setTitle(R.string.dialog_to_the_backpack)
+                } else {
+                    setTitle(R.string.dialog_to_the_event_title)
+                }
                 setMessage(R.string.dialog_enterText_cancel_message)
                 setPositiveButton(R.string.ok) { _, _ ->
                     navigation!!.backToEvent()
