@@ -188,6 +188,10 @@ class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<
         popupWindow.dismiss()
     }
 
+    /**
+     * Shows a popup window with the youtube player
+     * A pop-up window because that way we don't use our list and current search state in the fragment
+     */
     private fun showPreviewScreen() {
 
         youtubeVideoDetailBinding.rvYoutubeView.visibility = View.GONE
@@ -226,6 +230,9 @@ class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<
         resetPlayer()
     }
 
+    /**
+     * Everything you need to play a new video in your fragment
+     */
     private fun startYoutubePlayer() {
         val faithYoutubePlayer =
             FaithYoutubePlayer(

@@ -22,6 +22,8 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTube
  * Written to make sure we have complete control over each player state
  * Consists of 3 screens: empty player screen, on touch screen with pause button and a pause screen
  * It's easy to change the screens and lay-out
+ *
+ * The controller puts a custom lay-out on top of the youtubeplayerview declared in the xml files
  */
 class YoutubePlayerController (
     private val customPlayerUi: View,

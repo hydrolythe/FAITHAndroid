@@ -17,6 +17,9 @@ import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlay
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
+/**
+ * extends abstract FaithYoutubePlayer fragment
+ */
 class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetail) : FaithYoutubePlayerFragment() {
 
     private lateinit var viewYoutubeVideoBinding: FragmentViewYoutubeVideoBinding
@@ -40,6 +43,9 @@ class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetai
         }
     }
 
+    /**
+     * Everything you need to play a new video in your fragment
+     */
     override fun onStart() {
         super.onStart()
 

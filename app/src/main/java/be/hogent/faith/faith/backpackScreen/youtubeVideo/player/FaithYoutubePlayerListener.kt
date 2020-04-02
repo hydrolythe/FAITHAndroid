@@ -4,6 +4,11 @@ import android.view.View
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 
+/**
+ * Knows the youtube controller and adds it to the player
+ * Loads a new video
+ * Updates the duration and current time of the video
+ */
 class FaithYoutubePlayerListener(
     private val faithYoutubePlayer: FaithYoutubePlayer,
     private val customPlayerUi : View

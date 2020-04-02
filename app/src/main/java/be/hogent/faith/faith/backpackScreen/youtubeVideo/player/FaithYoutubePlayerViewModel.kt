@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
+/**
+ * Player and its current state
+ */
 class FaithYoutubePlayerViewModel : ViewModel(){
 
     private var _currentState = MutableLiveData<VideoPlayerState>()
@@ -16,10 +19,6 @@ class FaithYoutubePlayerViewModel : ViewModel(){
 
     init {
         _currentState.postValue(VideoPlayerState.UNSTARTED)
-    }
-
-    fun setVideoPlayerState(newState: VideoPlayerState){
-        _currentState.postValue(newState)
     }
 
     fun onStopClicked(){

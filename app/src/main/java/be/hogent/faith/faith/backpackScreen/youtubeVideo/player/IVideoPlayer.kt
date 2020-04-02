@@ -1,5 +1,8 @@
 package be.hogent.faith.faith.backpackScreen.youtubeVideo.player
 
+/**
+ * All the methods needed to play a new video
+ */
 interface IVideoPlayer {
 
     fun playVideo(currentState: VideoPlayerState)

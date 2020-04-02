@@ -7,6 +7,10 @@ import android.widget.TextView
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
+/**
+ * Contains all elements needed for our custom player
+ */
+
 class FaithYoutubePlayer(
     val youtubeVideoDetail: YoutubeVideoDetail,
     val youtubePlayerView : YouTubePlayerView,

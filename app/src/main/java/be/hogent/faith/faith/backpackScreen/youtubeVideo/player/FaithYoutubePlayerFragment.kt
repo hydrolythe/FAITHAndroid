@@ -15,16 +15,28 @@ import org.koin.android.viewmodel.ext.android.viewModel
  * Read more: https://medium.com/@soffritti.pierfrancesco/how-to-play-youtube-videos-in-your-android-app-c40427215230
  */
 
+/**
+ * Abstract FaithYoutubePlayer fragment
+ * should be extended by every fragment where this player is needed
+ * Communicates with the FaithYoutubePlayerViewModel that contains the player and its current state
+ */
+
 abstract class FaithYoutubePlayerFragment() : IVideoPlayer, Fragment() {
 
     private val playerViewModel : FaithYoutubePlayerViewModel by viewModel()
     private var faithPlayerListener: FaithYoutubePlayerListener? = null
 
+    /**
+     * Attach listeners to all the elements of the player if they are present
+     */
     override fun onStart() {
         super.onStart()
 
         playerViewModel.player.observe(this, Observer {
             if(faithPlayerListener == null && it != null){
+                /**
+                 * Creates a listener from our player with the new track to play
+                 */
                 faithPlayerListener =
                     FaithYoutubePlayerListener(
                         it,
@@ -135,7 +147,6 @@ abstract class FaithYoutubePlayerFragment() : IVideoPlayer, Fragment() {
     }
 
     fun resetPlayer(){
-  //      stopPlayer()
         faithPlayerListener = null
         playerViewModel.resetPlayer()
     }
