@@ -40,9 +40,6 @@ class YoutubeVideoDetailViewModel(
     val backToBackpack: LiveData<Any>
         get() = _backToBackpack
 
-    private val viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
     /**
      * When the fragment starts, preview screen should be hidden
      */
@@ -103,6 +100,11 @@ class YoutubeVideoDetailViewModel(
 
     fun hidePreview() {
         _showPreview.postValue(ShowPreview.HIDE)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        getYoutubeVideosFromSearchUseCase.dispose()
     }
 }
 
