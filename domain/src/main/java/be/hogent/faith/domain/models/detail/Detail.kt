@@ -10,7 +10,7 @@ import java.util.UUID
 
 sealed class Detail(
     var file: File,
-    var fileName: String = "",
+    var title: String = "",
     val uuid: UUID = UUID.randomUUID()
 ) : Serializable {
     override fun equals(other: Any?): Boolean {
@@ -34,34 +34,34 @@ sealed class Detail(
 
 class DrawingDetail(
     file: File,
-    fileName: String = "",
+    title: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+) : Detail(file, title, uuid)
 
 class PhotoDetail(
     file: File,
-    fileName: String = "",
+    title: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+) : Detail(file, title, uuid)
 
 class TextDetail(
     file: File,
-    fileName: String = "",
+    title: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+) : Detail(file, title, uuid)
 
 class AudioDetail(
     file: File,
-    fileName: String = "",
+    title: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+) : Detail(file, title, uuid)
 class VideoDetail(
     file: File,
-    fileName: String = "",
+    title: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+) : Detail(file, title, uuid)
 class ExternalVideoDetail(
     file: File,
-    fileName: String = "",
+    title: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+) : Detail(file, title, uuid)

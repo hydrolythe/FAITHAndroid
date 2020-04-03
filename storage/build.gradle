@@ -27,7 +27,7 @@ android {
 }
 dependencies {
     implementation project(':domain')
-    implementation project(':database')
+    implementation project(':service')
     implementation project(':util')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])

@@ -2,7 +2,7 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.IEventRepository
+import be.hogent.faith.service.repositories.IEventRepository
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.service.usecases.fakes.SingleUserFakeEventRepository
 import be.hogent.faith.util.factory.EventFactory
@@ -42,7 +42,7 @@ class SaveEventUseCaseTest {
         result.test()
             .dispose()
 
-        val foundEvent = eventRepository.getEventData(event.uuid).test().values().first()
+        val foundEvent = eventRepository.get(event.uuid).test().values().first()
         assertEquals(event, foundEvent)
     }
 

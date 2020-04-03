@@ -1,6 +1,6 @@
 package be.hogent.faith.faith
 
-import be.hogent.faith.domain.repository.IAuthManager
+import be.hogent.faith.service.repositories.IAuthManager
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single

@@ -1,11 +1,13 @@
 package be.hogent.faith.storage
 
 import android.content.Context
-import be.hogent.faith.database.encryption.EncryptedDetail
-import be.hogent.faith.database.encryption.EncryptedEvent
+import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.service.encryption.EncryptedDetail
+import be.hogent.faith.service.encryption.EncryptedEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import java.io.File
@@ -18,6 +20,7 @@ import java.io.File
  * - Events main folder: users/[User.uuid]/events/[Event.uuid]/
  * - Event's emotionAvatar: users/[User.uuid]/events/[Event.uuid]/emotionAvatar
  * - Detail inside an event: users/[User.uuid]/events/[Event.uuid]/[Detail.uuid]
+ * - Backpack files: users/[User.uuid]/backpack/[Detail.uuid]
  */
 class StoragePathProvider(
     private val context: Context,
@@ -28,50 +31,74 @@ class StoragePathProvider(
         get() = fbAuth.currentUser
 
     /**
-     * Returns the path in which a user's events will be saved.
+     * Returns the folder path in which a user's detailsContainer will be saved.
      */
-    fun getEventFolder(event: Event): File {
+    fun detailsContainerFolderPath(detailsContainer: DetailsContainer): File {
+        return when (detailsContainer) {
+            is Backpack -> File("users/${user!!.uid}/backpack")
+            else -> throw NotImplementedError()
+        }
+    }
+
+    /**
+     * Returns the **relative** path in which a detail will be saved.
+     * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path.
+     */
+    fun detailPath(detail: Detail, detailsContainer: DetailsContainer): File {
+        return File("${detailsContainerFolderPath(detailsContainer).path}/${detail.uuid}")
+    }
+
+    /**
+     * Returns the **relative** path in which a detail will be saved.
+     * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path.
+     */
+    fun detailPath(detail: Detail, event: Event): File {
+        return File("${eventsFolderPath(event).path}/${detail.uuid}")
+    }
+
+    /**
+     * Returns the **relative** path in which a detail will be saved.
+     * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path.
+     */
+    fun detailPath(encryptedEvent: EncryptedEvent, encryptedDetail: EncryptedDetail): File {
+        return File("${eventsFolderPath(encryptedEvent).path}/${encryptedDetail.uuid}")
+    }
+
+    private fun eventsFolderPath(event: Event): File {
         return File("users/${user!!.uid}/events/${event.uuid}")
     }
 
-    fun getEventFolder(encryptedEvent: EncryptedEvent): File {
+    private fun eventsFolderPath(encryptedEvent: EncryptedEvent): File {
         return File("users/${user!!.uid}/events/${encryptedEvent.uuid}")
     }
 
     /**
-     * Returns the path in which an event's detail will be saved
+     * Returns the **relative** path in which an [encryptedEvent]s emotionAvatar will be saved.
+     * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path.
      */
-    fun getDetailPath(encryptedEvent: EncryptedEvent, encryptedDetail: EncryptedDetail): File {
-        return File("${getEventFolder(encryptedEvent).path}/${encryptedDetail.uuid}")
-    }
-
-    fun getEmotionAvatarPath(encryptedEvent: EncryptedEvent): File {
-        return File("${getEventFolder(encryptedEvent).path}/emotionAvatar")
-    }
-
-    fun getDetailPath(detail: Detail, event: Event): File {
-        return File("${getEventFolder(event).path}/${detail.uuid}")
-    }
-
-    fun getDetailPath(detail: Detail): File {
-        return File("users/${user!!.uid}/backpack/${detail.uuid}")
-    }
-
-    fun getEmotionAvatarPath(event: Event): File {
-        return File("${getEventFolder(event).path}/emotionAvatar")
+    fun emotionAvatarPath(encryptedEvent: EncryptedEvent): File {
+        return File("${eventsFolderPath(encryptedEvent).path}/avatar")
     }
 
     /**
-     * Given a relative path, returns a version of this path in the device's local storage.
+     * Returns the **relative** path in which an [event]s emotionAvatar will be saved.
+     * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path.
      */
-    fun localStoragePath(file: File): File {
+    fun emotionAvatarPath(event: Event): File {
+        return File("${eventsFolderPath(event).path}/avatar")
+    }
+
+    /**
+     * Given a [file]  with a  relative path, returns a version of this path in the device's local storage.
+     */
+    fun localStorage(file: File): File {
         return File(context.filesDir, file.path)
     }
 
     /**
-     * Given a relative path, returns a version of this path in the device's temporary storage.
+     * Given a [file] with a relative path, returns a version of this path in the device's temporary storage.
      */
-    fun temporaryStoragePath(file: File): File {
+    fun temporaryStorage(file: File): File {
         return File(context.cacheDir, file.path)
     }
 }

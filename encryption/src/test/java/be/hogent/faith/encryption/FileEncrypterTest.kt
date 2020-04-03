@@ -12,7 +12,7 @@ import java.io.File
 class FileEncrypterTest {
     private val dataEncryptionKey = KeyGenerator().generateStreamingKeysetHandle()
 
-    private val fileEncrypter = FileEncrypter(dataEncryptionKey)
+    private val fileEncrypter = FileEncryptionService(dataEncryptionKey)
 
     private val workingFile =
         File("src/test/java/be/hogent/faith/encryption/testResources/image.png")

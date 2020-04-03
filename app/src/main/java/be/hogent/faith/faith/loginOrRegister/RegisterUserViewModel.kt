@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.repository.InvalidCredentialsException
-import be.hogent.faith.domain.repository.UserCollisionException
-import be.hogent.faith.domain.repository.WeakPasswordException
+import be.hogent.faith.service.repositories.InvalidCredentialsException
+import be.hogent.faith.service.repositories.UserCollisionException
+import be.hogent.faith.service.repositories.WeakPasswordException
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.Avatar
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
-import be.hogent.faith.service.usecases.RegisterUserUseCase
+import be.hogent.faith.service.usecases.user.RegisterUserUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import timber.log.Timber
 

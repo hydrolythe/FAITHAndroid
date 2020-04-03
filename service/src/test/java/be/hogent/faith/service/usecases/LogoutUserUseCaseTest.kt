@@ -1,6 +1,7 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.repository.IAuthManager
+import be.hogent.faith.service.repositories.IAuthManager
+import be.hogent.faith.service.usecases.user.LogoutUserUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
@@ -20,7 +21,11 @@ class LogoutUserUseCaseTest {
         executor = mockk()
         scheduler = mockk()
         authManager = mockk(relaxed = true)
-        logoutUserUseCase = LogoutUserUseCase(authManager, scheduler)
+        logoutUserUseCase =
+            LogoutUserUseCase(
+                authManager,
+                scheduler
+            )
     }
 
     @Test

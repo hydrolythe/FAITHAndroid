@@ -7,11 +7,11 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.NetworkError
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
-import be.hogent.faith.service.usecases.GetUserUseCase
+import be.hogent.faith.service.repositories.NetworkError
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
+import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableObserver
@@ -93,13 +93,13 @@ class UserViewModel(
         }
     }
 
-    fun saveEvent(eventTitle: String?, event: Event) {
-        if (eventTitle.isNullOrEmpty()) {
+    fun saveEvent(event: Event) {
+        if (event.title.isNullOrEmpty()) {
             _titleErrorMessage.postValue(R.string.error_event_no_title)
             return
         }
         _eventSavedState.postValue(Resource(ResourceState.LOADING, null, null))
-        val params = SaveEventUseCase.Params(eventTitle, event, user.value!!)
+        val params = SaveEventUseCase.Params(event, user.value!!)
         saveEventUseCase.execute(params, SaveEventUseCaseHandler())
     }
 

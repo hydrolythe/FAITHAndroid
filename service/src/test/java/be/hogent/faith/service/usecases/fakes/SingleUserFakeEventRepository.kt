@@ -2,7 +2,7 @@ package be.hogent.faith.service.usecases.fakes
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.IEventRepository
+import be.hogent.faith.service.repositories.IEventRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.UUID
@@ -22,7 +22,7 @@ class SingleUserFakeEventRepository : IEventRepository {
         }
     }
 
-    override fun getEventData(uuid: UUID): Observable<Event> {
+    override fun get(uuid: UUID): Observable<Event> {
         return Observable.just(events.first { it.uuid == uuid })
     }
 

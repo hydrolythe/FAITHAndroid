@@ -1,7 +1,5 @@
 package be.hogent.faith.encryption
 
-import be.hogent.faith.database.encryption.EncryptedDetail
-import be.hogent.faith.database.models.EncryptedDetailEntity
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
@@ -10,34 +8,45 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.encryption.internal.DataEncrypter
+import be.hogent.faith.service.encryption.EncryptedDetail
 import com.google.crypto.tink.KeysetHandle
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.rxkotlin.zipWith
+import java.io.File
 
-class DetailEncryptionService {
+class DetailEncryptionService(
+    private val fileEncryptionService: FileEncryptionService
+) {
 
     /**
-     * Encrypts a [EncryptedDetailEntity].
-     * The file attribute is not encrypted because it contains no sensitive information and
-     * it makes it easier to save it permanently later on.
+     * Encrypts both the data within a file and the files associated with it.
      */
     fun encrypt(detail: Detail, dek: KeysetHandle, sdek: KeysetHandle): Single<EncryptedDetail> {
-        return encryptDetailFiles(detail, sdek)
-            .andThen(encryptDetailData(detail, dek))
+        return encryptData(detail, dek).zipWith(
+            encryptDetailFiles(detail, sdek)
+        ) { encryptedDetail, file ->
+            encryptedDetail.file = file
+            encryptedDetail
+        }
     }
 
-    private fun encryptDetailFiles(detail: Detail, sdek: KeysetHandle): Completable {
-        val fileEncrypter = FileEncrypter(sdek)
-        return fileEncrypter.encrypt(detail.file)
+    private fun encryptDetailFiles(detail: Detail, sdek: KeysetHandle): Single<File> {
+        return fileEncryptionService.encrypt(detail.file, sdek)
     }
 
-    private fun encryptDetailData(detail: Detail, dek: KeysetHandle): Single<EncryptedDetail> {
+    /**
+     * Encrypts the data of  the detail.
+     * Does  not set the [EncryptedDetail.file] to an en encrypted version of the file!
+     * This should be done afterwards, once the file has been encrypted.
+     */
+    private fun encryptData(detail: Detail, dek: KeysetHandle): Single<EncryptedDetail> {
         val dataEncrypter = DataEncrypter(dek)
         return Single.just(
             EncryptedDetail(
                 file = detail.file,
                 uuid = detail.uuid,
-                fileName = detail.fileName,
+                title = detail.title,
                 type = dataEncrypter.encrypt(
                     when (detail) {
                         is AudioDetail -> DetailType.Audio
@@ -63,32 +72,32 @@ class DetailEncryptionService {
             when (DetailType.valueOf(detailTypeString)) {
                 DetailType.Audio -> AudioDetail(
                     encryptedDetail.file,
-                    encryptedDetail.fileName,
+                    encryptedDetail.title,
                     encryptedDetail.uuid
                 )
                 DetailType.Text -> TextDetail(
                     encryptedDetail.file,
-                    encryptedDetail.fileName,
+                    encryptedDetail.title,
                     encryptedDetail.uuid
                 )
                 DetailType.Drawing -> DrawingDetail(
                     encryptedDetail.file,
-                    encryptedDetail.fileName,
+                    encryptedDetail.title,
                     encryptedDetail.uuid
                 )
                 DetailType.Photo -> PhotoDetail(
                     encryptedDetail.file,
-                    encryptedDetail.fileName,
+                    encryptedDetail.title,
                     encryptedDetail.uuid
                 )
                 DetailType.Video -> VideoDetail(
                     encryptedDetail.file,
-                    encryptedDetail.fileName,
+                    encryptedDetail.title,
                     encryptedDetail.uuid
                 )
                 DetailType.ExternalVideo -> ExternalVideoDetail(
                     encryptedDetail.file,
-                    encryptedDetail.fileName,
+                    encryptedDetail.title,
                     encryptedDetail.uuid
                 )
             }
@@ -99,7 +108,7 @@ class DetailEncryptionService {
         encryptedDetail: EncryptedDetail,
         sdek: KeysetHandle
     ): Completable {
-        val fileEncrypter = FileEncrypter(sdek)
+        val fileEncrypter = FileEncryptionService(sdek)
         return fileEncrypter.decrypt(encryptedDetail.file)
     }
 }

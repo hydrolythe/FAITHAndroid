@@ -1,16 +1,17 @@
 package be.hogent.faith.service.usecases.backpack
 
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.repository.IBackpackRepository
-import be.hogent.faith.service.usecases.base.ObservableUseCase
-import io.reactivex.Observable
+import be.hogent.faith.service.repositories.IDetailContainerRepository
+import be.hogent.faith.service.usecases.base.FlowableUseCase
+import io.reactivex.Flowable
 import io.reactivex.Scheduler
 
 class GetBackPackFilesDummyUseCase(
-    private val backpackRepository: IBackpackRepository,
+    private val backpackRepository: IDetailContainerRepository<Backpack>,
     observeScheduler: Scheduler
-) : ObservableUseCase<List<Detail>, GetBackPackFilesDummyUseCase.Params>(observeScheduler) {
-    override fun buildUseCaseObservable(params: Params): Observable<List<Detail>> {
+) : FlowableUseCase<List<Detail>, GetBackPackFilesDummyUseCase.Params>(observeScheduler) {
+    override fun buildUseCaseObservable(params: Params): Flowable<List<Detail>> {
         return backpackRepository.get()
     }
 

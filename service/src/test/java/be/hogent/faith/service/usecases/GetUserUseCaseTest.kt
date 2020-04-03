@@ -2,9 +2,10 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.IAuthManager
-import be.hogent.faith.domain.repository.IEventRepository
-import be.hogent.faith.domain.repository.IUserRepository
+import be.hogent.faith.service.repositories.IAuthManager
+import be.hogent.faith.service.repositories.IEventRepository
+import be.hogent.faith.service.repositories.IUserRepository
+import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.every
 import io.mockk.mockk
@@ -35,7 +36,12 @@ class GetUserUseCaseTest {
         userRepository = mockk(relaxed = true)
         eventRepository = mockk(relaxed = true)
         authManager = mockk(relaxed = true)
-        getUserUC = GetUserUseCase(userRepository, eventRepository, authManager, scheduler)
+        getUserUC = GetUserUseCase(
+            userRepository,
+            eventRepository,
+            authManager,
+            scheduler
+        )
     }
 
     @Test

@@ -1,7 +1,6 @@
 package be.hogent.faith.domain.models
 
 import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
@@ -32,34 +31,7 @@ data class Event(
     var notes: String? = null,
 
     val uuid: UUID = UUID.randomUUID()
-) {
-
-    constructor(
-        dateTime: LocalDateTime,
-        title: String?,
-        emotionAvatar: File?,
-        notes: String?,
-        uuid: UUID,
-        details: List<Detail>
-    ) : this(dateTime, title, emotionAvatar, notes, uuid) {
-        _details.addAll(details)
-    }
-
-    private val _details = mutableListOf<Detail>()
-    val details: List<Detail>
-        get() = _details
-
-    fun getLastDetail(): Detail {
-        return _details.last()
-    }
-
-    fun getDetail(uuid: UUID): Detail? {
-        return details.find { it.uuid == uuid }
-    }
-
-    fun addDetail(detail: Detail) {
-        _details += detail
-    }
+) : DetailsContainer() {
 
     fun addNewPhotoDetail(saveFile: File): PhotoDetail {
         val newDetail = PhotoDetail(saveFile)

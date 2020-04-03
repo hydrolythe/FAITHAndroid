@@ -1,0 +1,98 @@
+package be.hogent.faith.storage.online
+
+import android.net.Uri
+import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.service.encryption.EncryptedDetail
+import be.hogent.faith.service.encryption.EncryptedEvent
+import be.hogent.faith.storage.StoragePathProvider
+import com.google.firebase.storage.FirebaseStorage
+import io.reactivex.Completable
+import io.reactivex.rxkotlin.toFlowable
+import java.io.File
+
+class FirebaseStorageRepository(
+    private val pathProvider: StoragePathProvider,
+    private val firestorage: FirebaseStorage,
+    private val rxFirebaseStorage: IRxFireBaseStorage
+) : IOnlineFileStorageRepository {
+
+    private var storageRef = firestorage.reference
+
+    /**
+     * Saves all files associated with an [EncryptedEventEntity] (detail files, emotionavatar)
+     */
+    override fun saveEventFiles(encryptedEvent: EncryptedEvent): Completable {
+        // TODO: do all the downloading in parallel using merge instead of concat
+        return saveEventEmotionAvatar(encryptedEvent) // save avatar in firestorage
+            .concatWith(
+                encryptedEvent.details.toFlowable() // save all detail files in firestorage
+                    .concatMapCompletable {
+                        saveDetailFile(encryptedEvent, it)
+                    }
+            )
+    }
+
+    /**
+     * Uploads the emotion avatar file to [firestorage]
+     */
+    private fun saveEventEmotionAvatar(encryptedEvent: EncryptedEvent): Completable {
+        if (encryptedEvent.emotionAvatar == null) {
+            return Completable.complete()
+        } else {
+            return rxFirebaseStorage
+                .putFile(
+                    storageRef.child(pathProvider.emotionAvatarPath(encryptedEvent).path),
+                    Uri.parse("file://${encryptedEvent.emotionAvatar!!.path}")
+                )
+                .ignoreElement()
+        }
+    }
+
+    /**
+     * Uploads the detail file to [firestorage]
+     */
+    private fun saveDetailFile(event: EncryptedEvent, detail: EncryptedDetail): Completable {
+        return rxFirebaseStorage
+            .putFile(
+                storageRef.child(pathProvider.detailPath(event, detail).path),
+                Uri.parse("file://${detail.file.path}")
+            )
+            .ignoreElement()
+    }
+
+    /**
+     * Downloads a detail's file from [firestorage] and stores it into the path provided for it by the
+     * [pathProvider].
+     */
+    override fun downloadDetail(detail: Detail, event: Event): Completable {
+        val fileToDownloadReference = storageRef.child(detail.file.path)
+        val localFile: File = with(pathProvider) { localStorage(detailPath(detail, event)) }
+        return Completable
+            .fromSingle(rxFirebaseStorage.getFile(fileToDownloadReference, localFile))
+            .andThen(Completable.fromAction {
+                detail.file = localFile
+            })
+    }
+
+    /**
+     * Gets the emotion avatar file from [firestorage] and stores it into the path provided for it
+     * by the [pathProvider].
+     */
+    override fun downloadEmotionAvatar(event: Event): Completable {
+        if (event.emotionAvatar == null) {
+            return Completable.complete()
+        } else {
+            return rxFirebaseStorage
+                .getFile(
+                    storageRef.child(pathProvider.emotionAvatarPath(event).path),
+                    pathProvider.localStorage(event.emotionAvatar!!)
+                )
+                .flatMapCompletable {
+                    Completable.fromAction {
+                        event.emotionAvatar = pathProvider.localStorage(event.emotionAvatar!!)
+                    }
+                }
+        }
+    }
+}

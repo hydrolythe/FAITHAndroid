@@ -1,12 +1,11 @@
 package be.hogent.faith.encryption
 
-import be.hogent.faith.database.encryption.EncryptedEvent
+import be.hogent.faith.service.usecases.encryption.EncryptedEvent
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.encryption.di.encryptionModule
 import be.hogent.faith.encryption.encryptionService.DummyKeyEncryptionService
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
-import be.hogent.faith.util.contentEqual
 import be.hogent.faith.util.factory.EventFactory
 import org.junit.After
 import org.junit.Assert.assertEquals

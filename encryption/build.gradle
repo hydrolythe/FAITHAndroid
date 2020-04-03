@@ -27,8 +27,7 @@ android {
 
 dependencies {
     implementation project(':domain')
-    implementation project(':storage')
-    implementation project(':database')
+    implementation project(':service')
     implementation project(':util')
 
     def commonDependencies = rootProject.ext.commonDependencies

@@ -1,9 +1,9 @@
 package be.hogent.faith.storage
 
-import be.hogent.faith.database.encryption.EncryptedEvent
-import be.hogent.faith.database.storage.ILocalFileStorageRepository
-import be.hogent.faith.storage.onlinestorage.IOnlineFileStorageRepository
-import be.hogent.faith.storage.localstorage.ITemporaryStorageRepository
+import be.hogent.faith.service.usecases.encryption.EncryptedEvent
+import be.hogent.faith.storage.local.ILocalFileStorageRepository
+import be.hogent.faith.storage.online.IOnlineFileStorageRepository
+import be.hogent.faith.storage.local.ITemporaryFileStorageRepository
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.Called
 import io.mockk.every
@@ -20,7 +20,7 @@ class FileStorageRepositoryTest {
 
     private val localStorage = mockk<ILocalFileStorageRepository>()
     private val remoteStorage = mockk<IOnlineFileStorageRepository>()
-    private val temporaryStorage = mockk<ITemporaryStorageRepository>()
+    private val temporaryStorage = mockk<ITemporaryFileStorageRepository>()
     private val storageRepository =
         FileStorageRepository(temporaryStorage, localStorage, remoteStorage)
 
@@ -40,50 +40,50 @@ class FileStorageRepositoryTest {
     @Test
     fun `saveEvent passes the event to local storage`() {
         // Arrange
-        every { localStorage.saveEvent(encryptedEvent) } returns Single.just(encryptedEvent)
-        every { remoteStorage.saveEvent(any()) } returns Completable.complete()
+        every { localStorage.saveEventFiles(encryptedEvent) } returns Single.just(encryptedEvent)
+        every { remoteStorage.saveEventFiles(any()) } returns Completable.complete()
 
         // Act
         storageRepository.saveEventFiles(encryptedEvent)
             .test()
             .dispose()
 
-        verify(exactly = 1) { localStorage.saveEvent(encryptedEvent) }
+        verify(exactly = 1) { localStorage.saveEventFiles(encryptedEvent) }
     }
 
     @Test
     fun `saveEvent passes the event to remote storage`() {
         // Arrange
-        every { localStorage.saveEvent(encryptedEvent) } returns Single.just(encryptedEvent)
-        every { remoteStorage.saveEvent(any()) } returns Completable.complete()
+        every { localStorage.saveEventFiles(encryptedEvent) } returns Single.just(encryptedEvent)
+        every { remoteStorage.saveEventFiles(any()) } returns Completable.complete()
 
         // Act
         storageRepository.saveEventFiles(encryptedEvent)
             .test()
             .dispose()
 
-        verify(exactly = 1) { remoteStorage.saveEvent(encryptedEvent) }
+        verify(exactly = 1) { remoteStorage.saveEventFiles(encryptedEvent) }
     }
 
     @Test
     fun `saveEvent does not store in remote storage when saving to local storage fails`() {
         // Arrange
-        every { localStorage.saveEvent(any()) } returns Single.error(RuntimeException())
-        every { remoteStorage.saveEvent(any()) } returns Completable.complete()
+        every { localStorage.saveEventFiles(any()) } returns Single.error(RuntimeException())
+        every { remoteStorage.saveEventFiles(any()) } returns Completable.complete()
 
         // Act
         storageRepository.saveEventFiles(encryptedEvent)
             .test()
             .dispose()
 
-        verify { remoteStorage.saveEvent(any()) wasNot Called }
+        verify { remoteStorage.saveEventFiles(any()) wasNot Called }
     }
 
     @Test
     fun `saveEvent emits an error when saving to local storage fails`() {
         // Arrange
-        every { localStorage.saveEvent(any()) } returns Single.error(RuntimeException())
-        every { remoteStorage.saveEvent(any()) } returns Completable.complete()
+        every { localStorage.saveEventFiles(any()) } returns Single.error(RuntimeException())
+        every { remoteStorage.saveEventFiles(any()) } returns Completable.complete()
 
         // Act
         storageRepository.saveEventFiles(encryptedEvent)
@@ -95,8 +95,8 @@ class FileStorageRepositoryTest {
     @Test
     fun `saveEvent emits an error when saving to remote storage fails`() {
         // Arrange
-        every { localStorage.saveEvent(any()) } returns Single.just(encryptedEvent)
-        every { remoteStorage.saveEvent(any()) } returns Completable.error(RuntimeException())
+        every { localStorage.saveEventFiles(any()) } returns Single.just(encryptedEvent)
+        every { remoteStorage.saveEventFiles(any()) } returns Completable.error(RuntimeException())
 
         // Act
         storageRepository.saveEventFiles(encryptedEvent)

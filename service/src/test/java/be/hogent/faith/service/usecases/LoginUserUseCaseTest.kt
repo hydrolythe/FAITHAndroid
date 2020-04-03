@@ -1,7 +1,8 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.repository.IAuthManager
-import be.hogent.faith.domain.repository.SignInException
+import be.hogent.faith.service.repositories.IAuthManager
+import be.hogent.faith.service.repositories.SignInException
+import be.hogent.faith.service.usecases.user.LoginUserUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -23,7 +24,11 @@ class LoginUserUseCaseTest {
         executor = mockk()
         scheduler = mockk()
         authManager = mockk(relaxed = true)
-        loginUserUseCase = LoginUserUseCase(authManager, scheduler)
+        loginUserUseCase =
+            LoginUserUseCase(
+                authManager,
+                scheduler
+            )
     }
 
     @Test

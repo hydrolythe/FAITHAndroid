@@ -1,6 +1,6 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.repository.IEventRepository
+import be.hogent.faith.service.repositories.IEventRepository
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory

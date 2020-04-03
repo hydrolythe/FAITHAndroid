@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.repository.InvalidCredentialsException
-import be.hogent.faith.domain.repository.NetworkError
+import be.hogent.faith.service.repositories.InvalidCredentialsException
+import be.hogent.faith.service.repositories.NetworkError
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
-import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
+import be.hogent.faith.service.usecases.user.IsUsernameUniqueUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableSingleObserver
 import timber.log.Timber

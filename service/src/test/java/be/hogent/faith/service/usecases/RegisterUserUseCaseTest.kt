@@ -1,9 +1,10 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.IAuthManager
-import be.hogent.faith.domain.repository.UserCollisionException
-import be.hogent.faith.domain.repository.IUserRepository
+import be.hogent.faith.service.repositories.IAuthManager
+import be.hogent.faith.service.repositories.UserCollisionException
+import be.hogent.faith.service.repositories.IUserRepository
+import be.hogent.faith.service.usecases.user.RegisterUserUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -30,7 +31,12 @@ class RegisterUserUseCaseTest {
         scheduler = mockk()
         authManager = mockk(relaxed = true)
         userRepository = mockk(relaxed = true)
-        registerUserUseCase = RegisterUserUseCase(authManager, userRepository, scheduler)
+        registerUserUseCase =
+            RegisterUserUseCase(
+                authManager,
+                userRepository,
+                scheduler
+            )
     }
 
     @Test

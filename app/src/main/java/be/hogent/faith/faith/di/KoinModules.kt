@@ -55,9 +55,9 @@ val appModule = module(override = true) {
 
     // ViewModels
     viewModel { CityScreenViewModel(get()) }
-    viewModel { (event: Event) -> EventViewModel(get(), get(), get(), get(), get(), event) }
-    viewModel { EventViewModel(get(), get(), get(), get(), get()) }
-    viewModel { BackpackViewModel(get(), get(), get(), get(), get(), get(), get()) }
+    viewModel { (event: Event) -> EventViewModel(get(), get(), event) }
+    viewModel { EventViewModel(get(), get()) }
+    viewModel { BackpackViewModel(get(), get(), get()) }
     viewModel { DrawViewModel() }
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }

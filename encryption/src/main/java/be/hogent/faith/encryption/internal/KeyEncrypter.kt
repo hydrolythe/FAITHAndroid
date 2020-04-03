@@ -1,9 +1,10 @@
 package be.hogent.faith.encryption.internal
 
-import be.hogent.faith.database.encryption.EncryptedString
+import be.hogent.faith.service.usecases.encryption.EncryptedString
 import be.hogent.faith.encryption.encryptionService.DecryptionRequest
 import be.hogent.faith.encryption.encryptionService.EncryptionRequest
 import be.hogent.faith.encryption.encryptionService.KeyEncryptionService
+import be.hogent.faith.service.encryption.EncryptedString
 import com.google.crypto.tink.CleartextKeysetHandle
 import com.google.crypto.tink.JsonKeysetReader
 import com.google.crypto.tink.JsonKeysetWriter

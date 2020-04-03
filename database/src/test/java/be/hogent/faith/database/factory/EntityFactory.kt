@@ -2,9 +2,9 @@ package be.hogent.faith.database.factory
 
 import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.converters.LocalDateTimeConverter
-import be.hogent.faith.database.models.EncryptedDetailEntity
-import be.hogent.faith.database.models.EncryptedEventEntity
-import be.hogent.faith.database.models.UserEntity
+import be.hogent.faith.database.common.EncryptedDetailEntity
+import be.hogent.faith.database.event.EncryptedEventEntity
+import be.hogent.faith.database.user.UserEntity
 import be.hogent.faith.util.factory.DataFactory
 import java.util.UUID
 

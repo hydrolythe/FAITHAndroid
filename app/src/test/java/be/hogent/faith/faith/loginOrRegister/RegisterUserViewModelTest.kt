@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.Avatar
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
-import be.hogent.faith.service.usecases.RegisterUserUseCase
+import be.hogent.faith.service.usecases.user.RegisterUserUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.called
 import io.mockk.mockk

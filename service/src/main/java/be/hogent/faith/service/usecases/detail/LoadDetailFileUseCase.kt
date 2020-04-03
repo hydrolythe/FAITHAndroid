@@ -1,6 +1,6 @@
 package be.hogent.faith.service.usecases.detail
 
-import be.hogent.faith.database.storage.IFileStorageRepository
+import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.usecases.base.SingleUseCase
 import io.reactivex.Scheduler

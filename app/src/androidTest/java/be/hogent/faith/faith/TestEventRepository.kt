@@ -2,7 +2,7 @@ package be.hogent.faith.faith
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.IEventRepository
+import be.hogent.faith.service.repositories.IEventRepository
 import be.hogent.faith.util.factory.EventFactory
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -17,7 +17,7 @@ class TestEventRepository : IEventRepository {
         return Completable.complete()
     }
 
-    override fun getEventData(uuid: UUID): Observable<Event> {
+    override fun get(uuid: UUID): Observable<Event> {
         return Observable.just(EventFactory.makeEvent())
     }
 

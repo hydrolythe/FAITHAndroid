@@ -1,0 +1,8 @@
+- filesReadyToUse(event) opnemen in downloadEventFiles?
+- doewnloadFile(detail:Detail): container/event voor nodidg
+- Maybe<Detail> in detailContainerRepo -> 0,1 of  fout?
+- terug  flowable ipv observable
+
+- USE CASE COORDINEERT IPV DE  EVENTREPO
+
+Check op user = authenticated user toevoegen?

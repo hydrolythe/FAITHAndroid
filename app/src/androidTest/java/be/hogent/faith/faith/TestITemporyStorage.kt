@@ -1,18 +1,18 @@
 package be.hogent.faith.faith
 
 import android.graphics.Bitmap
-import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.storage.localstorage.ITemporaryStorageRepository
+import be.hogent.faith.storage.local.ITemporaryFileStorageRepository
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.FileFactory
 import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
 
-class TestITemporyStorage : ITemporaryStorageRepository {
+class TestITemporyStorage : ITemporaryFileStorageRepository {
     override fun storeTextTemporarily(text: String): Single<File> {
         return Single.just(FileFactory.makeFile())
     }
@@ -32,7 +32,10 @@ class TestITemporyStorage : ITemporaryStorageRepository {
         return Completable.complete()
     }
 
-    override fun storeDetailWithEvent(detail: Detail, event: Event): Completable {
+    override fun saveDetailFileWithContainer(
+        container: DetailsContainer,
+        detail: Detail
+    ): Completable {
         return Completable.complete()
     }
 

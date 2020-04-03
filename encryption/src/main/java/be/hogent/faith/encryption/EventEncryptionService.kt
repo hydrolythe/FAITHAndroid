@@ -1,65 +1,77 @@
 package be.hogent.faith.encryption
 
-import be.hogent.faith.database.encryption.EncryptedDetail
-import be.hogent.faith.database.encryption.EncryptedEvent
-import be.hogent.faith.database.encryption.IEventEncryptionService
-import be.hogent.faith.database.models.EncryptedEventEntity
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
+import be.hogent.faith.service.encryption.EncryptedDetail
+import be.hogent.faith.service.encryption.EncryptedEvent
+import be.hogent.faith.service.encryption.IEventEncryptionService
 import com.google.crypto.tink.KeysetHandle
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
+import io.reactivex.rxkotlin.zipWith
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import org.threeten.bp.LocalDateTime
+import java.io.File
 
 /**
  * @param keyGenerator will be used to generate the DEK that will be used when encrypting the [EncryptedEventEntity].
  * @param keyEncrypter will be used to do the encrypting with the DEK
  */
 class EventEncryptionService(
+    private val detailEncryptionService: DetailEncryptionService,
+    private val fileEncryptionService: FileEncryptionService,
     private val keyGenerator: KeyGenerator,
     private val keyEncrypter: KeyEncrypter
 ) : IEventEncryptionService, KoinComponent {
-    private val detailEncryptionService by inject<DetailEncryptionService>()
 
     override fun encrypt(event: Event): Single<EncryptedEvent> {
-        val dataKeysetHandle = keyGenerator.generateKeysetHandle()
-        val streamingKeySetHandle = keyGenerator.generateStreamingKeysetHandle()
+        val dataKey = keyGenerator.generateKeysetHandle()
+        val streamingDataKey = keyGenerator.generateStreamingKeysetHandle()
 
-        return encryptEvent(event, dataKeysetHandle, streamingKeySetHandle)
-    }
-
-    private fun encryptEvent(
-        event: Event,
-        keysetHandle: KeysetHandle,
-        streamingKeySetHandle: KeysetHandle
-    ): Single<EncryptedEvent> {
-        val dataEncrypter = DataEncrypter(keysetHandle)
-        val encryptedDetails = encryptDetails(event, keysetHandle, streamingKeySetHandle)
-
-        // Encrypt the DEKs so it can be placed next to the data it encrypted in the EncryptedEventEntity
-        val encryptedDEK = keyEncrypter.encrypt(keysetHandle)
-        val encryptedStreamingDEK = keyEncrypter.encrypt(streamingKeySetHandle)
+        // TODO: find a way to handle a null emotionAvatar on the Event
+        var encryptedEmotionAvatar: Single<File> = Single.just(File(""))
+        if (event.emotionAvatar != null) {
+            encryptedEmotionAvatar =
+                fileEncryptionService.encrypt(event.emotionAvatar!!, streamingDataKey)
+        }
+        val encryptedDetails = encryptDetails(event, dataKey, streamingDataKey)
 
         return Singles.zip(
-            encryptedDetails, encryptedDEK, encryptedStreamingDEK
-        ) { details: List<EncryptedDetail>, dek: String, sdek: String ->
-            EncryptedEvent(
-                dateTime = dataEncrypter.encrypt(event.dateTime.toString()),
-                title = dataEncrypter.encrypt(event.title!!),
-                emotionAvatar = event.emotionAvatar,
-                notes = event.notes?.let { dataEncrypter.encrypt(it) },
-                uuid = event.uuid,
-                details = details,
-                encryptedDEK = dek,
-                encryptedStreamingDEK = sdek
-            )
+            encryptEventData(event, dataKey, streamingDataKey),
+            encryptedDetails,
+            encryptedEmotionAvatar
+        ) { encryptedEvent, details, emotionAvatar ->
+            encryptedEvent.details = details
+            encryptedEvent.emotionAvatar = emotionAvatar
+            encryptedEvent
+        }
+    }
+
+    private fun encryptEventData(
+        event: Event,
+        dataKey: KeysetHandle,
+        streamingKey: KeysetHandle
+    ): Single<EncryptedEvent> {
+        val encryptedDEK = keyEncrypter.encrypt(dataKey)
+        val encryptedStreamingDEK = keyEncrypter.encrypt(streamingKey)
+
+        return encryptedDEK.zipWith(encryptedStreamingDEK) { encryptedDek, encryptedSdek ->
+            with(DataEncrypter(dataKey)) {
+                EncryptedEvent(
+                    dateTime = encrypt(event.dateTime.toString()),
+                    title = encrypt(event.title!!),
+                    emotionAvatar = event.emotionAvatar,
+                    notes = event.notes?.let { encrypt(it) },
+                    uuid = event.uuid,
+                    encryptedDEK = encryptedDek,
+                    encryptedStreamingDEK = encryptedSdek
+                )
+            }
         }
     }
 
@@ -68,7 +80,6 @@ class EventEncryptionService(
         dek: KeysetHandle,
         sdek: KeysetHandle
     ): Single<List<EncryptedDetail>> {
-
         return Observable.fromIterable(event.details)
             .flatMapSingle { detailEncryptionService.encrypt(it, dek, sdek) }
             .toList()
@@ -112,6 +123,7 @@ class EventEncryptionService(
     }
 
     override fun decryptFiles(encryptedEvent: EncryptedEvent): Completable {
+        // TODO: emotionavatar decrypten
         return keyEncrypter.decrypt(encryptedEvent.encryptedStreamingDEK)
             .flatMapCompletable { sdek ->
                 Completable.merge {

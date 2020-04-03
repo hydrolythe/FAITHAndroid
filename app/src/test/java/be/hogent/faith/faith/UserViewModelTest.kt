@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
-import be.hogent.faith.service.usecases.GetUserUseCase
+import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory

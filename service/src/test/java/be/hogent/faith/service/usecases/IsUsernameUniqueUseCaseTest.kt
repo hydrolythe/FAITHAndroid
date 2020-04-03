@@ -1,6 +1,7 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.repository.IAuthManager
+import be.hogent.faith.service.repositories.IAuthManager
+import be.hogent.faith.service.usecases.user.IsUsernameUniqueUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -23,7 +24,10 @@ class IsUsernameUniqueUseCaseTest {
         scheduler = mockk()
         authManager = mockk(relaxed = true)
         isUsernameUniqueUserUseCase =
-            IsUsernameUniqueUseCase(authManager, scheduler)
+            IsUsernameUniqueUseCase(
+                authManager,
+                scheduler
+            )
     }
 
     @Test

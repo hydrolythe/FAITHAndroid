@@ -1,15 +1,18 @@
 package be.hogent.faith.storage
 
-import be.hogent.faith.database.encryption.EncryptedEvent
-import be.hogent.faith.database.storage.IFileStorageRepository
-import be.hogent.faith.database.storage.ILocalFileStorageRepository
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.storage.onlinestorage.IOnlineFileStorageRepository
-import be.hogent.faith.storage.localstorage.ITemporaryStorageRepository
+import be.hogent.faith.service.encryption.EncryptedDetail
+import be.hogent.faith.service.encryption.EncryptedEvent
+import be.hogent.faith.service.repositories.IFileStorageRepository
+import be.hogent.faith.storage.local.ILocalFileStorageRepository
+import be.hogent.faith.storage.local.ITemporaryFileStorageRepository
+import be.hogent.faith.storage.online.IOnlineFileStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
+import java.io.File
 
 /**
  * Repository providing access to both the internal and remote storage.
@@ -17,23 +20,23 @@ import io.reactivex.Single
  *
  */
 class FileStorageRepository(
-    private val temporaryStorageRepository: ITemporaryStorageRepository,
-    private val localFileStorage: ILocalFileStorageRepository,
-    private val remoteFileStorage: IOnlineFileStorageRepository
+    private val temporaryStorageRepository: ITemporaryFileStorageRepository,
+    private val localStorage: ILocalFileStorageRepository,
+    private val onlineStorage: IOnlineFileStorageRepository
 ) : IFileStorageRepository {
 
     /**
      * stores all event files in permanent storage, both local and online.
      * @return the saved event. This can be different from the original
-     * @see ILocalFileStorageRepository.saveEvent
+     * @see ILocalFileStorageRepository.saveEventFiles
      */
     override fun saveEventFiles(encryptedEvent: EncryptedEvent): Single<EncryptedEvent> {
         // Hacky way to first store locally, then remotely, and then give back the event.
         // Must be done in this order because saving to local storage changes paths inside the event.
-        return localFileStorage.saveEvent(encryptedEvent)
-            .ignoreElement()
-            .andThen(remoteFileStorage.saveEvent(encryptedEvent))
-            .toSingle { encryptedEvent }
+        return localStorage.saveEventFiles(encryptedEvent)
+            .flatMapCompletable(onlineStorage::saveEventFiles)
+            // the original encrypted is also the one that has been changed in localStorage call (pass by reference)
+            .andThen(Single.just(encryptedEvent))
     }
 
     /**
@@ -44,20 +47,20 @@ class FileStorageRepository(
      * file should be stored.
      */
     private fun getDetailFile(detail: Detail, event: Event): Completable {
-        if (localFileStorage.isFilePresent(detail, event))
+        if (localStorage.isFilePresent(detail, event))
             return Completable.complete()
         else
-            return remoteFileStorage.downloadDetail(detail, event)
+            return onlineStorage.downloadDetail(detail, event)
     }
 
     /**
      * download emotion avatar from firebase to localStorage if not present yet
      */
     private fun getEmotionAvatarFile(event: Event): Completable {
-        if (event.emotionAvatar == null || localFileStorage.isEmotionAvatarPresent(event))
+        if (event.emotionAvatar == null || localStorage.isEmotionAvatarPresent(event))
             return Completable.complete()
         else
-            return remoteFileStorage.downloadEmotionAvatar(event)
+            return onlineStorage.downloadEmotionAvatar(event)
     }
 
     /**
@@ -77,5 +80,17 @@ class FileStorageRepository(
                     // We  are using the fact that decrypted files are stored in the cache directory.
                     temporaryStorageRepository.isFilePresent(detail, event)
                 }
+    }
+
+    override fun downloadFile(detail: Detail): Single<File> {
+        TODO("Not yet implemented")
+    }
+
+    override fun saveDetailFileWithContainer(
+        encryptedDetail: EncryptedDetail,
+        container: DetailsContainer
+    ): Completable {
+        return localStorage.saveDetailFileWithContainer(encryptedDetail, container)
+            .andThen(onlineStorage.saveDetailFileForContainer(container))
     }
 }

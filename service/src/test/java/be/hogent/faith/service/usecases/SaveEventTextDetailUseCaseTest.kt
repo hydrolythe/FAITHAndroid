@@ -2,8 +2,8 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.service.usecases.event.SaveEventTextDetailUseCase
-import be.hogent.faith.storage.localstorage.ITemporaryStorageRepository
+import be.hogent.faith.storage.local.ITemporaryFileStorageRepository
+import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -15,9 +15,9 @@ import org.junit.Before
 import org.junit.Test
 
 class SaveEventTextDetailUseCaseTest {
-    private lateinit var saveEventTextDetailUseCase: SaveEventTextDetailUseCase
+    private lateinit var saveEventTextDetailUseCase: SaveEventDetailUseCase
     private val scheduler: Scheduler = mockk()
-    private val repository: ITemporaryStorageRepository = mockk(relaxed = true)
+    private val repository: ITemporaryFileStorageRepository = mockk(relaxed = true)
 
     private val event = Event()
     private val detail = mockk<TextDetail>()
@@ -25,7 +25,7 @@ class SaveEventTextDetailUseCaseTest {
     @Before
     fun setUp() {
         saveEventTextDetailUseCase =
-            SaveEventTextDetailUseCase(
+            SaveEventDetailUseCase(
                 repository,
                 scheduler
             )
@@ -34,8 +34,8 @@ class SaveEventTextDetailUseCaseTest {
     @Test
     fun saveTextUC_saveTextNormal_savedToStorage() {
         // Arrange
-        every { repository.storeDetailWithEvent(detail, event) } returns Completable.complete()
-        val params = SaveEventTextDetailUseCase.Params(detail, event)
+        every { repository.saveDetailFileWithContainer(event, detail) } returns Completable.complete()
+        val params = SaveEventDetailUseCase.Params(detail, event)
 
         // Act
         saveEventTextDetailUseCase.buildUseCaseObservable(params).test()
@@ -43,14 +43,14 @@ class SaveEventTextDetailUseCaseTest {
             .assertComplete()
 
         // Assert
-        verify { repository.storeDetailWithEvent(detail, event) }
+        verify { repository.saveDetailFileWithContainer(event, detail) }
     }
 
     @Test
     fun saveTextUC_saveTextNormal_addedToEvent() {
         // Arrange
-        every { repository.storeDetailWithEvent(detail, event) } returns Completable.complete()
-        val params = SaveEventTextDetailUseCase.Params(detail, event)
+        every { repository.saveDetailFileWithContainer(event, detail) } returns Completable.complete()
+        val params = SaveEventDetailUseCase.Params(detail, event)
 
         // Act
         saveEventTextDetailUseCase.buildUseCaseObservable(params).test()
@@ -63,10 +63,10 @@ class SaveEventTextDetailUseCaseTest {
     @Test
     fun saveTextUC_errorInRepo_notAddedToEvent() {
         // Arrange
-        every { repository.storeDetailWithEvent(detail, event) } returns Completable.error(
+        every { repository.saveDetailFileWithContainer(event, detail) } returns Completable.error(
             RuntimeException()
         )
-        val params = SaveEventTextDetailUseCase.Params(detail, event)
+        val params = SaveEventDetailUseCase.Params(detail, event)
 
         // Act
         saveEventTextDetailUseCase.buildUseCaseObservable(params).test()
@@ -80,7 +80,7 @@ class SaveEventTextDetailUseCaseTest {
     fun saveTextUC_existingDetail_NOP() {
         // Arrange
         event.addDetail(detail)
-        val params = SaveEventTextDetailUseCase.Params(detail, event)
+        val params = SaveEventDetailUseCase.Params(detail, event)
 
         // Act
         saveEventTextDetailUseCase.buildUseCaseObservable(params).test()
