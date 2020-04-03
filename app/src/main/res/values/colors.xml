@@ -50,6 +50,9 @@
     <color name="skin_darkbrown">#9C6231</color>
 
     <color name="green_light">#95E8CD</color>
+
+    <color name="background_backpack_video">#CDF9EC</color>
+    <color name="background_backpack_video_black">#000000</color>
 </resources>
 
 

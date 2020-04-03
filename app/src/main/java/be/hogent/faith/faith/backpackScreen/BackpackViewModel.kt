@@ -11,17 +11,22 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
+import be.hogent.faith.service.usecases.backpack.SaveYoutubeDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
+import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.subscribers.DisposableSubscriber
+import java.util.Date
 
 class BackpackViewModel(
     saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
     deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>,
-    private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
+    private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase,
+    private val saveYoutubeDetailUseCase: SaveYoutubeDetailUseCase
 ) : DetailsContainerViewModel(saveBackpackDetailUseCase, deleteBackpackDetailUseCase) {
 
     private val _detailIsSaved = SingleLiveEvent<Any>()
@@ -89,6 +94,7 @@ class BackpackViewModel(
                     user,
                     showSaveDialog.value as ExternalVideoDetail
             )
+            is YoutubeVideoDetail -> saveYoutubeDetail(user, detail)
         }
         _currentFile.postValue(null)
     }
@@ -117,6 +123,38 @@ class BackpackViewModel(
             if (!uniqueTitle)
                 setErrorMessage(R.string.save_detail_uniqueName)
         }
+    }
+
+    /**
+     * YouTube detail isn't stored in a file and saved differently and it's specific to the backpack
+     * that's why this isn't in the detailcontainer viewmodel
+     */
+    fun saveYoutubeDetail(user: User, detail: YoutubeVideoDetail) {
+        val params = SaveYoutubeDetailUseCase.Params(user, detail)
+        saveYoutubeDetailUseCase.execute(params, SaveBackpackYoutubeDetailUseCaseHandler())
+    }
+
+    private inner class SaveBackpackYoutubeDetailUseCaseHandler : DisposableCompletableObserver() {
+        override fun onComplete() {
+            _infoMessage.postValue(R.string.save_video_success)
+        }
+
+        override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.error_save_external_video_failed)
+        }
+    }
+
+    fun saveYoutubeVideoDetail(title: String, user: User, detail: Detail) {
+        val notMaxCharacters = checkMaxCharacters(title)
+        val uniqueFilename = checkUniqueTitle(title)
+
+        if (!notMaxCharacters)
+            detail.title = title.substring(0, 29)
+
+        if (!uniqueFilename) {
+            detail.title = detail.title + " (" + Date() + ")"
+        }
+        saveCurrentDetail(user, detail)
     }
 
     private fun checkUniqueTitle(title: String): Boolean {

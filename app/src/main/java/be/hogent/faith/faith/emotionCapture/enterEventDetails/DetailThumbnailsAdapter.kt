@@ -7,9 +7,9 @@ import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.AUDIO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.EXTERNAL_VIDEO_DETAIL
@@ -57,8 +57,8 @@ class DetailThumbnailsAdapter(
             is DrawingDetail -> PICTURE_DETAIL
             is TextDetail -> TEXT_DETAIL
             is PhotoDetail -> PICTURE_DETAIL
-            is VideoDetail -> VIDEO_DETAIL
             is ExternalVideoDetail -> EXTERNAL_VIDEO_DETAIL
+            is YoutubeVideoDetail -> VIDEO_DETAIL
         }
     }
 

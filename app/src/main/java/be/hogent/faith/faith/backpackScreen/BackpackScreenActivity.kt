@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -13,6 +12,8 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.backpackScreen.externalFile.AddExternalFileFragment
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailFragment
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
@@ -32,7 +33,9 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         TakePhotoFragment.PhotoScreenNavigation,
         DetailViewHolder.ExistingDetailNavigationListener,
         AddExternalFileFragment.ExternalFileScreenNavigation,
-        DeleteDetailDialog.DeleteDetailDialogListener {
+        DeleteDetailDialog.DeleteDetailDialogListener,
+        YoutubeVideoDetailFragment.YoutubeVideoDetailScreenNavigation,
+        ViewYoutubeVideoFragment.ViewYoutubeVideoNavigation {
 
     private lateinit var backpackViewModel: BackpackViewModel
 
@@ -105,7 +108,8 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         setLayoutListenersOnNewDetailOpened()
     }
     override fun startVideoDetailFragment() {
-        Toast.makeText(this, "Nog niet beschikbaar", Toast.LENGTH_SHORT).show()
+        replaceFragment(BackpackDetailFragment.YoutubeVideoFragment.newInstance(), R.id.fragment)
+        setLayoutListenersOnNewDetailOpened()
     }
     private fun setLayoutListenersOnNewDetailOpened() {
         backpackViewModel.viewButtons(false)

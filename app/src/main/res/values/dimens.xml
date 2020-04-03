@@ -21,4 +21,5 @@
     <dimen name="textIcon_fontsize_medium">35sp</dimen>
     <dimen name="textIcon_fontsize_large">45sp</dimen>
     <dimen name="icon_small">20dp</dimen>
+    <dimen name="match_constraint">0dp</dimen>
 </resources>
