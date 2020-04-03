@@ -108,8 +108,8 @@ class DetailEncryptionService(
         encryptedDetail: EncryptedDetail,
         sdek: KeysetHandle
     ): Completable {
-        val fileEncrypter = FileEncryptionService(sdek)
-        return fileEncrypter.decrypt(encryptedDetail.file)
+        val fileEncrypter = FileEncryptionService()
+        return fileEncrypter.decrypt(encryptedDetail.file, sdek)
     }
 }
 

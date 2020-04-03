@@ -80,29 +80,32 @@ class EventEncryptionService(
         dek: KeysetHandle,
         sdek: KeysetHandle
     ): Single<List<EncryptedDetail>> {
-        return Observable.fromIterable(event.details)
+        return Observable
+            .fromIterable(event.details)
             .flatMapSingle { detailEncryptionService.encrypt(it, dek, sdek) }
             .toList()
     }
 
     override fun decryptData(encryptedEvent: EncryptedEvent): Single<Event> {
-        return keyEncrypter.decrypt(encryptedEvent.encryptedDEK)
+        return keyEncrypter
+            .decrypt(encryptedEvent.encryptedDEK)
             .flatMap { dek -> decryptEventData(encryptedEvent, dek) }
     }
 
     private fun decryptEventData(encryptedEvent: EncryptedEvent, dek: KeysetHandle): Single<Event> {
-        val dataEncrypter = DataEncrypter(dek)
-
         return decryptDetailsData(dek, encryptedEvent)
             .map { details ->
-                Event(
-                    dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedEvent.dateTime)),
-                    title = encryptedEvent.title.let { dataEncrypter.decrypt(it) },
-                    emotionAvatar = encryptedEvent.emotionAvatar,
-                    notes = encryptedEvent.notes?.let { dataEncrypter.decrypt(it) },
-                    uuid = encryptedEvent.uuid,
-                    details = details
-                )
+                with(DataEncrypter(dek)) {
+                    Event(
+                        dateTime = LocalDateTime.parse(decrypt(encryptedEvent.dateTime)),
+                        title = encryptedEvent.title.let { decrypt(it) },
+                        emotionAvatar = encryptedEvent.emotionAvatar,
+                        notes = encryptedEvent.notes?.let { decrypt(it) },
+                        uuid = encryptedEvent.uuid
+                    ).apply {
+                        details.forEach(::addDetail)
+                    }
+                }
             }
     }
 
@@ -110,15 +113,8 @@ class EventEncryptionService(
         dek: KeysetHandle,
         encryptedEvent: EncryptedEvent
     ): Single<List<Detail>> {
-
         return Observable.fromIterable(encryptedEvent.details)
             .flatMapSingle { detailEncryptionService.decryptData(it, dek) }
-            .toList()
-    }
-
-    override fun decryptList(encryptedEvents: List<EncryptedEvent>): Single<List<Event>> {
-        return Observable.fromIterable(encryptedEvents)
-            .flatMapSingle(this::decryptData)
             .toList()
     }
 

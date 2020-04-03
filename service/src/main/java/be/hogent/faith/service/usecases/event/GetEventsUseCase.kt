@@ -2,8 +2,10 @@ package be.hogent.faith.service.usecases.event
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.service.usecases.base.ObservableUseCase
+import be.hogent.faith.service.encryption.IEventEncryptionService
 import be.hogent.faith.service.repositories.IEventRepository
+import be.hogent.faith.service.usecases.base.FlowableUseCase
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 
@@ -13,11 +15,17 @@ import io.reactivex.Scheduler
  */
 class GetEventsUseCase(
     private val eventRepository: IEventRepository,
+    private val eventEncryptionService: IEventEncryptionService,
     observeScheduler: Scheduler
-) : ObservableUseCase<List<Event>, GetEventsUseCase.Params>(observeScheduler) {
+) : FlowableUseCase<List<Event>, GetEventsUseCase.Params>(observeScheduler) {
 
-    override fun buildUseCaseObservable(params: Params): Observable<List<Event>> {
-        return eventRepository.getAllEventsData()
+    override fun buildUseCaseObservable(params: Params): Flowable<List<Event>> {
+        return eventRepository.getAll()
+            .concatMapSingle { list ->
+                Observable.fromIterable(list)
+                    .flatMapSingle(eventEncryptionService::decryptData)
+                    .toList()
+            }
     }
 
     data class Params(
