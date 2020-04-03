@@ -40,11 +40,23 @@ class FileStorageRepository(
     }
 
     /**
+     * Download all files belonging to an event
+     */
+    override fun downloadEventFiles(event: Event): Completable {
+        return Completable.mergeArray(
+            getEmotionAvatarFile(event),
+            Observable
+                .fromIterable(event.details)
+                .flatMapCompletable { getDetailFile(it, event) }
+        )
+    }
+
+    /**
      * Transfers a [detail]'s file(s) from online storage to local storage.
      * If the files were already in local storage, completes immediately.
      *
-     * @param event: the event this detail belongs to. Used to determine the path where the
-     * file should be stored.
+     * @param event: the event this detail belongs to.
+     * Used to determine the path where the file should be stored.
      */
     private fun getDetailFile(detail: Detail, event: Event): Completable {
         if (localStorage.isFilePresent(detail, event))
@@ -63,21 +75,10 @@ class FileStorageRepository(
             return onlineStorage.downloadEmotionAvatar(event)
     }
 
-    /**
-     * Download all files belonging to an event
-     */
-    override fun downloadEventFiles(event: Event): Completable {
-        return Completable.mergeArray(
-            getEmotionAvatarFile(event),
-            Observable.fromIterable(event.details)
-                .flatMapCompletable { getDetailFile(it, event) }
-        )
-    }
-
     override fun filesReadyToUse(event: Event): Boolean {
+        // We  are using the fact that decrypted files are stored in the cache directory.
         return temporaryStorageRepository.isEmotionAvatarPresent(event) &&
                 event.details.all { detail ->
-                    // We  are using the fact that decrypted files are stored in the cache directory.
                     temporaryStorageRepository.isFilePresent(detail, event)
                 }
     }

@@ -36,6 +36,11 @@ interface ITemporaryFileStorageRepository {
     fun loadTextFromExistingDetail(textDetail: TextDetail): Single<String>
 
     /**
+     * Checks if the file(s) belonging to the [event] are in temporary storage.
+     */
+    fun isFilePresent(detail: Detail, event: Event): Boolean
+
+    /**
      * Checks if the file(s) belonging to the [container] are in temporary storage.
      */
     fun isFilePresent(detail: Detail, container: DetailsContainer): Boolean

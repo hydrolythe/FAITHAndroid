@@ -119,13 +119,22 @@ class EventEncryptionService(
     }
 
     override fun decryptFiles(encryptedEvent: EncryptedEvent): Completable {
-        // TODO: emotionavatar decrypten
         return keyEncrypter.decrypt(encryptedEvent.encryptedStreamingDEK)
             .flatMapCompletable { sdek ->
                 Completable.merge {
                     Observable.fromIterable(encryptedEvent.details)
                         .map { detail -> detailEncryptionService.decryptDetailFiles(detail, sdek) }
                 }
+                    .mergeWith {
+                        if (encryptedEvent.emotionAvatar == null) {
+                            Completable.complete()
+                        } else {
+                            fileEncryptionService.decrypt(encryptedEvent.emotionAvatar!!, sdek)
+                                .map {
+                                    encryptedEvent.emotionAvatar = it
+                                }
+                        }
+                    }
             }
     }
 }

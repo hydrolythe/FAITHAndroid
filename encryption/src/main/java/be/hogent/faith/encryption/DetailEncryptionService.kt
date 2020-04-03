@@ -110,6 +110,8 @@ class DetailEncryptionService(
     ): Completable {
         val fileEncrypter = FileEncryptionService()
         return fileEncrypter.decrypt(encryptedDetail.file, sdek)
+            .map { encryptedDetail.file = it }
+            .ignoreElement()
     }
 }
 

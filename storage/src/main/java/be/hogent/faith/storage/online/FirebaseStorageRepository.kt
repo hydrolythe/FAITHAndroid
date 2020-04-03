@@ -66,13 +66,15 @@ class FirebaseStorageRepository(
      * [pathProvider].
      */
     override fun downloadDetail(detail: Detail, event: Event): Completable {
-        val fileToDownloadReference = storageRef.child(detail.file.path)
-        val localFile: File = with(pathProvider) { localStorage(detailPath(detail, event)) }
+        val localDestinationFile: File =
+            with(pathProvider) { localStorage(detailPath(detail, event)) }
         return Completable
-            .fromSingle(rxFirebaseStorage.getFile(fileToDownloadReference, localFile))
-            .andThen(Completable.fromAction {
-                detail.file = localFile
-            })
+            .fromSingle(
+                rxFirebaseStorage.getFile(storageRef.child(detail.file.path), localDestinationFile)
+            )
+            .andThen {
+                detail.file = localDestinationFile
+            }
     }
 
     /**
@@ -83,15 +85,15 @@ class FirebaseStorageRepository(
         if (event.emotionAvatar == null) {
             return Completable.complete()
         } else {
+            val localDestinationFile = with(pathProvider) { localStorage(emotionAvatarPath(event)) }
             return rxFirebaseStorage
                 .getFile(
                     storageRef.child(pathProvider.emotionAvatarPath(event).path),
-                    pathProvider.localStorage(event.emotionAvatar!!)
+                    localDestinationFile
                 )
-                .flatMapCompletable {
-                    Completable.fromAction {
-                        event.emotionAvatar = pathProvider.localStorage(event.emotionAvatar!!)
-                    }
+                .ignoreElement()
+                .andThen {
+                    event.emotionAvatar = localDestinationFile
                 }
         }
     }

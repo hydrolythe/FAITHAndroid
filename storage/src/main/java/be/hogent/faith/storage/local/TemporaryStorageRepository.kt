@@ -123,6 +123,12 @@ class TemporaryStorageRepository(
         }
     }
 
+    override fun isFilePresent(detail: Detail, event: Event): Boolean {
+        return with(pathProvider) {
+            temporaryStorage(detailPath(detail, event)).exists()
+        }
+    }
+
     override fun isFilePresent(detail: Detail, container: DetailsContainer): Boolean {
         return with(pathProvider) {
             temporaryStorage(detailPath(detail, container)).exists()

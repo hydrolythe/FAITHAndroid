@@ -82,7 +82,7 @@ class StoragePathProvider(
 
     /**
      * Returns the **relative** path in which an [event]s emotionAvatar will be saved.
-     * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path.
+     * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path on the device.
      */
     fun emotionAvatarPath(event: Event): File {
         return File("${eventsFolderPath(event).path}/avatar")
