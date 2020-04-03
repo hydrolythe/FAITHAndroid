@@ -82,7 +82,7 @@ ext {
     lottieVersion = '3.4.0'
 
     //Version Code
-    ext.versionMajor = 1
+    ext.versionMajor = 2
     ext.versionMinor = 1
     ext.versionPatch = 1
     ext.versionClassifier = null

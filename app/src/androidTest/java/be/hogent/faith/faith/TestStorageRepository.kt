@@ -1,5 +1,6 @@
 package be.hogent.faith.faith
 
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.storage.IStorageRepository
@@ -20,5 +21,12 @@ class TestStorageRepository : IStorageRepository {
 
     override fun getFile(detail: Detail): Single<File> {
         return Single.just(DataFactory.randomFile())
+    }
+
+    override fun saveDetailFileForContainer(
+        detailsContainer: DetailsContainer,
+        detail: Detail
+    ): Single<Detail> {
+        TODO("Not yet implemented")
     }
 }
