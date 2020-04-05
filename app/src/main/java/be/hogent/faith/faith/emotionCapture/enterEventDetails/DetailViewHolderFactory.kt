@@ -8,7 +8,6 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.faith.GlideApp
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.AudioDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExistingDetailNavigationListener
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.PictureDetailViewHolder
@@ -134,7 +133,7 @@ sealed class DetailViewHolder(
         override fun load(detail: Detail): RequestBuilder<Drawable> {
             // TODO : encryptie
             if (detail.file.path.startsWith("users")) {
-                return GlideApp.with(thumbnailView)
+                return Glide.with(thumbnailView)
                     .load(FirebaseStorage.getInstance().reference.child(detail.file.path)) // load the storagereference
             }
             return Glide.with(thumbnailView)

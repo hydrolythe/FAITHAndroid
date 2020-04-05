@@ -19,13 +19,13 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/event_textInput_height"
             android:hint="@string/wat_zoek_je"
+            android:paddingEnd="16dp"
             app:hintEnabled="false"
             app:layout_constraintBottom_toTopOf="@+id/guide_rv_container_horizontal"
             app:layout_constraintEnd_toStartOf="@+id/btn_cinema_chooseDate_start"
             app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
             app:startIconDrawable="@drawable/ic_search"
-            app:startIconTint="@null"
-            android:paddingEnd="16dp">
+            app:startIconTint="@null">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -65,9 +65,6 @@
             app:layout_constraintEnd_toStartOf="@+id/btn_cinema_chooseDate_end" />
 
 
-
-
-
         <ImageButton
             android:id="@+id/btn_cinema_cancel"
             android:layout_width="@dimen/material_icon_width"
@@ -89,27 +86,36 @@
             app:layout_constraintTop_toTopOf="@+id/guide_rv_container_horizontal"
             app:srcCompat="@drawable/cinema_film_container"
             tools:srcCompat="@drawable/cinema_film_container" />
-        <ImageButton
-            android:id="@+id/btn_films"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:background="@android:color/transparent"
-            android:text="@string/mijn_filmpjes"
-            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
-            app:layout_constraintEnd_toStartOf="@+id/guide_btns_vertical"
-            android:src="@drawable/btn_cinema_mijn_filmpjes_achtergrond"/>
 
-        <ImageButton
-            android:id="@+id/btn_details"
-            style="@style/Widget.AppCompat.Button"
+
+        <ToggleButton
+            android:id="@+id/btn_films"
             android:layout_width="150dp"
             android:layout_height="50dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/btn_cinema_mijn_bestanden_achtergrond"
-            android:text="@string/mijn_filmpjes"
+            android:layout_weight="1"
+            android:background="@drawable/btn_cinema_mijn_filmpjes_achtergrond"
+            android:checked="false"
+            android:textAllCaps="false"
+            android:textOff="@string/mijn_filmpjes"
+            android:textOn="@string/mijn_filmpjes"
             app:layout_constraintBottom_toBottomOf="@+id/rv_container"
-            app:layout_constraintStart_toEndOf="@+id/btn_films" />
+            app:layout_constraintEnd_toStartOf="@+id/btn_details" />
+
+        <ToggleButton
+            android:id="@+id/btn_details"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_cinema_mijn_bestanden_achtergrond"
+            android:checked="false"
+            android:textAllCaps="false"
+            android:textOff="@string/mijn_bestanden"
+            android:textOn="@string/mijn_bestanden"
+
+
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintStart_toStartOf="@+id/guide_btns_vertical" />
+
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_btns_vertical"
