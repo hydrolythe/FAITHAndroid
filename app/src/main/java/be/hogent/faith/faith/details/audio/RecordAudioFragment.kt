@@ -25,6 +25,7 @@ import be.hogent.faith.faith.details.audio.audioPlayer.PlaybackInfoListener
 import be.hogent.faith.faith.details.audio.audioRecorder.AudioRecorderAdapter
 import be.hogent.faith.faith.details.audio.audioRecorder.AudioRecorderHolder
 import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener
+import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.util.TempFileProvider
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -49,13 +50,13 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
     private var hasAudioRecordingPermission = false
 
     private val audioPlayer: AudioPlayerAdapter =
-        AudioPlayerHolder().apply {
-            setPlaybackInfoListener(PlaybackListener())
-        }
+            AudioPlayerHolder().apply {
+                setPlaybackInfoListener(PlaybackListener())
+            }
     private val audioRecorder: AudioRecorderAdapter =
-        AudioRecorderHolder(tempFileProvider.tempAudioRecordingFile).apply {
-            recordingInfoListener = RecordingListener()
-        }
+            AudioRecorderHolder(tempFileProvider.tempAudioRecordingFile).apply {
+                recordingInfoListener = RecordingListener()
+            }
 
     /**
      * true when the user is currently dragging the indicator on the seekBar
@@ -85,7 +86,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
         savedInstanceState: Bundle?
     ): View? {
         recordAudioBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_record_audio, container, false)
+                DataBindingUtil.inflate(inflater, R.layout.fragment_record_audio, container, false)
         recordAudioBinding.audioDetailViewModel = audioDetailViewModel
         recordAudioBinding.lifecycleOwner = this
 
@@ -100,8 +101,9 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     private fun startListeners() {
         audioDetailViewModel.savedDetail.observe(this, Observer { finishedDetail ->
-            Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
-
+            if (requireActivity() is EmotionCaptureMainActivity) {
+                Toast.makeText(context, R.string.save_audio_success, Toast.LENGTH_SHORT).show()
+            }
             detailFinishedListener.onDetailFinished(finishedDetail)
 
             navigation?.backToEvent()
@@ -145,7 +147,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     private fun initialiseSeekBar() {
         recordAudioBinding.playRecording.seekBar.setOnSeekBarChangeListener(object :
-            SeekBar.OnSeekBarChangeListener {
+                SeekBar.OnSeekBarChangeListener {
             var userSelectedPosition = 0
             override fun onProgressChanged(
                 seekBar: SeekBar?,
@@ -186,8 +188,8 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     private fun hasRecordingPermissions(): Boolean {
         return checkSelfPermission(
-            activity!!,
-            Manifest.permission.RECORD_AUDIO
+                activity!!,
+                Manifest.permission.RECORD_AUDIO
         ) == PERMISSION_GRANTED
     }
 
@@ -198,8 +200,8 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
     private fun checkAudioRecordingPermission() {
         if (!hasRecordingPermissions()) {
             requestPermissions(
-                arrayOf(Manifest.permission.RECORD_AUDIO),
-                REQUESTCODE_AUDIO
+                    arrayOf(Manifest.permission.RECORD_AUDIO),
+                    REQUESTCODE_AUDIO
             )
         } else {
             audioDetailViewModel.initialiseState()
@@ -218,9 +220,9 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
                 audioDetailViewModel.initialiseState()
             } else {
                 Toast.makeText(
-                    this.context,
-                    getString(R.string.permission_record_audio),
-                    Toast.LENGTH_LONG
+                        this.context,
+                        getString(R.string.permission_record_audio),
+                        Toast.LENGTH_LONG
                 ).show()
             }
         }

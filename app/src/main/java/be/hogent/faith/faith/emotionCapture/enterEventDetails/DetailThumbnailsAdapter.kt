@@ -7,9 +7,9 @@ import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.AUDIO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.EXTERNAL_VIDEO_DETAIL
@@ -32,14 +32,13 @@ class DetailThumbnailsAdapter(
 ) : RecyclerView.Adapter<DetailViewHolder>() {
 
     private var _details = details.toMutableList()
-    private var _detailsCopy = details.toMutableList()
     private var hide = true
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetailViewHolder {
         return DetailViewHolderFactory.createViewHolder(
-            parent,
-            viewType,
-            existingDetailNavigationListener
+                parent,
+                viewType,
+                existingDetailNavigationListener
         )
     }
 
@@ -58,8 +57,8 @@ class DetailThumbnailsAdapter(
             is DrawingDetail -> PICTURE_DETAIL
             is TextDetail -> TEXT_DETAIL
             is PhotoDetail -> PICTURE_DETAIL
-            is VideoDetail -> VIDEO_DETAIL
             is ExternalVideoDetail -> EXTERNAL_VIDEO_DETAIL
+            is YoutubeVideoDetail -> VIDEO_DETAIL
         }
     }
 
@@ -71,7 +70,6 @@ class DetailThumbnailsAdapter(
     fun updateDetailsList(newDetails: List<Detail>) {
         val diffCallback = ThumbnailDiffCallback(_details, newDetails)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
-        _detailsCopy.addAll(newDetails)
         _details.clear()
         _details.addAll(newDetails)
         diffResult.dispatchUpdatesTo(this)

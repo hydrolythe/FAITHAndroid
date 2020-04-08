@@ -19,7 +19,7 @@ import java.io.InputStream
 fun loadImageIntoView(context: Context, referencePath: String, image: ImageView) {
     // TODO : encryptie
     if (referencePath.startsWith("users")) {
-        GlideApp.with(context)
+        Glide.with(context)
             .load(FirebaseStorage.getInstance().reference.child(referencePath)) // load the storagereference
             .apply(RequestOptions.centerCropTransform())
             .into(image)

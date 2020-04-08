@@ -10,6 +10,8 @@ import be.hogent.faith.service.usecases.RegisterUserUseCase
 import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
+import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
+import be.hogent.faith.service.usecases.backpack.SaveYoutubeDetailUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
@@ -57,6 +59,8 @@ val serviceModule = module {
     factory { GetEventFilesUseCase(get(), get()) }
     factory { LoadDetailFileUseCase(get(), get()) }
     factory { GetBackPackFilesDummyUseCase(get(), get()) }
+    factory { GetYoutubeVideosFromSearchUseCase(get()) }
+    factory { SaveYoutubeDetailUseCase(get(), get()) }
     factory { SaveDetailsContainerDetailUseCase<Backpack>(get(), get(), get()) }
     factory {
         DeleteDetailsContainerDetailUseCase<Backpack>(
