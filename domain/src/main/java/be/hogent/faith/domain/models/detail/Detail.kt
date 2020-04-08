@@ -7,8 +7,6 @@ import java.util.UUID
 /**
  * A detail that can be part of an event, solution,...
  */
-const val DURATION_DEFAULT = 5
-
 sealed class Detail(
     /**
      * A relative path of where the actual content of the detail is saved.
@@ -18,12 +16,7 @@ sealed class Detail(
     var file: File,
     var fileName: String = "",
     val uuid: UUID = UUID.randomUUID()
-) : Serializable {
-    open fun getDuration(): Int {
-        // TODO implement for the classes that do not return the default
-        return DURATION_DEFAULT
-    }
-}
+) : Serializable
 
 class DrawingDetail(
     file: File,
