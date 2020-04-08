@@ -58,19 +58,19 @@ object NavigationUtil {
         onView(withId(R.id.btn_save_event_save)).perform(click())
     }
 
-    //TODO Check
+    // TODO Check
     fun goToEventsOverviewScreen() {
         goToCityScreenViaRegistration()
-        //onView(withId(R.id.btn_loginfragment_library)).perform(click())
+        // onView(withId(R.id.btn_loginfragment_library)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }
 
-    //TODO Check
+    // TODO Check
     fun goToNewEventScreen() {
         goToCityScreenViaLogin()
         Thread.sleep(3000)
-        //onView(withId(R.id.btn_loginfragment_startNewEvent)).perform(click())
+        // onView(withId(R.id.btn_loginfragment_startNewEvent)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }
@@ -110,10 +110,10 @@ object NavigationUtil {
         closeSoftKeyboard()
     }
 
-    //TODO Check
+    // TODO Check
     fun goToBackpack() {
         goToCityScreenViaLogin()
-        //onView(withId(R.id.btn_backpack)).perform(click())
+        // onView(withId(R.id.btn_backpack)).perform(click())
         // Just for safety
         closeSoftKeyboard()
     }

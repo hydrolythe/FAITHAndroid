@@ -7,7 +7,6 @@ import java.util.UUID
 /**
  * A detail that can be part of an event, solution,...
  */
-
 sealed class Detail(
     /**
      * A relative path of where the actual content of the detail is saved.
