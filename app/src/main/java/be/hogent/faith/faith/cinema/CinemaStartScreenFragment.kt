@@ -16,6 +16,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCinemaStartBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
+import com.google.android.material.picker.CalendarConstraints
+import com.google.android.material.picker.MaterialDatePicker
+import com.google.android.material.picker.Month
 
 class CinemaStartScreenFragment : Fragment() {
 
@@ -63,14 +66,18 @@ class CinemaStartScreenFragment : Fragment() {
 
             if (isChecked && compoundButton == binding.btnDetails) {
                 binding.btnCinemaAdd.visibility = View.VISIBLE
-                binding.btnDetails.backgroundTintList = ColorStateList.valueOf(Color.DKGRAY)
+                binding.btnDetails.backgroundTintList = ColorStateList.valueOf(Color.LTGRAY)
                 binding.btnFilms.isChecked = false
                 binding.btnFilms.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
+
+                binding.textInputEditTextCinemaDetailsSearch.hint = resources.getString(R.string.search_hint_bestand)
             } else if (isChecked && compoundButton == binding.btnFilms) {
                 binding.btnCinemaAdd.visibility = View.GONE
-                binding.btnFilms.backgroundTintList = ColorStateList.valueOf(Color.DKGRAY)
+                binding.btnFilms.backgroundTintList = ColorStateList.valueOf(Color.LTGRAY)
                 binding.btnDetails.isChecked = false
                 binding.btnDetails.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
+
+                binding.textInputEditTextCinemaDetailsSearch.hint = resources.getString(R.string.search_hint_film)
             }
         }
 
@@ -95,8 +102,27 @@ class CinemaStartScreenFragment : Fragment() {
         binding.btnCinemaCancel.setOnClickListener {
             navigation!!.closeCinema()
         }
+        binding.btnCinemaChooseDate.setOnClickListener{
+            showDateRangePicker()
+        }
     }
 
+    private fun showDateRangePicker() {
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+        val picker: MaterialDatePicker<*>
+        builder
+                .setTitleTextResId(R.string.daterange)
+                .setCalendarConstraints(
+                        CalendarConstraints.Builder()
+                                .setEnd(Month.today())
+                                .build()
+                )
+        picker = builder.build()
+        picker.show(this.fragmentManager!!, picker.toString())
+        picker.addOnPositiveButtonClickListener {
+            //TODO
+        }
+    }
     companion object {
         fun newInstance(): CinemaStartScreenFragment {
             return CinemaStartScreenFragment()

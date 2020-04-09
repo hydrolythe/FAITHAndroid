@@ -235,4 +235,6 @@
     <string name="mijn_bestanden">mijn bestanden</string>
     <string name="create_film">Maak filmpje</string>
     <string name="search_hint_cinema">Zoek hier een bestand of filmpje op naam</string>
+    <string name="search_hint_film">zoek hier een film op naam</string>
+    <string name="search_hint_bestand">zoek hier een bestand op naam</string>
 </resources>

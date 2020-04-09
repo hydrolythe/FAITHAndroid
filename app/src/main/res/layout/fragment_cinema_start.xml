@@ -22,47 +22,36 @@
             android:paddingEnd="16dp"
             app:hintEnabled="false"
             app:layout_constraintBottom_toTopOf="@+id/guide_rv_container_horizontal"
-            app:layout_constraintEnd_toStartOf="@+id/btn_cinema_chooseDate_start"
+            app:layout_constraintEnd_toStartOf="@+id/btn_cinema_chooseDate"
             app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
             app:startIconDrawable="@drawable/ic_search"
             app:startIconTint="@null">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_cinema_details_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/search_hint_cinema"
+                android:hint="@string/search_hint_film"
                 android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_cinema_chooseDate_end"
-            style="@style/faith_textbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginBottom="25dp"
-            android:backgroundTint="@color/color_white"
-            android:text="Tot"
-            app:icon="@drawable/ic_kalender"
-            app:iconGravity="textStart"
-            app:iconSize="34dp"
-            app:layout_constraintBottom_toTopOf="@+id/guide_rv_container_horizontal"
-            app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical2" />
+
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_cinema_chooseDate_start"
+            android:id="@+id/btn_cinema_chooseDate"
             style="@style/faith_textbutton"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_marginBottom="25dp"
             android:backgroundTint="@color/color_white"
             android:gravity="center"
-            android:text="Start"
+            android:text="Datum"
             app:icon="@drawable/ic_kalender"
             app:iconGravity="textStart"
             app:iconSize="34dp"
             app:layout_constraintBottom_toTopOf="@+id/guide_rv_container_horizontal"
-            app:layout_constraintEnd_toStartOf="@+id/btn_cinema_chooseDate_end" />
+            app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical2" />
 
 
         <ImageButton
@@ -99,7 +88,7 @@
             android:textOff="@string/mijn_filmpjes"
             android:textOn="@string/mijn_filmpjes"
             app:layout_constraintBottom_toBottomOf="@+id/rv_container"
-            app:layout_constraintEnd_toStartOf="@+id/btn_details" />
+            app:layout_constraintEnd_toStartOf="@+id/guide_btns_vertical" />
 
         <ToggleButton
             android:id="@+id/btn_details"
@@ -111,8 +100,6 @@
             android:textAllCaps="false"
             android:textOff="@string/mijn_bestanden"
             android:textOn="@string/mijn_bestanden"
-
-
             app:layout_constraintBottom_toBottomOf="@+id/rv_container"
             app:layout_constraintStart_toStartOf="@+id/guide_btns_vertical" />
 
@@ -182,7 +169,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/rv_container"
             app:layout_constraintTop_toTopOf="@+id/rv_container"
-            app:layout_constraintVertical_bias="0.0" />
+            />
 
         <ImageView
             android:id="@+id/achtergrond_publiek"

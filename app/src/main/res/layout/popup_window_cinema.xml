@@ -13,8 +13,8 @@
         android:padding="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
             app:srcCompat="@drawable/ic_menu_bestand" />
 
         <TextView
@@ -32,8 +32,8 @@
         android:padding="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
             app:srcCompat="@drawable/ic_menu_icoon_foto" />
 
         <TextView
@@ -51,8 +51,8 @@
         android:padding="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
             app:srcCompat="@drawable/ic_menu_icoon_tekeningen" />
 
         <TextView

@@ -104,10 +104,7 @@ dependencies {
     implementation uiDependencies.legacysupport
     implementation uiDependencies.googleplay
 
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    
     kapt uiDependencies.glidecompiler
     implementation uiDependencies.recyclerview
     implementation uiDependencies.rv_selection
