@@ -1,7 +1,7 @@
 package be.hogent.faith.database.event
 
-import be.hogent.faith.database.common.DetailMapper
 import be.hogent.faith.database.Mapper
+import be.hogent.faith.database.common.DetailMapper
 import be.hogent.faith.service.encryption.EncryptedEvent
 import java.io.File
 import java.util.UUID
@@ -40,10 +40,10 @@ internal object EventMapper :
     }
 
     override fun mapToEntities(models: List<EncryptedEvent>): List<EncryptedEventEntity> {
-        return models.map(EventMapper::mapToEntity)
+        return models.map(::mapToEntity)
     }
 
     override fun mapFromEntities(entities: List<EncryptedEventEntity>): List<EncryptedEvent> {
-        return entities.map(EventMapper::mapFromEntity)
+        return entities.map(::mapFromEntity)
     }
 }

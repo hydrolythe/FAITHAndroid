@@ -1,15 +1,16 @@
 package be.hogent.faith.database.detailcontainer
 
+import be.hogent.faith.database.common.CONTAINERS_KEY
 import be.hogent.faith.database.common.DetailEntity
+import be.hogent.faith.database.common.EncryptedDetailEntity
+import be.hogent.faith.database.common.USERS_KEY
 import be.hogent.faith.database.user.UserEntity
-import be.hogent.faith.util.TAG
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import durdinapps.rxfirebase2.RxFirestore
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
-import timber.log.Timber
 
 abstract class DetailContainerDatabase<DetailContainer>(
     private val fbAuth: FirebaseAuth,
@@ -17,40 +18,33 @@ abstract class DetailContainerDatabase<DetailContainer>(
 ) {
     abstract val containerName: String
 
-    open fun insert(item: DetailEntity, user: UserEntity): Maybe<DetailEntity?> {
+    open fun insert(item: EncryptedDetailEntity, user: UserEntity): Completable {
         val currentUser = fbAuth.currentUser
         if (currentUser == null || currentUser.uid != user.uuid) {
-            return Maybe.error(RuntimeException("Unauthorized user."))
+            return Completable.error(RuntimeException("Unauthorized user."))
         } else {
-            val document =
-                firestore.collection(FirebaseUserRepository.USERS_KEY).document(currentUser.uid)
-                    .collection(containerName)
-                    .document(item.uuid)
+            val document = firestore
+                .collection(USERS_KEY)
+                .document(currentUser.uid)
+                .collection(containerName)
+                .document(item.uuid)
             return RxFirestore.setDocument(document, item)
-                .andThen(
-                    RxFirestore.getDocument(document)
-                        .map { it.toObject(DetailEntity::class.java) })
-                .onErrorResumeNext { error: Throwable ->
-                    Timber.e("$TAG: error saving detail in $containerName ${error.message}")
-                    Maybe.error(RuntimeException("Error saving detail in $containerName", error))
-                }
         }
     }
 
-    open fun getAll(): Flowable<List<DetailEntity>> {
+    open fun getAll(): Flowable<List<EncryptedDetailEntity>> {
         val currentUser = fbAuth.currentUser
         if (currentUser == null) {
             return Flowable.error(RuntimeException("Unauthorized user."))
         }
         return RxFirestore.observeQueryRef(
-            firestore.collection(FirebaseEventRepository.USERS_KEY).document(currentUser.uid).collection(
-                containerName
-            )
+            firestore
+                .collection(USERS_KEY)
+                .document(currentUser.uid)
+                .collection(containerName)
         )
             .map {
-                it.map { document ->
-                    document.toObject(DetailEntity::class.java)
-                }
+                it.map { document -> document.toObject(EncryptedDetailEntity::class.java) }
             }
     }
 
@@ -60,10 +54,41 @@ abstract class DetailContainerDatabase<DetailContainer>(
             Completable.error(RuntimeException("User not set."))
         } else {
             RxFirestore.deleteDocument(
-                firestore.collection(FirebaseEventRepository.USERS_KEY).document(
-                    currentUser.uid
-                ).collection(containerName).document(item.uuid)
+                firestore
+                    .collection(USERS_KEY)
+                    .document(currentUser.uid)
+                    .collection(containerName)
+                    .document(item.uuid)
             )
         }
+    }
+
+    // TODO: document
+    fun createContainer(container: EncryptedDetailsContainerEntity): Completable {
+        val currentUser = fbAuth.currentUser
+        if (currentUser == null) {
+            return Completable.error(RuntimeException("Unauthorized user."))
+        }
+        val containerDocument = firestore
+            .collection(USERS_KEY)
+            .document(currentUser.uid)
+            .collection(CONTAINERS_KEY)
+            .document(containerName)
+        return RxFirestore.setDocument(containerDocument, container)
+    }
+
+    fun getContainer(): Maybe<EncryptedDetailsContainerEntity> {
+        val currentUser = fbAuth.currentUser
+        if (currentUser == null) {
+            return Maybe.error(RuntimeException("Unauthorized user."))
+        }
+        return RxFirestore.getDocument(
+            firestore
+                .collection(USERS_KEY)
+                .document(currentUser.uid)
+                .collection(CONTAINERS_KEY)
+                .document(containerName)
+        )
+            .map { snapshot -> snapshot.toObject(EncryptedDetailsContainerEntity::class.java) }
     }
 }

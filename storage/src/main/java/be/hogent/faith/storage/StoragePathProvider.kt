@@ -20,7 +20,7 @@ import java.io.File
  * - Events main folder: users/[User.uuid]/events/[Event.uuid]/
  * - Event's emotionAvatar: users/[User.uuid]/events/[Event.uuid]/emotionAvatar
  * - Detail inside an event: users/[User.uuid]/events/[Event.uuid]/[Detail.uuid]
- * - Backpack files: users/[User.uuid]/backpack/[Detail.uuid]
+ * - Backpack files: users/[User.uuid]/containers/backpack/[Detail.uuid]
  */
 class StoragePathProvider(
     private val context: Context,
@@ -35,9 +35,17 @@ class StoragePathProvider(
      */
     fun detailsContainerFolderPath(detailsContainer: DetailsContainer): File {
         return when (detailsContainer) {
-            is Backpack -> File("users/${user!!.uid}/backpack")
+            is Backpack -> File("users/${user!!.uid}/containers/backpack")
             else -> throw NotImplementedError()
         }
+    }
+
+    /**
+     * Returns the **relative** path in which a detail will be saved.
+     * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path.
+     */
+    fun detailPath(detail: EncryptedDetail, detailsContainer: DetailsContainer): File {
+        return File("${detailsContainerFolderPath(detailsContainer).path}/${detail.uuid}")
     }
 
     /**

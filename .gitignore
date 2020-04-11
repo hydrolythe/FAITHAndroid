@@ -75,4 +75,5 @@ fastlane/readme.md
 *.vpp.working-journal
 *.lock
 *.lck
+*.vpp.*
 tmp/*

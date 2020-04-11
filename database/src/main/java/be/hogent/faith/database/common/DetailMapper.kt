@@ -2,7 +2,6 @@ package be.hogent.faith.database.common
 
 import be.hogent.faith.database.Mapper
 import be.hogent.faith.database.converters.FileConverter
-import be.hogent.faith.service.usecases.encryption.EncryptedDetail
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
@@ -10,6 +9,7 @@ import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.service.encryption.EncryptedDetail
 import java.io.File
 import java.util.UUID
 
@@ -19,8 +19,7 @@ import java.util.UUID
  * The event is required because we need its uuid to map the foreign key relationship.
  */
 
-object DetailMapper :
-    Mapper<EncryptedDetailEntity, EncryptedDetail> {
+object DetailMapper : Mapper<EncryptedDetailEntity, EncryptedDetail> {
 
     /**
      * Temporarily added for backpack compatibility
@@ -28,7 +27,7 @@ object DetailMapper :
     fun mapToEntity(model: Detail): DetailEntity {
         return DetailEntity(
             FileConverter().toString(model.file), model.uuid.toString(),
-            model.fileName,
+            model.title,
             when (model) {
                 is AudioDetail -> DetailType.AUDIO
                 is TextDetail -> DetailType.TEXT
@@ -78,6 +77,7 @@ object DetailMapper :
     override fun mapToEntity(model: EncryptedDetail): EncryptedDetailEntity {
         return EncryptedDetailEntity(
             file = model.file.path,
+            title = model.title,
             uuid = model.uuid.toString(),
             type = model.type
         )
@@ -90,14 +90,10 @@ object DetailMapper :
     override fun mapFromEntity(entity: EncryptedDetailEntity): EncryptedDetail {
         return EncryptedDetail(
             file = File(entity.file),
-            fileName = entity.fileName,
+            title = entity.title,
             uuid = UUID.fromString(entity.uuid),
             type = entity.type
         )
-    }
-
-    fun mapList(entities: List<DetailEntity>): List<Detail> {
-        return entities.map { mapFromEntity(it) }
     }
 
     override fun mapFromEntities(entities: List<EncryptedDetailEntity>): List<EncryptedDetail> {

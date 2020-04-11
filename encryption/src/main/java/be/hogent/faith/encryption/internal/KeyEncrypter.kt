@@ -1,9 +1,5 @@
 package be.hogent.faith.encryption.internal
 
-import be.hogent.faith.service.usecases.encryption.EncryptedString
-import be.hogent.faith.encryption.encryptionService.DecryptionRequest
-import be.hogent.faith.encryption.encryptionService.EncryptionRequest
-import be.hogent.faith.encryption.encryptionService.KeyEncryptionService
 import be.hogent.faith.service.encryption.EncryptedString
 import com.google.crypto.tink.CleartextKeysetHandle
 import com.google.crypto.tink.JsonKeysetReader
@@ -34,7 +30,11 @@ class KeyEncrypter(private val encryptionService: KeyEncryptionService) {
 
     internal fun decrypt(encryptedKey: EncryptedString): Single<KeysetHandle> {
         return encryptionService
-            .decrypt(DecryptionRequest(encryptedKey))
+            .decrypt(
+                DecryptionRequest(
+                    encryptedKey
+                )
+            )
                 // TEMP FIX: because somehow the UC starting this is not doing its thing off the main thread
             .subscribeOn(Schedulers.io())
             .map(::convertStringToKeysetHandle)

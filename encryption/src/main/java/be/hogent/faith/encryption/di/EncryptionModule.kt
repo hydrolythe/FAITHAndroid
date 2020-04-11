@@ -3,8 +3,8 @@ package be.hogent.faith.encryption.di
 import be.hogent.faith.service.usecases.encryption.IEventEncryptionService
 import be.hogent.faith.encryption.DetailEncryptionService
 import be.hogent.faith.encryption.EventEncryptionService
-import be.hogent.faith.encryption.encryptionService.ENDPOINT
-import be.hogent.faith.encryption.encryptionService.KeyEncryptionService
+import be.hogent.faith.encryption.internal.ENDPOINT
+import be.hogent.faith.encryption.internal.KeyEncryptionService
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
 import com.squareup.moshi.Moshi

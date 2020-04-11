@@ -1,5 +1,6 @@
 package be.hogent.faith.database.user
 
+import be.hogent.faith.database.common.USERS_KEY
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import durdinapps.rxfirebase2.RxFirestore
@@ -50,9 +51,5 @@ class FirebaseUserDatabase(
             return Completable.error(RuntimeException("Unauthorized user."))
         }
         return RxFirestore.deleteDocument(firestore.collection(USERS_KEY).document(currentUser.uid))
-    }
-
-    companion object {
-        const val USERS_KEY = "users"
     }
 }

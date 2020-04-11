@@ -91,10 +91,14 @@ class LocalFileStorageRepository(
     }
 
     override fun saveDetailFileWithContainer(
-        detail: Detail,
+        detail: EncryptedDetail,
         container: DetailsContainer
-    ): Completable {
-        // TODO
-        TODO("Not yet implemented")
+    ): Single<EncryptedDetail> {
+        return Single.fromCallable {
+            val localPath = with(pathProvider) { localStorage(detailPath(detail, container)) }
+            moveFile(detail.file, localPath)
+            detail.file = localPath
+            detail
+        }
     }
 }

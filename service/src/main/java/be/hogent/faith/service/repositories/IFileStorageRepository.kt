@@ -33,5 +33,5 @@ interface IFileStorageRepository {
      */
     fun downloadFile(detail: Detail): Single<File>
 
-    fun saveDetailFileWithContainer(encryptedDetail: EncryptedDetail, container: DetailsContainer): Completable
+    fun saveDetailFileWithContainer(encryptedDetail: EncryptedDetail, container: DetailsContainer): Single<EncryptedDetail>
 }

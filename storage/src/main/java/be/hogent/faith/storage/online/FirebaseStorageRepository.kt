@@ -1,6 +1,7 @@
 package be.hogent.faith.storage.online
 
 import android.net.Uri
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.encryption.EncryptedDetail
@@ -96,5 +97,17 @@ class FirebaseStorageRepository(
                     event.emotionAvatar = localDestinationFile
                 }
         }
+    }
+
+    override fun saveDetailFiles(
+        encryptedDetail: EncryptedDetail,
+        container: DetailsContainer
+    ): Completable {
+        return rxFirebaseStorage
+            .putFile(
+                storageRef.child(pathProvider.detailPath(encryptedDetail, container).path),
+                Uri.parse("file://${encryptedDetail.file.path}")
+            )
+            .ignoreElement()
     }
 }

@@ -1,4 +1,4 @@
-package be.hogent.faith.encryption.encryptionService
+package be.hogent.faith.encryption.internal
 
 import com.squareup.moshi.JsonClass
 import io.reactivex.Single

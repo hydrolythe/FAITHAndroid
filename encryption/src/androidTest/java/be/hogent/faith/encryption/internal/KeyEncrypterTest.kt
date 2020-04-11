@@ -2,7 +2,6 @@ package be.hogent.faith.encryption.internal
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import be.hogent.faith.encryption.di.encryptionModule
-import be.hogent.faith.encryption.encryptionService.KeyEncryptionService
 import com.google.crypto.tink.KeysetHandle
 import org.junit.Assert.assertEquals
 import org.junit.Before

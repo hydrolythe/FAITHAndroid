@@ -90,8 +90,14 @@ class FileStorageRepository(
     override fun saveDetailFileWithContainer(
         encryptedDetail: EncryptedDetail,
         container: DetailsContainer
-    ): Completable {
+    ): Single<EncryptedDetail> {
         return localStorage.saveDetailFileWithContainer(encryptedDetail, container)
-            .andThen(onlineStorage.saveDetailFileForContainer(container))
+            .flatMapCompletable { savedDetail ->
+                onlineStorage.saveDetailFiles(
+                    savedDetail,
+                    container
+                )
+            }
+            .andThen(Single.just(encryptedDetail))
     }
 }
