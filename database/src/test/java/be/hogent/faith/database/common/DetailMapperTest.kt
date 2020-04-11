@@ -1,8 +1,8 @@
 package be.hogent.faith.database.common
 
 import be.hogent.faith.database.converters.FileConverter
-import be.hogent.faith.service.usecases.encryption.EncryptedDetail
 import be.hogent.faith.database.factory.EntityFactory
+import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.util.factory.DataFactory
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -23,7 +23,7 @@ class DetailMapperTest {
     fun `should map to DetailEntity when Detail is given`() {
         val model = EncryptedDetail(
             file = DataFactory.randomFile(),
-            fileName = DataFactory.randomString(),
+            title = DataFactory.randomString(),
             uuid = UUID.randomUUID(),
             type = "encrypted type"
         )

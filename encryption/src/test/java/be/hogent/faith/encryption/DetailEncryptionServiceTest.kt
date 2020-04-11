@@ -1,7 +1,8 @@
 package be.hogent.faith.encryption
 
-import be.hogent.faith.service.usecases.encryption.EncryptedDetail
 import be.hogent.faith.encryption.internal.KeyGenerator
+import be.hogent.faith.service.encryption.EncryptedDetail
+import be.hogent.faith.util.contentEqual
 import be.hogent.faith.util.factory.DetailFactory
 import org.junit.After
 import org.junit.Assert.assertTrue
@@ -13,7 +14,7 @@ class DetailEncryptionServiceTest {
     private val dek by lazy { KeyGenerator().generateKeysetHandle() }
     private val sdek by lazy { KeyGenerator().generateStreamingKeysetHandle() }
 
-    private val detailEncrypter = DetailEncryptionService()
+    private val detailEncrypter = DetailEncryptionService(FileEncryptionService())
 
     private val detail = DetailFactory.makeRandomDetail()
 

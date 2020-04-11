@@ -1,8 +1,8 @@
 package be.hogent.faith.storage.local
 
 import android.content.Context
-import be.hogent.faith.service.usecases.encryption.EncryptedDetail
-import be.hogent.faith.service.usecases.encryption.EncryptedEvent
+import be.hogent.faith.service.encryption.EncryptedDetail
+import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.storage.StoragePathProvider
 import be.hogent.faith.util.factory.DataFactory
 import com.google.firebase.auth.FirebaseAuth

@@ -2,8 +2,8 @@ package be.hogent.faith.storage.online
 
 import android.content.Context
 import android.net.Uri
-import be.hogent.faith.service.usecases.encryption.EncryptedDetail
-import be.hogent.faith.service.usecases.encryption.EncryptedEvent
+import be.hogent.faith.service.encryption.EncryptedDetail
+import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.storage.StoragePathProvider
 import be.hogent.faith.util.factory.DataFactory
 import com.google.firebase.auth.FirebaseAuth
@@ -57,7 +57,7 @@ class FirebaseStorageRepositoryTest {
 
     @Before
     fun setUp() {
-        every { firebaseStorage.getReference() } returns mockk(relaxed = true)
+        every { firebaseStorage.reference } returns mockk(relaxed = true)
         onlineFileStorageRepository =
             FirebaseStorageRepository(storagePathProvider, firebaseStorage, rxFirebaseStorage)
 

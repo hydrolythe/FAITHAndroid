@@ -1,8 +1,8 @@
 package be.hogent.faith.database.authentication
 
-import be.hogent.faith.service.usecases.repository.SignInException
-import be.hogent.faith.service.usecases.repository.SignOutException
-import be.hogent.faith.service.usecases.repository.UserCollisionException
+import be.hogent.faith.service.repositories.SignInException
+import be.hogent.faith.service.repositories.SignOutException
+import be.hogent.faith.service.repositories.UserCollisionException
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable

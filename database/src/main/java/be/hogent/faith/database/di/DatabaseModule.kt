@@ -2,6 +2,7 @@ package be.hogent.faith.database.di
 
 import be.hogent.faith.database.authentication.AuthManager
 import be.hogent.faith.database.authentication.FirebaseAuthManager
+import be.hogent.faith.database.common.DetailMapper
 import be.hogent.faith.database.detailcontainer.BackpackDatabase
 import be.hogent.faith.database.detailcontainer.DetailContainerDatabase
 import be.hogent.faith.database.detailcontainer.DetailContainerRepository
@@ -21,11 +22,17 @@ import org.koin.dsl.module
 
 val databaseModule = module {
     single { EventMapper }
+    single { DetailMapper }
     single { UserMapper }
 
     single { EventRepository(get()) as IEventRepository }
     single {
-        DetailContainerRepository<Backpack>(get(), get(), get()) as IDetailContainerRepository
+        DetailContainerRepository<Backpack>(
+            get(),
+            get(),
+            get(),
+            get()
+        ) as IDetailContainerRepository<Backpack>
     }
     single { UserRepository(get(), get()) as IUserRepository }
     single { AuthManager(get()) as IAuthManager }

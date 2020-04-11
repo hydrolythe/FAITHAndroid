@@ -12,7 +12,7 @@ class GetBackPackFilesDummyUseCase(
     observeScheduler: Scheduler
 ) : FlowableUseCase<List<Detail>, GetBackPackFilesDummyUseCase.Params>(observeScheduler) {
     override fun buildUseCaseObservable(params: Params): Flowable<List<Detail>> {
-        return backpackRepository.get()
+        return Flowable.just(emptyList())
     }
 
     data class Params(val backpack: String)

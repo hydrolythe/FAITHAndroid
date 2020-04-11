@@ -2,26 +2,38 @@ package be.hogent.faith.service.usecases.user
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.service.encryption.IEventEncryptionService
 import be.hogent.faith.service.repositories.IAuthManager
 import be.hogent.faith.service.repositories.IEventRepository
 import be.hogent.faith.service.repositories.IUserRepository
-import be.hogent.faith.service.usecases.base.ObservableUseCase
+import be.hogent.faith.service.usecases.base.FlowableUseCase
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Scheduler
-import io.reactivex.rxkotlin.Observables.combineLatest
+import io.reactivex.rxkotlin.Flowables
 
 class GetUserUseCase(
     private val userRepository: IUserRepository,
     private val eventRepository: IEventRepository,
+    private val eventEncryptionService: IEventEncryptionService,
     private val authManager: IAuthManager,
     observeScheduler: Scheduler
-) : ObservableUseCase<User, GetUserUseCase.Params>(observeScheduler) {
+) : FlowableUseCase<User, GetUserUseCase.Params>(observeScheduler) {
 
-    override fun buildUseCaseObservable(params: Params): Observable<User> {
+    override fun buildUseCaseObservable(params: Params): Flowable<User> {
         val currentUser = authManager.getLoggedInUserUUID()
         if (currentUser == null)
-            return Observable.error(RuntimeException("You are not allowed to access the user, please log in"))
-        return combineLatest(userRepository.get(currentUser), eventRepository.getAllEventsData())
+            return Flowable.error(RuntimeException("You are not allowed to access the user, please log in"))
+        return Flowables.combineLatest(
+            userRepository.get(currentUser),
+            eventRepository.getAll()
+                .concatMapSingle { list ->
+                    Observable.fromIterable(list)
+                        .flatMapSingle(eventEncryptionService::decryptData)
+                        .toList()
+                }
+
+        )
             .map { pair: Pair<User, List<Event>> -> addEventsToUser(pair.first, pair.second) }
     }
 

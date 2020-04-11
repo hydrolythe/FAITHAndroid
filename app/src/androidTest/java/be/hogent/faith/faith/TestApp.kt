@@ -28,8 +28,7 @@ class TestApp : Application() {
                     appModule,
                     databaseModule,
                     serviceModule,
-                    storageModule,
-                    androidTestModule
+                    storageModule
                 )
             )
         }

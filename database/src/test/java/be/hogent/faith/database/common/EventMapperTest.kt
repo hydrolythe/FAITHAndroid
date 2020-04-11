@@ -1,11 +1,11 @@
 package be.hogent.faith.database.common
 
 import be.hogent.faith.database.converters.FileConverter
-import be.hogent.faith.service.usecases.encryption.EncryptedDetail
-import be.hogent.faith.service.usecases.encryption.EncryptedEvent
 import be.hogent.faith.database.event.EventMapper
 import be.hogent.faith.database.factory.EntityFactory
 import be.hogent.faith.database.event.EncryptedEventEntity
+import be.hogent.faith.service.encryption.EncryptedDetail
+import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.UserFactory
 import org.junit.Assert.assertEquals
@@ -18,7 +18,7 @@ class EventMapperTest {
 
     private val encryptedDetail = EncryptedDetail(
         file = DataFactory.randomFile(),
-        fileName = DataFactory.randomString(),
+        title = DataFactory.randomString(),
         uuid = DataFactory.randomUUID(),
         type = "Encrypted type"
     )

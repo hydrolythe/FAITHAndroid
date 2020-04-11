@@ -8,13 +8,13 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
-import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
+import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
+import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.reactivex.subscribers.DisposableSubscriber
 
@@ -137,9 +137,9 @@ class BackpackViewModel(
     fun onSaveClicked(title: String, user: User, detail: Detail) {
         val noEmptyString = checkEmptyString(title)
         val notMaxCharacters = checkMaxCharacters(title)
-        val uniquetitle = checkUniqueFilename(fileName)
+        val uniquetitle = checkUniquetitle(title)
         if (noEmptyString && notMaxCharacters && uniquetitle) {
-            detail.fileName = fileName
+            detail.title = title
             saveCurrentDetail(user, detail)
             _detailIsSaved.call()
         } else {
@@ -147,21 +147,21 @@ class BackpackViewModel(
                 setErrorMessage(R.string.save_detail_emptyString)
             if (!notMaxCharacters)
                 setErrorMessage(R.string.save_detail_maxChar)
-            if (!uniqueFilename)
+            if (!uniquetitle)
                 setErrorMessage(R.string.save_detail_uniqueName)
         }
     }
 
-    private fun checkUniqueFilename(fileName: String): Boolean {
-        return (details.find { e -> (e.fileName == fileName) } == null)
+    private fun checkUniquetitle(title: String): Boolean {
+        return (details.find { e -> (e.title == title) } == null)
     }
 
-    private fun checkMaxCharacters(fileName: String): Boolean {
-        return fileName.length <= 30
+    private fun checkMaxCharacters(title: String): Boolean {
+        return title.length <= 30
     }
 
-    private fun checkEmptyString(fileName: String): Boolean {
-        return fileName.isNotEmpty() || !fileName.isBlank()
+    private fun checkEmptyString(title: String): Boolean {
+        return title.isNotEmpty() || !title.isBlank()
     }
 
     fun clearSaveDialogErrorMessage() {

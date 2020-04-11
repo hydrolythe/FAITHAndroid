@@ -16,7 +16,8 @@ import java.util.UUID
 class TemporaryStorageRepository(
     private val context: Context,
     private val pathProvider: StoragePathProvider
-) : ITemporaryFileStorageRepository {
+) : ITemporaryFileStorageRepository,
+    be.hogent.faith.service.repositories.ITemporaryFileStorageRepository {
 
     /**
      * Stores a detail in its event's folder, and sets the the details path to that location
@@ -34,23 +35,7 @@ class TemporaryStorageRepository(
             )
     }
 
-    override fun saveDetailFileWithContainer(
-        container: DetailsContainer,
-        detail: Detail
-    ): Completable {
-        val saveFile = with(pathProvider) {
-            temporaryStorage(detailPath(detail, container))
-        }
-        return moveFile(detail.file, saveFile)
-            .andThen(
-                Completable.fromCallable {
-                    detail.file = saveFile // relativePath
-                    Unit
-                }
-            )
-    }
-
-    override fun storeTextTemporarily(text: String): Single<File> {
+    override fun storeText(text: String): Single<File> {
         return Single.fromCallable {
             val saveDirectory = File(context.cacheDir, "text")
             saveDirectory.mkdirs()
@@ -60,7 +45,7 @@ class TemporaryStorageRepository(
         }
     }
 
-    override fun storeBitmapTemporarily(bitmap: Bitmap): Single<File> {
+    override fun storeBitmap(bitmap: Bitmap): Single<File> {
         val saveDirectory = File(context.cacheDir, "pictures")
         saveDirectory.mkdirs()
         return storeBitmap(bitmap, saveDirectory, UUID.randomUUID().toString())

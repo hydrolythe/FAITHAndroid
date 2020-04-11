@@ -1,12 +1,11 @@
 package be.hogent.faith.database.authentication
 
-import timber.log.Timber
-import be.hogent.faith.service.usecases.repository.InvalidCredentialsException
-import be.hogent.faith.service.usecases.repository.NetworkError
-import be.hogent.faith.service.usecases.repository.SignInException
-import be.hogent.faith.service.usecases.repository.SignOutException
-import be.hogent.faith.service.usecases.repository.UserCollisionException
-import be.hogent.faith.service.usecases.repository.WeakPasswordException
+import be.hogent.faith.service.repositories.InvalidCredentialsException
+import be.hogent.faith.service.repositories.NetworkError
+import be.hogent.faith.service.repositories.SignInException
+import be.hogent.faith.service.repositories.SignOutException
+import be.hogent.faith.service.repositories.UserCollisionException
+import be.hogent.faith.service.repositories.WeakPasswordException
 import be.hogent.faith.util.TAG
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.AuthResult
@@ -19,6 +18,7 @@ import durdinapps.rxfirebase2.RxFirebaseAuth
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
+import timber.log.Timber
 
 /**
  * uses RxFirebaseAuth : https://github.com/FrangSierra/RxFirebase

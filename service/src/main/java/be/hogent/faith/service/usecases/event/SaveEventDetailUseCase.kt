@@ -2,6 +2,7 @@ package be.hogent.faith.service.usecases.event
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import io.reactivex.Completable
 import io.reactivex.Scheduler
@@ -12,11 +13,10 @@ class SaveEventDetailUseCase(
 ) : CompletableUseCase<SaveEventDetailUseCase.Params>(observeScheduler) {
 
     override fun buildUseCaseObservable(params: Params): Completable {
-        // TODO : Stond erbij voor text en drawing. Is ook ok voor de rest?
         if (params.event.details.contains(params.detail)) {
             return Completable.complete()
         }
-        return tempStorageRepo.storeDetailWithContainer(
+        return tempStorageRepo.storeDetailWithEvent(
             params.detail,
             params.event
         ).doOnComplete {

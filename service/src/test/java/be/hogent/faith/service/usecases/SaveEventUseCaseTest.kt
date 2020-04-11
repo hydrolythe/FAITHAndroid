@@ -2,53 +2,45 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.service.encryption.IEventEncryptionService
 import be.hogent.faith.service.repositories.IEventRepository
+import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
-import be.hogent.faith.service.usecases.fakes.SingleUserFakeEventRepository
 import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Completable
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class SaveEventUseCaseTest {
+    private val eventEncryptionService: IEventEncryptionService = mockk()
+    private val filesStorageRepository: IFileStorageRepository = mockk()
+    private val eventRepository: IEventRepository = mockk()
     private lateinit var saveEventUseCase: SaveEventUseCase
-    private lateinit var eventRepository: IEventRepository
 
     private lateinit var event: Event
     private lateinit var user: User
-
-    private val eventTitle = "title"
 
     @Before
     fun setUp() {
         event = EventFactory.makeEvent(numberOfDetails = 2, hasEmotionAvatar = true)
         user = UserFactory.makeUser(numberOfEvents = 0)
-        eventRepository = SingleUserFakeEventRepository()
         saveEventUseCase =
-            SaveEventUseCase(eventRepository, mockk(relaxed = true))
-    }
-
-    @Test
-    fun `After saving the event it should be available in the EventRepository`() {
-        val params = SaveEventUseCase.Params(eventTitle, event, user)
-
-        val result = saveEventUseCase.buildUseCaseObservable(params)
-        result.test()
-            .dispose()
-
-        val foundEvent = eventRepository.get(event.uuid).test().values().first()
-        assertEquals(event, foundEvent)
+            SaveEventUseCase(
+                eventEncryptionService,
+                filesStorageRepository,
+                eventRepository,
+                mockk()
+            )
     }
 
     @Test
     fun `After saving the event it should be in the user's list of events`() {
-        val params = SaveEventUseCase.Params(eventTitle, event, user)
+        val params = SaveEventUseCase.Params(event, user)
 
         val result = saveEventUseCase.buildUseCaseObservable(params)
 
@@ -61,11 +53,9 @@ class SaveEventUseCaseTest {
     @Test
     fun `When an error occurs in the EventRepository it returns an Error`() {
         // Arrange
-        eventRepository = mockk()
-        every { eventRepository.insert(any(), any()) } returns Completable.error(RuntimeException())
-        saveEventUseCase = SaveEventUseCase(eventRepository, mockk(relaxed = true))
+        every { eventRepository.insert(any()) } returns Completable.error(RuntimeException())
 
-        val params = SaveEventUseCase.Params(eventTitle, event, user)
+        val params = SaveEventUseCase.Params(event, user)
 
         saveEventUseCase.buildUseCaseObservable(params)
             .test()
@@ -74,12 +64,9 @@ class SaveEventUseCaseTest {
 
     @Test
     fun `When an error occurs in the EventRepository the event is not added to the user's events`() {
-        eventRepository = mockk()
-        every { eventRepository.insert(any(), any()) } returns Completable.error(RuntimeException())
-        saveEventUseCase =
-            SaveEventUseCase(eventRepository, mockk(relaxed = true))
+        every { eventRepository.insert(any()) } returns Completable.error(RuntimeException())
 
-        val params = SaveEventUseCase.Params(eventTitle, event, user)
+        val params = SaveEventUseCase.Params(event, user)
 
         val result = saveEventUseCase.buildUseCaseObservable(params)
         result.test()

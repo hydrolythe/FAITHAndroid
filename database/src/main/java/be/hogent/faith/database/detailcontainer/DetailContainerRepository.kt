@@ -17,7 +17,7 @@ open class DetailContainerRepository<T : DetailsContainer>(
     private val detailMapper: DetailMapper,
     private val containerMapper: DetailContainerMapper,
     private val database: DetailContainerDatabase<T>
-) : IDetailContainerRepository {
+) : IDetailContainerRepository<T> {
 
     override fun insertDetail(
         encryptedDetail: EncryptedDetail,

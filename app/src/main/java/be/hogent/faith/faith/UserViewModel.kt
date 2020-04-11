@@ -14,7 +14,7 @@ import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableCompletableObserver
-import io.reactivex.observers.DisposableObserver
+import io.reactivex.subscribers.DisposableSubscriber
 import timber.log.Timber
 
 /**
@@ -54,11 +54,6 @@ class UserViewModel(
         _user.postValue(user)
     }
 
-    fun getLoggedInUser() {
-        _getLoggedInUserState.postValue(Resource(ResourceState.LOADING, null, null))
-        getUserUseCase.execute(GetUserUseCase.Params(), GetUserUseCaseHandler())
-    }
-
     /**
      * if the fragment updated the ui, the state is set to null.
      * reason : a new DetailFragment is created when you want to register a new event, so the state must be empty again
@@ -67,30 +62,33 @@ class UserViewModel(
         _eventSavedState.postValue(null)
     }
 
-    private inner class GetUserUseCaseHandler : DisposableObserver<User>() {
+    fun getLoggedInUser() {
+        _getLoggedInUserState.postValue(Resource(ResourceState.LOADING, null, null))
+        getUserUseCase.execute(GetUserUseCase.Params(), object : DisposableSubscriber<User>() {
 
-        override fun onNext(t: User) {
-            Timber.i("success $t")
-            _user.postValue(t)
-            _getLoggedInUserState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
-        }
+            override fun onNext(t: User) {
+                Timber.i("success $t")
+                _user.postValue(t)
+                _getLoggedInUserState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
+            }
 
-        override fun onComplete() {
-            Timber.i(TAG, "completed")
-        }
+            override fun onComplete() {
+                Timber.i(TAG, "completed")
+            }
 
-        override fun onError(e: Throwable) {
-            Timber.e(e)
-            _getLoggedInUserState.postValue(
-                Resource(
-                    ResourceState.ERROR, null,
-                    when (e) {
-                        is NetworkError -> R.string.login_error_internet
-                        else -> R.string.register_error_create_user
-                    }
+            override fun onError(e: Throwable) {
+                Timber.e(e)
+                _getLoggedInUserState.postValue(
+                    Resource(
+                        ResourceState.ERROR, null,
+                        when (e) {
+                            is NetworkError -> R.string.login_error_internet
+                            else -> R.string.register_error_create_user
+                        }
+                    )
                 )
-            )
-        }
+            }
+        })
     }
 
     fun saveEvent(event: Event) {

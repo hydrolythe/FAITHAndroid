@@ -9,7 +9,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class UserMapperTest {
-    private val user = EntityFactory.makeUserEntity()
     private val userMapper = UserMapper
 
     @Test
@@ -26,10 +25,7 @@ class UserMapperTest {
         assertEqualData(entity, model)
     }
 
-    private fun assertEqualData(
-        entity: UserEntity,
-        model: User
-    ) {
+    private fun assertEqualData(entity: UserEntity, model: User) {
         assertEquals(entity.uuid, model.uuid)
         assertEquals(entity.avatarName, model.avatarName)
         assertEquals(entity.username, model.username)

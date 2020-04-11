@@ -1,9 +1,9 @@
 package be.hogent.faith.storage
 
-import be.hogent.faith.service.usecases.encryption.EncryptedEvent
+import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.storage.local.ILocalFileStorageRepository
-import be.hogent.faith.storage.online.IOnlineFileStorageRepository
 import be.hogent.faith.storage.local.ITemporaryFileStorageRepository
+import be.hogent.faith.storage.online.IOnlineFileStorageRepository
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.Called
 import io.mockk.every
@@ -134,16 +134,10 @@ class FileStorageRepositoryTest {
         every { localStorage.isEmotionAvatarPresent(event) } returns true
 
         every {
-            remoteStorage.downloadDetail(
-                event.details[0],
-                event
-            )
+            remoteStorage.downloadDetail(event.details[0], event)
         } returns Completable.complete()
         every {
-            remoteStorage.downloadDetail(
-                event.details[1],
-                event
-            )
+            remoteStorage.downloadDetail(event.details[1], event)
         } returns Completable.complete()
 
         // Act

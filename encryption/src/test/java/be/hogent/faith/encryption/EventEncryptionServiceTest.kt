@@ -1,11 +1,12 @@
 package be.hogent.faith.encryption
 
-import be.hogent.faith.service.usecases.encryption.EncryptedEvent
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.encryption.di.encryptionModule
 import be.hogent.faith.encryption.encryptionService.DummyKeyEncryptionService
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
+import be.hogent.faith.service.encryption.EncryptedEvent
+import be.hogent.faith.util.contentEqual
 import be.hogent.faith.util.factory.EventFactory
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -21,7 +22,14 @@ class EventEncryptionServiceTest : KoinTest {
     private val keyGenerator = KeyGenerator()
     private val keyEncrypter = KeyEncrypter(DummyKeyEncryptionService())
 
-    private val eventEncrypter = EventEncryptionService(keyGenerator, keyEncrypter)
+    private val fileEncryptionService = FileEncryptionService()
+
+    private val eventEncrypter = EventEncryptionService(
+        DetailEncryptionService(fileEncryptionService),
+        fileEncryptionService,
+        keyGenerator,
+        keyEncrypter
+    )
 
     private val eventWithoutFiles =
         EventFactory.makeEvent(numberOfDetails = 0, hasEmotionAvatar = false)

@@ -1,8 +1,8 @@
 package be.hogent.faith.database.factory
 
+import be.hogent.faith.database.common.EncryptedDetailEntity
 import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.converters.LocalDateTimeConverter
-import be.hogent.faith.database.common.EncryptedDetailEntity
 import be.hogent.faith.database.event.EncryptedEventEntity
 import be.hogent.faith.database.user.UserEntity
 import be.hogent.faith.util.factory.DataFactory
@@ -11,8 +11,6 @@ import java.util.UUID
 /**
  * Used in addition to the Factories included in the util package.
  */
-// We can't put these methods here because the util package doesn't know the database package.
-// Making it depend on the database module would introduce a circular dependency.
 object EntityFactory {
 
     fun makeDetailEntity(): EncryptedDetailEntity {

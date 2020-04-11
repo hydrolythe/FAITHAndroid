@@ -11,7 +11,7 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 
 class SaveDetailsContainerDetailUseCase<T : DetailsContainer>(
-    private val detailContainerRepository: IDetailContainerRepository,
+    private val detailContainerRepository: IDetailContainerRepository<T>,
     private val detailContainerEncryptionService: IDetailContainerEncryptionService<T>,
     private val storageRepository: IFileStorageRepository,
     observeScheduler: Scheduler

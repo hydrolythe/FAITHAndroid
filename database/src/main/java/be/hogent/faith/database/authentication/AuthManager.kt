@@ -1,6 +1,6 @@
 package be.hogent.faith.database.authentication
 
-import be.hogent.faith.service.usecases.repository.IAuthManager
+import be.hogent.faith.service.repositories.IAuthManager
 import io.reactivex.Single
 
 class AuthManager(private val firebase: FirebaseAuthManager) : IAuthManager {

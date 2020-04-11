@@ -2,7 +2,7 @@ package be.hogent.faith.service.repositories
 
 import be.hogent.faith.domain.models.User
 import io.reactivex.Completable
-import io.reactivex.Observable
+import io.reactivex.Flowable
 
 interface IUserRepository {
 
@@ -10,5 +10,5 @@ interface IUserRepository {
 
     fun insert(user: User): Completable
 
-    fun get(uid: String): Observable<User>
+    fun get(uid: String): Flowable<User>
 }

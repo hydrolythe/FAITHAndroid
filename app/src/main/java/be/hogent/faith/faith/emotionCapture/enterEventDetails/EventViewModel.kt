@@ -15,6 +15,7 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
+import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import org.koin.core.KoinComponent
 import org.threeten.bp.LocalDateTime
@@ -45,7 +46,7 @@ class EventViewModel(
     val eventDate = MutableLiveData<LocalDateTime>()
 
     val eventDateString: LiveData<String> =
-        Transformations.map<LocalDateTime, String>(eventDate) { date ->
+        Transformations.map(eventDate) { date ->
             date.format(DateTimeFormatter.ISO_DATE)
         }
 
@@ -159,7 +160,6 @@ class EventViewModel(
         _emotionAvatarClicked.call()
     }
 
-    //region saveEmotionAvatar
     /**
      * Save avatarName bitmap. This updates the property emotionAvatar. Must be done in this viewmodel
      * because otherwise the event is not updated (if this code is in DrawEmotionViewModel, then the
@@ -168,84 +168,69 @@ class EventViewModel(
      */
     fun saveEmotionAvatarImage(bitmap: Bitmap) {
         val params = SaveEmotionAvatarUseCase.Params(bitmap, event.value!!)
-        saveEmotionAvatarUseCase.execute(params, SaveEmotionAvatarUseCaseHandler())
+        saveEmotionAvatarUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                updateEvent()
+                _avatarSavedSuccessFully.postValue(R.string.avatar_save_successfull)
+            }
+
+            override fun onError(e: Throwable) {
+                Timber.e(e.localizedMessage)
+                _errorMessage.postValue(R.string.error_save_avatar_failed)
+            }
+        })
     }
 
-    private inner class SaveEmotionAvatarUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            updateEvent()
-            _avatarSavedSuccessFully.postValue(R.string.avatar_save_successfull)
-        }
-
-        override fun onError(e: Throwable) {
-            Timber.e(e.localizedMessage)
-            _errorMessage.postValue(R.string.error_save_avatar_failed)
-        }
-    }
-    //endregion
-
-    //region saveAudio
     fun saveAudioDetail(audioDetail: AudioDetail) {
         val params = SaveEventDetailUseCase.Params(audioDetail, event.value!!)
-        saveEventDetailUseCase.execute(params, SaveEventAudioUseCaseHandler())
+        saveEventDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _audioSavedSuccessFully.postValue(R.string.save_audio_success)
+            }
+
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_save_audio_failed)
+            }
+        })
     }
 
-    private inner class SaveEventAudioUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _audioSavedSuccessFully.postValue(R.string.save_audio_success)
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_audio_failed)
-        }
-    }
-    //endregion
-
-    //region savePhoto
     fun savePhotoDetail(photoDetail: PhotoDetail) {
         val params = SaveEventDetailUseCase.Params(photoDetail, event.value!!)
-        saveEventDetailUseCase.execute(params, TakeEventPhotoUseCaseHandler())
-    }
+        saveEventDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _photoSavedSuccessFully.postValue(R.string.save_photo_success)
+            }
 
-    private inner class TakeEventPhotoUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _photoSavedSuccessFully.postValue(R.string.save_photo_success)
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_photo_failed)
-        }
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_save_photo_failed)
+            }
+        })
     }
-    //endregion
 
     fun saveTextDetail(detail: TextDetail) {
         val params = SaveEventDetailUseCase.Params(detail, event.value!!)
-        saveEventDetailUseCase.execute(params, SaveEventTextDetailUseCaseHandler())
-    }
+        saveEventDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _textSavedSuccessFully.postValue(R.string.save_text_success)
+            }
 
-    private inner class SaveEventTextDetailUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _textSavedSuccessFully.postValue(R.string.save_text_success)
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_text_failed)
-        }
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_save_text_failed)
+            }
+        })
     }
 
     fun saveDrawingDetail(detail: DrawingDetail) {
         val params = SaveEventDetailUseCase.Params(detail, event.value!!)
-        saveEventDetailUseCase.execute(params, SaveEventDrawingUseCaseHandler())
-    }
+        saveEventDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _drawingSavedSuccessFully.postValue(R.string.save_drawing_success)
+            }
 
-    private inner class SaveEventDrawingUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _drawingSavedSuccessFully.postValue(R.string.save_drawing_success)
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_drawing_failed)
-        }
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_save_drawing_failed)
+            }
+        })
     }
 
     override fun onCleared() {

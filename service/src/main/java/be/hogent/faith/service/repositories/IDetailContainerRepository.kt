@@ -8,7 +8,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Single
 
-interface IDetailContainerRepository {
+interface IDetailContainerRepository<T> {
     fun insertDetail(encryptedDetail: EncryptedDetail, user: User): Completable
 
     fun getEncryptedContainer(): Single<EncryptedDetailsContainer>

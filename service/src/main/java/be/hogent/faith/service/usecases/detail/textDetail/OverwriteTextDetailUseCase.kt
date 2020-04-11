@@ -1,8 +1,8 @@
 package be.hogent.faith.service.usecases.detail.textDetail
 
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.storage.local.ITemporaryFileStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
