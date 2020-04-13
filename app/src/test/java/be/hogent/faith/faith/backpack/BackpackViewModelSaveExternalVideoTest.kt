@@ -22,7 +22,8 @@ import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDet
 
 class BackpackViewModelSaveExternalVideoTest {
     private lateinit var viewModel: BackpackViewModel
-    private val saveExternalVideoUseCase = mockk<SaveDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
+    private val saveExternalVideoUseCase =
+        mockk<SaveDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<ExternalVideoDetail>()
     private val user = mockk<User>(relaxed = true)
@@ -33,10 +34,11 @@ class BackpackViewModelSaveExternalVideoTest {
     @Before
     fun setUp() {
         viewModel = BackpackViewModel(
-                saveExternalVideoUseCase,
-                mockk(),
-                getBackPackFilesDummyUseCase,
-                mockk()
+            saveExternalVideoUseCase,
+            mockk(),
+            mockk(),
+            getBackPackFilesDummyUseCase,
+            mockk()
         )
     }
 

@@ -11,6 +11,7 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailFragment
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.view.ViewYoutubeVideoFragment
@@ -23,27 +24,28 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.ext.android.getKoin
-import org.koin.android.viewmodel.ext.android.getViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.BackpackDetailsNavigationListener,
-        RecordAudioFragment.AudioScreenNavigation,
-        DrawFragment.DrawingScreenNavigation,
-        DetailFinishedListener,
-        TextDetailFragment.TextScreenNavigation,
-        TakePhotoFragment.PhotoScreenNavigation,
-        DetailViewHolder.ExistingDetailNavigationListener,
-        AddExternalFileFragment.ExternalFileScreenNavigation,
-        DeleteDetailDialog.DeleteDetailDialogListener,
-        YoutubeVideoDetailFragment.YoutubeVideoDetailScreenNavigation,
-        ViewYoutubeVideoFragment.ViewYoutubeVideoNavigation {
+class BackpackScreenActivity : AppCompatActivity(),
+    BackpackScreenFragment.BackpackDetailsNavigationListener,
+    RecordAudioFragment.AudioScreenNavigation,
+    DrawFragment.DrawingScreenNavigation,
+    DetailFinishedListener,
+    TextDetailFragment.TextScreenNavigation,
+    TakePhotoFragment.PhotoScreenNavigation,
+    DetailViewHolder.ExistingDetailNavigationListener,
+    AddExternalFileFragment.ExternalFileScreenNavigation,
+    DeleteDetailDialog.DeleteDetailDialogListener,
+    YoutubeVideoDetailFragment.YoutubeVideoDetailScreenNavigation,
+    ViewYoutubeVideoFragment.ViewYoutubeVideoNavigation {
 
-    private lateinit var backpackViewModel: BackpackViewModel
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
+    private val backpackViewModel: BackpackViewModel by viewModel { parametersOf(userViewModel.user.value!!.backpack) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backpackscreen)
-
-        backpackViewModel = getViewModel()
 
         // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
@@ -51,8 +53,8 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         if (savedInstanceState == null) {
             val fragment = BackpackScreenFragment.newInstance()
             supportFragmentManager.beginTransaction()
-                    .add(R.id.fragment, fragment)
-                    .commit()
+                .add(R.id.fragment, fragment)
+                .commit()
         }
 
         backpackViewModel.goToCityScreen.observe(this, Observer {
@@ -103,14 +105,17 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         replaceFragment(BackpackDetailFragment.TextFragment.newInstance(), R.id.fragment)
         setLayoutListenersOnNewDetailOpened()
     }
+
     override fun startExternalFileDetailFragment() {
         replaceFragment(BackpackDetailFragment.ExternalFileFragment.newInstance(), R.id.fragment)
         setLayoutListenersOnNewDetailOpened()
     }
+
     override fun startVideoDetailFragment() {
         replaceFragment(BackpackDetailFragment.YoutubeVideoFragment.newInstance(), R.id.fragment)
         setLayoutListenersOnNewDetailOpened()
     }
+
     private fun setLayoutListenersOnNewDetailOpened() {
         backpackViewModel.viewButtons(false)
         backpackViewModel.setOpenDetailType(OpenDetailMode.NEW)
@@ -120,8 +125,8 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         backpackViewModel.setOpenDetailType(OpenDetailMode.EDIT)
         backpackViewModel.setCurrentFile(detail)
         replaceFragment(
-                BackpackDetailFragment.newInstance(detail),
-                R.id.fragment
+            BackpackDetailFragment.newInstance(detail),
+            R.id.fragment
         )
         backpackViewModel.viewButtons(false)
     }

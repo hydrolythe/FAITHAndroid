@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.di
 
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
@@ -59,7 +60,7 @@ val appModule = module(override = true) {
     viewModel { CityScreenViewModel(get()) }
     viewModel { (event: Event) -> EventViewModel(get(), get(), event) }
     viewModel { EventViewModel(get(), get()) }
-    viewModel { BackpackViewModel(get(), get(), get(), get()) }
+    viewModel { (backpack: Backpack) -> BackpackViewModel(get(), get(), backpack, get(), get()) }
     viewModel { DrawViewModel() }
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }

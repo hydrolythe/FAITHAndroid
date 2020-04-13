@@ -25,9 +25,10 @@ import java.util.Date
 class BackpackViewModel(
     saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
     deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>,
+    backpack: Backpack,
     private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase,
     private val saveYoutubeDetailUseCase: SaveYoutubeDetailUseCase
-) : DetailsContainerViewModel(saveBackpackDetailUseCase, deleteBackpackDetailUseCase) {
+) : DetailsContainerViewModel<Backpack>(saveBackpackDetailUseCase, deleteBackpackDetailUseCase, backpack) {
 
     private val _detailIsSaved = SingleLiveEvent<Any>()
     val detailIsSaved: LiveData<Any> = _detailIsSaved

@@ -23,7 +23,8 @@ import org.junit.Assert.assertEquals
 class BackpackViewModelSaveDrawingTest {
 
     private lateinit var viewModel: BackpackViewModel
-    private val saveDrawingUseCase = mockk<SaveDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
+    private val saveDrawingUseCase =
+        mockk<SaveDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<DrawingDetail>()
     private val user = mockk<User>(relaxed = true)
@@ -34,10 +35,11 @@ class BackpackViewModelSaveDrawingTest {
     @Before
     fun setUp() {
         viewModel = BackpackViewModel(
-                saveDrawingUseCase,
-                mockk(),
-                getBackPackFilesDummyUseCase,
-                mockk()
+            saveDrawingUseCase,
+            mockk(),
+            mockk(),
+            getBackPackFilesDummyUseCase,
+            mockk()
         )
     }
 

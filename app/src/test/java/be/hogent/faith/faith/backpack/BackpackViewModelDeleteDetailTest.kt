@@ -21,7 +21,8 @@ import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 
 class BackpackViewModelDeleteDetailTest {
     private lateinit var viewModel: BackpackViewModel
-    private val deleteBackpackDetailUseCase = mockk<DeleteDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
+    private val deleteBackpackDetailUseCase =
+        mockk<DeleteDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<Detail>()
 
@@ -31,10 +32,11 @@ class BackpackViewModelDeleteDetailTest {
     @Before
     fun setUp() {
         viewModel = BackpackViewModel(
-                mockk(),
-                deleteBackpackDetailUseCase,
-                getBackPackFilesDummyUseCase,
-                mockk()
+            mockk(),
+            deleteBackpackDetailUseCase,
+            mockk(),
+            getBackPackFilesDummyUseCase,
+            mockk()
         )
     }
 

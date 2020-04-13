@@ -14,7 +14,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.observers.DisposableCompletableObserver
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,6 +33,7 @@ class SaveYoutubeVideoTest {
     @Before
     fun setUp() {
         viewModel = BackpackViewModel(
+            mockk(),
             mockk(),
             mockk(),
             getBackPackFilesDummyUseCase,

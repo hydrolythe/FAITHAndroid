@@ -6,7 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
@@ -14,15 +14,16 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.backpackScreen.detailFilters.CombinedDetailFilter
+import be.hogent.faith.faith.detailscontainer.detailFilters.CombinedDetailFilter
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 
-abstract class DetailsContainerViewModel(
-    private val saveDetailsContainerDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
-    private val deleteDetailsContainerDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>
+abstract class DetailsContainerViewModel<T : DetailsContainer>(
+    private val saveDetailsContainerDetailUseCase: SaveDetailsContainerDetailUseCase<T>,
+    private val deleteDetailsContainerDetailUseCase: DeleteDetailsContainerDetailUseCase<T>,
+    private val detailsContainer: T
 ) : ViewModel() {
 
     protected var details: List<Detail> = emptyList()
@@ -139,7 +140,7 @@ abstract class DetailsContainerViewModel(
     }
 
     fun saveTextDetail(user: User, detail: TextDetail) {
-        val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
+        val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_text_success)
@@ -152,7 +153,7 @@ abstract class DetailsContainerViewModel(
     }
 
     fun saveAudioDetail(user: User, detail: AudioDetail) {
-        val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
+        val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_audio_success)
@@ -165,7 +166,7 @@ abstract class DetailsContainerViewModel(
     }
 
     fun savePhotoDetail(user: User, detail: PhotoDetail) {
-        val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
+        val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_photo_success)
@@ -178,7 +179,7 @@ abstract class DetailsContainerViewModel(
     }
 
     fun saveDrawingDetail(user: User, detail: DrawingDetail) {
-        val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
+        val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_drawing_success)
@@ -191,7 +192,7 @@ abstract class DetailsContainerViewModel(
     }
 
     fun saveExternalVideoDetail(user: User, detail: ExternalVideoDetail) {
-        val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
+        val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_video_success)
@@ -209,10 +210,10 @@ abstract class DetailsContainerViewModel(
 
     fun deleteDetail(detail: Detail) {
         val params = DeleteDetailsContainerDetailUseCase.Params(detail)
-        deleteDetailsContainerDetailUseCase.execute(params, DeleteBackpackDetailUseCaseHandler())
+        deleteDetailsContainerDetailUseCase.execute(params, DeleteDetailUseCaseHandler())
     }
 
-    private inner class DeleteBackpackDetailUseCaseHandler : DisposableCompletableObserver() {
+    private inner class DeleteDetailUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
             _infoMessage.postValue(R.string.delete_detail_success)
         }
