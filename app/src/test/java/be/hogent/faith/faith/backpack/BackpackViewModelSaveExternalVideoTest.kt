@@ -35,8 +35,7 @@ class BackpackViewModelSaveExternalVideoTest {
         viewModel = BackpackViewModel(
                 saveExternalVideoUseCase,
                 mockk(),
-                getBackPackFilesDummyUseCase,
-                mockk()
+                getBackPackFilesDummyUseCase
         )
     }
 

@@ -7,6 +7,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.storage.StoragePathProvider
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -24,15 +25,20 @@ class TemporaryStorageRepository(
      */
 
     override fun storeDetailWithEvent(detail: Detail, event: Event): Completable {
-        val saveFile =
-            with(pathProvider) { temporaryStorage(detailPath(detail, event)) }
-        return moveFile(detail.file, saveFile)
-            .andThen(
-                Completable.fromCallable {
-                    detail.file = saveFile // relativePath
-                    Unit
-                }
-            )
+        // As there's no file in a YoutubeVideoDetail, we say complete immediately
+        if (detail is YoutubeVideoDetail) {
+            return Completable.complete()
+        } else {
+            val saveFile =
+                with(pathProvider) { temporaryStorage(detailPath(detail, event)) }
+            return moveFile(detail.file, saveFile)
+                .andThen(
+                    Completable.fromCallable {
+                        detail.file = saveFile // relativePath
+                        Unit
+                    }
+                )
+        }
     }
 
     override fun storeText(text: String): Single<File> {
@@ -109,14 +115,24 @@ class TemporaryStorageRepository(
     }
 
     override fun isFilePresent(detail: Detail, event: Event): Boolean {
-        return with(pathProvider) {
-            temporaryStorage(detailPath(detail, event)).exists()
+        // As there's no file in a YoutubeVideoDetail, we say yes
+        if (detail is YoutubeVideoDetail) {
+            return true
+        } else {
+            return with(pathProvider) {
+                temporaryStorage(detailPath(detail, event)).exists()
+            }
         }
     }
 
     override fun isFilePresent(detail: Detail, container: DetailsContainer): Boolean {
-        return with(pathProvider) {
-            temporaryStorage(detailPath(detail, container)).exists()
+        // As there's no file in a YoutubeVideoDetail, we say yes
+        if (detail is YoutubeVideoDetail) {
+            return true
+        } else {
+            return with(pathProvider) {
+                temporaryStorage(detailPath(detail, container)).exists()
+            }
         }
     }
 

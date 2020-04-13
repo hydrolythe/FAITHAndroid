@@ -17,7 +17,8 @@ object DetailMapper : Mapper<EncryptedDetailEntity, EncryptedDetail> {
             file = model.file.path,
             title = model.title,
             uuid = model.uuid.toString(),
-            type = model.type
+            type = model.type,
+            youtubeVideoId = model.youtubeVideoID
         )
     }
 
@@ -30,7 +31,8 @@ object DetailMapper : Mapper<EncryptedDetailEntity, EncryptedDetail> {
             file = File(entity.file),
             title = entity.title,
             uuid = UUID.fromString(entity.uuid),
-            type = entity.type
+            type = entity.type,
+            youtubeVideoID = entity.youtubeVideoId
         )
     }
 

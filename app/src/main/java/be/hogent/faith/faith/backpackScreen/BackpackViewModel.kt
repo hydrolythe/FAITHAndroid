@@ -10,13 +10,12 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
-import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
+import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
-import be.hogent.faith.service.usecases.backpack.SaveYoutubeDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.subscribers.DisposableSubscriber
@@ -25,8 +24,7 @@ import java.util.Date
 class BackpackViewModel(
     saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
     deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>,
-    private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase,
-    private val saveYoutubeDetailUseCase: SaveYoutubeDetailUseCase
+    private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
 ) : DetailsContainerViewModel(saveBackpackDetailUseCase, deleteBackpackDetailUseCase) {
 
     private val _detailIsSaved = SingleLiveEvent<Any>()
@@ -91,8 +89,8 @@ class BackpackViewModel(
             is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
             is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
             is ExternalVideoDetail -> saveExternalVideoDetail(
-                    user,
-                    showSaveDialog.value as ExternalVideoDetail
+                user,
+                showSaveDialog.value as ExternalVideoDetail
             )
             is YoutubeVideoDetail -> saveYoutubeDetail(user, detail)
         }
@@ -125,13 +123,18 @@ class BackpackViewModel(
         }
     }
 
-    /**
-     * YouTube detail isn't stored in a file and saved differently and it's specific to the backpack
-     * that's why this isn't in the detailcontainer viewmodel
-     */
+    // Youtube videos are only in the Backpack, so this is not in the [DetailsContainerViewModel].
     fun saveYoutubeDetail(user: User, detail: YoutubeVideoDetail) {
-        val params = SaveYoutubeDetailUseCase.Params(user, detail)
-        saveYoutubeDetailUseCase.execute(params, SaveBackpackYoutubeDetailUseCaseHandler())
+        val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
+        saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _infoMessage.postValue(R.string.save_video_success)
+            }
+
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_save_external_video_failed)
+            }
+        })
     }
 
     private inner class SaveBackpackYoutubeDetailUseCaseHandler : DisposableCompletableObserver() {

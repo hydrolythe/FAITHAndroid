@@ -35,8 +35,7 @@ class BackpackViewModelSavePhotoTest {
         viewModel = BackpackViewModel(
                 savePhotoUseCase,
                 mockk(),
-                getBackPackFilesDummyUseCase,
-                mockk()
+                getBackPackFilesDummyUseCase
         )
     }
 

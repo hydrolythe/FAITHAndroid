@@ -51,7 +51,7 @@ class ExternalFileViewModel(
     fun loadExistingDetail(detail: Detail) {
         // TODO tijdelijk tot encryptie
         if (detail.file.path.startsWith("users")) {
-            val params = LoadDetailFileUseCase.LoadFileParams(detail)
+            val params = LoadDetailFileUseCase.Params(detail)
             loadDetailFile.execute(params, LoadFileUseCaseHandler())
         } else
             _currentFile.value = detail.file

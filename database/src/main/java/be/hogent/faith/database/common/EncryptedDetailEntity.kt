@@ -6,5 +6,6 @@ data class EncryptedDetailEntity(
     var file: EncryptedString = "",
     var title: EncryptedString = "",
     val uuid: EncryptedString = "",
-    val type: EncryptedString = ""
+    val type: EncryptedString = "",
+    val youtubeVideoId: EncryptedString = ""
 )

@@ -4,6 +4,7 @@ import android.net.Uri
 import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.storage.StoragePathProvider
@@ -54,12 +55,17 @@ class FirebaseStorageRepository(
      * Uploads the detail file to [firestorage]
      */
     private fun saveDetailFile(event: EncryptedEvent, detail: EncryptedDetail): Completable {
-        return rxFirebaseStorage
-            .putFile(
-                storageRef.child(pathProvider.detailPath(event, detail).path),
-                Uri.parse("file://${detail.file.path}")
-            )
-            .ignoreElement()
+        // YoutubeVideoDetails don't have a "real" file
+        if (detail.youtubeVideoID.isNotEmpty()) {
+            return Completable.complete()
+        } else {
+            return rxFirebaseStorage
+                .putFile(
+                    storageRef.child(pathProvider.detailPath(event, detail).path),
+                    Uri.parse("file://${detail.file.path}")
+                )
+                .ignoreElement()
+        }
     }
 
     /**
@@ -67,15 +73,23 @@ class FirebaseStorageRepository(
      * [pathProvider].
      */
     override fun downloadDetail(detail: Detail, event: Event): Completable {
-        val localDestinationFile: File =
-            with(pathProvider) { localStorage(detailPath(detail, event)) }
-        return Completable
-            .fromSingle(
-                rxFirebaseStorage.getFile(storageRef.child(detail.file.path), localDestinationFile)
-            )
-            .andThen {
-                detail.file = localDestinationFile
-            }
+        // YoutubeVideoDetails don't have a "real" file
+        if (detail is YoutubeVideoDetail) {
+            return Completable.complete()
+        } else {
+            val localDestinationFile: File =
+                with(pathProvider) { localStorage(detailPath(detail, event)) }
+            return Completable
+                .fromSingle(
+                    rxFirebaseStorage.getFile(
+                        storageRef.child(detail.file.path),
+                        localDestinationFile
+                    )
+                )
+                .andThen {
+                    detail.file = localDestinationFile
+                }
+        }
     }
 
     /**
@@ -103,11 +117,16 @@ class FirebaseStorageRepository(
         encryptedDetail: EncryptedDetail,
         container: DetailsContainer
     ): Completable {
-        return rxFirebaseStorage
-            .putFile(
-                storageRef.child(pathProvider.detailPath(encryptedDetail, container).path),
-                Uri.parse("file://${encryptedDetail.file.path}")
-            )
-            .ignoreElement()
+        // YoutubeVideoDetails don't have a "real" file
+        if (encryptedDetail.youtubeVideoID.isNotEmpty()) {
+            return Completable.complete()
+        } else {
+            return rxFirebaseStorage
+                .putFile(
+                    storageRef.child(pathProvider.detailPath(encryptedDetail, container).path),
+                    Uri.parse("file://${encryptedDetail.file.path}")
+                )
+                .ignoreElement()
+        }
     }
 }

@@ -3,6 +3,7 @@ package be.hogent.faith.storage.local
 import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.storage.StoragePathProvider
@@ -57,6 +58,10 @@ class LocalFileStorageRepository(
         encryptedDetail: EncryptedDetail,
         encryptedEvent: EncryptedEvent
     ) {
+        // There is no valid File to move for a YoutubeVideoDetail
+        if (encryptedDetail.youtubeVideoID.isNotEmpty()) {
+            return
+        }
         val localStoragePath =
             with(pathProvider) { localStorage(detailPath(encryptedEvent, encryptedDetail)) }
         moveFile(encryptedDetail.file, localStoragePath)
@@ -79,7 +84,12 @@ class LocalFileStorageRepository(
     }
 
     override fun isFilePresent(detail: Detail, event: Event): Boolean {
-        return with(pathProvider) { localStorage(detailPath(detail, event)).exists() }
+        // As there's no file in a YoutubeVideoDetail, we say yes
+        if (detail is YoutubeVideoDetail) {
+            return true
+        } else {
+            return with(pathProvider) { localStorage(detailPath(detail, event)).exists() }
+        }
     }
 
     override fun isEmotionAvatarPresent(event: Event): Boolean {
@@ -94,11 +104,16 @@ class LocalFileStorageRepository(
         detail: EncryptedDetail,
         container: DetailsContainer
     ): Single<EncryptedDetail> {
-        return Single.fromCallable {
-            val localPath = with(pathProvider) { localStorage(detailPath(detail, container)) }
-            moveFile(detail.file, localPath)
-            detail.file = localPath
-            detail
+        // As there's no file in a YoutubeVideoDetail, we can just return it
+        if (detail.youtubeVideoID.isNotEmpty()) {
+            return Single.just(detail)
+        } else {
+            return Single.fromCallable {
+                val localPath = with(pathProvider) { localStorage(detailPath(detail, container)) }
+                moveFile(detail.file, localPath)
+                detail.file = localPath
+                detail
+            }
         }
     }
 }
