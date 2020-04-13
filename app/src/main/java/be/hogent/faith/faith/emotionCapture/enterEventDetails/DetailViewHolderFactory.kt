@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.detail_item_rv.view.detail_img
 import kotlinx.android.synthetic.main.detail_item_rv.view.text_detail_title
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-
+import be.hogent.faith.faith.GlideApp
 object DetailViewHolderFactory {
     fun createViewHolder(
         parent: ViewGroup,
@@ -133,10 +133,10 @@ sealed class DetailViewHolder(
         override fun load(detail: Detail): RequestBuilder<Drawable> {
             // TODO : encryptie
             if (detail.file.path.startsWith("users")) {
-                return Glide.with(thumbnailView)
+                return GlideApp.with(thumbnailView)
                     .load(FirebaseStorage.getInstance().reference.child(detail.file.path)) // load the storagereference
             }
-            return Glide.with(thumbnailView)
+            return GlideApp.with(thumbnailView)
                     .load(androidTempFileProvider.getFile(detail))
                     // Signature is required to force Glide to reload overwritten pictures
                     .signature(MediaStoreSignature("", detail.file.lastModified(), 0))

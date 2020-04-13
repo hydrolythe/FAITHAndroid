@@ -102,7 +102,7 @@ class CinemaStartScreenFragment : Fragment() {
         binding.btnCinemaCancel.setOnClickListener {
             navigation!!.closeCinema()
         }
-        binding.btnCinemaChooseDate.setOnClickListener{
+        binding.btnCinemaChooseDate.setOnClickListener {
             showDateRangePicker()
         }
     }
@@ -120,7 +120,7 @@ class CinemaStartScreenFragment : Fragment() {
         picker = builder.build()
         picker.show(this.fragmentManager!!, picker.toString())
         picker.addOnPositiveButtonClickListener {
-            //TODO
+            // TODO
         }
     }
     companion object {
