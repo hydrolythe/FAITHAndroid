@@ -3,21 +3,23 @@ package be.hogent.faith.domain.models
 import be.hogent.faith.domain.models.detail.Detail
 import java.util.UUID
 
-abstract class DetailsContainer {
+sealed class DetailsContainer {
 
     private val _details = mutableListOf<Detail>()
     val details: List<Detail>
         get() = _details
 
-    open fun getDetail(uuid: UUID): Detail? {
+    fun get(uuid: UUID): Detail? {
         return details.find { it.uuid == uuid }
     }
 
-    open fun addDetail(detail: Detail) {
+    fun addDetail(detail: Detail) {
         _details += detail
     }
 
-    open fun removeDetail(detail: Detail) {
+    fun removeDetail(detail: Detail) {
         _details.remove(detail)
     }
 }
+
+class Backpack : DetailsContainer()
