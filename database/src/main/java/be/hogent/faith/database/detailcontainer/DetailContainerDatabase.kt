@@ -1,10 +1,10 @@
 package be.hogent.faith.database.detailcontainer
 
 import be.hogent.faith.database.common.CONTAINERS_KEY
-import be.hogent.faith.database.common.DetailEntity
 import be.hogent.faith.database.common.EncryptedDetailEntity
 import be.hogent.faith.database.common.USERS_KEY
 import be.hogent.faith.database.user.UserEntity
+import be.hogent.faith.domain.models.detail.Detail
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import durdinapps.rxfirebase2.RxFirestore
@@ -48,7 +48,7 @@ abstract class DetailContainerDatabase<DetailContainer>(
             }
     }
 
-    open fun delete(item: DetailEntity): Completable {
+    open fun delete(item: Detail): Completable {
         val currentUser = fbAuth.currentUser
         return if (currentUser == null) {
             Completable.error(RuntimeException("User not set."))
@@ -58,7 +58,7 @@ abstract class DetailContainerDatabase<DetailContainer>(
                     .collection(USERS_KEY)
                     .document(currentUser.uid)
                     .collection(containerName)
-                    .document(item.uuid)
+                    .document(item.uuid.toString())
             )
         }
     }

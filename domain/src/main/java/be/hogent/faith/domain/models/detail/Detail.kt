@@ -12,6 +12,7 @@ sealed class Detail(
     var title: String = "",
     val uuid: UUID = UUID.randomUUID()
 ) : Serializable {
+    // TODO: check if needed
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -63,7 +64,7 @@ class ExternalVideoDetail(
 
 class YoutubeVideoDetail(
     file: File,
-    fileName: String = "",
+    title: String = "",
     uuid: UUID = UUID.randomUUID(),
     val videoId: String
-) : Detail(file, fileName, uuid,)
+) : Detail(file, title, uuid)

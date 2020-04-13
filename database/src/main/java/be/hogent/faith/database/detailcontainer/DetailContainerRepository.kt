@@ -42,6 +42,6 @@ open class DetailContainerRepository<T : DetailsContainer>(
     }
 
     override fun deleteDetail(detail: Detail): Completable {
-        return database.delete(detailMapper.mapToEntity(detail))
+        return database.delete(detail)
     }
 }

@@ -1,7 +1,5 @@
 package be.hogent.faith.database.factory
 
-import be.hogent.faith.database.common.DetailEntity
-import be.hogent.faith.database.common.DetailType
 import be.hogent.faith.database.common.EncryptedDetailEntity
 import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.converters.LocalDateTimeConverter
