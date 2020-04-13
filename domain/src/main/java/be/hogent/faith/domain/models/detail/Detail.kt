@@ -63,7 +63,7 @@ class ExternalVideoDetail(
 ) : Detail(file, title, uuid)
 
 class YoutubeVideoDetail(
-    file: File,
+    file: File = File("YoutubeVideoDetail/has/no/file"),
     title: String = "",
     uuid: UUID = UUID.randomUUID(),
     val videoId: String

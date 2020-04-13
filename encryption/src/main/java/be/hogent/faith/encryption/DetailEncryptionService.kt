@@ -6,7 +6,7 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.service.encryption.EncryptedDetail
 import com.google.crypto.tink.KeysetHandle
@@ -46,17 +46,21 @@ class DetailEncryptionService(
             EncryptedDetail(
                 file = detail.file,
                 uuid = detail.uuid,
-                title = detail.title,
+                title = dataEncrypter.encrypt(detail.title),
                 type = dataEncrypter.encrypt(
                     when (detail) {
                         is AudioDetail -> DetailType.Audio
                         is TextDetail -> DetailType.Text
                         is DrawingDetail -> DetailType.Drawing
                         is PhotoDetail -> DetailType.Photo
-                        is VideoDetail -> DetailType.Video
                         is ExternalVideoDetail -> DetailType.ExternalVideo
+                        is YoutubeVideoDetail -> DetailType.YoutubeVideo
                     }.toString()
-                )
+                ),
+                youtubeVideoID = when (detail) {
+                    is YoutubeVideoDetail -> dataEncrypter.encrypt(detail.videoId)
+                    else -> ""
+                }
             )
         )
     }
@@ -71,34 +75,35 @@ class DetailEncryptionService(
         return Single.just(
             when (DetailType.valueOf(detailTypeString)) {
                 DetailType.Audio -> AudioDetail(
-                    encryptedDetail.file,
-                    encryptedDetail.title,
-                    encryptedDetail.uuid
+                    file = encryptedDetail.file,
+                    title = dataEncrypter.decrypt(encryptedDetail.title),
+                    uuid = encryptedDetail.uuid
                 )
                 DetailType.Text -> TextDetail(
-                    encryptedDetail.file,
-                    encryptedDetail.title,
-                    encryptedDetail.uuid
+                    file = encryptedDetail.file,
+                    title = dataEncrypter.decrypt(encryptedDetail.title),
+                    uuid = encryptedDetail.uuid
                 )
                 DetailType.Drawing -> DrawingDetail(
-                    encryptedDetail.file,
-                    encryptedDetail.title,
-                    encryptedDetail.uuid
+                    file = encryptedDetail.file,
+                    title = dataEncrypter.decrypt(encryptedDetail.title),
+                    uuid = encryptedDetail.uuid
                 )
                 DetailType.Photo -> PhotoDetail(
-                    encryptedDetail.file,
-                    encryptedDetail.title,
-                    encryptedDetail.uuid
+                    file = encryptedDetail.file,
+                    title = dataEncrypter.decrypt(encryptedDetail.title),
+                    uuid = encryptedDetail.uuid
                 )
-                DetailType.Video -> VideoDetail(
-                    encryptedDetail.file,
-                    encryptedDetail.title,
-                    encryptedDetail.uuid
+                DetailType.YoutubeVideo -> YoutubeVideoDetail(
+                    file = encryptedDetail.file,
+                    title = dataEncrypter.decrypt(encryptedDetail.title),
+                    uuid = encryptedDetail.uuid,
+                    videoId = encryptedDetail.youtubeVideoID
                 )
                 DetailType.ExternalVideo -> ExternalVideoDetail(
-                    encryptedDetail.file,
-                    encryptedDetail.title,
-                    encryptedDetail.uuid
+                    file = encryptedDetail.file,
+                    title = dataEncrypter.decrypt(encryptedDetail.title),
+                    uuid = encryptedDetail.uuid
                 )
             }
         )
@@ -109,9 +114,14 @@ class DetailEncryptionService(
         sdek: KeysetHandle
     ): Completable {
         val fileEncrypter = FileEncryptionService()
-        return fileEncrypter.decrypt(encryptedDetail.file, sdek)
-            .map { encryptedDetail.file = it }
-            .ignoreElement()
+        // YoutubeVideos don't have a file that needs o be encrypted
+        if (encryptedDetail.youtubeVideoID.isNotEmpty()) {
+            return Completable.complete()
+        } else {
+            return fileEncrypter.decrypt(encryptedDetail.file, sdek)
+                .map { encryptedDetail.file = it }
+                .ignoreElement()
+        }
     }
 }
 
@@ -120,6 +130,6 @@ internal enum class DetailType {
     Text,
     Drawing,
     Photo,
-    Video,
-    ExternalVideo
+    ExternalVideo,
+    YoutubeVideo
 }
