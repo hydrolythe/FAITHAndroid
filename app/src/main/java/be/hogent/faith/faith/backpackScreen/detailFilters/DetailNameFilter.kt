@@ -7,8 +7,12 @@ class DetailNameFilter(var searchString: String) : DetailFilter {
 
     override fun invoke(detail: Detail): Boolean {
         val searchWords = searchString.split(" ")
-        return searchWords.all {
-            detail.title.toLowerCase(Locale.ROOT).contains(it.toLowerCase(Locale.ROOT))
+        if (searchWords.isEmpty()) {
+            return true
+        } else {
+            return searchWords.all {
+                detail.title.toLowerCase(Locale.ROOT).contains(it.toLowerCase(Locale.ROOT))
+            }
         }
     }
 }

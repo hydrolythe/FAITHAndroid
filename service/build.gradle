@@ -32,11 +32,16 @@ dependencies {
 
     def commonDependencies = rootProject.ext.commonDependencies
     def injectionDependencies = rootProject.ext.injectionDependencies
+    def retrofitDependencies = rootProject.ext.retrofitDependencies
 
     implementation commonDependencies.kotlin
     implementation commonDependencies.threeTenABP
     implementation commonDependencies.rxjava
     implementation commonDependencies.rxkotlin
+
+    implementation retrofitDependencies.retrofit
+    implementation retrofitDependencies.gson
+    implementation retrofitDependencies.rxjavaAdapter
 
     implementation injectionDependencies.koin
 
@@ -47,5 +52,7 @@ dependencies {
     testImplementation(testDependencies.threeTenBP) {
         exclude group:'com.jakewharton.threetenabp', module:'threetenabp'
     }
+
+
 
 }

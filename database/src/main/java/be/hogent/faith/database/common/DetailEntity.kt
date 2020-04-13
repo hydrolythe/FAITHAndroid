@@ -9,6 +9,7 @@ data class DetailEntity(
     var file: String = "",
     var fileName: String = "",
     val uuid: String = UUID.randomUUID().toString(),
+    val videoId: String = "",
     val type: DetailType? = null
 )
 

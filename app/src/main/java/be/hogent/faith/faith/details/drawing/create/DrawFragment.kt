@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
 import com.divyanshu.draw.widget.DrawView
 import kotlinx.android.synthetic.main.panel_brush_sizes.btn_draw_setMediumLineWidth
 import kotlinx.android.synthetic.main.panel_brush_sizes.btn_draw_setThickLineWidth
@@ -101,7 +102,11 @@ abstract class DrawFragment : Fragment() {
     private fun showExitAlert() {
         val alertDialog: AlertDialog = this.run {
             val builder = AlertDialog.Builder(this.requireContext()).apply {
-                setTitle(R.string.dialog_to_the_event_title)
+                if (requireActivity() is BackpackScreenActivity) {
+                    setTitle(R.string.dialog_to_the_backpack)
+                } else {
+                    setTitle(R.string.dialog_to_the_event_title)
+                }
                 setMessage(R.string.dialog_to_the_event_message)
                 setPositiveButton(R.string.ok) { _, _ ->
                     navigation!!.backToEvent()

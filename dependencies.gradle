@@ -41,6 +41,8 @@ ext {
 
     design_version = '28.0.0'
 
+    youtube_playerview_version= '10.0.5'
+
     firebaseui_version='6.0.2'
     rxfirebase_version ='1.5.6'
     firebaseauth_version ='19.2.0'
@@ -73,8 +75,15 @@ ext {
 
     viewpager_version = '1.0.0'
 
+    retrofit_version = '2.5.0'
+    gson_version = '2.5.0'
+    rxjava_adapter_version = '1.0.0'
+
+    colorpicker_version = '2.0.0'
+    lottieVersion = '3.4.0'
+
     //Version Code
-    ext.versionMajor = 1
+    ext.versionMajor = 2
     ext.versionMinor = 1
     ext.versionPatch = 1
     ext.versionClassifier = null
@@ -128,7 +137,8 @@ ext {
             testRules      : "androidx.test:rules:$test_version",
             testRunner     : "androidx.test:runner:$test_version",
             espressoContrib: "androidx.test.espresso:espresso-contrib:$espresso_contrib_version",
-            uiAutomator    : "androidx.test.uiautomator:uiautomator:$uiAutomator_version"
+            uiAutomator    : "androidx.test.uiautomator:uiautomator:$uiAutomator_version",
+
     ]
 
     injectionDependencies = [
@@ -165,13 +175,20 @@ ext {
             design             : "com.android.support:design:$design_version",
             viewpager2         : "androidx.viewpager2:viewpager2:$viewpager_version",
             googleplay         :  "com.google.android.gms:play-services-plus:$play_services_version",
-            legacysupport      : "androidx.legacy:legacy-support-v4:$legacy_support_version"
-
-
+            legacysupport      : "androidx.legacy:legacy-support-v4:$legacy_support_version",
+            youtubePlayerView  : "com.pierfrancescosoffritti.androidyoutubeplayer:core:$youtube_playerview_version",
+            colorpicker        : "com.github.skydoves:colorpickerpreference:$colorpicker_version",
+            lottie             : "com.airbnb.android:lottie:$lottieVersion"
     ]
 
     authdependencies = [
             auth0: 'com.auth0.android:auth0:1.+'
+    ]
+
+    retrofitDependencies = [
+            retrofit : "com.squareup.retrofit2:retrofit:$retrofit_version",
+            gson : "com.squareup.retrofit2:converter-gson:$gson_version",
+            rxjavaAdapter : "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rxjava_adapter_version"
     ]
 
 }

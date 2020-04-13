@@ -5,9 +5,8 @@ import java.io.Serializable
 import java.util.UUID
 
 /**
- * A detail that can be part of an event, backpack, solution,...
+ * A detail that can be part of an event, backpack,...
  */
-
 sealed class Detail(
     var file: File,
     var title: String = "",
@@ -55,13 +54,16 @@ class AudioDetail(
     title: String = "",
     uuid: UUID = UUID.randomUUID()
 ) : Detail(file, title, uuid)
-class VideoDetail(
-    file: File,
-    title: String = "",
-    uuid: UUID = UUID.randomUUID()
-) : Detail(file, title, uuid)
+
 class ExternalVideoDetail(
     file: File,
     title: String = "",
     uuid: UUID = UUID.randomUUID()
 ) : Detail(file, title, uuid)
+
+class YoutubeVideoDetail(
+    file: File,
+    fileName: String = "",
+    uuid: UUID = UUID.randomUUID(),
+    val videoId: String
+) : Detail(file, fileName, uuid,)

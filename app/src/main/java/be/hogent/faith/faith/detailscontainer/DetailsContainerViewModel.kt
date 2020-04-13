@@ -75,6 +75,10 @@ abstract class DetailsContainerViewModel(
             detailFilter.hasExternalVideoDetailFilter.isEnabled = enabled
             value = detailFilter.filter(details)
         }
+        addSource(videoFilterEnabled) { enabled ->
+            detailFilter.hasVideoDetailFilter.isEnabled = enabled
+            value = detailFilter.filter(details)
+        }
     }
 
     protected var _currentFile = MutableLiveData<Detail>()
@@ -136,81 +140,67 @@ abstract class DetailsContainerViewModel(
 
     fun saveTextDetail(user: User, detail: TextDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
-        saveDetailsContainerDetailUseCase.execute(params, SaveBackpackTextDetailUseCaseHandler())
-    }
+        saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _infoMessage.postValue(R.string.save_text_success)
+            }
 
-    private inner class SaveBackpackTextDetailUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _infoMessage.postValue(R.string.save_text_success)
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_text_failed)
-        }
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_save_text_failed)
+            }
+        })
     }
 
     fun saveAudioDetail(user: User, detail: AudioDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
-        saveDetailsContainerDetailUseCase.execute(params, SaveBackpackAudioDetailUseCaseHandler())
-    }
+        saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _infoMessage.postValue(R.string.save_audio_success)
+            }
 
-    private inner class SaveBackpackAudioDetailUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _infoMessage.postValue(R.string.save_audio_success)
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_audio_failed)
-        }
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_save_audio_failed)
+            }
+        })
     }
 
     fun savePhotoDetail(user: User, detail: PhotoDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
-        saveDetailsContainerDetailUseCase.execute(params, SaveBackpackPhotoDetailUseCaseHandler())
-    }
+        saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _infoMessage.postValue(R.string.save_photo_success)
+            }
 
-    private inner class SaveBackpackPhotoDetailUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _infoMessage.postValue(R.string.save_photo_success)
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_photo_failed)
-        }
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_save_photo_failed)
+            }
+        })
     }
 
     fun saveDrawingDetail(user: User, detail: DrawingDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
-        saveDetailsContainerDetailUseCase.execute(params, SaveBackpackDrawingDetailUseCaseHandler())
-    }
+        saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _infoMessage.postValue(R.string.save_drawing_success)
+            }
 
-    private inner class SaveBackpackDrawingDetailUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _infoMessage.postValue(R.string.save_drawing_success)
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_drawing_failed)
-        }
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_save_drawing_failed)
+            }
+        })
     }
 
     fun saveExternalVideoDetail(user: User, detail: ExternalVideoDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
-        saveDetailsContainerDetailUseCase.execute(
-            params,
-            SaveBackpackExternalVideoDetailUseCaseHandler()
-        )
-    }
+        saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _infoMessage.postValue(R.string.save_video_success)
+            }
 
-    private inner class SaveBackpackExternalVideoDetailUseCaseHandler :
-        DisposableCompletableObserver() {
-        override fun onComplete() {
-            _infoMessage.postValue(R.string.save_video_success)
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_external_video_failed)
-        }
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_save_external_video_failed)
+            }
+        })
     }
 
     fun goToDetail(detail: Detail) {

@@ -227,8 +227,16 @@
     <string name="recordaudio_pause">Fragment pauzeren</string>
     <string name="recordaudio_stop">Opname stoppen</string>
     <string name="avatar_nog_niet_ingekleurd">Avatar is nog niet ingekleurd. Klik op potlood om avatar in te kleuren</string>
+    <string name="search">Zoeken...</string>
+    <string name="save_video">Save je video</string>
+    <string name="youtube_snippet_thumbnail">Youtube video thumbnail</string>
+    <string name="search_btn">ZOEKEN</string>
+    <string name="search_youtube">Zoek een filmpje op YouTube...</string>
+    <string name="dialog_to_the_backpack">\"Wil je teruggaan naar je rugzak?</string>
+    <string name="save_success">Succesvol opgeslagen.</string>
     <string name="error_ophalen_textdetail">Er ging iets fout bij het ophalen van de tekst</string>
     <string name="rv_btn_detail">Knop bekijk bestand</string>
     <string name="rv_btn_delete_detail">Knop verwijder bestand</string>
     <string name="rv_detail_title">Detail Title</string>
+    <string name="unauthorized_file_type">Dit bestandstype is niet toegelaten.</string>
 </resources>

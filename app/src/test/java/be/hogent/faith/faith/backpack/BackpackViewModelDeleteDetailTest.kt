@@ -33,7 +33,8 @@ class BackpackViewModelDeleteDetailTest {
         viewModel = BackpackViewModel(
                 mockk(),
                 deleteBackpackDetailUseCase,
-                getBackPackFilesDummyUseCase
+                getBackPackFilesDummyUseCase,
+                mockk()
         )
     }
 

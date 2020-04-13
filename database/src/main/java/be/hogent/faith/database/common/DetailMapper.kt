@@ -10,7 +10,6 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.service.encryption.EncryptedDetail
-import java.io.File
 import java.util.UUID
 
 /**
@@ -60,7 +59,7 @@ object DetailMapper : Mapper<EncryptedDetailEntity, EncryptedDetail> {
                 entity.fileName,
                 UUID.fromString(entity.uuid)
             )
-            DetailType.VIDEO -> VideoDetail(
+            DetailType.EXTERNAL_VIDEO -> ExternalVideoDetail(
                 FileConverter().toFile(entity.file),
                 entity.fileName,
                 UUID.fromString(entity.uuid)
@@ -83,16 +82,20 @@ object DetailMapper : Mapper<EncryptedDetailEntity, EncryptedDetail> {
         )
     }
 
-    override fun mapToEntities(models: List<EncryptedDetail>): List<EncryptedDetailEntity> {
-        return models.map(DetailMapper::mapToEntity)
-    }
-
-    override fun mapFromEntity(entity: EncryptedDetailEntity): EncryptedDetail {
-        return EncryptedDetail(
-            file = File(entity.file),
-            title = entity.title,
-            uuid = UUID.fromString(entity.uuid),
-            type = entity.type
+    override fun mapToEntity(model: Detail): DetailEntity {
+        return DetailEntity(
+            FileConverter().toString(model.file),
+            model.fileName,
+            model.uuid.toString(),
+            when (model) {
+                is AudioDetail -> DetailType.AUDIO
+                is TextDetail -> DetailType.TEXT
+                is DrawingDetail -> DetailType.DRAWING
+                is PhotoDetail -> DetailType.PHOTO
+                is VideoDetail -> DetailType.VIDEO
+                is ExternalVideoDetail -> DetailType.EXTERNAL_VIDEO
+                else -> throw ClassCastException("Unknown Detail subclass encountered")
+            }
         )
     }
 
