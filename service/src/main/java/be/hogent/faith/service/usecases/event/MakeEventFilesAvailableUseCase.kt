@@ -9,8 +9,8 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 
 /**
- * Download all event files not already in local storage from firebase to local storage
- * Makes offline working possible. Needed for library
+ * Download all event files not already in storage to local storage, and places a decrypted version
+ * in cache storage.
  */
 class MakeEventFilesAvailableUseCase(
     private val fileStorageRepo: IFileStorageRepository,

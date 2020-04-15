@@ -17,9 +17,9 @@ import org.junit.Before
 import org.junit.Test
 
 class SaveEventUseCaseTest {
-    private val eventEncryptionService: IEventEncryptionService = mockk()
-    private val filesStorageRepository: IFileStorageRepository = mockk()
-    private val eventRepository: IEventRepository = mockk()
+    private val eventEncryptionService: IEventEncryptionService = mockk(relaxed = true)
+    private val filesStorageRepository: IFileStorageRepository = mockk(relaxed = true)
+    private val eventRepository: IEventRepository = mockk(relaxed = true)
     private lateinit var saveEventUseCase: SaveEventUseCase
 
     private lateinit var event: Event

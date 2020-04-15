@@ -18,9 +18,9 @@ import java.io.IOException
 class MakeEventFilesAvailableUseCaseTest {
     private lateinit var makeEventFilesAvailableUseCase: MakeEventFilesAvailableUseCase
     private val observer: Scheduler = mockk()
-    private val fileStorageRepository: IFileStorageRepository = mockk()
-    private val eventRepository: IEventRepository = mockk()
-    private val evenEncryptionService: IEventEncryptionService = mockk()
+    private val fileStorageRepository: IFileStorageRepository = mockk(relaxed = true)
+    private val eventRepository: IEventRepository = mockk(relaxed = true)
+    private val evenEncryptionService: IEventEncryptionService = mockk(relaxed = true)
     private lateinit var event: Event
 
     @Before
