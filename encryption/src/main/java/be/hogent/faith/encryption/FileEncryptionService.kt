@@ -78,9 +78,6 @@ class FileEncryptionService {
             decryptingChannel.close()
             plainTextChannel.close()
 
-            plainTextFile.copyTo(cypherTextFile, overwrite = true)
-            plainTextFile.delete()
-
             plainTextFile
         }
     }

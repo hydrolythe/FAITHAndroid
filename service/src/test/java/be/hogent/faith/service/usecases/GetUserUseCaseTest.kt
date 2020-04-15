@@ -1,12 +1,12 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.service.encryption.IEventEncryptionService
 import be.hogent.faith.service.repositories.IAuthManager
 import be.hogent.faith.service.repositories.IEventRepository
 import be.hogent.faith.service.repositories.IUserRepository
 import be.hogent.faith.service.usecases.user.GetUserUseCase
+import be.hogent.faith.service.usecases.util.EncryptedEventFactory
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.every
 import io.mockk.mockk
@@ -25,10 +25,10 @@ class GetUserUseCaseTest {
     @Before
     fun setUp() {
         getUserUC = GetUserUseCase(
-            userRepository = mockk(relaxed = true),
-            eventRepository = mockk(relaxed = true),
+            userRepository = mockk(),
+            eventRepository = mockk(),
             eventEncryptionService = eventEncryptionService,
-            authManager = mockk(relaxed = true),
+            authManager = mockk(),
             observeScheduler = mockk()
         )
     }
@@ -55,20 +55,9 @@ class GetUserUseCaseTest {
     fun getUserUseCase_userPresent_returnsUserWithEvents() {
         val userUuidArg = slot<String>()
         val userUuid = DataFactory.randomUUID().toString()
-        val events =
-            listOf(
-                EncryptedEvent(
-                    dateTime = "encryptedDate",
-                    title = "title",
-                    emotionAvatar = mockk(),
-                    notes = "notes",
-                    uuid = mockk(),
-                    details = mockk(),
-                    encryptedDEK = mockk(),
-                    encryptedStreamingDEK = mockk()
-                )
-            )
+        val events = EncryptedEventFactory.makeEventList(5)
         val user = User("username", "avatar", UUID.randomUUID().toString())
+
         every { mockk<IAuthManager>(relaxed = true).getLoggedInUserUUID() } returns userUuid
         every { mockk<IUserRepository>(relaxed = true).get(capture(userUuidArg)) } returns Flowable.just(
             user

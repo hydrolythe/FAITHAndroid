@@ -1,7 +1,9 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.service.encryption.IEventEncryptionService
+import be.hogent.faith.service.repositories.IEventRepository
+import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.service.usecases.event.MakeEventFilesAvailableUseCase
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.every
@@ -15,16 +17,18 @@ import java.io.IOException
 
 class MakeEventFilesAvailableUseCaseTest {
     private lateinit var makeEventFilesAvailableUseCase: MakeEventFilesAvailableUseCase
-    private lateinit var observer: Scheduler
-    private lateinit var fileStorageRepository: IFileStorageRepository
+    private val observer: Scheduler = mockk()
+    private val fileStorageRepository: IFileStorageRepository = mockk()
+    private val eventRepository: IEventRepository = mockk()
+    private val evenEncryptionService: IEventEncryptionService = mockk()
     private lateinit var event: Event
 
     @Before
     fun setUp() {
-        observer = mockk()
-        fileStorageRepository = mockk(relaxed = true)
         makeEventFilesAvailableUseCase = MakeEventFilesAvailableUseCase(
             fileStorageRepository,
+            eventRepository,
+            evenEncryptionService,
             observer
         )
         event = EventFactory.makeEvent(numberOfDetails = 0)

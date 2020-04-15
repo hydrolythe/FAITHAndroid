@@ -18,7 +18,7 @@ import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import java.io.File
 
-class EventEncryptionServiceTest : KoinTest {
+class EventEncryptionServiceTest : KoinTest, TestWithFiles() {
     private val keyGenerator = KeyGenerator()
     private val keyEncrypter = KeyEncrypter(DummyKeyEncryptionService())
 
@@ -106,7 +106,7 @@ class EventEncryptionServiceTest : KoinTest {
             .assertNoErrors()
             .assertComplete()
             .assertValue { encryptedEvent ->
-                encryptedEvent.emotionAvatar!!.contentEqual(backupFile)
+                encryptedEvent.emotionAvatar!!.contentEqual(backupFile).not()
             }
             .dispose()
     }

@@ -40,7 +40,9 @@ class FirebaseStorageRepositoryTest {
         file = detailFile,
         title = DataFactory.randomString(),
         uuid = UUID.randomUUID(),
-        type = "encrypted type"
+        type = "encrypted type",
+        // Empty string to emulate a non-YoutubeVideoDetail
+        youtubeVideoID = ""
     )
 
     val emotionAvatarFile = File("emotionAvatar")

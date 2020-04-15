@@ -35,10 +35,12 @@ class LocalFileStorageRepositoryTest {
         file = detailFile,
         title = DataFactory.randomString(),
         uuid = UUID.randomUUID(),
-        type = "encrypted type"
+        type = "encrypted type",
+        // Empty string to emulate a non-YoutubeVideoDetail
+        youtubeVideoID = ""
     )
 
-    val emotionAvatarFile = File("emotionAvatar")
+    private val emotionAvatarFile = File("emotionAvatar")
     private val encryptedEvent = EncryptedEvent(
         dateTime = "encrypted DateTime",
         uuid = UUID.randomUUID(),
@@ -83,6 +85,7 @@ class LocalFileStorageRepositoryTest {
         // Assert
         val detailLocation =
             File(filesDir, "users/$userUID/events/${encryptedEvent.uuid}/${encryptedDetail.uuid}")
+        assertEquals(detailLocation, encryptedDetail.file)
         assertTrue(detailLocation.exists())
     }
 
@@ -116,7 +119,7 @@ class LocalFileStorageRepositoryTest {
         // Assert
         val avatarLocation =
             File(filesDir, "users/$userUID/events/${encryptedEvent.uuid}/emotionAvatar")
-        assertEquals(encryptedEvent.emotionAvatar, avatarLocation)
+        assertEquals(avatarLocation, encryptedEvent.emotionAvatar)
     }
 
     @Test

@@ -1,9 +1,9 @@
 package be.hogent.faith.database.common
 
 import be.hogent.faith.database.converters.FileConverter
+import be.hogent.faith.database.event.EncryptedEventEntity
 import be.hogent.faith.database.event.EventMapper
 import be.hogent.faith.database.factory.EntityFactory
-import be.hogent.faith.database.event.EncryptedEventEntity
 import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.util.factory.DataFactory
@@ -20,7 +20,8 @@ class EventMapperTest {
         file = DataFactory.randomFile(),
         title = DataFactory.randomString(),
         uuid = DataFactory.randomUUID(),
-        type = "Encrypted type"
+        type = "Encrypted type",
+        youtubeVideoID = ""
     )
     private val encryptedEventWithDetails = EncryptedEvent(
         dateTime = "encrypted datetime",

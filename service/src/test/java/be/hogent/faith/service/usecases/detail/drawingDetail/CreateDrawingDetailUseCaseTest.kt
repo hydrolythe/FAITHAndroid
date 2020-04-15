@@ -1,7 +1,7 @@
 package be.hogent.faith.service.usecases.detail.drawingDetail
 
 import android.graphics.Bitmap
-import be.hogent.faith.storage.local.ITemporaryFileStorageRepository
+import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Scheduler
@@ -36,7 +36,7 @@ class CreateDrawingDetailUseCaseTest {
     fun createDrawingDetailUC_normal_createsDetailWithCorrectFile() {
         // Arrange
         val saveFile = File("location")
-        every { storageRepository.storeBitmapTemporarily(any()) } returns Single.just(saveFile)
+        every { storageRepository.storeBitmap(any()) } returns Single.just(saveFile)
 
         val params = CreateDrawingDetailUseCase.Params(bitmap)
 

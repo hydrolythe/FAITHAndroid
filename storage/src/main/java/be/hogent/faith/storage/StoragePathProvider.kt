@@ -85,7 +85,7 @@ class StoragePathProvider(
      * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path.
      */
     fun emotionAvatarPath(encryptedEvent: EncryptedEvent): File {
-        return File("${eventsFolderPath(encryptedEvent).path}/avatar")
+        return File("${eventsFolderPath(encryptedEvent).path}/emotionAvatar")
     }
 
     /**
@@ -93,7 +93,7 @@ class StoragePathProvider(
      * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path on the device.
      */
     fun emotionAvatarPath(event: Event): File {
-        return File("${eventsFolderPath(event).path}/avatar")
+        return File("${eventsFolderPath(event).path}/emotionAvatar")
     }
 
     /**

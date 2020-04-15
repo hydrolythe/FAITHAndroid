@@ -1,7 +1,7 @@
 package be.hogent.faith.service.usecases.detail.textDetail
 
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.storage.local.ITemporaryFileStorageRepository
+import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

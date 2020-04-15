@@ -10,7 +10,7 @@ import org.junit.Before
 import org.junit.Test
 import java.io.File
 
-class DetailEncryptionServiceTest {
+class DetailEncryptionServiceTest : TestWithFiles() {
     private val dek by lazy { KeyGenerator().generateKeysetHandle() }
     private val sdek by lazy { KeyGenerator().generateStreamingKeysetHandle() }
 
@@ -71,7 +71,10 @@ class DetailEncryptionServiceTest {
             .test()
             .assertComplete()
             .assertValue { decryptedDetail ->
-                detail == decryptedDetail
+                // Not a full equals check because file may still be different if the files have
+                // not been decrypted yet.
+                detail.title == decryptedDetail.title &&
+                        detail.uuid == detail.uuid
             }
             .dispose()
     }

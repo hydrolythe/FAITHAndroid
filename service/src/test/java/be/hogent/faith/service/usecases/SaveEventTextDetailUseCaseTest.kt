@@ -2,7 +2,7 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.storage.local.ITemporaryFileStorageRepository
+import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
 import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import io.mockk.every
 import io.mockk.mockk
@@ -34,7 +34,7 @@ class SaveEventTextDetailUseCaseTest {
     @Test
     fun saveTextUC_saveTextNormal_savedToStorage() {
         // Arrange
-        every { repository.saveDetailFileWithContainer(event, detail) } returns Completable.complete()
+        every { repository.storeDetailWithEvent(detail, event) } returns Completable.complete()
         val params = SaveEventDetailUseCase.Params(detail, event)
 
         // Act
@@ -43,13 +43,13 @@ class SaveEventTextDetailUseCaseTest {
             .assertComplete()
 
         // Assert
-        verify { repository.saveDetailFileWithContainer(event, detail) }
+        verify { repository.storeDetailWithEvent(detail, event) }
     }
 
     @Test
     fun saveTextUC_saveTextNormal_addedToEvent() {
         // Arrange
-        every { repository.saveDetailFileWithContainer(event, detail) } returns Completable.complete()
+        every { repository.storeDetailWithEvent(detail, event) } returns Completable.complete()
         val params = SaveEventDetailUseCase.Params(detail, event)
 
         // Act
@@ -63,7 +63,7 @@ class SaveEventTextDetailUseCaseTest {
     @Test
     fun saveTextUC_errorInRepo_notAddedToEvent() {
         // Arrange
-        every { repository.saveDetailFileWithContainer(event, detail) } returns Completable.error(
+        every { repository.storeDetailWithEvent(detail, event) } returns Completable.error(
             RuntimeException()
         )
         val params = SaveEventDetailUseCase.Params(detail, event)
