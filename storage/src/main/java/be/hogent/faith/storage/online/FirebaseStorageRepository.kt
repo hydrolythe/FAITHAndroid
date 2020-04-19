@@ -82,7 +82,31 @@ class FirebaseStorageRepository(
             return Completable
                 .fromSingle(
                     rxFirebaseStorage.getFile(
-                        storageRef.child(detail.file.path),
+                        storageRef.child(pathProvider.detailPath(detail, event).path),
+                        localDestinationFile
+                    )
+                )
+                .andThen {
+                    detail.file = localDestinationFile
+                }
+        }
+    }
+
+    /**
+     * Downloads a detail's file from [firestorage] and stores it into the path provided for it by the
+     * [pathProvider].
+     */
+    override fun downloadDetail(detail: Detail, container: DetailsContainer): Completable {
+        // YoutubeVideoDetails don't have a "real" file
+        if (detail is YoutubeVideoDetail) {
+            return Completable.complete()
+        } else {
+            val localDestinationFile: File =
+                with(pathProvider) { localStorage(detailPath(detail, container)) }
+            return Completable
+                .fromSingle(
+                    rxFirebaseStorage.getFile(
+                        storageRef.child(pathProvider.detailPath(detail, container).path),
                         localDestinationFile
                     )
                 )

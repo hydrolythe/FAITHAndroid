@@ -7,11 +7,12 @@ import be.hogent.faith.service.usecases.base.FlowableUseCase
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
 
-class GetBackPackFilesDummyUseCase(
+class GetBackPackFilesUseCase(
     private val backpackRepository: IDetailContainerRepository<Backpack>,
     observeScheduler: Scheduler
-) : FlowableUseCase<List<Detail>, GetBackPackFilesDummyUseCase.Params>(observeScheduler) {
+) : FlowableUseCase<List<Detail>, GetBackPackFilesUseCase.Params>(observeScheduler) {
     override fun buildUseCaseObservable(params: Params): Flowable<List<Detail>> {
+        // TODO: implement
         return Flowable.just(emptyList())
     }
 

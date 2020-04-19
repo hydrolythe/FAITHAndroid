@@ -1,13 +1,12 @@
 package be.hogent.faith.service.repositories
 
-import be.hogent.faith.service.encryption.EncryptedDetail
-import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.service.encryption.EncryptedDetail
+import be.hogent.faith.service.encryption.EncryptedEvent
 import io.reactivex.Completable
 import io.reactivex.Single
-import java.io.File
 
 interface IFileStorageRepository {
 
@@ -31,7 +30,15 @@ interface IFileStorageRepository {
     /**
      * Downloads a detail's file, and returns it.
      */
-    fun downloadFile(detail: Detail): Single<File>
+    fun downloadFile(detail: Detail, container: DetailsContainer): Completable
 
-    fun saveDetailFileWithContainer(encryptedDetail: EncryptedDetail, container: DetailsContainer): Single<EncryptedDetail>
+    /**
+     * Files are considered ready to use if they are available on the device in an unencrypted format.
+     */
+    fun fileReadyToUse(detail: Detail, container: DetailsContainer): Boolean
+
+    fun saveDetailFileWithContainer(
+        encryptedDetail: EncryptedDetail,
+        container: DetailsContainer
+    ): Single<EncryptedDetail>
 }

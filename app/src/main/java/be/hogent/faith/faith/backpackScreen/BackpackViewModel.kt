@@ -14,7 +14,7 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
+import be.hogent.faith.service.usecases.backpack.GetBackPackFilesUseCase
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
@@ -24,7 +24,7 @@ import java.util.Date
 class BackpackViewModel(
     saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
     deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>,
-    private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase
+    private val getBackPackFilesUseCase: GetBackPackFilesUseCase
 ) : DetailsContainerViewModel(saveBackpackDetailUseCase, deleteBackpackDetailUseCase) {
 
     private val _detailIsSaved = SingleLiveEvent<Any>()
@@ -48,8 +48,8 @@ class BackpackViewModel(
 
     // TODO tijdelijk
     private fun loadDetails() {
-        val params = GetBackPackFilesDummyUseCase.Params("")
-        getBackPackFilesDummyUseCase.execute(params, GetBackPackFilesDummyUseCaseHandler())
+        val params = GetBackPackFilesUseCase.Params("")
+        getBackPackFilesUseCase.execute(params, GetBackPackFilesDummyUseCaseHandler())
     }
 
     private inner class GetBackPackFilesDummyUseCaseHandler : DisposableSubscriber<List<Detail>>() {

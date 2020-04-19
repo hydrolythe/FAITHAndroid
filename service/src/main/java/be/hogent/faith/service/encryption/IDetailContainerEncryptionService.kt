@@ -1,6 +1,7 @@
 package be.hogent.faith.service.encryption
 
 import be.hogent.faith.domain.models.detail.Detail
+import io.reactivex.Completable
 import io.reactivex.Single
 
 interface IDetailContainerEncryptionService<T> {
@@ -13,4 +14,6 @@ interface IDetailContainerEncryptionService<T> {
         detail: Detail,
         encryptedDetailsContainer: EncryptedDetailsContainer
     ): Single<EncryptedDetail>
+
+    fun decryptFile(detail: Detail, container: EncryptedDetailsContainer): Completable
 }

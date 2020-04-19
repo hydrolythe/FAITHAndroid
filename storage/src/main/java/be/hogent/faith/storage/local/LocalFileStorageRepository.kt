@@ -96,6 +96,7 @@ class LocalFileStorageRepository(
         if (event.emotionAvatar == null) {
             return true
         } else {
+            // TODO: check if this enough: the event's avatar should also point to this path
             return with(pathProvider) { localStorage(emotionAvatarPath(event)).exists() }
         }
     }

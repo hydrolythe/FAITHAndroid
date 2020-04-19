@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.faith.testModule
-import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
+import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import io.mockk.Called
 import io.mockk.mockk

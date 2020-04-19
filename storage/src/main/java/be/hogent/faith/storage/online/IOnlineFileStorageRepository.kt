@@ -12,9 +12,14 @@ interface IOnlineFileStorageRepository {
     fun saveEventFiles(encryptedEvent: EncryptedEvent): Completable
 
     /**
-     * Ensures a detail's file is locally available.
+     * Ensures an [event]'s [detail]'s file is locally available.
      */
     fun downloadDetail(detail: Detail, event: Event): Completable
+
+    /**
+     * Ensures a [container]'s [detail]'s file is locally available.
+     */
+    fun downloadDetail(detail: Detail, container: DetailsContainer): Completable
 
     /**
      * Ensures the emotion avatar for the given [event] is locally available.

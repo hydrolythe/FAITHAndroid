@@ -1,8 +1,8 @@
 package be.hogent.faith.service.di
 
 import be.hogent.faith.domain.models.Backpack
-import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
-import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
+import be.hogent.faith.service.usecases.backpack.GetBackPackFilesUseCase
+import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
@@ -50,8 +50,13 @@ val serviceModule = module {
     factory { CreateTextDetailUseCase(get(), get()) }
     factory { CreateExternalVideoDetailUseCase(get()) }
     factory { MakeEventFilesAvailableUseCase(get(), get(), get(), get()) }
-    factory { LoadDetailFileUseCase(get(), get()) }
-    factory { GetBackPackFilesDummyUseCase(get(), get()) }
+    factory {
+        LoadDetailFileUseCase(
+            get(),
+            get()
+        )
+    }
+    factory { GetBackPackFilesUseCase(get(), get()) }
     factory { SaveDetailsContainerDetailUseCase<Backpack>(get(), get(), get(), get()) }
     factory { DeleteDetailsContainerDetailUseCase<Backpack>(get(), get()) }
 }

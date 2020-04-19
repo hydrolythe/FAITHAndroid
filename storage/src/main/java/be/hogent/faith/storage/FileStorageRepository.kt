@@ -12,7 +12,6 @@ import be.hogent.faith.storage.online.IOnlineFileStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
-import java.io.File
 
 /**
  * Repository providing access to both the internal and remote storage.
@@ -69,10 +68,11 @@ class FileStorageRepository(
      * download emotion avatar from firebase to localStorage if not present yet
      */
     private fun getEmotionAvatarFile(event: Event): Completable {
-        if (event.emotionAvatar == null || localStorage.isEmotionAvatarPresent(event))
+        if (event.emotionAvatar == null || localStorage.isEmotionAvatarPresent(event)) {
             return Completable.complete()
-        else
+        } else {
             return onlineStorage.downloadEmotionAvatar(event)
+        }
     }
 
     override fun filesReadyToUse(event: Event): Boolean {
@@ -83,8 +83,16 @@ class FileStorageRepository(
                 }
     }
 
-    override fun downloadFile(detail: Detail): Single<File> {
-        TODO("Not yet implemented")
+    override fun downloadFile(detail: Detail, container: DetailsContainer): Completable {
+        if (localStorage.isFilePresent(detail, container)) {
+            return Completable.complete()
+        } else {
+            return onlineStorage.downloadDetail(detail, container)
+        }
+    }
+
+    override fun fileReadyToUse(detail: Detail, container: DetailsContainer): Boolean {
+        return temporaryStorageRepository.isFilePresent(detail, container)
     }
 
     override fun saveDetailFileWithContainer(

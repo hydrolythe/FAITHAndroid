@@ -17,9 +17,14 @@ interface ILocalFileStorageRepository {
     fun saveEventFiles(encryptedEvent: EncryptedEvent): Single<EncryptedEvent>
 
     /**
-     * Checks if file is present in localStorage
+     * Checks if an [event]'s  [detail]'s file is present in local storage
      */
     fun isFilePresent(detail: Detail, event: Event): Boolean
+
+    /**
+     * Checks if a [container]'s [detail]'s file is present in local storage.
+     */
+    fun isFilePresent(detail: Detail, container: DetailsContainer): Boolean
 
     /**
      * Checks if emotion avatar is present in localStorage

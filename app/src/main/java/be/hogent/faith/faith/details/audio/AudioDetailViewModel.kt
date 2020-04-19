@@ -13,7 +13,7 @@ import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.R
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.faith.util.combineWith
-import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
+import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.util.toMinutesSecondString
 import io.reactivex.observers.DisposableSingleObserver

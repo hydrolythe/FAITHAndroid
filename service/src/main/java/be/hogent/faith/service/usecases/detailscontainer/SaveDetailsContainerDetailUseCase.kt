@@ -10,9 +10,9 @@ import be.hogent.faith.service.usecases.base.CompletableUseCase
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
-class SaveDetailsContainerDetailUseCase<T : DetailsContainer>(
-    private val detailContainerRepository: IDetailContainerRepository<T>,
-    private val detailContainerEncryptionService: IDetailContainerEncryptionService<T>,
+class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
+    private val detailContainerRepository: IDetailContainerRepository<Container>,
+    private val detailContainerEncryptionService: IDetailContainerEncryptionService<Container>,
     private val storageRepository: IFileStorageRepository,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveDetailsContainerDetailUseCase.Params>(
