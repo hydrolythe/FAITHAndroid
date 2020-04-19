@@ -62,7 +62,6 @@ class SaveBackpackDetailUseCaseTest {
             containerRepository.insertDetail(encryptedDetail, user)
         } returns Completable.complete()
 
-
         // Act
         saveBackpackTextDetailUseCase.buildUseCaseObservable(params).test()
             .assertNoErrors()

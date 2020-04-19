@@ -3,7 +3,6 @@ package be.hogent.faith.encryption
 import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.util.contentEqual
 import org.junit.After
-import org.junit.AfterClass
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -23,7 +22,6 @@ class FileEncrypterTest : TestWithFiles() {
     fun tearDown() {
         originalFile.copyTo(plainTextFile, overwrite = true)
     }
-
 
     @Test
     fun `the original file remains untouched after encryption`() {

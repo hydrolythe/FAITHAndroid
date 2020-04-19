@@ -92,6 +92,10 @@ class LocalFileStorageRepository(
         }
     }
 
+    override fun isFilePresent(detail: Detail, container: DetailsContainer): Boolean {
+        TODO("Not yet implemented")
+    }
+
     override fun isEmotionAvatarPresent(event: Event): Boolean {
         if (event.emotionAvatar == null) {
             return true

@@ -5,6 +5,7 @@ import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.service.encryption.EncryptedDetailsContainer
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
 
@@ -23,5 +24,9 @@ class DetailContainerEncryptionService<T>(
         return Singles.zip(dekSingle, sdekSingle) { dek, sdek ->
             detailEncryptionService.encrypt(detail, dek, sdek).blockingGet()
         }
+    }
+
+    override fun decryptFile(detail: Detail, container: EncryptedDetailsContainer): Completable {
+        TODO("Not yet implemented")
     }
 }

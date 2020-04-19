@@ -21,5 +21,4 @@ object EncryptedDetailFactory {
         type = DataFactory.randomString(),
         youtubeVideoID = DataFactory.randomString()
     )
-
 }

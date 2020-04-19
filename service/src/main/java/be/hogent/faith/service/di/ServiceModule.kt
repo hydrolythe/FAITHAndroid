@@ -2,7 +2,6 @@ package be.hogent.faith.service.di
 
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesUseCase
-import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
@@ -12,6 +11,7 @@ import be.hogent.faith.service.usecases.detail.textDetail.CreateTextDetailUseCas
 import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.OverwriteTextDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
+import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import be.hogent.faith.service.usecases.event.MakeEventFilesAvailableUseCase
@@ -51,7 +51,9 @@ val serviceModule = module {
     factory { CreateExternalVideoDetailUseCase(get()) }
     factory { MakeEventFilesAvailableUseCase(get(), get(), get(), get()) }
     factory {
-        LoadDetailFileUseCase(
+        LoadDetailFileUseCase<Backpack>(
+            get(),
+            get(),
             get(),
             get()
         )

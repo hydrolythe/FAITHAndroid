@@ -18,16 +18,18 @@ class LoadDetailFileUseCase<Container : DetailsContainer>(
 ) : SingleUseCase<File, LoadDetailFileUseCase.Params>(observeScheduler) {
 
     override fun buildUseCaseSingle(params: Params): Single<File> {
-        if (storageRepo.fileReadyToUse(params.detail)) {
+        if (storageRepo.fileReadyToUse(params.detail, params.container)) {
             return Single.just(params.detail.file)
         } else {
-            return storageRepo.downloadFile(params.detail, params.container)
-                .andThen(containerRepository.getEncryptedContainer())
-                .map { container ->
-                    detailContainerEncryptionService.decrypt(
-                        params.detail, container
-                    )
-                }
+            return Single.just(params.detail.file)
+            // TODO:
+//            return storageRepo.downloadFile(params.detail, params.container)
+//                .andThen(containerRepository.getEncryptedContainer())
+//                .map { container ->
+//                    detailContainerEncryptionService.decrypt(
+//                        params.detail, container
+//                    )
+//                }
         }
     }
 
