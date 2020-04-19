@@ -13,8 +13,8 @@ import io.reactivex.Maybe
 import timber.log.Timber
 
 abstract class FirebaseDetailContainerRepository<T : DetailsContainer>(
-    private val fbAuth: FirebaseAuth,
-    private val firestore: FirebaseFirestore
+    protected val fbAuth: FirebaseAuth,
+    protected val firestore: FirebaseFirestore
 ) {
     abstract val containerName: String
 

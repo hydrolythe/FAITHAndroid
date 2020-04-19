@@ -14,7 +14,7 @@ import io.reactivex.Maybe
 abstract class DetailContainerRepositoryImpl<T : DetailsContainer>(
     private val userMapper: UserMapper,
     private val detailMapper: DetailMapper,
-    private val firebaseDetailContainerRepository: FirebaseDetailContainerRepository<T>
+    protected val firebaseDetailContainerRepository: FirebaseDetailContainerRepository<T>
 ) : DetailContainerRepository<T> {
 
     override fun insertDetail(detail: Detail, user: User): Maybe<Detail> {
