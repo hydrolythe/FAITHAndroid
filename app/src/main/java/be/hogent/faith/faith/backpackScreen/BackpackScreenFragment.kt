@@ -76,7 +76,7 @@ class BackpackScreenFragment : Fragment() {
 
         backpackViewModel.filteredDetails.observe(this, Observer { details ->
             detailThumbnailsAdapter?.updateDetailsList(details)
-            })
+        })
 
         backpackBinding.backpackMenuFilter.searchBar.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
@@ -92,25 +92,29 @@ class BackpackScreenFragment : Fragment() {
             }
         })
 
-        backpackViewModel.isInEditMode.observe(this, Observer {
-            if (backpackViewModel.isInEditMode.value == EditModeState.OPEN) {
+        backpackViewModel.deleteEnabled.observe(this, Observer { enabled ->
+            if (enabled) {
                 detailThumbnailsAdapter!!.hide(false)
                 backpackViewModel.viewButtons(false)
             } else {
-            detailThumbnailsAdapter!!.hide(true)
+                detailThumbnailsAdapter!!.hide(true)
                 backpackViewModel.viewButtons(true)
-        }
+            }
         })
         backpackBinding.btnBackpackAdd.setOnClickListener {
             addDetailMenu.show()
         }
-
-        backpackViewModel.initialize()
     }
 
     @SuppressLint("RestrictedApi")
     private fun initialiseMenu() {
-        addDetailMenu = PopupMenu(backpackBinding.btnBackpackAdd.context, backpackBinding.btnBackpackAdd, Gravity.END, 0, R.style.PopupMenu_AddDetail)
+        addDetailMenu = PopupMenu(
+            backpackBinding.btnBackpackAdd.context,
+            backpackBinding.btnBackpackAdd,
+            Gravity.END,
+            0,
+            R.style.PopupMenu_AddDetail
+        )
 
         addDetailMenu.menuInflater.inflate(R.menu.menu_backpack, addDetailMenu.menu)
 
@@ -136,8 +140,8 @@ class BackpackScreenFragment : Fragment() {
             fieldMPopup.isAccessible = true
             val mPopup = fieldMPopup.get(addDetailMenu)
             mPopup.javaClass
-                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                    .invoke(mPopup, true)
+                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                .invoke(mPopup, true)
         } catch (e: Exception) {
             Timber.e("Error showing icons")
         }

@@ -1,9 +1,9 @@
 package be.hogent.faith.service.usecases.backpack
 
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
-import be.hogent.faith.domain.repository.DetailContainerRepository
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.repository.BackpackRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import io.reactivex.Completable
 import io.reactivex.Scheduler
@@ -13,7 +13,7 @@ import io.reactivex.Single
  * YouTube detail isn't stored in a file
  */
 class SaveYoutubeDetailUseCase(
-    private val backpackRepository: DetailContainerRepository<YoutubeVideoDetail>,
+    private val backpackRepository: BackpackRepository,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveYoutubeDetailUseCase.Params>(
     observeScheduler

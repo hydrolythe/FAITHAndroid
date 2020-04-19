@@ -14,17 +14,17 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
-import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
+import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveYoutubeDetailUseCase
-import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.subscribers.DisposableSubscriber
 import java.util.Date
 
 class BackpackViewModel(
-    saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
-    deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>,
+    saveBackpackDetailUseCase: SaveBackpackDetailUseCase,
+    deleteBackpackDetailUseCase: DeleteBackpackDetailUseCase,
     backpack: Backpack,
     private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase,
     private val saveYoutubeDetailUseCase: SaveYoutubeDetailUseCase
@@ -35,9 +35,6 @@ class BackpackViewModel(
 
     private val _viewButtons = MutableLiveData<Boolean>()
     val viewButtons: LiveData<Boolean> = _viewButtons
-
-    private val _isInEditMode = MutableLiveData<EditModeState>()
-    val isInEditMode: LiveData<EditModeState> = _isInEditMode
 
     private val _showSaveDialog = SingleLiveEvent<Detail>()
     val showSaveDialog: LiveData<Detail> = _showSaveDialog
@@ -68,17 +65,6 @@ class BackpackViewModel(
 
         override fun onError(e: Throwable) {
         }
-    }
-
-    fun initialize() {
-        _isInEditMode.postValue(EditModeState.CLOSED)
-    }
-
-    fun setIsInEditMode() {
-        if (isInEditMode.value == EditModeState.CLOSED)
-            _isInEditMode.postValue(EditModeState.OPEN)
-        else if (isInEditMode.value == EditModeState.OPEN)
-            _isInEditMode.postValue(EditModeState.CLOSED)
     }
 
     fun showSaveDialog(detail: Detail) {

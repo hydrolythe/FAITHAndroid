@@ -2,6 +2,7 @@ package be.hogent.faith.database.firebase
 
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.UserEntity
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.util.TAG
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -11,7 +12,7 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import timber.log.Timber
 
-abstract class FirebaseDetailContainerRepository<DetailContainer>(
+abstract class FirebaseDetailContainerRepository<T : DetailsContainer>(
     private val fbAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore
 ) {

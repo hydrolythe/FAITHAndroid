@@ -51,6 +51,10 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         this.value = false
     }
 
+    val deleteEnabled = MutableLiveData<Boolean>().apply {
+        this.value = false
+    }
+
     val filteredDetails: LiveData<List<Detail>> = MediatorLiveData<List<Detail>>().apply {
         addSource(searchString) { query ->
             detailFilter.titleFilter.searchString = query
@@ -129,6 +133,10 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
 
     fun onFilterExternalVideoClicked() {
         externalVideoFilterEnabled.value = externalVideoFilterEnabled.value!!.not()
+    }
+
+    fun onDeleteClicked() {
+        deleteEnabled.value = deleteEnabled.value!!.not()
     }
 
     fun setSearchStringText(text: String) {
