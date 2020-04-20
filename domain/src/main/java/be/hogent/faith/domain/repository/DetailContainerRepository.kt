@@ -3,7 +3,6 @@ package be.hogent.faith.domain.repository
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.DetailsContainer
-import be.hogent.faith.domain.models.Film
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Completable
@@ -20,7 +19,4 @@ interface DetailContainerRepository<T : DetailsContainer> {
 
 interface BackpackRepository : DetailContainerRepository<Backpack>
 
-interface CinemaRepository : DetailContainerRepository<Cinema> {
-    fun getFilms(): Flowable<List<Film>>
-    fun deleteFilm(film: Film): Completable
-}
+interface CinemaRepository : DetailContainerRepository<Cinema>
