@@ -1,7 +1,8 @@
 package be.hogent.faith.service.usecases.backpack
 
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.repository.BackpackRepository
+import be.hogent.faith.domain.repository.DetailContainerRepository
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import io.mockk.every
 import io.mockk.mockk
@@ -12,16 +13,16 @@ import org.junit.Before
 import org.junit.Test
 
 class DeleteBackpackDetailUseCaseTest {
-    private lateinit var deleteBackpackDetailUseCase: DeleteBackpackDetailUseCase
+    private lateinit var deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>
     private val scheduler: Scheduler = mockk()
-    private val repository: BackpackRepository = mockk(relaxed = true)
+    private val repository: DetailContainerRepository<Backpack> = mockk(relaxed = true)
 
     private val detail = mockk<AudioDetail>()
 
     @Before
     fun setUp() {
         deleteBackpackDetailUseCase =
-            DeleteBackpackDetailUseCase(
+            DeleteDetailsContainerDetailUseCase<Backpack>(
                 repository,
                 scheduler
             )

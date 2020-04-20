@@ -14,16 +14,16 @@ import org.junit.Assert.assertEquals
 import androidx.lifecycle.Observer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 
 class BackpackViewModelSaveExternalVideoTest {
     private lateinit var viewModel: BackpackViewModel
     private val saveExternalVideoUseCase =
-        mockk<SaveBackpackDetailUseCase>(relaxed = true)
+        mockk<SaveDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
     private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
     private val detail = mockk<ExternalVideoDetail>()
     private val user = mockk<User>(relaxed = true)

@@ -3,23 +3,25 @@ package be.hogent.faith.database.di
 import be.hogent.faith.database.firebase.FirebaseAuthManager
 import be.hogent.faith.database.firebase.FirebaseBackpackRepository
 import be.hogent.faith.database.firebase.FirebaseCinemaRepository
+import be.hogent.faith.database.firebase.FirebaseDetailContainerRepository
 import be.hogent.faith.database.firebase.FirebaseEventRepository
 import be.hogent.faith.database.firebase.FirebaseUserRepository
 import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.EventMapper
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.repositories.AuthManagerImpl
-import be.hogent.faith.database.repositories.BackpackRepositoryImpl
-import be.hogent.faith.database.repositories.CinemaRepositoryImpl
+import be.hogent.faith.database.repositories.DetailContainerRepositoryImpl
 import be.hogent.faith.database.repositories.EventRepositoryImpl
 import be.hogent.faith.database.repositories.UserRepositoryImpl
+import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.repository.AuthManager
-import be.hogent.faith.domain.repository.BackpackRepository
-import be.hogent.faith.domain.repository.CinemaRepository
+import be.hogent.faith.domain.repository.DetailContainerRepository
 import be.hogent.faith.domain.repository.EventRepository
 import be.hogent.faith.domain.repository.UserRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val databaseModule = module {
@@ -37,17 +39,16 @@ val databaseModule = module {
     // Koin doesn't automatically see the Impl as an implementation of the interface,
     // so we have to explicitly mention it.
     single { EventRepositoryImpl(get(), get(), get()) as EventRepository }
-    single { BackpackRepositoryImpl(get(), get(), get()) as BackpackRepository }
-    single { CinemaRepositoryImpl(get(), get(), get()) as CinemaRepository }
+    single<DetailContainerRepository<Backpack>>(named("BackpackRepositoryImpl")) { DetailContainerRepositoryImpl<Backpack>(get(), get(), get(named("FirebaseBackpackRepository"))) }
+    single<DetailContainerRepository<Cinema>>(named("CinemaRepositoryImpl")) { DetailContainerRepositoryImpl<Cinema>(get(), get(), get(named("FirebaseCinemaRepository"))) }
     single { UserRepositoryImpl(get(), get()) as UserRepository }
     single { AuthManagerImpl(get()) as AuthManager }
     single { FirebaseAuthManager(constructFirebaseAuthInstance()) }
     single { FirebaseUserRepository(constructFirebaseAuthInstance(), constructFireStoreInstance()) }
-    single { FirebaseBackpackRepository(constructFirebaseAuthInstance(),
+    single<FirebaseDetailContainerRepository<Backpack>>(named("FirebaseBackpackRepository")) { FirebaseBackpackRepository(constructFirebaseAuthInstance(),
         constructFireStoreInstance()) }
-    single { FirebaseCinemaRepository(constructFirebaseAuthInstance(),
-        constructFireStoreInstance())
-    }
+    single<FirebaseDetailContainerRepository<Cinema>>(named("FirebaseCinemaRepository")) { FirebaseCinemaRepository(constructFirebaseAuthInstance(),
+        constructFireStoreInstance()) }
     single {
         FirebaseEventRepository(
             constructFirebaseAuthInstance(),

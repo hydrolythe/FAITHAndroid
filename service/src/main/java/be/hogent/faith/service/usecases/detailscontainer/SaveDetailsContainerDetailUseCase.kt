@@ -10,7 +10,7 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 
-abstract class SaveDetailsContainerDetailUseCase<T : DetailsContainer>(
+open class SaveDetailsContainerDetailUseCase<T : DetailsContainer>(
     private val detailsContainerRepository: DetailContainerRepository<T>,
     private val storageRepository: IStorageRepository,
     observeScheduler: Scheduler

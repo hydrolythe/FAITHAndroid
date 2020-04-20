@@ -14,17 +14,17 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
-import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
-import be.hogent.faith.service.usecases.backpack.SaveBackpackDetailUseCase
 import be.hogent.faith.service.usecases.backpack.SaveYoutubeDetailUseCase
+import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
+import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.subscribers.DisposableSubscriber
 import java.util.Date
 
 class BackpackViewModel(
-    saveBackpackDetailUseCase: SaveBackpackDetailUseCase,
-    deleteBackpackDetailUseCase: DeleteBackpackDetailUseCase,
+    saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
+    deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>,
     backpack: Backpack,
     private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase,
     private val saveYoutubeDetailUseCase: SaveYoutubeDetailUseCase

@@ -1,8 +1,9 @@
 package be.hogent.faith.service.usecases.backpack
 
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.repository.BackpackRepository
+import be.hogent.faith.domain.repository.DetailContainerRepository
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import be.hogent.faith.storage.IStorageRepository
 import io.mockk.every
@@ -15,9 +16,9 @@ import org.junit.Before
 import org.junit.Test
 
 class SaveBackpackDrawingDetailUseCaseTest {
-    private lateinit var saveBackpackDrawingDetailUseCase: SaveBackpackDetailUseCase
+    private lateinit var saveBackpackDrawingDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>
     private val scheduler: Scheduler = mockk()
-    private val repository: BackpackRepository = mockk(relaxed = true)
+    private val repository: DetailContainerRepository<Backpack> = mockk(relaxed = true)
     private val storageRepository: IStorageRepository = mockk(relaxed = true)
     private val user: User = mockk(relaxed = true)
 
@@ -26,7 +27,7 @@ class SaveBackpackDrawingDetailUseCaseTest {
     @Before
     fun setUp() {
         saveBackpackDrawingDetailUseCase =
-            SaveBackpackDetailUseCase(
+            SaveDetailsContainerDetailUseCase<Backpack>(
                 repository,
                 storageRepository,
                 scheduler

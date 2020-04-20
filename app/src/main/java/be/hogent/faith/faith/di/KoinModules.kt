@@ -60,7 +60,7 @@ val appModule = module(override = true) {
     viewModel { CityScreenViewModel(get()) }
     viewModel { (event: Event) -> EventViewModel(get(), get(), event) }
     viewModel { EventViewModel(get(), get()) }
-    viewModel { (backpack: Backpack) -> BackpackViewModel(get(), get(), backpack, get(), get()) }
+    viewModel { (backpack: Backpack) -> BackpackViewModel(get(named("SaveBackpackDetailUseCase")), get(named("DeleteBackpackDetailUseCase")), backpack, get(), get()) }
     viewModel { DrawViewModel() }
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }

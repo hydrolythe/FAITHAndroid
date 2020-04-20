@@ -11,7 +11,7 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 
-abstract class DetailContainerRepositoryImpl<T : DetailsContainer>(
+open class DetailContainerRepositoryImpl<T : DetailsContainer>(
     private val userMapper: UserMapper,
     private val detailMapper: DetailMapper,
     private val firebaseDetailContainerRepository: FirebaseDetailContainerRepository<T>

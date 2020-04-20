@@ -6,6 +6,7 @@ import be.hogent.faith.database.mappers.DetailMapper
 import be.hogent.faith.database.mappers.UserMapper
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.UserEntity
+import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.util.factory.DetailFactory
@@ -23,7 +24,7 @@ class CinemaRepositoryImplTest {
     private val detailMapper = mockk<DetailMapper>()
 
     private val cinemaRepository =
-        CinemaRepositoryImpl(userMapper, detailMapper, firebaseCinemaRepository)
+        DetailContainerRepositoryImpl<Cinema>(userMapper, detailMapper, firebaseCinemaRepository)
 
     private val user = UserFactory.makeUser(0)
     private val userEntity = EntityFactory.makeUserEntity()

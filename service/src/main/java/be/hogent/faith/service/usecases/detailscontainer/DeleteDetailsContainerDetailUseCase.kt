@@ -7,7 +7,7 @@ import be.hogent.faith.service.usecases.base.CompletableUseCase
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
-abstract class DeleteDetailsContainerDetailUseCase<T : DetailsContainer>(
+open class DeleteDetailsContainerDetailUseCase<T : DetailsContainer>(
     val detailsContainerRepository: DetailContainerRepository<T>,
     observeScheduler: Scheduler
 ) : CompletableUseCase<DeleteDetailsContainerDetailUseCase.Params>(
