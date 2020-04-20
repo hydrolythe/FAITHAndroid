@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.backpackScreen
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -12,7 +11,10 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.externalFile.AddExternalFileFragment
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailFragment
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
@@ -22,25 +24,28 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.ext.android.getKoin
-import org.koin.android.viewmodel.ext.android.getViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.BackpackDetailsNavigationListener,
-        RecordAudioFragment.AudioScreenNavigation,
-        DrawFragment.DrawingScreenNavigation,
-        DetailFinishedListener,
-        TextDetailFragment.TextScreenNavigation,
-        TakePhotoFragment.PhotoScreenNavigation,
-        DetailViewHolder.ExistingDetailNavigationListener,
-        AddExternalFileFragment.ExternalFileScreenNavigation,
-        DeleteDetailDialog.DeleteDetailDialogListener {
+class BackpackScreenActivity : AppCompatActivity(),
+    BackpackScreenFragment.BackpackDetailsNavigationListener,
+    RecordAudioFragment.AudioScreenNavigation,
+    DrawFragment.DrawingScreenNavigation,
+    DetailFinishedListener,
+    TextDetailFragment.TextScreenNavigation,
+    TakePhotoFragment.PhotoScreenNavigation,
+    DetailViewHolder.ExistingDetailNavigationListener,
+    AddExternalFileFragment.ExternalFileScreenNavigation,
+    DeleteDetailDialog.DeleteDetailDialogListener,
+    YoutubeVideoDetailFragment.YoutubeVideoDetailScreenNavigation,
+    ViewYoutubeVideoFragment.ViewYoutubeVideoNavigation {
 
-    private lateinit var backpackViewModel: BackpackViewModel
+    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
+    private val backpackViewModel: BackpackViewModel by viewModel { parametersOf(userViewModel.user.value!!.backpack) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_backpackscreen)
-
-        backpackViewModel = getViewModel()
 
         // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
@@ -48,8 +53,8 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
         if (savedInstanceState == null) {
             val fragment = BackpackScreenFragment.newInstance()
             supportFragmentManager.beginTransaction()
-                    .add(R.id.backpack_fragment_container, fragment)
-                    .commit()
+                .add(R.id.backpack_fragment_container, fragment)
+                .commit()
         }
 
         backpackViewModel.goToCityScreen.observe(this, Observer {
@@ -68,8 +73,6 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
     override fun backToEvent() {
         supportFragmentManager.popBackStack()
         backpackViewModel.viewButtons(true)
-        backpackViewModel.setDetailScreenOpen(false)
-        backpackViewModel.closePopUpMenu()
     }
 
     override fun onDetailFinished(detail: Detail) {
@@ -81,57 +84,51 @@ class BackpackScreenActivity : AppCompatActivity(), BackpackScreenFragment.Backp
             is ExternalVideoDetail -> save(detail)
         }
         backpackViewModel.viewButtons(true)
-        backpackViewModel.setDetailScreenOpen(false)
-        backpackViewModel.closePopUpMenu()
     }
 
     override fun startPhotoDetailFragment() {
-        replaceFragment(BackpackDetailFragment.PhotoFragmentNoEmotionAvatar.newInstance(), R.id.backpack_fragment_container)
-        startFragmentInitialisers()
+        replaceFragment(BackpackDetailFragment.PhotoFragment.newInstance(), R.id.backpack_fragment_container)
+        setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startAudioDetailFragment() {
-        replaceFragment(BackpackDetailFragment.AudioFragmentNoEmotionAvatar.newInstance(), R.id.backpack_fragment_container)
-        startFragmentInitialisers()
+        replaceFragment(BackpackDetailFragment.AudioFragment.newInstance(), R.id.backpack_fragment_container)
+        setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startDrawingDetailFragment() {
-        replaceFragment(BackpackDetailFragment.DrawingFragmentNoEmotionAvatar.newInstance(), R.id.backpack_fragment_container)
-        startFragmentInitialisers()
+        replaceFragment(BackpackDetailFragment.DrawingFragment.newInstance(), R.id.backpack_fragment_container)
+        setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startTextDetailFragment() {
-        replaceFragment(BackpackDetailFragment.TextFragmentNoEmotionAvatar.newInstance(), R.id.backpack_fragment_container)
-        startFragmentInitialisers()
-    }
-
-    private fun startFragmentInitialisers() {
-        backpackViewModel.viewButtons(false)
-        backpackViewModel.setDetailScreenOpen(true)
-        backpackViewModel.closePopUpMenu()
-        backpackViewModel.setOpenDetailType(OpenDetailType.NEW)
-    }
-
-    override fun startVideoDetailFragment() {
-        Toast.makeText(this, "Nog niet beschikbaar", Toast.LENGTH_SHORT).show()
+        replaceFragment(BackpackDetailFragment.TextFragment.newInstance(), R.id.backpack_fragment_container)
+        setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startExternalFileDetailFragment() {
-        replaceFragment(BackpackDetailFragment.ExternalFileFragmentNoEmotionAvatar.newInstance(), R.id.backpack_fragment_container)
+        replaceFragment(BackpackDetailFragment.ExternalFileFragment.newInstance(), R.id.backpack_fragment_container)
+        setLayoutListenersOnNewDetailOpened()
+    }
+
+    override fun startVideoDetailFragment() {
+        replaceFragment(BackpackDetailFragment.YoutubeVideoFragment.newInstance(), R.id.backpack_fragment_container)
+        setLayoutListenersOnNewDetailOpened()
+    }
+
+    private fun setLayoutListenersOnNewDetailOpened() {
         backpackViewModel.viewButtons(false)
-        backpackViewModel.setDetailScreenOpen(true)
-        backpackViewModel.closePopUpMenu()
+        backpackViewModel.setOpenDetailType(OpenDetailMode.NEW)
     }
 
     override fun openDetailScreenFor(detail: Detail) {
-        backpackViewModel.setOpenDetailType(OpenDetailType.EDIT)
+        backpackViewModel.setOpenDetailType(OpenDetailMode.EDIT)
         backpackViewModel.setCurrentFile(detail)
         replaceFragment(
-                BackpackDetailFragment.newInstance(detail),
-                R.id.backpack_fragment_container
+            BackpackDetailFragment.newInstance(detail),
+            R.id.backpack_fragment_container
         )
         backpackViewModel.viewButtons(false)
-        backpackViewModel.closePopUpMenu()
     }
 
     override fun closeBackpack() {

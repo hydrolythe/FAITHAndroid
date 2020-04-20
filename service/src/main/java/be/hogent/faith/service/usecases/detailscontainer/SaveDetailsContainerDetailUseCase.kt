@@ -10,8 +10,8 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 
-class SaveDetailsContainerDetailUseCase<T : DetailsContainer>(
-    private val backpackRepository: DetailContainerRepository<T>,
+abstract class SaveDetailsContainerDetailUseCase<T : DetailsContainer>(
+    private val detailsContainerRepository: DetailContainerRepository<T>,
     private val storageRepository: IStorageRepository,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveDetailsContainerDetailUseCase.Params>(
@@ -29,7 +29,7 @@ class SaveDetailsContainerDetailUseCase<T : DetailsContainer>(
                     params.detail
                 )
             }
-            .flatMapMaybe { backpackRepository.insertDetail(params.detail, params.user) }
+            .flatMapMaybe { detailsContainerRepository.insertDetail(params.detail, params.user) }
             .flatMapCompletable { Completable.complete() }
     }
 

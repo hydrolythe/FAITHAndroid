@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.backpackScreen.detailFilters
+package be.hogent.faith.faith.detailscontainer.detailFilters
 
 import be.hogent.faith.domain.models.detail.Detail
 

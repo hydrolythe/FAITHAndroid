@@ -9,7 +9,7 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.view.ViewDrawingFragment
@@ -64,7 +64,7 @@ class LibraryActivity : AppCompatActivity(), EventListFragment.EventsListNavigat
             is TextDetail -> ViewTextDetailFragment.newInstance(detail)
             is DrawingDetail -> ViewDrawingFragment.newInstance(detail)
             is PhotoDetail -> ReviewPhotoFragment.newInstance(detail)
-            is VideoDetail -> null
+            is YoutubeVideoDetail -> null
             is ExternalVideoDetail -> null
         }?.let {
             replaceFragment(it, R.id.fragment_container)

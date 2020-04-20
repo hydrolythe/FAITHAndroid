@@ -7,7 +7,6 @@ import java.util.UUID
 /**
  * A detail that can be part of an event, solution,...
  */
-
 sealed class Detail(
     /**
      * A relative path of where the actual content of the detail is saved.
@@ -15,40 +14,46 @@ sealed class Detail(
      * added before the path.
      */
     var file: File,
-    var fileName: String = "",
-    val uuid: UUID = UUID.randomUUID()
+    var title: String = "",
+    val uuid: UUID = UUID.randomUUID(),
+    // YoutubeVideo
+    val videoId: String = ""
+
 ) : Serializable
 
 class DrawingDetail(
     file: File,
-    fileName: String = "",
+    title: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+) : Detail(file, title, uuid)
 
 class PhotoDetail(
     file: File,
-    fileName: String = "",
+    title: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+) : Detail(file, title, uuid)
 
 class TextDetail(
     file: File,
-    fileName: String = "",
+    title: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+) : Detail(file, title, uuid)
 
 class AudioDetail(
     file: File,
-    fileName: String = "",
+    title: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
-class VideoDetail(
-    file: File,
-    fileName: String = "",
-    uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+) : Detail(file, title, uuid)
+
 class ExternalVideoDetail(
     file: File,
-    fileName: String = "",
+    title: String = "",
     uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+) : Detail(file, title, uuid)
+
+class YoutubeVideoDetail(
+    file: File,
+    fileName: String = "",
+    uuid: UUID = UUID.randomUUID(),
+    videoId: String
+) : Detail(file, fileName, uuid, videoId)

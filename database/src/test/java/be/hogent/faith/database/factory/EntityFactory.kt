@@ -5,6 +5,7 @@ import be.hogent.faith.database.converters.LocalDateTimeConverter
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.DetailType
 import be.hogent.faith.database.models.EventEntity
+import be.hogent.faith.database.models.FilmEntity
 import be.hogent.faith.database.models.UserEntity
 import be.hogent.faith.util.factory.DataFactory
 import java.util.UUID
@@ -23,24 +24,28 @@ object EntityFactory {
                 FileConverter().toString(DataFactory.randomFile()),
                 "",
                 DataFactory.randomUUID().toString(),
+                "",
                 DetailType.PHOTO
             )
             rand < 0.50 -> DetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
                 "",
                 DataFactory.randomUUID().toString(),
+                "",
                 DetailType.DRAWING
             )
             rand < 0.75 -> DetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
                 "",
                 DataFactory.randomUUID().toString(),
+                "",
                 DetailType.AUDIO
             )
             else -> DetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
                 "",
                 DataFactory.randomUUID().toString(),
+                "",
                 DetailType.TEXT
             )
         }
@@ -89,5 +94,17 @@ object EntityFactory {
             DataFactory.randomString(),
             DataFactory.randomString()
         )
+    }
+
+    fun makeFilmEntity(): FilmEntity {
+        return FilmEntity(DataFactory.randomString(), DataFactory.randomString(), DataFactory.randomString(), DataFactory.randomUUID().toString())
+    }
+
+    fun makeFilmEntityList(count: Int): List<FilmEntity> {
+        val films = mutableListOf<FilmEntity>()
+        repeat(count) {
+            films.add(makeFilmEntity())
+        }
+        return films
     }
 }

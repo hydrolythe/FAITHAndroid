@@ -1,15 +1,19 @@
 package be.hogent.faith.service.usecases.di
 
-import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.service.usecases.CreateUserUseCase
 import be.hogent.faith.service.usecases.GetUserUseCase
 import be.hogent.faith.service.usecases.IsUsernameUniqueUseCase
 import be.hogent.faith.service.usecases.LoginUserUseCase
 import be.hogent.faith.service.usecases.LogoutUserUseCase
 import be.hogent.faith.service.usecases.RegisterUserUseCase
+import be.hogent.faith.service.usecases.backpack.DeleteBackpackDetailUseCase
 import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
-import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
+import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
+import be.hogent.faith.service.usecases.backpack.SaveBackpackDetailUseCase
+import be.hogent.faith.service.usecases.backpack.SaveYoutubeDetailUseCase
+import be.hogent.faith.service.usecases.cinema.DeleteCinemaDetailUseCase
+import be.hogent.faith.service.usecases.cinema.SaveCinemaDetailUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
@@ -18,7 +22,6 @@ import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseC
 import be.hogent.faith.service.usecases.detail.textDetail.CreateTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.OverwriteTextDetailUseCase
-import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import be.hogent.faith.service.usecases.event.GetEventFilesUseCase
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
@@ -57,9 +60,18 @@ val serviceModule = module {
     factory { GetEventFilesUseCase(get(), get()) }
     factory { LoadDetailFileUseCase(get(), get()) }
     factory { GetBackPackFilesDummyUseCase(get(), get()) }
-    factory { SaveDetailsContainerDetailUseCase<Backpack>(get(), get(), get()) }
+    factory { GetYoutubeVideosFromSearchUseCase(get()) }
+    factory { SaveYoutubeDetailUseCase(get(), get()) }
+    factory { SaveBackpackDetailUseCase(get(), get(), get()) }
+    factory { SaveCinemaDetailUseCase(get(), get(), get()) }
     factory {
-        DeleteDetailsContainerDetailUseCase<Backpack>(
+        DeleteBackpackDetailUseCase(
+            get(),
+            get()
+        )
+    }
+    factory {
+        DeleteCinemaDetailUseCase(
             get(),
             get()
         )

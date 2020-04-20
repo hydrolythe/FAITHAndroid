@@ -7,14 +7,14 @@ import be.hogent.faith.service.usecases.base.CompletableUseCase
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
-class DeleteDetailsContainerDetailUseCase<T : DetailsContainer>(
-    private val backpackRepository: DetailContainerRepository<T>,
+abstract class DeleteDetailsContainerDetailUseCase<T : DetailsContainer>(
+    val detailsContainerRepository: DetailContainerRepository<T>,
     observeScheduler: Scheduler
 ) : CompletableUseCase<DeleteDetailsContainerDetailUseCase.Params>(
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {
-        return backpackRepository.deleteDetail(params.detail)
+        return detailsContainerRepository.deleteDetail(params.detail)
     }
 
     data class Params(val detail: Detail)

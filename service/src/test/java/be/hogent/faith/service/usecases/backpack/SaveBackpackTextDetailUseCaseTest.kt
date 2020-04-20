@@ -1,9 +1,8 @@
 package be.hogent.faith.service.usecases.backpack
 
-import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.repository.DetailContainerRepository
+import be.hogent.faith.domain.repository.BackpackRepository
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import be.hogent.faith.storage.IStorageRepository
 import io.mockk.every
@@ -17,9 +16,9 @@ import org.junit.Test
 
 class SaveBackpackTextDetailUseCaseTest {
 
-    private lateinit var saveBackpackTextDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>
+    private lateinit var saveBackpackTextDetailUseCase: SaveBackpackDetailUseCase
     private val scheduler: Scheduler = mockk()
-    private val repository: DetailContainerRepository<Backpack> = mockk(relaxed = true)
+    private val repository: BackpackRepository = mockk(relaxed = true)
     private val storageRepository: IStorageRepository = mockk(relaxed = true)
     private val user: User = mockk(relaxed = true)
 
@@ -28,7 +27,7 @@ class SaveBackpackTextDetailUseCaseTest {
     @Before
     fun setUp() {
         saveBackpackTextDetailUseCase =
-            SaveDetailsContainerDetailUseCase(
+            SaveBackpackDetailUseCase(
                 repository,
                 storageRepository,
                 scheduler
@@ -39,7 +38,12 @@ class SaveBackpackTextDetailUseCaseTest {
     fun saveTextUC_saveTextNormal_savedToStorage() {
         // Arrange
         every { repository.insertDetail(detail, user) } returns Maybe.fromSingle { detail }
-        every { storageRepository.saveDetailFileForContainer(user.backpack, detail) } returns Single.just(detail)
+        every {
+            storageRepository.saveDetailFileForContainer(
+                user.backpack,
+                detail
+            )
+        } returns Single.just(detail)
         val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
 
         // Act

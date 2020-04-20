@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.di
 
+import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
@@ -16,6 +17,8 @@ import be.hogent.faith.faith.details.photo.create.TakePhotoViewModel
 import be.hogent.faith.faith.details.photo.view.ViewPhotoDetailViewModel
 import be.hogent.faith.faith.details.text.view.ViewTextDetailViewModel
 import be.hogent.faith.faith.details.text.create.TextDetailViewModel
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
@@ -57,7 +60,7 @@ val appModule = module(override = true) {
     viewModel { CityScreenViewModel(get()) }
     viewModel { (event: Event) -> EventViewModel(get(), get(), event) }
     viewModel { EventViewModel(get(), get()) }
-    viewModel { BackpackViewModel(get(), get(), get()) }
+    viewModel { (backpack: Backpack) -> BackpackViewModel(get(), get(), backpack, get(), get()) }
     viewModel { DrawViewModel() }
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }
@@ -72,7 +75,9 @@ val appModule = module(override = true) {
     viewModel { RegisterUserInfoViewModel(get()) }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { TakePhotoViewModel(get()) }
-    viewModel { ExternalFileViewModel(get(), get()) }
+    viewModel { YoutubeVideoDetailViewModel(get()) }
+    viewModel { FaithYoutubePlayerViewModel() }
+    viewModel { ExternalFileViewModel(get(), get(), get()) }
     viewModel { (user: User) -> EventListViewModel(user, get()) }
     viewModel { EventDetailsViewModel() }
     viewModel { ViewPhotoDetailViewModel() }

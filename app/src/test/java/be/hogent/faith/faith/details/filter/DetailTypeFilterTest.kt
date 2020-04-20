@@ -5,7 +5,7 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.faith.backpackScreen.detailFilters.DetailTypeFilter
+import be.hogent.faith.faith.detailscontainer.detailFilters.DetailTypeFilter
 import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
