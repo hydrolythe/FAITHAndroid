@@ -5,6 +5,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.service.encryption.EncryptedEvent
+import io.reactivex.Completable
 import io.reactivex.Single
 
 interface ILocalFileStorageRepository {
@@ -40,4 +41,9 @@ interface ILocalFileStorageRepository {
         detail: EncryptedDetail,
         container: DetailsContainer
     ): Single<EncryptedDetail>
+
+    /**
+     * Delete all files belonging to this detail.
+     */
+    fun deleteFiles(detail: Detail, container: DetailsContainer): Completable
 }

@@ -121,4 +121,14 @@ class LocalFileStorageRepository(
             }
         }
     }
+
+    override fun deleteFiles(detail: Detail, container: DetailsContainer): Completable {
+        return Completable.fromAction {
+            val localStorageFile =
+                pathProvider.localStorage(pathProvider.detailPath(detail, container))
+            if (localStorageFile.exists()) {
+                localStorageFile.delete()
+            }
+        }
+    }
 }

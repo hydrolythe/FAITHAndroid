@@ -3,6 +3,7 @@ package be.hogent.faith.storage.local
 import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
+import io.reactivex.Completable
 
 /**
  * Allows access to the devices temporary storage (i.e. context.cachedir)
@@ -23,4 +24,9 @@ interface ITemporaryFileStorageRepository {
      * Checks if the emotion avatar of the [event] is in temporary storage.
      */
     fun isEmotionAvatarPresent(event: Event): Boolean
+
+    /**
+     * Delete all files belonging to this detail.
+     */
+    fun deleteFiles(detail: Detail, container: DetailsContainer): Completable
 }

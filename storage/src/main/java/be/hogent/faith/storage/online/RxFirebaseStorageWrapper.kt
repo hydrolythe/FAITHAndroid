@@ -5,6 +5,7 @@ import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
 import durdinapps.rxfirebase2.RxFirebaseStorage
+import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
 
@@ -26,5 +27,9 @@ class RxFirebaseStorageWrapper : IRxFireBaseStorage {
         uri: Uri
     ): Single<UploadTask.TaskSnapshot> {
         return RxFirebaseStorage.putFile(storageReference, uri)
+    }
+
+    override fun delete(storageReference: StorageReference): Completable {
+        return RxFirebaseStorage.delete(storageReference)
     }
 }

@@ -27,4 +27,9 @@ interface IOnlineFileStorageRepository {
     fun downloadEmotionAvatar(event: Event): Completable
 
     fun saveDetailFiles(encryptedDetail: EncryptedDetail, container: DetailsContainer): Completable
+
+    /**
+     * Delete all files belonging to this detail.
+     */
+    fun deleteFiles(detail: Detail, container: DetailsContainer): Completable
 }

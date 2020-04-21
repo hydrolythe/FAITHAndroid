@@ -139,4 +139,14 @@ class TemporaryStorageRepository(
     override fun isEmotionAvatarPresent(event: Event): Boolean {
         return with(pathProvider) { temporaryStorage(emotionAvatarPath(event)).exists() }
     }
+
+    override fun deleteFiles(detail: Detail, container: DetailsContainer): Completable {
+        return Completable.fromAction {
+            val tempStorageFile =
+                pathProvider.temporaryStorage(pathProvider.detailPath(detail, container))
+            if (tempStorageFile.exists()) {
+                tempStorageFile.delete()
+            }
+        }
+    }
 }

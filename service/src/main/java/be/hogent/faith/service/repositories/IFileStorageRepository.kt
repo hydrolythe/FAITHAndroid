@@ -41,4 +41,9 @@ interface IFileStorageRepository {
         encryptedDetail: EncryptedDetail,
         container: DetailsContainer
     ): Single<EncryptedDetail>
+
+    /**
+     * Delete all files belonging to this detail.
+     */
+    fun deleteFiles(detail: Detail, container: DetailsContainer): Completable
 }

@@ -19,7 +19,7 @@ import io.reactivex.Single
  *
  */
 class FileStorageRepository(
-    private val temporaryStorageRepository: ITemporaryFileStorageRepository,
+    private val temporaryStorage: ITemporaryFileStorageRepository,
     private val localStorage: ILocalFileStorageRepository,
     private val onlineStorage: IOnlineFileStorageRepository
 ) : IFileStorageRepository {
@@ -77,9 +77,9 @@ class FileStorageRepository(
 
     override fun filesReadyToUse(event: Event): Boolean {
         // We  are using the fact that decrypted files are stored in the cache directory.
-        return temporaryStorageRepository.isEmotionAvatarPresent(event) &&
+        return temporaryStorage.isEmotionAvatarPresent(event) &&
                 event.details.all { detail ->
-                    temporaryStorageRepository.isFilePresent(detail, event)
+                    temporaryStorage.isFilePresent(detail, event)
                 }
     }
 
@@ -92,7 +92,7 @@ class FileStorageRepository(
     }
 
     override fun fileReadyToUse(detail: Detail, container: DetailsContainer): Boolean {
-        return temporaryStorageRepository.isFilePresent(detail, container)
+        return temporaryStorage.isFilePresent(detail, container)
     }
 
     override fun saveDetailFileWithContainer(
@@ -107,5 +107,22 @@ class FileStorageRepository(
                 )
             }
             .andThen(Single.just(encryptedDetail))
+    }
+
+    override fun deleteFiles(detail: Detail, container: DetailsContainer): Completable {
+        return Completable.mergeArray(
+            deleteDetailFile(detail),
+            temporaryStorage.deleteFiles(detail, container),
+            localStorage.deleteFiles(detail, container),
+            onlineStorage.deleteFiles(detail, container)
+        )
+    }
+
+    private fun deleteDetailFile(detail: Detail): Completable {
+        return Completable.fromAction {
+            if (detail.file.exists()) {
+                detail.file.delete()
+            }
+        }
     }
 }
