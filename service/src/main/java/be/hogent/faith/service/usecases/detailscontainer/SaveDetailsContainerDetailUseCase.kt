@@ -22,22 +22,13 @@ class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
     override fun buildUseCaseObservable(params: Params): Completable {
         return detailContainerRepository.getEncryptedContainer()
             .flatMap { container ->
-                detailContainerEncryptionService.encrypt(
-                    params.detail,
-                    container
-                )
+                detailContainerEncryptionService.encrypt(params.detail, container)
             }
             .flatMap { encryptedDetail ->
-                storageRepository.saveDetailFileWithContainer(
-                    encryptedDetail,
-                    params.detailsContainer
-                )
+                storageRepository.saveDetailFileWithContainer(encryptedDetail, params.detailsContainer)
             }
             .flatMapCompletable { savedEncryptedDetail ->
-                detailContainerRepository.insertDetail(
-                    savedEncryptedDetail,
-                    params.user
-                )
+                detailContainerRepository.insertDetail(savedEncryptedDetail, params.user)
             }
             .andThen { addDetailToContainer(params) }
     }

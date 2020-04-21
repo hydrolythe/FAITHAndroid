@@ -22,8 +22,9 @@ class GetUserUseCase(
 
     override fun buildUseCaseObservable(params: Params): Flowable<User> {
         val currentUser = authManager.getLoggedInUserUUID()
-        if (currentUser == null)
+        if (currentUser == null) {
             return Flowable.error(RuntimeException("You are not allowed to access the user, please log in"))
+        }
         return Flowables.combineLatest(
             userRepository.get(currentUser),
             eventRepository.getAll()
@@ -37,11 +38,11 @@ class GetUserUseCase(
             .map { pair: Pair<User, List<Event>> -> addEventsToUser(pair.first, pair.second) }
     }
 
-    class Params
-
     private fun addEventsToUser(user: User, events: List<Event>): User {
         user.clearEvents()
         events.forEach { user.addEvent(it) }
         return user
     }
+
+    class Params
 }

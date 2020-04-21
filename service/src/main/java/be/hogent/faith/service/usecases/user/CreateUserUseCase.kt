@@ -14,6 +14,7 @@ class CreateUserUseCase(
     override fun buildUseCaseSingle(params: Params): Single<User> {
         val user = User(params.username, params.avatarName, params.uuid)
         return userRepository.insert(user).andThen(Single.just(user))
+        // TODO: encrypted containers aanmaken
     }
 
     data class Params(
