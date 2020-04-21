@@ -19,6 +19,8 @@ class DeleteDetailsContainerDetailUseCase<T : DetailsContainer>(
         return Completable.mergeArray(
             backpackRepository.deleteDetail(params.detail),
             fileStorageRepository.deleteFiles(params.detail, params.container)
+        ).concatWith(
+            Completable.defer { Completable.fromAction { params.container.removeDetail(params.detail) } }
         )
     }
 
