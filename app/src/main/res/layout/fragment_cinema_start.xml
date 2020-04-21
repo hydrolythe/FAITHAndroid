@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cinema_start_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/achtergrond_cinema">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_cinema_details_search"
+            style="@style/faith_textInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/event_textInput_height"
+            android:hint="@string/wat_zoek_je"
+            android:paddingEnd="16dp"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toTopOf="@+id/guide_rv_container_horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/btn_cinema_chooseDate"
+            app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
+            app:startIconDrawable="@drawable/ic_search"
+            app:startIconTint="@null">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_cinema_details_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_hint_film"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cinema_chooseDate"
+            style="@style/faith_textbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginBottom="25dp"
+            android:backgroundTint="@color/color_white"
+            android:gravity="center"
+            android:text="Datum"
+            app:icon="@drawable/ic_kalender"
+            app:iconGravity="textStart"
+            app:iconSize="34dp"
+            app:layout_constraintBottom_toTopOf="@+id/guide_rv_container_horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical2" />
+
+
+        <ImageButton
+            android:id="@+id/btn_cinema_cancel"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/knop_terug_wit"
+            android:contentDescription="@string/cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/rv_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/achtergrond_publiek"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical2"
+            app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
+            app:layout_constraintTop_toTopOf="@+id/guide_rv_container_horizontal"
+            app:srcCompat="@drawable/cinema_film_container"
+            tools:srcCompat="@drawable/cinema_film_container" />
+
+
+        <ToggleButton
+            android:id="@+id/btn_films"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_cinema_mijn_filmpjes_achtergrond"
+            android:checked="false"
+            android:textAllCaps="false"
+            android:textOff="@string/mijn_filmpjes"
+            android:textOn="@string/mijn_filmpjes"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintEnd_toStartOf="@+id/guide_btns_vertical" />
+
+        <ToggleButton
+            android:id="@+id/btn_details"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_cinema_mijn_bestanden_achtergrond"
+            android:checked="false"
+            android:textAllCaps="false"
+            android:textOff="@string/mijn_bestanden"
+            android:textOn="@string/mijn_bestanden"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintStart_toStartOf="@+id/guide_btns_vertical" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_btns_vertical"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rv_container_vertical1"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.15" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rv_container_vertical2"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.85" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rv_container_horizontal"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.15" />
+
+        <ImageButton
+            android:id="@+id/btn_cinema_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/prullenbak"
+            android:contentDescription="@string/delete"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintStart_toStartOf="@+id/rv_container"
+            app:srcCompat="@drawable/prullenbak" />
+
+        <ImageButton
+            android:id="@+id/btn_cinema_add"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/achtergrond_publiek"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/rv_container"
+            app:srcCompat="@drawable/add_btn" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_cinema"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scrollbarSize="16dp"
+            android:scrollbarThumbVertical="@drawable/scrollbarthumb_circle_rv"
+            android:scrollbarTrackVertical="@drawable/scrollbartrack_rectangle_rv"
+            android:scrollbars="vertical"
+            android:verticalScrollbarPosition="right"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintEnd_toEndOf="@+id/rv_container"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/rv_container"
+            app:layout_constraintTop_toTopOf="@+id/rv_container"
+            />
+
+        <ImageView
+            android:id="@+id/achtergrond_publiek"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/publiek_cinema"
+            tools:srcCompat="@drawable/publiek_cinema" />
+
+        <ImageButton
+            android:id="@+id/create_film"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/create_film"
+            app:layout_constraintBottom_toBottomOf="@+id/achtergrond_publiek"
+            app:layout_constraintEnd_toEndOf="@+id/achtergrond_publiek"
+            app:layout_constraintStart_toStartOf="@+id/achtergrond_publiek"
+            app:layout_constraintTop_toBottomOf="@+id/rv_container"
+            app:srcCompat="@drawable/ic_btn_maak_filmpje" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

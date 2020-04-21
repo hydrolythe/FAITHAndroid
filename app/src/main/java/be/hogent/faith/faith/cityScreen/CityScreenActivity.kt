@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
+import be.hogent.faith.faith.cinema.CinemaActivity
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.library.LibraryActivity
@@ -75,6 +76,11 @@ class CityScreenActivity : AppCompatActivity(),
 
     override fun startBackpackFragment() {
         val intent = Intent(this, BackpackScreenActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun startCinemaFragment() {
+        val intent = Intent(this, CinemaActivity::class.java)
         startActivity(intent)
     }
 

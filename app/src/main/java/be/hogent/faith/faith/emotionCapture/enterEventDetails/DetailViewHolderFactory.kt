@@ -8,7 +8,6 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.faith.GlideApp
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.AudioDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExistingDetailNavigationListener
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.PictureDetailViewHolder
@@ -25,7 +24,7 @@ import kotlinx.android.synthetic.main.detail_item_rv.view.detail_img
 import kotlinx.android.synthetic.main.detail_item_rv.view.text_detail_title
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-
+import be.hogent.faith.faith.GlideApp
 object DetailViewHolderFactory {
     fun createViewHolder(
         parent: ViewGroup,
@@ -145,7 +144,7 @@ sealed class DetailViewHolder(
                 return GlideApp.with(thumbnailView)
                     .load(FirebaseStorage.getInstance().reference.child(detail.file.path)) // load the storagereference
             }
-            return Glide.with(thumbnailView)
+            return GlideApp.with(thumbnailView)
                     .load(androidTempFileProvider.getFile(detail))
                     // Signature is required to force Glide to reload overwritten pictures
                     .signature(MediaStoreSignature("", detail.file.lastModified(), 0))

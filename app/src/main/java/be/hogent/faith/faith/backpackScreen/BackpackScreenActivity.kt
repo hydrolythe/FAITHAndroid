@@ -53,7 +53,7 @@ class BackpackScreenActivity : AppCompatActivity(),
         if (savedInstanceState == null) {
             val fragment = BackpackScreenFragment.newInstance()
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment, fragment)
+                .add(R.id.backpack_fragment_container, fragment)
                 .commit()
         }
 
@@ -64,7 +64,7 @@ class BackpackScreenActivity : AppCompatActivity(),
         backpackViewModel.goToDetail.observe(this, Observer {
             replaceFragment(
                 BackpackDetailFragment.newInstance(it),
-                R.id.fragment
+                R.id.backpack_fragment_container
             )
         })
     }
@@ -87,32 +87,32 @@ class BackpackScreenActivity : AppCompatActivity(),
     }
 
     override fun startPhotoDetailFragment() {
-        replaceFragment(BackpackDetailFragment.PhotoFragment.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.PhotoFragment.newInstance(), R.id.backpack_fragment_container)
         setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startAudioDetailFragment() {
-        replaceFragment(BackpackDetailFragment.AudioFragment.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.AudioFragment.newInstance(), R.id.backpack_fragment_container)
         setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startDrawingDetailFragment() {
-        replaceFragment(BackpackDetailFragment.DrawingFragment.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.DrawingFragment.newInstance(), R.id.backpack_fragment_container)
         setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startTextDetailFragment() {
-        replaceFragment(BackpackDetailFragment.TextFragment.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.TextFragment.newInstance(), R.id.backpack_fragment_container)
         setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startExternalFileDetailFragment() {
-        replaceFragment(BackpackDetailFragment.ExternalFileFragment.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.ExternalFileFragment.newInstance(), R.id.backpack_fragment_container)
         setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startVideoDetailFragment() {
-        replaceFragment(BackpackDetailFragment.YoutubeVideoFragment.newInstance(), R.id.fragment)
+        replaceFragment(BackpackDetailFragment.YoutubeVideoFragment.newInstance(), R.id.backpack_fragment_container)
         setLayoutListenersOnNewDetailOpened()
     }
 
@@ -126,7 +126,7 @@ class BackpackScreenActivity : AppCompatActivity(),
         backpackViewModel.setCurrentFile(detail)
         replaceFragment(
             BackpackDetailFragment.newInstance(detail),
-            R.id.fragment
+            R.id.backpack_fragment_container
         )
         backpackViewModel.viewButtons(false)
     }

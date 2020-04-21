@@ -238,5 +238,11 @@
     <string name="rv_btn_detail">Knop bekijk bestand</string>
     <string name="rv_btn_delete_detail">Knop verwijder bestand</string>
     <string name="rv_detail_title">Detail Title</string>
+    <string name="mijn_filmpjes">mijn filmpjes</string>
+    <string name="mijn_bestanden">mijn bestanden</string>
+    <string name="create_film">Maak filmpje</string>
+    <string name="search_hint_film">zoek hier een film op naam</string>
+    <string name="search_hint_bestand">zoek hier een bestand op naam</string>
     <string name="unauthorized_file_type">Dit bestandstype is niet toegelaten.</string>
+
 </resources>
