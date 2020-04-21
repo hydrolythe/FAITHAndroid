@@ -33,9 +33,11 @@ interface IFileStorageRepository {
     fun downloadFile(detail: Detail, container: DetailsContainer): Completable
 
     /**
+     * Sets the detail's file if it is ready to use.
      * Files are considered ready to use if they are available on the device in an unencrypted format.
+     * @return false if the file isn't ready to use yet.
      */
-    fun fileReadyToUse(detail: Detail, container: DetailsContainer): Boolean
+    fun setFileIfReady(detail: Detail, container: DetailsContainer): Boolean
 
     fun saveDetailFileWithContainer(
         encryptedDetail: EncryptedDetail,

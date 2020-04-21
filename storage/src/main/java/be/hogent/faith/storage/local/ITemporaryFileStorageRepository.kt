@@ -4,6 +4,7 @@ import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import io.reactivex.Completable
+import java.io.File
 
 /**
  * Allows access to the devices temporary storage (i.e. context.cachedir)
@@ -29,4 +30,9 @@ interface ITemporaryFileStorageRepository {
      * Delete all files belonging to this detail.
      */
     fun deleteFiles(detail: Detail, container: DetailsContainer): Completable
+
+    /**
+     * Returns the file where the [detail]'s file is stored.
+     */
+    fun getFile(detail: Detail, container: DetailsContainer): File
 }

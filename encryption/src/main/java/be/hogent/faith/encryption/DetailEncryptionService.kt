@@ -110,11 +110,26 @@ class DetailEncryptionService(
     }
 
     fun decryptDetailFiles(
+        detail: Detail,
+        sdek: KeysetHandle
+    ): Completable {
+        val fileEncrypter = FileEncryptionService()
+        // YoutubeVideos don't have a file that needs to be encrypted
+        if (detail is YoutubeVideoDetail) {
+            return Completable.complete()
+        } else {
+            return fileEncrypter.decrypt(detail.file, sdek)
+                .map { detail.file = it }
+                .ignoreElement()
+        }
+    }
+
+    fun decryptDetailFiles(
         encryptedDetail: EncryptedDetail,
         sdek: KeysetHandle
     ): Completable {
         val fileEncrypter = FileEncryptionService()
-        // YoutubeVideos don't have a file that needs o be encrypted
+        // YoutubeVideos don't have a file that needs to be encrypted
         if (encryptedDetail.youtubeVideoID.isNotEmpty()) {
             return Completable.complete()
         } else {

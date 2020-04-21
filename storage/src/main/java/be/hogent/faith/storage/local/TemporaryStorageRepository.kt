@@ -149,4 +149,8 @@ class TemporaryStorageRepository(
             }
         }
     }
+
+    override fun getFile(detail: Detail, container: DetailsContainer): File {
+        return with(pathProvider) { temporaryStorage(detailPath(detail, container)) }
+    }
 }

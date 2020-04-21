@@ -27,6 +27,7 @@ class DetailContainerEncryptionService<T>(
     }
 
     override fun decryptFile(detail: Detail, container: EncryptedDetailsContainer): Completable {
-        TODO("Not yet implemented")
+        return keyEncrypter.decrypt(container.encryptedStreamingDEK)
+            .flatMapCompletable { sdek -> detailEncryptionService.decryptDetailFiles(detail, sdek) }
     }
 }

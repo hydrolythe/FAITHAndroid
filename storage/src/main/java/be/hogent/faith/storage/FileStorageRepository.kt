@@ -91,8 +91,13 @@ class FileStorageRepository(
         }
     }
 
-    override fun fileReadyToUse(detail: Detail, container: DetailsContainer): Boolean {
-        return temporaryStorage.isFilePresent(detail, container)
+    override fun setFileIfReady(detail: Detail, container: DetailsContainer): Boolean {
+        if (temporaryStorage.isFilePresent(detail, container)) {
+            detail.file = temporaryStorage.getFile(detail, container)
+            return true
+        } else {
+            return false
+        }
     }
 
     override fun saveDetailFileWithContainer(
