@@ -10,8 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import android.widget.TableLayout
-import android.widget.PopupWindow
 import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -26,7 +24,6 @@ import com.google.android.material.picker.CalendarConstraints
 import com.google.android.material.picker.MaterialDatePicker
 import com.google.android.material.picker.Month
 import kotlinx.android.synthetic.main.fragment_cinema_start.btn_cinema_chooseDate
-import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_chooseDate
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
@@ -43,7 +40,7 @@ class CinemaStartScreenFragment : Fragment() {
 
     private val cinemaOverviewViewModel: CinemaOverviewViewModel by sharedViewModel {
         parametersOf(
-            userViewModel.user.value!!.cinema
+                userViewModel.user.value!!.cinema
         )
     }
 
@@ -54,7 +51,7 @@ class CinemaStartScreenFragment : Fragment() {
     ): View? {
 
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_cinema_start, container, false)
+                DataBindingUtil.inflate(inflater, R.layout.fragment_cinema_start, container, false)
         binding.lifecycleOwner = this
         binding.cinemaOverviewViewModel = cinemaOverviewViewModel
 
@@ -77,8 +74,8 @@ class CinemaStartScreenFragment : Fragment() {
 
     private fun updateUI() {
         detailThumbnailsAdapter = DetailThumbnailsAdapter(
-            emptyList(),
-            requireNotNull(activity) as CinemaActivity
+                emptyList(),
+                requireNotNull(activity) as CinemaActivity
         )
         binding.rvCinema.layoutManager = GridLayoutManager(activity, 6)
         binding.rvCinema.adapter = detailThumbnailsAdapter
@@ -86,14 +83,18 @@ class CinemaStartScreenFragment : Fragment() {
     }
 
     private fun startListeners() {
+
+        cinemaOverviewViewModel.makeFilmButtonClicked.observe(this, Observer {
+            navigation?.startCreateVideoFragment()
+        })
         val toggle =
-            CompoundButton.OnCheckedChangeListener { compoundButton: CompoundButton, isChecked: Boolean ->
-                if (isChecked && compoundButton == binding.btnDetails) {
-                  cinemaOverviewViewModel.onFilesButtonClicked()
-                } else if (isChecked && compoundButton == binding.btnFilms) {
-                    cinemaOverviewViewModel.onFilmsButtonClicked()
+                CompoundButton.OnCheckedChangeListener { compoundButton: CompoundButton, isChecked: Boolean ->
+                    if (isChecked && compoundButton == binding.btnDetails) {
+                        cinemaOverviewViewModel.onFilesButtonClicked()
+                    } else if (isChecked && compoundButton == binding.btnFilms) {
+                        cinemaOverviewViewModel.onFilmsButtonClicked()
+                    }
                 }
-            }
         binding.btnDetails.setOnCheckedChangeListener(toggle)
         binding.btnFilms.setOnCheckedChangeListener(toggle)
 
@@ -104,7 +105,7 @@ class CinemaStartScreenFragment : Fragment() {
             binding.btnFilms.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
 
             binding.textInputEditTextCinemaDetailsSearch.hint =
-                resources.getString(R.string.search_hint_bestand)
+                    resources.getString(R.string.search_hint_bestand)
         })
 
         cinemaOverviewViewModel.filmsButtonClicked.observe(this, Observer {
@@ -112,28 +113,14 @@ class CinemaStartScreenFragment : Fragment() {
             binding.btnFilms.backgroundTintList = ColorStateList.valueOf(Color.LTGRAY)
             binding.btnDetails.isChecked = false
             binding.btnDetails.backgroundTintList =
-                ColorStateList.valueOf(Color.TRANSPARENT)
+                    ColorStateList.valueOf(Color.TRANSPARENT)
 
             binding.textInputEditTextCinemaDetailsSearch.hint =
-                resources.getString(R.string.search_hint_film)
+                    resources.getString(R.string.search_hint_film)
         })
 
         cinemaOverviewViewModel.addButtonClicked.observe(this, Observer {
             addDetailMenu.show()
-            /*
-            val popupView = layoutInflater.inflate(R.layout.popup_window_cinema, null)
-
-            val popupWindow = PopupWindow(
-                popupView,
-                TableLayout.LayoutParams.WRAP_CONTENT,
-                TableLayout.LayoutParams.WRAP_CONTENT
-            )
-            popupWindow.isOutsideTouchable = true
-            popupWindow.isFocusable = true
-            val help1 = -binding.btnCinemaAdd.height * 2
-
-            popupWindow.showAsDropDown(binding.btnCinemaAdd, 40, help1 - popupWindow.height)
-             */
         })
 
         cinemaOverviewViewModel.deleteEnabled.observe(this, Observer { enabled ->
@@ -153,7 +140,7 @@ class CinemaStartScreenFragment : Fragment() {
         })
 
         cinemaOverviewViewModel.dateRangeString.observe(
-            this, Observer { range -> btn_cinema_chooseDate.text = range })
+                this, Observer { range -> btn_cinema_chooseDate.text = range })
 
         cinemaOverviewViewModel.filteredDetails.observe(this, Observer { list ->
             detailThumbnailsAdapter!!.updateDetailsList(list)
@@ -163,11 +150,11 @@ class CinemaStartScreenFragment : Fragment() {
     @SuppressLint("RestrictedApi")
     private fun initialiseMenu() {
         addDetailMenu = PopupMenu(
-            binding.btnCinemaAdd.context,
-            binding.btnCinemaAdd,
-            Gravity.TOP,
-            0,
-            R.style.PopupMenu_AddDetail
+                binding.btnCinemaAdd.context,
+                binding.btnCinemaAdd,
+                Gravity.TOP,
+                0,
+                R.style.PopupMenu_AddDetail
         )
 
         addDetailMenu.menuInflater.inflate(R.menu.menu_cinema, addDetailMenu.menu)
@@ -188,8 +175,8 @@ class CinemaStartScreenFragment : Fragment() {
             fieldMPopup.isAccessible = true
             val mPopup = fieldMPopup.get(addDetailMenu)
             mPopup.javaClass
-                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                .invoke(mPopup, true)
+                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                    .invoke(mPopup, true)
         } catch (e: Exception) {
             Timber.e("Error showing icons")
         }
@@ -199,12 +186,12 @@ class CinemaStartScreenFragment : Fragment() {
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         val picker: MaterialDatePicker<*>
         builder
-            .setTitleTextResId(R.string.daterange)
-            .setCalendarConstraints(
-                CalendarConstraints.Builder()
-                    .setEnd(Month.today())
-                    .build()
-            )
+                .setTitleTextResId(R.string.daterange)
+                .setCalendarConstraints(
+                        CalendarConstraints.Builder()
+                                .setEnd(Month.today())
+                                .build()
+                )
         picker = builder.build()
         picker.show(this.fragmentManager!!, picker.toString())
         picker.addOnPositiveButtonClickListener {
@@ -222,6 +209,7 @@ class CinemaStartScreenFragment : Fragment() {
         fun startPhotoDetailFragment()
         fun startDrawingDetailFragment()
         fun startExternalFileDetailFragment()
+        fun startCreateVideoFragment()
         fun closeCinema()
     }
 }
