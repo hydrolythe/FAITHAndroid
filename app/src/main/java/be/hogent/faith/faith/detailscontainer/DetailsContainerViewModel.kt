@@ -21,7 +21,7 @@ import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDet
 import io.reactivex.observers.DisposableCompletableObserver
 
 abstract class DetailsContainerViewModel(
-    private val saveDetailsContainerDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
+    protected val saveDetailsContainerDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
     private val deleteDetailsContainerDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>
 ) : ViewModel() {
 

@@ -28,7 +28,7 @@ fun asDomainModel(items: List<Item>): List<YoutubeVideoDetail> {
     return items.map {
         YoutubeVideoDetail(
             file = File(""),
-            fileName = it.snippet.title,
+            title = it.snippet.title,
             videoId = it.id.videoId
         )
     }

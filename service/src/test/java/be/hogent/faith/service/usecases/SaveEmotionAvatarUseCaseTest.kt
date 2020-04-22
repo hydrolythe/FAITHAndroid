@@ -2,8 +2,8 @@ package be.hogent.faith.service.usecases
 
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.every
 import io.mockk.mockk
@@ -20,7 +20,7 @@ import java.io.IOException
 class SaveEmotionAvatarUseCaseTest {
     private lateinit var saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase
     private lateinit var observer: Scheduler
-    private lateinit var storageRepository: ITemporaryStorage
+    private lateinit var storageRepository: ITemporaryFileStorageRepository
     private var bitmap = mockk<Bitmap>()
     private lateinit var event: Event
 
@@ -32,13 +32,13 @@ class SaveEmotionAvatarUseCaseTest {
             storageRepository,
             observer
         )
-        event = EventFactory.makeEvent(nbrOfDetails = 0)
+        event = EventFactory.makeEvent(numberOfDetails = 0)
     }
 
     @Test
     fun saveBitMapUC_execute_saves() {
         val avatarFile = File("path")
-        every { storageRepository.storeBitmapTemporarily(any()) } returns Single.just(avatarFile)
+        every { storageRepository.storeBitmap(any()) } returns Single.just(avatarFile)
 
         saveEmotionAvatarUseCase.buildUseCaseObservable(
             SaveEmotionAvatarUseCase.Params(bitmap, event)
@@ -48,7 +48,7 @@ class SaveEmotionAvatarUseCaseTest {
 
         // The image should be stored in the repo
         verify {
-            storageRepository.storeBitmapTemporarily(bitmap)
+            storageRepository.storeBitmap(bitmap)
             // The image should be added to the event
             assertEquals(avatarFile, event.emotionAvatar)
         }
@@ -56,7 +56,7 @@ class SaveEmotionAvatarUseCaseTest {
 
     @Test
     fun saveBitMapUC_execute_failsOnRepoError() {
-        every { storageRepository.storeBitmapTemporarily(any()) } returns Single.error(
+        every { storageRepository.storeBitmap(any()) } returns Single.error(
             IOException()
         )
 

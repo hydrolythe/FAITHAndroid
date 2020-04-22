@@ -5,20 +5,12 @@ import java.io.Serializable
 import java.util.UUID
 
 /**
- * A detail that can be part of an event, solution,...
+ * A detail that can be part of an event, backpack,...
  */
 sealed class Detail(
-    /**
-     * A relative path of where the actual content of the detail is saved.
-     * Relative because when getting it from local storage the necessary directory structure is
-     * added before the path.
-     */
     var file: File,
     var title: String = "",
-    val uuid: UUID = UUID.randomUUID(),
-    // YoutubeVideo
-    val videoId: String = ""
-
+    val uuid: UUID = UUID.randomUUID()
 ) : Serializable
 
 class DrawingDetail(
@@ -52,8 +44,8 @@ class ExternalVideoDetail(
 ) : Detail(file, title, uuid)
 
 class YoutubeVideoDetail(
-    file: File,
-    fileName: String = "",
+    file: File = File("YoutubeVideoDetail/has/no/file"),
+    title: String = "",
     uuid: UUID = UUID.randomUUID(),
-    videoId: String
-) : Detail(file, fileName, uuid, videoId)
+    val videoId: String
+) : Detail(file, title, uuid)

@@ -3,7 +3,7 @@ package be.hogent.faith.faith.cityScreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.LogoutUserUseCase
+import be.hogent.faith.service.usecases.user.LogoutUserUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import timber.log.Timber
 

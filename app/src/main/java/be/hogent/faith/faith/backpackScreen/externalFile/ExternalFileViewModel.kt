@@ -9,7 +9,7 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
+import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detail.externalVideo.CreateExternalVideoDetailUseCase
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
 import io.reactivex.observers.DisposableSingleObserver
@@ -51,7 +51,7 @@ class ExternalFileViewModel(
     fun loadExistingDetail(detail: Detail) {
         // TODO tijdelijk tot encryptie
         if (detail.file.path.startsWith("users")) {
-            val params = LoadDetailFileUseCase.LoadFileParams(detail)
+            val params = LoadDetailFileUseCase.Params(detail)
             loadDetailFile.execute(params, LoadFileUseCaseHandler())
         } else
             _currentFile.value = detail.file

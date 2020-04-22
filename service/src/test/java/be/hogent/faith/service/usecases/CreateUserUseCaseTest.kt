@@ -1,7 +1,8 @@
 package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.UserRepository
+import be.hogent.faith.service.repositories.IUserRepository
+import be.hogent.faith.service.usecases.user.CreateUserUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
@@ -17,14 +18,18 @@ class CreateUserUseCaseTest {
     private lateinit var createUserUseCase: CreateUserUseCase
     private lateinit var executor: Executor
     private lateinit var scheduler: Scheduler
-    private lateinit var repository: UserRepository
+    private lateinit var repository: IUserRepository
 
     @Before
     fun setUp() {
         executor = mockk()
         scheduler = mockk()
         repository = mockk(relaxed = true)
-        createUserUseCase = CreateUserUseCase(repository, scheduler)
+        createUserUseCase =
+            CreateUserUseCase(
+                repository,
+                scheduler
+            )
     }
 
     @Test

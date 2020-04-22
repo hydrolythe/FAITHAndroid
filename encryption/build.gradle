@@ -1,0 +1,67 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    def globalConfig = rootProject.extensions.getByName("ext")
+    compileSdkVersion globalConfig["androidCompileSdkVersion"]
+
+    defaultConfig {
+        minSdkVersion globalConfig["androidMinSdkVersion"]
+        targetSdkVersion globalConfig["androidTargetSdkVersion"]
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    defaultConfig {
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+}
+
+dependencies {
+    implementation project(':domain')
+    implementation project(':service')
+    implementation project(':util')
+
+    def commonDependencies = rootProject.ext.commonDependencies
+    def testDependencies = rootProject.ext.testDependencies
+    def injectionDependencies = rootProject.ext.injectionDependencies
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation commonDependencies.kotlin
+    implementation commonDependencies.threeTenABP
+    implementation injectionDependencies.koin
+
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.mockk
+    testImplementation testDependencies.koinTesting
+    androidTestImplementation testDependencies.koinTesting
+    // TODO: add deps to dependencies.gradle
+
+    implementation("com.google.crypto.tink:tink-android:1.2.2")
+    testImplementation("com.google.crypto.tink:tink:1.2.2") {
+        exclude group:'com.google.crypto.tink', module:'tink-android'
+    }
+    // TODO: check if this can be removed
+    annotationProcessor("com.google.auto.service:auto-service:1.0-rc4")
+
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation "com.squareup.moshi:moshi-kotlin:1.9.1"
+    implementation "com.squareup.retrofit2:converter-moshi:2.6.2"
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
+    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+}
+
+repositories {
+    mavenCentral()
+}

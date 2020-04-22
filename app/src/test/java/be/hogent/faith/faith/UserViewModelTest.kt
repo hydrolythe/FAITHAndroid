@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
-import be.hogent.faith.service.usecases.GetUserUseCase
+import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
@@ -14,7 +14,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.observers.DisposableCompletableObserver
-import io.reactivex.subscribers.DisposableSubscriber
+import io.reactivex.observers.DisposableObserver
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -113,7 +113,7 @@ class UserViewModelTest {
     @Test
     fun userViewModel_getUser_callUseCaseAndNotifiesSuccess() {
         // Arrange
-        val observer = slot<DisposableSubscriber<User>>()
+        val observer = slot<DisposableObserver<User>>()
         val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
         userViewModel.getLoggedInUserState.observeForever(successObserver)
 
@@ -134,7 +134,7 @@ class UserViewModelTest {
 
     @Test
     fun userViewModel_getUser_callUseCaseAndNotifiesFailure() {
-        val observer = slot<DisposableSubscriber<User>>()
+        val observer = slot<DisposableObserver<User>>()
         val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
         userViewModel.getLoggedInUserState.observeForever(successObserver)
 

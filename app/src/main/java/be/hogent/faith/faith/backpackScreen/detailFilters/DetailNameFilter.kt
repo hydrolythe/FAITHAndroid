@@ -10,9 +10,9 @@ class DetailNameFilter(var searchString: String) : DetailFilter {
         if (searchWords.isEmpty()) {
             return true
         } else {
-        return searchWords.all {
-            detail.title.toLowerCase(Locale.ROOT).contains(it.toLowerCase(Locale.ROOT))
-        }
+            return searchWords.all {
+                detail.title.toLowerCase(Locale.ROOT).contains(it.toLowerCase(Locale.ROOT))
+            }
         }
     }
 }

@@ -31,6 +31,10 @@ data class User(
     }
 
     fun clearEvents() {
-        _events = HashMap<UUID, Event>()
+        _events = HashMap()
+    }
+
+    fun removeEvent(event: Event) {
+        _events.remove(event.uuid)
     }
 }
