@@ -17,6 +17,7 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
@@ -30,6 +31,7 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.util.replaceChildFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import java.lang.UnsupportedOperationException
 
 abstract class BackpackDetailFragment : Fragment() {
 
@@ -81,6 +83,7 @@ abstract class BackpackDetailFragment : Fragment() {
                 is AudioDetail -> AudioFragment.newInstance()
                 is ExternalVideoDetail -> ExternalVideoFragment.newInstance()
                 is YoutubeVideoDetail -> YoutubeVideoFragment.newInstance()
+                is FilmDetail -> throw UnsupportedOperationException("Film is not part of the backpack")
             }
         }
     }

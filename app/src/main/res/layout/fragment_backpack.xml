@@ -5,13 +5,9 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="backpackViewModel"
             type="be.hogent.faith.faith.backpackScreen.BackpackViewModel" />
-        <variable
-            name="editModeState"
-            type="be.hogent.faith.faith.backpackScreen.EditModeState" />
         <import type="android.view.View" />
     </data>
 

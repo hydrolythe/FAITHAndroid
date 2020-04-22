@@ -7,15 +7,18 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
+import org.threeten.bp.LocalDate
 
 class CombinedDetailFilter {
     val titleFilter = DetailNameFilter("")
+    val dateFilter = DetailDateFilter(LocalDate.MIN.plusDays(1), LocalDate.MAX.minusDays(1))
 
     val hasTextDetailFilter = ToggleableDetailFilter(DetailTypeFilter(TextDetail::class))
     val hasPhotoDetailFilter = ToggleableDetailFilter(DetailTypeFilter(PhotoDetail::class))
     val hasAudioDetailFilter = ToggleableDetailFilter(DetailTypeFilter(AudioDetail::class))
     val hasDrawingDetailFilter = ToggleableDetailFilter(DetailTypeFilter(DrawingDetail::class))
-    val hasExternalVideoDetailFilter = ToggleableDetailFilter(DetailTypeFilter(ExternalVideoDetail::class))
+    val hasExternalVideoDetailFilter =
+        ToggleableDetailFilter(DetailTypeFilter(ExternalVideoDetail::class))
     val hasVideoDetailFilter = ToggleableDetailFilter(DetailTypeFilter(YoutubeVideoDetail::class))
 
     fun filter(details: List<Detail>): List<Detail> {
@@ -43,8 +46,9 @@ class CombinedDetailFilter {
         if (filteredDetails.isEmpty() && !isDetailTypeFilterActive()) {
             return details.sortedBy { it.javaClass.canonicalName }
         }
-        return filteredDetails.filter(titleFilter)
+        return filteredDetails.filter(titleFilter).filter(dateFilter)
     }
+
     private fun isDetailTypeFilterActive(): Boolean {
         return hasExternalVideoDetailFilter.isEnabled || hasPhotoDetailFilter.isEnabled || hasDrawingDetailFilter.isEnabled || hasTextDetailFilter.isEnabled || hasAudioDetailFilter.isEnabled || hasVideoDetailFilter.isEnabled
     }

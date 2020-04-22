@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.di
 
 import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
@@ -19,6 +20,7 @@ import be.hogent.faith.faith.details.text.view.ViewTextDetailViewModel
 import be.hogent.faith.faith.details.text.create.TextDetailViewModel
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerViewModel
+import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
@@ -61,6 +63,7 @@ val appModule = module(override = true) {
     viewModel { (event: Event) -> EventViewModel(get(), get(), event) }
     viewModel { EventViewModel(get(), get()) }
     viewModel { (backpack: Backpack) -> BackpackViewModel(get(named("SaveBackpackDetailUseCase")), get(named("DeleteBackpackDetailUseCase")), backpack, get(), get()) }
+    viewModel { (cinema: Cinema) -> CinemaOverviewViewModel(get(named("SaveCinemaDetailUseCase")), get(named("DeleteCinemaDetailUseCase")), cinema) }
     viewModel { DrawViewModel() }
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }

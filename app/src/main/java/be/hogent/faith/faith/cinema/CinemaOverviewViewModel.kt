@@ -17,24 +17,37 @@ class CinemaOverviewViewModel(
     cinema
 ) {
 
-    private val _mijnBestandenButtonClicked = SingleLiveEvent<Unit>()
-    val mijnBestandenButtonClicked: LiveData<Unit> = _mijnBestandenButtonClicked
+    private val _filesButtonClicked = SingleLiveEvent<Unit>()
+    val filesButtonClicked: LiveData<Unit> = _filesButtonClicked
 
-    private val _mijnFilmpjesButtonClicked = SingleLiveEvent<Unit>()
-    val mijnFilmpjesButtonClicked: LiveData<Unit> = _mijnFilmpjesButtonClicked
+    private val _filmsButtonClicked = SingleLiveEvent<Unit>()
+    val filmsButtonClicked: LiveData<Unit> = _filmsButtonClicked
 
-    private val _maakFilmButtonClicked = SingleLiveEvent<Unit>()
-    val maakFilmButtonClicked: LiveData<Unit> = _maakFilmButtonClicked
+    private val _makeFilmButtonClicked = SingleLiveEvent<Unit>()
+    val maakFilmButtonClicked: LiveData<Unit> = _makeFilmButtonClicked
 
-    fun onMijnBestandenClicked() {
-        _mijnBestandenButtonClicked.call()
+    private val _addButtonClicked = SingleLiveEvent<Unit>()
+    val addButtonClicked: LiveData<Unit> = _addButtonClicked
+
+    fun onFilesButtonClicked() {
+            details = detailsContainer.getFiles()
+            _filesButtonClicked.call()
     }
 
-    fun onMijnFilmpjesClicked() {
-        _mijnFilmpjesButtonClicked.call()
+    fun onFilmsButtonClicked() {
+        details = detailsContainer.films
+        _filmsButtonClicked.call()
     }
 
-    fun onMaakFilmClicked() {
-        _maakFilmButtonClicked.call()
+    fun onMakeFilmClicked() {
+        _makeFilmButtonClicked.call()
+    }
+
+    fun onAddButtonClicked() {
+        _addButtonClicked.call()
+    }
+
+    init {
+        searchString.value = "test"
     }
 }

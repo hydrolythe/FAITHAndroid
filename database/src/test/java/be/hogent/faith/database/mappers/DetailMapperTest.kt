@@ -1,13 +1,17 @@
 package be.hogent.faith.database.mappers
 
 import be.hogent.faith.database.converters.FileConverter
+import be.hogent.faith.database.converters.LocalDateTimeConverter
 import be.hogent.faith.database.factory.EntityFactory
 import be.hogent.faith.database.models.DetailEntity
 import be.hogent.faith.database.models.DetailType
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.util.factory.DetailFactory
 import be.hogent.faith.util.factory.EventFactory
 import org.junit.Assert.assertEquals
@@ -38,10 +42,15 @@ class DetailMapperTest {
     ) {
         assertEquals(entity.uuid, model.uuid.toString())
         assertEquals(entity.file, FileConverter().toString(model.file))
+        assertEquals(entity.fileName, model.title)
+        assertEquals(entity.dateTime, LocalDateTimeConverter().toString(model.dateTime))
         when (model) {
             is AudioDetail -> assertEquals(DetailType.AUDIO, entity.type)
             is PhotoDetail -> assertEquals(DetailType.PHOTO, entity.type)
             is TextDetail -> assertEquals(DetailType.TEXT, entity.type)
+            is ExternalVideoDetail -> assertEquals(DetailType.EXTERNAL_VIDEO, entity.type)
+            is YoutubeVideoDetail -> assertEquals(DetailType.VIDEO, entity.type)
+            is FilmDetail -> assertEquals(DetailType.FILM, entity.type)
             else -> assertEquals(DetailType.DRAWING, entity.type)
         }
     }

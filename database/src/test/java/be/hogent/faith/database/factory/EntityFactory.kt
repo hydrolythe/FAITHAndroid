@@ -24,6 +24,7 @@ object EntityFactory {
                 "",
                 DataFactory.randomUUID().toString(),
                 "",
+                LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
                 DetailType.PHOTO
             )
             rand < 0.50 -> DetailEntity(
@@ -31,6 +32,7 @@ object EntityFactory {
                 "",
                 DataFactory.randomUUID().toString(),
                 "",
+                LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
                 DetailType.DRAWING
             )
             rand < 0.75 -> DetailEntity(
@@ -38,6 +40,7 @@ object EntityFactory {
                 "",
                 DataFactory.randomUUID().toString(),
                 "",
+                LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
                 DetailType.AUDIO
             )
             else -> DetailEntity(
@@ -45,6 +48,7 @@ object EntityFactory {
                 "",
                 DataFactory.randomUUID().toString(),
                 "",
+                LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
                 DetailType.TEXT
             )
         }

@@ -7,9 +7,10 @@ data class DetailEntity(
     var fileName: String = "",
     val uuid: String = UUID.randomUUID().toString(),
     val videoId: String = "",
+    val dateTime: String = "",
     val type: DetailType? = null
 )
 
 enum class DetailType {
-    TEXT, AUDIO, DRAWING, PHOTO, VIDEO, EXTERNAL_VIDEO
+    TEXT, AUDIO, DRAWING, PHOTO, VIDEO, EXTERNAL_VIDEO, FILM
 }

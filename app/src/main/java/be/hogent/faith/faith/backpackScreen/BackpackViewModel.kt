@@ -5,12 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
@@ -35,9 +30,6 @@ class BackpackViewModel(
 
     private val _viewButtons = MutableLiveData<Boolean>()
     val viewButtons: LiveData<Boolean> = _viewButtons
-
-    private val _showSaveDialog = SingleLiveEvent<Detail>()
-    val showSaveDialog: LiveData<Detail> = _showSaveDialog
 
     private val _openDetailMode = SingleLiveEvent<OpenDetailMode>()
     val openDetailMode: LiveData<OpenDetailMode> = _openDetailMode
@@ -67,23 +59,10 @@ class BackpackViewModel(
         }
     }
 
-    fun showSaveDialog(detail: Detail) {
-        _showSaveDialog.postValue(detail)
-    }
-
-    fun saveCurrentDetail(user: User, detail: Detail) {
-        when (detail) {
-            is DrawingDetail -> saveDrawingDetail(user, showSaveDialog.value as DrawingDetail)
-            is TextDetail -> saveTextDetail(user, showSaveDialog.value as TextDetail)
-            is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
-            is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
-            is ExternalVideoDetail -> saveExternalVideoDetail(
-                    user,
-                    showSaveDialog.value as ExternalVideoDetail
-            )
-            is YoutubeVideoDetail -> saveYoutubeDetail(user, detail)
-        }
-        _currentFile.postValue(null)
+    override fun saveCurrentDetail(user: User, detail: Detail) {
+        super.saveCurrentDetail(user, detail)
+        if (detail is YoutubeVideoDetail)
+            saveYoutubeDetail(user, detail)
     }
 
     fun setOpenDetailType(openDetailMode: OpenDetailMode) {

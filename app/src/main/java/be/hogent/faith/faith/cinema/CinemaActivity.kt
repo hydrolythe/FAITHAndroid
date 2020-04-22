@@ -6,7 +6,10 @@ import androidx.fragment.app.DialogFragment
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.backpackScreen.DeleteDetailDialog
+import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
+import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
+import be.hogent.faith.faith.util.replaceFragment
 
 class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavigationListener, DetailViewHolder.ExistingDetailNavigationListener,
         DeleteDetailDialog.DeleteDetailDialogListener {
@@ -24,11 +27,11 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
     }
 
     override fun startPhotoDetailFragment() {
-        TODO("Not yet implemented")
+        replaceFragment(TakePhotoFragment.newInstance(), R.id.cinema_fragment_container)
     }
 
     override fun startDrawingDetailFragment() {
-        TODO("Not yet implemented")
+        replaceFragment(DrawingDetailFragment.newInstance(), R.id.cinema_fragment_container)
     }
 
     override fun startExternalFileDetailFragment() {

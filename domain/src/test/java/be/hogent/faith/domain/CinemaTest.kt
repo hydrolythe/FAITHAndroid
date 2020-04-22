@@ -1,8 +1,8 @@
 package be.hogent.faith.domain
 
 import be.hogent.faith.domain.models.Cinema
-import be.hogent.faith.domain.models.Film
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.FilmDetail
 import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Before
@@ -12,7 +12,7 @@ class CinemaTest {
 
     private lateinit var cinema: Cinema
     private lateinit var detail: DrawingDetail
-    private lateinit var film: Film
+    private lateinit var film: FilmDetail
 
     @Before
     fun setUp() {
