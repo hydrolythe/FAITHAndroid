@@ -112,12 +112,11 @@
             android:scrollbarTrackVertical="@drawable/scrollbartrack_rectangle_rv"
             android:scrollbars="vertical"
             android:verticalScrollbarPosition="right"
-            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
-            app:layout_constraintEnd_toEndOf="@+id/rv_container"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_video_details_container"
+            app:layout_constraintEnd_toEndOf="@+id/rv_video_details_container"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/rv_container"
-            app:layout_constraintTop_toTopOf="@+id/rv_container"
-            />
+            app:layout_constraintStart_toStartOf="@+id/rv_video_details_container"
+            app:layout_constraintTop_toTopOf="@+id/rv_video_details_container" />
 
         <ImageButton
             android:id="@+id/btn_create_video"
