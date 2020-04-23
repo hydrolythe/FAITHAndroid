@@ -4,6 +4,9 @@
 
     <data>
 
+        <variable
+            name="userViewModel"
+            type="be.hogent.faith.faith.UserViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
