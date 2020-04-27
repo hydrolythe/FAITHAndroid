@@ -33,9 +33,11 @@ dependencies {
     def commonDependencies = rootProject.ext.commonDependencies
     def testDependencies = rootProject.ext.testDependencies
     def injectionDependencies = rootProject.ext.injectionDependencies
+    def networkDependencies = rootProject.ext.networkDependencies
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation commonDependencies.kotlin
+    implementation commonDependencies.rxkotlin
     implementation commonDependencies.threeTenABP
     implementation injectionDependencies.koin
 
@@ -47,16 +49,15 @@ dependencies {
 
     implementation("com.google.crypto.tink:tink-android:1.2.2")
     testImplementation("com.google.crypto.tink:tink:1.2.2") {
-        exclude group:'com.google.crypto.tink', module:'tink-android'
+        exclude group: 'com.google.crypto.tink', module: 'tink-android'
     }
     // TODO: check if this can be removed
     annotationProcessor("com.google.auto.service:auto-service:1.0-rc4")
 
-    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
-    implementation "com.squareup.moshi:moshi-kotlin:1.9.1"
-    implementation "com.squareup.retrofit2:converter-moshi:2.6.2"
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
-    implementation "io.reactivex.rxjava2:rxkotlin:2.4.0"
+    implementation networkDependencies.moshi
+    implementation networkDependencies.moshiConverter
+    implementation networkDependencies.retrofit
+    implementation networkDependencies.rxjavaAdapter
 
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
