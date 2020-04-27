@@ -6,6 +6,7 @@ import be.hogent.faith.database.common.DetailMapper
 import be.hogent.faith.database.detailcontainer.BackpackDatabase
 import be.hogent.faith.database.detailcontainer.CinemaDatabase
 import be.hogent.faith.database.detailcontainer.DetailContainerDatabase
+import be.hogent.faith.database.detailcontainer.DetailContainerMapper
 import be.hogent.faith.database.detailcontainer.DetailContainerRepository
 import be.hogent.faith.database.event.EventDatabase
 import be.hogent.faith.database.event.EventMapper
@@ -28,6 +29,7 @@ val databaseModule = module {
     single { EventMapper }
     single { DetailMapper }
     single { UserMapper }
+    single { DetailContainerMapper }
 
     single { EventRepository(get()) as IEventRepository }
     single { UserRepository(get(), get()) as IUserRepository }

@@ -59,6 +59,7 @@ dependencies {
     //test
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
+    androidTestImplementation testDependencies.koinTesting
     //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
     testImplementation(testDependencies.threeTenBP) {
         exclude group:'com.jakewharton.threetenabp', module:'threetenabp'

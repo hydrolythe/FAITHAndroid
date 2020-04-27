@@ -1,22 +1,6 @@
 package be.hogent.faith.database.repositories
 
-import be.hogent.faith.database.common.DetailMapper
-import be.hogent.faith.database.common.EncryptedDetailEntity
-import be.hogent.faith.database.detailcontainer.CinemaDatabase
-import be.hogent.faith.database.detailcontainer.DetailContainerMapper
-import be.hogent.faith.database.detailcontainer.DetailContainerRepository
-import be.hogent.faith.database.factory.EntityFactory
-import be.hogent.faith.database.user.UserMapper
-import be.hogent.faith.domain.models.Cinema
-import be.hogent.faith.service.encryption.EncryptedDetail
-//import be.hogent.faith.service.usecases.util.EncryptedDetailFactory
-import be.hogent.faith.util.factory.DetailFactory
-import be.hogent.faith.util.factory.UserFactory
-import io.mockk.every
-import io.mockk.mockk
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import org.junit.Test
+// import be.hogent.faith.service.usecases.util.EncryptedDetailFactory
 
 class CinemaRepositoryTest {
     /*

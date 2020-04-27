@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.backpackScreen
+package be.hogent.faith.faith.cinema
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,24 +18,21 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.backpackScreen.SaveDetailDialog
 import be.hogent.faith.faith.backpackScreen.externalFile.AddExternalFileFragment
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailFragment
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.view.ViewYoutubeVideoFragment
-import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.externalVideo.view.ViewExternalVideoFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
-import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.util.replaceChildFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-abstract class BackpackDetailFragment : Fragment() {
+abstract class CinemaDetailFragment : Fragment() {
 
-    private val backpackViewModel: BackpackViewModel by sharedViewModel()
+    private val cinemaViewModel: CinemaOverviewViewModel by sharedViewModel()
     private lateinit var editDetailBinding: FragmentEditFileBinding
     private lateinit var saveDialog: SaveDetailDialog
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
@@ -49,11 +46,11 @@ abstract class BackpackDetailFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_edit_file, container, false)
         editDetailBinding.lifecycleOwner = this
 
-        backpackViewModel.showSaveDialog.observe(this, Observer {
-            if (it != null && backpackViewModel.openDetailMode.value != OpenDetailMode.EDIT)
+        cinemaViewModel.showSaveDialog.observe(viewLifecycleOwner, Observer {
+            if (it != null && cinemaViewModel.openDetailMode.value != OpenDetailMode.EDIT)
                 showSaveDialog(it)
             else
-                backpackViewModel.saveCurrentDetail(userViewModel.user.value!!, it)
+                cinemaViewModel.saveCurrentDetail(userViewModel.user.value!!, it)
         })
 
         return editDetailBinding.root
@@ -63,50 +60,32 @@ abstract class BackpackDetailFragment : Fragment() {
 
         saveDialog = SaveDetailDialog.newInstance(detail)
         saveDialog.show(requireActivity().supportFragmentManager, null)
-        backpackViewModel.setCurrentFile(detail)
+        cinemaViewModel.setCurrentFile(detail)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setChildFragment(backpackViewModel.currentFile.value)
-        backpackViewModel.setCurrentFile(null)
+        setChildFragment(cinemaViewModel.currentFile.value)
+        cinemaViewModel.setCurrentFile(null)
     }
 
     abstract fun setChildFragment(detail: Detail? = null)
 
     companion object {
-        fun newInstance(detail: Detail): BackpackDetailFragment {
+        fun newInstance(detail: Detail): CinemaDetailFragment {
             return when (detail) {
-                is TextDetail -> TextFragment.newInstance()
+                is TextDetail -> throw UnsupportedOperationException("Film is not part of the backpack")
                 is DrawingDetail -> DrawingFragment.newInstance()
                 is PhotoDetail -> PhotoFragment.newInstance()
-                is AudioDetail -> AudioFragment.newInstance()
+                is AudioDetail -> throw UnsupportedOperationException("Film is not part of the backpack")
                 is ExternalVideoDetail -> ExternalVideoFragment.newInstance()
-                is YoutubeVideoDetail -> YoutubeVideoFragment.newInstance()
+                is YoutubeVideoDetail -> throw UnsupportedOperationException("Film is not part of the backpack")
                 is FilmDetail -> throw UnsupportedOperationException("Film is not part of the backpack")
             }
         }
     }
 
-    class TextFragment : BackpackDetailFragment() {
-
-        companion object {
-            fun newInstance(): TextFragment {
-                return TextFragment()
-            }
-        }
-
-        override fun setChildFragment(detail: Detail?) {
-            val childFragment = if (detail == null) {
-                TextDetailFragment.newInstance()
-            } else {
-                TextDetailFragment.newInstance(detail as TextDetail)
-            }
-            replaceChildFragment(childFragment, R.id.fragment_container_editFile)
-        }
-    }
-
-    class DrawingFragment : BackpackDetailFragment() {
+    class DrawingFragment : CinemaDetailFragment() {
 
         companion object {
             fun newInstance(): DrawingFragment {
@@ -124,7 +103,7 @@ abstract class BackpackDetailFragment : Fragment() {
         }
     }
 
-    class PhotoFragment : BackpackDetailFragment() {
+    class PhotoFragment : CinemaDetailFragment() {
 
         companion object {
             fun newInstance(): PhotoFragment {
@@ -142,25 +121,7 @@ abstract class BackpackDetailFragment : Fragment() {
         }
     }
 
-    class AudioFragment : BackpackDetailFragment() {
-
-        companion object {
-            fun newInstance(): AudioFragment {
-                return AudioFragment()
-            }
-        }
-
-        override fun setChildFragment(detail: Detail?) {
-            val childFragment = if (detail == null) {
-                RecordAudioFragment.newInstance()
-            } else {
-                RecordAudioFragment.newInstance(detail as AudioDetail)
-            }
-            replaceChildFragment(childFragment, R.id.fragment_container_editFile)
-        }
-    }
-
-    class ExternalVideoFragment : BackpackDetailFragment() {
+    class ExternalVideoFragment : CinemaDetailFragment() {
 
         companion object {
             fun newInstance(): ExternalVideoFragment {
@@ -174,7 +135,7 @@ abstract class BackpackDetailFragment : Fragment() {
         }
     }
 
-    class ExternalFileFragment : BackpackDetailFragment() {
+    class ExternalFileFragment : CinemaDetailFragment() {
 
         companion object {
             fun newInstance(): ExternalFileFragment {
@@ -184,24 +145,6 @@ abstract class BackpackDetailFragment : Fragment() {
 
         override fun setChildFragment(detail: Detail?) {
             val childFragment = AddExternalFileFragment.newInstance()
-            replaceChildFragment(childFragment, R.id.fragment_container_editFile)
-        }
-    }
-
-    class YoutubeVideoFragment : BackpackDetailFragment() {
-
-        companion object {
-            fun newInstance(): YoutubeVideoFragment {
-                return YoutubeVideoFragment()
-            }
-        }
-
-        override fun setChildFragment(detail: Detail?) {
-            val childFragment = if (detail == null) {
-                YoutubeVideoDetailFragment.newInstance()
-            } else {
-                ViewYoutubeVideoFragment.newInstance(detail as YoutubeVideoDetail)
-            }
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }
     }

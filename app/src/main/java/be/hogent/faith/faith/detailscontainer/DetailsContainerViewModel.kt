@@ -134,6 +134,9 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         _currentFile.postValue(detail)
     }
 
+    protected val _openDetailMode = SingleLiveEvent<OpenDetailMode>()
+    val openDetailMode: LiveData<OpenDetailMode> = _openDetailMode
+
     protected val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
@@ -355,3 +358,9 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
             .toLocalDate()
     }
 }
+
+/**
+ * If a detail is new --> savedialog is shown
+ * When editing an existing detail --> savedialog isn't shown
+ */
+enum class OpenDetailMode { NEW, EDIT }
