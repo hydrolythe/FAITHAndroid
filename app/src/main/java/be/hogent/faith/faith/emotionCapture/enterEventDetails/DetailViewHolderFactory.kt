@@ -54,7 +54,6 @@ object DetailViewHolderFactory {
                 thumbnailView,
                 existingDetailNavigationListener
             )
-            DetailTypes.EXTERNAL_VIDEO_DETAIL -> createExternalVideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
             // TEXT_DETAIL
             else -> createTextDetailViewHolder(
                     thumbnailView,

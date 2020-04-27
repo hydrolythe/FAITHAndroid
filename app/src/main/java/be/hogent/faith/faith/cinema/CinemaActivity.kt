@@ -12,7 +12,8 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.util.replaceFragment
 
 class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavigationListener, DetailViewHolder.ExistingDetailNavigationListener,
-        DeleteDetailDialog.DeleteDetailDialogListener {
+        DeleteDetailDialog.DeleteDetailDialogListener,
+        CinemaCreateVideoFragment.CinemaCreateVideoFragmentNavigationListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +39,20 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
         TODO("Not yet implemented")
     }
 
+    override fun startCreateVideoFragment() {
+        replaceFragment(CinemaCreateVideoFragment.newInstance(), R.id.cinema_fragment_container)
+    }
+
     override fun closeCinema() {
         finish()
+    }
+
+    override fun startViewVideoFragment() {
+        TODO("Not yet implemented")
+    }
+
+    override fun goBack() {
+        supportFragmentManager.popBackStack()
     }
 
     override fun openDetailScreenFor(detail: Detail) {

@@ -27,7 +27,7 @@ class CinemaOverviewViewModel(
     val filmsButtonClicked: LiveData<Unit> = _filmsButtonClicked
 
     private val _makeFilmButtonClicked = SingleLiveEvent<Unit>()
-    val maakFilmButtonClicked: LiveData<Unit> = _makeFilmButtonClicked
+    val makeFilmButtonClicked: LiveData<Unit> = _makeFilmButtonClicked
 
     private val _addButtonClicked = SingleLiveEvent<Unit>()
     val addButtonClicked: LiveData<Unit> = _addButtonClicked

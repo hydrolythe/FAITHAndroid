@@ -39,7 +39,7 @@ class CinemaStartScreenFragment : Fragment() {
 
     private val cinemaOverviewViewModel: CinemaOverviewViewModel by sharedViewModel {
         parametersOf(
-            userViewModel.user.value!!.cinema
+                userViewModel.user.value!!.cinema
         )
     }
 
@@ -82,6 +82,10 @@ class CinemaStartScreenFragment : Fragment() {
     }
 
     private fun startListeners() {
+
+        cinemaOverviewViewModel.makeFilmButtonClicked.observe(this, Observer {
+            navigation?.startCreateVideoFragment()
+        })
         val toggle =
             CompoundButton.OnCheckedChangeListener { compoundButton: CompoundButton, isChecked: Boolean ->
                 if (isChecked && compoundButton == binding.btnDetails) {
@@ -218,6 +222,7 @@ class CinemaStartScreenFragment : Fragment() {
         fun startPhotoDetailFragment()
         fun startDrawingDetailFragment()
         fun startExternalFileDetailFragment()
+        fun startCreateVideoFragment()
         fun closeCinema()
     }
 }

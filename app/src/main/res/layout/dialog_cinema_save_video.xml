@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="userViewModel"
+            type="be.hogent.faith.faith.UserViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cinema_create_video"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/illustratie_cinema_opslaan">
+
+
+        <ImageButton
+            android:id="@+id/btn_cinema_cancel"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/ic_return"
+            android:contentDescription="@string/cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_cardview_vertical1"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.22" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rv_cardview_vertical2"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.90" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_cardview_horizontal1"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.30" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_cardview_horizontal2"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.72" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/save_video_cardview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:cardBackgroundColor="@color/background_save_event"
+            app:cardCornerRadius="60dp"
+            app:cardElevation="@dimen/panel_elevation"
+            app:layout_constraintBottom_toTopOf="@+id/guide_cardview_horizontal2"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rv_cardview_vertical2"
+            app:layout_constraintStart_toStartOf="@+id/guide_cardview_vertical1"
+            app:layout_constraintTop_toTopOf="@+id/guide_cardview_horizontal1">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintlayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/save_event_btn_date"
+                    style="@style/faith_calendar_button"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/event_textInput_height"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="64dp"
+                    android:contentDescription="@string/save"
+                    android:elevation="0dp"
+                    android:fontFamily="@font/sourcesanspro"
+                    android:text="Datum"
+                    android:textAppearance="?attr/textAppearanceSubtitle1"
+                    android:textColor="@color/black"
+                    app:icon="@drawable/ic_kalender"
+                    app:iconGravity="textStart"
+                    app:iconPadding="5dp"
+                    app:iconSize="44dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/save_video_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="35dp"
+                    android:text="@string/je_filmpje_opslaan"
+                    android:textColor="@color/caption"
+                    android:textSize="45sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/textInputLayout_videotitle"
+                    app:layout_constraintEnd_toEndOf="@+id/textInputLayout_videotitle"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/textInputLayout_videotitle"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_videotitle"
+                    style="@style/faith_textInputLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="48dp"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginEnd="48dp"
+                    android:hint="@string/save_video_title"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/save_video_title"
+                    app:layout_constraintVertical_weight="1"
+                    app:startIconDrawable="@drawable/ic_titel">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txt_save_video_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:nextFocusDown="@+id/txt_save_event_notes"
+                        android:text="Typ hier de titel van je filmpje">
+
+                        <requestFocus />
+                    </com.google.android.material.textfield.TextInputEditText>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_save_event_save"
+                    style="@style/faith_button"
+                    android:layout_width="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/save_btn"
+                    android:contentDescription="@string/save"
+                    android:text="@string/save"
+                    app:cornerRadius="40dp"
+                    app:icon="@drawable/save_btn"
+                    app:iconGravity="textStart"
+                    app:iconPadding="5dp"
+                    app:iconSize="44dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout_videotitle" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
