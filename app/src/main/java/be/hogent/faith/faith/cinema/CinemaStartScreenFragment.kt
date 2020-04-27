@@ -10,8 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
-import android.widget.TableLayout
-import android.widget.PopupWindow
 import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -22,11 +20,9 @@ import be.hogent.faith.databinding.FragmentCinemaStartBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
-import com.google.android.material.picker.CalendarConstraints
-import com.google.android.material.picker.MaterialDatePicker
-import com.google.android.material.picker.Month
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.fragment_cinema_start.btn_cinema_chooseDate
-import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_chooseDate
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
@@ -89,7 +85,7 @@ class CinemaStartScreenFragment : Fragment() {
         val toggle =
             CompoundButton.OnCheckedChangeListener { compoundButton: CompoundButton, isChecked: Boolean ->
                 if (isChecked && compoundButton == binding.btnDetails) {
-                  cinemaOverviewViewModel.onFilesButtonClicked()
+                    cinemaOverviewViewModel.onFilesButtonClicked()
                 } else if (isChecked && compoundButton == binding.btnFilms) {
                     cinemaOverviewViewModel.onFilmsButtonClicked()
                 }
@@ -199,10 +195,10 @@ class CinemaStartScreenFragment : Fragment() {
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         val picker: MaterialDatePicker<*>
         builder
-            .setTitleTextResId(R.string.daterange)
+            .setTitleText(R.string.daterange)
             .setCalendarConstraints(
                 CalendarConstraints.Builder()
-                    .setEnd(Month.today())
+                    .setEnd(MaterialDatePicker.thisMonthInUtcMilliseconds())
                     .build()
             )
         picker = builder.build()

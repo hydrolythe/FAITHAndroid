@@ -17,9 +17,8 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentLibraryEventlistBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
-import com.google.android.material.picker.CalendarConstraints
-import com.google.android.material.picker.MaterialDatePicker
-import com.google.android.material.picker.Month
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_chooseDate
 import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_searchAudio
 import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_searchPhotos
@@ -156,10 +155,10 @@ class EventListFragment : Fragment() {
         val builder = MaterialDatePicker.Builder.dateRangePicker()
         val picker: MaterialDatePicker<*>
         builder
-            .setTitleTextResId(R.string.daterange)
+            .setTitleText(R.string.datumVan)
             .setCalendarConstraints(
                 CalendarConstraints.Builder()
-                    .setEnd(Month.today())
+                    .setEnd(MaterialDatePicker.thisMonthInUtcMilliseconds())
                     .build()
             )
         picker = builder.build()

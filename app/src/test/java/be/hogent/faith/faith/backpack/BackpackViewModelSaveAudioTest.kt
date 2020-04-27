@@ -7,7 +7,8 @@ import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
-import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
+import be.hogent.faith.service.usecases.backpack.GetBackPackFilesUseCase
+import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.mockk.Called
 import io.mockk.called
@@ -24,7 +25,9 @@ class BackpackViewModelSaveAudioTest {
     private lateinit var viewModel: BackpackViewModel
     private val saveAudioUseCase =
         mockk<SaveDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
-    private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
+    private val getBackPackFilesUseCase = mockk<GetBackPackFilesUseCase>(relaxed = true)
+    private val backpack = mockk<Backpack>(relaxed = true)
+    private val loadDetailFileUseCase = mockk<LoadDetailFileUseCase<Backpack>>(relaxed = true)
     private val detail = mockk<AudioDetail>()
     private val user = mockk<User>(relaxed = true)
 
@@ -36,9 +39,9 @@ class BackpackViewModelSaveAudioTest {
         viewModel = BackpackViewModel(
             saveAudioUseCase,
             mockk(),
-            mockk(),
-            getBackPackFilesDummyUseCase,
-            mockk()
+            backpack,
+            loadDetailFileUseCase,
+            getBackPackFilesUseCase
         )
     }
 

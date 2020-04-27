@@ -14,9 +14,11 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.detailscontainer.detailFilters.CombinedDetailFilter
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
+import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import org.threeten.bp.Instant
@@ -27,6 +29,7 @@ import org.threeten.bp.format.DateTimeFormatter
 abstract class DetailsContainerViewModel<T : DetailsContainer>(
     private val saveDetailsContainerDetailUseCase: SaveDetailsContainerDetailUseCase<T>,
     private val deleteDetailsContainerDetailUseCase: DeleteDetailsContainerDetailUseCase<T>,
+    private val loadDetailFileUseCase: LoadDetailFileUseCase<T>,
     protected val detailsContainer: T
 ) : ViewModel() {
 
@@ -127,6 +130,10 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         _currentFile.postValue(detail)
     }
 
+    fun setCurrentFileAndLoadCorrespongFile(detail: Detail?) {
+        _currentFile.postValue(detail)
+    }
+
     protected val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
@@ -219,8 +226,23 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
                 user,
                 showSaveDialog.value as ExternalVideoDetail
             )
+            is YoutubeVideoDetail -> saveYoutubeDetail(user, detail)
         }
         _currentFile.postValue(null)
+    }
+
+    fun getCurrentDetailFile(detail: Detail) {
+        val params = LoadDetailFileUseCase.Params(detail, detailsContainer)
+        loadDetailFileUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _currentFile.postValue(detail)
+                _goToDetail.value = detail
+            }
+
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_load_detail_failed)
+            }
+        })
     }
 
     fun saveTextDetail(user: User, detail: TextDetail) {
@@ -288,12 +310,26 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         })
     }
 
+    // Youtube videos are only in the Backpack, so this is not in the [DetailsContainerViewModel].
+    fun saveYoutubeDetail(user: User, detail: YoutubeVideoDetail) {
+        val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
+        saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _infoMessage.postValue(R.string.save_video_success)
+            }
+
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_save_external_video_failed)
+            }
+        })
+    }
+
     fun goToDetail(detail: Detail) {
         _goToDetail.postValue(detail)
     }
 
     fun deleteDetail(detail: Detail) {
-        val params = DeleteDetailsContainerDetailUseCase.Params(detail)
+        val params = DeleteDetailsContainerDetailUseCase.Params(detail, detailsContainer)
         deleteDetailsContainerDetailUseCase.execute(params, DeleteDetailUseCaseHandler())
     }
 

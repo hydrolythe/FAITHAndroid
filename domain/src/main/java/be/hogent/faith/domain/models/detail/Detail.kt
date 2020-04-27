@@ -17,9 +17,7 @@ sealed class Detail(
     var file: File,
     var title: String = "",
     val uuid: UUID = UUID.randomUUID(),
-    var dateTime: LocalDateTime = LocalDateTime.now(),
-    // YoutubeVideo
-    val videoId: String = ""
+    var dateTime: LocalDateTime = LocalDateTime.now()
 ) : Serializable
 
 class DrawingDetail(
@@ -58,12 +56,12 @@ class ExternalVideoDetail(
 ) : Detail(file, title, uuid, dateTime)
 
 class YoutubeVideoDetail(
-    file: File,
-    fileName: String = "",
+    file: File = File("YoutubeVideoDetail/has/no/file"),
+    title: String = "",
     uuid: UUID = UUID.randomUUID(),
-    videoId: String,
+    val videoId: String,
     dateTime: LocalDateTime = LocalDateTime.now()
-) : Detail(file, fileName, uuid, dateTime, videoId)
+) : Detail(file, title, uuid, dateTime)
 
 class FilmDetail(
     file: File,

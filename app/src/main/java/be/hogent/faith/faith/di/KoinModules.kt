@@ -55,22 +55,22 @@ object KoinModules {
 
 val appModule = module(override = true) {
 
-    // Scheduler for use cases
+    // Observing scheduler for use cases
     single { AndroidSchedulers.mainThread() }
 
     // ViewModels
     viewModel { CityScreenViewModel(get()) }
     viewModel { (event: Event) -> EventViewModel(get(), get(), event) }
     viewModel { EventViewModel(get(), get()) }
-    viewModel { (backpack: Backpack) -> BackpackViewModel(get(named("SaveBackpackDetailUseCase")), get(named("DeleteBackpackDetailUseCase")), backpack, get(), get()) }
-    viewModel { (cinema: Cinema) -> CinemaOverviewViewModel(get(named("SaveCinemaDetailUseCase")), get(named("DeleteCinemaDetailUseCase")), cinema) }
+    viewModel { (backpack: Backpack) -> BackpackViewModel(get(named("SaveBackpackDetailUseCase")), get(named("DeleteBackpackDetailUseCase")), backpack, get(named("LoadBackpackDetailFileUseCase")), get()) }
+    viewModel { (cinema: Cinema) -> CinemaOverviewViewModel(get(named("SaveCinemaDetailUseCase")), get(named("DeleteCinemaDetailUseCase")), get(named("LoadCinemaDetailFileUseCase")), cinema) }
     viewModel { DrawViewModel() }
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }
     viewModel { TextDetailViewModel(get(), get(), get()) }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { WelcomeViewModel(get()) }
-    viewModel { AudioDetailViewModel(get(), get(), get()) }
+    viewModel { AudioDetailViewModel(get(), get()) }
     viewModel { WelcomeViewModel(get()) }
     viewModel { RegisterUserViewModel(get()) }
     viewModel { RegisterUserInfoViewModel(get()) }
@@ -80,7 +80,7 @@ val appModule = module(override = true) {
     viewModel { TakePhotoViewModel(get()) }
     viewModel { YoutubeVideoDetailViewModel(get()) }
     viewModel { FaithYoutubePlayerViewModel() }
-    viewModel { ExternalFileViewModel(get(), get(), get()) }
+    viewModel { ExternalFileViewModel(get(), get()) }
     viewModel { (user: User) -> EventListViewModel(user, get()) }
     viewModel { EventDetailsViewModel() }
     viewModel { ViewPhotoDetailViewModel() }

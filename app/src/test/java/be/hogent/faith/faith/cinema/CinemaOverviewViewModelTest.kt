@@ -11,6 +11,7 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.TestUtils
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
+import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.mockk.mockk
 import org.junit.After
@@ -64,13 +65,17 @@ class CinemaOverviewViewModelTest {
         mockk<SaveDetailsContainerDetailUseCase<Cinema>>()
     private val deleteDetailsContainerDetailUseCase =
         mockk<DeleteDetailsContainerDetailUseCase<Cinema>>()
+    private val loadDetailFileUseCase = mockk<LoadDetailFileUseCase<Cinema>>()
     private val cinema = Cinema()
 
     @Before
     fun setUp() {
         details.forEach { cinema.addDetail(it) }
         viewModel = CinemaOverviewViewModel(
-            saveDetailsContainerDetailUseCase, deleteDetailsContainerDetailUseCase, cinema
+            saveDetailsContainerDetailUseCase,
+            deleteDetailsContainerDetailUseCase,
+            loadDetailFileUseCase,
+            cinema
         )
         viewModel.filteredDetails.observeForever(detailssObserver)
     }

@@ -13,7 +13,6 @@ import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.R
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.faith.util.combineWith
-import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.util.toMinutesSecondString
 import io.reactivex.observers.DisposableSingleObserver
@@ -23,8 +22,7 @@ import kotlin.math.roundToLong
 
 class AudioDetailViewModel(
     private val createAudioDetailUseCase: CreateAudioDetailUseCase,
-    private val tempFileProvider: TempFileProvider,
-    private val loadDetailFile: LoadDetailFileUseCase
+    private val tempFileProvider: TempFileProvider
 ) : ViewModel(), DetailViewModel<AudioDetail> {
 
     private val _savedDetail = MutableLiveData<AudioDetail>()
@@ -193,11 +191,13 @@ class AudioDetailViewModel(
         this.existingDetail = existingDetail
         _saveButtonEnabled.value = false
         _deleteButtonEnabled.value = false
+        /*
         // TODO tijdelijk tot encryptie
         if (existingDetail.file.path.startsWith("users")) {
-            val params = LoadDetailFileUseCase.LoadFileParams(existingDetail)
+            val params = LoadDetailFileUseCase.Params(existingDetail)
             loadDetailFile.execute(params, LoadFileUseCaseHandler())
         } else
+        */
             _file.value = existingDetail.file
     }
 

@@ -206,7 +206,7 @@
                         android:layout_marginBottom="16dp"
                         android:background="@drawable/save_btn"
                         android:contentDescription="@string/save"
-                        android:onClick="@{() -> userViewModel.saveEvent(eventViewModel.eventTitle, eventViewModel.event)}"
+                        android:onClick="@{() -> userViewModel.saveEvent(eventViewModel.event)}"
                         android:text="@string/save"
                         app:cornerRadius="40dp"
                         app:icon="@drawable/save_btn"

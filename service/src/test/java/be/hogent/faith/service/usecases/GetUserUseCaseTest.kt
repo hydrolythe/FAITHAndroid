@@ -1,41 +1,49 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.AuthManager
-import be.hogent.faith.domain.repository.EventRepository
-import be.hogent.faith.domain.repository.UserRepository
+import be.hogent.faith.service.encryption.IEventEncryptionService
+import be.hogent.faith.service.repositories.IAuthManager
+import be.hogent.faith.service.repositories.IEventRepository
+import be.hogent.faith.service.repositories.IUserRepository
+import be.hogent.faith.service.usecases.user.GetUserUseCase
+import be.hogent.faith.service.usecases.util.EncryptedEventFactory
 import be.hogent.faith.util.factory.DataFactory
+import be.hogent.faith.util.factory.EventFactory
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
+import io.reactivex.Single
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.threeten.bp.LocalDateTime
-import java.io.File
 import java.util.UUID
-import java.util.concurrent.Executor
 
 class GetUserUseCaseTest {
     private lateinit var getUserUC: GetUserUseCase
-    private lateinit var executor: Executor
-    private lateinit var scheduler: Scheduler
-    private lateinit var userRepository: UserRepository
-    private lateinit var eventRepository: EventRepository
-    private lateinit var authManager: AuthManager
+    private val eventEncryptionService = mockk<IEventEncryptionService>()
+    private val userRepository = mockk<IUserRepository>(relaxed = true)
+    private val eventRepository = mockk<IEventRepository>(relaxed = true)
+    private val authManager = mockk<IAuthManager>(relaxed = true)
 
     @Before
     fun setUp() {
-        executor = mockk()
-        scheduler = mockk()
-        userRepository = mockk(relaxed = true)
-        eventRepository = mockk(relaxed = true)
-        authManager = mockk(relaxed = true)
-        getUserUC = GetUserUseCase(userRepository, eventRepository, authManager, scheduler)
+        getUserUC = GetUserUseCase(
+            userRepository,
+            eventRepository,
+            eventEncryptionService,
+            authManager,
+            mockk<Scheduler>()
+        )
+    }
+
+    @After
+    fun tearDown() {
+        clearAllMocks()
     }
 
     @Test
@@ -60,20 +68,22 @@ class GetUserUseCaseTest {
     fun getUserUseCase_userPresent_returnsUserWithEvents() {
         val userUuidArg = slot<String>()
         val userUuid = DataFactory.randomUUID().toString()
-        val events = listOf(Event(LocalDateTime.now(), "title", mockk<File>(), "notes"))
+        val encryptedEvents = EncryptedEventFactory.makeEventList(5)
         val user = User("username", "avatar", UUID.randomUUID().toString())
+
         every { authManager.getLoggedInUserUUID() } returns userUuid
-        every { userRepository.get(capture(userUuidArg)) } returns Flowable
-            .just(user)
-        every { eventRepository.getAll() } returns Flowable
-            .just(events)
-
-        val result = getUserUC.buildUseCaseObservable(mockk())
-
-        result.test().assertValue { newUser ->
-            newUser.username == "username"
-            newUser.events.count() == events.count()
+        every { userRepository.get(capture(userUuidArg)) } returns Flowable.just(user)
+        every { eventRepository.getAll() } returns Flowable.just(encryptedEvents)
+        every { eventEncryptionService.decryptData(any()) } returns Single.defer { // Defer to ensure a new event is made with each call
+            Single.just(EventFactory.makeEvent())
         }
+
+        getUserUC.buildUseCaseObservable(mockk())
+            .test()
+            .assertValue { newUser ->
+                newUser.username == "username"
+                newUser.events.count() == encryptedEvents.count()
+            }
         Assert.assertEquals(userUuid, userUuidArg.captured)
     }
 
@@ -81,8 +91,8 @@ class GetUserUseCaseTest {
     fun getUserUseCase_noUserPresent_returnsNothing() {
         every { authManager.getLoggedInUserUUID() } returns null
 
-        val result = getUserUC.buildUseCaseObservable(mockk())
-
-        result.test().assertError(RuntimeException::class.java)
+        getUserUC.buildUseCaseObservable(mockk())
+            .test()
+            .assertError(RuntimeException::class.java)
     }
 }

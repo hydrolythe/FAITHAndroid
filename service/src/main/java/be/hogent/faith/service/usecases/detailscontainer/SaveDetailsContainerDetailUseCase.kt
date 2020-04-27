@@ -3,39 +3,40 @@ package be.hogent.faith.service.usecases.detailscontainer
 import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.repository.DetailContainerRepository
+import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
+import be.hogent.faith.service.repositories.IDetailContainerRepository
+import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.storage.IStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
-import io.reactivex.Single
 
-open class SaveDetailsContainerDetailUseCase<T : DetailsContainer>(
-    private val detailsContainerRepository: DetailContainerRepository<T>,
-    private val storageRepository: IStorageRepository,
+class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
+    private val detailContainerRepository: IDetailContainerRepository<Container>,
+    private val detailContainerEncryptionService: IDetailContainerEncryptionService<Container>,
+    private val storageRepository: IFileStorageRepository,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveDetailsContainerDetailUseCase.Params>(
     observeScheduler
 ) {
-    private var params: Params? = null
 
     override fun buildUseCaseObservable(params: Params): Completable {
-        this.params = params
-
-        return addDetailToBackpack(params.detail)
-            .flatMap {
-                storageRepository.saveDetailFileForContainer(
-                    params.detailsContainer,
-                    params.detail
-                )
+        return detailContainerRepository.getEncryptedContainer()
+            .flatMap { container ->
+                detailContainerEncryptionService.encrypt(params.detail, container)
             }
-            .flatMapMaybe { detailsContainerRepository.insertDetail(params.detail, params.user) }
-            .flatMapCompletable { Completable.complete() }
+            .flatMap { encryptedDetail ->
+                storageRepository.saveDetailFileWithContainer(encryptedDetail, params.detailsContainer)
+            }
+            .flatMapCompletable { savedEncryptedDetail ->
+                detailContainerRepository.insertDetail(savedEncryptedDetail, params.user)
+            }
+            .andThen { addDetailToContainer(params) }
     }
 
-    private fun addDetailToBackpack(detail: Detail): Single<Detail> = Single.fromCallable {
-        params!!.user.backpack.addDetail(detail)
-        detail
+    private fun addDetailToContainer(params: Params) {
+        with(params) {
+            detailsContainer.addDetail(detail)
+        }
     }
 
     data class Params(val user: User, val detailsContainer: DetailsContainer, val detail: Detail)

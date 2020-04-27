@@ -5,9 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.SeekBar
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentViewYoutubeVideoBinding
@@ -56,15 +53,15 @@ class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetai
                 youtubeVideoDetail = youtubeVideoDetail,
                 youtubePlayerView = youtubePlayerView!!,
                 playerParentView = viewYoutubeVideoBinding.cardYoutubePlayer,
-                playButton = viewYoutubeVideoBinding.btnPlayYtVideo as ImageButton,
-                pauseButton = viewYoutubeVideoBinding.btnPauseYtVideo as ImageButton
+                playButton = viewYoutubeVideoBinding.btnPlayYtVideo,
+                pauseButton = viewYoutubeVideoBinding.btnPauseYtVideo
             )
 
-        faithYoutubePlayer.currentTimeField = viewYoutubeVideoBinding.textCurrentimeYtVideo as TextView
-        faithYoutubePlayer.durationField = viewYoutubeVideoBinding.textDurationYtVideo as TextView
-        faithYoutubePlayer.seekBar = viewYoutubeVideoBinding.seekbarYtVideo as SeekBar
-        faithYoutubePlayer.stopButton = viewYoutubeVideoBinding.btnStopYtVideo as ImageButton
-        faithYoutubePlayer.fullscreenButton = viewYoutubeVideoBinding.btnFullscreenYtVideo as ImageButton
+        faithYoutubePlayer.currentTimeField = viewYoutubeVideoBinding.textCurrentimeYtVideo
+        faithYoutubePlayer.durationField = viewYoutubeVideoBinding.textDurationYtVideo
+        faithYoutubePlayer.seekBar = viewYoutubeVideoBinding.seekbarYtVideo
+        faithYoutubePlayer.stopButton = viewYoutubeVideoBinding.btnStopYtVideo
+        faithYoutubePlayer.fullscreenButton = viewYoutubeVideoBinding.btnFullscreenYtVideo
         faithYoutubePlayer.timeContainer = viewYoutubeVideoBinding.timeContainerYtVideo
         faithYoutubePlayer.menuContainer = viewYoutubeVideoBinding.menuContainerYtVideo
 

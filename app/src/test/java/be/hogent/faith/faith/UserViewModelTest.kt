@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
-import be.hogent.faith.service.usecases.GetUserUseCase
+import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.util.factory.DataFactory
 import be.hogent.faith.util.factory.EventFactory
@@ -41,9 +41,9 @@ class UserViewModelTest {
         // Arrange
         val errorMessageObserver = mockk<Observer<Int>>(relaxed = true)
         userViewModel.titleErrorMessage.observeForever(errorMessageObserver)
-
+        event.title = null
         // Act
-        userViewModel.saveEvent(null, mockk())
+        userViewModel.saveEvent(event)
 
         // Assert
         verify { saveEventUseCase wasNot called }
@@ -56,11 +56,10 @@ class UserViewModelTest {
         val params = slot<SaveEventUseCase.Params>()
 
         // Act
-        userViewModel.saveEvent(eventTitle, event)
+        userViewModel.saveEvent(event)
         verify { saveEventUseCase.execute(capture(params), any()) }
 
         // Assert
-        assertEquals(params.captured.eventTitle, eventTitle)
         assertEquals(event, params.captured.event)
     }
 
@@ -74,7 +73,7 @@ class UserViewModelTest {
         userViewModel.eventSavedState.observeForever(successObserver)
 
         // Act
-        userViewModel.saveEvent(eventTitle, event)
+        userViewModel.saveEvent(event)
         verify { saveEventUseCase.execute(capture(params), capture(observer)) }
         // Make the UC-handler call the success handler
         observer.captured.onComplete()
@@ -97,7 +96,7 @@ class UserViewModelTest {
         userViewModel.eventSavedState.observeForever(successObserver)
 
         // Act
-        userViewModel.saveEvent(eventTitle, event)
+        userViewModel.saveEvent(event)
         verify { saveEventUseCase.execute(capture(params), capture(observer)) }
         // Make the UC-handler call the success handler
         observer.captured.onError(mockk(relaxed = true))

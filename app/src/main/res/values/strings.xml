@@ -244,5 +244,6 @@
     <string name="search_hint_film">zoek hier een film op naam</string>
     <string name="search_hint_bestand">zoek hier een bestand op naam</string>
     <string name="unauthorized_file_type">Dit bestandstype is niet toegelaten.</string>
+    <string name="error_load_detail_failed">Er ging iets fout bij het ophalen van het bestand</string>
 
 </resources>

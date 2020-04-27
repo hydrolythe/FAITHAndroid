@@ -6,14 +6,12 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
-import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
-import be.hogent.faith.service.usecases.backpack.SaveYoutubeDetailUseCase
+import be.hogent.faith.service.usecases.backpack.GetBackPackFilesUseCase
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
+import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
-import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.subscribers.DisposableSubscriber
 import java.util.Date
 
@@ -21,9 +19,9 @@ class BackpackViewModel(
     saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
     deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Backpack>,
     backpack: Backpack,
-    private val getBackPackFilesDummyUseCase: GetBackPackFilesDummyUseCase,
-    private val saveYoutubeDetailUseCase: SaveYoutubeDetailUseCase
-) : DetailsContainerViewModel<Backpack>(saveBackpackDetailUseCase, deleteBackpackDetailUseCase, backpack) {
+    loadDetailFileUseCase: LoadDetailFileUseCase<Backpack>,
+    private val getBackPackFilesUseCase: GetBackPackFilesUseCase
+) : DetailsContainerViewModel<Backpack>(saveBackpackDetailUseCase, deleteBackpackDetailUseCase, loadDetailFileUseCase, backpack) {
 
     private val _detailIsSaved = SingleLiveEvent<Any>()
     val detailIsSaved: LiveData<Any> = _detailIsSaved
@@ -40,8 +38,8 @@ class BackpackViewModel(
 
     // TODO tijdelijk
     private fun loadDetails() {
-        val params = GetBackPackFilesDummyUseCase.Params("")
-        getBackPackFilesDummyUseCase.execute(params, GetBackPackFilesDummyUseCaseHandler())
+        val params = GetBackPackFilesUseCase.Params("")
+        getBackPackFilesUseCase.execute(params, GetBackPackFilesDummyUseCaseHandler())
     }
 
     private inner class GetBackPackFilesDummyUseCaseHandler : DisposableSubscriber<List<Detail>>() {
@@ -57,12 +55,6 @@ class BackpackViewModel(
 
         override fun onError(e: Throwable) {
         }
-    }
-
-    override fun saveCurrentDetail(user: User, detail: Detail) {
-        super.saveCurrentDetail(user, detail)
-        if (detail is YoutubeVideoDetail)
-            saveYoutubeDetail(user, detail)
     }
 
     fun setOpenDetailType(openDetailMode: OpenDetailMode) {
@@ -88,25 +80,6 @@ class BackpackViewModel(
                 setErrorMessage(R.string.save_detail_maxChar)
             if (!uniqueTitle)
                 setErrorMessage(R.string.save_detail_uniqueName)
-        }
-    }
-
-    /**
-     * YouTube detail isn't stored in a file and saved differently and it's specific to the backpack
-     * that's why this isn't in the detailcontainer viewmodel
-     */
-    fun saveYoutubeDetail(user: User, detail: YoutubeVideoDetail) {
-        val params = SaveYoutubeDetailUseCase.Params(user, detail)
-        saveYoutubeDetailUseCase.execute(params, SaveBackpackYoutubeDetailUseCaseHandler())
-    }
-
-    private inner class SaveBackpackYoutubeDetailUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _infoMessage.postValue(R.string.save_video_success)
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_external_video_failed)
         }
     }
 

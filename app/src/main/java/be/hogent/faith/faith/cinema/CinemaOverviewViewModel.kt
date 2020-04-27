@@ -5,15 +5,18 @@ import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
+import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 
 class CinemaOverviewViewModel(
     saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Cinema>,
     deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Cinema>,
+    loadDetailFileUseCase: LoadDetailFileUseCase<Cinema>,
     cinema: Cinema
 ) : DetailsContainerViewModel<Cinema>(
     saveBackpackDetailUseCase,
     deleteBackpackDetailUseCase,
+    loadDetailFileUseCase,
     cinema
 ) {
 
