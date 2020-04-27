@@ -8,6 +8,7 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
+import be.hogent.faith.faith.detailscontainer.OpenDetailMode
 import be.hogent.faith.service.usecases.backpack.GetBackPackFilesUseCase
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
@@ -28,9 +29,6 @@ class BackpackViewModel(
 
     private val _viewButtons = MutableLiveData<Boolean>()
     val viewButtons: LiveData<Boolean> = _viewButtons
-
-    private val _openDetailMode = SingleLiveEvent<OpenDetailMode>()
-    val openDetailMode: LiveData<OpenDetailMode> = _openDetailMode
 
     init {
         loadDetails()
@@ -113,9 +111,3 @@ class BackpackViewModel(
  * Holds the state of the edit mode: open or closed
  */
 enum class EditModeState { OPEN, CLOSED }
-
-/**
- * If a detail is new --> savedialog is shown
- * When editing an existing detail --> savedialog isn't shown
- */
-enum class OpenDetailMode { NEW, EDIT }

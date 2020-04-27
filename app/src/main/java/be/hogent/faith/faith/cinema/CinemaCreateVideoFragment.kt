@@ -14,7 +14,6 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAd
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 
-
 class CinemaCreateVideoFragment : Fragment() {
 
     var navigation: CinemaCreateVideoFragmentNavigationListener? = null

@@ -3,7 +3,7 @@ package be.hogent.faith.database.detailcontainer
 import be.hogent.faith.database.Mapper
 import be.hogent.faith.service.encryption.EncryptedDetailsContainer
 
-class DetailContainerMapper : Mapper<EncryptedDetailsContainerEntity, EncryptedDetailsContainer> {
+object DetailContainerMapper : Mapper<EncryptedDetailsContainerEntity, EncryptedDetailsContainer> {
     override fun mapFromEntity(entity: EncryptedDetailsContainerEntity): EncryptedDetailsContainer {
         with(entity) {
             return EncryptedDetailsContainer(

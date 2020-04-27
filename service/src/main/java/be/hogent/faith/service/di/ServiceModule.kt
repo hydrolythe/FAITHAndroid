@@ -2,6 +2,7 @@ package be.hogent.faith.service.di
 
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
+import be.hogent.faith.service.usecases.backpack.GetBackPackFilesUseCase
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
@@ -98,4 +99,5 @@ val serviceModule = module {
             get(), get()
         )
     }
+    factory { GetBackPackFilesUseCase(get(named("BackpackRepository")), get()) }
 }
