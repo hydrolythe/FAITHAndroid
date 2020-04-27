@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.firebase-perf'
@@ -127,10 +126,8 @@ dependencies {
     implementation uiDependencies.colorpicker
     implementation uiDependencies.viewpager2
     implementation uiDependencies.youtubePlayerView
-    kapt uiDependencies.glidecompiler
 
     implementation firebaseDependencies.firebasestorageui
-
 
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk

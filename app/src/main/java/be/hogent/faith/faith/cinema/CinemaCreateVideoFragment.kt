@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.cinema
 
-import be.hogent.faith.databinding.FragmentCinemaCreateVideoBinding
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
+import be.hogent.faith.databinding.FragmentCinemaCreateVideoBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -26,7 +26,12 @@ class CinemaCreateVideoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_cinema_create_video, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_cinema_create_video,
+            container,
+            false
+        )
         binding.lifecycleOwner = this
 
         return binding.root
@@ -47,8 +52,8 @@ class CinemaCreateVideoFragment : Fragment() {
 
     private fun updateUI() {
         detailThumbnailsAdapter = DetailThumbnailsAdapter(
-                emptyList(),
-                requireNotNull(activity) as CinemaActivity
+            emptyList(),
+            requireNotNull(activity) as CinemaActivity
         )
         binding.rvVideoDetails.layoutManager = GridLayoutManager(activity, 6)
         binding.rvVideoDetails.adapter = detailThumbnailsAdapter
@@ -74,7 +79,7 @@ class CinemaCreateVideoFragment : Fragment() {
                     .build()
             )
         picker = builder.build()
-        picker.show(this.fragmentManager!!, picker.toString())
+        picker.show(requireActivity().supportFragmentManager, picker.toString())
         picker.addOnPositiveButtonClickListener {
             // TODO
         }

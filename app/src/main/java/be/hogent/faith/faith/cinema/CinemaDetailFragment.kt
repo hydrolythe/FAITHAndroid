@@ -43,10 +43,10 @@ abstract class CinemaDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         editDetailBinding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_edit_file, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_edit_file, container, false)
         editDetailBinding.lifecycleOwner = this
 
-        cinemaViewModel.showSaveDialog.observe(this, Observer {
+        cinemaViewModel.showSaveDialog.observe(viewLifecycleOwner, Observer {
             if (it != null && cinemaViewModel.openDetailMode.value != OpenDetailMode.EDIT)
                 showSaveDialog(it)
             else
@@ -59,7 +59,7 @@ abstract class CinemaDetailFragment : Fragment() {
     private fun showSaveDialog(detail: Detail) {
 
         saveDialog = SaveDetailDialog.newInstance(detail)
-        saveDialog.show(fragmentManager!!, null)
+        saveDialog.show(requireActivity().supportFragmentManager, null)
         cinemaViewModel.setCurrentFile(detail)
     }
 
