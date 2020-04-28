@@ -65,6 +65,7 @@
     <string name="header_emotie_regulatie">Emotie regulatie</string>
     <string name="frag_viewEvent_notes">notes</string>
     <string name="dialog_to_the_event_title">"Wil je teruggaan naar het park?</string>
+    <string name="dialog_to_the_cinema_title">"Wil je teruggaan naar de cinema?</string>
     <string name="dialog_takePhoto_cancel_message">Ben je zeker? Je foto is nog niet opgeslagen!</string>
     <string name="dialog_enterText_cancel_message">Ben je zeker? Je tekst is nog niet opgeslagen!</string>
     <string name="dialog_to_the_event_message">Ben je zeker? Je tekening is nog niet opgeslagen!</string>

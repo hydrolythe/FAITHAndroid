@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.backpackScreen.externalFile
+package be.hogent.faith.faith.details.externalFile
 
 import android.app.Activity.RESULT_OK
 import android.content.Context

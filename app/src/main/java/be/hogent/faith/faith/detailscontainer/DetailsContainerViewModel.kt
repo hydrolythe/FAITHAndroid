@@ -35,6 +35,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
 
     protected var details: List<Detail> = detailsContainer.details
 
+    // filter
     private val detailFilter = CombinedDetailFilter()
 
     val searchString = MutableLiveData<String>()
@@ -122,6 +123,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         }
     }
 
+    // opening and saving (first showSaveDialog, then  ,  a detail
     protected var _currentFile = MutableLiveData<Detail>()
     val currentFile: LiveData<Detail>
         get() = _currentFile
@@ -134,28 +136,40 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         _currentFile.postValue(detail)
     }
 
+    // nieuw detail aanmaken of bestaand detail openen?
     protected val _openDetailMode = SingleLiveEvent<OpenDetailMode>()
     val openDetailMode: LiveData<OpenDetailMode> = _openDetailMode
 
-    protected val _errorMessage = MutableLiveData<@IdRes Int>()
+    // ga naar een bestaand detail
+    protected val _goToDetail = SingleLiveEvent<Detail>()
+    val goToDetail: LiveData<Detail> = _goToDetail
+
+    // detail is opgeslaan
+    protected val _detailIsSaved = SingleLiveEvent<Any>()
+    val detailIsSaved: LiveData<Any> = _detailIsSaved
+
+    // detail moet worden opgeslaan, maar eerst dient de titel,... te worden opgevraagd via SaveDialog
+    private val _showSaveDialog = SingleLiveEvent<Detail>()
+    val showSaveDialog: LiveData<Detail> = _showSaveDialog
+
+    // errormessages
+    protected val _errorMessage = SingleLiveEvent<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
+
+    protected val _titleErrorMessage = MutableLiveData<Int>()
+    val titleErrorMessage: LiveData<Int>
+        get() = _titleErrorMessage
 
     protected fun setErrorMessage(errorMsg: Int) {
         _errorMessage.postValue(errorMsg)
     }
 
-    private val _showSaveDialog = SingleLiveEvent<Detail>()
-    val showSaveDialog: LiveData<Detail> = _showSaveDialog
+    protected val _infoMessage = SingleLiveEvent<Int>()
+    val infoMessage: LiveData<Int> = _infoMessage
 
     protected val _goToCityScreen = SingleLiveEvent<Any>()
     val goToCityScreen: LiveData<Any> = _goToCityScreen
-
-    protected val _goToDetail = SingleLiveEvent<Detail>()
-    val goToDetail: LiveData<Detail> = _goToDetail
-
-    protected val _infoMessage = SingleLiveEvent<Int>()
-    val infoMessage: LiveData<Int> = _infoMessage
 
     fun onFilterPhotosClicked() {
         photoFilterEnabled.value = photoFilterEnabled.value!!.not()
@@ -181,20 +195,8 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         externalVideoFilterEnabled.value = externalVideoFilterEnabled.value!!.not()
     }
 
-    fun onDeleteClicked() {
-        deleteEnabled.value = deleteEnabled.value!!.not()
-    }
-
     fun setSearchStringText(text: String) {
         searchString.postValue(text)
-    }
-
-    fun onDateRangeClicked() {
-        _dateRangeClicked.call()
-    }
-
-    fun goToCityScreen() {
-        _goToCityScreen.call()
     }
 
     fun setDateRange(startDate: Long?, endDate: Long?) {
@@ -215,10 +217,28 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         return "$van - $tot"
     }
 
+    fun onDateRangeClicked() {
+        _dateRangeClicked.call()
+    }
+
+    fun onDeleteClicked() {
+        deleteEnabled.value = deleteEnabled.value!!.not()
+    }
+
+    fun goToCityScreen() {
+        _goToCityScreen.call()
+    }
+
+    fun setOpenDetailType(openDetailMode: OpenDetailMode) {
+        _openDetailMode.postValue(openDetailMode)
+    }
+
+    // detail is aangemaakt, maar titel,... moet nog worden opgevraagd
     fun showSaveDialog(detail: Detail) {
         _showSaveDialog.postValue(detail)
     }
 
+    // opslaan van detail
     open fun saveCurrentDetail(user: User, detail: Detail) {
         when (detail) {
             is DrawingDetail -> saveDrawingDetail(user, showSaveDialog.value as DrawingDetail)
@@ -248,11 +268,29 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         })
     }
 
+    fun onSaveClicked(title: String, user: User, detail: Detail) {
+        val notMaxCharacters = checkMaxCharacters(title)
+        val uniqueTitle = checkUniqueTitle(title)
+        if (title.isNotEmpty() && notMaxCharacters && uniqueTitle) {
+            detail.title = title
+            _titleErrorMessage.value = R.string.empty
+            saveCurrentDetail(user, detail)
+        } else {
+            if (title.isBlank())
+                _titleErrorMessage.postValue(R.string.save_detail_emptyString)
+            if (!notMaxCharacters)
+                _titleErrorMessage.postValue(R.string.save_detail_maxChar)
+            if (!uniqueTitle)
+                _titleErrorMessage.postValue(R.string.save_detail_uniqueName)
+        }
+    }
+
     fun saveTextDetail(user: User, detail: TextDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_text_success)
+                _detailIsSaved.call()
             }
 
             override fun onError(e: Throwable) {
@@ -266,6 +304,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_audio_success)
+                _detailIsSaved.call()
             }
 
             override fun onError(e: Throwable) {
@@ -292,6 +331,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_drawing_success)
+                _detailIsSaved.call()
             }
 
             override fun onError(e: Throwable) {
@@ -305,6 +345,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_video_success)
+                _detailIsSaved.call()
             }
 
             override fun onError(e: Throwable) {
@@ -319,6 +360,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_video_success)
+                _detailIsSaved.call()
             }
 
             override fun onError(e: Throwable) {
@@ -356,6 +398,14 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         return Instant.ofEpochMilli(milliseconds) // Convert count-of-milliseconds-since-epoch into a date-time in UTC (`Instant`).
             .atZone(ZoneId.of("Europe/Brussels")) // Adjust into the wall-clock time used by the people of a particular region (a time zone). Produces a `ZonedDateTime` object.
             .toLocalDate()
+    }
+
+    protected fun checkUniqueTitle(title: String): Boolean {
+        return (details.find { e -> (e.title == title) } == null)
+    }
+
+    protected fun checkMaxCharacters(title: String): Boolean {
+        return title.length <= 30
     }
 }
 

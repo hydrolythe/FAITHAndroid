@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.backpackScreen
+package be.hogent.faith.faith.cinema
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -11,23 +11,23 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.databinding.DialogSaveBackpackdetailBinding
+import be.hogent.faith.databinding.DialogCinemaSavedetailBinding
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
-class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
-    private lateinit var saveDetailBinding: DialogSaveBackpackdetailBinding
+class SaveCinemaDetailDialog(private var detail: Detail) : DialogFragment() {
+    private lateinit var saveDetailBinding: DialogCinemaSavedetailBinding
 
-    private val backpackViewModel: BackpackViewModel by sharedViewModel()
+    private val cinemaOverviewViewModel: CinemaOverviewViewModel by sharedViewModel()
 
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     companion object {
-        fun newInstance(detail: Detail): SaveDetailDialog {
-            return SaveDetailDialog(detail)
+        fun newInstance(detail: Detail): SaveCinemaDetailDialog {
+            return SaveCinemaDetailDialog(detail)
         }
     }
 
@@ -43,10 +43,10 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         saveDetailBinding =
-                DataBindingUtil.inflate(inflater, R.layout.dialog_save_backpackdetail, container, false)
-        saveDetailBinding.backpackViewModel = backpackViewModel
+            DataBindingUtil.inflate(inflater, R.layout.dialog_cinema_savedetail, container, false)
+        saveDetailBinding.cinemaViewModel = cinemaOverviewViewModel
         saveDetailBinding.userViewModel = userViewModel
-        saveDetailBinding.lifecycleOwner = this@SaveDetailDialog
+        saveDetailBinding.lifecycleOwner = this@SaveCinemaDetailDialog
         return saveDetailBinding.root
     }
 
@@ -56,23 +56,28 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
     }
 
     private fun startListeners() {
-        saveDetailBinding.btnSaveBackpack.setOnClickListener {
-            backpackViewModel.onSaveClicked(saveDetailBinding.txtSaveEventTitle.text.toString(), userViewModel.user.value!!, detail)
+        saveDetailBinding.btnSaveCinema.setOnClickListener {
+            cinemaOverviewViewModel.onSaveClicked(
+                saveDetailBinding.txtSaveEventTitle.text.toString(),
+                userViewModel.user.value!!,
+                detail
+            )
         }
 
-        backpackViewModel.detailIsSaved.observe(this, Observer {
-            Toast.makeText(context, R.string.save_success, Toast.LENGTH_SHORT).show() // Mag deze algemeen blijven of best per detail ?
+        cinemaOverviewViewModel.detailIsSaved.observe(this, Observer {
+            Toast.makeText(context, R.string.save_success, Toast.LENGTH_SHORT)
+                .show() // Mag deze algemeen blijven of best per detail ?
             dismiss()
         })
 
-        saveDetailBinding.btnSaveBackpackCancel.setOnClickListener {
+        saveDetailBinding.btnSaveCinemaCancel.setOnClickListener {
             dismiss()
-            backpackViewModel.goToDetail(detail)
+            cinemaOverviewViewModel.goToDetail(detail)
         }
 
-        backpackViewModel.errorMessage.observe(this, Observer {
+        cinemaOverviewViewModel.errorMessage.observe(this, Observer {
             if (it != null)
-                Toast.makeText(context, resources.getString(it), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, resources.getString(it), Toast.LENGTH_LONG).show()
         })
     }
 
@@ -82,6 +87,6 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        backpackViewModel.goToDetail(detail)
+        cinemaOverviewViewModel.goToDetail(detail)
     }
 }

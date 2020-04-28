@@ -6,7 +6,7 @@
 
         <variable
             name="photoDetailViewViewModel"
-            type="be.hogent.faith.faith.backpackScreen.externalFile.ExternalFileViewModel" />
+            type="be.hogent.faith.faith.details.externalFile.ExternalFileViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/screen_take_photo"

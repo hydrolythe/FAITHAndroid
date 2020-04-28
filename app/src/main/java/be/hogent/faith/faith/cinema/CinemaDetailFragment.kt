@@ -18,8 +18,7 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.backpackScreen.SaveDetailDialog
-import be.hogent.faith.faith.backpackScreen.externalFile.AddExternalFileFragment
+import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.externalVideo.view.ViewExternalVideoFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
@@ -34,7 +33,7 @@ abstract class CinemaDetailFragment : Fragment() {
 
     private val cinemaViewModel: CinemaOverviewViewModel by sharedViewModel()
     private lateinit var editDetailBinding: FragmentEditFileBinding
-    private lateinit var saveDialog: SaveDetailDialog
+    private lateinit var saveDialog: SaveCinemaDetailDialog
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     override fun onCreateView(
@@ -58,7 +57,7 @@ abstract class CinemaDetailFragment : Fragment() {
 
     private fun showSaveDialog(detail: Detail) {
 
-        saveDialog = SaveDetailDialog.newInstance(detail)
+        saveDialog = SaveCinemaDetailDialog.newInstance(detail)
         saveDialog.show(fragmentManager!!, null)
         cinemaViewModel.setCurrentFile(detail)
     }

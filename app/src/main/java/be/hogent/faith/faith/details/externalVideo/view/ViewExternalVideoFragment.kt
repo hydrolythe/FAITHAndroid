@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentViewExternalVideoBinding
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
-import be.hogent.faith.faith.backpackScreen.externalFile.ExternalFileViewModel
+import be.hogent.faith.faith.details.externalFile.ExternalFileViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val VIDEO_DETAIL = "The video to be shown"
