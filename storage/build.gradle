@@ -48,6 +48,9 @@ dependencies {
     implementation commonDependencies.rxjava
     implementation commonDependencies.rxkotlin
     implementation commonDependencies.threeTenABP
+    testImplementation(testDependencies.threeTenBP) {
+        exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
+    }
 
     implementation commonDependencies.timber
 
