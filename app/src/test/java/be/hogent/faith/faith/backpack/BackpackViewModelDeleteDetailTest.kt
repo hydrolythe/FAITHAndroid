@@ -6,7 +6,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
-import be.hogent.faith.service.usecases.backpack.GetBackPackFilesUseCase
+import be.hogent.faith.service.usecases.backpack.GetBackPackDataUseCase
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import io.mockk.mockk
@@ -25,7 +25,7 @@ class BackpackViewModelDeleteDetailTest {
     private val deleteBackpackDetailUseCase =
         mockk<DeleteDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
     private val loadDetailFileUseCase = mockk<LoadDetailFileUseCase<Backpack>>(relaxed = true)
-    private val getBackPackFilesUseCase = mockk<GetBackPackFilesUseCase>(relaxed = true)
+    private val getBackPackFilesUseCase = mockk<GetBackPackDataUseCase>(relaxed = true)
     private val backpack = mockk<Backpack>(relaxed = true)
     private val detail = mockk<Detail>()
 

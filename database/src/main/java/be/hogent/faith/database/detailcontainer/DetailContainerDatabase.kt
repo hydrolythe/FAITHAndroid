@@ -18,7 +18,7 @@ abstract class DetailContainerDatabase<DetailContainer>(
 ) {
     abstract val containerName: String
 
-    open fun insert(item: EncryptedDetailEntity, user: UserEntity): Completable {
+    fun insertDetail(item: EncryptedDetailEntity, user: UserEntity): Completable {
         val currentUser = fbAuth.currentUser
         if (currentUser == null || currentUser.uid != user.uuid) {
             return Completable.error(RuntimeException("Unauthorized user."))
@@ -32,7 +32,7 @@ abstract class DetailContainerDatabase<DetailContainer>(
         }
     }
 
-    open fun getAll(): Flowable<List<EncryptedDetailEntity>> {
+    fun getAll(): Flowable<List<EncryptedDetailEntity>> {
         val currentUser = fbAuth.currentUser
         if (currentUser == null) {
             return Flowable.error(RuntimeException("Unauthorized user."))
@@ -48,7 +48,7 @@ abstract class DetailContainerDatabase<DetailContainer>(
             }
     }
 
-    open fun delete(item: Detail): Completable {
+    fun delete(item: Detail): Completable {
         val currentUser = fbAuth.currentUser
         return if (currentUser == null) {
             Completable.error(RuntimeException("User not set."))
@@ -63,8 +63,7 @@ abstract class DetailContainerDatabase<DetailContainer>(
         }
     }
 
-    // TODO: document
-    fun createContainer(container: EncryptedDetailsContainerEntity): Completable {
+    fun insertContainer(container: EncryptedDetailsContainerEntity): Completable {
         val currentUser = fbAuth.currentUser
         if (currentUser == null) {
             return Completable.error(RuntimeException("Unauthorized user."))

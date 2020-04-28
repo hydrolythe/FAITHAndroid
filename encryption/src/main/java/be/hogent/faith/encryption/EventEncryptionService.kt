@@ -34,6 +34,7 @@ class EventEncryptionService(
         val streamingDataKey = keyGenerator.generateStreamingKeysetHandle()
 
         // TODO: find a way to handle a null emotionAvatar on the Event
+        // WOrkaround in localfilestorageRepo saveEmotionAvatar can be removed once this is OrmeK
         var encryptedEmotionAvatar: Single<File> = Single.just(File(""))
         if (event.emotionAvatar != null) {
             encryptedEmotionAvatar =

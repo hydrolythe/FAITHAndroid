@@ -23,7 +23,7 @@ open class DetailContainerRepository<T : DetailsContainer>(
         encryptedDetail: EncryptedDetail,
         user: User
     ): Completable {
-        return database.insert(
+        return database.insertDetail(
             detailMapper.mapToEntity(encryptedDetail),
             userMapper.mapToEntity(user)
         )
@@ -35,7 +35,7 @@ open class DetailContainerRepository<T : DetailsContainer>(
             .toSingle()
     }
 
-    override fun get(): Flowable<List<EncryptedDetail>> {
+    override fun getAll(): Flowable<List<EncryptedDetail>> {
         return database.getAll().map {
             detailMapper.mapFromEntities(it)
         }
@@ -43,5 +43,11 @@ open class DetailContainerRepository<T : DetailsContainer>(
 
     override fun deleteDetail(detail: Detail): Completable {
         return database.delete(detail)
+    }
+
+    override fun saveEncryptedContainer(encryptedDetailsContainer: EncryptedDetailsContainer): Completable {
+        return database.insertContainer(
+            containerMapper.mapToEntity(encryptedDetailsContainer)
+        )
     }
 }

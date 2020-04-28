@@ -27,10 +27,16 @@ val encryptionModule = module {
     single { KeyGenerator() }
     single { FileEncryptionService() }
     single { DetailEncryptionService(get()) }
-    factory { EventEncryptionService(get(), get(), get(), get()) as IEventEncryptionService }
-    factory { DetailContainerEncryptionService<Backpack>(get(), get()) as IDetailContainerEncryptionService<Backpack> }
-    factory<IDetailContainerEncryptionService<Backpack>>(named("BackpackEncryptionService")) { DetailContainerEncryptionService<Backpack>(get(), get()) }
-    factory<IDetailContainerEncryptionService<Cinema>>(named("CinemaEncryptionService")) { DetailContainerEncryptionService<Cinema>(get(), get()) }
+    factory<IEventEncryptionService> { EventEncryptionService(get(), get(), get(), get()) }
+    factory<IDetailContainerEncryptionService<Backpack>> {
+        DetailContainerEncryptionService<Backpack>(get(), get(), get())
+    }
+    factory<IDetailContainerEncryptionService<Backpack>>(named("BackpackEncryptionService")) {
+        DetailContainerEncryptionService<Backpack>(get(), get(), get())
+    }
+    factory<IDetailContainerEncryptionService<Cinema>>(named("CinemaEncryptionService")) {
+        DetailContainerEncryptionService<Cinema>(get(), get(), get())
+    }
 }
 
 fun provideMoshi(): Moshi {

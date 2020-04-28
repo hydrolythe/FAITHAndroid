@@ -2,6 +2,7 @@ package be.hogent.faith.encryption
 
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.encryption.internal.KeyEncrypter
+import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.service.encryption.EncryptedDetailsContainer
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
@@ -11,7 +12,8 @@ import io.reactivex.rxkotlin.Singles
 
 class DetailContainerEncryptionService<T>(
     private val detailEncryptionService: DetailEncryptionService,
-    private val keyEncrypter: KeyEncrypter
+    private val keyEncrypter: KeyEncrypter,
+    private val keyGenerator: KeyGenerator
 ) : IDetailContainerEncryptionService<T> {
     override fun encrypt(
         detail: Detail,
@@ -29,5 +31,27 @@ class DetailContainerEncryptionService<T>(
     override fun decryptFile(detail: Detail, container: EncryptedDetailsContainer): Completable {
         return keyEncrypter.decrypt(container.encryptedStreamingDEK)
             .flatMapCompletable { sdek -> detailEncryptionService.decryptDetailFiles(detail, sdek) }
+    }
+
+    override fun decryptData(
+        encryptedDetail: EncryptedDetail,
+        container: EncryptedDetailsContainer
+    ): Single<Detail> {
+        val dekSingle = keyEncrypter.decrypt(container.encryptedDEK)
+        val sdekSingle = keyEncrypter.decrypt(container.encryptedStreamingDEK)
+
+        // TODO: Find a way around blockingGet()
+        return Singles.zip(dekSingle, sdekSingle) { dek, sdek ->
+            detailEncryptionService.decryptData(encryptedDetail, dek).blockingGet()
+        }
+    }
+
+    override fun createContainer(): Single<EncryptedDetailsContainer> {
+        val encryptedDEK = keyEncrypter.encrypt(keyGenerator.generateKeysetHandle())
+        val encryptedSDEK = keyEncrypter.encrypt(keyGenerator.generateStreamingKeysetHandle())
+
+        return Singles.zip(encryptedDEK, encryptedSDEK) { dek, sdek ->
+            EncryptedDetailsContainer(dek, sdek)
+        }
     }
 }

@@ -13,7 +13,9 @@ interface IDetailContainerRepository<T> {
 
     fun getEncryptedContainer(): Single<EncryptedDetailsContainer>
 
-    fun get(): Flowable<List<EncryptedDetail>>
+    fun saveEncryptedContainer(encryptedDetailsContainer: EncryptedDetailsContainer): Completable
+
+    fun getAll(): Flowable<List<EncryptedDetail>>
 
     fun deleteDetail(detail: Detail): Completable
 }

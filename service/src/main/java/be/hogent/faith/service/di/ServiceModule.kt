@@ -2,7 +2,7 @@ package be.hogent.faith.service.di
 
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
-import be.hogent.faith.service.usecases.backpack.GetBackPackFilesUseCase
+import be.hogent.faith.service.usecases.backpack.GetBackPackDataUseCase
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
@@ -15,11 +15,10 @@ import be.hogent.faith.service.usecases.detail.textDetail.OverwriteTextDetailUse
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
-import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
-
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import be.hogent.faith.service.usecases.event.MakeEventFilesAvailableUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
+import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.service.usecases.user.CreateUserUseCase
 import be.hogent.faith.service.usecases.user.GetUserUseCase
@@ -37,7 +36,7 @@ import org.koin.dsl.module
 val serviceModule = module {
     factory { GetEventsUseCase(get(), get(), get()) }
     factory { SaveEventUseCase(get(), get(), get(), get()) }
-    factory { CreateUserUseCase(get(), get()) }
+    factory { CreateUserUseCase(get(), get(), get(), get(), get(), get()) }
     factory { SaveEmotionAvatarUseCase(get(), get()) }
     factory { SaveEventDetailUseCase(get(), get()) }
     factory { GetUserUseCase(get(), get(), get(), get(), get()) }
@@ -56,9 +55,9 @@ val serviceModule = module {
     factory { MakeEventFilesAvailableUseCase(get(), get(), get(), get()) }
     factory<LoadDetailFileUseCase<Backpack>>(named("LoadBackpackDetailFileUseCase")) {
         LoadDetailFileUseCase<Backpack>(
-        get(),
-        get(named("BackpackRepository")),
-        get(named("BackpackEncryptionService")),
+            get(),
+            get(named("BackpackRepository")),
+            get(named("BackpackEncryptionService")),
             get()
         )
     }
@@ -99,5 +98,11 @@ val serviceModule = module {
             get(), get()
         )
     }
-    factory { GetBackPackFilesUseCase(get(named("BackpackRepository")), get()) }
+    factory {
+        GetBackPackDataUseCase(
+            get(named("BackpackRepository")),
+            get(named("BackpackEncryptionService")),
+            get()
+        )
+    }
 }

@@ -32,7 +32,7 @@ class LocalFileStorageRepository(
      * and updates the path
      */
     private fun saveEmotionAvatar(encryptedEvent: EncryptedEvent): Completable {
-        return if (encryptedEvent.emotionAvatar == null) {
+        return if (encryptedEvent.emotionAvatar == null || encryptedEvent.emotionAvatar?.path.isNullOrBlank()) {
             Completable.complete()
         } else {
             Completable.fromCallable {
