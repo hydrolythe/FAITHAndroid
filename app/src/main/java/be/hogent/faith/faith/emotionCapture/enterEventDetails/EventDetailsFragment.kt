@@ -160,7 +160,7 @@ class EventDetailsFragment : Fragment() {
 
         eventViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
-            saveDialog.show(fragmentManager!!, null)
+            saveDialog.show(requireFragmentManager(), null)
         })
 
         userViewModel.eventSavedState.observe(this, Observer {

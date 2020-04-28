@@ -162,7 +162,7 @@ class EventListFragment : Fragment() {
                     .build()
             )
         picker = builder.build()
-        picker.show(this.fragmentManager!!, picker.toString())
+        picker.show(this.requireFragmentManager(), picker.toString())
         picker.addOnPositiveButtonClickListener {
             eventListViewModel.setDateRange(it.first, it.second)
         }
