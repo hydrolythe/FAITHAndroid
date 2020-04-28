@@ -52,35 +52,21 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     val endDate: LiveData<LocalDate>
         get() = _endDate
 
-    val audioFilterEnabled = MutableLiveData<Boolean>().apply {
-        this.value = false
-    }
-    val drawingFilterEnabled = MutableLiveData<Boolean>().apply {
-        this.value = false
-    }
-    val photoFilterEnabled = MutableLiveData<Boolean>().apply {
-        this.value = false
-    }
-    val textFilterEnabled = MutableLiveData<Boolean>().apply {
-        this.value = false
-    }
-    val videoFilterEnabled = MutableLiveData<Boolean>().apply {
-        this.value = false
-    }
-    val externalVideoFilterEnabled = MutableLiveData<Boolean>().apply {
-        this.value = false
-    }
+    val audioFilterEnabled = MutableLiveData<Boolean>().apply { this.value = false }
+    val drawingFilterEnabled = MutableLiveData<Boolean>().apply { this.value = false }
+    val photoFilterEnabled = MutableLiveData<Boolean>().apply { this.value = false }
+    val textFilterEnabled = MutableLiveData<Boolean>().apply { this.value = false }
+    val videoFilterEnabled = MutableLiveData<Boolean>().apply { this.value = false }
+    val externalVideoFilterEnabled = MutableLiveData<Boolean>().apply { this.value = false }
 
-    val deleteEnabled = MutableLiveData<Boolean>().apply {
-        this.value = false
-    }
+    val deleteEnabled = MutableLiveData<Boolean>().apply { this.value = false }
 
     private var _dateRangeClicked = SingleLiveEvent<Unit>()
     val dateRangeClicked: LiveData<Unit> = _dateRangeClicked
 
     val dateRangeString: LiveData<String> = MediatorLiveData<String>().apply {
-        this.addSource(startDate) { _ -> value = combineLatestDates(startDate, endDate) }
-        this.addSource(endDate) { _ -> value = combineLatestDates(startDate, endDate) }
+        this.addSource(startDate) { value = combineLatestDates(startDate, endDate) }
+        this.addSource(endDate) { value = combineLatestDates(startDate, endDate) }
     }
 
     val filteredDetails: LiveData<List<Detail>> = MediatorLiveData<List<Detail>>().apply {
@@ -198,9 +184,8 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     }
 
     fun setDateRange(startDate: Long?, endDate: Long?) {
-        _startDate.value =
-            if (startDate != null) toLocalDate(startDate) else LocalDate.MIN.plusDays(1)
-        _endDate.value = if (endDate != null) toLocalDate(endDate) else LocalDate.now()
+        _startDate.value = startDate?.let { toLocalDate(it) } ?: LocalDate.MIN.plusDays(1)
+        _endDate.value = endDate?.let { toLocalDate(it) } ?: LocalDate.now()
     }
 
     private fun combineLatestDates(

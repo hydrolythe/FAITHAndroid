@@ -33,8 +33,8 @@ class CinemaOverviewViewModel(
     val addButtonClicked: LiveData<Unit> = _addButtonClicked
 
     fun onFilesButtonClicked() {
-            details = detailsContainer.getFiles()
-            _filesButtonClicked.call()
+        details = detailsContainer.getFiles()
+        _filesButtonClicked.call()
     }
 
     fun onFilmsButtonClicked() {
@@ -51,6 +51,6 @@ class CinemaOverviewViewModel(
     }
 
     init {
-        searchString.value = "test"
+        searchString.value = ""
     }
 }
