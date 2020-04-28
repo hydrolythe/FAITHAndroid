@@ -1,1 +1,5 @@
-<manifest package="be.hogent.faith.encryption"/>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="be.hogent.faith.encryption">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+</manifest>

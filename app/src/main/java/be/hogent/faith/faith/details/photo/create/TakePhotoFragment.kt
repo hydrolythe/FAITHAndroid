@@ -107,7 +107,7 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
 
         takePhotoViewModel.photoSaveFile.observe(this, Observer { photo ->
             if (photo != null) {
-                Glide.with(context!!).load(photo).diskCacheStrategy(DiskCacheStrategy.NONE)
+                Glide.with(requireContext()).load(photo).diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).into(img_takePhoto_theTakenPhoto)
                 Timber.d("photoSaveFile saved ${photo.name} ${photo.path}")
             }
@@ -149,7 +149,7 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
     }
 
     private fun hasCameraPermissions(): Boolean {
-        return checkSelfPermission(activity!!, Manifest.permission.CAMERA) == PERMISSION_GRANTED
+        return checkSelfPermission(requireActivity(), Manifest.permission.CAMERA) == PERMISSION_GRANTED
     }
 
     private fun showExitAlert() {
