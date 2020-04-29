@@ -12,6 +12,7 @@ import be.hogent.faith.storage.online.IOnlineFileStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
+import timber.log.Timber
 
 /**
  * Repository providing access to both the internal and remote storage.
@@ -33,7 +34,9 @@ class FileStorageRepository(
         // Hacky way to first store locally, then remotely, and then give back the event.
         // Must be done in this order because saving to local storage changes paths inside the event.
         return localStorage.saveEventFiles(encryptedEvent)
+            .doOnSuccess { Timber.i("Saved files locally for event ${encryptedEvent.uuid}") }
             .flatMapCompletable(onlineStorage::saveEventFiles)
+            .doOnComplete { Timber.i("Saved files online for event ${encryptedEvent.uuid}") }
             // the original encrypted is also the one that has been changed in localStorage call (pass by reference)
             .andThen(Single.just(encryptedEvent))
     }

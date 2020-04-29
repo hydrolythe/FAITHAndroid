@@ -69,7 +69,7 @@ class UserViewModel(
             override fun onNext(t: User) {
                 Timber.i("success $t")
                 _user.postValue(t)
-                _getLoggedInUserState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
+                _getLoggedInUserState.value = Resource(ResourceState.SUCCESS, Unit, null)
             }
 
             override fun onComplete() {
@@ -78,7 +78,7 @@ class UserViewModel(
 
             override fun onError(e: Throwable) {
                 Timber.e(e)
-                _getLoggedInUserState.postValue(
+                _getLoggedInUserState.value =
                     Resource(
                         ResourceState.ERROR, null,
                         when (e) {
@@ -86,7 +86,6 @@ class UserViewModel(
                             else -> R.string.register_error_create_user
                         }
                     )
-                )
             }
         })
     }
@@ -98,24 +97,22 @@ class UserViewModel(
         }
         _eventSavedState.postValue(Resource(ResourceState.LOADING, null, null))
         val params = SaveEventUseCase.Params(event, user.value!!)
-        saveEventUseCase.execute(params, SaveEventUseCaseHandler())
-    }
+        saveEventUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                Timber.i("Successfully saved event")
+                _eventSavedState.value = Resource(ResourceState.SUCCESS, Unit, null)
+            }
 
-    private inner class SaveEventUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _eventSavedState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
-        }
-
-        override fun onError(e: Throwable) {
-            Timber.e(e, "error saving event ${e.localizedMessage}")
-            _eventSavedState.postValue(
-                Resource(
-                    ResourceState.ERROR,
-                    null,
-                    R.string.error_save_event_failed
-                )
-            )
-        }
+            override fun onError(e: Throwable) {
+                Timber.e(e, "error saving event ${e.localizedMessage}")
+                _eventSavedState.value =
+                    Resource(
+                        ResourceState.ERROR,
+                        null,
+                        R.string.error_save_event_failed
+                    )
+            }
+        })
     }
 
     override fun onCleared() {

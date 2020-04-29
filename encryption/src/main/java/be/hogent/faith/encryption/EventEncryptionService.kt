@@ -16,7 +16,7 @@ import io.reactivex.rxkotlin.Singles
 import io.reactivex.rxkotlin.zipWith
 import org.koin.core.KoinComponent
 import org.threeten.bp.LocalDateTime
-import java.io.File
+import timber.log.Timber
 
 /**
  * @param keyGenerator will be used to generate the DEK that will be used when encrypting the [EncryptedEventEntity].
@@ -33,23 +33,28 @@ class EventEncryptionService(
         val dataKey = keyGenerator.generateKeysetHandle()
         val streamingDataKey = keyGenerator.generateStreamingKeysetHandle()
 
-        // TODO: find a way to handle a null emotionAvatar on the Event
-        // WOrkaround in localfilestorageRepo saveEmotionAvatar can be removed once this is OrmeK
-        var encryptedEmotionAvatar: Single<File> = Single.just(File(""))
-        if (event.emotionAvatar != null) {
-            encryptedEmotionAvatar =
-                fileEncryptionService.encrypt(event.emotionAvatar!!, streamingDataKey)
-        }
         val encryptedDetails = encryptDetails(event, dataKey, streamingDataKey)
+            .doOnSuccess { Timber.i("Encrypted details for event ${event.uuid}") }
 
-        return Singles.zip(
-            encryptEventData(event, dataKey, streamingDataKey),
-            encryptedDetails,
-            encryptedEmotionAvatar
-        ) { encryptedEvent, details, emotionAvatar ->
-            encryptedEvent.details = details
-            encryptedEvent.emotionAvatar = emotionAvatar
-            encryptedEvent
+        if (event.emotionAvatar != null) {
+            val encryptedEmotionAvatar =
+                fileEncryptionService
+                    .encrypt(event.emotionAvatar!!, streamingDataKey)
+                    .doOnSuccess { Timber.i("Encrypted emotionAvatar for event ${event.uuid}") }
+            return Singles.zip(
+                encryptEventData(event, dataKey, streamingDataKey),
+                encryptedDetails,
+                encryptedEmotionAvatar
+            ) { encryptedEvent, details, emotionAvatar ->
+                encryptedEvent.details = details
+                encryptedEvent.emotionAvatar = emotionAvatar
+                encryptedEvent
+            }
+        } else {
+            return encryptEventData(event, dataKey, streamingDataKey).zipWith(encryptedDetails) { encryptedEvent, details ->
+                encryptedEvent.details = details
+                encryptedEvent
+            }
         }
     }
 
@@ -59,7 +64,9 @@ class EventEncryptionService(
         streamingKey: KeysetHandle
     ): Single<EncryptedEvent> {
         val encryptedDEK = keyEncrypter.encrypt(dataKey)
+            .doOnSuccess { Timber.i("Encrypted dek for ${event.uuid}") }
         val encryptedStreamingDEK = keyEncrypter.encrypt(streamingKey)
+            .doOnSuccess { Timber.i("Encrypted sdek for ${event.uuid}") }
 
         return encryptedDEK.zipWith(encryptedStreamingDEK) { encryptedDek, encryptedSdek ->
             with(DataEncrypter(dataKey)) {
@@ -74,6 +81,7 @@ class EventEncryptionService(
                 )
             }
         }
+            .doOnSuccess { Timber.i("Encrypted data for event ${event.uuid}") }
     }
 
     private fun encryptDetails(
@@ -90,6 +98,7 @@ class EventEncryptionService(
     override fun decryptData(encryptedEvent: EncryptedEvent): Single<Event> {
         return keyEncrypter
             .decrypt(encryptedEvent.encryptedDEK)
+            .doOnSuccess { Timber.i("decrypted dek for ${encryptedEvent.uuid}") }
             .flatMap { dek -> decryptEventData(encryptedEvent, dek) }
     }
 
@@ -108,6 +117,7 @@ class EventEncryptionService(
                     }
                 }
             }
+            .doOnSuccess { Timber.i("Decrypted data for event ${encryptedEvent.uuid}") }
     }
 
     private fun decryptDetailsData(
@@ -117,23 +127,28 @@ class EventEncryptionService(
         return Observable.fromIterable(encryptedEvent.details)
             .flatMapSingle { detailEncryptionService.decryptData(it, dek) }
             .toList()
+            .doOnSuccess { Timber.i("Decrypted details data for event ${encryptedEvent.uuid}") }
     }
 
     override fun decryptFiles(encryptedEvent: EncryptedEvent): Completable {
         return keyEncrypter.decrypt(encryptedEvent.encryptedStreamingDEK)
+            .doOnSuccess { Timber.i("decrypted sdek for ${encryptedEvent.uuid}") }
             .flatMapCompletable { sdek ->
                 Completable.merge {
                     Observable.fromIterable(encryptedEvent.details)
                         .map { detail -> detailEncryptionService.decryptDetailFiles(detail, sdek) }
                 }
+                    .doOnComplete { Timber.i("Decrypted detail files for event ${encryptedEvent.uuid}") }
                     .mergeWith {
                         if (encryptedEvent.emotionAvatar == null) {
                             Completable.complete()
+                                .doOnComplete { Timber.i("No emotionAvatar to decrypt for event ${encryptedEvent.uuid}") }
                         } else {
                             fileEncryptionService.decrypt(encryptedEvent.emotionAvatar!!, sdek)
                                 .map {
                                     encryptedEvent.emotionAvatar = it
                                 }
+                                .doOnSuccess { Timber.i("EmotionAvatar decrypted for event ${encryptedEvent.uuid}") }
                         }
                     }
             }

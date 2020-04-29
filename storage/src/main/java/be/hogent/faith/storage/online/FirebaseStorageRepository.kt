@@ -11,6 +11,7 @@ import be.hogent.faith.storage.StoragePathProvider
 import com.google.firebase.storage.FirebaseStorage
 import io.reactivex.Completable
 import io.reactivex.rxkotlin.toFlowable
+import timber.log.Timber
 import java.io.File
 
 class FirebaseStorageRepository(
@@ -41,6 +42,7 @@ class FirebaseStorageRepository(
     private fun saveEventEmotionAvatar(encryptedEvent: EncryptedEvent): Completable {
         if (encryptedEvent.emotionAvatar == null) {
             return Completable.complete()
+                .doOnComplete { Timber.i("No emotionAvatar to save online for ${encryptedEvent.uuid}") }
         } else {
             return rxFirebaseStorage
                 .putFile(
@@ -48,6 +50,7 @@ class FirebaseStorageRepository(
                     Uri.parse("file://${encryptedEvent.emotionAvatar!!.path}")
                 )
                 .ignoreElement()
+                .doOnComplete { Timber.i("Saved emotionavatar online for ${encryptedEvent.uuid}") }
         }
     }
 
@@ -65,6 +68,7 @@ class FirebaseStorageRepository(
                     Uri.parse("file://${detail.file.path}")
                 )
                 .ignoreElement()
+                .doOnComplete { Timber.i("Saved details online for event ${event.uuid}") }
         }
     }
 
@@ -89,6 +93,7 @@ class FirebaseStorageRepository(
                 .andThen {
                     detail.file = localDestinationFile
                 }
+                .doOnComplete { "Downloaded file for detail ${detail.uuid} in event ${event.uuid}" }
         }
     }
 
@@ -113,6 +118,7 @@ class FirebaseStorageRepository(
                 .andThen {
                     detail.file = localDestinationFile
                 }
+                .doOnComplete { "Downloaded file for detail ${detail.uuid} in ${container.javaClass}" }
         }
     }
 
@@ -134,6 +140,7 @@ class FirebaseStorageRepository(
                 .andThen {
                     event.emotionAvatar = localDestinationFile
                 }
+                .doOnComplete { "Downloaded emotionAvatar for event ${event.uuid}" }
         }
     }
 
@@ -151,6 +158,7 @@ class FirebaseStorageRepository(
                     Uri.parse("file://${encryptedDetail.file.path}")
                 )
                 .ignoreElement()
+                .doOnComplete { "Saved detail files for ${encryptedDetail.uuid} in ${container.javaClass}" }
         }
     }
 

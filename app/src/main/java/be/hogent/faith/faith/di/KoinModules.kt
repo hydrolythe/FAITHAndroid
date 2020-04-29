@@ -82,7 +82,7 @@ val appModule = module(override = true) {
     viewModel { FaithYoutubePlayerViewModel() }
     viewModel { ExternalFileViewModel(get(), get()) }
     viewModel { (user: User) -> EventListViewModel(user, get()) }
-    viewModel { EventDetailsViewModel() }
+    viewModel { EventDetailsViewModel(get()) }
     viewModel { ViewPhotoDetailViewModel() }
     viewModel { ViewDrawingDetailViewModel() }
     viewModel {

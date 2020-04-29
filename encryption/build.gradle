@@ -44,6 +44,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation commonDependencies.kotlin
     implementation commonDependencies.rxkotlin
+    implementation commonDependencies.timber
     implementation commonDependencies.threeTenABP
     testImplementation(testDependencies.threeTenBP) {
         exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'

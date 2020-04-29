@@ -15,6 +15,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.zipWith
 import org.threeten.bp.LocalDateTime
+import timber.log.Timber
 import java.io.File
 
 class DetailEncryptionService(
@@ -35,6 +36,7 @@ class DetailEncryptionService(
 
     private fun encryptDetailFiles(detail: Detail, sdek: KeysetHandle): Single<File> {
         return fileEncryptionService.encrypt(detail.file, sdek)
+            .doOnSuccess { Timber.i("Encrypted detail files for detail ${detail.uuid}") }
     }
 
     /**
@@ -67,6 +69,7 @@ class DetailEncryptionService(
                 }
             )
         )
+            .doOnSuccess { Timber.i("Encrypted detail data for detail ${detail.uuid}") }
     }
 
     fun decryptData(
@@ -123,6 +126,7 @@ class DetailEncryptionService(
                 )
             }
         )
+            .doOnSuccess { Timber.i("Decrypted detail data for detail ${encryptedDetail.uuid}") }
     }
 
     fun decryptDetailFiles(
@@ -133,10 +137,12 @@ class DetailEncryptionService(
         // YoutubeVideos don't have a file that needs to be encrypted
         if (detail is YoutubeVideoDetail) {
             return Completable.complete()
+                .doOnComplete { Timber.i("Detail ${detail.uuid} is a YoutubeVideoDetail, nothing to encrypt") }
         } else {
             return fileEncrypter.decrypt(detail.file, sdek)
                 .map { detail.file = it }
                 .ignoreElement()
+                .doOnComplete { Timber.i("Decrypted detail files for detail ${detail.uuid}") }
         }
     }
 
@@ -148,10 +154,12 @@ class DetailEncryptionService(
         // YoutubeVideos don't have a file that needs to be encrypted
         if (encryptedDetail.youtubeVideoID.isNotEmpty()) {
             return Completable.complete()
+                .doOnComplete { Timber.i("Detail ${encryptedDetail.uuid} is a YoutubeVideoDetail, nothing to encrypt") }
         } else {
             return fileEncrypter.decrypt(encryptedDetail.file, sdek)
                 .map { encryptedDetail.file = it }
                 .ignoreElement()
+                .doOnComplete { Timber.i("Decrypted detail files for detail ${encryptedDetail.uuid}") }
         }
     }
 }

@@ -11,6 +11,7 @@ import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.storage.StoragePathProvider
 import io.reactivex.Completable
 import io.reactivex.Single
+import timber.log.Timber
 import java.io.File
 import java.util.UUID
 
@@ -120,7 +121,10 @@ class TemporaryStorageRepository(
             return true
         } else {
             return with(pathProvider) {
-                temporaryStorage(detailPath(detail, event)).exists()
+                val supposedPath = temporaryStorage(detailPath(detail, event))
+                Timber.i("Looking for detail file for detail ${detail.uuid} in ${event.uuid} at ${supposedPath.path}")
+                Timber.i(if (supposedPath.exists()) "found" else "not found")
+                supposedPath.exists()
             }
         }
     }
@@ -131,13 +135,21 @@ class TemporaryStorageRepository(
             return true
         } else {
             return with(pathProvider) {
-                temporaryStorage(detailPath(detail, container)).exists()
+                val supposedPath = temporaryStorage(detailPath(detail, container))
+                Timber.i("Looking for detail file for detail ${detail.uuid} in ${container.javaClass} at ${supposedPath.path}")
+                Timber.i(if (supposedPath.exists()) "found" else "not found")
+                supposedPath.exists()
             }
         }
     }
 
     override fun isEmotionAvatarPresent(event: Event): Boolean {
-        return with(pathProvider) { temporaryStorage(emotionAvatarPath(event)).exists() }
+        return with(pathProvider) {
+            val supposedPath = temporaryStorage(emotionAvatarPath(event))
+            Timber.i("Looking for emotionavatar for event ${event.uuid} at ${supposedPath.path}")
+            Timber.i(if (supposedPath.exists()) "found" else "not found")
+            supposedPath.exists()
+        }
     }
 
     override fun deleteFiles(detail: Detail, container: DetailsContainer): Completable {

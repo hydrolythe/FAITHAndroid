@@ -5,7 +5,7 @@ import io.reactivex.Single
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-const val ENDPOINT = "https://encryptionapi-bvjyzvhieq-ew.a.run.app"
+const val ENDPOINT = "https://encryptionapi-7io5ui3y7a-ew.a.run.app"
 
 interface KeyEncryptionService {
 

@@ -10,6 +10,7 @@ import be.hogent.faith.storage.StoragePathProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
+import timber.log.Timber
 import java.io.File
 
 class LocalFileStorageRepository(
@@ -34,6 +35,7 @@ class LocalFileStorageRepository(
     private fun saveEmotionAvatar(encryptedEvent: EncryptedEvent): Completable {
         return if (encryptedEvent.emotionAvatar == null || encryptedEvent.emotionAvatar?.path.isNullOrBlank()) {
             Completable.complete()
+                .doOnComplete { Timber.i("No emotionAvatar to save locally for ${encryptedEvent.uuid}") }
         } else {
             Completable.fromCallable {
                 moveAvatarToLocalStorage(encryptedEvent)
@@ -52,6 +54,7 @@ class LocalFileStorageRepository(
                     moveDetailToLocalStorage(detail, encryptedEvent)
                 }
             }
+            .doOnComplete { Timber.i("Saved details locally for event ${encryptedEvent.uuid}") }
     }
 
     private fun moveDetailToLocalStorage(
@@ -66,6 +69,7 @@ class LocalFileStorageRepository(
             with(pathProvider) { localStorage(detailPath(encryptedEvent, encryptedDetail)) }
         moveFile(encryptedDetail.file, localStoragePath)
         encryptedDetail.file = localStoragePath
+        Timber.i("Saved detail ${encryptedDetail.uuid} to ${encryptedDetail.file.absolutePath}")
     }
 
     private fun moveAvatarToLocalStorage(encryptedEvent: EncryptedEvent) {
@@ -73,6 +77,7 @@ class LocalFileStorageRepository(
             with(pathProvider) { localStorage(emotionAvatarPath(encryptedEvent)) }
         moveFile(encryptedEvent.emotionAvatar!!, localStoragePath)
         encryptedEvent.emotionAvatar = localStoragePath
+        Timber.i("Saved emotionAvatar for event ${encryptedEvent.uuid} to ${encryptedEvent.emotionAvatar?.absolutePath}")
     }
 
     /**
@@ -88,12 +93,22 @@ class LocalFileStorageRepository(
         if (detail is YoutubeVideoDetail) {
             return true
         } else {
-            return with(pathProvider) { localStorage(detailPath(detail, event)).exists() }
+            return with(pathProvider) {
+                val supposedPath = localStorage(detailPath(detail, event))
+                Timber.i("Looking in local storage for detail ${detail.uuid} in event ${event.uuid} at path ${supposedPath.absolutePath}")
+                Timber.i(if (supposedPath.exists()) "found" else "not found")
+                supposedPath.exists()
+            }
         }
     }
 
     override fun isFilePresent(detail: Detail, container: DetailsContainer): Boolean {
-        TODO("Not yet implemented")
+        return with(pathProvider) {
+            val supposedPath = localStorage(detailPath(detail, container))
+            Timber.i("Looking in local storage for detail ${detail.uuid} in ${container.javaClass} at path ${supposedPath.absolutePath}")
+            Timber.i(if (supposedPath.exists()) "found" else "not found")
+            supposedPath.exists()
+        }
     }
 
     override fun isEmotionAvatarPresent(event: Event): Boolean {
@@ -101,7 +116,12 @@ class LocalFileStorageRepository(
             return true
         } else {
             // TODO: check if this enough: the event's avatar should also point to this path
-            return with(pathProvider) { localStorage(emotionAvatarPath(event)).exists() }
+            return with(pathProvider) {
+                val supposedPath = localStorage(emotionAvatarPath(event))
+                Timber.i("Looking in local storage for emotionAvatar for event ${event.uuid} at path ${supposedPath.absolutePath}")
+                Timber.i(if (supposedPath.exists()) "found" else "not found")
+                supposedPath.exists()
+            }
         }
     }
 

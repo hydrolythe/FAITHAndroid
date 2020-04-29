@@ -1,13 +1,20 @@
 package be.hogent.faith.service.usecases
 
+import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
+import be.hogent.faith.service.repositories.IDetailContainerRepository
 import be.hogent.faith.service.repositories.IUserRepository
 import be.hogent.faith.service.usecases.user.CreateUserUseCase
+import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.reactivex.Completable
 import io.reactivex.Scheduler
+import io.reactivex.Single
+import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -19,6 +26,10 @@ class CreateUserUseCaseTest {
     private lateinit var executor: Executor
     private lateinit var scheduler: Scheduler
     private lateinit var repository: IUserRepository
+    private val backpackRepository: IDetailContainerRepository<Backpack> = mockk()
+    private val cinemaRepository: IDetailContainerRepository<Cinema> = mockk()
+    private val backpackEncryptionService: IDetailContainerEncryptionService<Backpack> = mockk()
+    private val cinemaEncryptionService: IDetailContainerEncryptionService<Backpack> = mockk()
 
     @Before
     fun setUp() {
@@ -28,8 +39,17 @@ class CreateUserUseCaseTest {
         createUserUseCase =
             CreateUserUseCase(
                 repository,
+                backpackRepository,
+                cinemaRepository,
+                backpackEncryptionService,
+                cinemaEncryptionService,
                 scheduler
             )
+    }
+
+    @After
+    fun tearDown() {
+        clearAllMocks()
     }
 
     @Test
@@ -38,6 +58,10 @@ class CreateUserUseCaseTest {
         val uuid = UUID.randomUUID().toString()
         val userArg = slot<User>()
         every { repository.insert(capture(userArg)) } returns Completable.complete()
+        every { backpackRepository.saveEncryptedContainer(any()) } returns Completable.complete()
+        every { backpackEncryptionService.createContainer() } returns Single.just(mockk())
+        every { cinemaRepository.saveEncryptedContainer(any()) } returns Completable.complete()
+        every { cinemaEncryptionService.createContainer() } returns Single.just(mockk())
 
         val params = CreateUserUseCase.Params("username", "avatarName", uuid)
 
@@ -59,6 +83,10 @@ class CreateUserUseCaseTest {
         // Arrange
         val userArg = slot<User>()
         every { repository.insert(capture(userArg)) } returns Completable.complete()
+        every { backpackRepository.saveEncryptedContainer(any()) } returns Completable.complete()
+        every { backpackEncryptionService.createContainer() } returns Single.just(mockk())
+        every { cinemaRepository.saveEncryptedContainer(any()) } returns Completable.complete()
+        every { cinemaEncryptionService.createContainer() } returns Single.just(mockk())
 
         val params = CreateUserUseCase.Params("username", "testPassword", "avatarName")
 
@@ -76,6 +104,10 @@ class CreateUserUseCaseTest {
         // Arrange
         val userArg = slot<User>()
         every { repository.insert(capture(userArg)) } returns Completable.error(RuntimeException())
+        every { backpackRepository.saveEncryptedContainer(any()) } returns Completable.complete()
+        every { backpackEncryptionService.createContainer() } returns Single.just(mockk())
+        every { cinemaRepository.saveEncryptedContainer(any()) } returns Completable.complete()
+        every { cinemaEncryptionService.createContainer() } returns Single.just(mockk())
 
         val params = CreateUserUseCase.Params("username", "testPassword", "avatarName")
 

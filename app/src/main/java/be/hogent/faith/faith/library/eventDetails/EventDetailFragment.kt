@@ -47,14 +47,14 @@ class EventDetailFragment : Fragment() {
     }
 
     private fun setListeners() {
-        eventDetailsViewModel.avatarImage.observe(this, Observer { image ->
+        eventDetailsViewModel.avatarImage.observe(viewLifecycleOwner, Observer { image ->
             if (image != null)
-                loadImageIntoView(context!!, image.path, binding.imgAvatar)
+                loadImageIntoView(requireContext(), image.path, binding.imgAvatar)
             else
                 binding.imgAvatar.setImageDrawable(null)
         })
 
-        eventDetailsViewModel.details.observe(this, Observer { details ->
+        eventDetailsViewModel.details.observe(viewLifecycleOwner, Observer { details ->
             binding.recyclerViewLibraryEventdetails.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -66,8 +66,8 @@ class EventDetailFragment : Fragment() {
             }
         })
 
-        eventDetailsViewModel.cancelButtonClicked.observe(this, Observer {
-            activity!!.onBackPressed()
+        eventDetailsViewModel.cancelButtonClicked.observe(viewLifecycleOwner, Observer {
+            requireActivity().onBackPressed()
         })
     }
 

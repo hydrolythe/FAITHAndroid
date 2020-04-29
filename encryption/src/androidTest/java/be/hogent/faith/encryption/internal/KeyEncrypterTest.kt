@@ -59,7 +59,9 @@ class KeyEncrypterTest : KoinTest {
         var decryptedKeySetHandle: KeysetHandle? = null
 
         keyEncrypter.encrypt(keySetHandle)
-            .doOnSuccess { encryptedKeySetHandle = it }
+            .doOnSuccess {
+                encryptedKeySetHandle = it
+            }
             .test()
             .assertComplete()
             .dispose()

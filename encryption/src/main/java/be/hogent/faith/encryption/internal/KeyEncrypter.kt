@@ -35,7 +35,7 @@ class KeyEncrypter(private val encryptionService: KeyEncryptionService) {
                     encryptedKey
                 )
             )
-                // TEMP FIX: because somehow the UC starting this is not doing its thing off the main thread
+            // TEMP FIX: because somehow the UC starting this is not doing its thing off the main thread
             // However, this also makes the KeyEncrypter Android test fail.
             .subscribeOn(Schedulers.io())
             .map(::convertStringToKeysetHandle)
