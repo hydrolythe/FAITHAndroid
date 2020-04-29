@@ -8,16 +8,15 @@ ext {
     coroutines_version = '1.1.1'
     coroutines_android_version = '1.1.1'
     koin_version = '2.1.4'
-    aac_core_version = '2.1.0'
-    lifecycle_version = '2.1.0'
+    aac_core_version = '2.0.0'
+    lifecycle_version = '2.2.0'
     appcompat_version = '1.1.0'
+    threeTenABP_version = '1.2.4'
+    threeTenBP_version = '1.4.4'
 
-    threeTenABP_version = '1.2.1'
-    threeTenBP_version = '1.4.0'
-
-    rxjava_version = '2.2.7'
+    rxjava_version = '2.2.19'
     rxjava_android_version = '2.1.1'
-    rxkotlin_version = '2.3.0'
+    rxkotlin_version = '2.4.0'
 
     fotoApparat_version = '2.7.0'
 
@@ -26,36 +25,36 @@ ext {
 
     // UI LIBRARIES
     constraint_layout_version = '2.0.0-beta4'
-    fragment_version = '1.1.0'
+    fragment_version = '1.2.4'
 
     recyclerview_version = '1.1.0'
-    recyclerview_selection_version = '1.1.0-beta01'
+    recyclerview_selection_version = '1.1.0-rc01'
 
-    glide_version = '4.10.0'
+    glide_version = '4.11.0'
     cardview_version = '1.0.0'
     material_version = '1.2.0-alpha06'
     textEditor_version = '1.2.2'
-    materialdrawer_version = '2.0.1'
-    play_services_version= '17.0.0'
-    legacy_support_version='1.0.0'
+    materialdrawer_version = '3.0.0'
+    play_services_version = '17.0.0'
+    legacy_support_version = '1.0.0'
 
     design_version = '28.0.0'
 
-    youtube_playerview_version= '10.0.5'
+    youtube_playerview_version = '10.0.5'
 
-    firebaseui_version='6.0.2'
-    rxfirebase_version ='1.5.6'
-    firebaseauth_version ='19.2.0'
-    firestore_version ='21.3.1'
-    firebasestorage_version ='19.1.0'
+    firebaseui_version = '6.0.2'
+    rxfirebase_version = '1.5.6'
+    firebaseauth_version = '19.2.0'
+    firestore_version = '21.3.1'
+    firebasestorage_version = '19.1.0'
     firebasestorageui_version = '4.3.1'
-    firebase_analytics_version ='17.2.1'
+    firebase_analytics_version = '17.2.1'
 
 
     // TESTING LIBRARIES
     test_core_version = '1.2.0'
     espresso_version = '3.2.0'
-    espresso_contrib_version = '3.3.0-alpha03'
+    espresso_contrib_version = '3.3.0-beta01'
     android_junit_version = '1.1.1'
     test_version = '1.2.0'
     robolectric_version = '4.3.1'
@@ -65,18 +64,19 @@ ext {
     firebase_performance = '19.0.5'
     uiAutomator_version = '2.2.0'
     junit_version = '4.13'
-    mockk_version = '1.9.3.kotlin12'
+    mockk_version = '1.10.0'
 
     // OTHER LIBRARIES
     ktlint_version = '0.31.0'
     timber_version = '4.7.1'
     oss_licenses_version = '17.0.0'
-    nav_version = '2.1.0'
+    nav_version = '2.2.2'
+    moshi_version = "1.9.2"
 
     viewpager_version = '1.0.0'
 
-    retrofit_version = '2.5.0'
-    gson_version = '2.5.0'
+    retrofit_version = '2.8.1'
+    gson_version = '2.8.1'
     rxjava_adapter_version = '1.0.0'
 
     colorpicker_version = '2.0.0'
@@ -110,23 +110,23 @@ ext {
     ]
 
     androidDependencies = [
-            appcompat: "androidx.appcompat:appcompat:$appcompat_version",
-            lifecycle: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
-            viewmodellifecycle : "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
+            appcompat         : "androidx.appcompat:appcompat:$appcompat_version",
+            lifecycle         : "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
+            viewmodellifecycle: "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     ]
 
     testDependencies = [
-            junit      : "junit:junit:$junit_version",
-            mockk      : "io.mockk:mockk:$mockk_version",
-            coreTesting: "androidx.arch.core:core-testing:$aac_core_version",
-            threeTenBP : "org.threeten:threetenbp:$threeTenBP_version",
-            koinTesting: "org.koin:koin-test:$koin_version",
-            robolectric: "org.robolectric:robolectric:$robolectric_version",
-            hamcrest: "org.hamcrest:hamcrest:$hamcrest_version",
-            hamcrestLibrary: "org.hamcrest:hamcrest-library:$hamcrest_version",
+            junit             : "junit:junit:$junit_version",
+            mockk             : "io.mockk:mockk:$mockk_version",
+            coreTesting       : "androidx.arch.core:core-testing:$aac_core_version",
+            threeTenBP        : "org.threeten:threetenbp:$threeTenBP_version",
+            koinTesting       : "org.koin:koin-test:$koin_version",
+            robolectric       : "org.robolectric:robolectric:$robolectric_version",
+            hamcrest          : "org.hamcrest:hamcrest:$hamcrest_version",
+            hamcrestLibrary   : "org.hamcrest:hamcrest-library:$hamcrest_version",
             //Add Analytics
             firebase_analytics: "com.google.firebase:firebase-analytics:$firebase_test_version",
-            crashlytics: "com.crashlytics.sdk.android:crashlytics:$crashlytics_dep_version"
+            crashlytics       : "com.crashlytics.sdk.android:crashlytics:$crashlytics_dep_version"
     ]
 
     androidTestDependencies = [
@@ -147,15 +147,15 @@ ext {
     ]
 
     firebaseDependencies = [
-            analytics : "com.google.firebase:firebase-analytics:$firebase_analytics_version",
-            firebaseui   :"com.firebaseui:firebase-ui-storage:$firebaseui_version"   ,
-            rxfirebase : "com.github.FrangSierra:RxFirebase:$rxfirebase_version",
-            firebaseauth :"com.google.firebase:firebase-auth:$firebaseauth_version",
-            firestore :"com.google.firebase:firebase-firestore-ktx:$firestore_version",
-            firebasestorage :"com.google.firebase:firebase-storage:$firebasestorage_version",
-            firebasestorageui:"com.firebaseui:firebase-ui-storage:$firebasestorageui_version",
+            analytics        : "com.google.firebase:firebase-analytics:$firebase_analytics_version",
+            firebaseui       : "com.firebaseui:firebase-ui-storage:$firebaseui_version",
+            rxfirebase       : "com.github.FrangSierra:RxFirebase:$rxfirebase_version",
+            firebaseauth     : "com.google.firebase:firebase-auth:$firebaseauth_version",
+            firestore        : "com.google.firebase:firebase-firestore-ktx:$firestore_version",
+            firebasestorage  : "com.google.firebase:firebase-storage:$firebasestorage_version",
+            firebasestorageui: "com.firebaseui:firebase-ui-storage:$firebasestorageui_version",
             // Add the dependency for the Performance Monitoring library
-            performance: "com.google.firebase:firebase-perf:$firebase_performance"
+            performance      : "com.google.firebase:firebase-perf:$firebase_performance"
     ]
 
     uiDependencies = [
@@ -174,7 +174,7 @@ ext {
             materialdrawer     : "co.zsmb:materialdrawer-kt:$materialdrawer_version",
             design             : "com.android.support:design:$design_version",
             viewpager2         : "androidx.viewpager2:viewpager2:$viewpager_version",
-            googleplay         :  "com.google.android.gms:play-services-plus:$play_services_version",
+            googleplay         : "com.google.android.gms:play-services-plus:$play_services_version",
             legacysupport      : "androidx.legacy:legacy-support-v4:$legacy_support_version",
             youtubePlayerView  : "com.pierfrancescosoffritti.androidyoutubeplayer:core:$youtube_playerview_version",
             colorpicker        : "com.github.skydoves:colorpickerpreference:$colorpicker_version",
@@ -185,10 +185,12 @@ ext {
             auth0: 'com.auth0.android:auth0:1.+'
     ]
 
-    retrofitDependencies = [
-            retrofit : "com.squareup.retrofit2:retrofit:$retrofit_version",
-            gson : "com.squareup.retrofit2:converter-gson:$gson_version",
-            rxjavaAdapter : "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rxjava_adapter_version"
+    networkDependencies = [
+            retrofit      : "com.squareup.retrofit2:retrofit:$retrofit_version",
+            gson          : "com.squareup.retrofit2:converter-gson:$gson_version",
+            moshi         : "com.squareup.moshi:moshi-kotlin:$moshi_version",
+            moshiConverter: "com.squareup.retrofit2:converter-moshi:2.8.1",
+            rxjavaAdapter : "com.squareup.retrofit2:adapter-rxjava2:2.8.1"
     ]
 
 }

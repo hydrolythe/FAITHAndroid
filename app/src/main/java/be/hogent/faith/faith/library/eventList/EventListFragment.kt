@@ -92,13 +92,13 @@ class EventListFragment : Fragment() {
     private fun startListeners() {
 
         eventListViewModel.dateRangeString.observe(
-            this, Observer { range -> btn_library_eventlist_chooseDate.text = range })
+            viewLifecycleOwner, Observer { range -> btn_library_eventlist_chooseDate.text = range })
 
-        eventListViewModel.filteredEvents.observe(this, Observer { list ->
+        eventListViewModel.filteredEvents.observe(viewLifecycleOwner, Observer { list ->
             eventsAdapter.updateEventsList(list, eventListViewModel.deleteEnabled.value!!)
         })
 
-        eventListViewModel.audioFilterEnabled.observe(this, Observer { enabled ->
+        eventListViewModel.audioFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setDrawable(
                 enabled,
                 btn_library_eventlist_searchAudio,
@@ -106,7 +106,7 @@ class EventListFragment : Fragment() {
                 R.drawable.ic_filterknop_audio_selected
             )
         })
-        eventListViewModel.textFilterEnabled.observe(this, Observer { enabled ->
+        eventListViewModel.textFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setDrawable(
                 enabled,
                 btn_library_eventlist_searchText,
@@ -114,7 +114,7 @@ class EventListFragment : Fragment() {
                 R.drawable.ic_filterknop_teksten_selected
             )
         })
-        eventListViewModel.photoFilterEnabled.observe(this, Observer { enabled ->
+        eventListViewModel.photoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setDrawable(
                 enabled,
                 btn_library_eventlist_searchPhotos,
@@ -122,7 +122,7 @@ class EventListFragment : Fragment() {
                 R.drawable.ic_filterknop_foto_selected
             )
         })
-        eventListViewModel.drawingFilterEnabled.observe(this, Observer { enabled ->
+        eventListViewModel.drawingFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setDrawable(
                 enabled,
                 btn_library_eventlist_searchDrawing,
@@ -131,19 +131,19 @@ class EventListFragment : Fragment() {
             )
         })
 
-        eventListViewModel.startDateClicked.observe(this, Observer {
+        eventListViewModel.startDateClicked.observe(viewLifecycleOwner, Observer {
             showDateRangePicker()
         })
 
-        eventListViewModel.endDateClicked.observe(this, Observer {
+        eventListViewModel.endDateClicked.observe(viewLifecycleOwner, Observer {
             showDateRangePicker()
         })
 
-        eventListViewModel.cancelButtonClicked.observe(this, Observer {
-            activity!!.onBackPressed()
+        eventListViewModel.cancelButtonClicked.observe(viewLifecycleOwner, Observer {
+            requireActivity().onBackPressed()
         })
 
-        eventListViewModel.deleteEnabled.observe(this, Observer { enabled ->
+        eventListViewModel.deleteEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             eventsAdapter.updateEventsList(eventListViewModel.filteredEvents.value!!, enabled)
         })
     }
@@ -162,7 +162,7 @@ class EventListFragment : Fragment() {
                     .build()
             )
         picker = builder.build()
-        picker.show(this.fragmentManager!!, picker.toString())
+        picker.show(this.requireFragmentManager(), picker.toString())
         picker.addOnPositiveButtonClickListener {
             eventListViewModel.setDateRange(it.first, it.second)
         }
@@ -188,7 +188,7 @@ class EventListFragment : Fragment() {
     private fun setDrawable(enabled: Boolean, button: ImageButton, image: Int, imageSelected: Int) {
         button.setImageDrawable(
             AppCompatResources.getDrawable(
-                this.context!!,
+                this.requireContext(),
                 if (enabled) imageSelected else image
             )
         )

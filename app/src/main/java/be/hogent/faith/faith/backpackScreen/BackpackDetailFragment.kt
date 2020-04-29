@@ -50,7 +50,7 @@ abstract class BackpackDetailFragment : Fragment() {
                 DataBindingUtil.inflate(inflater, R.layout.fragment_edit_file, container, false)
         editDetailBinding.lifecycleOwner = this
 
-        backpackViewModel.showSaveDialog.observe(this, Observer {
+        backpackViewModel.showSaveDialog.observe(viewLifecycleOwner, Observer {
             if (it != null && backpackViewModel.openDetailMode.value != OpenDetailMode.EDIT)
                 showSaveDialog(it)
             else
@@ -63,7 +63,7 @@ abstract class BackpackDetailFragment : Fragment() {
     private fun showSaveDialog(detail: Detail) {
 
         saveDialog = SaveDetailDialog.newInstance(detail)
-        saveDialog.show(fragmentManager!!, null)
+        saveDialog.show(requireActivity().supportFragmentManager, null)
         backpackViewModel.setCurrentFile(detail)
     }
 
@@ -188,6 +188,7 @@ abstract class BackpackDetailFragment : Fragment() {
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }
     }
+
     class YoutubeVideoFragment : BackpackDetailFragment() {
 
         companion object {

@@ -3,7 +3,6 @@ package be.hogent.faith.faith.cinema
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.Cinema
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
@@ -58,9 +57,8 @@ class CinemaOverviewViewModelTest {
 
     // We need to immediatly observe on the [EventListViewModel.filteredEvents] or otherwise
     // the MediatorLiveData will not start processing updates from its sources.
-    private val detailssObserver = Observer<List<Detail>> { }
+    private val detailsObserver = Observer<List<Detail>> { }
 
-    private val user = mockk<User>()
     private val saveDetailsContainerDetailUseCase =
         mockk<SaveDetailsContainerDetailUseCase<Cinema>>()
     private val deleteDetailsContainerDetailUseCase =
@@ -77,12 +75,12 @@ class CinemaOverviewViewModelTest {
             loadDetailFileUseCase,
             cinema
         )
-        viewModel.filteredDetails.observeForever(detailssObserver)
+        viewModel.filteredDetails.observeForever(detailsObserver)
     }
 
     @After
     fun tearDown() {
-        viewModel.filteredDetails.removeObserver(detailssObserver)
+        viewModel.filteredDetails.removeObserver(detailsObserver)
     }
 
     @Test
@@ -93,7 +91,7 @@ class CinemaOverviewViewModelTest {
     }
 
     @Test
-    fun `when clicking the text detail filter, it is disabled and only text details are shown`() {
+    fun `when clicking the text detail filter, it is enabled and only text details are shown`() {
         // Act
         viewModel.onFilterTextClicked()
         val filteredDetails = TestUtils.getValue(viewModel.filteredDetails)
@@ -137,11 +135,10 @@ class CinemaOverviewViewModelTest {
     fun `when setting the start and end date filters, it is enabled and only details that in between those dates are shown`() {
         // Arrange
         viewModel.setDateRange(
-            LocalDate.of(2020, Month.JANUARY, 1).atStartOfDay().toInstant(
-                ZoneOffset.of("+01:00")
-            ).toEpochMilli(), LocalDate.of(2020, Month.FEBRUARY, 1).atStartOfDay().toInstant(
-                ZoneOffset.of("+01:00")
-            ).toEpochMilli()
+            startDate = LocalDate.of(2020, Month.JANUARY, 1).atStartOfDay()
+                .toInstant(ZoneOffset.of("+01:00")).toEpochMilli(),
+            endDate = LocalDate.of(2020, Month.FEBRUARY, 1).atStartOfDay()
+                .toInstant(ZoneOffset.of("+01:00")).toEpochMilli()
         )
         // Act
         val filteredDetails = TestUtils.getValue(viewModel.filteredDetails)

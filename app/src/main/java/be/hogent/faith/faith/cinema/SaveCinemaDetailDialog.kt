@@ -11,15 +11,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.databinding.DialogCinemaSavedetailBinding
+import be.hogent.faith.databinding.DialogCinemaSaveDetailBinding
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class SaveCinemaDetailDialog(private var detail: Detail) : DialogFragment() {
-    private lateinit var saveDetailBinding: DialogCinemaSavedetailBinding
+    private lateinit var saveDetailBinding: DialogCinemaSaveDetailBinding
 
     private val cinemaOverviewViewModel: CinemaOverviewViewModel by sharedViewModel()
 
@@ -42,25 +45,41 @@ class SaveCinemaDetailDialog(private var detail: Detail) : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        cinemaOverviewViewModel.resetDetails()
         saveDetailBinding =
-            DataBindingUtil.inflate(inflater, R.layout.dialog_cinema_savedetail, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.dialog_cinema_save_detail, container, false)
         saveDetailBinding.cinemaViewModel = cinemaOverviewViewModel
         saveDetailBinding.userViewModel = userViewModel
-        saveDetailBinding.lifecycleOwner = this@SaveCinemaDetailDialog
+        saveDetailBinding.lifecycleOwner = this
         return saveDetailBinding.root
     }
 
     override fun onStart() {
         super.onStart()
         startListeners()
+        initTitle()
+    }
+
+    private fun initTitle() {
+        saveDetailBinding.saveCinemadetailTitle.text = when (detail) {
+            is DrawingDetail -> getString(R.string.je_tekening_opslaan)
+            is PhotoDetail -> getString(R.string.je_foto_opslaan)
+            is ExternalVideoDetail -> getString(R.string.je_extern_bestand_opslaan)
+            else -> throw UnsupportedOperationException()
+        }
     }
 
     private fun startListeners() {
-        saveDetailBinding.btnSaveCinema.setOnClickListener {
+        cinemaOverviewViewModel.detailDateButtonClicked.observe(this, Observer {
+            CinemaDateDialog.newInstance().show(requireActivity().supportFragmentManager, null)
+        })
+
+        saveDetailBinding.btnCinemadetailSave.setOnClickListener {
             cinemaOverviewViewModel.onSaveClicked(
-                saveDetailBinding.txtSaveEventTitle.text.toString(),
+                cinemaOverviewViewModel.detailTitle.value!!,
                 userViewModel.user.value!!,
-                detail
+                detail,
+                cinemaOverviewViewModel.detailDate.value!!
             )
         }
 
@@ -70,7 +89,7 @@ class SaveCinemaDetailDialog(private var detail: Detail) : DialogFragment() {
             dismiss()
         })
 
-        saveDetailBinding.btnSaveCinemaCancel.setOnClickListener {
+        saveDetailBinding.btnCinemadetailCancel.setOnClickListener {
             dismiss()
             cinemaOverviewViewModel.goToDetail(detail)
         }

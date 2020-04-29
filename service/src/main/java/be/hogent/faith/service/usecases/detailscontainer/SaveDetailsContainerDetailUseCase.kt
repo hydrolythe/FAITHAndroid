@@ -30,7 +30,8 @@ class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
             .flatMapCompletable { savedEncryptedDetail ->
                 detailContainerRepository.insertDetail(savedEncryptedDetail, params.user)
             }
-            .andThen { addDetailToContainer(params) }
+            .andThen {
+                addDetailToContainer(params) }
     }
 
     private fun addDetailToContainer(params: Params) {

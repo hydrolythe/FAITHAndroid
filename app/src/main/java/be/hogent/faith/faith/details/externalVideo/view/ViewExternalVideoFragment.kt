@@ -29,7 +29,7 @@ class ViewExternalVideoFragment : Fragment() {
     ): View? {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_external_video, container, false)
-        externalFileViewModel.currentFile.observe(this, Observer { file ->
+        externalFileViewModel.currentFile.observe(viewLifecycleOwner, Observer { file ->
             binding.video.setVideoURI(Uri.fromFile(file))
             val mediaController = MediaController(requireContext())
             mediaController.setAnchorView(binding.video)
@@ -41,7 +41,7 @@ class ViewExternalVideoFragment : Fragment() {
     }
 
     private fun loadExistingVideo() {
-        val externalVideoDetail = arguments!!.getSerializable(VIDEO_DETAIL) as ExternalVideoDetail
+        val externalVideoDetail = requireArguments().getSerializable(VIDEO_DETAIL) as ExternalVideoDetail
         externalFileViewModel.loadExistingDetail(externalVideoDetail)
     }
     companion object {

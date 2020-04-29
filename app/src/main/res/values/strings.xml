@@ -31,12 +31,14 @@
     <string name="lbl_detail_name">Naam:</string>
     <string name="hint_audio_recording_name">Een naam voor deze opname</string>
     <string name="save">Opslaan</string>
+    <string name="save_film_success">Je film werd opgeslagen</string>
     <string name="save_audio_success">Je opname werd opgeslagen</string>
     <string name="save_drawing_success">Je tekening werd opgeslagen</string>
     <string name="save_photo_success">Je foto werd opgeslagen</string>
     <string name="save_event_success">Je gebeurtenis werd opgeslagen</string>
     <string name="error_load_events">Er ging iets fout bij het laden van je gebeurtenissen.</string>
     <string name="save_text_success">Je tekst werd opgeslagen</string>
+    <string name="error_save_film_failed">Er ging iets fout bij het opslaan van je film</string>
     <string name="error_save_audio_failed">Er ging iets fout bij het opslaan van je opname</string>
     <string name="error_save_event_failed">Er ging iets fout bij het opslaan van je gebeurtenis</string>
     <string name="error_save_avatar_failed">Er ging iets fout bij het opslaan van je avatar</string>
@@ -109,6 +111,7 @@
     <string name="register_passwords_nomatch">Wachtwoorden niet gelijk</string>
     <string name="register_password_empty">Wachtwoord ingeven</string>
     <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
+    <string name="getLoggedInUser_error">Er ging iets fout bij het ophalen van de gebruiker.</string>
     <string name="error_no_credentials">No credentials have been stored</string>
     <string name="msg_naar_de_stad">Naar de stad</string>
     <string name="msg_registreer">Ik ben nieuw</string>
@@ -247,6 +250,9 @@
     <string name="unauthorized_file_type">Dit bestandstype is niet toegelaten.</string>
     <string name="btn_create_video">Maak video</string>
     <string name="je_filmpje_opslaan">Je filmpje opslaan</string>
+    <string name="je_tekening_opslaan">Je tekening opslaan</string>
+    <string name="je_foto_opslaan">Je foto opslaan</string>
+    <string name="je_extern_bestand_opslaan">Je extern bestand opslaan</string>
     <string name="save_video_title">Titel</string>
     <string name="error_load_detail_failed">Laden detail faalt</string>
 

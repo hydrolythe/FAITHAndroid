@@ -32,16 +32,16 @@ dependencies {
 
     def commonDependencies = rootProject.ext.commonDependencies
     def injectionDependencies = rootProject.ext.injectionDependencies
-    def retrofitDependencies = rootProject.ext.retrofitDependencies
+    def networkDependencies = rootProject.ext.networkDependencies
 
     implementation commonDependencies.kotlin
     implementation commonDependencies.threeTenABP
     implementation commonDependencies.rxjava
     implementation commonDependencies.rxkotlin
 
-    implementation retrofitDependencies.retrofit
-    implementation retrofitDependencies.gson
-    implementation retrofitDependencies.rxjavaAdapter
+    implementation networkDependencies.retrofit
+    implementation networkDependencies.gson
+    implementation networkDependencies.rxjavaAdapter
 
     implementation injectionDependencies.koin
 

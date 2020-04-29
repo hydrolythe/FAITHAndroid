@@ -190,7 +190,7 @@ class CinemaStartScreenFragment : Fragment() {
                     .build()
             )
         picker = builder.build()
-        picker.show(this.fragmentManager!!, picker.toString())
+        picker.show(requireActivity().supportFragmentManager, picker.toString())
         picker.addOnPositiveButtonClickListener {
             // TODO
         }

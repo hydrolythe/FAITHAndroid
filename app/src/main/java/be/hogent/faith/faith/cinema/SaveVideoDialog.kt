@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import be.hogent.faith.R
-import be.hogent.faith.databinding.DialogCinemaSaveVideoBinding
+import be.hogent.faith.databinding.DialogCinemaSaveDetailBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import org.koin.android.ext.android.getKoin
 
 class SaveVideoDialog : DialogFragment() {
-    private lateinit var saveVideoBinding: DialogCinemaSaveVideoBinding
+    private lateinit var saveVideoBinding: DialogCinemaSaveDetailBinding
 
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
@@ -36,7 +36,7 @@ class SaveVideoDialog : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         saveVideoBinding =
-                DataBindingUtil.inflate(inflater, R.layout.dialog_cinema_save_video, container, false)
+                DataBindingUtil.inflate(inflater, R.layout.dialog_cinema_save_detail, container, false)
         saveVideoBinding.userViewModel = userViewModel
         saveVideoBinding.lifecycleOwner = this@SaveVideoDialog
         return saveVideoBinding.root

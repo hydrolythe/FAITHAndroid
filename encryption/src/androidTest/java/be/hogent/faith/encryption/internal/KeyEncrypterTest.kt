@@ -5,6 +5,7 @@ import be.hogent.faith.encryption.di.encryptionModule
 import com.google.crypto.tink.KeysetHandle
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,6 +38,7 @@ class KeyEncrypterTest : KoinTest {
     }
 
     @Test
+    @Ignore("Wait for keyEncrypter workaround to be deleted")
     fun transforms_a_given_keySetHandle_to_an_encrypted_String() {
         val keySetHandle = keyGenerator.generateKeysetHandle()
 
@@ -50,20 +52,23 @@ class KeyEncrypterTest : KoinTest {
     }
 
     @Test
+    @Ignore("Wait for keyEncrypter workaround to be deleted")
     fun transforms_an_encrypted_keySetHandle_back_to_the_original() {
         val keySetHandle = keyGenerator.generateKeysetHandle()
-        var encryptedKeySethandle = ""
+        var encryptedKeySetHandle = ""
         var decryptedKeySetHandle: KeysetHandle? = null
 
         keyEncrypter.encrypt(keySetHandle)
-            .doOnSuccess { encryptedKeySethandle = it }
+            .doOnSuccess { encryptedKeySetHandle = it }
             .test()
             .assertComplete()
             .dispose()
 
-        keyEncrypter.decrypt(encryptedKeySethandle)
+        keyEncrypter.decrypt(encryptedKeySetHandle)
             .doOnSuccess { decryptedKeySetHandle = it }
             .test()
+            .assertComplete()
+            .assertNoErrors()
             .dispose()
 
         // Have to use keySetInfo because comparing the keysets themselves differ by some whitespace only.

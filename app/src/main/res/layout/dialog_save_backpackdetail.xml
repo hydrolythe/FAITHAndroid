@@ -90,7 +90,7 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_weight="1"
                         app:errorEnabled="true"
-                        app:errorResId="@{backpackViewModel.titleErrorMessage}">
+                        app:errorResId="@{backpackViewModel.detailTitleErrorMessage}">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/txt_save_event_title"
