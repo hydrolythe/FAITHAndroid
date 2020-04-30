@@ -5,10 +5,12 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.encryption.EncryptedDetailsContainer
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import be.hogent.faith.service.usecases.util.EncryptedDetailFactory
+import be.hogent.faith.util.factory.DetailFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Test
 import be.hogent.faith.service.repositories.IDetailContainerRepository as IDetailContainerRepository1
@@ -24,7 +26,8 @@ class GetBackPackDataUseCaseTest {
         getBackPackDataUseCase = GetBackPackDataUseCase(
             containerRepository,
             containerEncryptionService,
-            observeScheduler = mockk()
+            observeScheduler = mockk(),
+            subscribeScheduler = Schedulers.trampoline()
         )
     }
 
@@ -42,7 +45,7 @@ class GetBackPackDataUseCaseTest {
         )
         every {
             containerEncryptionService.decryptData(any(), any())
-        } returns Single.defer { Single.just(mockk<Detail>()) }
+        } returns Single.defer { Single.just(DetailFactory.makeRandomDetail()) }
 
         // Act + Assert
         getBackPackDataUseCase.buildUseCaseObservable(GetBackPackDataUseCase.Params())

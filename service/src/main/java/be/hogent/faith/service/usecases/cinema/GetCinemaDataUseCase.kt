@@ -50,7 +50,5 @@ class GetCinemaDataUseCase(
             }
     }
 
-    class Params(
-        cinema: Cinema
-    )
+    class Params()
 }

@@ -62,7 +62,7 @@ class SaveEventDialog : DialogFragment() {
 
     private fun startListeners() {
         eventDetailsViewModel.dateButtonClicked.observe(this, Observer {
-            EventDateDialog.newInstance().show(requireFragmentManager(), null)
+            EventDateDialog.newInstance().show(requireActivity().supportFragmentManager, null)
         })
         eventDetailsViewModel.cancelButtonClicked.observe(this, Observer {
             dismiss()

@@ -131,9 +131,11 @@ class EventDetailsFragment : Fragment() {
         })
 
         userViewModel.user.observe(this, Observer { user ->
-            Glide.with(requireContext()).load(avatarProvider.getAvatarDrawableZitten(user.avatarName))
+            Glide.with(requireContext())
+                .load(avatarProvider.getAvatarDrawableZitten(user.avatarName))
                 .diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_zittend)
-            Glide.with(requireContext()).load(avatarProvider.getAvatarDrawableGezicht(user.avatarName))
+            Glide.with(requireContext())
+                .load(avatarProvider.getAvatarDrawableGezicht(user.avatarName))
                 .diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_inkleuren)
         })
 
@@ -160,7 +162,7 @@ class EventDetailsFragment : Fragment() {
 
         eventViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
-            saveDialog.show(requireFragmentManager(), null)
+            saveDialog.show(requireActivity().supportFragmentManager, null)
         })
 
         userViewModel.eventSavedState.observe(this, Observer {
