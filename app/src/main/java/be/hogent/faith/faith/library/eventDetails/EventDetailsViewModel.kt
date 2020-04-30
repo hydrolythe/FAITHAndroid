@@ -8,6 +8,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.event.MakeEventFilesAvailableUseCase
 import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.observers.DisposableSingleObserver
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 import timber.log.Timber
@@ -38,10 +39,10 @@ class EventDetailsViewModel(
         makeEventFilesAvailableUseCase.execute(
             MakeEventFilesAvailableUseCase.Params(event),
             object :
-                DisposableCompletableObserver() {
-                override fun onComplete() {
+                DisposableSingleObserver<Event>() {
+                override fun onSuccess(t: Event) {
                     Timber.i("Loaded new event files")
-                    _event.value = event
+                    _event.value = t
                 }
 
                 override fun onError(e: Throwable) {

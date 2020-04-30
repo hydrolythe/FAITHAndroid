@@ -111,7 +111,7 @@ class FileStorageRepositoryTest {
         event.details.forEach {
             every { localStorage.isFilePresent(it, event) } returns true
         }
-        every { localStorage.isEmotionAvatarPresent(event) } returns true
+        every { localStorage.setEmotionAvatarIfPresent(event) } returns true
 
         // Act
         storageRepository.downloadEventFiles(event)
@@ -131,7 +131,7 @@ class FileStorageRepositoryTest {
         every { localStorage.isFilePresent(event.details[0], event) } returns false
         every { localStorage.isFilePresent(event.details[1], event) } returns false
 
-        every { localStorage.isEmotionAvatarPresent(event) } returns true
+        every { localStorage.setEmotionAvatarIfPresent(event) } returns true
 
         every {
             remoteStorage.downloadDetail(event.details[0], event)
@@ -159,7 +159,7 @@ class FileStorageRepositoryTest {
         every { localStorage.isFilePresent(event.details[0], event) } returns true
         every { localStorage.isFilePresent(event.details[1], event) } returns true
 
-        every { localStorage.isEmotionAvatarPresent(event) } returns false
+        every { localStorage.setEmotionAvatarIfPresent(event) } returns false
         every { remoteStorage.downloadEmotionAvatar(event) } returns Completable.complete()
 
         // Act

@@ -30,11 +30,7 @@ class KeyEncrypter(private val encryptionService: KeyEncryptionService) {
 
     internal fun decrypt(encryptedKey: EncryptedString): Single<KeysetHandle> {
         return encryptionService
-            .decrypt(
-                DecryptionRequest(
-                    encryptedKey
-                )
-            )
+            .decrypt(DecryptionRequest(encryptedKey))
             // TEMP FIX: because somehow the UC starting this is not doing its thing off the main thread
             // However, this also makes the KeyEncrypter Android test fail.
             .subscribeOn(Schedulers.io())

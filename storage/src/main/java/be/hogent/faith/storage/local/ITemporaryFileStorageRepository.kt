@@ -21,7 +21,7 @@ interface ITemporaryFileStorageRepository {
      */
     fun isFilePresent(detail: Detail, container: DetailsContainer): Boolean
 
-    /**st
+    /**
      * Checks if the emotion avatar of the [event] is in temporary storage.
      */
     fun isEmotionAvatarPresent(event: Event): Boolean

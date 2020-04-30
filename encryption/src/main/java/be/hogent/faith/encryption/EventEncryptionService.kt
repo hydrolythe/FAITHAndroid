@@ -51,7 +51,11 @@ class EventEncryptionService(
                 encryptedEvent
             }
         } else {
-            return encryptEventData(event, dataKey, streamingDataKey).zipWith(encryptedDetails) { encryptedEvent, details ->
+            return encryptEventData(
+                event,
+                dataKey,
+                streamingDataKey
+            ).zipWith(encryptedDetails) { encryptedEvent, details ->
                 encryptedEvent.details = details
                 encryptedEvent
             }
@@ -132,25 +136,51 @@ class EventEncryptionService(
 
     override fun decryptFiles(encryptedEvent: EncryptedEvent): Completable {
         return keyEncrypter.decrypt(encryptedEvent.encryptedStreamingDEK)
-            .doOnSuccess { Timber.i("decrypted sdek for ${encryptedEvent.uuid}") }
-            .flatMapCompletable { sdek ->
-                Completable.merge {
-                    Observable.fromIterable(encryptedEvent.details)
-                        .map { detail -> detailEncryptionService.decryptDetailFiles(detail, sdek) }
-                }
-                    .doOnComplete { Timber.i("Decrypted detail files for event ${encryptedEvent.uuid}") }
-                    .mergeWith {
-                        if (encryptedEvent.emotionAvatar == null) {
-                            Completable.complete()
-                                .doOnComplete { Timber.i("No emotionAvatar to decrypt for event ${encryptedEvent.uuid}") }
-                        } else {
-                            fileEncryptionService.decrypt(encryptedEvent.emotionAvatar!!, sdek)
-                                .map {
-                                    encryptedEvent.emotionAvatar = it
-                                }
-                                .doOnSuccess { Timber.i("EmotionAvatar decrypted for event ${encryptedEvent.uuid}") }
-                        }
-                    }
+            .doOnSuccess { Timber.i("decrypted sdek for event ${encryptedEvent.uuid}") }
+            .doOnSuccess { println("decrypted sdek for ${encryptedEvent.uuid}") }
+            .flatMapCompletable {
+                Completable.mergeArray(
+                    decryptEmotionAvatar(encryptedEvent, it),
+                    decryptDetailFiles(encryptedEvent, it)
+                )
+
             }
+    }
+
+    private fun decryptEmotionAvatar(
+        encryptedEvent: EncryptedEvent,
+        sdek: KeysetHandle
+    ): Completable {
+        return Observable.just(encryptedEvent)
+            .flatMapCompletable { event ->
+                if (event.emotionAvatar == null) {
+                    Completable
+                        .complete()
+                        .doOnComplete { Timber.i("No emotionAvatar to decrypt for event ${encryptedEvent.uuid}") }
+                } else {
+                    fileEncryptionService
+                        .decrypt(event.emotionAvatar!!, sdek)
+                        .flatMapCompletable {
+                            Completable.fromAction {
+                                Timber.i("Decrypted emotionavatar for event ${event.uuid} is ${it.path}")
+                                event.emotionAvatar = it
+                            }
+                        }
+                }
+            }
+
+    }
+
+    private fun decryptDetailFiles(
+        encryptedEvent: EncryptedEvent,
+        sdek: KeysetHandle
+    ): Completable {
+        return Completable
+            .merge(
+                encryptedEvent.details.map { detail ->
+                    detailEncryptionService.decryptDetailFiles(detail, sdek)
+                }
+            )
+            .doOnComplete { Timber.i("Decrypted detail files for event ${encryptedEvent.uuid}") }
     }
 }

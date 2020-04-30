@@ -130,6 +130,30 @@ class EventEncryptionServiceTest : KoinTest, TestWithFiles() {
         })
     }
 
+    @Test
+    fun `decrypting the details of an encrypted event restores them to their original state`() {
+        // Arrange
+        lateinit var encryptedEvent: EncryptedEvent
+        createFilesForEvent(eventWithFiles)
+        eventEncrypter.encrypt(eventWithFiles)
+            .doOnSuccess { encryptedEvent = it }
+            .test()
+            .dispose()
+
+        eventEncrypter.decryptFiles(encryptedEvent)
+            .test()
+            .assertComplete()
+            .assertNoErrors()
+
+        assertTrue(encryptedEvent.emotionAvatar!!.contentEqual(eventWithFiles.emotionAvatar!!))
+        assertTrue(encryptedEvent.details.all { encryptedDetail ->
+            encryptedDetail.file.contentEqual(eventWithFiles.details.find {
+                it.uuid == encryptedDetail.uuid
+            }!!.file)
+        })
+
+    }
+
     private fun createFilesForEvent(eventWithFiles: Event) {
         dataFile.copyTo(eventWithFiles.emotionAvatar!!)
         eventWithFiles.details.forEach {

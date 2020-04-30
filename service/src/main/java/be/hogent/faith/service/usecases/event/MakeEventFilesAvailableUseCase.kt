@@ -22,23 +22,21 @@ class MakeEventFilesAvailableUseCase(
     observeScheduler
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {
-        return Completable.defer {
-            if (fileStorageRepo.filesReadyToUse(params.event)) {
-                Completable.complete()
-                    .doOnComplete {
-                        Timber.i("Files for ${params.event.uuid} are ready to use")
-                    }
-            } else {
-                fileStorageRepo.downloadEventFiles(params.event)
-                    .doOnComplete { Timber.i("Files for ${params.event.uuid} have finished downloading") }
-                    .concatWith(
-                        eventRepository.get(params.event.uuid)
-                            .firstElement()
-                            .doOnSubscribe { Timber.i("Starting to decrypt the files for event ${params.event.uuid}") }
-                            .flatMapCompletable(eventEncryptionService::decryptFiles)
-                            .doOnComplete { Timber.i("Files for event ${params.event.uuid} have been decrypted") }
-                    )
-            }
+        if (fileStorageRepo.filesReadyToUse(params.event)) {
+            return Completable.complete()
+                .doOnComplete {
+                    Timber.i("Files for ${params.event.uuid} are ready to use")
+                }
+        } else {
+            return fileStorageRepo.downloadEventFiles(params.event)
+                .doOnComplete { Timber.i("Files for ${params.event.uuid} have finished downloading") }
+                .concatWith(
+                    eventRepository.get(params.event.uuid)
+                        .firstElement()
+                        .doOnSubscribe { Timber.i("Starting to decrypt the files for event ${params.event.uuid}") }
+                        .flatMapCompletable(eventEncryptionService::decryptFiles)
+                        .doOnComplete { Timber.i("Files for event ${params.event.uuid} have been decrypted") }
+                )
         }
     }
 

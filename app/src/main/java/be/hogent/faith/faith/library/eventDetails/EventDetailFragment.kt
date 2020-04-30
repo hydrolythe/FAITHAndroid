@@ -42,11 +42,27 @@ class EventDetailFragment : Fragment() {
         )
         binding.eventDetailsViewModel = eventDetailsViewModel
         binding.lifecycleOwner = this
-        setListeners()
+        setUpRecyclerView()
+        setupListeners()
         return binding.root
     }
 
-    private fun setListeners() {
+    private fun setUpRecyclerView() {
+        binding.recyclerViewLibraryEventdetails.apply {
+            binding.recyclerViewLibraryEventdetails.apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                // Start with empty list and then fill it in
+                adapter = DetailThumbnailsAdapter(
+                    emptyList(),
+                    requireNotNull(activity) as LibraryActivity
+                )
+            }
+
+        }
+    }
+
+    private fun setupListeners() {
         eventDetailsViewModel.avatarImage.observe(viewLifecycleOwner, Observer { image ->
             if (image != null)
                 loadImageIntoView(requireContext(), image.path, binding.imgAvatar)
@@ -55,15 +71,8 @@ class EventDetailFragment : Fragment() {
         })
 
         eventDetailsViewModel.details.observe(viewLifecycleOwner, Observer { details ->
-            binding.recyclerViewLibraryEventdetails.apply {
-                setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                // Start with empty list and then fill it in
-                adapter = DetailThumbnailsAdapter(
-                    details,
-                    requireNotNull(activity) as LibraryActivity
-                )
-            }
+            (binding.recyclerViewLibraryEventdetails.adapter as DetailThumbnailsAdapter)
+                .updateDetailsList(details)
         })
 
         eventDetailsViewModel.cancelButtonClicked.observe(viewLifecycleOwner, Observer {

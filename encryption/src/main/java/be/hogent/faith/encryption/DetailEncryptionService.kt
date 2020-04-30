@@ -140,9 +140,11 @@ class DetailEncryptionService(
                 .doOnComplete { Timber.i("Detail ${detail.uuid} is a YoutubeVideoDetail, nothing to encrypt") }
         } else {
             return fileEncrypter.decrypt(detail.file, sdek)
-                .map { detail.file = it }
+                .map {
+                    Timber.i("Decrypted file for detail ${detail.uuid} is ${it.path}")
+                    detail.file = it
+                }
                 .ignoreElement()
-                .doOnComplete { Timber.i("Decrypted detail files for detail ${detail.uuid}") }
         }
     }
 
@@ -157,9 +159,11 @@ class DetailEncryptionService(
                 .doOnComplete { Timber.i("Detail ${encryptedDetail.uuid} is a YoutubeVideoDetail, nothing to encrypt") }
         } else {
             return fileEncrypter.decrypt(encryptedDetail.file, sdek)
-                .map { encryptedDetail.file = it }
+                .map {
+                    Timber.i("Decrypted file for detail ${encryptedDetail.uuid} is ${it.path}")
+                    encryptedDetail.file = it
+                }
                 .ignoreElement()
-                .doOnComplete { Timber.i("Decrypted detail files for detail ${encryptedDetail.uuid}") }
         }
     }
 }

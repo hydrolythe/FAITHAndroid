@@ -78,6 +78,11 @@ class FileStorageRepository(
         }
     }
 
+    /**
+     * Checks if files are available ready to use.
+     * This can change the event, as paths to the events files can be changed if they are found
+     * in storage.
+     */
     override fun filesReadyToUse(event: Event): Boolean {
         // We  are using the fact that decrypted files are stored in the cache directory.
         return temporaryStorage.isEmotionAvatarPresent(event) &&
