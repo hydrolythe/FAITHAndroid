@@ -256,5 +256,6 @@
     <string name="save_video_title">Titel</string>
     <string name="error_load_detail_failed">Laden detail faalt</string>
     <string name="error_load_backpack">Er ging iets fout bij het laden van je rugzak.</string>
+    <string name="error_load_cinema">Er ging iets fout bij het laden van je cinema.</string>
 
 </resources>

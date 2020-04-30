@@ -6,7 +6,9 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
-import be.hogent.faith.faith.details.externalFile.ExternalFileViewModel
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerViewModel
+import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.details.audio.AudioDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
@@ -14,13 +16,11 @@ import be.hogent.faith.faith.details.drawing.create.DrawingDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProviderFromResources
 import be.hogent.faith.faith.details.drawing.view.ViewDrawingDetailViewModel
+import be.hogent.faith.faith.details.externalFile.ExternalFileViewModel
 import be.hogent.faith.faith.details.photo.create.TakePhotoViewModel
 import be.hogent.faith.faith.details.photo.view.ViewPhotoDetailViewModel
-import be.hogent.faith.faith.details.text.view.ViewTextDetailViewModel
 import be.hogent.faith.faith.details.text.create.TextDetailViewModel
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerViewModel
-import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
+import be.hogent.faith.faith.details.text.view.ViewTextDetailViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
@@ -62,8 +62,24 @@ val appModule = module(override = true) {
     viewModel { CityScreenViewModel(get()) }
     viewModel { (event: Event) -> EventViewModel(get(), get(), event) }
     viewModel { EventViewModel(get(), get()) }
-    viewModel { (backpack: Backpack) -> BackpackViewModel(get(named("SaveBackpackDetailUseCase")), get(named("DeleteBackpackDetailUseCase")), backpack, get(named("LoadBackpackDetailFileUseCase")), get()) }
-    viewModel { (cinema: Cinema) -> CinemaOverviewViewModel(get(named("SaveCinemaDetailUseCase")), get(named("DeleteCinemaDetailUseCase")), get(named("LoadCinemaDetailFileUseCase")), cinema) }
+    viewModel { (backpack: Backpack) ->
+        BackpackViewModel(
+            saveBackpackDetailUseCase = get(named("SaveBackpackDetailUseCase")),
+            deleteBackpackDetailUseCase = get(named("DeleteBackpackDetailUseCase")),
+            backpack = backpack,
+            loadDetailFileUseCase = get(named("LoadBackpackDetailFileUseCase")),
+            getBackPackDataUseCase = get()
+        )
+    }
+    viewModel { (cinema: Cinema) ->
+        CinemaOverviewViewModel(
+            saveBackpackDetailUseCase = get(named("SaveCinemaDetailUseCase")),
+            deleteBackpackDetailUseCase = get(named("DeleteCinemaDetailUseCase")),
+            loadDetailFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
+            cinema = cinema,
+            getCinemaDataUseCase = get()
+        )
+    }
     viewModel { DrawViewModel() }
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }
@@ -87,7 +103,7 @@ val appModule = module(override = true) {
     viewModel { ViewDrawingDetailViewModel() }
     viewModel {
         ViewTextDetailViewModel(
-                get()
+            get()
         )
     }
 
@@ -117,9 +133,9 @@ val appModule = module(override = true) {
     // We are using SharedPrefs to store tokens, in PRIVATE mode
     single {
         SecureCredentialsManager(
-                get(),
-                get() as AuthenticationAPIClient,
-                get() as SharedPreferencesStorage
+            get(),
+            get() as AuthenticationAPIClient,
+            get() as SharedPreferencesStorage
         )
     }
     single { SharedPreferencesStorage(androidContext()) }

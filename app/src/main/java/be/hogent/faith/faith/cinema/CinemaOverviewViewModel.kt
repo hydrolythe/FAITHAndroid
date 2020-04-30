@@ -2,18 +2,23 @@ package be.hogent.faith.faith.cinema
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import be.hogent.faith.R
 import be.hogent.faith.domain.models.Cinema
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.cinema.GetCinemaDataUseCase
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
+import io.reactivex.observers.DisposableObserver
 
 class CinemaOverviewViewModel(
     saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Cinema>,
     deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Cinema>,
     loadDetailFileUseCase: LoadDetailFileUseCase<Cinema>,
-    cinema: Cinema
+    cinema: Cinema,
+    private val getCinemaDataUseCase: GetCinemaDataUseCase
 ) : DetailsContainerViewModel<Cinema>(
     saveBackpackDetailUseCase,
     deleteBackpackDetailUseCase,
@@ -33,7 +38,19 @@ class CinemaOverviewViewModel(
     val addButtonClicked: LiveData<Unit> = _addButtonClicked
 
     fun onFilesButtonClicked() {
-        details = detailsContainer.getFiles()
+        getCinemaDataUseCase.execute(
+            GetCinemaDataUseCase.Params(),
+            object : DisposableObserver<List<Detail>>() {
+                override fun onComplete() {}
+
+                override fun onNext(t: List<Detail>) {
+                    details = t
+                }
+
+                override fun onError(e: Throwable) {
+                    _errorMessage.postValue(R.string.error_load_cinema)
+                }
+            })
         _filmsVisible.value = false
     }
 

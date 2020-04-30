@@ -4,6 +4,7 @@ import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.service.usecases.backpack.GetBackPackDataUseCase
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
+import be.hogent.faith.service.usecases.cinema.GetCinemaDataUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
@@ -103,30 +104,39 @@ val serviceModule = module {
     }
     factory<SaveDetailsContainerDetailUseCase<Cinema>>(named("SaveCinemaDetailUseCase")) {
         SaveDetailsContainerDetailUseCase<Cinema>(
-            get(named(CinemaNames.repo)),
-            get(named(CinemaNames.encryptionService)),
-            get(),
-            get(),
+            detailContainerRepository = get(named(CinemaNames.repo)),
+            detailContainerEncryptionService = get(named(CinemaNames.encryptionService)),
+            storageRepository = get(),
+            observeScheduler = get(),
             subscribeScheduler = Schedulers.io()
         )
     }
     factory<DeleteDetailsContainerDetailUseCase<Backpack>>(named("DeleteBackpackDetailUseCase")) {
         DeleteDetailsContainerDetailUseCase<Backpack>(
-            get(named(BackpackNames.repo)),
-            get(), get()
+            backpackRepository = get(named(BackpackNames.repo)),
+            fileStorageRepository = get(), observeScheduler = get()
         )
     }
     factory<DeleteDetailsContainerDetailUseCase<Cinema>>(named("DeleteCinemaDetailUseCase")) {
         DeleteDetailsContainerDetailUseCase<Cinema>(
-            get(named(CinemaNames.repo)),
-            get(), get()
+            backpackRepository = get(named(CinemaNames.repo)),
+            fileStorageRepository = get(), observeScheduler = get()
         )
     }
     factory {
         GetBackPackDataUseCase(
-            get(named(BackpackNames.repo)),
-            get(named(BackpackNames.encryptionService)),
-            get()
+            backpackRepository = get(named(BackpackNames.repo)),
+            detailContainerEncryptionService = get(named(BackpackNames.encryptionService)),
+            observeScheduler = get(),
+            subscribeScheduler = Schedulers.io()
+        )
+    }
+    factory {
+        GetCinemaDataUseCase(
+            cinemaRepository = get(named(CinemaNames.repo)),
+            detailContainerEncryptionService = get(named(CinemaNames.encryptionService)),
+            observeScheduler = get(),
+            subscribeScheduler = Schedulers.io()
         )
     }
 }

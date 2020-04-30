@@ -2,6 +2,7 @@ package be.hogent.faith.storage
 
 import android.content.Context
 import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
@@ -36,7 +37,7 @@ class StoragePathProvider(
     fun detailsContainerFolderPath(detailsContainer: DetailsContainer): File {
         return when (detailsContainer) {
             is Backpack -> File("users/${user!!.uid}/containers/backpack")
-            else -> throw NotImplementedError()
+            is Cinema -> File("users/${user!!.uid}/containers/cinema")
         }
     }
 
