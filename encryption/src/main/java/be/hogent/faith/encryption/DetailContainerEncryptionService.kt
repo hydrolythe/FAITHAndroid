@@ -9,6 +9,7 @@ import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
+import timber.log.Timber
 
 class DetailContainerEncryptionService<T>(
     private val detailEncryptionService: DetailEncryptionService,
@@ -48,7 +49,9 @@ class DetailContainerEncryptionService<T>(
 
     override fun createContainer(): Single<EncryptedDetailsContainer> {
         val encryptedDEK = keyEncrypter.encrypt(keyGenerator.generateKeysetHandle())
+            .doOnSuccess { Timber.i("Created dek for container") }
         val encryptedSDEK = keyEncrypter.encrypt(keyGenerator.generateStreamingKeysetHandle())
+            .doOnSuccess { Timber.i("Created sdek for container") }
 
         return Singles.zip(encryptedDEK, encryptedSDEK) { dek, sdek ->
             EncryptedDetailsContainer(dek, sdek)

@@ -10,6 +10,8 @@ import be.hogent.faith.encryption.internal.ENDPOINT
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyEncryptionService
 import be.hogent.faith.encryption.internal.KeyGenerator
+import be.hogent.faith.service.di.BackpackNames
+import be.hogent.faith.service.di.CinemaNames
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import be.hogent.faith.service.encryption.IEventEncryptionService
 import com.squareup.moshi.Moshi
@@ -31,10 +33,10 @@ val encryptionModule = module {
     factory<IDetailContainerEncryptionService<Backpack>> {
         DetailContainerEncryptionService<Backpack>(get(), get(), get())
     }
-    factory<IDetailContainerEncryptionService<Backpack>>(named("BackpackEncryptionService")) {
+    factory<IDetailContainerEncryptionService<Backpack>>(named(BackpackNames.encryptionService)) {
         DetailContainerEncryptionService<Backpack>(get(), get(), get())
     }
-    factory<IDetailContainerEncryptionService<Cinema>>(named("CinemaEncryptionService")) {
+    factory<IDetailContainerEncryptionService<Cinema>>(named(CinemaNames.encryptionService)) {
         DetailContainerEncryptionService<Cinema>(get(), get(), get())
     }
 }

@@ -7,6 +7,10 @@ import io.reactivex.Single
 interface IAuthManager {
     fun isUsernameUnique(email: String): Single<Boolean>
 
+    /**
+     * Registers a user with the given [email] and [password]
+     * @return the users UUID>
+     */
     fun register(email: String, password: String): Maybe<String?>
 
     fun signIn(email: String, password: String): Maybe<String?>

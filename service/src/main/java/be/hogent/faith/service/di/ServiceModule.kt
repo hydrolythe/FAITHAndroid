@@ -25,7 +25,7 @@ import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.service.usecases.user.IsUsernameUniqueUseCase
 import be.hogent.faith.service.usecases.user.LoginUserUseCase
 import be.hogent.faith.service.usecases.user.LogoutUserUseCase
-import be.hogent.faith.service.usecases.user.RegisterUserUseCase
+import io.reactivex.schedulers.Schedulers
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -33,14 +33,36 @@ import org.koin.dsl.module
  * Module containing all the use cases.
  * Don't forget to add any use case that you write here so it can be injected in the app module.
  */
+object BackpackNames {
+    const val repo = "BackpackRepository"
+    const val database = "BackpackDatabase"
+    const val encryptionService = "BackpackEncryptionService"
+}
+
+object CinemaNames {
+    const val repo = "CinemaRepository"
+    const val database = "CinemaDatabase"
+    const val encryptionService = "CinemaEncryptionService"
+}
+
 val serviceModule = module {
     factory { GetEventsUseCase(get(), get(), get()) }
     factory { SaveEventUseCase(get(), get(), get(), get()) }
-    factory { CreateUserUseCase(get(), get(), get(), get(), get(), get()) }
+    factory {
+        CreateUserUseCase(
+            authManager = get(),
+            userRepository = get(),
+            backpackRepository = get(named(BackpackNames.repo)),
+            cinemaRepository = get(named(CinemaNames.repo)),
+            backpackEncryptionService = get(),
+            cinemaEncryptionService = get(),
+            observer = get(),
+            subscriber = Schedulers.io()
+        )
+    }
     factory { SaveEmotionAvatarUseCase(get(), get()) }
     factory { SaveEventDetailUseCase(get(), get()) }
     factory { GetUserUseCase(get(), get(), get(), get(), get()) }
-    factory { RegisterUserUseCase(get(), get(), get()) }
     factory { IsUsernameUniqueUseCase(get(), get()) }
     factory { LoginUserUseCase(get(), get()) }
     factory { LogoutUserUseCase(get(), get()) }
@@ -52,56 +74,58 @@ val serviceModule = module {
     factory { CreateAudioDetailUseCase(get()) }
     factory { CreateTextDetailUseCase(get(), get()) }
     factory { CreateExternalVideoDetailUseCase(get()) }
-    factory { MakeEventFilesAvailableUseCase(get(), get(), get(), get()) }
+    factory { MakeEventFilesAvailableUseCase(get(), get(), get(), get(), Schedulers.io()) }
     factory<LoadDetailFileUseCase<Backpack>>(named("LoadBackpackDetailFileUseCase")) {
         LoadDetailFileUseCase<Backpack>(
-            get(),
-            get(named("BackpackRepository")),
-            get(named("BackpackEncryptionService")),
-            get()
+            storageRepo = get(),
+            containerRepository = get(named(BackpackNames.repo)),
+            detailContainerEncryptionService = get(named(BackpackNames.encryptionService)),
+            observeScheduler = get()
         )
     }
     factory<LoadDetailFileUseCase<Cinema>>(named("LoadCinemaDetailFileUseCase")) {
         LoadDetailFileUseCase<Cinema>(
-            get(),
-            get(named("CinemaRepository")),
-            get(named("CinemaEncryptionService")),
-            get()
+            storageRepo = get(),
+            containerRepository = get(named(CinemaNames.repo)),
+            detailContainerEncryptionService = get(named(CinemaNames.encryptionService)),
+            observeScheduler = get()
         )
     }
     factory { GetYoutubeVideosFromSearchUseCase(get()) }
     factory<SaveDetailsContainerDetailUseCase<Backpack>>(named("SaveBackpackDetailUseCase")) {
         SaveDetailsContainerDetailUseCase<Backpack>(
-            get(named("BackpackRepository")),
-            get(named("BackpackEncryptionService")),
-            get(),
-            get()
+            detailContainerRepository = get(named(BackpackNames.repo)),
+            detailContainerEncryptionService = get(named(BackpackNames.encryptionService)),
+            storageRepository = get(),
+            observeScheduler = get(),
+            subscribeScheduler = Schedulers.io()
         )
     }
     factory<SaveDetailsContainerDetailUseCase<Cinema>>(named("SaveCinemaDetailUseCase")) {
         SaveDetailsContainerDetailUseCase<Cinema>(
-            get(named("CinemaRepository")),
-            get(named("CinemaEncryptionService")),
+            get(named(CinemaNames.repo)),
+            get(named(CinemaNames.encryptionService)),
             get(),
-            get()
+            get(),
+            subscribeScheduler = Schedulers.io()
         )
     }
     factory<DeleteDetailsContainerDetailUseCase<Backpack>>(named("DeleteBackpackDetailUseCase")) {
         DeleteDetailsContainerDetailUseCase<Backpack>(
-            get(named("BackpackRepository")),
+            get(named(BackpackNames.repo)),
             get(), get()
         )
     }
     factory<DeleteDetailsContainerDetailUseCase<Cinema>>(named("DeleteCinemaDetailUseCase")) {
         DeleteDetailsContainerDetailUseCase<Cinema>(
-            get(named("CinemaRepository")),
+            get(named(CinemaNames.repo)),
             get(), get()
         )
     }
     factory {
         GetBackPackDataUseCase(
-            get(named("BackpackRepository")),
-            get(named("BackpackEncryptionService")),
+            get(named(BackpackNames.repo)),
+            get(named(BackpackNames.encryptionService)),
             get()
         )
     }

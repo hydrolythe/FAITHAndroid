@@ -83,7 +83,7 @@ class UserViewModel(
                         ResourceState.ERROR, null,
                         when (e) {
                             is NetworkError -> R.string.login_error_internet
-                            else -> R.string.register_error_create_user
+                            else -> R.string.getLoggedInUser_error
                         }
                     )
             }

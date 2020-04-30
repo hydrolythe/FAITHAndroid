@@ -52,7 +52,6 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        backpackViewModel.clearSaveDialogErrorMessage()
         startListeners()
     }
 
@@ -73,13 +72,12 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
 
         backpackViewModel.errorMessage.observe(this, Observer {
             if (it != null)
-                saveDetailBinding.textInputLayoutDetailTitle.error = resources.getString(it)
+                Toast.makeText(context, resources.getString(it), Toast.LENGTH_SHORT).show()
         })
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        backpackViewModel.clearSaveDialogErrorMessage()
     }
 
     override fun onCancel(dialog: DialogInterface) {

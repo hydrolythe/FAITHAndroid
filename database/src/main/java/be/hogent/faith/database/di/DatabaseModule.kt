@@ -16,6 +16,8 @@ import be.hogent.faith.database.user.UserMapper
 import be.hogent.faith.database.user.UserRepository
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
+import be.hogent.faith.service.di.BackpackNames
+import be.hogent.faith.service.di.CinemaNames
 import be.hogent.faith.service.repositories.IAuthManager
 import be.hogent.faith.service.repositories.IDetailContainerRepository
 import be.hogent.faith.service.repositories.IEventRepository
@@ -36,13 +38,35 @@ val databaseModule = module {
     single { AuthManager(get()) as IAuthManager }
     single { FirebaseAuthManager(constructFirebaseAuthInstance()) }
 
-    single<IDetailContainerRepository<Backpack>>(named("BackpackRepository")) { DetailContainerRepository<Backpack>(get(), get(), get(), get(named("BackpackDatabase"))) }
-    single<IDetailContainerRepository<Cinema>>(named("CinemaRepository")) { DetailContainerRepository<Cinema>(get(), get(), get(), get(named("CinemaDatabase"))) }
+    single<IDetailContainerRepository<Backpack>>(named(BackpackNames.repo)) {
+        DetailContainerRepository<Backpack>(
+            userMapper = get(),
+            detailMapper = get(),
+            containerMapper = get(),
+            database = get(named(BackpackNames.database))
+        )
+    }
+    single<IDetailContainerRepository<Cinema>>(named(CinemaNames.repo)) {
+        DetailContainerRepository<Cinema>(
+            userMapper = get(),
+            detailMapper = get(),
+            containerMapper = get(),
+            database = get(named(CinemaNames.database))
+        )
+    }
 
-    single<DetailContainerDatabase<Backpack>>(named("BackpackDatabase")) { BackpackDatabase(constructFirebaseAuthInstance(),
-        constructFireStoreInstance()) }
-    single<DetailContainerDatabase<Cinema>>(named("CinemaDatabase")) { CinemaDatabase(constructFirebaseAuthInstance(),
-        constructFireStoreInstance()) }
+    single<DetailContainerDatabase<Backpack>>(named(BackpackNames.database)) {
+        BackpackDatabase(
+            constructFirebaseAuthInstance(),
+            constructFireStoreInstance()
+        )
+    }
+    single<DetailContainerDatabase<Cinema>>(named(CinemaNames.database)) {
+        CinemaDatabase(
+            constructFirebaseAuthInstance(),
+            constructFireStoreInstance()
+        )
+    }
     single { EventDatabase(constructFirebaseAuthInstance(), constructFireStoreInstance()) }
     single { FirebaseUserDatabase(constructFirebaseAuthInstance(), constructFireStoreInstance()) }
 }

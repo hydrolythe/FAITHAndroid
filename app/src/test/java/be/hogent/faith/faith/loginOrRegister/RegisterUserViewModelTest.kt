@@ -5,7 +5,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.Avatar
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
-import be.hogent.faith.service.usecases.user.RegisterUserUseCase
+import be.hogent.faith.service.usecases.user.CreateUserUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.called
 import io.mockk.mockk
@@ -20,7 +20,7 @@ import org.junit.Test
 class RegisterUserViewModelTest {
 
     private lateinit var registerUserViewModel: RegisterUserViewModel
-    private val registerUserUseCase = mockk<RegisterUserUseCase>(relaxed = true)
+    private val createUserUseCase = mockk<CreateUserUseCase>(relaxed = true)
     private val username = DataFactory.randomString()
     private val password = DataFactory.randomString()
     private val avatar = Avatar(DataFactory.randomString())
@@ -30,7 +30,7 @@ class RegisterUserViewModelTest {
 
     @Before
     fun setUp() {
-        registerUserViewModel = RegisterUserViewModel(registerUserUseCase)
+        registerUserViewModel = RegisterUserViewModel(createUserUseCase)
     }
 
     @Test
@@ -46,7 +46,7 @@ class RegisterUserViewModelTest {
             ResourceState.ERROR,
             registerUserViewModel.userRegisteredState.value?.status
         )
-        verify { registerUserUseCase wasNot called }
+        verify { createUserUseCase wasNot called }
     }
 
     @Test
@@ -62,7 +62,7 @@ class RegisterUserViewModelTest {
             ResourceState.ERROR,
             registerUserViewModel.userRegisteredState.value?.status
         )
-        verify { registerUserUseCase wasNot called }
+        verify { createUserUseCase wasNot called }
     }
 
     @Test
@@ -70,7 +70,7 @@ class RegisterUserViewModelTest {
         // Arrange
         registerUserViewModel.setRegistrationDetails(username, password)
         registerUserViewModel.setAvatar(avatar)
-        val params = slot<RegisterUserUseCase.Params>()
+        val params = slot<CreateUserUseCase.Params>()
         val observer = slot<DisposableCompletableObserver>()
         val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
 
@@ -78,13 +78,13 @@ class RegisterUserViewModelTest {
 
         // Act
         registerUserViewModel.register()
-        verify { registerUserUseCase.execute(capture(params), capture(observer)) }
+        verify { createUserUseCase.execute(capture(params), capture(observer)) }
         observer.captured.onComplete()
 
         // Assert
         Assert.assertEquals(username, params.captured.username)
         Assert.assertEquals(password, params.captured.password)
-        Assert.assertEquals(avatar.avatarName, params.captured.avatar)
+        Assert.assertEquals(avatar.avatarName, params.captured.avatarName)
     }
 
     @Test
@@ -92,14 +92,14 @@ class RegisterUserViewModelTest {
         // Arrange
         registerUserViewModel.setRegistrationDetails(username, password)
         registerUserViewModel.setAvatar(avatar)
-        val params = slot<RegisterUserUseCase.Params>()
+        val params = slot<CreateUserUseCase.Params>()
         val observer = slot<DisposableCompletableObserver>()
         val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
         registerUserViewModel.userRegisteredState.observeForever(successObserver)
 
         // Act
         registerUserViewModel.register()
-        verify { registerUserUseCase.execute(capture(params), capture(observer)) }
+        verify { createUserUseCase.execute(capture(params), capture(observer)) }
         observer.captured.onComplete()
 
         // Assert
@@ -115,14 +115,14 @@ class RegisterUserViewModelTest {
         // Arrange
         registerUserViewModel.setRegistrationDetails(username, password)
         registerUserViewModel.setAvatar(avatar)
-        val params = slot<RegisterUserUseCase.Params>()
+        val params = slot<CreateUserUseCase.Params>()
         val observer = slot<DisposableCompletableObserver>()
         val successObserver = mockk<Observer<Resource<Unit>>>(relaxed = true)
         registerUserViewModel.userRegisteredState.observeForever(successObserver)
 
         // Act
         registerUserViewModel.register()
-        verify { registerUserUseCase.execute(capture(params), capture(observer)) }
+        verify { createUserUseCase.execute(capture(params), capture(observer)) }
         observer.captured.onError(mockk(relaxed = true))
 
         // Assert

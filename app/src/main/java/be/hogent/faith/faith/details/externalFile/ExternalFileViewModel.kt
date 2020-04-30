@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.backpackScreen.externalFile
+package be.hogent.faith.faith.details.externalFile
 
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData

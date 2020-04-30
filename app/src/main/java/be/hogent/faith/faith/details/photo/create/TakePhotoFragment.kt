@@ -17,6 +17,7 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
+import be.hogent.faith.faith.cinema.CinemaActivity
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
@@ -155,10 +156,10 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
     private fun showExitAlert() {
         val alertDialog: AlertDialog = this.run {
             val builder = AlertDialog.Builder(this.requireContext()).apply {
-                if (requireActivity() is BackpackScreenActivity) {
-                    setTitle(R.string.dialog_to_the_backpack)
-                } else {
-                    setTitle(R.string.dialog_to_the_event_title)
+                when (requireActivity()) {
+                    is BackpackScreenActivity -> setTitle(R.string.dialog_to_the_backpack)
+                    is CinemaActivity -> setTitle(R.string.dialog_to_the_cinema_title)
+                    else -> setTitle(R.string.dialog_to_the_event_title)
                 }
                 setMessage(R.string.dialog_takePhoto_cancel_message)
                 setPositiveButton(R.string.ok) { _, _ ->

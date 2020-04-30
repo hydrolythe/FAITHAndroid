@@ -6,7 +6,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
-import be.hogent.faith.faith.backpackScreen.externalFile.ExternalFileViewModel
+import be.hogent.faith.faith.details.externalFile.ExternalFileViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.details.audio.AudioDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel

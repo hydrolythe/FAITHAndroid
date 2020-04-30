@@ -11,6 +11,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Completable
 import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
@@ -29,7 +30,8 @@ class MakeEventFilesAvailableUseCaseTest {
             fileStorageRepository,
             eventRepository,
             evenEncryptionService,
-            observer
+            observer,
+            Schedulers.trampoline()
         )
         event = EventFactory.makeEvent(numberOfDetails = 0)
     }
@@ -37,7 +39,7 @@ class MakeEventFilesAvailableUseCaseTest {
     @Test
     fun getEventFilesUC_execute_getFiles() {
         every { fileStorageRepository.downloadEventFiles(any()) } returns Completable.complete()
-        makeEventFilesAvailableUseCase.buildUseCaseObservable(
+        makeEventFilesAvailableUseCase.buildUseCaseSingle(
             MakeEventFilesAvailableUseCase.Params(event)
         )
             .test()
@@ -54,7 +56,7 @@ class MakeEventFilesAvailableUseCaseTest {
         every { fileStorageRepository.downloadEventFiles(any()) } returns Completable.error(
             IOException()
         )
-        makeEventFilesAvailableUseCase.buildUseCaseObservable(
+        makeEventFilesAvailableUseCase.buildUseCaseSingle(
             MakeEventFilesAvailableUseCase.Params(event)
         )
             .test()

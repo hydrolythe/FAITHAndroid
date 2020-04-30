@@ -58,7 +58,6 @@ class EventDetailFragment : Fragment() {
                     requireNotNull(activity) as LibraryActivity
                 )
             }
-
         }
     }
 

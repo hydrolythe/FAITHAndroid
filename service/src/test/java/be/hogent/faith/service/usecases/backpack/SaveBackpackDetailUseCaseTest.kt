@@ -15,6 +15,7 @@ import io.mockk.verify
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Test
 
@@ -38,7 +39,8 @@ class SaveBackpackDetailUseCaseTest {
                 containerRepository,
                 containerEncryptionService,
                 storageRepository,
-                scheduler
+                scheduler,
+                Schedulers.trampoline()
             )
     }
 

@@ -143,7 +143,6 @@ class EventEncryptionService(
                     decryptEmotionAvatar(encryptedEvent, it),
                     decryptDetailFiles(encryptedEvent, it)
                 )
-
             }
     }
 
@@ -168,7 +167,6 @@ class EventEncryptionService(
                         }
                 }
             }
-
     }
 
     private fun decryptDetailFiles(

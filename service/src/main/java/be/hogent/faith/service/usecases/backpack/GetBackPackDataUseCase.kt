@@ -4,8 +4,7 @@ import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import be.hogent.faith.service.repositories.IDetailContainerRepository
-import be.hogent.faith.service.usecases.base.FlowableUseCase
-import io.reactivex.Flowable
+import be.hogent.faith.service.usecases.base.ObservableUseCase
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 
@@ -16,15 +15,22 @@ class GetBackPackDataUseCase(
     private val backpackRepository: IDetailContainerRepository<Backpack>,
     private val detailContainerEncryptionService: IDetailContainerEncryptionService<Backpack>,
     observeScheduler: Scheduler
-) : FlowableUseCase<List<Detail>, GetBackPackDataUseCase.Params>(observeScheduler) {
-    override fun buildUseCaseObservable(params: Params): Flowable<List<Detail>> {
-        // TODO: find something around this blockingGet
-        val container = backpackRepository.getEncryptedContainer().blockingGet()
-        return backpackRepository.getAll()
-            .concatMapSingle { list ->
-                Observable.fromIterable(list)
-                    .flatMapSingle { detailContainerEncryptionService.decryptData(it, container) }
-                    .toList()
+) : ObservableUseCase<List<Detail>, GetBackPackDataUseCase.Params>(observeScheduler) {
+    override fun buildUseCaseObservable(params: Params): Observable<List<Detail>> {
+        return backpackRepository.getEncryptedContainer()
+            .flatMapObservable { container ->
+                backpackRepository.getAll()
+                    .toObservable()
+                    .concatMapSingle { list ->
+                        Observable.fromIterable(list)
+                            .flatMapSingle {
+                                detailContainerEncryptionService.decryptData(
+                                    it,
+                                    container
+                                )
+                            }
+                            .toList()
+                    }
             }
     }
 

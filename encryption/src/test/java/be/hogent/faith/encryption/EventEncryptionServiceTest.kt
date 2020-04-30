@@ -8,10 +8,10 @@ import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.util.contentEqual
 import be.hogent.faith.util.factory.EventFactory
+import io.reactivex.schedulers.Schedulers
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.koin.test.KoinTest
@@ -73,7 +73,6 @@ class EventEncryptionServiceTest : KoinTest, TestWithFiles() {
             .dispose()
     }
 
-    @Ignore("Currently doesn't work because of the temp fix in [KeyEncrypter]")
     @Test()
     fun `After decrypting an encrypted event all its data is back to the original values`() {
         // Arrange
@@ -86,6 +85,7 @@ class EventEncryptionServiceTest : KoinTest, TestWithFiles() {
         // Act
         var decryptedEvent: Event? = null
         eventEncrypter.decryptData(encryptedEvent!!)
+            .subscribeOn(Schedulers.trampoline())
             .doOnSuccess { decryptedEvent = it }
             .test()
             .assertNoErrors()
@@ -141,6 +141,7 @@ class EventEncryptionServiceTest : KoinTest, TestWithFiles() {
             .dispose()
 
         eventEncrypter.decryptFiles(encryptedEvent)
+            .subscribeOn(Schedulers.trampoline())
             .test()
             .assertComplete()
             .assertNoErrors()
@@ -151,7 +152,6 @@ class EventEncryptionServiceTest : KoinTest, TestWithFiles() {
                 it.uuid == encryptedDetail.uuid
             }!!.file)
         })
-
     }
 
     private fun createFilesForEvent(eventWithFiles: Event) {

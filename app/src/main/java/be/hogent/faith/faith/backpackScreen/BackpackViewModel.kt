@@ -7,13 +7,11 @@ import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
-import be.hogent.faith.faith.detailscontainer.OpenDetailMode
-import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.backpack.GetBackPackDataUseCase
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
-import io.reactivex.subscribers.DisposableSubscriber
+import io.reactivex.observers.DisposableObserver
 import java.util.Date
 
 class BackpackViewModel(
@@ -29,9 +27,6 @@ class BackpackViewModel(
     backpack
 ) {
 
-    private val _detailIsSaved = SingleLiveEvent<Any>()
-    val detailIsSaved: LiveData<Any> = _detailIsSaved
-
     private val _viewButtons = MutableLiveData<Boolean>()
     val viewButtons: LiveData<Boolean> = _viewButtons
 
@@ -41,46 +36,26 @@ class BackpackViewModel(
 
     private fun loadDetails() {
         val params = GetBackPackDataUseCase.Params()
-        getBackPackDataUseCase.execute(params, object : DisposableSubscriber<List<Detail>>() {
-            override fun onNext(loadedDetails: List<Detail>?) {
-                loadedDetails?.let {
-                    details = it
-                    setSearchStringText("")
-                }
-            }
+        getBackPackDataUseCase.execute(params, object : DisposableObserver<List<Detail>>() {
 
-            override fun onComplete() {}
+            override fun onComplete() {
+            }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_load_backpack)
             }
-        })
-    }
 
-    fun setOpenDetailType(openDetailMode: OpenDetailMode) {
-        _openDetailMode.postValue(openDetailMode)
+            override fun onNext(t: List<Detail>) {
+                t.let {
+                    details = it
+                    setSearchStringText("")
+                }
+            }
+        })
     }
 
     fun viewButtons(viewButtons: Boolean) {
         _viewButtons.postValue(viewButtons)
-    }
-
-    fun onSaveClicked(title: String, user: User, detail: Detail) {
-        val notMaxCharacters = checkMaxCharacters(title)
-        val uniqueTitle = checkUniqueTitle(title)
-        if (title.isNotEmpty() && notMaxCharacters && uniqueTitle) {
-            detail.title = title
-
-            saveCurrentDetail(user, detail)
-            _detailIsSaved.call()
-        } else {
-            if (title.isBlank())
-                setErrorMessage(R.string.save_detail_emptyString)
-            if (!notMaxCharacters)
-                setErrorMessage(R.string.save_detail_maxChar)
-            if (!uniqueTitle)
-                setErrorMessage(R.string.save_detail_uniqueName)
-        }
     }
 
     fun saveYoutubeVideoDetail(title: String, user: User, detail: Detail) {
@@ -94,17 +69,5 @@ class BackpackViewModel(
             detail.title = detail.title + " (" + Date() + ")"
         }
         saveCurrentDetail(user, detail)
-    }
-
-    private fun checkUniqueTitle(title: String): Boolean {
-        return (details.find { e -> (e.title == title) } == null)
-    }
-
-    private fun checkMaxCharacters(title: String): Boolean {
-        return title.length <= 30
-    }
-
-    fun clearSaveDialogErrorMessage() {
-        _errorMessage.postValue(null)
     }
 }

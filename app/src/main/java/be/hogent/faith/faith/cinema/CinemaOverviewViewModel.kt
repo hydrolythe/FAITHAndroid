@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.cinema
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
@@ -20,11 +21,10 @@ class CinemaOverviewViewModel(
     cinema
 ) {
 
-    private val _filesButtonClicked = SingleLiveEvent<Unit>()
-    val filesButtonClicked: LiveData<Unit> = _filesButtonClicked
-
-    private val _filmsButtonClicked = SingleLiveEvent<Unit>()
-    val filmsButtonClicked: LiveData<Unit> = _filmsButtonClicked
+    private val _filmsVisible = MutableLiveData<Boolean>().apply {
+        this.value = true
+    }
+    val filmsVisible: LiveData<Boolean> = _filmsVisible
 
     private val _makeFilmButtonClicked = SingleLiveEvent<Unit>()
     val makeFilmButtonClicked: LiveData<Unit> = _makeFilmButtonClicked
@@ -34,12 +34,12 @@ class CinemaOverviewViewModel(
 
     fun onFilesButtonClicked() {
         details = detailsContainer.getFiles()
-        _filesButtonClicked.call()
+        _filmsVisible.value = false
     }
 
     fun onFilmsButtonClicked() {
         details = detailsContainer.films
-        _filmsButtonClicked.call()
+        _filmsVisible.value = true
     }
 
     fun onMakeFilmClicked() {
