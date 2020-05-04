@@ -2,7 +2,6 @@ package be.hogent.faith.database.event
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.service.repositories.IEventRepository
 import io.reactivex.Completable

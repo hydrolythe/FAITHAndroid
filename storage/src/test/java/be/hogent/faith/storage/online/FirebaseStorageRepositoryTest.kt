@@ -151,19 +151,4 @@ class FirebaseStorageRepositoryTest {
         verify { rxFirebaseStorage.putFile(any(), any()) }
     }
 
-    @Test
-    fun `when trying to delete a detail that is not in storage, no error is thrown`() {
-        // Arrange
-        every { rxFirebaseStorage.delete(any()) } returns Completable.error(mockk<StorageException>().apply {
-            every { errorCode } returns -13010
-        })
-        val detail = DetailFactory.makeRandomDetail()
-        val event = EventFactory.makeEvent()
-        event.addDetail(detail)
-
-        onlineFileStorageRepository.deleteDetail(detail, event)
-            .test()
-            .assertNoErrors()
-            .assertComplete()
-    }
 }

@@ -48,5 +48,4 @@ interface IFileStorageRepository {
      * Delete all files belonging to this detail.
      */
     fun deleteFiles(detail: Detail, container: DetailsContainer): Completable
-
 }
