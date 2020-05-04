@@ -26,7 +26,7 @@ class CinemaOverviewViewModel(
     cinema
 ) {
 
-    override var details: List<Detail> = emptyList()
+    override val details: List<Detail>
             get() = if (_filmsVisible.value!!) detailsContainer.films else detailsContainer.getFiles()
 
     private val _filmsVisible = MutableLiveData<Boolean>().apply {
@@ -41,18 +41,20 @@ class CinemaOverviewViewModel(
     val addButtonClicked: LiveData<Unit> = _addButtonClicked
 
     fun onFilesButtonClicked() {
-        details = detailsContainer.getFiles()
-        initSearch()
         _filmsVisible.value = false
+        initSearch()
     }
 
     fun onFilmsButtonClicked() {
-        details = detailsContainer.films
-        initSearch()
         _filmsVisible.value = true
+        initSearch()
     }
 
     fun onMakeFilmClicked() {
+        if (_filmsVisible.value!!) {
+            _filmsVisible.value = false
+            initSearch()
+        }
         _makeFilmButtonClicked.call()
     }
 
@@ -62,6 +64,10 @@ class CinemaOverviewViewModel(
 
     private fun initSearch() {
         setSearchStringText("")
+        resetDateRange()
+    }
+
+    fun resetDateRange() {
         _startDate.value = LocalDate.MIN.plusDays(1)
         _endDate.value = LocalDate.now()
     }

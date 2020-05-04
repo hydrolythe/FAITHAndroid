@@ -38,7 +38,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     protected val detailsContainer: T
 ) : ViewModel() {
 
-    protected open var details: List<Detail> = emptyList()
+    protected open val details: List<Detail>
         get() = detailsContainer.details
 
     // filter
@@ -462,7 +462,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     }
 
     private fun setDetails() {
-        details = detailsContainer.details
         audioFilterEnabled.postValue(false)
     }
 }

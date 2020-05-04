@@ -10,6 +10,10 @@
         <variable
             name="viewModel"
             type="be.hogent.faith.faith.cinema.CinemaCreateVideoViewModel" />
+
+        <variable
+            name="cinemaOverviewViewModel"
+            type="be.hogent.faith.faith.cinema.CinemaOverviewViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,7 +30,7 @@
             android:hint="@string/wat_zoek_je"
             android:paddingEnd="16dp"
             app:hintEnabled="false"
-            app:layout_constraintBottom_toTopOf="@+id/guide_rv_container_horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/guide_rv_container_horizontal1"
             app:layout_constraintEnd_toStartOf="@+id/btn_cinema_chooseDate"
             app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
             app:startIconDrawable="@drawable/ic_search"
@@ -37,6 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="@{viewModel.isRendering == true ? false : true}"
+                android:text="@={cinemaOverviewViewModel.searchString}"
                 android:hint="@string/search_hint_film"
                 android:inputType="text" />
 
@@ -48,15 +53,15 @@
             style="@style/faith_textbutton"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="16dp"
             android:backgroundTint="@color/color_white"
             android:clickable="@{viewModel.isRendering == true ? false : true}"
-            android:gravity="center"
-            android:text="Datum"
+            android:onClick="@{() -> cinemaOverviewViewModel.onDateRangeClicked()}"
+            android:text="@{cinemaOverviewViewModel.dateRangeString}"
             app:icon="@drawable/ic_kalender"
             app:iconGravity="textStart"
             app:iconSize="34dp"
-            app:layout_constraintBottom_toTopOf="@+id/guide_rv_container_horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/textInputLayout_cinema_details_search"
             app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical2" />
 
 

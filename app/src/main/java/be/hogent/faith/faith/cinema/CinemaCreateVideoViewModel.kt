@@ -4,10 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
-import java.io.File
 
 class CinemaCreateVideoViewModel : ViewModel() {
 

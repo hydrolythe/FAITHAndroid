@@ -21,6 +21,7 @@ import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
+import kotlinx.android.synthetic.main.fragment_cinema_start.btn_cinema_chooseDate
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import java.util.concurrent.TimeUnit
 
@@ -46,6 +47,7 @@ class CinemaCreateVideoFragment : Fragment() {
         )
         binding.lifecycleOwner = this
         binding.viewModel = createVideoViewModel
+        binding.cinemaOverviewViewModel = cinemaOverviewViewModel
 
         return binding.root
     }
@@ -68,7 +70,11 @@ class CinemaCreateVideoFragment : Fragment() {
             override fun selectDetail(detail: Detail, isSelected: Boolean): Boolean {
                 val isAdded = createVideoViewModel.selectDetail(detail, getDetailDuration(detail))
                 if (!isSelected && !isAdded)
-                    Toast.makeText(context, resources.getString(R.string.selected_detail_error), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        resources.getString(R.string.selected_detail_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 return isAdded
             }
         })
@@ -82,10 +88,15 @@ class CinemaCreateVideoFragment : Fragment() {
     private fun startListeners() {
 
         binding.btnCinemaCancel.setOnClickListener {
+            requireActivity().onBackPressed()
         }
-        binding.btnCinemaChooseDate.setOnClickListener {
+
+        cinemaOverviewViewModel.dateRangeClicked.observe(this, Observer {
             showDateRangePicker()
-        }
+        })
+
+        cinemaOverviewViewModel.dateRangeString.observe(
+            this, Observer { range -> btn_cinema_chooseDate.text = range })
 
         createVideoViewModel.isDoneRendering.observe(this, Observer {
             navigation!!.startViewVideoFragment()
@@ -144,7 +155,10 @@ class CinemaCreateVideoFragment : Fragment() {
         picker = builder.build()
         picker.show(requireActivity().supportFragmentManager, picker.toString())
         picker.addOnPositiveButtonClickListener {
-            // TODO
+            cinemaOverviewViewModel.setDateRange(it.first, it.second)
+        }
+        picker.addOnNegativeButtonClickListener {
+            cinemaOverviewViewModel.resetDateRange()
         }
     }
 
