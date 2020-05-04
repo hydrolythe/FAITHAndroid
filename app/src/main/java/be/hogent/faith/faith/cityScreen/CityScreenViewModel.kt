@@ -3,7 +3,7 @@ package be.hogent.faith.faith.cityScreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.LogoutUserUseCase
+import be.hogent.faith.service.usecases.user.LogoutUserUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import timber.log.Timber
 
@@ -16,6 +16,7 @@ class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : Vi
     val parkClicked = SingleLiveEvent<Unit>()
     val thirdLocation = SingleLiveEvent<Unit>()
     val backpackClicked = SingleLiveEvent<Unit>()
+    val cinemaClicked = SingleLiveEvent<Unit>()
 
     private val _logoutSuccessFull = SingleLiveEvent<Unit>()
     val logoutSuccessFull: LiveData<Unit>
@@ -38,6 +39,10 @@ class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : Vi
     fun onBackpackClicked() {
         Timber.i("Fourth location clicked")
         backpackClicked.call()
+    }
+    fun onCinemaClicked() {
+        Timber.i("Fifth location clicked")
+        cinemaClicked.call()
     }
 
     fun onLogOutClicked() {

@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.databinding.DialogSaveEventBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import kotlinx.android.synthetic.main.dialog_save_event.progress
@@ -16,7 +17,7 @@ import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 class SaveEventDialog : DialogFragment() {
-    private lateinit var saveEventBinding: be.hogent.faith.databinding.DialogSaveEventBinding
+    private lateinit var saveEventBinding: DialogSaveEventBinding
 
     private val eventDetailsViewModel: EventViewModel by sharedViewModel()
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
@@ -61,7 +62,7 @@ class SaveEventDialog : DialogFragment() {
 
     private fun startListeners() {
         eventDetailsViewModel.dateButtonClicked.observe(this, Observer {
-            EventDateDialog.newInstance().show(fragmentManager!!, null)
+            EventDateDialog.newInstance().show(requireActivity().supportFragmentManager, null)
         })
         eventDetailsViewModel.cancelButtonClicked.observe(this, Observer {
             dismiss()

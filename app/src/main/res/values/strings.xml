@@ -31,12 +31,14 @@
     <string name="lbl_detail_name">Naam:</string>
     <string name="hint_audio_recording_name">Een naam voor deze opname</string>
     <string name="save">Opslaan</string>
+    <string name="save_film_success">Je film werd opgeslagen</string>
     <string name="save_audio_success">Je opname werd opgeslagen</string>
     <string name="save_drawing_success">Je tekening werd opgeslagen</string>
     <string name="save_photo_success">Je foto werd opgeslagen</string>
     <string name="save_event_success">Je gebeurtenis werd opgeslagen</string>
     <string name="error_load_events">Er ging iets fout bij het laden van je gebeurtenissen.</string>
     <string name="save_text_success">Je tekst werd opgeslagen</string>
+    <string name="error_save_film_failed">Er ging iets fout bij het opslaan van je film</string>
     <string name="error_save_audio_failed">Er ging iets fout bij het opslaan van je opname</string>
     <string name="error_save_event_failed">Er ging iets fout bij het opslaan van je gebeurtenis</string>
     <string name="error_save_avatar_failed">Er ging iets fout bij het opslaan van je avatar</string>
@@ -65,6 +67,7 @@
     <string name="header_emotie_regulatie">Emotie regulatie</string>
     <string name="frag_viewEvent_notes">notes</string>
     <string name="dialog_to_the_event_title">"Wil je teruggaan naar het park?</string>
+    <string name="dialog_to_the_cinema_title">"Wil je teruggaan naar de cinema?</string>
     <string name="dialog_takePhoto_cancel_message">Ben je zeker? Je foto is nog niet opgeslagen!</string>
     <string name="dialog_enterText_cancel_message">Ben je zeker? Je tekst is nog niet opgeslagen!</string>
     <string name="dialog_to_the_event_message">Ben je zeker? Je tekening is nog niet opgeslagen!</string>
@@ -108,6 +111,7 @@
     <string name="register_passwords_nomatch">Wachtwoorden niet gelijk</string>
     <string name="register_password_empty">Wachtwoord ingeven</string>
     <string name="register_error_create_user">Er ging iets fout bij het aanmaken van je nieuwe gebruiker.</string>
+    <string name="getLoggedInUser_error">Er ging iets fout bij het ophalen van de gebruiker.</string>
     <string name="error_no_credentials">No credentials have been stored</string>
     <string name="msg_naar_de_stad">Naar de stad</string>
     <string name="msg_registreer">Ik ben nieuw</string>
@@ -218,7 +222,7 @@
     <string name="wat_zoek_je">wat zoek je?</string>
     <string name="potlood">potlood</string>
     <string name="daterange">selecteer een datumbereik</string>
-    <string name="library_verwijder_event_message">Ben je zeker? Ook alle bijhorende tekeningen, foto\'s,... worden verwijderd</string>
+    <string name="library_verwijder_event_message">Ben je zeker? Ook alle bijhorende tekeningen, foto\'s,… worden verwijderd</string>
     <string name="library_verwijder_event_title">Wil je dit event verwijderen?</string>
     <string name="delete">verwijder</string>
     <string name="recordaudio_record_description">Druk op de rode bol om\neen geluidsfragment op te nemen!</string>
@@ -227,8 +231,31 @@
     <string name="recordaudio_pause">Fragment pauzeren</string>
     <string name="recordaudio_stop">Opname stoppen</string>
     <string name="avatar_nog_niet_ingekleurd">Avatar is nog niet ingekleurd. Klik op potlood om avatar in te kleuren</string>
+    <string name="search">Zoeken…</string>
+    <string name="save_video">Save je video</string>
+    <string name="youtube_snippet_thumbnail">Youtube video thumbnail</string>
+    <string name="search_btn">ZOEKEN</string>
+    <string name="search_youtube">Zoek een filmpje op YouTube…</string>
+    <string name="dialog_to_the_backpack">\"Wil je teruggaan naar je rugzak?</string>
+    <string name="save_success">Succesvol opgeslagen.</string>
     <string name="error_ophalen_textdetail">Er ging iets fout bij het ophalen van de tekst</string>
     <string name="rv_btn_detail">Knop bekijk bestand</string>
     <string name="rv_btn_delete_detail">Knop verwijder bestand</string>
     <string name="rv_detail_title">Detail Title</string>
+    <string name="mijn_filmpjes">mijn filmpjes</string>
+    <string name="mijn_bestanden">mijn bestanden</string>
+    <string name="create_film">Maak filmpje</string>
+    <string name="search_hint_film">zoek hier een film op naam</string>
+    <string name="search_hint_bestand">zoek hier een bestand op naam</string>
+    <string name="unauthorized_file_type">Dit bestandstype is niet toegelaten.</string>
+    <string name="btn_create_video">Maak video</string>
+    <string name="je_filmpje_opslaan">Je filmpje opslaan</string>
+    <string name="je_tekening_opslaan">Je tekening opslaan</string>
+    <string name="je_foto_opslaan">Je foto opslaan</string>
+    <string name="je_extern_bestand_opslaan">Je extern bestand opslaan</string>
+    <string name="save_video_title">Titel</string>
+    <string name="error_load_detail_failed">Laden detail faalt</string>
+    <string name="error_load_backpack">Er ging iets fout bij het laden van je rugzak.</string>
+    <string name="error_load_cinema">Er ging iets fout bij het laden van je cinema.</string>
+
 </resources>

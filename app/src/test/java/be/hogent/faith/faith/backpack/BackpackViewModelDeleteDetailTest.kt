@@ -1,28 +1,32 @@
 package be.hogent.faith.faith.backpack
 
-import io.mockk.mockk
-import io.mockk.slot
-import io.mockk.verify
-import io.mockk.Called
-import io.mockk.called
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import io.reactivex.observers.DisposableCompletableObserver
-import org.junit.Assert.assertEquals
-import androidx.lifecycle.Observer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
+import be.hogent.faith.service.usecases.backpack.GetBackPackDataUseCase
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
-import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
+import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
+import io.mockk.mockk
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import io.mockk.Called
+import io.mockk.called
+import io.mockk.slot
+import io.mockk.verify
+import io.reactivex.observers.DisposableCompletableObserver
+import org.junit.Assert.assertEquals
 
 class BackpackViewModelDeleteDetailTest {
     private lateinit var viewModel: BackpackViewModel
-    private val deleteBackpackDetailUseCase = mockk<DeleteDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
-    private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
+    private val deleteBackpackDetailUseCase =
+        mockk<DeleteDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
+    private val loadDetailFileUseCase = mockk<LoadDetailFileUseCase<Backpack>>(relaxed = true)
+    private val getBackPackFilesUseCase = mockk<GetBackPackDataUseCase>(relaxed = true)
+    private val backpack = mockk<Backpack>(relaxed = true)
     private val detail = mockk<Detail>()
 
     @get:Rule
@@ -31,9 +35,11 @@ class BackpackViewModelDeleteDetailTest {
     @Before
     fun setUp() {
         viewModel = BackpackViewModel(
-                mockk(),
-                deleteBackpackDetailUseCase,
-                getBackPackFilesDummyUseCase
+            mockk(),
+            deleteBackpackDetailUseCase,
+            backpack,
+            loadDetailFileUseCase,
+            getBackPackFilesUseCase
         )
     }
 

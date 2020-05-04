@@ -5,7 +5,6 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="backpackViewModel"
             type="be.hogent.faith.faith.backpackScreen.BackpackViewModel" />
@@ -107,7 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/ic_trashcan"
-            android:onClick="@{() -> backpackViewModel.setIsInEditMode()}"
+            android:onClick="@{() -> backpackViewModel.onDeleteClicked()}"
             app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_end"
             app:layout_constraintTop_toTopOf="@+id/guide_rv_horizontal_2"
             app:srcCompat="@drawable/ic_trashcan" />
@@ -117,7 +116,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/search_btn"
-            android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
+            android:alpha="@{backpackViewModel.deleteEnabled == true ? 0.5F : 1F}"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -127,10 +126,9 @@
             android:id="@+id/btn_backpack_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
+            android:alpha="@{backpackViewModel.deleteEnabled == true ? 0.5F : 1F}"
             android:background="@drawable/add_btn"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
-            android:onClick="@{() -> backpackViewModel.changePopupMenuState()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -139,7 +137,7 @@
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
             android:layout_marginStart="16dp"
-            android:alpha="@{backpackViewModel.isInEditMode == 2 ? 0.5F : 1F}"
+            android:alpha="@{backpackViewModel.deleteEnabled == true ? 0.5F : 1F}"
             android:background="@drawable/ic_return"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             android:contentDescription="@string/cancel"

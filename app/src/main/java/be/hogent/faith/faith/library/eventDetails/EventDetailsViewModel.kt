@@ -6,10 +6,15 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.event.MakeEventFilesAvailableUseCase
+import io.reactivex.observers.DisposableSingleObserver
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
+import timber.log.Timber
 
-class EventDetailsViewModel : ViewModel() {
+class EventDetailsViewModel(
+    private val makeEventFilesAvailableUseCase: MakeEventFilesAvailableUseCase
+) : ViewModel() {
     private val _event = MutableLiveData<Event>()
     val event: LiveData<Event> = _event
 
@@ -30,10 +35,27 @@ class EventDetailsViewModel : ViewModel() {
     val cancelButtonClicked: LiveData<Unit> = _cancelButtonClicked
 
     fun setEvent(event: Event) {
-        _event.value = event
+        makeEventFilesAvailableUseCase.execute(
+            MakeEventFilesAvailableUseCase.Params(event),
+            object :
+                DisposableSingleObserver<Event>() {
+                override fun onSuccess(t: Event) {
+                    Timber.i("Loaded new event files")
+                    _event.value = t
+                }
+
+                override fun onError(e: Throwable) {
+                    Timber.e("Failed to load event")
+                }
+            })
     }
 
     fun onCancelButtonClicked() {
         _cancelButtonClicked.call()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        makeEventFilesAvailableUseCase.dispose()
     }
 }

@@ -2,16 +2,18 @@ package be.hogent.faith.service.usecases.event
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.service.encryption.IEventEncryptionService
+import be.hogent.faith.service.repositories.IEventRepository
+import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.storage.IStorageRepository
 import io.reactivex.Completable
 import io.reactivex.Scheduler
-import io.reactivex.Single
+import timber.log.Timber
 
 open class SaveEventUseCase(
-    private val eventRepository: EventRepository,
-    private val storageRepository: IStorageRepository,
+    private val eventEncryptionService: IEventEncryptionService,
+    private val filesStorageRepository: IFileStorageRepository,
+    private val eventRepository: IEventRepository,
     observeScheduler: Scheduler
 ) : CompletableUseCase<SaveEventUseCase.Params>(observeScheduler) {
 
@@ -19,23 +21,21 @@ open class SaveEventUseCase(
 
     override fun buildUseCaseObservable(params: Params): Completable {
         this.params = params
-        return addEventToUser(params.event)
-            .flatMap { storageRepository.saveEvent(it) }
-            .flatMapMaybe { eventRepository.insert(it, params.user) }
-            .flatMapCompletable { Completable.complete()
-            }
-    }
-
-    private fun addEventToUser(event: Event): Single<Event> = Single.fromCallable {
-        event.title = params!!.eventTitle
-        // First add in domain so we can do business logic
-        // If this fails the event won't get added to the Repo.
-        params!!.user.addEvent(event)
-        event
+        return eventEncryptionService.encrypt(params.event)
+            .doOnSuccess { Timber.i("encrypted event ${params.event.uuid}") }
+            .flatMap(filesStorageRepository::saveEventFiles)
+            .doOnSuccess { Timber.i("stored files for event ${params.event.uuid}") }
+            .flatMapCompletable(eventRepository::insert)
+            .doOnComplete { Timber.i("stored data for event ${params.event.uuid}") }
+            .andThen(Completable.fromAction {
+                with(params) {
+                    user.addEvent(event)
+                    Timber.i("added event to user")
+                }
+            })
     }
 
     data class Params(
-        val eventTitle: String,
         var event: Event,
         val user: User
     )

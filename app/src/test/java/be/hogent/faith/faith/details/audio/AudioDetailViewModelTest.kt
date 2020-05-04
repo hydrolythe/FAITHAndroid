@@ -6,13 +6,11 @@ import be.hogent.faith.faith.TestUtils.getValue
 import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener
 import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.faith.testModule
-import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -25,7 +23,6 @@ import org.koin.test.get
 class AudioDetailViewModelTest : KoinTest {
 
     private val createAudioDetailUseCase = mockk<CreateAudioDetailUseCase>()
-    private val loadDetailFileUseCase = mockk<LoadDetailFileUseCase>(relaxed = true)
 
     private lateinit var viewModel: AudioDetailViewModel
 
@@ -35,7 +32,7 @@ class AudioDetailViewModelTest : KoinTest {
     @Before
     fun setUp() {
         startKoin { modules(listOf(appModule, testModule)) }
-        viewModel = AudioDetailViewModel(createAudioDetailUseCase, get(), loadDetailFileUseCase)
+        viewModel = AudioDetailViewModel(createAudioDetailUseCase, get())
         viewModel.initialiseState()
     }
 

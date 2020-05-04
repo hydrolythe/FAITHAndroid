@@ -16,8 +16,11 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
 import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
+import be.hogent.faith.faith.cinema.CinemaActivity
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -105,21 +108,23 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
 
         takePhotoViewModel.photoSaveFile.observe(this, Observer { photo ->
             if (photo != null) {
-                Glide.with(context!!).load(photo).diskCacheStrategy(DiskCacheStrategy.NONE)
+                Glide.with(requireContext()).load(photo).diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true).into(img_takePhoto_theTakenPhoto)
                 Timber.d("photoSaveFile saved ${photo.name} ${photo.path}")
             }
         })
 
         takePhotoViewModel.savedDetail.observe(this, Observer { newPhotoDetail ->
+            if (requireActivity() is EmotionCaptureMainActivity) {
             Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
                 .show()
+            }
             detailFinishedListener.onDetailFinished(newPhotoDetail)
             navigation?.backToEvent()
         })
 
         takePhotoViewModel.cancelClicked.observe(this, Observer {
-            navigation!!.backToEvent()
+            showExitAlert()
         })
     }
 
@@ -145,13 +150,17 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
     }
 
     private fun hasCameraPermissions(): Boolean {
-        return checkSelfPermission(activity!!, Manifest.permission.CAMERA) == PERMISSION_GRANTED
+        return checkSelfPermission(requireActivity(), Manifest.permission.CAMERA) == PERMISSION_GRANTED
     }
 
     private fun showExitAlert() {
         val alertDialog: AlertDialog = this.run {
             val builder = AlertDialog.Builder(this.requireContext()).apply {
-                setTitle(R.string.dialog_to_the_event_title)
+                when (requireActivity()) {
+                    is BackpackScreenActivity -> setTitle(R.string.dialog_to_the_backpack)
+                    is CinemaActivity -> setTitle(R.string.dialog_to_the_cinema_title)
+                    else -> setTitle(R.string.dialog_to_the_event_title)
+                }
                 setMessage(R.string.dialog_takePhoto_cancel_message)
                 setPositiveButton(R.string.ok) { _, _ ->
                     navigation!!.backToEvent()

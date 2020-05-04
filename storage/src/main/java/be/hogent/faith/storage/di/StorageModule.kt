@@ -1,25 +1,35 @@
 package be.hogent.faith.storage.di
 
-import be.hogent.faith.storage.IStorageRepository
+import be.hogent.faith.service.repositories.IFileStorageRepository
+import be.hogent.faith.storage.FileStorageRepository
 import be.hogent.faith.storage.StoragePathProvider
-import be.hogent.faith.storage.StorageRepository
-import be.hogent.faith.storage.localStorage.LocalStorageRepository
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
-import be.hogent.faith.storage.firebase.FireBaseStorageRepository
-import be.hogent.faith.storage.firebase.IFireBaseStorageRepository
-import be.hogent.faith.storage.localStorage.ILocalStorageRepository
-import be.hogent.faith.storage.localStorage.TemporaryStorageRepository
+import be.hogent.faith.storage.local.ILocalFileStorageRepository
+import be.hogent.faith.storage.local.ITemporaryFileStorageRepository
+import be.hogent.faith.storage.local.LocalFileStorageRepository
+import be.hogent.faith.storage.local.TemporaryStorageRepository
+import be.hogent.faith.storage.online.FirebaseStorageRepository
+import be.hogent.faith.storage.online.IOnlineFileStorageRepository
+import be.hogent.faith.storage.online.RxFirebaseStorageWrapper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val storageModule = module {
-    factory<IStorageRepository> { StorageRepository(get(), get(), get()) }
+    factory { FileStorageRepository(get(), get(), get()) as IFileStorageRepository }
     factory { StoragePathProvider(androidContext(), constructFirebaseAuthInstance()) }
-    factory<ITemporaryStorage> { TemporaryStorageRepository(androidContext(), get()) }
-    factory<ILocalStorageRepository> { LocalStorageRepository(get(), androidContext()) }
-    factory<IFireBaseStorageRepository> { FireBaseStorageRepository(get(), constructFirebaseStorageInstance()) }
+    factory { TemporaryStorageRepository(androidContext(), get()) as be.hogent.faith.service.repositories.ITemporaryFileStorageRepository }
+    factory { TemporaryStorageRepository(androidContext(), get()) as ITemporaryFileStorageRepository }
+    factory<ILocalFileStorageRepository> {
+        LocalFileStorageRepository(get())
+    }
+    factory<IOnlineFileStorageRepository> {
+        FirebaseStorageRepository(
+            get(),
+            constructFirebaseStorageInstance(),
+            RxFirebaseStorageWrapper()
+        )
+    }
 }
 
 fun constructFirebaseStorageInstance(): FirebaseStorage {

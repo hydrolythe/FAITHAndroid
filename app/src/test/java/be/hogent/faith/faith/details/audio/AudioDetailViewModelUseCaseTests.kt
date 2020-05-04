@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.di.appModule
 import be.hogent.faith.faith.testModule
-import be.hogent.faith.service.usecases.detail.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import io.mockk.Called
 import io.mockk.mockk
@@ -24,7 +23,6 @@ import org.koin.test.get
 class AudioDetailViewModelUseCaseTests : KoinTest {
     private lateinit var detailViewModel: AudioDetailViewModel
     private val createAudioDetailUseCase = mockk<CreateAudioDetailUseCase>(relaxed = true)
-    private val loadDetailFileUseCase = mockk<LoadDetailFileUseCase>(relaxed = true)
 
     @get:Rule
     val testRule = InstantTaskExecutorRule()
@@ -32,7 +30,7 @@ class AudioDetailViewModelUseCaseTests : KoinTest {
     @Before
     fun setUp() {
         startKoin { modules(listOf(appModule, testModule)) }
-        detailViewModel = AudioDetailViewModel(createAudioDetailUseCase, get(), loadDetailFileUseCase)
+        detailViewModel = AudioDetailViewModel(createAudioDetailUseCase, get())
         detailViewModel.initialiseState()
     }
 

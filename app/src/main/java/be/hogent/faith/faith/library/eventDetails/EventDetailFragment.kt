@@ -42,31 +42,37 @@ class EventDetailFragment : Fragment() {
         )
         binding.eventDetailsViewModel = eventDetailsViewModel
         binding.lifecycleOwner = this
-        setListeners()
+        setUpRecyclerView()
+        setupListeners()
         return binding.root
     }
 
-    private fun setListeners() {
-        eventDetailsViewModel.avatarImage.observe(this, Observer { image ->
-            if (image != null)
-                loadImageIntoView(context!!, image.path, binding.imgAvatar)
-            else
-                binding.imgAvatar.setImageDrawable(null)
-        })
-
-        eventDetailsViewModel.details.observe(this, Observer {
+    private fun setUpRecyclerView() {
+        binding.recyclerViewLibraryEventdetails.apply {
             binding.recyclerViewLibraryEventdetails.apply {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 // Start with empty list and then fill it in
-                adapter = DetailThumbnailsAdapter(
-                    requireNotNull(activity) as LibraryActivity
-                )
+                adapter = DetailThumbnailsAdapter(requireNotNull(activity) as LibraryActivity)
             }
+        }
+    }
+
+    private fun setupListeners() {
+        eventDetailsViewModel.avatarImage.observe(viewLifecycleOwner, Observer { image ->
+            if (image != null)
+                loadImageIntoView(requireContext(), image.path, binding.imgAvatar)
+            else
+                binding.imgAvatar.setImageDrawable(null)
         })
 
-        eventDetailsViewModel.cancelButtonClicked.observe(this, Observer {
-            activity!!.onBackPressed()
+        eventDetailsViewModel.details.observe(viewLifecycleOwner, Observer { details ->
+            (binding.recyclerViewLibraryEventdetails.adapter as DetailThumbnailsAdapter)
+                .submitList(details)
+        })
+
+        eventDetailsViewModel.cancelButtonClicked.observe(viewLifecycleOwner, Observer {
+            requireActivity().onBackPressed()
         })
     }
 

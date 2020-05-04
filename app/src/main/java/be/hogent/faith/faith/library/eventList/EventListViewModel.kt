@@ -183,7 +183,7 @@ class EventListViewModel(
 
     fun deleteEvent(eventUUID: UUID) {
         // TODO must be implemented
-        Timber.d("Item deleted")
+        Timber.d("Item deleted $eventUUID")
     }
 
     private fun toLocalDate(milliseconds: Long): LocalDate? {

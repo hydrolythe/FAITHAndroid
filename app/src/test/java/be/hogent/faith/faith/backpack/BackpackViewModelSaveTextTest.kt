@@ -1,29 +1,32 @@
 package be.hogent.faith.faith.backpack
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
+import be.hogent.faith.R
+import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
+import be.hogent.faith.service.usecases.backpack.GetBackPackDataUseCase
+import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
+import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
+import io.mockk.Called
+import io.mockk.called
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import io.reactivex.observers.DisposableCompletableObserver
 import org.junit.Assert.assertEquals
-import androidx.lifecycle.Observer
-import be.hogent.faith.R
-import be.hogent.faith.domain.models.Backpack
-import be.hogent.faith.domain.models.User
-import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
-import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
-import io.mockk.Called
-import io.mockk.called
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class BackpackViewModelSaveTextTest {
     private lateinit var viewModel: BackpackViewModel
-    private val saveTextUseCase = mockk<SaveDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
-    private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
+    private val saveDetailsContainerDetailsUseCase = mockk<SaveDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
+    private val loadDetailFileUseCase = mockk<LoadDetailFileUseCase<Backpack>>(relaxed = true)
+    private val getBackPackFilesUseCase = mockk<GetBackPackDataUseCase>(relaxed = true)
+    private val backpack = mockk<Backpack>(relaxed = true)
     private val detail = mockk<TextDetail>()
     private val user: User = mockk(relaxed = true)
 
@@ -33,9 +36,11 @@ class BackpackViewModelSaveTextTest {
     @Before
     fun setUp() {
         viewModel = BackpackViewModel(
-                saveTextUseCase,
-                mockk(),
-                getBackPackFilesDummyUseCase
+            saveDetailsContainerDetailsUseCase,
+            mockk(),
+            backpack,
+            loadDetailFileUseCase,
+            getBackPackFilesUseCase
         )
     }
 
@@ -44,7 +49,7 @@ class BackpackViewModelSaveTextTest {
         val params = slot<SaveDetailsContainerDetailUseCase.Params>()
 
         viewModel.saveTextDetail(user, detail)
-        verify { saveTextUseCase.execute(capture(params), any()) }
+        verify { saveDetailsContainerDetailsUseCase.execute(capture(params), any()) }
 
         assertEquals(detail, params.captured.detail)
     }
@@ -60,7 +65,7 @@ class BackpackViewModelSaveTextTest {
 
         // Act
         viewModel.saveTextDetail(user, detail)
-        verify { saveTextUseCase.execute(any(), capture(useCaseObserver)) }
+        verify { saveDetailsContainerDetailsUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onComplete()
 
         // Assert
@@ -79,7 +84,7 @@ class BackpackViewModelSaveTextTest {
 
         // Act
         viewModel.saveTextDetail(user, detail)
-        verify { saveTextUseCase.execute(any(), capture(useCaseObserver)) }
+        verify { saveDetailsContainerDetailsUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onError(mockk(relaxed = true))
 
         // Assert

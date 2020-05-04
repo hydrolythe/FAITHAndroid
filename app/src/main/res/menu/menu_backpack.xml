@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/backpack_menu_addFile"
         android:icon="@drawable/ic_menu_bestand"
-        android:title="@string/bestand_toevoegen" />
+        android:title="@string/bestand_toevoegen"
+        />
     <item
         android:id="@+id/backpack_menu_addFoto"
         android:icon="@drawable/ic_menu_icoon_foto"
-        android:title="@string/foto_nemen" />
+        android:title="@string/foto_nemen"
+        />
     <item
         android:id="@+id/backpack_menu_addDrawing"
         android:icon="@drawable/ic_tekenen"
@@ -20,7 +24,8 @@
     <item
         android:id="@+id/backpack_menu_addAudio"
         android:icon="@drawable/ic_menu_icoon_audio"
-        android:title="@string/description_addAudio" />
+        android:title="@string/description_addAudio"
+        />
     <item
         android:id="@+id/backpack_menu_addVideo"
         android:icon="@drawable/ic_menu_icoon_video"

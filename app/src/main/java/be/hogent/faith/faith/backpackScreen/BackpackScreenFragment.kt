@@ -7,10 +7,8 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 
-import androidx.appcompat.view.menu.MenuBuilder
-import androidx.appcompat.view.menu.MenuPopupHelper
+import android.widget.SearchView
 import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -20,6 +18,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import timber.log.Timber
 
 class BackpackScreenFragment : Fragment() {
 
@@ -28,7 +27,6 @@ class BackpackScreenFragment : Fragment() {
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
     private lateinit var addDetailMenu: PopupMenu
-    private var menuPopupHelper: MenuPopupHelper? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -93,14 +91,8 @@ class BackpackScreenFragment : Fragment() {
             }
         })
 
-        backpackViewModel.isDetailScreenOpen.observe(this, Observer {
-            if (!it) {
-                closeMenu()
-            }
-        })
-
-        backpackViewModel.isInEditMode.observe(this, Observer {
-            if (backpackViewModel.isInEditMode.value == OpenState.OPEN) {
+        backpackViewModel.deleteEnabled.observe(this, Observer { enabled ->
+            if (enabled) {
                 detailThumbnailsAdapter!!.setItemsAsDeletable(true)
                 backpackViewModel.viewButtons(false)
             } else {
@@ -108,20 +100,9 @@ class BackpackScreenFragment : Fragment() {
                 backpackViewModel.viewButtons(true)
             }
         })
-
-        backpackViewModel.isPopupMenuOpen.observe(this, Observer {
-            if (it == OpenState.OPEN) {
-                openMenu()
-                backpackBinding.btnBackpackAdd.background =
-                    resources.getDrawable(R.drawable.ic_add_btn_selected, null)
-            } else if (it == OpenState.CLOSED) {
-                closeMenu()
-                backpackBinding.btnBackpackAdd.background =
-                    resources.getDrawable(R.drawable.add_btn, null)
-            }
-        })
-
-        backpackViewModel.initialize()
+        backpackBinding.btnBackpackAdd.setOnClickListener {
+            addDetailMenu.show()
+        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -135,18 +116,6 @@ class BackpackScreenFragment : Fragment() {
         )
 
         addDetailMenu.menuInflater.inflate(R.menu.menu_backpack, addDetailMenu.menu)
-
-        menuPopupHelper = MenuPopupHelper(
-            backpackBinding.btnBackpackAdd.context,
-            addDetailMenu.menu as MenuBuilder,
-            backpackBinding.btnBackpackAdd
-        )
-
-        menuPopupHelper!!.setOnDismissListener {
-            menuPopupHelper!!.dismiss()
-            backpackBinding.btnBackpackAdd.background =
-                resources.getDrawable(R.drawable.add_btn, null)
-        }
 
         addDetailMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
@@ -163,21 +132,18 @@ class BackpackScreenFragment : Fragment() {
                 R.id.backpack_menu_addVideo ->
                     navigation?.startVideoDetailFragment()
             }
-            menuPopupHelper!!.dismiss()
             true
         }
-
-        menuPopupHelper!!.setForceShowIcon(true)
-    }
-
-    @SuppressLint("RestrictedApi")
-    private fun closeMenu() {
-        menuPopupHelper?.dismiss()
-    }
-
-    @SuppressLint("RestrictedApi")
-    private fun openMenu() {
-        menuPopupHelper!!.show()
+        try {
+            val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
+            fieldMPopup.isAccessible = true
+            val mPopup = fieldMPopup.get(addDetailMenu)
+            mPopup.javaClass
+                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                .invoke(mPopup, true)
+        } catch (e: Exception) {
+            Timber.e("Error showing icons")
+        }
     }
 
     interface BackpackDetailsNavigationListener {

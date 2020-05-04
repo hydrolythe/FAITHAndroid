@@ -20,10 +20,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 
 }
 dependencies {
     implementation project(':domain')
+    implementation project(':service')
     implementation project(':util')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -44,6 +48,9 @@ dependencies {
     implementation commonDependencies.rxjava
     implementation commonDependencies.rxkotlin
     implementation commonDependencies.threeTenABP
+    testImplementation(testDependencies.threeTenBP) {
+        exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
+    }
 
     implementation commonDependencies.timber
 
@@ -57,6 +64,6 @@ dependencies {
     androidTestImplementation androidTestDependencies.androidJunit
     androidTestImplementation androidTestDependencies.espresso
 
-    implementation group: 'com.google.code.gson', name: 'gson', version: '2.7', changing: true
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.6', changing: true
 
 }

@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.repository.InvalidCredentialsException
-import be.hogent.faith.domain.repository.NetworkError
-import be.hogent.faith.domain.repository.SignInException
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.LoginUserUseCase
+import be.hogent.faith.service.repositories.InvalidCredentialsException
+import be.hogent.faith.service.repositories.NetworkError
+import be.hogent.faith.service.repositories.SignInException
+import be.hogent.faith.service.usecases.user.LoginUserUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.observers.DisposableMaybeObserver
 import timber.log.Timber
@@ -23,6 +23,7 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     private val _userLoggedInState = MutableLiveData<Resource<Unit>>()
     val userLoggedInState: LiveData<Resource<Unit>>
         get() = _userLoggedInState
+
     /**
      * reports errors with username
      */
@@ -111,8 +112,7 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
             _userLoggedInState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
         }
 
-        override fun onComplete() {
-        }
+        override fun onComplete() {}
 
         override fun onError(e: Throwable) {
             Timber.e("$TAG: ${e.localizedMessage}")

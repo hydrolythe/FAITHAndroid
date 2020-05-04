@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/backpack_menu_addFile"
+        android:icon="@drawable/ic_menu_bestand"
+        android:title="@string/bestand_toevoegen" />
+    <item
+        android:id="@+id/backpack_menu_addFoto"
+        android:icon="@drawable/ic_menu_icoon_foto"
+        android:title="@string/foto_nemen" />
+    <item
+        android:id="@+id/backpack_menu_addDrawing"
+        android:icon="@drawable/ic_tekenen"
+        android:title="@string/description_addDrawing" />
+</menu>

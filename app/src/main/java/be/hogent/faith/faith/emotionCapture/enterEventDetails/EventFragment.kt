@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.view_button_color_avatar.img_event_details
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import timber.log.Timber
 import java.util.UUID
 
 private const val ARG_EVENTUUID = "eventUUID"
@@ -127,7 +126,6 @@ class EventFragment : Fragment() {
     private fun startListeners() {
         // Update adapter when event changes
         eventViewModel.eventDetails.observe(this, Observer { details ->
-            Timber.d(details.size.toString())
             detailThumbnailsAdapter?.submitList(details)
             detailThumbnailsAdapter?.notifyDataSetChanged()
             // check whether there are detail in de adapter. If so, show the RV, of not leave hidden
@@ -135,9 +133,11 @@ class EventFragment : Fragment() {
         })
 
         userViewModel.user.observe(this, Observer { user ->
-            Glide.with(context!!).load(avatarProvider.getAvatarDrawableZitten(user.avatarName))
+            Glide.with(requireContext())
+                .load(avatarProvider.getAvatarDrawableZitten(user.avatarName))
                 .diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_zittend)
-            Glide.with(context!!).load(avatarProvider.getAvatarDrawableGezicht(user.avatarName))
+            Glide.with(requireContext())
+                .load(avatarProvider.getAvatarDrawableGezicht(user.avatarName))
                 .diskCacheStrategy(DiskCacheStrategy.ALL).into(img_event_details_avatar_inkleuren)
         })
 
@@ -163,7 +163,7 @@ class EventFragment : Fragment() {
         })
         eventViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
-            saveDialog.show(fragmentManager!!, null)
+            saveDialog.show(requireActivity().supportFragmentManager, null)
         })
 
         eventViewModel.deleteEnabled.observe(this, Observer { deleteEnabled ->

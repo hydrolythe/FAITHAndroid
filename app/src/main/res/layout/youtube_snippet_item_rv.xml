@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="snippet"
+            type="be.hogent.faith.domain.models.detail.YoutubeVideoDetail" />
+        <variable
+            name="clickListener"
+            type="be.hogent.faith.faith.backpackScreen.youtubeVideo.create.SnippetClickListener" />
+    </data>
+
+<!--    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/container_snippet"
+        style="@style/CardView.Light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="4dp"
+        android:background="@color/color_white"
+        android:backgroundTint="@color/color_white"
+        app:cardBackgroundColor="@color/color_white"
+        app:cardCornerRadius="45dp"
+        app:cardForegroundColor="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:rippleColor="@color/color_white">-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_snippet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_video_snippet"
+        android:backgroundTint="@color/color_white">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/color_white"
+            app:cardBackgroundColor="@color/color_white"
+            app:cardCornerRadius="45dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/img_snippet_thumbnail"
+                android:layout_width="250dp"
+                android:layout_height="190dp"
+                android:background="@drawable/rv_background_youtubeview"
+                android:contentDescription="@string/youtube_snippet_thumbnail"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/icoon_tekst_bestand" />
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/round_button"
+                android:backgroundTint="@color/color_white"
+                android:tint="@android:color/transparent"
+                app:srcCompat="@drawable/ic_play_arrow_white_24dp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/textView_snippet_title"
+            snippet_title="@{snippet}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:maxLength="30"
+            android:maxLines="2"
+            android:text="TextView"
+            android:textColor="#282828"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--    </com.google.android.material.card.MaterialCardView>-->
+</layout>

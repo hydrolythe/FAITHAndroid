@@ -1,10 +1,14 @@
 package be.hogent.faith.faith.di
 
+import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
-import be.hogent.faith.faith.backpackScreen.externalFile.ExternalFileViewModel
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerViewModel
+import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.details.audio.AudioDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
@@ -12,6 +16,7 @@ import be.hogent.faith.faith.details.drawing.create.DrawingDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProviderFromResources
 import be.hogent.faith.faith.details.drawing.view.ViewDrawingDetailViewModel
+import be.hogent.faith.faith.details.externalFile.ExternalFileViewModel
 import be.hogent.faith.faith.details.photo.create.TakePhotoViewModel
 import be.hogent.faith.faith.details.photo.view.ViewPhotoDetailViewModel
 import be.hogent.faith.faith.details.text.create.TextDetailViewModel
@@ -50,21 +55,38 @@ object KoinModules {
 
 val appModule = module(override = true) {
 
-    // Scheduler for use cases
+    // Observing scheduler for use cases
     single { AndroidSchedulers.mainThread() }
 
     // ViewModels
     viewModel { CityScreenViewModel(get()) }
     viewModel { (event: Event) -> EventViewModel(get(), get(), get(), event) }
     viewModel { EventViewModel(get(), get(), get()) }
-    viewModel { BackpackViewModel(get(), get(), get()) }
+    viewModel { (backpack: Backpack) ->
+        BackpackViewModel(
+            saveBackpackDetailUseCase = get(named("SaveBackpackDetailUseCase")),
+            deleteBackpackDetailUseCase = get(named("DeleteBackpackDetailUseCase")),
+            backpack = backpack,
+            loadDetailFileUseCase = get(named("LoadBackpackDetailFileUseCase")),
+            getBackPackDataUseCase = get()
+        )
+    }
+    viewModel { (cinema: Cinema) ->
+        CinemaOverviewViewModel(
+            saveBackpackDetailUseCase = get(named("SaveCinemaDetailUseCase")),
+            deleteBackpackDetailUseCase = get(named("DeleteCinemaDetailUseCase")),
+            loadDetailFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
+            cinema = cinema,
+            getCinemaDataUseCase = get()
+        )
+    }
     viewModel { DrawViewModel() }
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }
     viewModel { TextDetailViewModel(get(), get(), get()) }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { WelcomeViewModel(get()) }
-    viewModel { AudioDetailViewModel(get(), get(), get()) }
+    viewModel { AudioDetailViewModel(get(), get()) }
     viewModel { WelcomeViewModel(get()) }
     viewModel { RegisterUserViewModel(get()) }
     viewModel { RegisterUserInfoViewModel(get()) }
@@ -72,9 +94,11 @@ val appModule = module(override = true) {
     viewModel { RegisterUserInfoViewModel(get()) }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { TakePhotoViewModel(get()) }
+    viewModel { YoutubeVideoDetailViewModel(get()) }
+    viewModel { FaithYoutubePlayerViewModel() }
     viewModel { ExternalFileViewModel(get(), get()) }
     viewModel { (user: User) -> EventListViewModel(user, get()) }
-    viewModel { EventDetailsViewModel() }
+    viewModel { EventDetailsViewModel(get()) }
     viewModel { ViewPhotoDetailViewModel() }
     viewModel { ViewDrawingDetailViewModel() }
     viewModel {

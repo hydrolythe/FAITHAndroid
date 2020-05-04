@@ -17,13 +17,17 @@ import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
-import be.hogent.faith.service.usecases.backpack.GetBackPackFilesDummyUseCase
+import be.hogent.faith.service.usecases.backpack.GetBackPackDataUseCase
+import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 
 class BackpackViewModelSavePhotoTest {
     private lateinit var viewModel: BackpackViewModel
-    private val savePhotoUseCase = mockk<SaveDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
-    private val getBackPackFilesDummyUseCase = mockk<GetBackPackFilesDummyUseCase>(relaxed = true)
+    private val savePhotoUseCase =
+        mockk<SaveDetailsContainerDetailUseCase<Backpack>>(relaxed = true)
+    private val loadDetailFileUseCase = mockk<LoadDetailFileUseCase<Backpack>>(relaxed = true)
+    private val getBackPackFilesUseCase = mockk<GetBackPackDataUseCase>(relaxed = true)
+    private val backpack = mockk<Backpack>(relaxed = true)
     private val detail = mockk<PhotoDetail>()
     private val user = mockk<User>(relaxed = true)
 
@@ -33,10 +37,11 @@ class BackpackViewModelSavePhotoTest {
     @Before
     fun setUp() {
         viewModel = BackpackViewModel(
-
-                savePhotoUseCase,
-                mockk(),
-                getBackPackFilesDummyUseCase
+            savePhotoUseCase,
+            mockk(),
+            backpack,
+            loadDetailFileUseCase,
+            getBackPackFilesUseCase
         )
     }
 

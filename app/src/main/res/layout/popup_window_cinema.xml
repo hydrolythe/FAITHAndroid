@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_popup">
+
+    <TableRow
+        android:id="@+id/add_external_file"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            app:srcCompat="@drawable/ic_menu_bestand" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Extern bestand" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/add_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            app:srcCompat="@drawable/ic_menu_icoon_foto" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Foto nemen"
+            android:textColor="@color/black"/>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/add_drawing"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <ImageView
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            app:srcCompat="@drawable/ic_menu_icoon_tekeningen" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="Tekenen" />
+    </TableRow>
+
+
+</TableLayout>

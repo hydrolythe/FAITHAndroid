@@ -8,17 +8,17 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.faith.GlideApp
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.AudioDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExistingDetailNavigationListener
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExternalVideoDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.PictureDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.TextDetailViewHolder
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExternalVideoDetailViewHolder
 import be.hogent.faith.faith.util.TempFileProvider
+import be.hogent.faith.faith.util.getDefaultThumbnailUrl
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.signature.MediaStoreSignature
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.detail_item_rv.view.btn_delete_detailRv
 import kotlinx.android.synthetic.main.detail_item_rv.view.detail_img
 import kotlinx.android.synthetic.main.detail_item_rv.view.text_detail_title
@@ -32,21 +32,28 @@ object DetailViewHolderFactory {
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): DetailViewHolder {
         val thumbnailView = LayoutInflater.from(parent.context).inflate(
-                R.layout.detail_item_rv,
-                parent,
-                false
+            R.layout.detail_item_rv,
+            parent,
+            false
         ) as LinearLayout
 
         return when (viewType) {
             DetailTypes.AUDIO_DETAIL -> createAudioDetailViewHolder(
-                    thumbnailView,
-                    existingDetailNavigationListener
+                thumbnailView,
+                existingDetailNavigationListener
             )
             DetailTypes.PICTURE_DETAIL -> createPictureDetailViewHolder(
-                    thumbnailView,
-                    existingDetailNavigationListener
+                thumbnailView,
+                existingDetailNavigationListener
             )
-            DetailTypes.EXTERNAL_VIDEO_DETAIL -> createExternalVideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
+            DetailTypes.EXTERNAL_VIDEO_DETAIL -> createExternalVideoDetailViewHolder(
+                thumbnailView,
+                existingDetailNavigationListener
+            )
+            DetailTypes.VIDEO_DETAIL -> createYoutubeVideoDetailViewholder(
+                thumbnailView,
+                existingDetailNavigationListener
+            )
             // TEXT_DETAIL
             else -> createTextDetailViewHolder(
                     thumbnailView,
@@ -77,11 +84,22 @@ object DetailViewHolderFactory {
     ): PictureDetailViewHolder {
         return PictureDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
+
     private fun createExternalVideoDetailViewHolder(
         thumbnailView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): ExternalVideoDetailViewHolder {
         return ExternalVideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
+    }
+
+    private fun createYoutubeVideoDetailViewholder(
+        thumbnailView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
+    ): DetailViewHolder.YoutubeVideoDetailViewHolder {
+        return DetailViewHolder.YoutubeVideoDetailViewHolder(
+            thumbnailView,
+            existingDetailNavigationListener
+        )
     }
 }
 
@@ -99,7 +117,7 @@ sealed class DetailViewHolder(
         thumbnailView.btn_delete_detailRv.setOnClickListener {
             existingDetailNavigationListener.deleteDetail(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
         }
-        thumbnailView.text_detail_title.text = detail.fileName
+        thumbnailView.text_detail_title.text = detail.title
         setDeletable(isDeletable)
     }
 
@@ -133,13 +151,8 @@ sealed class DetailViewHolder(
 
         val androidTempFileProvider: TempFileProvider by inject()
         override fun load(detail: Detail): RequestBuilder<Drawable> {
-            // TODO : encryptie
-            if (detail.file.path.startsWith("users")) {
-                return GlideApp.with(thumbnailView)
-                    .load(FirebaseStorage.getInstance().reference.child(detail.file.path)) // load the storagereference
-            }
             return Glide.with(thumbnailView)
-                    .load(androidTempFileProvider.getFile(detail))
+                    .load(detail.file)
                     // Signature is required to force Glide to reload overwritten pictures
                     .signature(MediaStoreSignature("", detail.file.lastModified(), 0))
         }
@@ -162,6 +175,17 @@ sealed class DetailViewHolder(
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {
             return Glide.with(thumbnailView).load(R.drawable.event_detail_camera) // Vervangen door?
+        }
+    }
+
+    class YoutubeVideoDetailViewHolder(
+        imageView: LinearLayout,
+        existingDetailNavigationListener: ExistingDetailNavigationListener
+    ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
+
+        override fun load(detail: Detail): RequestBuilder<Drawable> {
+            require(detail is YoutubeVideoDetail)
+            return Glide.with(thumbnailView).load(getDefaultThumbnailUrl(detail.videoId))
         }
     }
 

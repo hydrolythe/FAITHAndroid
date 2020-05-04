@@ -1,5 +1,6 @@
 package be.hogent.faith.domain.models.detail
 
+import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.io.Serializable
 import java.util.UUID
@@ -7,7 +8,6 @@ import java.util.UUID
 /**
  * A detail that can be part of an event, solution,...
  */
-
 sealed class Detail(
     /**
      * A relative path of where the actual content of the detail is saved.
@@ -15,40 +15,57 @@ sealed class Detail(
      * added before the path.
      */
     var file: File,
-    var fileName: String = "",
-    val uuid: UUID = UUID.randomUUID()
+    var title: String = "",
+    val uuid: UUID = UUID.randomUUID(),
+    var dateTime: LocalDateTime = LocalDateTime.now()
 ) : Serializable
 
 class DrawingDetail(
     file: File,
-    fileName: String = "",
-    uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+    title: String = "",
+    uuid: UUID = UUID.randomUUID(),
+    dateTime: LocalDateTime = LocalDateTime.now()
+) : Detail(file, title, uuid, dateTime)
 
 class PhotoDetail(
     file: File,
-    fileName: String = "",
-    uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+    title: String = "",
+    uuid: UUID = UUID.randomUUID(),
+    dateTime: LocalDateTime = LocalDateTime.now()
+) : Detail(file, title, uuid, dateTime)
 
 class TextDetail(
     file: File,
-    fileName: String = "",
-    uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+    title: String = "",
+    uuid: UUID = UUID.randomUUID(),
+    dateTime: LocalDateTime = LocalDateTime.now()
+) : Detail(file, title, uuid, dateTime)
 
 class AudioDetail(
     file: File,
-    fileName: String = "",
-    uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
-class VideoDetail(
-    file: File,
-    fileName: String = "",
-    uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+    title: String = "",
+    uuid: UUID = UUID.randomUUID(),
+    dateTime: LocalDateTime = LocalDateTime.now()
+) : Detail(file, title, uuid, dateTime)
+
 class ExternalVideoDetail(
     file: File,
-    fileName: String = "",
-    uuid: UUID = UUID.randomUUID()
-) : Detail(file, fileName, uuid)
+    title: String = "",
+    uuid: UUID = UUID.randomUUID(),
+    dateTime: LocalDateTime = LocalDateTime.now()
+) : Detail(file, title, uuid, dateTime)
+
+class YoutubeVideoDetail(
+    file: File = File("YoutubeVideoDetail/has/no/file"),
+    title: String = "",
+    uuid: UUID = UUID.randomUUID(),
+    val videoId: String,
+    dateTime: LocalDateTime = LocalDateTime.now()
+) : Detail(file, title, uuid, dateTime)
+
+class FilmDetail(
+    file: File,
+    title: String = "",
+    uuid: UUID = UUID.randomUUID(),
+    dateTime: LocalDateTime = LocalDateTime.now()
+) : Detail(file, title, uuid, dateTime)
