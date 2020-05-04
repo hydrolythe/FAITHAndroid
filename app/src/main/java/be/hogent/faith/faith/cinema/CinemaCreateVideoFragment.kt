@@ -30,6 +30,7 @@ class CinemaCreateVideoFragment : Fragment() {
     private lateinit var binding: FragmentCinemaCreateVideoBinding
     private val createVideoViewModel: CinemaCreateVideoViewModel by sharedViewModel()
     private var selectedDetailsAdapter: SelectedDetailsAdapter? = null
+    private val cinemaOverviewViewModel: CinemaOverviewViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -102,6 +103,10 @@ class CinemaCreateVideoFragment : Fragment() {
 
         createVideoViewModel.selectedDuration.observe(this, Observer {
             binding.progressBarLengthVideo.progress = it.toInt()
+        })
+
+        cinemaOverviewViewModel.filteredDetails.observe(this, Observer {
+            selectedDetailsAdapter!!.submitList(it)
         })
     }
 
