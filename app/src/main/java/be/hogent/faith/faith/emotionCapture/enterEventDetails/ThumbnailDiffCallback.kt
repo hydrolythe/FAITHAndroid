@@ -22,7 +22,6 @@ class ThumbnailDiffCallback(
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         val oldItem = oldDetails[oldItemPosition]
         val newItem = newDetails[newItemPosition]
-
-        return oldItem.uuid == newItem.uuid
+        return oldItem.uuid == newItem.uuid && oldItem.file.path == newItem.file.path
     }
 }

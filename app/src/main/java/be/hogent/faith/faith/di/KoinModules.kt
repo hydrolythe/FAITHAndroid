@@ -68,7 +68,7 @@ val appModule = module(override = true) {
             deleteBackpackDetailUseCase = get(named("DeleteBackpackDetailUseCase")),
             backpack = backpack,
             loadDetailFileUseCase = get(named("LoadBackpackDetailFileUseCase")),
-            getBackPackDataUseCase = get()
+            getBackPackDataUseCase = get(named("GetBackpackDataUseCase"))
         )
     }
     viewModel { (cinema: Cinema) ->
@@ -77,7 +77,7 @@ val appModule = module(override = true) {
             deleteBackpackDetailUseCase = get(named("DeleteCinemaDetailUseCase")),
             loadDetailFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
             cinema = cinema,
-            getCinemaDataUseCase = get()
+            getCinemaDataUseCase = get(named("GetCinemaDataUseCase"))
         )
     }
     viewModel { DrawViewModel() }

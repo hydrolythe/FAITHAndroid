@@ -19,9 +19,11 @@ import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.detailscontainer.detailFilters.CombinedDetailFilter
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
+import be.hogent.faith.service.usecases.detailscontainer.GetDetailsContainerDataUseCase
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.observers.DisposableObserver
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
@@ -32,23 +34,25 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     private val saveDetailsContainerDetailUseCase: SaveDetailsContainerDetailUseCase<T>,
     private val deleteDetailsContainerDetailUseCase: DeleteDetailsContainerDetailUseCase<T>,
     private val loadDetailFileUseCase: LoadDetailFileUseCase<T>,
+    protected val getDetailsContainerDataUseCase: GetDetailsContainerDataUseCase<T>,
     protected val detailsContainer: T
 ) : ViewModel() {
 
-    protected var details: List<Detail> = detailsContainer.details
+    protected open var details: List<Detail> = emptyList()
+        get() = detailsContainer.details
 
     // filter
     private val detailFilter = CombinedDetailFilter()
 
     val searchString = MutableLiveData<String>()
 
-    private val _startDate = MutableLiveData<LocalDate>().apply {
+    protected val _startDate = MutableLiveData<LocalDate>().apply {
         this.value = LocalDate.MIN.plusDays(1)
     }
     val startDate: LiveData<LocalDate>
         get() = _startDate
 
-    private val _endDate = MutableLiveData<LocalDate>().apply {
+    protected val _endDate = MutableLiveData<LocalDate>().apply {
         this.value = LocalDate.now()
     }
 
@@ -182,6 +186,30 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     protected val _infoMessage = SingleLiveEvent<Int>()
     val infoMessage: LiveData<Int> = _infoMessage
 
+    init {
+        loadDetails()
+    }
+
+    private fun loadDetails() {
+        val params = GetDetailsContainerDataUseCase.Params()
+        getDetailsContainerDataUseCase.execute(params, object : DisposableObserver<List<Detail>>() {
+
+            override fun onComplete() {
+            }
+
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.error_load_backpack)
+            }
+
+            override fun onNext(t: List<Detail>) {
+                t.let {
+                    detailsContainer.setDetails(it)
+                    setSearchStringText("")
+                }
+            }
+        })
+    }
+
     protected val _goToCityScreen = SingleLiveEvent<Any>()
     val goToCityScreen: LiveData<Any> = _goToCityScreen
 
@@ -281,7 +309,12 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         })
     }
 
-    fun onSaveClicked(title: String, user: User, detail: Detail, date: LocalDateTime = LocalDateTime.now()) {
+    fun onSaveClicked(
+        title: String,
+        user: User,
+        detail: Detail,
+        date: LocalDateTime = LocalDateTime.now()
+    ) {
         val notMaxCharacters = checkMaxCharacters(title)
         val uniqueTitle = checkUniqueTitle(title)
         if (title.isNotEmpty() && notMaxCharacters && uniqueTitle) {
@@ -318,6 +351,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_audio_success)
+                setDetails()
                 _detailIsSaved.call()
             }
 
@@ -332,6 +366,8 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_photo_success)
+                setDetails()
+                _detailIsSaved.call()
             }
 
             override fun onError(e: Throwable) {
@@ -345,6 +381,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_drawing_success)
+                setDetails()
                 _detailIsSaved.call()
             }
 
@@ -359,6 +396,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_video_success)
+                setDetails()
                 _detailIsSaved.call()
             }
 
@@ -374,6 +412,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_video_success)
+                setDetails()
                 _detailIsSaved.call()
             }
 
@@ -420,6 +459,11 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
 
     protected fun checkMaxCharacters(title: String): Boolean {
         return title.length <= 30
+    }
+
+    private fun setDetails() {
+        details = detailsContainer.details
+        audioFilterEnabled.postValue(false)
     }
 }
 
