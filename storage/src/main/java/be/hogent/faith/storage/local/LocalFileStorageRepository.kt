@@ -151,4 +151,15 @@ class LocalFileStorageRepository(
             }
         }
     }
+
+    override fun deleteDetail(detail: Detail, event: Event): Completable {
+        return Completable.fromAction {
+            with(pathProvider) {
+                val supposedLocation = localStorage(detailPath(detail, event))
+                if (supposedLocation.exists()) {
+                    supposedLocation.delete()
+                }
+            }
+        }
+    }
 }

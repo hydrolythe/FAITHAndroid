@@ -71,4 +71,9 @@ class EventDatabase(
                 .document(item.uuid)
         return RxFirestore.setDocument(document, item) // ) // stores the event in firestore
     }
+
+    fun update(item: EncryptedEventEntity): Completable {
+        // insert overwrites by default
+        return insert(item)
+    }
 }

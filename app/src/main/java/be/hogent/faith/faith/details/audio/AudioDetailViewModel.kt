@@ -201,9 +201,6 @@ class AudioDetailViewModel(
             _file.value = existingDetail.file
     }
 
-    fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {
-    }
-
     fun onRecordingStateChanged(state: RecordingState) {
         when (state) {
             RecordingState.INVALID, RecordingState.RESET -> _viewState.value =
@@ -231,14 +228,16 @@ class AudioDetailViewModel(
         _recordingTime.postValue(duration)
     }
 
-    private inner class LoadFileUseCaseHandler : DisposableSingleObserver<File>() {
-    override fun onSuccess(loadedFile: File) {
-        _file.value = loadedFile
-    }
+    fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {}
 
-    override fun onError(e: Throwable) {
-        Timber.e(e)
-        _errorMessage.postValue(R.string.error_load_events)
+    private inner class LoadFileUseCaseHandler : DisposableSingleObserver<File>() {
+        override fun onSuccess(loadedFile: File) {
+            _file.value = loadedFile
+        }
+
+        override fun onError(e: Throwable) {
+            Timber.e(e)
+            _errorMessage.postValue(R.string.error_load_events)
+        }
     }
-}
 }

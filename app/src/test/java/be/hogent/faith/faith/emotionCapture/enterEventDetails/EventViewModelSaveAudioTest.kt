@@ -32,7 +32,8 @@ class EventViewModelSaveAudioTest {
     fun setUp() {
         viewModel = EventViewModel(
             mockk(),
-            saveEventAudioUC
+            saveEventAudioUC,
+            mockk()
         )
     }
 

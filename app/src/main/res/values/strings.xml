@@ -209,7 +209,7 @@
     <string name="save_detail_emptyString">"Gelieve een bestandsnaam in te geven"</string>
     <string name="save_detail_uniqueName">"Deze bestandsnaam bestaat al"</string>
     <string name="delete_detail_success">Succesvol verwijderd!</string>
-    <string name="error_delete_detail_failure">Er ging iets fout bij het verwijderen.</string>
+    <string name="error_delete_detail_failure">Er ging iets fout bij het verwijderen van het detail.</string>
     <string name="confirmation_delete_detail">Bent u zeker dat u dit bestand wilt verwijderen?</string>
     <string name="je_werkje_opslaan">Je werkje opslaan</string>
     <string name="schilder">schilder</string>

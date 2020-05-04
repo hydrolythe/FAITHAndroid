@@ -32,7 +32,8 @@ class EventViewModelSavePhotoTest {
     fun setUp() {
         viewModel = EventViewModel(
             mockk(),
-            saveEventPhotoUC
+            saveEventPhotoUC,
+            mockk()
         )
     }
 

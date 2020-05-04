@@ -32,6 +32,7 @@ class EventViewModelTest {
     fun setUp() {
         viewModel = EventViewModel(
             mockk(),
+            mockk(),
             mockk()
         )
 

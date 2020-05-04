@@ -10,10 +10,12 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.event.DeleteEventDetailUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
@@ -25,6 +27,7 @@ import timber.log.Timber
 class EventViewModel(
     private val saveEmotionAvatarUseCase: SaveEmotionAvatarUseCase,
     private val saveEventDetailUseCase: SaveEventDetailUseCase,
+    private val deleteDetailUseCase: DeleteEventDetailUseCase,
     givenEvent: Event? = null
 ) : ViewModel(), KoinComponent {
 
@@ -33,6 +36,8 @@ class EventViewModel(
      * Updates to the [eventTitle], [eventDate] and [eventNotes] are automatically applied to the event.
      */
     val event = MediatorLiveData<Event>()
+
+    val eventDetails: LiveData<List<Detail>> = Transformations.map(event) { it.details }
 
     /**
      * The title of the event.
@@ -70,12 +75,14 @@ class EventViewModel(
     private val _avatarSavedSuccessFully = SingleLiveEvent<Int>()
     val avatarSavedSuccessFully: LiveData<Int> = _avatarSavedSuccessFully
 
+    private val _detailDeletedSuccessFully = SingleLiveEvent<Int>()
+    val detailDeletedSuccessFully: LiveData<Int> = _detailDeletedSuccessFully
+
     private val _sendButtonClicked = SingleLiveEvent<Unit>()
     val sendButtonClicked: LiveData<Unit> = _sendButtonClicked
 
-    fun onSendButtonClicked() {
-        _sendButtonClicked.call()
-    }
+    private val _deleteEnabled = MutableLiveData<Boolean>().apply { value = false }
+    val deleteEnabled: LiveData<Boolean> = _deleteEnabled
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
@@ -133,22 +140,27 @@ class EventViewModel(
     }
 
     fun onCameraButtonClicked() {
+        _deleteEnabled.value = false
         _cameraButtonClicked.call()
     }
 
     fun onTextButtonClicked() {
+        _deleteEnabled.value = false
         _textButtonClicked.call()
     }
 
     fun onAudioButtonClicked() {
+        _deleteEnabled.value = false
         _audioButtonClicked.call()
     }
 
     fun onDrawingButtonClicked() {
+        _deleteEnabled.value = false
         _drawingButtonClicked.call()
     }
 
     fun onCancelButtonClicked() {
+        _deleteEnabled.value = false
         _cancelButtonClicked.call()
     }
 
@@ -157,7 +169,17 @@ class EventViewModel(
     }
 
     fun onEmotionAvatarClicked() {
+        _deleteEnabled.value = false
         _emotionAvatarClicked.call()
+    }
+
+    fun onTrashcanClicked() {
+        _deleteEnabled.value = _deleteEnabled.value!!.not()
+    }
+
+    fun onSendButtonClicked() {
+        _deleteEnabled.value = false
+        _sendButtonClicked.call()
     }
 
     /**
@@ -236,6 +258,22 @@ class EventViewModel(
     override fun onCleared() {
         saveEventDetailUseCase.dispose()
         saveEmotionAvatarUseCase.dispose()
+        deleteDetailUseCase.dispose()
         super.onCleared()
+    }
+
+    fun deleteDetail(detail: Detail) {
+        val params = DeleteEventDetailUseCase.Params(detail, event.value!!)
+        deleteDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _detailDeletedSuccessFully.call()
+                updateEvent()
+            }
+
+            override fun onError(e: Throwable) {
+                Timber.e(e)
+                _errorMessage.postValue(R.string.error_delete_detail_failure)
+            }
+        })
     }
 }

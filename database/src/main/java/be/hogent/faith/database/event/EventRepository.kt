@@ -24,6 +24,12 @@ open class EventRepository(
             .map(eventMapper::mapFromEntity)
     }
 
+    override fun update(encryptedEvent: EncryptedEvent): Completable {
+        return Single.just(encryptedEvent)
+            .map(eventMapper::mapToEntity)
+            .flatMapCompletable(eventDatabase::update)
+    }
+
     /**
      * Adds an event for the authenticated user together with its details
      * @return a [Maybe<Event>] that only succeeds when both the event and its details are inserted successfully.

@@ -46,4 +46,6 @@ interface ILocalFileStorageRepository {
      * Delete all files belonging to this detail.
      */
     fun deleteFiles(detail: Detail, container: DetailsContainer): Completable
+
+    fun deleteDetail(detail: Detail, event: Event): Completable
 }
