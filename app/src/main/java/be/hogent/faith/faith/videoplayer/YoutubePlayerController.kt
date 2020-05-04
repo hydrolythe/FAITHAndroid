@@ -1,17 +1,19 @@
-package be.hogent.faith.faith.backpackScreen.youtubeVideo.player
+package be.hogent.faith.faith.videoplayer
 
 import android.view.View
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import be.hogent.faith.R
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.util.getHighQualityThumbnailUrl
 import com.bumptech.glide.Glide
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import kotlinx.android.synthetic.main.player_youtube_custom.view.container_player_pause
 import kotlinx.android.synthetic.main.player_youtube_custom.view.container_youtube_playerview
 import kotlinx.android.synthetic.main.player_youtube_custom.view.gradient_blue_player
@@ -27,10 +29,18 @@ import kotlinx.android.synthetic.main.player_youtube_custom.view.txt_title_playe
  *
  * The controller puts a custom lay-out on top of the youtubeplayerview declared in the xml files
  */
+/** Youtube player:
+ * Uses: https://github.com/PierfrancescoSoffritti/android-youtube-player
+ * Why? - Customisable lay-out if we use a video player screen
+ *      - Ability to disable YouTube buttons
+ *
+ * Read more: https://medium.com/@soffritti.pierfrancesco/how-to-play-youtube-videos-in-your-android-app-c40427215230
+ */
+
 class YoutubePlayerController(
-    private val customPlayerUi: View,
-    private val youTubePlayer: YouTubePlayer,
-    private val faithYoutubePlayer: FaithYoutubePlayer
+    private val faithVideoPlayer: FaithVideoPlayer,
+    private val youTubePlayerView: YouTubePlayerView,
+    private val detail: YoutubeVideoDetail
 ) : IVideoPlayer, AbstractYouTubePlayerListener() {
 
     private var playerTracker: YouTubePlayerTracker? = null
@@ -38,14 +48,33 @@ class YoutubePlayerController(
     private var thumbnailImg: ImageView? = null
     private var gradient: ImageView? = null
     private var startScreen: ConstraintLayout? = null
-    private var alphaAnim: AlphaAnimation? = null
     private var customPlayerContainer: ConstraintLayout? = null
+    private var customPlayerUi: View? = null
+    private var youTubePlayer: YouTubePlayer? = null
 
     init {
+        youTubePlayerView.addYouTubePlayerListener(this)
         playerTracker = YouTubePlayerTracker()
+        customPlayerUi = youTubePlayerView.inflateCustomPlayerUi(R.layout.player_youtube_custom)
+        createCustomUiLayerAbovePlayerView(customPlayerUi!!)
+    }
+
+    override fun onReady(youTubePlayer: YouTubePlayer) {
         youTubePlayer.addListener(playerTracker!!)
 
-        createCustomUiLayerAbovePlayerView(customPlayerUi)
+        val videoId = detail.videoId
+        youTubePlayer.loadVideo(videoId, 0F)
+
+        this.youTubePlayer = youTubePlayer
+    }
+
+    override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
+        super.onVideoDuration(youTubePlayer, duration)
+        faithVideoPlayer.setDurationVideo(duration)
+    }
+
+    override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
+        faithVideoPlayer.setCurrentTimeVideo(second)
     }
 
     private fun createCustomUiLayerAbovePlayerView(customPlayerUi: View) {
@@ -55,12 +84,12 @@ class YoutubePlayerController(
         startScreen = customPlayerUi.container_player_pause
         customPlayerContainer = customPlayerUi.container_youtube_playerview
 
-        title!!.text = faithYoutubePlayer.youtubeVideoDetail.title
+        title!!.text = detail.title
 
         /**
          * Thumbnail image from YouTube is the background of the stop screen
          */
-        Glide.with(thumbnailImg!!).load(getHighQualityThumbnailUrl(faithYoutubePlayer.youtubeVideoDetail.videoId)).into(thumbnailImg!!)
+        Glide.with(thumbnailImg!!).load(getHighQualityThumbnailUrl(detail.videoId)).into(thumbnailImg!!)
 
         initFullScreenOnClickListener()
     }
@@ -71,96 +100,43 @@ class YoutubePlayerController(
      */
     private fun initFullScreenOnClickListener() {
         customPlayerContainer!!.setOnClickListener {
-            if (faithYoutubePlayer.isFullscreen) {
-                startAnimation()
-            } else
-                cancelAnim()
-        }
-
-        faithYoutubePlayer.timeContainer!!.setOnClickListener {
-            if (faithYoutubePlayer.isFullscreen)
-                cancelAnim()
-        }
-
-        faithYoutubePlayer.menuContainer!!.setOnClickListener {
-            if (faithYoutubePlayer.isFullscreen)
-                cancelAnim()
         }
     }
 
     override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
         super.onStateChange(youTubePlayer, state)
-        if (state == PlayerConstants.PlayerState.BUFFERING)
-            showLoadingScreen()
         if (state == PlayerConstants.PlayerState.UNSTARTED)
-            showStartScreen()
-        if (state == PlayerConstants.PlayerState.PLAYING) {
+            startScreen!!.visibility = View.VISIBLE
+        if (state == PlayerConstants.PlayerState.PLAYING)
             startScreen!!.visibility = View.GONE
-        }
-        if (state == PlayerConstants.PlayerState.PAUSED) {
-            if (alphaAnim != null)
-                cancelAnim()
-        }
         if (state == PlayerConstants.PlayerState.ENDED)
-            showStartScreen()
+            startScreen!!.visibility = View.VISIBLE
     }
 
-    private fun showLoadingScreen() {
-        // TODO
+    override fun playVideo() {
+        startScreen!!.visibility = View.GONE
+        youTubePlayer!!.play()
     }
 
-    private fun startAnimation() {
-        faithYoutubePlayer.menuContainer!!.visibility = View.VISIBLE
-        faithYoutubePlayer.timeContainer!!.visibility = View.VISIBLE
-
-        alphaAnim = AlphaAnimation(1.0f, 0.0f)
-        alphaAnim!!.startOffset = 3000
-        alphaAnim!!.duration = 400
-        alphaAnim!!.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationRepeat(p0: Animation?) {}
-
-            override fun onAnimationEnd(animation: Animation) {
-                faithYoutubePlayer.menuContainer!!.visibility = View.GONE
-                faithYoutubePlayer.timeContainer!!.visibility = View.GONE
-            }
-
-            override fun onAnimationStart(p0: Animation?) {}
-        })
+    override fun resumeVideo() {
+        youTubePlayer!!.play()
     }
 
-    private fun cancelAnim() {
-        alphaAnim?.cancel()
-        alphaAnim = null
-        faithYoutubePlayer.menuContainer!!.visibility = View.VISIBLE
-        faithYoutubePlayer.timeContainer!!.visibility = View.VISIBLE
+    override fun pauseVideo() {
+        youTubePlayer!!.pause()
     }
 
-    private fun showStartScreen() {
-        cancelAnim()
+    override fun stopVideo() {
+        youTubePlayer!!.seekTo(0F)
+        youTubePlayer!!.pause()
         startScreen!!.visibility = View.VISIBLE
     }
 
-    override fun playVideo(currentState: VideoPlayerState) {
-        startScreen!!.visibility = View.GONE
-        youTubePlayer.play()
+    override fun seekTo(time: Float) {
+        youTubePlayer!!.seekTo(time)
     }
 
-    override fun pauseVideo(currentState: VideoPlayerState) {
-        youTubePlayer.pause()
+    override fun stopPlayer() {
+        youTubePlayerView.release()
     }
-
-    override fun stopVideo(currentState: VideoPlayerState) {
-        youTubePlayer.seekTo(0F)
-        youTubePlayer.pause()
-        showStartScreen()
-    }
-
-    override fun seekTo(currentState: VideoPlayerState, time: Float) {
-        youTubePlayer.seekTo(time)
-
-        if (currentState == VideoPlayerState.PLAYING)
-            youTubePlayer.play()
-    }
-
-    override fun setFullScreen() {}
 }

@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.backpackScreen.youtubeVideo.player
+package be.hogent.faith.faith.videoplayer
 
 /**
  * Creates a label like this: 2:45

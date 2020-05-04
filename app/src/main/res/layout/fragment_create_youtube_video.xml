@@ -7,10 +7,10 @@
     <data>
         <variable
             name="youtubeViewModel"
-            type="be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel" />
+            type="be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailViewModel" />
         <variable
             name="preview"
-            type="be.hogent.faith.faith.backpackScreen.youtubeVideo.create.ShowPreview" />
+            type="be.hogent.faith.faith.details.youtubeVideo.create.ShowPreview" />
         <import type="android.view.View" />
     </data>
 
@@ -21,7 +21,7 @@
         android:background="@color/color_white"
         android:backgroundTint="#FF0000"
         android:clipToPadding="false"
-        tools:context=".faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailFragment">
+        tools:context=".faith.details.youtubeVideo.create.YoutubeVideoDetailFragment">
 
 
         <ImageView

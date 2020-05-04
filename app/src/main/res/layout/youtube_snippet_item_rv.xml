@@ -9,7 +9,7 @@
             type="be.hogent.faith.domain.models.detail.YoutubeVideoDetail" />
         <variable
             name="clickListener"
-            type="be.hogent.faith.faith.backpackScreen.youtubeVideo.create.SnippetClickListener" />
+            type="be.hogent.faith.faith.details.youtubeVideo.create.SnippetClickListener" />
     </data>
 
 <!--    <com.google.android.material.card.MaterialCardView
