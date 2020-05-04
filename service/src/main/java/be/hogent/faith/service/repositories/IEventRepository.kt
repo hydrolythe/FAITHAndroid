@@ -9,6 +9,8 @@ import java.util.UUID
 
 interface IEventRepository {
 
+    fun update(encryptedEvent: EncryptedEvent): Completable
+
     /**
      * Saves the given [event] to the events of the given [user]
      */

@@ -1,7 +1,6 @@
 package be.hogent.faith.service.usecases.backpack
 
 import be.hogent.faith.domain.models.Backpack
-import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.encryption.EncryptedDetailsContainer
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import be.hogent.faith.service.usecases.util.EncryptedDetailFactory

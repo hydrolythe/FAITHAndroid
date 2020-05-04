@@ -52,8 +52,7 @@ class CinemaCreateVideoFragment : Fragment() {
 
     private fun updateUI() {
         detailThumbnailsAdapter = DetailThumbnailsAdapter(
-            emptyList(),
-            requireNotNull(activity) as CinemaActivity
+            requireActivity() as CinemaActivity
         )
         binding.rvVideoDetails.layoutManager = GridLayoutManager(activity, 6)
         binding.rvVideoDetails.adapter = detailThumbnailsAdapter

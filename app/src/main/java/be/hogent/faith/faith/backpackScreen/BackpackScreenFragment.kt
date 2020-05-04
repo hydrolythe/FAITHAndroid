@@ -60,7 +60,6 @@ class BackpackScreenFragment : Fragment() {
 
     private fun updateUI() {
         detailThumbnailsAdapter = DetailThumbnailsAdapter(
-            emptyList(),
             requireNotNull(activity) as BackpackScreenActivity
         )
         backpackBinding.recyclerviewBackpack.layoutManager = GridLayoutManager(activity, 5)
@@ -75,7 +74,7 @@ class BackpackScreenFragment : Fragment() {
     private fun startListeners() {
 
         backpackViewModel.filteredDetails.observe(this, Observer { details ->
-            detailThumbnailsAdapter?.updateDetailsList(details)
+            detailThumbnailsAdapter?.submitList(details)
         })
 
         backpackBinding.backpackMenuFilter.searchBar.setOnQueryTextListener(object :
@@ -94,10 +93,10 @@ class BackpackScreenFragment : Fragment() {
 
         backpackViewModel.deleteEnabled.observe(this, Observer { enabled ->
             if (enabled) {
-                detailThumbnailsAdapter!!.hide(false)
+                detailThumbnailsAdapter!!.setItemsAsDeletable(true)
                 backpackViewModel.viewButtons(false)
             } else {
-                detailThumbnailsAdapter!!.hide(true)
+                detailThumbnailsAdapter!!.setItemsAsDeletable(false)
                 backpackViewModel.viewButtons(true)
             }
         })

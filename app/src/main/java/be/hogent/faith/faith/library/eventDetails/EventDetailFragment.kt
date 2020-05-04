@@ -53,10 +53,7 @@ class EventDetailFragment : Fragment() {
                 setHasFixedSize(true)
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 // Start with empty list and then fill it in
-                adapter = DetailThumbnailsAdapter(
-                    emptyList(),
-                    requireNotNull(activity) as LibraryActivity
-                )
+                adapter = DetailThumbnailsAdapter(requireNotNull(activity) as LibraryActivity)
             }
         }
     }
@@ -71,7 +68,7 @@ class EventDetailFragment : Fragment() {
 
         eventDetailsViewModel.details.observe(viewLifecycleOwner, Observer { details ->
             (binding.recyclerViewLibraryEventdetails.adapter as DetailThumbnailsAdapter)
-                .updateDetailsList(details)
+                .submitList(details)
         })
 
         eventDetailsViewModel.cancelButtonClicked.observe(viewLifecycleOwner, Observer {

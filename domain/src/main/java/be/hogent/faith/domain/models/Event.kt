@@ -41,6 +41,10 @@ data class Event(
         _details += detail
     }
 
+    fun removeDetail(detail: Detail) {
+        _details -= detail
+    }
+
     fun addNewPhotoDetail(saveFile: File): PhotoDetail {
         val newDetail = PhotoDetail(saveFile)
         addDetail(newDetail)
