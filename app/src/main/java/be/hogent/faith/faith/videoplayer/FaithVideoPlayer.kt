@@ -12,6 +12,7 @@ import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import com.google.android.material.card.MaterialCardView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import java.lang.UnsupportedOperationException
 
 class FaithVideoPlayer(
     private val playerParentView: MaterialCardView,
@@ -66,7 +67,7 @@ class FaithVideoPlayer(
             is YoutubeVideoDetail -> playYoutubeVideo(detail, context)
             is FilmDetail -> playVideoFile(detail, context)
             is ExternalVideoDetail -> playVideoFile(detail, context)
-            //TODO throw exception
+            else -> throw UnsupportedOperationException("This file cannot be played")
         }
     }
 
