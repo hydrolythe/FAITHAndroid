@@ -66,6 +66,8 @@ class YoutubePlayerController(
         youTubePlayer.loadVideo(videoId, 0F)
 
         this.youTubePlayer = youTubePlayer
+
+        startScreen!!.visibility = View.VISIBLE
     }
 
     override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
@@ -99,18 +101,7 @@ class YoutubePlayerController(
      * It's a layer between our UI and the default YouTube UI
      */
     private fun initFullScreenOnClickListener() {
-        customPlayerContainer!!.setOnClickListener {
-        }
-    }
-
-    override fun onStateChange(youTubePlayer: YouTubePlayer, state: PlayerConstants.PlayerState) {
-        super.onStateChange(youTubePlayer, state)
-        if (state == PlayerConstants.PlayerState.UNSTARTED)
-            startScreen!!.visibility = View.VISIBLE
-        if (state == PlayerConstants.PlayerState.PLAYING)
-            startScreen!!.visibility = View.GONE
-        if (state == PlayerConstants.PlayerState.ENDED)
-            startScreen!!.visibility = View.VISIBLE
+        customPlayerContainer!!.setOnClickListener {}
     }
 
     override fun playVideo() {

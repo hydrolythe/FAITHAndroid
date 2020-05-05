@@ -31,13 +31,11 @@ abstract class FaithVideoPlayerFragment : Fragment() {
         playerViewModel.setCurrentVideo(detail)
     }
 
-    fun resetPlayer() {
-        playerViewModel.resetPlayer()
-    }
-
     override fun onDestroy() {
         super.onDestroy()
-        if (playerViewModel.player.value != null)
-        playerViewModel.player.value!!.stopPlayer()
+        if (playerViewModel.player.value != null){
+            playerViewModel.player.value!!.stopPlayer()
+            playerViewModel.resetPlayer()
+        }
     }
 }

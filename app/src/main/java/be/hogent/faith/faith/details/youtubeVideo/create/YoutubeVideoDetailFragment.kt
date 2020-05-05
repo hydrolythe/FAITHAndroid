@@ -88,9 +88,6 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
                         /**
                          * Opens a preview screen only when no other preview screen is already opened
                          */
-                        /**
-                         * Opens a preview screen only when no other preview screen is already opened
-                         */
                         if (youtubeVideoDetailViewModel.showPreview.value != ShowPreview.SHOW)
                             youtubeVideoDetailViewModel.setSelectedSnippet(snippet)
                     }
@@ -219,13 +216,6 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
         }
 
         popupWindow.showAtLocation(popupview, Gravity.CENTER, 0, 0)
-    }
-
-    /**
-     * Behaviour required by Play Store. The audio must be stopped when the video isn't visible.
-     */
-    private fun stopYoutubePlayer() {
-        resetPlayer()
     }
 
     /**

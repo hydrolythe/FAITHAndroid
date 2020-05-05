@@ -13,9 +13,6 @@ import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import com.google.android.material.card.MaterialCardView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 
-/**
- *
- */
 class FaithVideoPlayer(
     private val playerParentView: MaterialCardView,
     private val playButton: View,
@@ -43,17 +40,13 @@ class FaithVideoPlayer(
             pauseVideo()
         }
 
-        if (stopButton != null) {
-            stopButton!!.setOnClickListener {
+        stopButton?.setOnClickListener {
                 stopVideo()
             }
-        }
 
-        if (fullscreenButton != null) {
-            fullscreenButton!!.setOnClickListener {
+        fullscreenButton?.setOnClickListener {
                 setFullScreen()
             }
-        }
 
         seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -79,7 +72,7 @@ class FaithVideoPlayer(
 
     private fun playYoutubeVideo(detail: Detail, context: Context){
         val youTubePlayerView = YouTubePlayerView(context)
-        controller = YoutubePlayerController(this, youTubePlayerView, detail)
+        controller = YoutubePlayerController(this, youTubePlayerView, detail as YoutubeVideoDetail)
         playerParentView.addView(youTubePlayerView)
     }
 
@@ -90,11 +83,8 @@ class FaithVideoPlayer(
     }
 
     fun setDurationVideo(duration: Float) {
-        if (seekBar != null)
-            seekBar!!.max = duration.toInt()
-        if (durationField != null) {
-            durationField!!.text = createTimeLabel(duration)
-        }
+        seekBar?.max = duration.toInt()
+        durationField?.text = createTimeLabel(duration)
     }
 
     fun setCurrentTimeVideo(second: Float) {
@@ -116,13 +106,13 @@ class FaithVideoPlayer(
 
     override fun stopVideo() {
         controller!!.stopVideo()
-        seekBar!!.progress = 0
-        currentTimeField!!.text = "0:00"
+        seekBar?.progress = 0
+        currentTimeField?.text = "0:00"
     }
 
     override fun seekTo(time: Float) {
         controller!!.seekTo(time)
-        currentTimeField!!.text = createTimeLabel(time)
+        currentTimeField?.text = createTimeLabel(time)
     }
 
     override fun stopPlayer() {
