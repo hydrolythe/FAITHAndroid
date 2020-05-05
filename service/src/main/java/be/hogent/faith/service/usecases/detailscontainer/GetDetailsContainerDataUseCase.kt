@@ -1,6 +1,6 @@
-package be.hogent.faith.service.usecases.backpack
+package be.hogent.faith.service.usecases.detailscontainer
 
-import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import be.hogent.faith.service.repositories.IDetailContainerRepository
@@ -10,28 +10,28 @@ import io.reactivex.Scheduler
 import timber.log.Timber
 
 /**
- * Use to load the data for all details in the backpack
+ * Use to load the data for all details in the cinema
  */
-class GetBackPackDataUseCase(
-    private val backpackRepository: IDetailContainerRepository<Backpack>,
-    private val detailContainerEncryptionService: IDetailContainerEncryptionService<Backpack>,
+class GetDetailsContainerDataUseCase<T : DetailsContainer>(
+    private val detailsContainerRepository: IDetailContainerRepository<T>,
+    private val detailContainerEncryptionService: IDetailContainerEncryptionService<T>,
     observeScheduler: Scheduler,
     private val subscribeScheduler: Scheduler
-) : ObservableUseCase<List<Detail>, GetBackPackDataUseCase.Params>(observeScheduler) {
+) : ObservableUseCase<List<Detail>, GetDetailsContainerDataUseCase.Params>(observeScheduler) {
     override fun buildUseCaseObservable(params: Params): Observable<List<Detail>> {
-        return backpackRepository.getEncryptedContainer()
+        return detailsContainerRepository.getEncryptedContainer()
             .subscribeOn(subscribeScheduler)
-            .doOnSuccess { Timber.i("Got encrypted backpack") }
+            .doOnSuccess { Timber.i("Got encrypted cinema") }
             .doOnError {
-                Timber.e("Error while fetching encrypted backpack: ${it.localizedMessage}")
+                Timber.e("Error while fetching encrypted cinema: ${it.localizedMessage}")
                 it.printStackTrace()
             }
             .flatMapObservable { container ->
-                backpackRepository.getAll()
+                detailsContainerRepository.getAll()
                     .subscribeOn(subscribeScheduler)
-                    .doOnNext { Timber.i("Got encrypted backpack data") }
+                    .doOnNext { Timber.i("Got encrypted cinema data") }
                     .doOnError {
-                        Timber.e("Error while fetching encrypted backpack data: ${it.localizedMessage}")
+                        Timber.e("Error while fetching encrypted cinema data: ${it.localizedMessage}")
                         it.printStackTrace()
                     }
                     .toObservable()
@@ -40,7 +40,7 @@ class GetBackPackDataUseCase(
                             .flatMapSingle {
                                 detailContainerEncryptionService.decryptData(it, container)
                                     .subscribeOn(subscribeScheduler)
-                                    .doOnSuccess { Timber.i("Decrypted data for detail ${it.uuid} in backpack") }
+                                    .doOnSuccess { Timber.i("Decrypted data for detail ${it.uuid} in cinema") }
                                     .doOnError {
                                         Timber.e("Error while decrypting detail: ${it.localizedMessage}")
                                         it.printStackTrace()
@@ -50,5 +50,5 @@ class GetBackPackDataUseCase(
             }
     }
 
-    class Params
+    class Params()
 }

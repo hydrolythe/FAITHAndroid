@@ -136,19 +136,6 @@
             app:layout_constraintGuide_percent="0.15" />
 
         <ImageButton
-            android:id="@+id/btn_cinema_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/ic_trashcan"
-            android:onClick="@{() -> cinemaOverviewViewModel.onDeleteClicked()}"
-            android:contentDescription="@string/delete"
-            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
-            app:layout_constraintStart_toStartOf="@+id/rv_container"
-            app:srcCompat="@drawable/ic_trashcan" />
-
-        <ImageButton
             android:id="@+id/btn_cinema_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -175,6 +162,19 @@
             app:layout_constraintStart_toStartOf="@+id/rv_container"
             app:layout_constraintTop_toTopOf="@+id/rv_container"
             />
+
+        <ImageButton
+            android:id="@+id/btn_cinema_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/ic_trashcan"
+            android:onClick="@{() -> cinemaOverviewViewModel.onDeleteClicked()}"
+            android:contentDescription="@string/delete"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintStart_toStartOf="@+id/rv_container"
+            app:srcCompat="@drawable/ic_trashcan" />
 
         <ImageView
             android:id="@+id/achtergrond_publiek"

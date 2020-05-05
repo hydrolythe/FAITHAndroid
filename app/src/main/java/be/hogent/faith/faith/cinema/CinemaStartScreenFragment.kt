@@ -191,7 +191,10 @@ class CinemaStartScreenFragment : Fragment() {
         picker = builder.build()
         picker.show(requireActivity().supportFragmentManager, picker.toString())
         picker.addOnPositiveButtonClickListener {
-            // TODO
+            cinemaOverviewViewModel.setDateRange(it.first, it.second)
+        }
+        picker.addOnNegativeButtonClickListener {
+            cinemaOverviewViewModel.resetDateRange()
         }
     }
 

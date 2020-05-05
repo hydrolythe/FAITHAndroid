@@ -6,17 +6,13 @@ import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.storage.StoragePathProvider
 import be.hogent.faith.util.factory.DataFactory
-import be.hogent.faith.util.factory.DetailFactory
-import be.hogent.faith.util.factory.EventFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageException
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
-import io.reactivex.Completable
 import io.reactivex.Single
 import org.junit.After
 import org.junit.Before
@@ -150,5 +146,4 @@ class FirebaseStorageRepositoryTest {
         // As such there's no difference between the test for storing the avatar and the details
         verify { rxFirebaseStorage.putFile(any(), any()) }
     }
-
 }

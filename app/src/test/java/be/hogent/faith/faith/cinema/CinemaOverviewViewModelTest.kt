@@ -9,10 +9,11 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.TestUtils
-import be.hogent.faith.service.usecases.cinema.GetCinemaDataUseCase
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
+import be.hogent.faith.service.usecases.detailscontainer.GetDetailsContainerDataUseCase
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
+import io.mockk.every
 import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert
@@ -65,12 +66,12 @@ class CinemaOverviewViewModelTest {
     private val deleteDetailsContainerDetailUseCase =
         mockk<DeleteDetailsContainerDetailUseCase<Cinema>>()
     private val loadDetailFileUseCase = mockk<LoadDetailFileUseCase<Cinema>>()
-    private val getCinemaDataUseCase = mockk<GetCinemaDataUseCase>()
-    private val cinema = Cinema()
+    private val getCinemaDataUseCase = mockk<GetDetailsContainerDataUseCase<Cinema>>(relaxed = true)
+    private val cinema: Cinema = mockk()
 
     @Before
     fun setUp() {
-        details.forEach { cinema.addDetail(it) }
+        every { cinema.getFiles() } returns details
         viewModel = CinemaOverviewViewModel(
             saveDetailsContainerDetailUseCase,
             deleteDetailsContainerDetailUseCase,
@@ -78,6 +79,7 @@ class CinemaOverviewViewModelTest {
             cinema,
             getCinemaDataUseCase
         )
+        viewModel.onFilesButtonClicked()
         viewModel.filteredDetails.observeForever(detailsObserver)
     }
 
