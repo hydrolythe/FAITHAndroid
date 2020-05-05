@@ -35,6 +35,9 @@ class EventDetailsViewModel(
     val cancelButtonClicked: LiveData<Unit> = _cancelButtonClicked
 
     fun setEvent(event: Event) {
+        // Set the event already so at least the data is shown
+        _event.value = event
+        // Then start the use case so files will be loaded
         makeEventFilesAvailableUseCase.execute(
             MakeEventFilesAvailableUseCase.Params(event),
             object :
