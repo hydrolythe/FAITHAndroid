@@ -57,6 +57,7 @@ class YoutubePlayerController(
         playerTracker = YouTubePlayerTracker()
         customPlayerUi = youTubePlayerView.inflateCustomPlayerUi(R.layout.player_youtube_custom)
         createCustomUiLayerAbovePlayerView(customPlayerUi!!)
+        startScreen!!.visibility = View.VISIBLE
     }
 
     override fun onReady(youTubePlayer: YouTubePlayer) {
@@ -67,7 +68,7 @@ class YoutubePlayerController(
 
         this.youTubePlayer = youTubePlayer
 
-        startScreen!!.visibility = View.VISIBLE
+        startScreen!!.visibility = View.GONE
     }
 
     override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
