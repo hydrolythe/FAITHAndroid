@@ -1,7 +1,10 @@
 package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,5 +70,21 @@ class SaveEventDialog : DialogFragment() {
         eventDetailsViewModel.cancelButtonClicked.observe(this, Observer {
             dismiss()
         })
+
+        //when a user starts typing error message will disappear
+        saveEventBinding.txtSaveEventTitle.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                userViewModel.clearErrorMessage()
+            }
+
+        })
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        userViewModel.clearErrorMessage()
     }
 }

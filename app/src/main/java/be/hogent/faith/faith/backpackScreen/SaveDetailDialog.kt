@@ -78,6 +78,7 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
+        backpackViewModel.clearErrorMessage()
     }
 
     override fun onCancel(dialog: DialogInterface) {

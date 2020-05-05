@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.cinema
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

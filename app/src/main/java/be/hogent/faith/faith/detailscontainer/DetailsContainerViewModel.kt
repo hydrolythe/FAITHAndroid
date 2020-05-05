@@ -464,6 +464,10 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     private fun setDetails() {
         audioFilterEnabled.postValue(false)
     }
+
+    fun clearErrorMessage(){
+        _errorMessage.postValue(null)
+    }
 }
 
 /**
