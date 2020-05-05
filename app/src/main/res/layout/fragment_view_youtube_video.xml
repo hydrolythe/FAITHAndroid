@@ -32,9 +32,8 @@
                 android:id="@+id/seekbar_yt_video"
                 android:layout_width="443dp"
                 android:layout_height="wrap_content"
-                android:progressBackgroundTint="#A5F2C9"
-                android:progressTint="#16F48A"
-                android:thumbTint="#0000FF" />
+                android:progressDrawable="@drawable/audio_seekbar_progress"
+                />
 
             <TextView
                 android:id="@+id/text_duration_yt_video"

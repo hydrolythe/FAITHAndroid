@@ -30,7 +30,7 @@ import java.util.UUID
 
 private const val ARG_EVENTUUID = "eventUUID"
 
-class EventDetailsFragment : Fragment() {
+class EventFragment : Fragment() {
 
     private var navigation: EventDetailsNavigationListener? = null
 
@@ -69,7 +69,7 @@ class EventDetailsFragment : Fragment() {
                 false
             )
         eventDetailsBinding.eventViewModel = eventViewModel
-        eventDetailsBinding.lifecycleOwner = this@EventDetailsFragment
+        eventDetailsBinding.lifecycleOwner = this@EventFragment
 
         return eventDetailsBinding.root
     }
@@ -95,7 +95,6 @@ class EventDetailsFragment : Fragment() {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             // Start with empty list and then fill it in
             adapter = DetailThumbnailsAdapter(
-                emptyList(),
                 requireNotNull(activity) as EmotionCaptureMainActivity
             )
         }
@@ -115,17 +114,20 @@ class EventDetailsFragment : Fragment() {
      * to gone when no items are shown, will set visible when at least one detail is present.
      */
     private fun determineRVVisibility() {
-        if (detailThumbnailsAdapter!!.itemCount > 0) {
-            eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.VISIBLE
-        } else {
+        if (detailThumbnailsAdapter!!.currentList.isEmpty()) {
             eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.GONE
+            eventDetailsBinding.btnEventDelete.visibility = View.GONE
+        } else {
+            eventDetailsBinding.recyclerViewEventDetailsDetails.visibility = View.VISIBLE
+            eventDetailsBinding.btnEventDelete.visibility = View.VISIBLE
         }
     }
 
     private fun startListeners() {
         // Update adapter when event changes
-        eventViewModel.event.observe(this, Observer { event ->
-            detailThumbnailsAdapter?.updateDetailsList(event.details)
+        eventViewModel.eventDetails.observe(this, Observer { details ->
+            detailThumbnailsAdapter?.submitList(details)
+            detailThumbnailsAdapter?.notifyDataSetChanged()
             // check whether there are detail in de adapter. If so, show the RV, of not leave hidden
             determineRVVisibility()
         })
@@ -159,10 +161,13 @@ class EventDetailsFragment : Fragment() {
             // navigation?.startMakeDrawingFragment()
             navigation?.startDrawingDetailFragment()
         })
-
         eventViewModel.sendButtonClicked.observe(this, Observer {
             saveDialog = SaveEventDialog.newInstance()
             saveDialog.show(requireActivity().supportFragmentManager, null)
+        })
+
+        eventViewModel.deleteEnabled.observe(this, Observer { deleteEnabled ->
+            detailThumbnailsAdapter?.setItemsAsDeletable(deleteEnabled)
         })
 
         userViewModel.eventSavedState.observe(this, Observer {
@@ -217,8 +222,8 @@ class EventDetailsFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(eventUuid: UUID? = null): EventDetailsFragment {
-            return EventDetailsFragment().apply {
+        fun newInstance(eventUuid: UUID? = null): EventFragment {
+            return EventFragment().apply {
                 arguments = Bundle().apply {
                     eventUuid?.let {
                         putSerializable(ARG_EVENTUUID, it)

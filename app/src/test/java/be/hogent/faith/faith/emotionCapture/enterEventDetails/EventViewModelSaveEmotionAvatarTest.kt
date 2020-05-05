@@ -35,7 +35,8 @@ class EventViewModelSaveEmotionAvatarTest : KoinTest {
         startKoin { modules(appModule) }
         viewModel = EventViewModel(
             saveEmotionAvatarUseCase,
-            mockk()
+            mockk(),
+                    mockk()
         )
 
         // We have to add an observer so event changes when title/notes/date are given a new value

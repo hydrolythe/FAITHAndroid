@@ -7,6 +7,7 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailViewModel
+import be.hogent.faith.faith.cinema.CinemaCreateVideoViewModel
 import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.details.audio.AudioDetailViewModel
@@ -60,15 +61,15 @@ val appModule = module(override = true) {
 
     // ViewModels
     viewModel { CityScreenViewModel(get()) }
-    viewModel { (event: Event) -> EventViewModel(get(), get(), event) }
-    viewModel { EventViewModel(get(), get()) }
+    viewModel { (event: Event) -> EventViewModel(get(), get(), get(), event) }
+    viewModel { EventViewModel(get(), get(), get()) }
     viewModel { (backpack: Backpack) ->
         BackpackViewModel(
             saveBackpackDetailUseCase = get(named("SaveBackpackDetailUseCase")),
             deleteBackpackDetailUseCase = get(named("DeleteBackpackDetailUseCase")),
             backpack = backpack,
             loadDetailFileUseCase = get(named("LoadBackpackDetailFileUseCase")),
-            getBackPackDataUseCase = get()
+            getBackPackDataUseCase = get(named("GetBackpackDataUseCase"))
         )
     }
     viewModel { (cinema: Cinema) ->
@@ -77,7 +78,7 @@ val appModule = module(override = true) {
             deleteBackpackDetailUseCase = get(named("DeleteCinemaDetailUseCase")),
             loadDetailFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
             cinema = cinema,
-            getCinemaDataUseCase = get()
+            getCinemaDataUseCase = get(named("GetCinemaDataUseCase"))
         )
     }
     viewModel { DrawViewModel() }
@@ -94,17 +95,14 @@ val appModule = module(override = true) {
     viewModel { RegisterUserInfoViewModel(get()) }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { TakePhotoViewModel(get()) }
-    viewModel {
-        YoutubeVideoDetailViewModel(
-            get()
-        )
-    }
+    viewModel { YoutubeVideoDetailViewModel(get()) }
     viewModel { VideoPlayerViewModel() }
     viewModel { ExternalFileViewModel(get(), get()) }
     viewModel { (user: User) -> EventListViewModel(user, get()) }
     viewModel { EventDetailsViewModel(get()) }
     viewModel { ViewPhotoDetailViewModel() }
     viewModel { ViewDrawingDetailViewModel() }
+    viewModel { CinemaCreateVideoViewModel() }
     viewModel {
         ViewTextDetailViewModel(
             get()

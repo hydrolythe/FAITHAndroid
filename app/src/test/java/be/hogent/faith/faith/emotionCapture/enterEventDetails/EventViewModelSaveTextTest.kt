@@ -28,7 +28,9 @@ class EventViewModelSaveTextTest {
     fun setUp() {
         viewModel = EventViewModel(
             mockk(),
-            saveTextUseCase)
+            saveTextUseCase,
+            mockk()
+        )
     }
 
     @Test

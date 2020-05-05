@@ -68,7 +68,6 @@ class CinemaStartScreenFragment : Fragment() {
 
     private fun updateUI() {
         detailThumbnailsAdapter = DetailThumbnailsAdapter(
-            emptyList(),
             requireNotNull(activity) as CinemaActivity
         )
         binding.rvCinema.layoutManager = GridLayoutManager(activity, 6)
@@ -113,7 +112,7 @@ class CinemaStartScreenFragment : Fragment() {
         })
 
         cinemaOverviewViewModel.filteredDetails.observe(this, Observer { details ->
-            detailThumbnailsAdapter?.updateDetailsList(details)
+            detailThumbnailsAdapter?.submitList(details)
         })
 
         cinemaOverviewViewModel.addButtonClicked.observe(this, Observer {
@@ -122,9 +121,9 @@ class CinemaStartScreenFragment : Fragment() {
 
         cinemaOverviewViewModel.deleteEnabled.observe(this, Observer { enabled ->
             if (enabled) {
-                detailThumbnailsAdapter!!.hide(false)
+                detailThumbnailsAdapter!!.setItemsAsDeletable(true)
             } else {
-                detailThumbnailsAdapter!!.hide(true)
+                detailThumbnailsAdapter!!.setItemsAsDeletable(false)
             }
         })
 
@@ -140,7 +139,7 @@ class CinemaStartScreenFragment : Fragment() {
             this, Observer { range -> btn_cinema_chooseDate.text = range })
 
         cinemaOverviewViewModel.filteredDetails.observe(this, Observer { list ->
-            detailThumbnailsAdapter!!.updateDetailsList(list)
+            detailThumbnailsAdapter!!.submitList(list)
         })
     }
 
@@ -192,7 +191,10 @@ class CinemaStartScreenFragment : Fragment() {
         picker = builder.build()
         picker.show(requireActivity().supportFragmentManager, picker.toString())
         picker.addOnPositiveButtonClickListener {
-            // TODO
+            cinemaOverviewViewModel.setDateRange(it.first, it.second)
+        }
+        picker.addOnNegativeButtonClickListener {
+            cinemaOverviewViewModel.resetDateRange()
         }
     }
 

@@ -148,4 +148,8 @@ abstract class CinemaDetailFragment : Fragment() {
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }
     }
+
+    interface CinemaDetailNavigation {
+        fun backToCinema()
+    }
 }
