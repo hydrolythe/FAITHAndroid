@@ -112,7 +112,7 @@ class DrawEmotionAvatarFragment : DrawFragment() {
         if (avatarOutlineResId != NO_AVATAR) {
             drawView.setPaintedBackground(
                 ContextCompat.getDrawable(
-                    context!!,
+                    requireContext(),
                     avatarOutlineResId
                 ) as BitmapDrawable
             )

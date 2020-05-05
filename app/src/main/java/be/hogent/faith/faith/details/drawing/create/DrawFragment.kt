@@ -33,7 +33,7 @@ abstract class DrawFragment : Fragment() {
         setUpListeners()
 
         // anders wordt zwarte kleur niet geselecteerd en wordt de alpha value niet ingesteld
-        drawViewModel.pickColor(ContextCompat.getColor(context!!, R.color.black))
+        drawViewModel.pickColor(ContextCompat.getColor(requireContext(), R.color.black))
     }
 
     override fun onAttach(context: Context) {
@@ -70,7 +70,7 @@ abstract class DrawFragment : Fragment() {
             showExitAlert()
         })
         drawViewModel.eraserClicked.observe(this, Observer {
-            drawView.pickEraserTool()
+            drawView.pickEraserTool(colorAlpha)
         })
         drawViewModel.drawingActions.observe(this, Observer {
             // It's very important that the drawCanvas doesn't create its own paths but uses a paths object
@@ -89,7 +89,7 @@ abstract class DrawFragment : Fragment() {
         val color: Int = drawViewModel.selectedColor.value!!
         val gradientDrawable =
             AppCompatResources.getDrawable(
-                this.context!!,
+                requireContext(),
                 R.drawable.circle
             ) as GradientDrawable
         gradientDrawable.setColor(color)
