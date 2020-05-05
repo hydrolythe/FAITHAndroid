@@ -9,21 +9,20 @@ import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import io.reactivex.Completable
 import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
     private val detailContainerRepository: IDetailContainerRepository<Container>,
     private val detailContainerEncryptionService: IDetailContainerEncryptionService<Container>,
     private val storageRepository: IFileStorageRepository,
-    observeScheduler: Scheduler,
-    private val subscribeScheduler: Scheduler
-) : CompletableUseCase<SaveDetailsContainerDetailUseCase.Params>(
-    observeScheduler
-) {
+    observer: Scheduler,
+    subscriber: Scheduler = Schedulers.io()
+) : CompletableUseCase<SaveDetailsContainerDetailUseCase.Params>(observer, subscriber) {
 
     override fun buildUseCaseObservable(params: Params): Completable {
         return detailContainerRepository.getEncryptedContainer()
-            .subscribeOn(subscribeScheduler)
+            .subscribeOn(subscriber)
             .doOnSuccess { Timber.i("Got encrypted container for ${params.detailsContainer.javaClass}") }
             .doOnError {
                 Timber.e("Error while fetching ${params.detailsContainer.javaClass}: ${it.localizedMessage}")
@@ -31,7 +30,7 @@ class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
             }
             .flatMap { container ->
                 detailContainerEncryptionService.encrypt(params.detail, container)
-                    .subscribeOn(subscribeScheduler)
+                    .subscribeOn(subscriber)
                     .doOnSuccess { Timber.i("Encrypted detail ${params.detail.uuid} in ${params.detailsContainer.javaClass}") }
                     .doOnError {
                         Timber.e("Error while encrypting detail $params.detail.uuid} in ${params.detailsContainer.javaClass}: ${it.localizedMessage}")
@@ -43,7 +42,7 @@ class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
                     encryptedDetail,
                     params.detailsContainer
                 )
-                    .subscribeOn(subscribeScheduler)
+                    .subscribeOn(subscriber)
                     .doOnSuccess { Timber.i("Stored detail file${params.detail.uuid} in ${params.detailsContainer.javaClass}") }
                     .doOnError {
                         Timber.e("Error while storing detail file $params.detail.uuid} in ${params.detailsContainer.javaClass}: ${it.localizedMessage}")
@@ -52,7 +51,7 @@ class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
             }
             .flatMapCompletable { savedEncryptedDetail ->
                 detailContainerRepository.insertDetail(savedEncryptedDetail, params.user)
-                    .subscribeOn(subscribeScheduler)
+                    .subscribeOn(subscriber)
                     .doOnComplete { Timber.i("Stored detail  data ${params.detail.uuid} in ${params.detailsContainer.javaClass}") }
                     .doOnError {
                         Timber.e("Error while storing detail data $params.detail.uuid} in ${params.detailsContainer.javaClass}: ${it.localizedMessage}")

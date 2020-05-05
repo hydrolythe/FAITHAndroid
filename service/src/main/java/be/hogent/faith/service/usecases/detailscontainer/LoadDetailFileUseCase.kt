@@ -13,8 +13,8 @@ class LoadDetailFileUseCase<Container : DetailsContainer>(
     private val storageRepo: IFileStorageRepository,
     private val containerRepository: IDetailContainerRepository<Container>,
     private val detailContainerEncryptionService: IDetailContainerEncryptionService<Container>,
-    observeScheduler: Scheduler
-) : CompletableUseCase<LoadDetailFileUseCase.Params>(observeScheduler) {
+    observer: Scheduler
+) : CompletableUseCase<LoadDetailFileUseCase.Params>(observer) {
 
     override fun buildUseCaseObservable(params: Params): Completable {
         if (storageRepo.setFileIfReady(params.detail, params.container)) {

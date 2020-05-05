@@ -26,7 +26,6 @@ import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.service.usecases.user.IsUsernameUniqueUseCase
 import be.hogent.faith.service.usecases.user.LoginUserUseCase
 import be.hogent.faith.service.usecases.user.LogoutUserUseCase
-import io.reactivex.schedulers.Schedulers
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -47,8 +46,21 @@ object CinemaNames {
 }
 
 val serviceModule = module {
-    factory { GetEventsUseCase(get(), get(), get()) }
-    factory { SaveEventUseCase(get(), get(), get(), get()) }
+    factory {
+        GetEventsUseCase(
+            eventRepository = get(),
+            eventEncryptionService = get(),
+            observer = get()
+        )
+    }
+    factory {
+        SaveEventUseCase(
+            eventEncryptionService = get(),
+            filesStorageRepository = get(),
+            eventRepository = get(),
+            observer = get()
+        )
+    }
     factory {
         CreateUserUseCase(
             authManager = get(),
@@ -57,13 +69,20 @@ val serviceModule = module {
             cinemaRepository = get(named(CinemaNames.repo)),
             backpackEncryptionService = get(),
             cinemaEncryptionService = get(),
-            observer = get(),
-            subscriber = Schedulers.io()
+            observer = get()
         )
     }
     factory { SaveEmotionAvatarUseCase(get(), get()) }
     factory { SaveEventDetailUseCase(get(), get()) }
-    factory { GetUserUseCase(get(), get(), get(), get(), get()) }
+    factory {
+        GetUserUseCase(
+            userRepository = get(),
+            eventRepository = get(),
+            eventEncryptionService = get(),
+            authManager = get(),
+            observeScheduler = get()
+        )
+    }
     factory { IsUsernameUniqueUseCase(get(), get()) }
     factory { LoginUserUseCase(get(), get()) }
     factory { LogoutUserUseCase(get(), get()) }
@@ -76,13 +95,20 @@ val serviceModule = module {
     factory { CreateTextDetailUseCase(get(), get()) }
     factory { CreateExternalVideoDetailUseCase(get()) }
     factory { DeleteEventDetailUseCase(get()) }
-    factory { MakeEventFilesAvailableUseCase(get(), get(), get(), get(), Schedulers.io()) }
+    factory {
+        MakeEventFilesAvailableUseCase(
+            fileStorageRepo = get(),
+            eventRepository = get(),
+            eventEncryptionService = get(),
+            observer = get()
+        )
+    }
     factory<LoadDetailFileUseCase<Backpack>>(named("LoadBackpackDetailFileUseCase")) {
         LoadDetailFileUseCase<Backpack>(
             storageRepo = get(),
             containerRepository = get(named(BackpackNames.repo)),
             detailContainerEncryptionService = get(named(BackpackNames.encryptionService)),
-            observeScheduler = get()
+            observer = get()
         )
     }
     factory<LoadDetailFileUseCase<Cinema>>(named("LoadCinemaDetailFileUseCase")) {
@@ -90,17 +116,21 @@ val serviceModule = module {
             storageRepo = get(),
             containerRepository = get(named(CinemaNames.repo)),
             detailContainerEncryptionService = get(named(CinemaNames.encryptionService)),
-            observeScheduler = get()
+            observer = get()
         )
     }
-    factory { GetYoutubeVideosFromSearchUseCase(get()) }
+    factory {
+        GetYoutubeVideosFromSearchUseCase(
+            observer = get(named("observer")),
+            subscriber = get(named("subscriber"))
+        )
+    }
     factory<SaveDetailsContainerDetailUseCase<Backpack>>(named("SaveBackpackDetailUseCase")) {
         SaveDetailsContainerDetailUseCase<Backpack>(
             detailContainerRepository = get(named(BackpackNames.repo)),
             detailContainerEncryptionService = get(named(BackpackNames.encryptionService)),
             storageRepository = get(),
-            observeScheduler = get(),
-            subscribeScheduler = Schedulers.io()
+            observer = get()
         )
     }
     factory<SaveDetailsContainerDetailUseCase<Cinema>>(named("SaveCinemaDetailUseCase")) {
@@ -108,36 +138,35 @@ val serviceModule = module {
             detailContainerRepository = get(named(CinemaNames.repo)),
             detailContainerEncryptionService = get(named(CinemaNames.encryptionService)),
             storageRepository = get(),
-            observeScheduler = get(),
-            subscribeScheduler = Schedulers.io()
+            observer = get()
         )
     }
-    factory<DeleteDetailsContainerDetailUseCase<Backpack>>(named("DeleteBackpackDetailUseCase")) {
+    factory<DeleteDetailsContainerDetailUseCase<Backpack>>(qualifier = named("DeleteBackpackDetailUseCase")) {
         DeleteDetailsContainerDetailUseCase<Backpack>(
             backpackRepository = get(named(BackpackNames.repo)),
-            fileStorageRepository = get(), observeScheduler = get()
+            fileStorageRepository = get(),
+            observer = get()
         )
     }
     factory<DeleteDetailsContainerDetailUseCase<Cinema>>(named("DeleteCinemaDetailUseCase")) {
         DeleteDetailsContainerDetailUseCase<Cinema>(
             backpackRepository = get(named(CinemaNames.repo)),
-            fileStorageRepository = get(), observeScheduler = get()
+            fileStorageRepository = get(),
+            observer = get()
         )
     }
     factory<GetDetailsContainerDataUseCase<Backpack>>(named("GetBackpackDataUseCase")) {
         GetDetailsContainerDataUseCase<Backpack>(
             detailsContainerRepository = get(named(BackpackNames.repo)),
             detailContainerEncryptionService = get(named(BackpackNames.encryptionService)),
-            observeScheduler = get(),
-            subscribeScheduler = Schedulers.io()
+            observer = get()
         )
     }
-    factory <GetDetailsContainerDataUseCase<Cinema>>(named("GetCinemaDataUseCase")) {
+    factory<GetDetailsContainerDataUseCase<Cinema>>(named("GetCinemaDataUseCase")) {
         GetDetailsContainerDataUseCase<Cinema>(
             detailsContainerRepository = get(named(CinemaNames.repo)),
             detailContainerEncryptionService = get(named(CinemaNames.encryptionService)),
-            observeScheduler = get(),
-            subscribeScheduler = Schedulers.io()
+            observer = get()
         )
     }
 }

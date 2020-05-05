@@ -17,6 +17,7 @@ import io.mockk.verify
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import org.junit.After
 import org.junit.Assert
 import org.junit.Before
@@ -37,7 +38,8 @@ class GetUserUseCaseTest {
             eventRepository,
             eventEncryptionService,
             authManager,
-            mockk<Scheduler>()
+            mockk<Scheduler>(),
+            Schedulers.trampoline()
         )
     }
 

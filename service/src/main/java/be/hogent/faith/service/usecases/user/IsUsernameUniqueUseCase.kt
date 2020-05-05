@@ -11,7 +11,7 @@ class IsUsernameUniqueUseCase(
 ) : SingleUseCase<Boolean, IsUsernameUniqueUseCase.Params>(observer) {
 
     override fun buildUseCaseSingle(params: Params): Single<Boolean> {
-        if (params.username.isNullOrBlank())
+        if (params.username.isBlank())
             return Single.error(RuntimeException("username moet ingevuld zijn"))
         return authManager.isUsernameUnique(params.username + "@faith.be")
     }

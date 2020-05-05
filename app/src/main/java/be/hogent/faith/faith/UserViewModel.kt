@@ -26,10 +26,6 @@ class UserViewModel(
     private val getUserUseCase: GetUserUseCase
 ) : ViewModel() {
 
-    private var userName: String? = null
-    private var password: String? = null
-    private var avatar: String? = null
-
     private val _eventSavedState = MutableLiveData<Resource<Unit>>()
     val eventSavedState: LiveData<Resource<Unit>>
         get() = _eventSavedState

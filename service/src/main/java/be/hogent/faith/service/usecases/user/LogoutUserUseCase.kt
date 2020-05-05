@@ -7,8 +7,8 @@ import io.reactivex.Scheduler
 
 class LogoutUserUseCase(
     private val authManager: IAuthManager,
-    observeScheduler: Scheduler
-) : CompletableUseCase<Void?>(observeScheduler) {
+    observer: Scheduler
+) : CompletableUseCase<Void?>(observer) {
 
     override fun buildUseCaseObservable(params: Void?): Completable {
         return authManager.signOut()

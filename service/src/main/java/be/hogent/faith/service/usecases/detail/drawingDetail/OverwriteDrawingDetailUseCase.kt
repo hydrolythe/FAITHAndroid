@@ -13,10 +13,9 @@ import io.reactivex.Scheduler
  */
 class OverwriteDrawingDetailUseCase(
     private val storageRepo: ITemporaryFileStorageRepository,
-    observeScheduler: Scheduler
-) : CompletableUseCase<OverwriteDrawingDetailUseCase.Params>(
-    observeScheduler
-) {
+    observer: Scheduler
+) : CompletableUseCase<OverwriteDrawingDetailUseCase.Params>(observer) {
+
     override fun buildUseCaseObservable(params: Params): Completable {
         return storageRepo.overwriteExistingDrawingDetail(params.bitmap, params.detail)
     }
