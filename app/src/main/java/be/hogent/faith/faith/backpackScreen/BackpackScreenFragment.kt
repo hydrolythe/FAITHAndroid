@@ -7,8 +7,10 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 
 import android.widget.SearchView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -27,14 +29,14 @@ class BackpackScreenFragment : Fragment() {
     private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
     private lateinit var addDetailMenu: PopupMenu
-
+    private var menuIsOpen: Boolean = false
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         backpackBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_backpack, container, false)
+                DataBindingUtil.inflate(inflater, R.layout.fragment_backpack, container, false)
 
         backpackViewModel.viewButtons(true)
 
@@ -60,7 +62,7 @@ class BackpackScreenFragment : Fragment() {
 
     private fun updateUI() {
         detailThumbnailsAdapter = DetailThumbnailsAdapter(
-            requireNotNull(activity) as BackpackScreenActivity
+                requireNotNull(activity) as BackpackScreenActivity
         )
         backpackBinding.recyclerviewBackpack.layoutManager = GridLayoutManager(activity, 5)
         backpackBinding.recyclerviewBackpack.adapter = detailThumbnailsAdapter
@@ -77,19 +79,6 @@ class BackpackScreenFragment : Fragment() {
             detailThumbnailsAdapter?.submitList(details)
         })
 
-        backpackBinding.backpackMenuFilter.searchBar.setOnQueryTextListener(object :
-            SearchView.OnQueryTextListener {
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                backpackViewModel.setSearchStringText(newText)
-                return true
-            }
-
-            override fun onQueryTextSubmit(query: String): Boolean {
-                backpackViewModel.setSearchStringText(query)
-                return true
-            }
-        })
 
         backpackViewModel.deleteEnabled.observe(this, Observer { enabled ->
             if (enabled) {
@@ -101,18 +90,74 @@ class BackpackScreenFragment : Fragment() {
             }
         })
         backpackBinding.btnBackpackAdd.setOnClickListener {
+            menuIsOpen = menuIsOpen.not()
+            if (menuIsOpen) {
+                backpackBinding.btnBackpackAdd.setImageResource(R.drawable.ic_knop_sluit_opties)
+            } else {
+                backpackBinding.btnBackpackAdd.setImageResource(R.drawable.add_btn)
+            }
             addDetailMenu.show()
         }
+
+        backpackViewModel.textFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
+            setDrawable(
+                    enabled,
+                    backpackBinding.backpackMenuFilter.filterknopTeksten,
+                    R.drawable.ic_filterknop_teksten,
+                    R.drawable.ic_filterknop_teksten_selected
+            )
+        })
+        backpackViewModel.audioFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
+            setDrawable(
+                    enabled,
+                    backpackBinding.backpackMenuFilter.filterknopAudio,
+                    R.drawable.ic_filterknop_audio,
+                    R.drawable.ic_filterknop_audio_selected
+            )
+        })
+        backpackViewModel.photoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
+            setDrawable(
+                    enabled,
+                    backpackBinding.backpackMenuFilter.filterknopFoto,
+                    R.drawable.ic_filterknop_foto,
+                    R.drawable.ic_filterknop_foto_selected
+            )
+        })
+        backpackViewModel.drawingFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
+            setDrawable(
+                    enabled,
+                    backpackBinding.backpackMenuFilter.filterknopTekeningen,
+                    R.drawable.ic_filterknop_tekeningen,
+                    R.drawable.ic_filterknop_tekeningen_selected
+            )
+        })
+        //TODO
+        /* backpackViewModel.videoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
+             setDrawable(
+                     enabled,
+                     backpackBinding.backpackMenuFilter.filterknopFilm,
+                     R.drawable.,
+                     R.drawable.
+             )
+         })*/
+        /*backpackViewModel.externalVideoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
+            setDrawable(
+                    enabled,
+                    backpackBinding.backpackMenuFilter.filterknopExternBestand,
+                    R.drawable.,
+                    R.drawable.
+            )
+        })*/
     }
 
     @SuppressLint("RestrictedApi")
     private fun initialiseMenu() {
         addDetailMenu = PopupMenu(
-            backpackBinding.btnBackpackAdd.context,
-            backpackBinding.btnBackpackAdd,
-            Gravity.END,
-            0,
-            R.style.PopupMenu_AddDetail
+                backpackBinding.btnBackpackAdd.context,
+                backpackBinding.btnBackpackAdd,
+                Gravity.END,
+                0,
+                R.style.PopupMenu_AddDetail
         )
 
         addDetailMenu.menuInflater.inflate(R.menu.menu_backpack, addDetailMenu.menu)
@@ -134,16 +179,33 @@ class BackpackScreenFragment : Fragment() {
             }
             true
         }
+        addDetailMenu.setOnDismissListener {
+            menuIsOpen = menuIsOpen.not()
+            if (menuIsOpen) {
+                backpackBinding.btnBackpackAdd.setImageResource(R.drawable.ic_knop_sluit_opties)
+            } else {
+                backpackBinding.btnBackpackAdd.setImageResource(R.drawable.add_btn)
+            }
+        }
         try {
             val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
             fieldMPopup.isAccessible = true
             val mPopup = fieldMPopup.get(addDetailMenu)
             mPopup.javaClass
-                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                .invoke(mPopup, true)
+                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                    .invoke(mPopup, true)
         } catch (e: Exception) {
             Timber.e("Error showing icons")
         }
+    }
+
+    private fun setDrawable(enabled: Boolean, button: ImageButton, image: Int, imageSelected: Int) {
+        button.setImageDrawable(
+                AppCompatResources.getDrawable(
+                        this.requireContext(),
+                        if (enabled) imageSelected else image
+                )
+        )
     }
 
     interface BackpackDetailsNavigationListener {
