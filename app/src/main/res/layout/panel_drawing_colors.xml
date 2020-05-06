@@ -33,11 +33,11 @@
                 android:layout_weight="1">
 
                 <ImageView
+                    android:id="@+id/img_draw_blackSelected"
                     android:layout_width="15dp"
                     android:layout_height="20dp"
                     android:contentDescription="@string/pijl"
                     android:src="@drawable/ic_selected"
-                    android:visibility="@{((int)drawViewModel.selectedColor)==@color/black ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -63,11 +63,11 @@
                 android:layout_weight="1">
 
                 <ImageView
+                    android:id="@+id/img_draw_blueSelected"
                     android:layout_width="15dp"
                     android:layout_height="20dp"
                     android:contentDescription="@string/pijl"
                     android:src="@drawable/ic_selected"
-                    android:visibility="@{((int)drawViewModel.selectedColor)==@color/blue ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -94,11 +94,11 @@
                 android:layout_weight="1">
 
                 <ImageView
+                    android:id="@+id/img_draw_redSelected"
                     android:layout_width="15dp"
                     android:layout_height="20dp"
                     android:contentDescription="@string/pijl"
                     android:src="@drawable/ic_selected"
-                    android:visibility="@{((int)drawViewModel.selectedColor)==@color/red ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -125,11 +125,11 @@
                 android:layout_weight="1">
 
                 <ImageView
+                    android:id="@+id/img_draw_yellowSelected"
                     android:layout_width="15dp"
                     android:layout_height="20dp"
                     android:contentDescription="@string/pijl"
                     android:src="@drawable/ic_selected"
-                    android:visibility="@{((int)drawViewModel.selectedColor)==@color/yellow ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -156,11 +156,11 @@
                 android:layout_weight="1">
 
                 <ImageView
+                    android:id="@+id/img_draw_greenSelected"
                     android:layout_width="15dp"
                     android:layout_height="20dp"
                     android:contentDescription="@string/pijl"
                     android:src="@drawable/ic_selected"
-                    android:visibility="@{((int)drawViewModel.selectedColor)==@color/green ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
