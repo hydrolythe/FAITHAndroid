@@ -3,6 +3,8 @@ package be.hogent.faith.faith.backpackScreen
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,6 +75,16 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
         backpackViewModel.errorMessage.observe(this, Observer {
             if (it != null)
                 Toast.makeText(context, resources.getString(it), Toast.LENGTH_SHORT).show()
+        })
+
+        // when a user starts typing error message will disappear
+        saveDetailBinding.txtSaveEventTitle.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                userViewModel.clearErrorMessage()
+            }
         })
     }
 
