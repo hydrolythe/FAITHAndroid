@@ -67,7 +67,7 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
 
         saveDetailBinding.btnSaveBackpackCancel.setOnClickListener {
             dismiss()
-            //backpackViewModel.goToDetail(detail)
+            backpackViewModel.goToDetail(detail)
         }
 
         backpackViewModel.errorMessage.observe(this, Observer {
@@ -83,6 +83,6 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-      //  backpackViewModel.goToDetail(detail)
+        backpackViewModel.goToDetail(detail)
     }
 }
