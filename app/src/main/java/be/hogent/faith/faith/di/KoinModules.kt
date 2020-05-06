@@ -8,6 +8,7 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerViewModel
+import be.hogent.faith.faith.cinema.CinemaCreateVideoViewModel
 import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.details.audio.AudioDetailViewModel
@@ -68,7 +69,7 @@ val appModule = module(override = true) {
             deleteBackpackDetailUseCase = get(named("DeleteBackpackDetailUseCase")),
             backpack = backpack,
             loadDetailFileUseCase = get(named("LoadBackpackDetailFileUseCase")),
-            getBackPackDataUseCase = get()
+            getBackPackDataUseCase = get(named("GetBackpackDataUseCase"))
         )
     }
     viewModel { (cinema: Cinema) ->
@@ -77,7 +78,7 @@ val appModule = module(override = true) {
             deleteBackpackDetailUseCase = get(named("DeleteCinemaDetailUseCase")),
             loadDetailFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
             cinema = cinema,
-            getCinemaDataUseCase = get()
+            getCinemaDataUseCase = get(named("GetCinemaDataUseCase"))
         )
     }
     viewModel { DrawViewModel() }
@@ -101,6 +102,7 @@ val appModule = module(override = true) {
     viewModel { EventDetailsViewModel(get()) }
     viewModel { ViewPhotoDetailViewModel() }
     viewModel { ViewDrawingDetailViewModel() }
+    viewModel { CinemaCreateVideoViewModel() }
     viewModel {
         ViewTextDetailViewModel(
             get()

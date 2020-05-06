@@ -3,6 +3,7 @@ package be.hogent.faith.service.usecases.backpack
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.service.encryption.EncryptedDetailsContainer
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
+import be.hogent.faith.service.usecases.detailscontainer.GetDetailsContainerDataUseCase
 import be.hogent.faith.service.usecases.util.EncryptedDetailFactory
 import be.hogent.faith.util.factory.DetailFactory
 import io.mockk.every
@@ -18,11 +19,11 @@ class GetBackPackDataUseCaseTest {
 
     private val containerEncryptionService = mockk<IDetailContainerEncryptionService<Backpack>>()
     private val containerRepository = mockk<IDetailContainerRepository1<Backpack>>()
-    private lateinit var getBackPackDataUseCase: GetBackPackDataUseCase
+    private lateinit var getBackPackDataUseCase: GetDetailsContainerDataUseCase<Backpack>
 
     @Before
     fun setUp() {
-        getBackPackDataUseCase = GetBackPackDataUseCase(
+        getBackPackDataUseCase = GetDetailsContainerDataUseCase<Backpack>(
             containerRepository,
             containerEncryptionService,
             observeScheduler = mockk(),
@@ -47,7 +48,7 @@ class GetBackPackDataUseCaseTest {
         } returns Single.defer { Single.just(DetailFactory.makeRandomDetail()) }
 
         // Act + Assert
-        getBackPackDataUseCase.buildUseCaseObservable(GetBackPackDataUseCase.Params())
+        getBackPackDataUseCase.buildUseCaseObservable(GetDetailsContainerDataUseCase.Params())
             .test()
             .assertValue {
                 it.size == 2

@@ -2,29 +2,32 @@ package be.hogent.faith.faith.cinema
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import be.hogent.faith.R
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.cinema.GetCinemaDataUseCase
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
+import be.hogent.faith.service.usecases.detailscontainer.GetDetailsContainerDataUseCase
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
-import io.reactivex.observers.DisposableObserver
+import org.threeten.bp.LocalDate
 
 class CinemaOverviewViewModel(
     saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Cinema>,
     deleteBackpackDetailUseCase: DeleteDetailsContainerDetailUseCase<Cinema>,
     loadDetailFileUseCase: LoadDetailFileUseCase<Cinema>,
     cinema: Cinema,
-    private val getCinemaDataUseCase: GetCinemaDataUseCase
+    getCinemaDataUseCase: GetDetailsContainerDataUseCase<Cinema>
 ) : DetailsContainerViewModel<Cinema>(
     saveBackpackDetailUseCase,
     deleteBackpackDetailUseCase,
     loadDetailFileUseCase,
+    getCinemaDataUseCase,
     cinema
 ) {
+
+    override val details: List<Detail>
+            get() = if (_filmsVisible.value!!) detailsContainer.films else detailsContainer.getFiles()
 
     private val _filmsVisible = MutableLiveData<Boolean>().apply {
         this.value = true
@@ -38,28 +41,20 @@ class CinemaOverviewViewModel(
     val addButtonClicked: LiveData<Unit> = _addButtonClicked
 
     fun onFilesButtonClicked() {
-        getCinemaDataUseCase.execute(
-            GetCinemaDataUseCase.Params(),
-            object : DisposableObserver<List<Detail>>() {
-                override fun onComplete() {}
-
-                override fun onNext(t: List<Detail>) {
-                    details = t
-                }
-
-                override fun onError(e: Throwable) {
-                    _errorMessage.postValue(R.string.error_load_cinema)
-                }
-            })
         _filmsVisible.value = false
+        initSearch()
     }
 
     fun onFilmsButtonClicked() {
-        details = detailsContainer.films
         _filmsVisible.value = true
+        initSearch()
     }
 
     fun onMakeFilmClicked() {
+        if (_filmsVisible.value!!) {
+            _filmsVisible.value = false
+            initSearch()
+        }
         _makeFilmButtonClicked.call()
     }
 
@@ -67,7 +62,13 @@ class CinemaOverviewViewModel(
         _addButtonClicked.call()
     }
 
-    init {
-        searchString.value = ""
+    private fun initSearch() {
+        setSearchStringText("")
+        resetDateRange()
+    }
+
+    fun resetDateRange() {
+        _startDate.value = LocalDate.MIN.plusDays(1)
+        _endDate.value = LocalDate.now()
     }
 }

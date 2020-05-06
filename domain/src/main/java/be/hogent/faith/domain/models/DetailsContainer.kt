@@ -14,7 +14,7 @@ import java.util.UUID
  */
 sealed class DetailsContainer {
 
-    private val _details = mutableListOf<Detail>()
+    private var _details = mutableListOf<Detail>()
     val details: List<Detail>
         get() = _details
 
@@ -23,11 +23,15 @@ sealed class DetailsContainer {
     }
 
     fun addDetail(detail: Detail) {
-        _details += detail
+        _details.add(detail)
     }
 
     fun removeDetail(detail: Detail) {
         _details.remove(detail)
+    }
+
+    fun setDetails(details: List<Detail>) {
+        _details = details.toMutableList()
     }
 }
 
@@ -43,11 +47,10 @@ class Cinema : DetailsContainer() {
         get() = details.filterIsInstance<FilmDetail>()
 
     fun getFiles(): List<Detail> {
-        return details.filter { it is FilmDetail }
+        return details.filter { it !is FilmDetail }
     }
 
     fun addFilm(film: FilmDetail) {
-        // TODO : validatie toevoegen : duration - naam - datum
         addDetail(film)
     }
 
