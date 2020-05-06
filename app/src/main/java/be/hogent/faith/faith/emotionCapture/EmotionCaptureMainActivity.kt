@@ -107,7 +107,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         eventViewModel.errorMessage.observe(this, Observer { errorMessageResId ->
             Toast.makeText(this, errorMessageResId, Toast.LENGTH_SHORT).show()
         })
-        eventViewModel.cancelButtonClicked.observe(this, Observer {
+        eventViewModel.backButtonClicked.observe(this, Observer {
             onBackPressed()
         })
     }
