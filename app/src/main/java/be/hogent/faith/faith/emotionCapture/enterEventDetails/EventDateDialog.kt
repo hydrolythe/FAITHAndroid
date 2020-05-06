@@ -24,7 +24,7 @@ class EventDateDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
         return DatePickerDialog(requireContext(), this@EventDateDialog, now.year, now.monthValue, now.dayOfMonth)
     }
 
-    //Month index starts at 0
+    // Month index starts at 0
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         eventDetailsViewModel.eventDate.postValue(LocalDate.of(year, month + 1, dayOfMonth).atStartOfDay())
     }

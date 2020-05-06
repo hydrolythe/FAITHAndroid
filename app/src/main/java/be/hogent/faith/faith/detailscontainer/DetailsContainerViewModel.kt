@@ -465,8 +465,8 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         audioFilterEnabled.postValue(false)
     }
 
-    fun clearErrorMessage(){
-        _errorMessage.postValue(null)
+    fun clearErrorMessage() {
+        _errorMessage.postValue(R.string.empty)
     }
 }
 

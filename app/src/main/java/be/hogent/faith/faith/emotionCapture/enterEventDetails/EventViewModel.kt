@@ -167,7 +167,7 @@ class EventViewModel(
         _cancelButtonClicked.call()
     }
 
-    fun onBackButtonClicked(){
+    fun onBackButtonClicked() {
         _deleteEnabled.value = false
         _backButtonClicked.call()
     }

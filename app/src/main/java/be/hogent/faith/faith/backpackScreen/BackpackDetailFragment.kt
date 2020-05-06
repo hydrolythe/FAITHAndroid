@@ -30,7 +30,6 @@ import be.hogent.faith.faith.backpackScreen.youtubeVideo.view.ViewYoutubeVideoFr
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.util.replaceChildFragment
-import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import java.lang.UnsupportedOperationException

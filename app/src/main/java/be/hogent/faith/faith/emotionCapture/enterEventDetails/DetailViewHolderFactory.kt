@@ -108,7 +108,7 @@ sealed class DetailViewHolder(
     private val existingDetailNavigationListener: ExistingDetailNavigationListener
 ) : RecyclerView.ViewHolder(thumbnailView), KoinComponent {
 
-    //clicklisteners on separate views to make sure there's no overlap
+    // clicklisteners on separate views to make sure there's no overlap
     fun bind(detail: Detail, isDeletable: Boolean) {
         load(detail).into(thumbnailView.detail_img)
         thumbnailView.setTag(R.id.TAG_DETAIL, detail)
