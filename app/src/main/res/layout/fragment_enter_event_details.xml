@@ -44,7 +44,7 @@
                 android:layout_marginStart="16dp"
                 android:background="@drawable/ic_return"
                 android:contentDescription="@string/cancel"
-                android:onClick="@{() -> eventViewModel.onCancelButtonClicked()}"
+                android:onClick="@{() -> eventViewModel.onBackButtonClicked()}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 

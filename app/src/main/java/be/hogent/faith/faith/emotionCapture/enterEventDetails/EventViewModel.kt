@@ -128,6 +128,9 @@ class EventViewModel(
     private val _cancelButtonClicked = SingleLiveEvent<Unit>()
     val cancelButtonClicked: LiveData<Unit> = _cancelButtonClicked
 
+    private val _backButtonClicked = SingleLiveEvent<Unit>()
+    val backButtonClicked: LiveData<Unit> = _backButtonClicked
+
     private val _dateButtonClicked = SingleLiveEvent<Unit>()
     val dateButtonClicked: LiveData<Unit> = _dateButtonClicked
 
@@ -162,6 +165,11 @@ class EventViewModel(
     fun onCancelButtonClicked() {
         _deleteEnabled.value = false
         _cancelButtonClicked.call()
+    }
+
+    fun onBackButtonClicked(){
+        _deleteEnabled.value = false
+        _backButtonClicked.call()
     }
 
     fun onDateButtonClicked() {
