@@ -19,8 +19,8 @@ import timber.log.Timber
 import java.util.UUID
 
 class EventListViewModel(
-        user: User,
-        private val getEventsUseCase: GetEventsUseCase
+    user: User,
+    private val getEventsUseCase: GetEventsUseCase
 ) : ViewModel() {
     // Currently like this to do testing
     private var events: List<Event> = emptyList()
@@ -128,8 +128,8 @@ class EventListViewModel(
     }
 
     private fun combineLatestDates(
-            startDate: LiveData<LocalDate>,
-            endDate: LiveData<LocalDate>
+        startDate: LiveData<LocalDate>,
+        endDate: LiveData<LocalDate>
     ): String {
         val van =
                 if (startDate.value == LocalDate.MIN.plusDays(1)) "van" else startDate.value!!.format(
