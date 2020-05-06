@@ -21,10 +21,10 @@ class EventDateDialog : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val now = LocalDateTime.now()
-        return DatePickerDialog(context!!, this@EventDateDialog, now.year, now.monthValue, now.dayOfMonth)
+        return DatePickerDialog(context!!, this@EventDateDialog, now.year, now.monthValue - 1, now.dayOfMonth) // DatePickerDialog counts from 0-11 for month, LocalDateTime 1-12
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        eventDetailsViewModel.eventDate.postValue(LocalDate.of(year, month, dayOfMonth).atStartOfDay())
+        eventDetailsViewModel.eventDate.postValue(LocalDate.of(year, month + 1, dayOfMonth).atStartOfDay())
     }
 }

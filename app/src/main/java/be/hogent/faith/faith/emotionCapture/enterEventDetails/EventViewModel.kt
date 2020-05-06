@@ -52,7 +52,7 @@ class EventViewModel(
 
     val eventDateString: LiveData<String> =
         Transformations.map(eventDate) { date ->
-            date.format(DateTimeFormatter.ISO_DATE)
+            date.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
         }
 
     /**

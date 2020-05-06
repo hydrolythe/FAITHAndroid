@@ -19,8 +19,8 @@ import timber.log.Timber
 import java.util.UUID
 
 class EventListViewModel(
-    user: User,
-    private val getEventsUseCase: GetEventsUseCase
+        user: User,
+        private val getEventsUseCase: GetEventsUseCase
 ) : ViewModel() {
     // Currently like this to do testing
     private var events: List<Event> = emptyList()
@@ -112,30 +112,30 @@ class EventListViewModel(
 
     private fun loadEvents(user: User) {
         getEventsUseCase.execute(GetEventsUseCase.Params(user),
-            object : DisposableSubscriber<List<Event>>() {
-                override fun onComplete() {}
+                object : DisposableSubscriber<List<Event>>() {
+                    override fun onComplete() {}
 
-                override fun onNext(t: List<Event>) {
-                    events = t.sortedByDescending { it.dateTime }
-                    audioFilterEnabled.value =
-                        audioFilterEnabled.value // anders wordt de lijst niet getoond
-                }
+                    override fun onNext(t: List<Event>) {
+                        events = t.sortedByDescending { it.dateTime }
+                        audioFilterEnabled.value =
+                                audioFilterEnabled.value // anders wordt de lijst niet getoond
+                    }
 
-                override fun onError(e: Throwable) {
-                    _errorMessage.postValue(R.string.error_load_events)
-                }
-            })
+                    override fun onError(e: Throwable) {
+                        _errorMessage.postValue(R.string.error_load_events)
+                    }
+                })
     }
 
     private fun combineLatestDates(
-        startDate: LiveData<LocalDate>,
-        endDate: LiveData<LocalDate>
+            startDate: LiveData<LocalDate>,
+            endDate: LiveData<LocalDate>
     ): String {
         val van =
-            if (startDate.value == LocalDate.MIN.plusDays(1)) "van" else startDate.value!!.format(
-                DateTimeFormatter.ISO_DATE
-            )
-        val tot = endDate.value!!.format(DateTimeFormatter.ISO_DATE)
+                if (startDate.value == LocalDate.MIN.plusDays(1)) "van" else startDate.value!!.format(
+                        DateTimeFormatter.ofPattern("dd,MMM yyyy")
+                )
+        val tot = endDate.value!!.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
         return "$van - $tot"
     }
 
@@ -177,7 +177,7 @@ class EventListViewModel(
 
     fun setDateRange(startDate: Long?, endDate: Long?) {
         _startDate.value =
-            if (startDate != null) toLocalDate(startDate) else LocalDate.MIN.plusDays(1)
+                if (startDate != null) toLocalDate(startDate) else LocalDate.MIN.plusDays(1)
         _endDate.value = if (endDate != null) toLocalDate(endDate) else LocalDate.now()
     }
 
@@ -188,7 +188,7 @@ class EventListViewModel(
 
     private fun toLocalDate(milliseconds: Long): LocalDate? {
         return Instant.ofEpochMilli(milliseconds) // Convert count-of-milliseconds-since-epoch into a date-time in UTC (`Instant`).
-            .atZone(ZoneId.of("Europe/Brussels")) // Adjust into the wall-clock time used by the people of a particular region (a time zone). Produces a `ZonedDateTime` object.
-            .toLocalDate()
+                .atZone(ZoneId.of("Europe/Brussels")) // Adjust into the wall-clock time used by the people of a particular region (a time zone). Produces a `ZonedDateTime` object.
+                .toLocalDate()
     }
 }
