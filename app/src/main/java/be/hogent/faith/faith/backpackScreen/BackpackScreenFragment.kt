@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 
-import android.widget.SearchView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
@@ -31,9 +30,9 @@ class BackpackScreenFragment : Fragment() {
     private lateinit var addDetailMenu: PopupMenu
     private var menuIsOpen: Boolean = false
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         backpackBinding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_backpack, container, false)
@@ -78,7 +77,6 @@ class BackpackScreenFragment : Fragment() {
         backpackViewModel.filteredDetails.observe(this, Observer { details ->
             detailThumbnailsAdapter?.submitList(details)
         })
-
 
         backpackViewModel.deleteEnabled.observe(this, Observer { enabled ->
             if (enabled) {
@@ -131,7 +129,7 @@ class BackpackScreenFragment : Fragment() {
                     R.drawable.ic_filterknop_tekeningen_selected
             )
         })
-        //TODO
+        // TODO
         /* backpackViewModel.videoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
              setDrawable(
                      enabled,
@@ -140,7 +138,7 @@ class BackpackScreenFragment : Fragment() {
                      R.drawable.
              )
          })*/
-        //TODO
+        // TODO
         /*backpackViewModel.externalVideoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setDrawable(
                     enabled,
