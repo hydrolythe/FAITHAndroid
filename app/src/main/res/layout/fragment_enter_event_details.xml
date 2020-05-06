@@ -8,6 +8,8 @@
         <variable
             name="eventViewModel"
             type="be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <FrameLayout
@@ -169,8 +171,10 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/save_btn"
+                android:visibility="@{eventViewModel.eventDetails.size() > 0 ? View.VISIBLE : View.GONE}"
                 android:minWidth="24dp"
                 android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:contentDescription="@string/save"/>
