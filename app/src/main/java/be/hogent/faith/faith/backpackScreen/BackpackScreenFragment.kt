@@ -140,6 +140,7 @@ class BackpackScreenFragment : Fragment() {
                      R.drawable.
              )
          })*/
+        //TODO
         /*backpackViewModel.externalVideoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setDrawable(
                     enabled,
