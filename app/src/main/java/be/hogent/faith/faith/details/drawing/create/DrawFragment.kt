@@ -57,7 +57,6 @@ abstract class DrawFragment : Fragment() {
             drawView.setAlpha(colorAlpha)
             setSelectedColor(newColor)
             setBrushSizeDrawables()
-
         })
         drawViewModel.pencilClicked.observe(this, Observer {
             drawView.pickDrawingTool()
@@ -88,12 +87,12 @@ abstract class DrawFragment : Fragment() {
         })
     }
 
-    protected fun setSelectedColor(@ColorInt newColor : Int){
+    private fun setSelectedColor(@ColorInt newColor: Int) {
         img_draw_blackSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.black)) View.VISIBLE else View.GONE
         img_draw_blueSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.blue)) View.VISIBLE else View.GONE
         img_draw_redSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.red)) View.VISIBLE else View.GONE
-        img_draw_greenSelected.visibility = if (newColor ==  ContextCompat.getColor(requireContext(), R.color.green)) View.VISIBLE else View.GONE
-        img_draw_yellowSelected.visibility = if  (newColor ==  ContextCompat.getColor(requireContext(), R.color.yellow))View.VISIBLE else View.GONE
+        img_draw_greenSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.green)) View.VISIBLE else View.GONE
+        img_draw_yellowSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.yellow))View.VISIBLE else View.GONE
     }
 
     protected fun setBrushSizeDrawables() {
