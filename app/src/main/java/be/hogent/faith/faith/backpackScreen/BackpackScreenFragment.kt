@@ -29,9 +29,9 @@ class BackpackScreenFragment : Fragment() {
     private lateinit var addDetailMenu: PopupMenu
     private var menuIsOpen: Boolean = false
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         backpackBinding =
                 DataBindingUtil.inflate(inflater, R.layout.fragment_backpack, container, false)
@@ -75,6 +75,12 @@ class BackpackScreenFragment : Fragment() {
 
         backpackViewModel.filteredDetails.observe(this, Observer { details ->
             detailThumbnailsAdapter?.submitList(details)
+            if (details.isEmpty()) {
+                backpackBinding.btnBackpackDelete.isClickable = false
+                backpackViewModel.deleteEnabled.postValue(false)
+            } else {
+                backpackBinding.btnBackpackDelete.isClickable = true
+            }
         })
 
         backpackViewModel.deleteEnabled.observe(this, Observer { enabled ->
