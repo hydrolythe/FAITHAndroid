@@ -93,6 +93,23 @@ class DrawEmotionAvatarFragment : DrawFragment() {
         paintpot_customColor.visibility = View.GONE
     }
 
+    override fun showExitAlert() {
+        val alertDialog: AlertDialog = this.run {
+            val builder = AlertDialog.Builder(this.requireContext()).apply {
+                setTitle(getString(R.string.dialog_wil_je_teruggaan))
+                setMessage(R.string.dialog_to_the_event_message)
+                setPositiveButton(R.string.ok) { _, _ ->
+                    navigation!!.backToEvent()
+                }
+                setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.cancel()
+                }
+            }
+            builder.create()
+        }
+        alertDialog.show()
+    }
+
     private fun configureDrawingCanvas() {
         // Paint with semi-transparent paint so you can always see the background's outline
         drawView.setAlpha(COLOR_ALPHA)

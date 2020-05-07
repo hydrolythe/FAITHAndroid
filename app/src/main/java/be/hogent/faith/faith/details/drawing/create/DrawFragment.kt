@@ -116,7 +116,7 @@ abstract class DrawFragment : Fragment() {
         return gradientDrawable
     }
 
-    private fun showExitAlert() {
+    protected open fun showExitAlert() {
         val alertDialog: AlertDialog = this.run {
             val builder = AlertDialog.Builder(this.requireContext()).apply {
                 when (requireActivity()) {
