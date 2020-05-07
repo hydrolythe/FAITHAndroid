@@ -87,7 +87,7 @@
                         android:layout_height="17dp"
                         android:contentDescription="@string/pijl"
                         android:src="@drawable/ic_selected_down"
-                        android:visibility="@{(textDetailViewModel.fontsizeClicked.booleanValue()==true)? View.VISIBLE : View.GONE}"
+                        android:visibility="@{(textDetailViewModel.fontsizeClicked.booleanValue()==true)? View.VISIBLE : View.INVISIBLE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -128,7 +128,7 @@
                         android:layout_height="17dp"
                         android:contentDescription="@string/pijl"
                         android:src="@drawable/ic_selected_down"
-                        android:visibility="@{ textDetailViewModel.boldClicked ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{ textDetailViewModel.boldClicked ? View.VISIBLE : View.INVISIBLE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -167,7 +167,7 @@
                         android:layout_height="17dp"
                         android:contentDescription="@string/pijl"
                         android:src="@drawable/ic_selected_down"
-                        android:visibility="@{ textDetailViewModel.italicClicked ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{ textDetailViewModel.italicClicked ? View.VISIBLE : View.INVISIBLE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -206,7 +206,7 @@
                         android:layout_height="17dp"
                         android:contentDescription="@string/pijl"
                         android:src="@drawable/ic_selected_down"
-                        android:visibility="@{ textDetailViewModel.underlineClicked ? View.VISIBLE : View.GONE}"
+                        android:visibility="@{ textDetailViewModel.underlineClicked ? View.VISIBLE : View.INVISIBLE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -363,7 +363,7 @@
                             android:layout_height="17dp"
                             android:contentDescription="@string/pijl"
                             android:src="@drawable/ic_selected_down"
-                            android:visibility="@{((int)textDetailViewModel.selectedTextColor)==@color/blue ? View.VISIBLE : View.GONE}"
+                            android:visibility="@{((int)textDetailViewModel.selectedTextColor)==@color/blue ? View.VISIBLE : View.INVISIBLE}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -393,7 +393,7 @@
                             android:layout_height="17dp"
                             android:contentDescription="@string/pijl"
                             android:src="@drawable/ic_selected_down"
-                            android:visibility="@{((int)textDetailViewModel.selectedTextColor)==@color/red ? View.VISIBLE : View.GONE}"
+                            android:visibility="@{((int)textDetailViewModel.selectedTextColor)==@color/red ? View.VISIBLE : View.INVISIBLE}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -423,7 +423,7 @@
                             android:layout_height="17dp"
                             android:contentDescription="@string/pijl"
                             android:src="@drawable/ic_selected_down"
-                            android:visibility="@{((int)textDetailViewModel.selectedTextColor)==@color/yellow ? View.VISIBLE : View.GONE}"
+                            android:visibility="@{((int)textDetailViewModel.selectedTextColor)==@color/yellow ? View.VISIBLE : View.INVISIBLE}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -453,7 +453,7 @@
                             android:layout_height="17dp"
                             android:contentDescription="@string/pijl"
                             android:src="@drawable/ic_selected_down"
-                            android:visibility="@{((int)textDetailViewModel.selectedTextColor)==@color/green ? View.VISIBLE : View.GONE}"
+                            android:visibility="@{((int)textDetailViewModel.selectedTextColor)==@color/green ? View.VISIBLE : View.INVISIBLE}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -489,7 +489,7 @@
                             android:layout_height="17dp"
                             android:contentDescription="@string/pijl"
                             android:src="@drawable/ic_selected_down"
-                            android:visibility="@{textDetailViewModel.customTextColorSelected? View.VISIBLE : View.GONE}"
+                            android:visibility="@{textDetailViewModel.customTextColorSelected? View.VISIBLE : View.INVISIBLE}"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />

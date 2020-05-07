@@ -58,7 +58,7 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
     }
 
     private fun loadExistingTextDetail() {
-        val existingDetail = arguments!!.getSerializable(TEXT_DETAIL) as TextDetail
+        val existingDetail = requireArguments().getSerializable(TEXT_DETAIL) as TextDetail
         textDetailDetailViewModel.loadExistingDetail(existingDetail)
     }
 
@@ -108,7 +108,7 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
             focusEditor()
         }
         val inputMethodManager =
-            context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(enterText_editor, InputMethodManager.SHOW_IMPLICIT)
     }
 
