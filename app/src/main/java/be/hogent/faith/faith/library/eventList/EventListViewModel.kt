@@ -188,7 +188,7 @@ class EventListViewModel(
 
     private fun toLocalDate(milliseconds: Long): LocalDate? {
         return Instant.ofEpochMilli(milliseconds) // Convert count-of-milliseconds-since-epoch into a date-time in UTC (`Instant`).
-                .atZone(ZoneId.of("Europe/Brussels")) // Adjust into the wall-clock time used by the people of a particular region (a time zone). Produces a `ZonedDateTime` object.
+                .atZone(ZoneId.systemDefault()) // Adjust into the wall-clock time used by the people of a particular region (a time zone). Produces a `ZonedDateTime` object.
                 .toLocalDate()
     }
 }
