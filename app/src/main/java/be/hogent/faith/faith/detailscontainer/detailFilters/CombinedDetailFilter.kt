@@ -44,7 +44,7 @@ class CombinedDetailFilter {
         }
 
         if (filteredDetails.isEmpty() && !isDetailTypeFilterActive()) {
-            return details.filter(titleFilter).filter(dateFilter).sortedBy { it.javaClass.canonicalName }
+            return details.filter(titleFilter).filter(dateFilter)
         }
         return filteredDetails.filter(titleFilter).filter(dateFilter)
     }
