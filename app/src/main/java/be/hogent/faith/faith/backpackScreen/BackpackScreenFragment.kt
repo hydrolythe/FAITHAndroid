@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Toast
 
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.PopupMenu
@@ -152,6 +153,10 @@ class BackpackScreenFragment : Fragment() {
                     R.drawable.
             )
         })*/
+
+        backpackViewModel.errorMessage.observe(this, Observer { message->
+            Toast.makeText(context, resources.getString(message), Toast.LENGTH_LONG).show()
+        })
     }
 
     private fun initialiseMenu() {
