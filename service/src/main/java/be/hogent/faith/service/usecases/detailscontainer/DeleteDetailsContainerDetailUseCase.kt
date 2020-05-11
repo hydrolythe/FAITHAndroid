@@ -11,10 +11,9 @@ import io.reactivex.Scheduler
 class DeleteDetailsContainerDetailUseCase<T : DetailsContainer>(
     private val backpackRepository: IDetailContainerRepository<T>,
     private val fileStorageRepository: IFileStorageRepository,
-    observeScheduler: Scheduler
-) : CompletableUseCase<DeleteDetailsContainerDetailUseCase.Params>(
-    observeScheduler
-) {
+    observer: Scheduler
+) : CompletableUseCase<DeleteDetailsContainerDetailUseCase.Params>(observer) {
+
     override fun buildUseCaseObservable(params: Params): Completable {
         return Completable.mergeArray(
             backpackRepository.deleteDetail(params.detail),

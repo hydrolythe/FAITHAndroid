@@ -11,14 +11,16 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.Flowables
+import io.reactivex.schedulers.Schedulers
 
 class GetUserUseCase(
     private val userRepository: IUserRepository,
     private val eventRepository: IEventRepository,
     private val eventEncryptionService: IEventEncryptionService,
     private val authManager: IAuthManager,
-    observeScheduler: Scheduler
-) : FlowableUseCase<User, GetUserUseCase.Params>(observeScheduler) {
+    observeScheduler: Scheduler,
+    subscriber: Scheduler = Schedulers.io()
+) : FlowableUseCase<User, GetUserUseCase.Params>(observeScheduler, subscriber) {
 
     override fun buildUseCaseObservable(params: Params): Flowable<User> {
         val currentUser = authManager.getLoggedInUserUUID()
@@ -26,11 +28,15 @@ class GetUserUseCase(
             return Flowable.error(RuntimeException("You are not allowed to access the user, please log in"))
         }
         return Flowables.combineLatest(
-            userRepository.get(currentUser),
+            userRepository.get(currentUser)
+                .subscribeOn(subscriber),
             eventRepository.getAll()
+                .subscribeOn(subscriber)
                 .concatMapSingle { list ->
                     Observable.fromIterable(list)
-                        .flatMapSingle(eventEncryptionService::decryptData)
+                        .flatMapSingle {
+                            eventEncryptionService.decryptData(it).subscribeOn(subscriber)
+                        }
                         .toList()
                 }
 

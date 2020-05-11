@@ -16,7 +16,8 @@ import io.reactivex.subscribers.DisposableSubscriber
  * An example can be found in [be.hogent.faith.service.usecases.SaveEventUseCase].
  */
 abstract class FlowableUseCase<Result, in Params>(
-    private val observer: Scheduler
+    private val observer: Scheduler,
+    protected val subscriber: Scheduler = Schedulers.io()
 ) {
 
     private val disposables = CompositeDisposable()
@@ -32,7 +33,7 @@ abstract class FlowableUseCase<Result, in Params>(
      */
     open fun execute(params: Params, flowableObserver: DisposableSubscriber<Result>) {
         val flowable = this.buildUseCaseObservable(params)
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(subscriber)
             .observeOn(observer)
         addDisposable(flowable.subscribeWith(flowableObserver))
     }

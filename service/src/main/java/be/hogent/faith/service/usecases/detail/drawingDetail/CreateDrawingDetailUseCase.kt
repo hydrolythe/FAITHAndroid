@@ -9,8 +9,8 @@ import io.reactivex.Single
 
 class CreateDrawingDetailUseCase(
     private val storageRepository: ITemporaryFileStorageRepository,
-    observeScheduler: Scheduler
-) : SingleUseCase<DrawingDetail, CreateDrawingDetailUseCase.Params>(observeScheduler) {
+    observer: Scheduler
+) : SingleUseCase<DrawingDetail, CreateDrawingDetailUseCase.Params>(observer) {
 
     override fun buildUseCaseSingle(params: Params): Single<DrawingDetail> {
         return storageRepository.storeBitmap(params.bitmap)

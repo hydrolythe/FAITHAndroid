@@ -7,8 +7,8 @@ import io.reactivex.Single
 import java.io.File
 
 class CreateExternalVideoDetailUseCase(
-    observeScheduler: Scheduler
-) : SingleUseCase<ExternalVideoDetail, CreateExternalVideoDetailUseCase.Params>(observeScheduler) {
+    observer: Scheduler
+) : SingleUseCase<ExternalVideoDetail, CreateExternalVideoDetailUseCase.Params>(observer) {
 
     override fun buildUseCaseSingle(params: Params): Single<ExternalVideoDetail> {
         return Single.fromCallable { ExternalVideoDetail(params.tempExternalVideoSaveFile) }

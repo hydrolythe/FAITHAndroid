@@ -7,6 +7,7 @@ import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.service.usecases.base.SingleUseCase
 import io.reactivex.Scheduler
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 /**
@@ -17,10 +18,10 @@ class MakeEventFilesAvailableUseCase(
     private val fileStorageRepo: IFileStorageRepository,
     private val eventRepository: IEventRepository,
     private val eventEncryptionService: IEventEncryptionService,
-    observeScheduler: Scheduler,
-    private val subscribeScheduler: Scheduler
+    observer: Scheduler,
+    subscriber: Scheduler = Schedulers.io()
 ) : SingleUseCase<Event, MakeEventFilesAvailableUseCase.Params>(
-    observeScheduler
+    observer, subscriber
 ) {
     override fun buildUseCaseSingle(params: Params): Single<Event> {
         if (fileStorageRepo.filesReadyToUse(params.event)) {
@@ -31,11 +32,11 @@ class MakeEventFilesAvailableUseCase(
 //                }
         } else {
             return fileStorageRepo.downloadEventFiles(params.event)
-                .subscribeOn(subscribeScheduler)
+                .subscribeOn(subscriber)
                 .doOnComplete { Timber.i("Files for ${params.event.uuid} have finished downloading") }
                 .concatWith(
                     eventRepository.get(params.event.uuid)
-                        .subscribeOn(subscribeScheduler)
+                        .subscribeOn(subscriber)
                         .firstElement()
                         .doOnSubscribe { Timber.i("Starting to decrypt the files for event ${params.event.uuid}") }
                         .flatMapCompletable(eventEncryptionService::decryptFiles)

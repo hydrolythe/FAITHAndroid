@@ -7,8 +7,8 @@ import io.reactivex.Completable
 import io.reactivex.Scheduler
 
 class DeleteEventDetailUseCase(
-    observeScheduler: Scheduler
-) : CompletableUseCase<DeleteEventDetailUseCase.Params>(observeScheduler) {
+    observer: Scheduler
+) : CompletableUseCase<DeleteEventDetailUseCase.Params>(observer) {
 
     override fun buildUseCaseObservable(params: Params): Completable {
         return Completable.fromAction {

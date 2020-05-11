@@ -19,7 +19,7 @@ class DeleteEventDetailUseCaseTest {
     @Before
     fun setUp() {
         event.addDetail(detail)
-        useCase = DeleteEventDetailUseCase(observeScheduler = mockk())
+        useCase = DeleteEventDetailUseCase(observer = mockk())
     }
 
     @After

@@ -7,8 +7,8 @@ import io.reactivex.Single
 import java.io.File
 
 class CreatePhotoDetailUseCase(
-    observeScheduler: Scheduler
-) : SingleUseCase<PhotoDetail, CreatePhotoDetailUseCase.Params>(observeScheduler) {
+    observer: Scheduler
+) : SingleUseCase<PhotoDetail, CreatePhotoDetailUseCase.Params>(observer) {
 
     override fun buildUseCaseSingle(params: Params): Single<PhotoDetail> {
         return Single.fromCallable { PhotoDetail(params.tempPhotoSaveFile) }
