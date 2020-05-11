@@ -146,6 +146,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/rv_container"
             app:srcCompat="@drawable/add_btn" />
+        <include
+            android:id="@+id/popup_window_cinema"
+            layout="@layout/popup_window_cinema"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/btn_cinema_add"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/rv_container" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_cinema"

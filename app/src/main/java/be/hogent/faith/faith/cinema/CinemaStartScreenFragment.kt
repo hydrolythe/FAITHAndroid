@@ -34,7 +34,7 @@ class CinemaStartScreenFragment : Fragment() {
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
     private lateinit var binding: FragmentCinemaStartBinding
     private lateinit var addDetailMenu: PopupMenu
-
+    private var menuIsOpen: Boolean = false
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private val cinemaOverviewViewModel: CinemaOverviewViewModel by sharedViewModel()
 
@@ -63,7 +63,6 @@ class CinemaStartScreenFragment : Fragment() {
         super.onStart()
         startListeners()
         updateUI()
-        initialiseMenu()
     }
 
     private fun updateUI() {
@@ -76,6 +75,29 @@ class CinemaStartScreenFragment : Fragment() {
 
     private fun startListeners() {
 
+        cinemaOverviewViewModel.addButtonClicked.observe(this, Observer {
+            menuIsOpen = menuIsOpen.not()
+            if (menuIsOpen) {
+                binding.popupWindowCinema.popupCinema.visibility = View.VISIBLE
+                binding.btnCinemaAdd.setImageResource(R.drawable.ic_knop_sluit_opties)
+            } else {
+                binding.popupWindowCinema.popupCinema.visibility = View.GONE
+                binding.btnCinemaAdd.setImageResource(R.drawable.add_btn)
+            }
+        })
+
+        binding.popupWindowCinema.addDrawing.setOnClickListener {
+            menuIsOpen = menuIsOpen.not()
+            navigation?.startDrawingDetailFragment()
+        }
+        binding.popupWindowCinema.addExternalFile.setOnClickListener {
+            menuIsOpen = menuIsOpen.not()
+            navigation?.startExternalFileDetailFragment()
+        }
+        binding.popupWindowCinema.addPhoto.setOnClickListener {
+            menuIsOpen = menuIsOpen.not()
+            navigation?.startPhotoDetailFragment()
+        }
         cinemaOverviewViewModel.makeFilmButtonClicked.observe(this, Observer {
             navigation?.startCreateFilmFragment()
         })
@@ -84,7 +106,13 @@ class CinemaStartScreenFragment : Fragment() {
                 if (isChecked && compoundButton == binding.btnDetails) {
                     cinemaOverviewViewModel.onFilesButtonClicked()
                 } else if (isChecked && compoundButton == binding.btnFilms) {
+                    if (menuIsOpen) {
+                        binding.popupWindowCinema.popupCinema.visibility = View.GONE
+                        binding.btnCinemaAdd.setImageResource(R.drawable.add_btn)
+                        menuIsOpen = false
+                    }
                     cinemaOverviewViewModel.onFilmsButtonClicked()
+
                 }
             }
         binding.btnDetails.setOnCheckedChangeListener(toggle)
@@ -143,40 +171,8 @@ class CinemaStartScreenFragment : Fragment() {
         })
     }
 
-    @SuppressLint("RestrictedApi")
-    private fun initialiseMenu() {
-        addDetailMenu = PopupMenu(
-            binding.btnCinemaAdd.context,
-            binding.btnCinemaAdd,
-            Gravity.TOP,
-            0,
-            R.style.PopupMenu_AddDetail
-        )
 
-        addDetailMenu.menuInflater.inflate(R.menu.menu_cinema, addDetailMenu.menu)
 
-        addDetailMenu.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.backpack_menu_addDrawing ->
-                    navigation?.startDrawingDetailFragment()
-                R.id.backpack_menu_addFile ->
-                    navigation?.startExternalFileDetailFragment()
-                R.id.backpack_menu_addFoto ->
-                    navigation?.startPhotoDetailFragment()
-            }
-            true
-        }
-        try {
-            val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
-            fieldMPopup.isAccessible = true
-            val mPopup = fieldMPopup.get(addDetailMenu)
-            mPopup.javaClass
-                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                .invoke(mPopup, true)
-        } catch (e: Exception) {
-            Timber.e("Error showing icons")
-        }
-    }
 
     private fun showDateRangePicker() {
         val builder = MaterialDatePicker.Builder.dateRangePicker()
