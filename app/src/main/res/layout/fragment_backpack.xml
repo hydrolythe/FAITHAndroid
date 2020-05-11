@@ -137,13 +137,15 @@
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:alpha="@{backpackViewModel.deleteEnabled == true ? 0.5F : 1F}"
             android:background="@drawable/ic_return"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             android:contentDescription="@string/cancel"
             android:onClick="@{() -> backpackViewModel.goToCityScreen()}"
-            app:layout_constraintStart_toStartOf="@+id/btn_backpack_search"
-            app:layout_constraintTop_toTopOf="@+id/guide_undo_horizontal" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+             />
 
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
