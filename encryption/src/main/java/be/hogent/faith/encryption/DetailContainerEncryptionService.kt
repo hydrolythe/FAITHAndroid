@@ -31,7 +31,7 @@ class DetailContainerEncryptionService<T>(
 
     override fun decryptFile(detail: Detail, container: EncryptedDetailsContainer): Completable {
         return keyEncrypter.decrypt(container.encryptedStreamingDEK)
-            .flatMapCompletable { sdek -> detailEncryptionService.decryptDetailFiles(detail, sdek) }
+            .flatMapCompletable { sdek -> detailEncryptionService.decryptDetailFile(detail, sdek) }
     }
 
     override fun decryptData(

@@ -48,6 +48,7 @@ class EventDetailsViewModel(
                 }
 
                 override fun onError(e: Throwable) {
+                    Timber.e(e)
                     Timber.e("Failed to load event")
                 }
             })

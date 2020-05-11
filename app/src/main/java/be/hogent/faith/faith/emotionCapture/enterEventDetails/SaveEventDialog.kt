@@ -53,11 +53,11 @@ class SaveEventDialog : DialogFragment() {
     }
 
     fun showProgressBar() {
-        progress.visibility = View.VISIBLE
+        progress?.visibility = View.VISIBLE
     }
 
     fun hideProgressBar() {
-        progress.visibility = View.GONE
+        progress?.visibility = View.GONE
     }
 
     private fun startListeners() {

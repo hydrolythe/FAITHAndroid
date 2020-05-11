@@ -64,7 +64,7 @@ class FirebaseStorageRepository(
         } else {
             return rxFirebaseStorage
                 .putFile(
-                    storageRef.child(pathProvider.detailPath(event, detail).path),
+                    storageRef.child(pathProvider.detailPath(detail, event).path),
                     Uri.parse("file://${detail.file.path}")
                 )
                 .ignoreElement()
@@ -83,17 +83,19 @@ class FirebaseStorageRepository(
         } else {
             val localDestinationFile: File =
                 with(pathProvider) { localStorage(detailPath(detail, event)) }
+            localDestinationFile.parentFile.mkdirs()
             return Completable
                 .fromSingle(
                     rxFirebaseStorage.getFile(
                         storageRef.child(pathProvider.detailPath(detail, event).path),
                         localDestinationFile
                     )
+                        .doOnSuccess { "Downloaded file for detail ${detail.uuid} in event ${event.uuid}" }
                 )
+                .doOnError { Timber.e("Error while downloading detail ${detail.uuid} in event ${event.uuid}") }
                 .andThen {
                     detail.file = localDestinationFile
                 }
-                .doOnComplete { "Downloaded file for detail ${detail.uuid} in event ${event.uuid}" }
         }
     }
 
@@ -131,11 +133,13 @@ class FirebaseStorageRepository(
             return Completable.complete()
         } else {
             val localDestinationFile = with(pathProvider) { localStorage(emotionAvatarPath(event)) }
+            localDestinationFile.mkdirs()
             return rxFirebaseStorage
                 .getFile(
                     storageRef.child(pathProvider.emotionAvatarPath(event).path),
                     localDestinationFile
                 )
+                .doOnError { Timber.e("Error while downloading emotionAvatar for event ${event.uuid}") }
                 .ignoreElement()
                 .andThen {
                     event.emotionAvatar = localDestinationFile

@@ -66,7 +66,7 @@ class LocalFileStorageRepository(
             return
         }
         val localStoragePath =
-            with(pathProvider) { localStorage(detailPath(encryptedEvent, encryptedDetail)) }
+            with(pathProvider) { localStorage(detailPath(encryptedDetail, encryptedEvent)) }
         moveFile(encryptedDetail.file, localStoragePath)
         encryptedDetail.file = localStoragePath
         Timber.i("Saved detail ${encryptedDetail.uuid} to ${encryptedDetail.file.absolutePath}")
