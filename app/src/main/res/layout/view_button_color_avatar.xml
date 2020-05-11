@@ -27,7 +27,7 @@
             android:layout_margin="8dp"
             android:adjustViewBounds="true"
             android:contentDescription="@string/avatar_inkleuren"
-            android:scaleType="fitXY"
+            android:scaleType="centerInside"
             app:srcCompat="@drawable/jongen_gamer_bl_hoofd" />
     </LinearLayout>
 </layout>

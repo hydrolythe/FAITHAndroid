@@ -59,6 +59,7 @@ class TextDetailViewModel(
     private val _selectedFontSize = MutableLiveData<FontSize>()
     val selectedFontSize: LiveData<FontSize> = _selectedFontSize
 
+    // als je dit initieel een waarde geeft dan komt de tekst al in bold te staan
     private val _boldClicked = MutableLiveData<Boolean?>()
     val boldClicked: LiveData<Boolean?> = _boldClicked
 
@@ -88,7 +89,6 @@ class TextDetailViewModel(
         }
 
     init {
-        _selectedTextColor.value = R.color.black
         _customTextColor.value = R.color.green
         _fontsizeClicked.value = false
         _selectedFontSize.value =

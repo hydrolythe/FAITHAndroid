@@ -98,7 +98,7 @@ class DrawingDetailFragment : DrawFragment(),
     }
 
     private fun loadExistingDrawing() {
-        val existingDetail = arguments!!.getSerializable(DRAWING_DETAIL) as DrawingDetail
+        val existingDetail = requireArguments().getSerializable(DRAWING_DETAIL) as DrawingDetail
         drawView.setImageBackground(existingDetail.file)
         drawingDetailViewModel.loadExistingDetail(existingDetail)
     }
