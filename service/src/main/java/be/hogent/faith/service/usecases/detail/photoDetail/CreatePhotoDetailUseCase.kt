@@ -14,7 +14,7 @@ class CreatePhotoDetailUseCase(
 
     override fun buildUseCaseSingle(params: Params): Single<PhotoDetail> {
         return Single.fromCallable {
-            PhotoDetail(params.tempPhotoSaveFile, base64encodeImage(getThumbnail(params.tempPhotoSaveFile.path )))}
+            PhotoDetail(params.tempPhotoSaveFile, params.tempPhotoSaveFile.getThumbnail().base64encodeImage()) }
     }
 
     class Params(

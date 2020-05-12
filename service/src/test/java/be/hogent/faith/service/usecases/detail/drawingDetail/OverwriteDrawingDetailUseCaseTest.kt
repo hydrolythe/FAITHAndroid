@@ -3,6 +3,7 @@ package be.hogent.faith.service.usecases.detail.drawingDetail
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
+import be.hogent.faith.util.factory.DataFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -39,7 +40,8 @@ class OverwriteDrawingDetailUseCaseTest {
     fun overwriteDrawingDetailUC_normal_detailSaveFileStaysSame() {
         // Arrange
         val saveFile = File("location")
-        val drawingDetail = DrawingDetail(saveFile)
+        val thumbnail = DataFactory.randomString()
+        val drawingDetail = DrawingDetail(saveFile, thumbnail)
         every {
             storageRepository.overwriteExistingDrawingDetail(
                 bitmap,
@@ -57,5 +59,6 @@ class OverwriteDrawingDetailUseCaseTest {
             .assertNoErrors()
         verify { storageRepository.overwriteExistingDrawingDetail(bitmap, drawingDetail) }
         assertEquals(saveFile, drawingDetail.file)
+        assertEquals(thumbnail, drawingDetail.thumbnail)
     }
 }

@@ -38,7 +38,8 @@ class LocalFileStorageRepositoryTest {
         type = "encrypted type",
         // Empty string to emulate a non-YoutubeVideoDetail
         youtubeVideoID = "",
-        dateTime = DataFactory.randomString()
+        dateTime = DataFactory.randomString(),
+        thumbnail = DataFactory.randomString()
     )
 
     private val emotionAvatarFile = File("emotionAvatar")

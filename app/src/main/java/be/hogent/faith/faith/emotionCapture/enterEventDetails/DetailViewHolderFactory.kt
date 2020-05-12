@@ -19,7 +19,6 @@ import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.faith.util.getDefaultThumbnailUrl
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.signature.MediaStoreSignature
 import kotlinx.android.synthetic.main.detail_item_rv.view.btn_delete_detailRv
 import kotlinx.android.synthetic.main.detail_item_rv.view.detail_img
 import kotlinx.android.synthetic.main.detail_item_rv.view.text_detail_title
@@ -164,7 +163,6 @@ sealed class DetailViewHolder(
                     // Signature is required to force Glide to reload overwritten pictures
                     .signature(MediaStoreSignature("", detail.file.lastModified(), 0))
                     */
-
         }
     }
 

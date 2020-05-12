@@ -13,7 +13,6 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
 import timber.log.Timber
-import java.nio.file.Files
 
 /**
  * Repository providing access to both the internal and remote storage.

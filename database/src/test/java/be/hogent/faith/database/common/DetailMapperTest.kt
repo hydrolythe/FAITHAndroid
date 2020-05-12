@@ -27,7 +27,8 @@ class DetailMapperTest {
             uuid = UUID.randomUUID(),
             type = "encrypted type",
             youtubeVideoID = "",
-            dateTime = DataFactory.randomString()
+            dateTime = DataFactory.randomString(),
+            thumbnail = DataFactory.randomString()
         )
         val entity = detailMapper.mapToEntity(model)
         assertEqualData(entity, model)

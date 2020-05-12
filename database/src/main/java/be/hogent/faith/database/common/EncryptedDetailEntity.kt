@@ -8,6 +8,6 @@ data class EncryptedDetailEntity(
     val uuid: EncryptedString = "",
     val type: EncryptedString = "",
     val dateTime: EncryptedString = "",
-    val thumbnail : EncryptedString? = null,
+    val thumbnail: EncryptedString? = null,
     val youtubeVideoId: EncryptedString = ""
 )
