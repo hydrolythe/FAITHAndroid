@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.databinding.FragmentEditFileBinding
+import be.hogent.faith.databinding.FragmentContainerBaseBinding
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
@@ -18,8 +18,8 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
+import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.externalVideo.view.ViewExternalVideoFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
@@ -32,7 +32,6 @@ import org.koin.android.viewmodel.ext.android.sharedViewModel
 abstract class CinemaDetailFragment : Fragment() {
 
     private val cinemaViewModel: CinemaOverviewViewModel by sharedViewModel()
-    private lateinit var editDetailBinding: FragmentEditFileBinding
     private lateinit var saveDialog: SaveCinemaDetailDialog
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
@@ -41,9 +40,8 @@ abstract class CinemaDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        editDetailBinding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_edit_file, container, false)
-        editDetailBinding.lifecycleOwner = this
+        val containerBaseBinding: FragmentContainerBaseBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_container_base, container, false)
 
         cinemaViewModel.showSaveDialog.observe(viewLifecycleOwner, Observer {
             if (it != null && cinemaViewModel.openDetailMode.value != OpenDetailMode.EDIT)
@@ -52,7 +50,7 @@ abstract class CinemaDetailFragment : Fragment() {
                 cinemaViewModel.saveCurrentDetail(userViewModel.user.value!!, it)
         })
 
-        return editDetailBinding.root
+        return containerBaseBinding.root
     }
 
     private fun showSaveDialog(detail: Detail) {
@@ -74,10 +72,10 @@ abstract class CinemaDetailFragment : Fragment() {
     companion object {
         fun newInstance(detail: Detail): CinemaDetailFragment {
             return when (detail) {
-                is TextDetail -> throw UnsupportedOperationException("Film is not part of the backpack")
+                is TextDetail -> throw UnsupportedOperationException("Text is not part of the backpack")
                 is DrawingDetail -> DrawingFragment.newInstance()
                 is PhotoDetail -> PhotoFragment.newInstance()
-                is AudioDetail -> throw UnsupportedOperationException("Film is not part of the backpack")
+                is AudioDetail -> throw UnsupportedOperationException("Audio is not part of the backpack")
                 is ExternalVideoDetail -> ExternalVideoFragment.newInstance()
                 is YoutubeVideoDetail -> throw UnsupportedOperationException("Film is not part of the backpack")
                 is FilmDetail -> throw UnsupportedOperationException("Film is not part of the backpack")
@@ -147,9 +145,5 @@ abstract class CinemaDetailFragment : Fragment() {
             val childFragment = AddExternalFileFragment.newInstance()
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }
-    }
-
-    interface CinemaDetailNavigation {
-        fun backToCinema()
     }
 }

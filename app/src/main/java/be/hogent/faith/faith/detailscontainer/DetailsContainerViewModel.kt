@@ -29,12 +29,13 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
+import timber.log.Timber
 
 abstract class DetailsContainerViewModel<T : DetailsContainer>(
     private val saveDetailsContainerDetailUseCase: SaveDetailsContainerDetailUseCase<T>,
     private val deleteDetailsContainerDetailUseCase: DeleteDetailsContainerDetailUseCase<T>,
     private val loadDetailFileUseCase: LoadDetailFileUseCase<T>,
-    protected val getDetailsContainerDataUseCase: GetDetailsContainerDataUseCase<T>,
+    private val getDetailsContainerDataUseCase: GetDetailsContainerDataUseCase<T>,
     protected val detailsContainer: T
 ) : ViewModel() {
 
@@ -134,11 +135,9 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     protected val _openDetailMode = SingleLiveEvent<OpenDetailMode>()
     val openDetailMode: LiveData<OpenDetailMode> = _openDetailMode
 
-    // ga naar een bestaand detail
     protected val _goToDetail = SingleLiveEvent<Detail>()
     val goToDetail: LiveData<Detail> = _goToDetail
 
-    // detail is opgeslaan
     protected val _detailIsSaved = SingleLiveEvent<Any>()
     val detailIsSaved: LiveData<Any> = _detailIsSaved
 
@@ -194,18 +193,16 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         val params = GetDetailsContainerDataUseCase.Params()
         getDetailsContainerDataUseCase.execute(params, object : DisposableObserver<List<Detail>>() {
 
-            override fun onComplete() {
+            override fun onNext(loadedDetails: List<Detail>) {
+                detailsContainer.setDetails(loadedDetails)
+                setSearchStringText("")
             }
+
+            override fun onComplete() {}
 
             override fun onError(e: Throwable) {
+                Timber.e(e)
                 _errorMessage.postValue(R.string.error_load_backpack)
-            }
-
-            override fun onNext(t: List<Detail>) {
-                t.let {
-                    detailsContainer.setDetails(it)
-                    setSearchStringText("")
-                }
             }
         })
     }
@@ -444,6 +441,8 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     override fun onCleared() {
         saveDetailsContainerDetailUseCase.dispose()
         deleteDetailsContainerDetailUseCase.dispose()
+        loadDetailFileUseCase.dispose()
+        getDetailsContainerDataUseCase.dispose()
         super.onCleared()
     }
 

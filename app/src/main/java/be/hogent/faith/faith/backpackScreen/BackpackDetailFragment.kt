@@ -8,36 +8,34 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.databinding.FragmentEditFileBinding
-import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
-import be.hogent.faith.faith.details.externalVideo.view.ViewExternalVideoFragment
+import be.hogent.faith.databinding.FragmentContainerBaseBinding
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailFragment
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
+import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
+import be.hogent.faith.faith.details.externalVideo.view.ViewExternalVideoFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailFragment
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.util.replaceChildFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import java.lang.UnsupportedOperationException
 
 abstract class BackpackDetailFragment : Fragment() {
 
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
-    private lateinit var editDetailBinding: FragmentEditFileBinding
     private lateinit var saveDialog: SaveDetailDialog
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
@@ -46,9 +44,8 @@ abstract class BackpackDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        editDetailBinding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_edit_file, container, false)
-        editDetailBinding.lifecycleOwner = this
+        val binding: FragmentContainerBaseBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_container_base, container, false)
 
         backpackViewModel.showSaveDialog.observe(viewLifecycleOwner, Observer {
             if (it != null && backpackViewModel.openDetailMode.value != OpenDetailMode.EDIT)
@@ -57,7 +54,7 @@ abstract class BackpackDetailFragment : Fragment() {
                 backpackViewModel.saveCurrentDetail(userViewModel.user.value!!, it)
         })
 
-        return editDetailBinding.root
+        return binding.root
     }
 
     private fun showSaveDialog(detail: Detail) {

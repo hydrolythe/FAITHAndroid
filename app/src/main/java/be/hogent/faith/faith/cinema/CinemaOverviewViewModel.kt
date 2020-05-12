@@ -27,7 +27,7 @@ class CinemaOverviewViewModel(
 ) {
 
     override val details: List<Detail>
-            get() = if (_filmsVisible.value!!) detailsContainer.films else detailsContainer.getFiles()
+        get() = if (_filmsVisible.value!!) detailsContainer.films else detailsContainer.getFiles()
 
     private val _filmsVisible = MutableLiveData<Boolean>().apply {
         this.value = true
