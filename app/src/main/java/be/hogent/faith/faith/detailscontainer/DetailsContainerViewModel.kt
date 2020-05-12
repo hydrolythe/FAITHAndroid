@@ -157,7 +157,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     val detailDate = MutableLiveData<LocalDateTime>()
     val detailDateString: LiveData<String> =
         Transformations.map(detailDate) { date ->
-            date.format(DateTimeFormatter.ISO_DATE)
+            date.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
         }
     private val _detailDateButtonClicked = SingleLiveEvent<Unit>()
     val detailDateButtonClicked: LiveData<Unit> = _detailDateButtonClicked
@@ -463,6 +463,10 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
 
     private fun setDetails() {
         audioFilterEnabled.postValue(false)
+    }
+
+    fun clearErrorMessage() {
+        _errorMessage.postValue(R.string.empty)
     }
 }
 

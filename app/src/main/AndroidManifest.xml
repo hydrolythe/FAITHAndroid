@@ -31,7 +31,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.FullScreen"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".faith.cinema.CinemaActivity"></activity>
+        <activity
+            android:name=".faith.cinema.CinemaActivity"
+            android:screenOrientation="landscape"
+            ></activity>
         <activity
             android:name=".faith.backpackScreen.BackpackScreenActivity"
             android:label="@string/title_backpack"
@@ -44,7 +47,8 @@
         <activity
             android:name=".faith.library.LibraryActivity"
             android:label="@string/title_event_detail"
-            android:parentActivityName=".faith.library.LibraryActivity">
+            android:parentActivityName=".faith.library.LibraryActivity"
+            android:screenOrientation="landscape">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="be.hogent.faith.faith.library.LibraryActivity" />

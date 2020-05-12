@@ -116,4 +116,8 @@ class UserViewModel(
         getUserUseCase.dispose()
         super.onCleared()
     }
+
+    fun clearErrorMessage() {
+        _titleErrorMessage.postValue(R.string.empty)
+    }
 }

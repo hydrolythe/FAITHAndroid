@@ -170,6 +170,10 @@ class EventFragment : Fragment() {
             detailThumbnailsAdapter?.setItemsAsDeletable(deleteEnabled)
         })
 
+        eventViewModel.cancelButtonClicked.observe(this, Observer {
+            saveDialog.dismiss()
+        })
+
         userViewModel.eventSavedState.observe(this, Observer {
             it?.let {
                 handleDataStateSavingEvent(it)

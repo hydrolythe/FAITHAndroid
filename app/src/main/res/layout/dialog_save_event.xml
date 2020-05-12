@@ -12,6 +12,7 @@
         <variable
             name="userViewModel"
             type="be.hogent.faith.faith.UserViewModel" />
+
     </data>
 
     <FrameLayout

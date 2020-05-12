@@ -75,7 +75,7 @@
             android:layout_width="8dp"
             android:layout_height="12dp"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.33" />
+            app:layout_constraintGuide_percent="0.25" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_items_vertical_end"
