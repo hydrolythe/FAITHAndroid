@@ -252,9 +252,9 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     ): String {
         val van =
             if (startDate.value == LocalDate.MIN.plusDays(1)) "van" else startDate.value!!.format(
-                DateTimeFormatter.ISO_DATE
+                DateTimeFormatter.ofPattern("dd,MMM yyyy")
             )
-        val tot = endDate.value!!.format(DateTimeFormatter.ISO_DATE)
+        val tot = endDate.value!!.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
         return "$van - $tot"
     }
 
