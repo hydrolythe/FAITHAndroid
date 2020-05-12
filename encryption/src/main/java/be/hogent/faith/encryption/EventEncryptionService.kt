@@ -187,8 +187,6 @@ class EventEncryptionService(
                     // Where the file of the detail points to is not relevant, as that is just where it was pointing
                     // the moment it was saved to the database.
                     // The encrypted version of the file should be in localstorage at this time, so we assume that path.
-                    detail.file =
-                        pathProvider.localStorage(pathProvider.detailPath(detail, encryptedEvent))
                     detailEncryptionService.decryptDetailFile(
                         detail,
                         sdek,

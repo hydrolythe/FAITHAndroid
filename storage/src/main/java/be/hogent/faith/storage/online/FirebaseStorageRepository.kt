@@ -133,7 +133,7 @@ class FirebaseStorageRepository(
             return Completable.complete()
         } else {
             val localDestinationFile = with(pathProvider) { localStorage(emotionAvatarPath(event)) }
-            localDestinationFile.mkdirs()
+            localDestinationFile.parentFile.mkdirs()
             return rxFirebaseStorage
                 .getFile(
                     storageRef.child(pathProvider.emotionAvatarPath(event).path),
