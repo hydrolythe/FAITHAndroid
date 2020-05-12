@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import android.graphics.drawable.Drawable
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -156,9 +157,14 @@ sealed class DetailViewHolder(
         val androidTempFileProvider: TempFileProvider by inject()
         override fun load(detail: Detail): RequestBuilder<Drawable> {
             return Glide.with(thumbnailView)
+                .load(Base64.decode(detail.thumbnail, Base64.DEFAULT))
+/*
+            return Glide.with(thumbnailView)
                     .load(detail.file)
                     // Signature is required to force Glide to reload overwritten pictures
                     .signature(MediaStoreSignature("", detail.file.lastModified(), 0))
+                    */
+
         }
     }
 

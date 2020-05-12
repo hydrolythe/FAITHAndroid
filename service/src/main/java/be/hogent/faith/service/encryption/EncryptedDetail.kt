@@ -16,6 +16,7 @@ class EncryptedDetail(
     val uuid: UUID,
     val type: EncryptedString,
     val dateTime: EncryptedString,
+    val thumbnail : EncryptedString?,
     /**
      * Only filled in when the Detail is a [YoutubeVideoDetail], empty otherwise
      */

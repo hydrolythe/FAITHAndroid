@@ -45,18 +45,6 @@ data class Event(
         _details -= detail
     }
 
-    fun addNewPhotoDetail(saveFile: File): PhotoDetail {
-        val newDetail = PhotoDetail(saveFile)
-        addDetail(newDetail)
-        return newDetail
-    }
-
-    fun addNewDrawingDetail(saveFile: File): DrawingDetail {
-        val newDetail = DrawingDetail(saveFile)
-        addDetail(newDetail)
-        return newDetail
-    }
-
     fun addNewAudioDetail(saveFile: File) {
         addDetail(AudioDetail(saveFile))
     }

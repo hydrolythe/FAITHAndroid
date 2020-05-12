@@ -19,6 +19,7 @@ object DetailMapper : Mapper<EncryptedDetailEntity, EncryptedDetail> {
             uuid = model.uuid.toString(),
             type = model.type,
             dateTime = model.dateTime,
+            thumbnail = model.thumbnail,
             youtubeVideoId = model.youtubeVideoID
         )
     }
@@ -34,6 +35,7 @@ object DetailMapper : Mapper<EncryptedDetailEntity, EncryptedDetail> {
             uuid = UUID.fromString(entity.uuid),
             type = entity.type,
             dateTime = entity.dateTime,
+            thumbnail = entity.thumbnail,
             youtubeVideoID = entity.youtubeVideoId
         )
     }
