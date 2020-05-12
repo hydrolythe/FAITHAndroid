@@ -13,7 +13,7 @@ import be.hogent.faith.databinding.FragmentViewTextBinding
 import be.hogent.faith.domain.models.detail.TextDetail
 import org.koin.android.viewmodel.ext.android.viewModel
 
-private const val TEXT_DETAIL = "the drawing to be shown"
+private const val TEXT_DETAIL = "the text detail to be shown"
 
 class ViewTextDetailFragment : Fragment() {
 
@@ -68,7 +68,7 @@ class ViewTextDetailFragment : Fragment() {
         })
 
         textDetailViewModel.cancelClicked.observe(this, Observer {
-            activity!!.onBackPressed()
+            requireActivity().onBackPressed()
         })
     }
 
@@ -82,6 +82,6 @@ class ViewTextDetailFragment : Fragment() {
     }
 
     private fun dpToPx(dp: Int): Int {
-        return dp * context!!.getResources().getDisplayMetrics().density.toInt()
+        return dp * requireContext().getResources().getDisplayMetrics().density.toInt()
     }
 }

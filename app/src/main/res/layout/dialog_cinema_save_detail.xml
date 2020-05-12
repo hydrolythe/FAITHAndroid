@@ -20,7 +20,7 @@
 
 
         <ImageButton
-            android:id="@+id/btn_cinemadetail_cancel"
+            android:id="@+id/btn_cinemaDetail_cancel"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
             android:layout_marginStart="20dp"

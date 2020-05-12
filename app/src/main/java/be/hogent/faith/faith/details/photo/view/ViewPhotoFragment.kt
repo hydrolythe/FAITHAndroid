@@ -71,7 +71,7 @@ class ReviewPhotoFragment : Fragment() {
         })
 
         photoDetailViewModel.cancelClicked.observe(this, Observer {
-            activity!!.onBackPressed()
+            requireActivity().onBackPressed()
         })
     }
 }

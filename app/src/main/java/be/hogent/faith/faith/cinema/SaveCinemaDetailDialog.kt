@@ -89,7 +89,7 @@ class SaveCinemaDetailDialog(private var detail: Detail) : DialogFragment() {
             dismiss()
         })
 
-        saveDetailBinding.btnCinemadetailCancel.setOnClickListener {
+        saveDetailBinding.btnCinemaDetailCancel.setOnClickListener {
             dismiss()
             cinemaOverviewViewModel.goToDetail(detail)
         }
@@ -98,10 +98,6 @@ class SaveCinemaDetailDialog(private var detail: Detail) : DialogFragment() {
             if (it != null)
                 Toast.makeText(context, resources.getString(it), Toast.LENGTH_LONG).show()
         })
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
     }
 
     override fun onCancel(dialog: DialogInterface) {

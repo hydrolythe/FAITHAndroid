@@ -54,7 +54,6 @@ abstract class CinemaDetailFragment : Fragment() {
     }
 
     private fun showSaveDialog(detail: Detail) {
-
         saveDialog = SaveCinemaDetailDialog.newInstance(detail)
         saveDialog.show(requireActivity().supportFragmentManager, null)
         cinemaViewModel.setCurrentFile(detail)

@@ -77,7 +77,7 @@ class CityScreenFragment : Fragment() {
         })
 
         userViewModel.user.observe(this, Observer { user ->
-            Glide.with(context!!).load(avatarProvider.getAvatarDrawableStaan(user.avatarName))
+            Glide.with(requireContext()).load(avatarProvider.getAvatarDrawableStaan(user.avatarName))
                 .diskCacheStrategy(
                     DiskCacheStrategy.ALL
                 ).into(image_main_avatar)
