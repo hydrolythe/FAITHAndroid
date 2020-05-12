@@ -23,9 +23,10 @@ class DetailContainerEncryptionService<T>(
         val dekSingle = keyEncrypter.decrypt(encryptedDetailsContainer.encryptedDEK)
         val sdekSingle = keyEncrypter.decrypt(encryptedDetailsContainer.encryptedStreamingDEK)
 
-        // TODO: Find a way around blockingGet()
-        return Singles.zip(dekSingle, sdekSingle) { dek, sdek ->
-            detailEncryptionService.encrypt(detail, dek, sdek).blockingGet()
+        return dekSingle.flatMap { dek ->
+            sdekSingle.flatMap { sdek ->
+                detailEncryptionService.encrypt(detail, dek, sdek)
+            }
         }
     }
 
@@ -39,11 +40,9 @@ class DetailContainerEncryptionService<T>(
         container: EncryptedDetailsContainer
     ): Single<Detail> {
         val dekSingle = keyEncrypter.decrypt(container.encryptedDEK)
-        val sdekSingle = keyEncrypter.decrypt(container.encryptedStreamingDEK)
 
-        // TODO: Find a way around blockingGet()
-        return Singles.zip(dekSingle, sdekSingle) { dek, sdek ->
-            detailEncryptionService.decryptData(encryptedDetail, dek).blockingGet()
+        return dekSingle.flatMap { dek ->
+            detailEncryptionService.decryptData(encryptedDetail, dek)
         }
     }
 
