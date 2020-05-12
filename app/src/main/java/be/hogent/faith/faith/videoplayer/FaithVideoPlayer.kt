@@ -71,13 +71,13 @@ class FaithVideoPlayer(
         }
     }
 
-    private fun playYoutubeVideo(detail: Detail, context: Context){
+    private fun playYoutubeVideo(detail: Detail, context: Context) {
         val youTubePlayerView = YouTubePlayerView(context)
         controller = YoutubePlayerController(this, youTubePlayerView, detail as YoutubeVideoDetail)
         playerParentView.addView(youTubePlayerView)
     }
 
-    private fun playVideoFile(detail: Detail, context: Context){
+    private fun playVideoFile(detail: Detail, context: Context) {
         val videoView = VideoView(context)
         controller = VideoFilePlayerController(this, videoView, detail.file)
         playerParentView.addView(videoView)

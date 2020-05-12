@@ -53,9 +53,6 @@ class ViewYoutubeVideoFragment(private val youtubeVideoDetail: YoutubeVideoDetai
         }
     }
 
-    /**
-     * Everything you need to play a new video in your fragment
-     */
     override fun onStart() {
         super.onStart()
         playNewVideo(youtubeVideoDetail)
