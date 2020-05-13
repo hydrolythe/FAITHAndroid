@@ -18,12 +18,14 @@ sealed class Detail(
     var title: String = "",
     val uuid: UUID = UUID.randomUUID(),
     var dateTime: LocalDateTime = LocalDateTime.now(),
+    // contains a string : base64 encoded thumbnail of the image.
+    // Only PhotoDetail and DrawingDetail have a thumbnail. Could also be generated for audio and video but not needed for the moment
     var thumbnail: String? = null
 ) : Serializable
 
 class DrawingDetail(
     file: File,
-    thumbnail: String,
+    thumbnail: String?,
     title: String = "",
     uuid: UUID = UUID.randomUUID(),
     dateTime: LocalDateTime = LocalDateTime.now()
@@ -31,7 +33,7 @@ class DrawingDetail(
 
 class PhotoDetail(
     file: File,
-    thumbnail: String,
+    thumbnail: String?,
     title: String = "",
     uuid: UUID = UUID.randomUUID(),
     dateTime: LocalDateTime = LocalDateTime.now()
