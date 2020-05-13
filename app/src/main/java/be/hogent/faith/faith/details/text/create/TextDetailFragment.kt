@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,8 +21,8 @@ import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
+import kotlinx.android.synthetic.main.fragment_enter_text.cardView_size
 import kotlinx.android.synthetic.main.fragment_enter_text.enterText_editor
-import kotlinx.android.synthetic.main.fragment_enter_text.img_enter_text_black_Selected
 import org.koin.android.viewmodel.ext.android.viewModel
 
 // uses https://github.com/wasabeef/richeditor-android
@@ -94,6 +95,7 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
         super.onStart()
         initEditor()
         setUpListeners()
+        textDetailDetailViewModel.pickTextColor(ContextCompat.getColor(requireContext(), R.color.black))
     }
 
     private fun initEditor() {
@@ -117,7 +119,6 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
             enterText_editor.html = text
         })
         textDetailDetailViewModel.selectedTextColor.observe(this, Observer { newColor ->
-            if (newColor == R.color.black) img_enter_text_black_Selected.visibility = View.VISIBLE
             enterText_editor.setTextColor(newColor)
         })
         textDetailDetailViewModel.boldClicked.observe(this, Observer {
@@ -128,6 +129,10 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
         })
         textDetailDetailViewModel.underlineClicked.observe(this, Observer {
             enterText_editor.setUnderline()
+        })
+
+        textDetailDetailViewModel.fontsizeClicked.observe(this, Observer {
+            cardView_size.visibility = if (it) View.VISIBLE else View.GONE
         })
         textDetailDetailViewModel.selectedFontSize.observe(this, Observer { newSize ->
             enterText_editor.setFontSize(newSize.size)

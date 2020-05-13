@@ -12,10 +12,9 @@ import io.reactivex.Scheduler
  */
 class OverwriteTextDetailUseCase(
     private val tempStorageRepo: ITemporaryFileStorageRepository,
-    observeScheduler: Scheduler
-) : CompletableUseCase<OverwriteTextDetailUseCase.Params>(
-    observeScheduler
-) {
+    observer: Scheduler
+) : CompletableUseCase<OverwriteTextDetailUseCase.Params>(observer) {
+
     override fun buildUseCaseObservable(params: Params): Completable {
         return tempStorageRepo.overwriteTextDetail(params.text, params.detail)
     }

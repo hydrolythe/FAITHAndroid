@@ -1,11 +1,9 @@
 package be.hogent.faith.faith.cinema
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +24,6 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.fragment_cinema_start.btn_cinema_chooseDate
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import timber.log.Timber
 
 class CinemaStartScreenFragment : Fragment() {
 
@@ -112,7 +109,6 @@ class CinemaStartScreenFragment : Fragment() {
                         menuIsOpen = false
                     }
                     cinemaOverviewViewModel.onFilmsButtonClicked()
-
                 }
             }
         binding.btnDetails.setOnCheckedChangeListener(toggle)
@@ -170,9 +166,6 @@ class CinemaStartScreenFragment : Fragment() {
             detailThumbnailsAdapter!!.submitList(list)
         })
     }
-
-
-
 
     private fun showDateRangePicker() {
         val builder = MaterialDatePicker.Builder.dateRangePicker()

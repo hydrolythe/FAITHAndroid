@@ -345,10 +345,10 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
         currentTool = DrawingTool(this, paintToUse)
     }
 
-    fun pickEraserTool() {
+    fun pickEraserTool(alpha: Int) {
         currentTool.finishCurrentAction()
         val paintToUse = Paint(currentTool.paint)
-        currentTool = EraserTool(this, paintToUse)
+        currentTool = EraserTool(this, paintToUse, alpha)
     }
 
     fun pickTextTool() {

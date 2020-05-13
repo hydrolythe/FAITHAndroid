@@ -13,9 +13,9 @@ import io.reactivex.Scheduler
  */
 class SaveEmotionAvatarUseCase(
     private val tempStorageRepo: ITemporaryFileStorageRepository,
-    observeScheduler: Scheduler
+    observer: Scheduler
 ) : CompletableUseCase<SaveEmotionAvatarUseCase.Params>(
-    observeScheduler
+    observer
 ) {
     override fun buildUseCaseObservable(params: Params): Completable {
         return Completable.fromSingle(

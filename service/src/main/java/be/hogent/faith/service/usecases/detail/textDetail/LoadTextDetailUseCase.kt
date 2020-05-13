@@ -8,8 +8,8 @@ import io.reactivex.Single
 
 class LoadTextDetailUseCase(
     private val tempStorageRepo: ITemporaryFileStorageRepository,
-    observeScheduler: Scheduler
-) : SingleUseCase<String, LoadTextDetailUseCase.LoadTextParams>(observeScheduler) {
+    observer: Scheduler
+) : SingleUseCase<String, LoadTextDetailUseCase.LoadTextParams>(observer) {
 
     override fun buildUseCaseSingle(params: LoadTextParams): Single<String> {
         return tempStorageRepo.loadTextFromExistingDetail(params.textDetail)

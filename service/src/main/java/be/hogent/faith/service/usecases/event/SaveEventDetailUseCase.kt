@@ -9,8 +9,8 @@ import io.reactivex.Scheduler
 
 class SaveEventDetailUseCase(
     private val tempStorageRepo: ITemporaryFileStorageRepository,
-    observeScheduler: Scheduler
-) : CompletableUseCase<SaveEventDetailUseCase.Params>(observeScheduler) {
+    observer: Scheduler
+) : CompletableUseCase<SaveEventDetailUseCase.Params>(observer) {
 
     override fun buildUseCaseObservable(params: Params): Completable {
         if (params.event.details.contains(params.detail)) {
