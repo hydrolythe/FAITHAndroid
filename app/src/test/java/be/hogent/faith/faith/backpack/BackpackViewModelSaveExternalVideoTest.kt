@@ -1,6 +1,6 @@
 package be.hogent.faith.faith.backpack
 
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
@@ -29,7 +29,7 @@ class BackpackViewModelSaveExternalVideoTest {
     private val getBackPackFilesUseCase =
         mockk<GetDetailsContainerDataUseCase<Backpack>>(relaxed = true)
     private val backpack = mockk<Backpack>(relaxed = true)
-    private val detail = mockk<ExternalVideoDetail>()
+    private val detail = mockk<VideoDetail>()
     private val user = mockk<User>(relaxed = true)
 
     @get:Rule

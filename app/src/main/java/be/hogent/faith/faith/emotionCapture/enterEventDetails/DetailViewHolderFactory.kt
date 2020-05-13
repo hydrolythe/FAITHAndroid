@@ -11,7 +11,7 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.AudioDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExistingDetailNavigationListener
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExternalVideoDetailViewHolder
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.VideoDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.PictureDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.TextDetailViewHolder
 import be.hogent.faith.faith.util.TempFileProvider
@@ -88,8 +88,8 @@ object DetailViewHolderFactory {
     private fun createExternalVideoDetailViewHolder(
         thumbnailView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
-    ): ExternalVideoDetailViewHolder {
-        return ExternalVideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
+    ): VideoDetailViewHolder {
+        return VideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
 
     private fun createYoutubeVideoDetailViewholder(
@@ -172,7 +172,7 @@ sealed class DetailViewHolder(
         }
     }
 
-    class ExternalVideoDetailViewHolder(
+    class VideoDetailViewHolder(
         imageView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {

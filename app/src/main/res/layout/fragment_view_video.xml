@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-        <variable
-            name="photoDetailViewViewModel"
-            type="be.hogent.faith.faith.details.externalFile.ExternalFileViewModel" />
-    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/screen_take_photo"
         android:layout_width="match_parent"

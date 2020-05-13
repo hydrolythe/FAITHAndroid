@@ -7,7 +7,7 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.DeleteDetailDialog
@@ -107,7 +107,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
         when (detail) {
             is DrawingDetail -> save(detail)
             is PhotoDetail -> save(detail)
-            is ExternalVideoDetail -> save(detail)
+            is VideoDetail -> save(detail)
         }
         // cinemaOverviewViewModel.viewButtons(true)
     }

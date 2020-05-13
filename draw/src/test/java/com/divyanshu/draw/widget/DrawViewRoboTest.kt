@@ -54,7 +54,7 @@ class DrawViewRoboTest {
         // Act
         subject.pickDrawingTool()
         subject.pickTextTool()
-        subject.pickEraserTool()
+        subject.pickEraserTool(0)
 
         // Assert
         assert(subject.canvasActions.isEmpty())
@@ -63,8 +63,8 @@ class DrawViewRoboTest {
     @Test
     fun drawView_pickEraserTool_multipleTimes_OK() {
         // Act
-        subject.pickEraserTool()
-        subject.pickEraserTool()
+        subject.pickEraserTool(0)
+        subject.pickEraserTool(0)
     }
 
     @Test

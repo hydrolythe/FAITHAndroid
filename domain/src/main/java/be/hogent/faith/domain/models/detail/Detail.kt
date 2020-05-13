@@ -48,7 +48,7 @@ class AudioDetail(
     dateTime: LocalDateTime = LocalDateTime.now()
 ) : Detail(file, title, uuid, dateTime)
 
-class ExternalVideoDetail(
+class VideoDetail(
     file: File,
     title: String = "",
     uuid: UUID = UUID.randomUUID(),

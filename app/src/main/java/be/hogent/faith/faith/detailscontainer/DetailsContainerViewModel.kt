@@ -12,7 +12,7 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
@@ -107,11 +107,11 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
             value = detailFilter.filter(details)
         }
         addSource(externalVideoFilterEnabled) { enabled ->
-            detailFilter.hasExternalVideoDetailFilter.isEnabled = enabled
+            detailFilter.hasVideoDetailFilter.isEnabled = enabled
             value = detailFilter.filter(details)
         }
         addSource(videoFilterEnabled) { enabled ->
-            detailFilter.hasVideoDetailFilter.isEnabled = enabled
+            detailFilter.hasYoutubeDetailFilter.isEnabled = enabled
             value = detailFilter.filter(details)
         }
     }
@@ -283,9 +283,9 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
             is TextDetail -> saveTextDetail(user, showSaveDialog.value as TextDetail)
             is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
             is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
-            is ExternalVideoDetail -> saveExternalVideoDetail(
+            is VideoDetail -> saveExternalVideoDetail(
                 user,
-                showSaveDialog.value as ExternalVideoDetail
+                showSaveDialog.value as VideoDetail
             )
             is YoutubeVideoDetail -> saveYoutubeDetail(user, detail)
         }
@@ -388,7 +388,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         })
     }
 
-    fun saveExternalVideoDetail(user: User, detail: ExternalVideoDetail) {
+    fun saveExternalVideoDetail(user: User, detail: VideoDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {

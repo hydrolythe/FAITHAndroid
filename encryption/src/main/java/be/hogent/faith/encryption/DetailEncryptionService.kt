@@ -3,7 +3,7 @@ package be.hogent.faith.encryption
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
@@ -58,7 +58,7 @@ class DetailEncryptionService(
                         is TextDetail -> DetailType.Text
                         is DrawingDetail -> DetailType.Drawing
                         is PhotoDetail -> DetailType.Photo
-                        is ExternalVideoDetail -> DetailType.ExternalVideo
+                        is VideoDetail -> DetailType.ExternalVideo
                         is YoutubeVideoDetail -> DetailType.YoutubeVideo
                         is FilmDetail -> DetailType.Film
                     }.toString()
@@ -112,7 +112,7 @@ class DetailEncryptionService(
                     dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime)),
                     videoId = encryptedDetail.youtubeVideoID
                 )
-                DetailType.ExternalVideo -> ExternalVideoDetail(
+                DetailType.ExternalVideo -> VideoDetail(
                     file = encryptedDetail.file,
                     title = dataEncrypter.decrypt(encryptedDetail.title),
                     uuid = encryptedDetail.uuid,

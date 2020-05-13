@@ -12,7 +12,7 @@ import be.hogent.faith.databinding.FragmentContainerBaseBinding
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
@@ -20,7 +20,7 @@ import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
-import be.hogent.faith.faith.details.externalVideo.view.ViewExternalVideoFragment
+import be.hogent.faith.faith.details.video.view.ViewVideoFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode
@@ -75,7 +75,7 @@ abstract class CinemaDetailFragment : Fragment() {
                 is DrawingDetail -> DrawingFragment.newInstance()
                 is PhotoDetail -> PhotoFragment.newInstance()
                 is AudioDetail -> throw UnsupportedOperationException("Audio is not part of the backpack")
-                is ExternalVideoDetail -> ExternalVideoFragment.newInstance()
+                is VideoDetail -> ExternalVideoFragment.newInstance()
                 is YoutubeVideoDetail -> throw UnsupportedOperationException("Film is not part of the backpack")
                 is FilmDetail -> throw UnsupportedOperationException("Film is not part of the backpack")
             }
@@ -127,7 +127,7 @@ abstract class CinemaDetailFragment : Fragment() {
         }
 
         override fun setChildFragment(detail: Detail?) {
-            val childFragment = ViewExternalVideoFragment.newInstance(detail as ExternalVideoDetail)
+            val childFragment = ViewVideoFragment.newInstance(detail as VideoDetail)
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }
     }
