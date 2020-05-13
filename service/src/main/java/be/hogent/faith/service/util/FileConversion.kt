@@ -16,7 +16,7 @@ internal fun Bitmap.getThumbnail(): Bitmap {
 
 internal fun Bitmap.base64encodeImage(): String {
     val baos = ByteArrayOutputStream()
-    this.compress(Bitmap.CompressFormat.PNG, 100, baos)
+    this.compress(Bitmap.CompressFormat.JPEG, 100, baos)
     val b = baos.toByteArray()
     return Base64.encodeToString(b, Base64.DEFAULT)
 }
