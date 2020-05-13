@@ -11,17 +11,17 @@ import org.koin.android.viewmodel.ext.android.viewModel
 abstract class FaithVideoPlayerFragment : Fragment() {
 
     private val playerViewModel: VideoPlayerViewModel by viewModel()
+    private var player : FaithVideoPlayer? = null
 
     override fun onStart() {
         super.onStart()
         playerViewModel.currentVideo.observe(this, Observer {
-            if (playerViewModel.player.value != null)
-                playerViewModel.playNewVideo(it, requireContext())
+                player?.playNewVideo(it, requireContext())
         })
     }
 
     fun setFaithPlayer(faithVideoPlayer: FaithVideoPlayer) {
-        playerViewModel.setPlayer(faithVideoPlayer)
+        player = faithVideoPlayer
     }
 
     fun playNewVideo(detail: Detail) {
@@ -30,9 +30,6 @@ abstract class FaithVideoPlayerFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (playerViewModel.player.value != null) {
-            playerViewModel.player.value!!.stopPlayer()
-            playerViewModel.resetPlayer()
+        player = null
         }
-    }
 }
