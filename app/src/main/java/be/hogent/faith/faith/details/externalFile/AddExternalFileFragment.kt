@@ -30,6 +30,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -45,7 +46,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
     private lateinit var detailFinishedListener: DetailFinishedListener
     private var navigation: ExternalFileScreenNavigation? = null
     private val tempFileProvider by inject<TempFileProvider>()
-    private lateinit var selectedView: View
+    private lateinit var previewView: View
     private lateinit var mJob: Job
     override val coroutineContext: CoroutineContext
         get() = mJob + Dispatchers.Main
@@ -98,7 +99,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
     }
 
     private fun removeFile() {
-        binding.filePreviewContainer.removeView(selectedView)
+        binding.filePreviewContainer.removeView(previewView)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -106,23 +107,22 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
             val uriToAdd = data!!.data
 
             if (uriToAdd!!.toString().contains("image")) {
-                val localFile = saveImageToFile(uriToAdd)
+                val localFile = saveAndPreviewImage(uriToAdd)
                 externalFileViewModel.setCurrentFile(localFile)
             } else if (uriToAdd.toString().contains("video")) {
-                val file = tempFileProvider.tempExternalVideoFile
                 try {
                     launch {
                         // Zolang het niet omgezet werd naar een file zal een progressbard verschijnen i.p.v de save button
                         binding.progress.visibility = View.VISIBLE
                         binding.btnSaveFile.visibility = View.GONE
-                        writeVideoToLocalFile(uriToAdd, file)
+                        val localVideoFile = writeVideoToLocalFile(uriToAdd)
                         binding.progress.visibility = View.GONE
                         binding.btnSaveFile.visibility = View.VISIBLE
+                        setUpVideoPreview(uriToAdd)
+                        externalFileViewModel.setCurrentFile(localVideoFile)
                     }
-                    setUpVideoPreview(uriToAdd)
-                    externalFileViewModel.setCurrentFile(file)
                 } catch (e: IOException) {
-                    e.printStackTrace()
+                    Timber.e(e)
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.error_save_external_video_failed),
@@ -150,14 +150,14 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
         centerView(videoView)
         videoView.layoutParams.height = 480
         videoView.layoutParams.height = 640
-        selectedView = videoView
+        previewView = videoView
     }
 
-    private suspend fun writeVideoToLocalFile(uriToAdd: Uri, localFile: File) {
+    private suspend fun writeVideoToLocalFile(uriToAdd: Uri): File {
         val job = async(Dispatchers.Default) {
             val inputStream: InputStream? =
                 requireContext().contentResolver.openInputStream(uriToAdd)
-            val outputStream: OutputStream = FileOutputStream(localFile)
+            val outputStream: OutputStream = FileOutputStream(tempFileProvider.tempVideoFile)
             val buf = ByteArray(4096)
             var len: Int
 
@@ -168,37 +168,33 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
             inputStream.close()
         }
         job.await()
+        return tempFileProvider.tempVideoFile
     }
 
-    private fun saveImageToFile(uriToAdd: Uri?): File {
+    private fun saveAndPreviewImage(uriToAdd: Uri?): File {
+        // Load URi into an imageview
         val imgView = ImageView(requireContext())
         imgView.id = View.generateViewId()
         imgView.setImageURI(uriToAdd)
         binding.filePreviewContainer.addView(imgView)
         centerView(imgView)
-        selectedView = imgView
+        previewView = imgView
 
+        // Use the imageview as source for a drawable we can write to a file
         val drawable = imgView.drawable
-        // Get the bitmap from drawable object
         val bitmap = (drawable as BitmapDrawable).bitmap
-
-        // Create a file to save the image
-        val file = tempFileProvider.tempPhotoFile
+        val localImageFile = tempFileProvider.tempPhotoFile
         try {
-            // Get the file output stream
-            val stream: OutputStream = FileOutputStream(file)
-            // Compress bitmap
+            val stream: OutputStream = FileOutputStream(localImageFile)
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-            // Flush the stream
             stream.flush()
-            // Close stream
             stream.close()
         } catch (e: IOException) {
             e.printStackTrace()
             Toast.makeText(context, getString(R.string.error_save_photo_failed), Toast.LENGTH_SHORT)
                 .show()
         }
-        return file
+        return localImageFile
     }
 
     private fun centerView(view: View) {
