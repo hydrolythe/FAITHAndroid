@@ -82,6 +82,6 @@ class ViewTextDetailFragment : Fragment() {
     }
 
     private fun dpToPx(dp: Int): Int {
-        return dp * requireContext().getResources().getDisplayMetrics().density.toInt()
+        return dp * requireContext().resources.displayMetrics.density.toInt()
     }
 }
