@@ -24,5 +24,5 @@ interface DetailViewModel<T : Detail> {
     /**
      * Trigger when the user clicks the Save button
      */
-    fun onSaveClicked() {}
+    fun onSaveClicked()
 }
