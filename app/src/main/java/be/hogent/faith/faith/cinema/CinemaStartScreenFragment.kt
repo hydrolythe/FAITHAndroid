@@ -18,13 +18,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCinemaStartBinding
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.fragment_cinema_start.btn_cinema_chooseDate
-import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
@@ -35,7 +32,6 @@ class CinemaStartScreenFragment : Fragment() {
     private lateinit var binding: FragmentCinemaStartBinding
     private lateinit var addDetailMenu: PopupMenu
 
-    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private val cinemaOverviewViewModel: CinemaOverviewViewModel by sharedViewModel()
 
     override fun onCreateView(
@@ -67,9 +63,7 @@ class CinemaStartScreenFragment : Fragment() {
     }
 
     private fun updateUI() {
-        detailThumbnailsAdapter = DetailThumbnailsAdapter(
-            requireNotNull(activity) as CinemaActivity
-        )
+        detailThumbnailsAdapter = DetailThumbnailsAdapter(requireActivity() as CinemaActivity)
         binding.rvCinema.layoutManager = GridLayoutManager(activity, 6)
         binding.rvCinema.adapter = detailThumbnailsAdapter
     }

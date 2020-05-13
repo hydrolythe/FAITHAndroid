@@ -12,7 +12,7 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
@@ -29,12 +29,13 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
+import timber.log.Timber
 
 abstract class DetailsContainerViewModel<T : DetailsContainer>(
     private val saveDetailsContainerDetailUseCase: SaveDetailsContainerDetailUseCase<T>,
     private val deleteDetailsContainerDetailUseCase: DeleteDetailsContainerDetailUseCase<T>,
     private val loadDetailFileUseCase: LoadDetailFileUseCase<T>,
-    protected val getDetailsContainerDataUseCase: GetDetailsContainerDataUseCase<T>,
+    private val getDetailsContainerDataUseCase: GetDetailsContainerDataUseCase<T>,
     protected val detailsContainer: T
 ) : ViewModel() {
 
@@ -106,11 +107,11 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
             value = detailFilter.filter(details)
         }
         addSource(externalVideoFilterEnabled) { enabled ->
-            detailFilter.hasExternalVideoDetailFilter.isEnabled = enabled
+            detailFilter.hasVideoDetailFilter.isEnabled = enabled
             value = detailFilter.filter(details)
         }
         addSource(videoFilterEnabled) { enabled ->
-            detailFilter.hasVideoDetailFilter.isEnabled = enabled
+            detailFilter.hasYoutubeDetailFilter.isEnabled = enabled
             value = detailFilter.filter(details)
         }
     }
@@ -118,27 +119,25 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     /**
      *  opening and saving (first showSaveDialog, then  ,  a detail
      */
-    protected var _currentFile = MutableLiveData<Detail>()
-    val currentFile: LiveData<Detail>
-        get() = _currentFile
+    protected var _currentDetail = MutableLiveData<Detail>()
+    val currentDetail: LiveData<Detail>
+        get() = _currentDetail
 
     fun setCurrentFile(detail: Detail?) {
-        _currentFile.postValue(detail)
+        _currentDetail.postValue(detail)
     }
 
-    fun setCurrentFileAndLoadCorrespongFile(detail: Detail?) {
-        _currentFile.postValue(detail)
+    fun setCurrentFileAndLoadCorrespondingFile(detail: Detail?) {
+        _currentDetail.postValue(detail)
     }
 
     // nieuw detail aanmaken of bestaand detail openen?
     protected val _openDetailMode = SingleLiveEvent<OpenDetailMode>()
     val openDetailMode: LiveData<OpenDetailMode> = _openDetailMode
 
-    // ga naar een bestaand detail
     protected val _goToDetail = SingleLiveEvent<Detail>()
     val goToDetail: LiveData<Detail> = _goToDetail
 
-    // detail is opgeslaan
     protected val _detailIsSaved = SingleLiveEvent<Any>()
     val detailIsSaved: LiveData<Any> = _detailIsSaved
 
@@ -194,18 +193,16 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         val params = GetDetailsContainerDataUseCase.Params()
         getDetailsContainerDataUseCase.execute(params, object : DisposableObserver<List<Detail>>() {
 
-            override fun onComplete() {
+            override fun onNext(loadedDetails: List<Detail>) {
+                detailsContainer.setDetails(loadedDetails)
+                setSearchStringText("")
             }
+
+            override fun onComplete() {}
 
             override fun onError(e: Throwable) {
+                Timber.e(e)
                 _errorMessage.postValue(R.string.error_load_backpack)
-            }
-
-            override fun onNext(t: List<Detail>) {
-                t.let {
-                    detailsContainer.setDetails(it)
-                    setSearchStringText("")
-                }
             }
         })
     }
@@ -286,20 +283,20 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
             is TextDetail -> saveTextDetail(user, showSaveDialog.value as TextDetail)
             is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
             is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
-            is ExternalVideoDetail -> saveExternalVideoDetail(
+            is VideoDetail -> saveExternalVideoDetail(
                 user,
-                showSaveDialog.value as ExternalVideoDetail
+                showSaveDialog.value as VideoDetail
             )
             is YoutubeVideoDetail -> saveYoutubeDetail(user, detail)
         }
-        _currentFile.postValue(null)
+        _currentDetail.postValue(null)
     }
 
     fun getCurrentDetailFile(detail: Detail) {
         val params = LoadDetailFileUseCase.Params(detail, detailsContainer)
         loadDetailFileUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
-                _currentFile.postValue(detail)
+                _currentDetail.postValue(detail)
                 _goToDetail.value = detail
             }
 
@@ -391,7 +388,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         })
     }
 
-    fun saveExternalVideoDetail(user: User, detail: ExternalVideoDetail) {
+    fun saveExternalVideoDetail(user: User, detail: VideoDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
@@ -444,6 +441,8 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     override fun onCleared() {
         saveDetailsContainerDetailUseCase.dispose()
         deleteDetailsContainerDetailUseCase.dispose()
+        loadDetailFileUseCase.dispose()
+        getDetailsContainerDataUseCase.dispose()
         super.onCleared()
     }
 

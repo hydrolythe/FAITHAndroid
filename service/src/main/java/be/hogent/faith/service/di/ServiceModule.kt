@@ -6,7 +6,7 @@ import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCa
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
-import be.hogent.faith.service.usecases.detail.externalVideo.CreateExternalVideoDetailUseCase
+import be.hogent.faith.service.usecases.detail.externalVideo.CreateVideoDetailUseCase
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.CreateTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
@@ -93,7 +93,7 @@ val serviceModule = module {
     factory { CreatePhotoDetailUseCase(get()) }
     factory { CreateAudioDetailUseCase(get()) }
     factory { CreateTextDetailUseCase(get(), get()) }
-    factory { CreateExternalVideoDetailUseCase(get()) }
+    factory { CreateVideoDetailUseCase(get()) }
     factory { DeleteEventDetailUseCase(get()) }
     factory {
         MakeEventFilesAvailableUseCase(

@@ -112,12 +112,12 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
         fillColor: Int
     ) {
         val gradientDrawable =
-            getDrawable(this.context!!, R.drawable.skin_color) as GradientDrawable
-        gradientDrawable.setColor(ContextCompat.getColor(this.context!!, fillColor))
+            getDrawable(this.requireContext(), R.drawable.skin_color) as GradientDrawable
+        gradientDrawable.setColor(ContextCompat.getColor(this.requireContext(), fillColor))
         gradientDrawable.setStroke(
             2,
             if (selectedColor != color) ContextCompat.getColor(
-                this.context!!, fillColor
+                this.requireContext(), fillColor
             ) else Color.BLACK
         )
         view.background = gradientDrawable

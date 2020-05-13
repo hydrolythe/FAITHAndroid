@@ -18,6 +18,6 @@ class TestFileProvider : TempFileProvider {
         get() = File("/tmp/testPhoto")
     override val tempAudioRecordingFile: File
         get() = File("/tmp/testAudio")
-    override val tempExternalVideoFile: File
+    override val tempVideoFile: File
         get() = File("tmp/testExternalVideo")
 }

@@ -141,7 +141,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
         audioDetailViewModel.cancelClicked.observe(this, Observer {
             audioPlayer.reset()
             audioRecorder.reset()
-            activity!!.onBackPressed()
+            requireActivity().onBackPressed()
         })
     }
 
@@ -188,7 +188,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     private fun hasRecordingPermissions(): Boolean {
         return checkSelfPermission(
-                activity!!,
+                requireActivity(),
                 Manifest.permission.RECORD_AUDIO
         ) == PERMISSION_GRANTED
     }

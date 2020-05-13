@@ -14,7 +14,7 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.DialogCinemaSaveDetailBinding
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
@@ -64,7 +64,7 @@ class SaveCinemaDetailDialog(private var detail: Detail) : DialogFragment() {
         saveDetailBinding.saveCinemadetailTitle.text = when (detail) {
             is DrawingDetail -> getString(R.string.je_tekening_opslaan)
             is PhotoDetail -> getString(R.string.je_foto_opslaan)
-            is ExternalVideoDetail -> getString(R.string.je_extern_bestand_opslaan)
+            is VideoDetail -> getString(R.string.je_extern_bestand_opslaan)
             else -> throw UnsupportedOperationException()
         }
     }
@@ -89,7 +89,7 @@ class SaveCinemaDetailDialog(private var detail: Detail) : DialogFragment() {
             dismiss()
         })
 
-        saveDetailBinding.btnCinemadetailCancel.setOnClickListener {
+        saveDetailBinding.btnCinemaDetailCancel.setOnClickListener {
             dismiss()
             cinemaOverviewViewModel.goToDetail(detail)
         }
@@ -98,10 +98,6 @@ class SaveCinemaDetailDialog(private var detail: Detail) : DialogFragment() {
             if (it != null)
                 Toast.makeText(context, resources.getString(it), Toast.LENGTH_LONG).show()
         })
-    }
-
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
     }
 
     override fun onCancel(dialog: DialogInterface) {

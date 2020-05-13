@@ -6,7 +6,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
@@ -14,7 +14,7 @@ import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.view.ViewDrawingFragment
-import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
+import be.hogent.faith.faith.details.photo.view.ViewPhotoFragment
 import be.hogent.faith.faith.details.text.view.ViewTextDetailFragment
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
@@ -64,9 +64,9 @@ class LibraryActivity : AppCompatActivity(), EventListFragment.EventsListNavigat
             is AudioDetail -> RecordAudioFragment.newInstance(detail)
             is TextDetail -> ViewTextDetailFragment.newInstance(detail)
             is DrawingDetail -> ViewDrawingFragment.newInstance(detail)
-            is PhotoDetail -> ReviewPhotoFragment.newInstance(detail)
+            is PhotoDetail -> ViewPhotoFragment.newInstance(detail)
             is YoutubeVideoDetail -> null
-            is ExternalVideoDetail -> null
+            is VideoDetail -> null
             is FilmDetail -> null
         }?.let {
             replaceFragment(it, R.id.fragment_container)
