@@ -9,7 +9,7 @@ import be.hogent.faith.domain.models.detail.Detail
 /**
  * Knows the player and current video
  */
-class VideoPlayerViewModel : ViewModel() {
+class CurrentVideoViewModel : ViewModel() {
 
     private var _currentVideo = MutableLiveData<Detail>()
     val currentVideo: LiveData<Detail>

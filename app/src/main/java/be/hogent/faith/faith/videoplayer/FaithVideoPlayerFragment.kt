@@ -10,7 +10,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
  */
 abstract class FaithVideoPlayerFragment : Fragment() {
 
-    private val playerViewModel: VideoPlayerViewModel by viewModel()
+    private val playerViewModel: CurrentVideoViewModel by viewModel()
     private var player : FaithVideoPlayer? = null
 
     override fun onStart() {
