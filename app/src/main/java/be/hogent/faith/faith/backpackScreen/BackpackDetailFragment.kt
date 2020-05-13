@@ -25,7 +25,7 @@ import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.video.view.ViewVideoFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
-import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
+import be.hogent.faith.faith.details.photo.view.ViewPhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode
 import be.hogent.faith.faith.di.KoinModules
@@ -65,7 +65,7 @@ abstract class BackpackDetailFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setChildFragment(backpackViewModel.currentFile.value)
+        setChildFragment(backpackViewModel.currentDetail.value)
         backpackViewModel.setCurrentFile(null)
     }
 
@@ -133,7 +133,7 @@ abstract class BackpackDetailFragment : Fragment() {
             val childFragment = if (detail == null) {
                 TakePhotoFragment.newInstance()
             } else {
-                ReviewPhotoFragment.newInstance(detail as PhotoDetail)
+                ViewPhotoFragment.newInstance(detail as PhotoDetail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }

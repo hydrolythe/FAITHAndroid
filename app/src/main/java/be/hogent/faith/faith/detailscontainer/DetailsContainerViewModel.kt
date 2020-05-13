@@ -119,16 +119,16 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     /**
      *  opening and saving (first showSaveDialog, then  ,  a detail
      */
-    protected var _currentFile = MutableLiveData<Detail>()
-    val currentFile: LiveData<Detail>
-        get() = _currentFile
+    protected var _currentDetail = MutableLiveData<Detail>()
+    val currentDetail: LiveData<Detail>
+        get() = _currentDetail
 
     fun setCurrentFile(detail: Detail?) {
-        _currentFile.postValue(detail)
+        _currentDetail.postValue(detail)
     }
 
-    fun setCurrentFileAndLoadCorrespongFile(detail: Detail?) {
-        _currentFile.postValue(detail)
+    fun setCurrentFileAndLoadCorrespondingFile(detail: Detail?) {
+        _currentDetail.postValue(detail)
     }
 
     // nieuw detail aanmaken of bestaand detail openen?
@@ -289,14 +289,14 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
             )
             is YoutubeVideoDetail -> saveYoutubeDetail(user, detail)
         }
-        _currentFile.postValue(null)
+        _currentDetail.postValue(null)
     }
 
     fun getCurrentDetailFile(detail: Detail) {
         val params = LoadDetailFileUseCase.Params(detail, detailsContainer)
         loadDetailFileUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
-                _currentFile.postValue(detail)
+                _currentDetail.postValue(detail)
                 _goToDetail.value = detail
             }
 

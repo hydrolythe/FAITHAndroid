@@ -14,7 +14,7 @@ import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.view.ViewDrawingFragment
-import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
+import be.hogent.faith.faith.details.photo.view.ViewPhotoFragment
 import be.hogent.faith.faith.details.text.view.ViewTextDetailFragment
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
@@ -64,7 +64,7 @@ class LibraryActivity : AppCompatActivity(), EventListFragment.EventsListNavigat
             is AudioDetail -> RecordAudioFragment.newInstance(detail)
             is TextDetail -> ViewTextDetailFragment.newInstance(detail)
             is DrawingDetail -> ViewDrawingFragment.newInstance(detail)
-            is PhotoDetail -> ReviewPhotoFragment.newInstance(detail)
+            is PhotoDetail -> ViewPhotoFragment.newInstance(detail)
             is YoutubeVideoDetail -> null
             is VideoDetail -> null
             is FilmDetail -> null
