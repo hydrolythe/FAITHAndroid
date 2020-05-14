@@ -77,7 +77,6 @@ class BackpackScreenFragment : Fragment() {
         backpackViewModel.filteredDetails.observe(this, Observer { details ->
             detailThumbnailsAdapter?.submitList(details)
             if (details.isEmpty()) {
-                backpackBinding.btnBackpackDelete.isClickable = false
                 backpackViewModel.deleteEnabled.postValue(false)
             } else {
                 backpackBinding.btnBackpackDelete.isClickable = true
@@ -140,7 +139,7 @@ class BackpackScreenFragment : Fragment() {
              setDrawable(
                      enabled,
                      backpackBinding.backpackMenuFilter.filterknopFilm,
-                     R.drawable.,
+                     R.drawable.,// Juiste drawable ontbreekt
                      R.drawable.
              )
          })*/
@@ -149,7 +148,7 @@ class BackpackScreenFragment : Fragment() {
             setDrawable(
                     enabled,
                     backpackBinding.backpackMenuFilter.filterknopExternBestand,
-                    R.drawable.,
+                    R.drawable.,// Juiste drawable ontbreekt
                     R.drawable.
             )
         })*/

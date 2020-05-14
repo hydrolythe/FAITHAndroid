@@ -67,7 +67,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     val externalVideoFilterEnabled = MutableLiveData<Boolean>().apply { this.value = false }
 
     val deleteEnabled = MutableLiveData<Boolean>().apply { this.value = false }
-
+    val detailsPresent = MutableLiveData<Boolean>().apply { this.value = detailsContainer.details.isNotEmpty() }
     private var _dateRangeClicked = SingleLiveEvent<Unit>()
     val dateRangeClicked: LiveData<Unit> = _dateRangeClicked
 

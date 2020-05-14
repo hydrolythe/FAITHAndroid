@@ -106,6 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/ic_trashcan"
+            android:clickable="@{backpackViewModel.detailsPresent == true? true : false}"
             android:onClick="@{() -> backpackViewModel.onDeleteClicked()}"
             app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_end"
             app:layout_constraintTop_toTopOf="@+id/guide_rv_horizontal_2"
