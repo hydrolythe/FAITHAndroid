@@ -11,6 +11,7 @@ object EncryptedDetailFactory {
         uuid = DataFactory.randomUUID(),
         type = DataFactory.randomString(),
         dateTime = DataFactory.randomString(),
+        thumbnail = DataFactory.randomString(),
         // Empty to indicate this is not a YoutubeVideoDetail
         youtubeVideoID = ""
     )
@@ -21,6 +22,7 @@ object EncryptedDetailFactory {
         uuid = DataFactory.randomUUID(),
         type = DataFactory.randomString(),
         dateTime = DataFactory.randomString(),
+        thumbnail = DataFactory.randomString(),
         youtubeVideoID = DataFactory.randomString()
     )
 }

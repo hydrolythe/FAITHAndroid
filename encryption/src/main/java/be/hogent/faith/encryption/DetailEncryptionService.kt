@@ -63,6 +63,7 @@ class DetailEncryptionService(
                         is FilmDetail -> DetailType.Film
                     }.toString()
                 ),
+                thumbnail = detail.thumbnail?.let { dataEncrypter.encrypt(it) },
                 youtubeVideoID = when (detail) {
                     is YoutubeVideoDetail -> dataEncrypter.encrypt(detail.videoId)
                     else -> ""
@@ -97,13 +98,15 @@ class DetailEncryptionService(
                     file = encryptedDetail.file,
                     title = dataEncrypter.decrypt(encryptedDetail.title),
                     uuid = encryptedDetail.uuid,
-                    dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime))
+                    dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime)),
+                    thumbnail = encryptedDetail.thumbnail?.let { dataEncrypter.decrypt(it) }
                 )
                 DetailType.Photo -> PhotoDetail(
                     file = encryptedDetail.file,
                     title = dataEncrypter.decrypt(encryptedDetail.title),
                     uuid = encryptedDetail.uuid,
-                    dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime))
+                    dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime)),
+                    thumbnail = encryptedDetail.thumbnail?.let { dataEncrypter.decrypt(it) }
                 )
                 DetailType.YoutubeVideo -> YoutubeVideoDetail(
                     file = encryptedDetail.file,
