@@ -104,11 +104,12 @@
             android:id="@+id/btn_backpack_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/margin_corner_button"
             android:background="@drawable/ic_trashcan"
-            android:clickable="@{backpackViewModel.detailsPresent == true? true : false}"
+            android:contentDescription="@string/rv_btn_delete_detail"
             android:onClick="@{() -> backpackViewModel.onDeleteClicked()}"
-            app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_end"
+            android:clickable="@{backpackViewModel.detailsPresent == true? true : false}"
+            app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_start"
             app:layout_constraintTop_toTopOf="@+id/guide_rv_horizontal_2"
             app:srcCompat="@drawable/ic_trashcan" />
 
@@ -121,7 +122,8 @@
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/search_btn" />
+            app:srcCompat="@drawable/search_btn"
+            android:contentDescription="@string/button_filter_menu" />
 
         <ImageButton
             android:id="@+id/btn_backpack_add"
@@ -131,7 +133,8 @@
             android:background="@drawable/add_btn"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/button_open_add_menu" />
 
         <ImageButton
             android:id="@+id/btn_backpack_draw_cancel"

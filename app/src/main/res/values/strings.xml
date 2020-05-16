@@ -198,7 +198,6 @@
     <string name="filter_btn_video">Filter knop video</string>
     <string name="filter_btn_file">Filter knop bestand</string>
     <string name="close_filter_btn">Knop sluit filter menu</string>
-    <string name="backpack_btn_delete">Verwijderknop rugzak</string>
     <string name="backpack_btn_open_filter">Open zoekmenu rugzak</string>
     <string name="backpack_btn_add">"Knop voeg toe "</string>
     <string name="selected_image">Selected image</string>
@@ -224,7 +223,6 @@
     <string name="daterange">selecteer een datumbereik</string>
     <string name="library_verwijder_event_message">Ben je zeker? Ook alle bijhorende tekeningen, foto\'s,… worden verwijderd</string>
     <string name="library_verwijder_event_title">Wil je dit event verwijderen?</string>
-    <string name="delete">verwijder</string>
     <string name="recordaudio_record_description">Druk op de rode bol om\neen geluidsfragment op te nemen!</string>
     <string name="recordaudio_record">Opnemen</string>
     <string name="recordaudio_play">Fragment afspelen</string>
@@ -259,4 +257,8 @@
     <string name="error_load_cinema">Er ging iets fout bij het laden van je cinema.</string>
     <string name="selected_detail_error">Dit bestand kan niet meer toegevoegd worden. Je filmpje duurt te lang</string>
     <string name="dialog_wil_je_teruggaan">Wil je teruggaan?</string>
+    <string name="button_filter_menu">open filter menu</string>
+    <string name="button_open_add_menu">knop open toevoeg menu</string>
+    <string name="delete_event">Verwijder opgeslagen event</string>
+    <string name="delete">Verwijder</string>
 </resources>

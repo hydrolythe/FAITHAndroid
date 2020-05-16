@@ -67,7 +67,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     val externalVideoFilterEnabled = MutableLiveData<Boolean>().apply { this.value = false }
 
     val deleteEnabled = MutableLiveData<Boolean>().apply { this.value = false }
-    val detailsPresent = MutableLiveData<Boolean>().apply { this.value = detailsContainer.details.isNotEmpty() }
     private var _dateRangeClicked = SingleLiveEvent<Unit>()
     val dateRangeClicked: LiveData<Unit> = _dateRangeClicked
 
@@ -75,6 +74,8 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         this.addSource(startDate) { value = combineLatestDates(startDate, endDate) }
         this.addSource(endDate) { value = combineLatestDates(startDate, endDate) }
     }
+
+    val detailsPresent: LiveData<Boolean> by lazy { Transformations.map(filteredDetails) { detailsList -> detailsList.isNotEmpty() } }
 
     val filteredDetails: LiveData<List<Detail>> = MediatorLiveData<List<Detail>>().apply {
         addSource(searchString) { query ->

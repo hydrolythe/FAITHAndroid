@@ -35,7 +35,7 @@ class BackpackScreenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         backpackBinding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_backpack, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_backpack, container, false)
 
         backpackViewModel.viewButtons(true)
 
@@ -61,7 +61,7 @@ class BackpackScreenFragment : Fragment() {
 
     private fun updateUI() {
         detailThumbnailsAdapter = DetailThumbnailsAdapter(
-                requireNotNull(activity) as BackpackScreenActivity
+            requireNotNull(activity) as BackpackScreenActivity
         )
         backpackBinding.recyclerviewBackpack.layoutManager = GridLayoutManager(activity, 5)
         backpackBinding.recyclerviewBackpack.adapter = detailThumbnailsAdapter
@@ -104,54 +104,56 @@ class BackpackScreenFragment : Fragment() {
 
         backpackViewModel.textFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setDrawable(
-                    enabled,
-                    backpackBinding.backpackMenuFilter.filterknopTeksten,
-                    R.drawable.ic_filterknop_teksten,
-                    R.drawable.ic_filterknop_teksten_selected
+                enabled,
+                backpackBinding.backpackMenuFilter.filterknopTeksten,
+                R.drawable.ic_filterknop_teksten,
+                R.drawable.ic_filterknop_teksten_selected
             )
         })
         backpackViewModel.audioFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setDrawable(
-                    enabled,
-                    backpackBinding.backpackMenuFilter.filterknopAudio,
-                    R.drawable.ic_filterknop_audio,
-                    R.drawable.ic_filterknop_audio_selected
+                enabled,
+                backpackBinding.backpackMenuFilter.filterknopAudio,
+                R.drawable.ic_filterknop_audio,
+                R.drawable.ic_filterknop_audio_selected
             )
         })
         backpackViewModel.photoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setDrawable(
-                    enabled,
-                    backpackBinding.backpackMenuFilter.filterknopFoto,
-                    R.drawable.ic_filterknop_foto,
-                    R.drawable.ic_filterknop_foto_selected
+                enabled,
+                backpackBinding.backpackMenuFilter.filterknopFoto,
+                R.drawable.ic_filterknop_foto,
+                R.drawable.ic_filterknop_foto_selected
             )
         })
         backpackViewModel.drawingFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setDrawable(
-                    enabled,
-                    backpackBinding.backpackMenuFilter.filterknopTekeningen,
-                    R.drawable.ic_filterknop_tekeningen,
-                    R.drawable.ic_filterknop_tekeningen_selected
+                enabled,
+                backpackBinding.backpackMenuFilter.filterknopTekeningen,
+                R.drawable.ic_filterknop_tekeningen,
+                R.drawable.ic_filterknop_tekeningen_selected
             )
         })
         // TODO
-        /* backpackViewModel.videoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
-             setDrawable(
-                     enabled,
-                     backpackBinding.backpackMenuFilter.filterknopFilm,
-                     R.drawable.,// Juiste drawable ontbreekt
-                     R.drawable.
-             )
-         })*/
-        // TODO
-        /*backpackViewModel.externalVideoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
+        backpackViewModel.videoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setDrawable(
+                enabled,
+                backpackBinding.backpackMenuFilter.filterknopFilm,
+                R.drawable.filterknop_film,
+                R.drawable.circle_green // Placeholder, juiste drawable ontbreekt
+            )
+        })
+        // TODO
+        backpackViewModel.externalVideoFilterEnabled.observe(
+            viewLifecycleOwner,
+            Observer { enabled ->
+                setDrawable(
                     enabled,
                     backpackBinding.backpackMenuFilter.filterknopExternBestand,
-                    R.drawable.,// Juiste drawable ontbreekt
-                    R.drawable.
-            )
-        })*/
+                    R.drawable.filterknop_extern_bestand,
+                    R.drawable.circle_green // Placeholder, juiste drawable ontbreekt
+                )
+            })
 
         backpackViewModel.errorMessage.observe(this, Observer { message ->
             Toast.makeText(context, resources.getString(message), Toast.LENGTH_LONG).show()
@@ -160,11 +162,11 @@ class BackpackScreenFragment : Fragment() {
 
     private fun initialiseMenu() {
         addDetailMenu = PopupMenu(
-                backpackBinding.btnBackpackAdd.context,
-                backpackBinding.btnBackpackAdd,
-                Gravity.END,
-                0,
-                R.style.PopupMenu_AddDetail
+            backpackBinding.btnBackpackAdd.context,
+            backpackBinding.btnBackpackAdd,
+            Gravity.END,
+            0,
+            R.style.PopupMenu_AddDetail
         )
 
         addDetailMenu.menuInflater.inflate(R.menu.menu_backpack, addDetailMenu.menu)
@@ -199,8 +201,8 @@ class BackpackScreenFragment : Fragment() {
             fieldMPopup.isAccessible = true
             val mPopup = fieldMPopup.get(addDetailMenu)
             mPopup.javaClass
-                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                    .invoke(mPopup, true)
+                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                .invoke(mPopup, true)
         } catch (e: Exception) {
             Timber.e("Error showing icons")
         }
@@ -208,10 +210,10 @@ class BackpackScreenFragment : Fragment() {
 
     private fun setDrawable(enabled: Boolean, button: ImageButton, image: Int, imageSelected: Int) {
         button.setImageDrawable(
-                AppCompatResources.getDrawable(
-                        this.requireContext(),
-                        if (enabled) imageSelected else image
-                )
+            AppCompatResources.getDrawable(
+                this.requireContext(),
+                if (enabled) imageSelected else image
+            )
         )
     }
 

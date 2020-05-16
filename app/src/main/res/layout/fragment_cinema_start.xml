@@ -180,7 +180,7 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/ic_trashcan"
             android:onClick="@{() -> cinemaOverviewViewModel.onDeleteClicked()}"
-            android:contentDescription="@string/delete"
+            android:contentDescription="@string/rv_btn_delete_detail"
             app:layout_constraintBottom_toBottomOf="@+id/rv_container"
             app:layout_constraintStart_toStartOf="@+id/rv_container"
             app:srcCompat="@drawable/ic_trashcan" />
