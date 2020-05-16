@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -24,11 +23,6 @@ import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import kotlinx.android.synthetic.main.fragment_enter_text.cardView_size
 import kotlinx.android.synthetic.main.fragment_enter_text.enterText_editor
-import kotlinx.android.synthetic.main.fragment_enter_text.img_enter_text_blackSelected
-import kotlinx.android.synthetic.main.fragment_enter_text.img_enter_text_blueSelected
-import kotlinx.android.synthetic.main.fragment_enter_text.img_enter_text_greenSelected
-import kotlinx.android.synthetic.main.fragment_enter_text.img_enter_text_redSelected
-import kotlinx.android.synthetic.main.fragment_enter_text.img_enter_text_yellowSelected
 import org.koin.android.viewmodel.ext.android.viewModel
 
 // uses https://github.com/wasabeef/richeditor-android
@@ -125,7 +119,6 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
             enterText_editor.html = text
         })
         textDetailDetailViewModel.selectedTextColor.observe(this, Observer { newColor ->
-            setSelectedColor(newColor)
             enterText_editor.setTextColor(newColor)
         })
         textDetailDetailViewModel.boldClicked.observe(this, Observer {
@@ -174,14 +167,6 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
         textDetailDetailViewModel.cancelClicked.observe(this, Observer {
             showExitAlert()
         })
-    }
-
-    private fun setSelectedColor(@ColorInt newColor: Int) {
-        img_enter_text_blackSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.black)) View.VISIBLE else View.INVISIBLE
-        img_enter_text_blueSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.blue)) View.VISIBLE else View.INVISIBLE
-        img_enter_text_redSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.red)) View.VISIBLE else View.INVISIBLE
-        img_enter_text_greenSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.green)) View.VISIBLE else View.INVISIBLE
-        img_enter_text_yellowSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.yellow))View.VISIBLE else View.INVISIBLE
     }
 
     private fun showExitAlert() {

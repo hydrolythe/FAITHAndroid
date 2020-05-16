@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Toast
 
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.PopupMenu
@@ -75,6 +76,11 @@ class BackpackScreenFragment : Fragment() {
 
         backpackViewModel.filteredDetails.observe(this, Observer { details ->
             detailThumbnailsAdapter?.submitList(details)
+            if (details.isEmpty()) {
+                backpackViewModel.deleteEnabled.postValue(false)
+            } else {
+                backpackBinding.btnBackpackDelete.isClickable = true
+            }
         })
 
         backpackViewModel.deleteEnabled.observe(this, Observer { enabled ->
@@ -129,23 +135,29 @@ class BackpackScreenFragment : Fragment() {
             )
         })
         // TODO
-        /* backpackViewModel.videoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
-             setDrawable(
-                     enabled,
-                     backpackBinding.backpackMenuFilter.filterknopFilm,
-                     R.drawable.,
-                     R.drawable.
-             )
-         })*/
-        // TODO
-        /*backpackViewModel.externalVideoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
+        backpackViewModel.videoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setDrawable(
+                enabled,
+                backpackBinding.backpackMenuFilter.filterknopFilm,
+                R.drawable.filterknop_film,
+                R.drawable.circle_green // Placeholder, juiste drawable ontbreekt
+            )
+        })
+        // TODO
+        backpackViewModel.externalVideoFilterEnabled.observe(
+            viewLifecycleOwner,
+            Observer { enabled ->
+                setDrawable(
                     enabled,
                     backpackBinding.backpackMenuFilter.filterknopExternBestand,
-                    R.drawable.,
-                    R.drawable.
-            )
-        })*/
+                    R.drawable.filterknop_extern_bestand,
+                    R.drawable.circle_green // Placeholder, juiste drawable ontbreekt
+                )
+            })
+
+        backpackViewModel.errorMessage.observe(this, Observer { message ->
+            Toast.makeText(context, resources.getString(message), Toast.LENGTH_LONG).show()
+        })
     }
 
     private fun initialiseMenu() {

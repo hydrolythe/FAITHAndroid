@@ -58,8 +58,8 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
     }
 
     private fun startListeners() {
-        saveDetailBinding.btnSaveBackpack.setOnClickListener {
-            backpackViewModel.onSaveClicked(saveDetailBinding.txtSaveEventTitle.text.toString(), userViewModel.user.value!!, detail)
+        saveDetailBinding.btnSaveDetail.setOnClickListener {
+            backpackViewModel.onSaveClicked(saveDetailBinding.txtSaveBackpackDetailTitle.text.toString(), userViewModel.user.value!!, detail)
         }
 
         backpackViewModel.detailIsSaved.observe(this, Observer {
@@ -78,7 +78,7 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
         })
 
         // when a user starts typing error message will disappear
-        saveDetailBinding.txtSaveEventTitle.addTextChangedListener(object : TextWatcher {
+        saveDetailBinding.txtSaveBackpackDetailTitle.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 

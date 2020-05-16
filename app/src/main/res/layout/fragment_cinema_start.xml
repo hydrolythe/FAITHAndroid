@@ -60,8 +60,8 @@
             android:id="@+id/btn_cinema_cancel"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginStart="@dimen/margin_corner_button"
+            android:layout_marginTop="@dimen/margin_corner_button"
             android:background="@drawable/knop_terug_wit"
             android:contentDescription="@string/cancel"
             android:onClick="@{() -> cinemaOverviewViewModel.goToCityScreen()}"
@@ -146,6 +146,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/rv_container"
             app:srcCompat="@drawable/add_btn" />
+        <include
+            android:id="@+id/popup_window_cinema"
+            layout="@layout/popup_window_cinema"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/btn_cinema_add"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/rv_container" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_cinema"
@@ -171,7 +180,7 @@
             android:layout_marginBottom="15dp"
             android:background="@drawable/ic_trashcan"
             android:onClick="@{() -> cinemaOverviewViewModel.onDeleteClicked()}"
-            android:contentDescription="@string/delete"
+            android:contentDescription="@string/rv_btn_delete_detail"
             app:layout_constraintBottom_toBottomOf="@+id/rv_container"
             app:layout_constraintStart_toStartOf="@+id/rv_container"
             app:srcCompat="@drawable/ic_trashcan" />

@@ -40,8 +40,8 @@
                 android:id="@+id/btn_library_eventlist_cancel"
                 android:layout_width="@dimen/material_icon_width"
                 android:layout_height="@dimen/material_icon_height"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="@dimen/margin_corner_button"
+                android:layout_marginTop="@dimen/margin_corner_button"
                 android:background="@drawable/ic_return"
                 android:contentDescription="@string/cancel"
                 android:onClick="@{() -> eventlistViewModel.onCancelButtonClicked()}"
@@ -157,13 +157,14 @@
                 android:id="@+id/btn_library_eventlist_delete"
                 android:layout_width="31dp"
                 android:layout_height="31dp"
+                android:layout_marginBottom="@dimen/margin_corner_button"
+                android:layout_marginStart="@dimen/margin_corner_button"
                 android:background="@drawable/ic_prullenmand"
-                android:contentDescription="@string/cancel"
+                android:contentDescription="@string/delete_event"
                 android:onClick="@{() -> eventlistViewModel.onDeleteClicked()}"
-                app:layout_constraintBottom_toBottomOf="@+id/btn_library_eventlist_cancel"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/guideline_library_eventlist_right"
-                app:layout_constraintTop_toTopOf="@+id/btn_library_eventlist_cancel" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                 />
 
             <ImageView
                 android:layout_width="wrap_content"

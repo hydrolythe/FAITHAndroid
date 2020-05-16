@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.details.text.create
 
 import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -49,8 +48,9 @@ class TextDetailViewModel(
 
     private val _existingDetail = MutableLiveData<TextDetail>()
 
-    private val _selectedTextColor = MutableLiveData<@ColorRes Int>()
-    val selectedTextColor: LiveData<Int> = _selectedTextColor
+    protected val _selectedTextColor = MutableLiveData<@ColorInt Int>()
+    val selectedTextColor: LiveData<Int>
+        get() = _selectedTextColor
 
     protected val _customTextColor = MutableLiveData<@ColorInt Int>()
     val customTextColor: LiveData<Int>
@@ -121,7 +121,7 @@ class TextDetailViewModel(
         _fontsizeClicked.value = true
     }
 
-    fun pickTextColor(@ColorRes color: Int) {
+    fun pickTextColor(@ColorInt color: Int) {
         _selectedTextColor.value = color
     }
 
