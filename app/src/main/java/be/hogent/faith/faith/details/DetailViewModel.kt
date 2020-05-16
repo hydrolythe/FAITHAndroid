@@ -10,7 +10,8 @@ import be.hogent.faith.domain.models.detail.Detail
  */
 interface DetailViewModel<T : Detail> {
     /**
-     * Updates with a new version of the [Detail] every time it is saved.
+     * Updates with a new version of the [Detail] every time it is fully saved, meaning not just the
+     * file but also possible metadata.
      */
     val savedDetail: LiveData<T>
 

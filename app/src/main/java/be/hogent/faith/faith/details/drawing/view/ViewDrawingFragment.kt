@@ -72,7 +72,7 @@ class ViewDrawingFragment : Fragment() {
         })
 
         drawingDetailViewModel.cancelClicked.observe(this, Observer {
-            activity!!.onBackPressed()
+            requireActivity().onBackPressed()
         })
     }
 }

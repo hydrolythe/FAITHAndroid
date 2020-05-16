@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.detail.externalVideo.CreateExternalVideoDetailUseCase
+import be.hogent.faith.service.usecases.detail.externalVideo.CreateVideoDetailUseCase
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
 import io.reactivex.observers.DisposableSingleObserver
 import timber.log.Timber
@@ -18,7 +18,7 @@ import java.util.Locale
 
 class ExternalFileViewModel(
     private val createPhotoDetailUseCase: CreatePhotoDetailUseCase,
-    private val createExternalVideoDetailUseCase: CreateExternalVideoDetailUseCase
+    private val createVideoDetailUseCase: CreateVideoDetailUseCase
 ) : ViewModel() {
 
     private val _cancelClicked = SingleLiveEvent<Unit>()
@@ -38,7 +38,6 @@ class ExternalFileViewModel(
         get() = _errorMessage
 
     fun setCurrentFile(file: File) {
-
         _currentFile.value = file
     }
 
@@ -75,11 +74,11 @@ class ExternalFileViewModel(
                     })
             }
             ".mp4" -> {
-                val params = CreateExternalVideoDetailUseCase.Params(_currentFile.value!!)
-                createExternalVideoDetailUseCase.execute(
+                val params = CreateVideoDetailUseCase.Params(_currentFile.value!!)
+                createVideoDetailUseCase.execute(
                     params,
-                    object : DisposableSingleObserver<ExternalVideoDetail>() {
-                        override fun onSuccess(createdDetail: ExternalVideoDetail) {
+                    object : DisposableSingleObserver<VideoDetail>() {
+                        override fun onSuccess(createdDetail: VideoDetail) {
                             _savedDetail.postValue(createdDetail)
                         }
 

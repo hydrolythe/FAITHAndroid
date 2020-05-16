@@ -11,7 +11,7 @@ import be.hogent.faith.databinding.SelectedDetailItemRvBinding
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
@@ -40,7 +40,7 @@ class SelectedDetailsAdapter(private val clickListener: SelectedDetailsClickList
             is TextDetail -> TEXT_DETAIL
             is PhotoDetail -> PICTURE_DETAIL
             is YoutubeVideoDetail -> VIDEO_DETAIL
-            is ExternalVideoDetail -> EXTERNAL_VIDEO_DETAIL
+            is VideoDetail -> EXTERNAL_VIDEO_DETAIL
             is FilmDetail -> FILM_DETAIL
         }
     }

@@ -16,7 +16,7 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCinemaCreateVideoBinding
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import com.google.android.material.datepicker.CalendarConstraints
@@ -125,7 +125,7 @@ class CinemaCreateVideoFragment : Fragment() {
         when (detail) {
             is DrawingDetail -> return VideoDurations.DRAWING_DURATION
             is PhotoDetail -> return VideoDurations.PHOTO_DURATION
-            is ExternalVideoDetail -> return getVideoDuration(detail)
+            is VideoDetail -> return getVideoDuration(detail)
         }
         return 0
     }
@@ -134,9 +134,9 @@ class CinemaCreateVideoFragment : Fragment() {
         createVideoViewModel.setCurrentFilmDetail(filmDetail)
     }
 
-    private fun getVideoDuration(externalVideoDetail: ExternalVideoDetail): Int {
+    private fun getVideoDuration(videoDetail: VideoDetail): Int {
         val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(context, Uri.fromFile(externalVideoDetail.file))
+        retriever.setDataSource(context, Uri.fromFile(videoDetail.file))
         val time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
         retriever.release()
         return TimeUnit.MILLISECONDS.toSeconds(Integer.parseInt(time).toLong()).toInt()

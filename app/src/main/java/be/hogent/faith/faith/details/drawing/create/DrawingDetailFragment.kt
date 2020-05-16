@@ -16,14 +16,12 @@ import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.details.drawing.create.draggableImages.DragListener
 import be.hogent.faith.faith.details.drawing.create.draggableImages.ImagesAdapter
-import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
 import be.hogent.faith.faith.di.KoinModules
 import com.divyanshu.draw.widget.DrawView
 import com.google.android.material.tabs.TabLayout
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import org.koin.android.ext.android.getKoin
-import org.koin.android.ext.android.inject
 import org.koin.core.error.ScopeNotCreatedException
 import org.koin.core.qualifier.named
 import timber.log.Timber
@@ -45,8 +43,6 @@ class DrawingDetailFragment : DrawFragment(),
             drawingDetailViewModel.onBitMapAvailable(bitmap)
         }
     }
-
-    private val premadeImagesProvider by inject<PremadeImagesProvider>()
 
     private lateinit var drawBinding: FragmentDrawBinding
 
