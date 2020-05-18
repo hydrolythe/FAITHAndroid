@@ -24,7 +24,8 @@ class CinemaCreateVideoViewModelTest {
 
     private val detail_1 = PhotoDetail(
         title = "title 1",
-        file = mockk<File>()
+        file = mockk<File>(),
+        thumbnail = ""
     )
     private val detail_2 = TextDetail(
         title = "title 2",
@@ -32,7 +33,8 @@ class CinemaCreateVideoViewModelTest {
     )
     private val detail_3 = DrawingDetail(
         title = "title 3",
-        file = mockk<File>()
+        file = mockk<File>(),
+        thumbnail = ""
     )
     private val detail_4 = AudioDetail(
         title = "title 4",

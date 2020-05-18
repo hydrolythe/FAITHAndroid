@@ -22,7 +22,8 @@ class EventMapperTest {
         uuid = DataFactory.randomUUID(),
         type = "Encrypted type",
         youtubeVideoID = "",
-        dateTime = DataFactory.randomString()
+        dateTime = DataFactory.randomString(),
+        thumbnail = DataFactory.randomString()
     )
     private val encryptedEventWithDetails = EncryptedEvent(
         dateTime = "encrypted datetime",

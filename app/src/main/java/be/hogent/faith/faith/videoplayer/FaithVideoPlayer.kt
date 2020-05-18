@@ -8,8 +8,8 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.VideoView
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import com.google.android.material.card.MaterialCardView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -80,7 +80,7 @@ class FaithVideoPlayer(
         when (detail) {
             is YoutubeVideoDetail -> playYoutubeVideo(detail, context)
             is FilmDetail -> playVideoFile(detail, context)
-            is ExternalVideoDetail -> playVideoFile(detail, context)
+            is VideoDetail -> playVideoFile(detail, context)
             else -> throw UnsupportedOperationException("This file cannot be played")
         }
     }

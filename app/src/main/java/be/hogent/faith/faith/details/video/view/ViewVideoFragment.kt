@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentViewYoutubeVideoBinding
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayer
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayerFragment
 import be.hogent.faith.faith.details.externalFile.ExternalFileViewModel
@@ -17,7 +17,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val VIDEO_DETAIL = "The video to be shown"
 
-class ViewExternalVideoFragment : FaithVideoPlayerFragment() {
+class ViewVideoFragment : FaithVideoPlayerFragment() {
 
     private lateinit var binding: FragmentViewYoutubeVideoBinding
     private val externalFileViewModel: ExternalFileViewModel by viewModel()
@@ -57,7 +57,7 @@ class ViewExternalVideoFragment : FaithVideoPlayerFragment() {
                 )
 
             setFaithPlayer(faithYoutubePlayer)
-            playNewVideo(ExternalVideoDetail(file))
+            playNewVideo(VideoDetail(file))
         })
 
         return binding.root
@@ -74,12 +74,12 @@ class ViewExternalVideoFragment : FaithVideoPlayerFragment() {
         }
 
                 private fun loadExistingVideo() {
-            val externalVideoDetail = requireArguments().getSerializable(VIDEO_DETAIL) as ExternalVideoDetail
+            val externalVideoDetail = requireArguments().getSerializable(VIDEO_DETAIL) as VideoDetail
             externalFileViewModel.loadExistingDetail(externalVideoDetail)
         }
                 companion object {
-            fun newInstance(videoDetail: ExternalVideoDetail): ViewExternalVideoFragment {
-                return ViewExternalVideoFragment().apply {
+            fun newInstance(videoDetail: VideoDetail): ViewVideoFragment {
+                return ViewVideoFragment().apply {
                     arguments = Bundle().apply {
                         putSerializable(VIDEO_DETAIL, videoDetail)
                     }

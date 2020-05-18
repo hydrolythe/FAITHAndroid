@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import android.graphics.drawable.Drawable
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,22 +9,20 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.AudioDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExistingDetailNavigationListener
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExternalVideoDetailViewHolder
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.VideoDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.PictureDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.TextDetailViewHolder
-import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.faith.util.getDefaultThumbnailUrl
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.signature.MediaStoreSignature
 import kotlinx.android.synthetic.main.detail_item_rv.view.btn_delete_detailRv
 import kotlinx.android.synthetic.main.detail_item_rv.view.detail_img
 import kotlinx.android.synthetic.main.detail_item_rv.view.text_detail_title
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 object DetailViewHolderFactory {
     fun createViewHolder(
@@ -56,8 +55,8 @@ object DetailViewHolderFactory {
             )
             // TEXT_DETAIL
             else -> createTextDetailViewHolder(
-                    thumbnailView,
-                    existingDetailNavigationListener
+                thumbnailView,
+                existingDetailNavigationListener
             )
         }
     }
@@ -88,8 +87,8 @@ object DetailViewHolderFactory {
     private fun createExternalVideoDetailViewHolder(
         thumbnailView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
-    ): ExternalVideoDetailViewHolder {
-        return ExternalVideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
+    ): VideoDetailViewHolder {
+        return VideoDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
 
     private fun createYoutubeVideoDetailViewholder(
@@ -108,10 +107,14 @@ sealed class DetailViewHolder(
     private val existingDetailNavigationListener: ExistingDetailNavigationListener
 ) : RecyclerView.ViewHolder(thumbnailView), KoinComponent {
 
+    // clicklisteners on separate views to make sure there's no overlap
     fun bind(detail: Detail, isDeletable: Boolean) {
         load(detail).into(thumbnailView.detail_img)
         thumbnailView.setTag(R.id.TAG_DETAIL, detail)
         thumbnailView.detail_img.setOnClickListener {
+            existingDetailNavigationListener.openDetailScreenFor(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
+        }
+        thumbnailView.text_detail_title.setOnClickListener {
             existingDetailNavigationListener.openDetailScreenFor(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
         }
         thumbnailView.btn_delete_detailRv.setOnClickListener {
@@ -149,12 +152,11 @@ sealed class DetailViewHolder(
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
-        val androidTempFileProvider: TempFileProvider by inject()
         override fun load(detail: Detail): RequestBuilder<Drawable> {
+            if (detail.thumbnail == null)
+                return Glide.with(thumbnailView).load(if (detail is PhotoDetail) R.drawable.ic_camera else R.drawable.ic_tekenen)
             return Glide.with(thumbnailView)
-                    .load(detail.file)
-                    // Signature is required to force Glide to reload overwritten pictures
-                    .signature(MediaStoreSignature("", detail.file.lastModified(), 0))
+                .load(Base64.decode(detail.thumbnail, Base64.DEFAULT))
         }
     }
 
@@ -168,7 +170,7 @@ sealed class DetailViewHolder(
         }
     }
 
-    class ExternalVideoDetailViewHolder(
+    class VideoDetailViewHolder(
         imageView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {

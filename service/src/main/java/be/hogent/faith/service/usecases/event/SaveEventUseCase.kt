@@ -14,8 +14,8 @@ open class SaveEventUseCase(
     private val eventEncryptionService: IEventEncryptionService,
     private val filesStorageRepository: IFileStorageRepository,
     private val eventRepository: IEventRepository,
-    observeScheduler: Scheduler
-) : CompletableUseCase<SaveEventUseCase.Params>(observeScheduler) {
+    observer: Scheduler
+) : CompletableUseCase<SaveEventUseCase.Params>(observer) {
 
     private var params: Params? = null
 

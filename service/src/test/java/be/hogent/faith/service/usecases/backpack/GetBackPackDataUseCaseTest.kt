@@ -26,8 +26,8 @@ class GetBackPackDataUseCaseTest {
         getBackPackDataUseCase = GetDetailsContainerDataUseCase<Backpack>(
             containerRepository,
             containerEncryptionService,
-            observeScheduler = mockk(),
-            subscribeScheduler = Schedulers.trampoline()
+            observer = mockk(),
+            subscriber = Schedulers.trampoline()
         )
     }
 

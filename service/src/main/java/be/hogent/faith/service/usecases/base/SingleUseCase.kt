@@ -16,7 +16,8 @@ import io.reactivex.schedulers.Schedulers
  * An example can be found in [be.hogent.faith.service.usecases.SaveEventUseCase].
  */
 abstract class SingleUseCase<Result, in Params>(
-    private val observer: Scheduler
+    private val observer: Scheduler,
+    protected val subscriber: Scheduler = Schedulers.io()
 ) {
     private val disposables = CompositeDisposable()
 
@@ -24,7 +25,7 @@ abstract class SingleUseCase<Result, in Params>(
 
     open fun execute(params: Params, singleObserver: DisposableSingleObserver<Result>) {
         val single = this.buildUseCaseSingle(params)
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(subscriber)
             .observeOn(observer)
         addDisposable(single.subscribeWith(singleObserver))
     }

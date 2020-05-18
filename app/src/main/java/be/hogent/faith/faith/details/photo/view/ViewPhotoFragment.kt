@@ -16,11 +16,11 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val PHOTO_DETAIL = "The photoDetail to be shown"
 
-class ReviewPhotoFragment : Fragment() {
+class ViewPhotoFragment : Fragment() {
 
     companion object {
         fun newInstance(photoDetail: PhotoDetail) =
-            ReviewPhotoFragment().apply {
+            ViewPhotoFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(PHOTO_DETAIL, photoDetail)
                 }
@@ -71,7 +71,7 @@ class ReviewPhotoFragment : Fragment() {
         })
 
         photoDetailViewModel.cancelClicked.observe(this, Observer {
-            activity!!.onBackPressed()
+            requireActivity().onBackPressed()
         })
     }
 }

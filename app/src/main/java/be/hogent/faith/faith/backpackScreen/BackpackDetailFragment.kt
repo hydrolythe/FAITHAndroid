@@ -8,22 +8,22 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.databinding.FragmentEditFileBinding
-import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
-import be.hogent.faith.faith.details.externalVideo.view.ViewExternalVideoFragment
+import be.hogent.faith.databinding.FragmentContainerBaseBinding
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
-import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
+import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
+import be.hogent.faith.faith.details.externalVideo.view.ViewVideoFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
-import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
+import be.hogent.faith.faith.details.photo.view.ViewPhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailFragment
 import be.hogent.faith.faith.details.youtubeVideo.view.ViewYoutubeVideoFragment
@@ -32,12 +32,10 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.util.replaceChildFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import java.lang.UnsupportedOperationException
 
 abstract class BackpackDetailFragment : Fragment() {
 
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
-    private lateinit var editDetailBinding: FragmentEditFileBinding
     private lateinit var saveDialog: SaveDetailDialog
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
@@ -46,9 +44,8 @@ abstract class BackpackDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        editDetailBinding =
-                DataBindingUtil.inflate(inflater, R.layout.fragment_edit_file, container, false)
-        editDetailBinding.lifecycleOwner = this
+        val binding: FragmentContainerBaseBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_container_base, container, false)
 
         backpackViewModel.showSaveDialog.observe(viewLifecycleOwner, Observer {
             if (it != null && backpackViewModel.openDetailMode.value != OpenDetailMode.EDIT)
@@ -57,11 +54,10 @@ abstract class BackpackDetailFragment : Fragment() {
                 backpackViewModel.saveCurrentDetail(userViewModel.user.value!!, it)
         })
 
-        return editDetailBinding.root
+        return binding.root
     }
 
     private fun showSaveDialog(detail: Detail) {
-
         saveDialog = SaveDetailDialog.newInstance(detail)
         saveDialog.show(requireActivity().supportFragmentManager, null)
         backpackViewModel.setCurrentFile(detail)
@@ -69,7 +65,7 @@ abstract class BackpackDetailFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setChildFragment(backpackViewModel.currentFile.value)
+        setChildFragment(backpackViewModel.currentDetail.value)
         backpackViewModel.setCurrentFile(null)
     }
 
@@ -82,7 +78,7 @@ abstract class BackpackDetailFragment : Fragment() {
                 is DrawingDetail -> DrawingFragment.newInstance()
                 is PhotoDetail -> PhotoFragment.newInstance()
                 is AudioDetail -> AudioFragment.newInstance()
-                is ExternalVideoDetail -> ExternalVideoFragment.newInstance()
+                is VideoDetail -> ExternalVideoFragment.newInstance()
                 is YoutubeVideoDetail -> YoutubeVideoFragment.newInstance()
                 is FilmDetail -> throw UnsupportedOperationException("Film is not part of the backpack")
             }
@@ -137,7 +133,7 @@ abstract class BackpackDetailFragment : Fragment() {
             val childFragment = if (detail == null) {
                 TakePhotoFragment.newInstance()
             } else {
-                ReviewPhotoFragment.newInstance(detail as PhotoDetail)
+                ViewPhotoFragment.newInstance(detail as PhotoDetail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }
@@ -170,7 +166,7 @@ abstract class BackpackDetailFragment : Fragment() {
         }
 
         override fun setChildFragment(detail: Detail?) {
-            val childFragment = ViewExternalVideoFragment.newInstance(detail as ExternalVideoDetail)
+            val childFragment = ViewVideoFragment.newInstance(detail as VideoDetail)
             replaceChildFragment(childFragment, R.id.fragment_container_editFile)
         }
     }

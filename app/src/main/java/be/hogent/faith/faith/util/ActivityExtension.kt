@@ -20,15 +20,16 @@ fun AppCompatActivity.addFragment(fragment: Fragment, frameId: Int) {
     }
 }
 
-fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int) {
+fun AppCompatActivity.replaceFragment(fragment: Fragment, frameId: Int, tag: String? = null) {
     supportFragmentManager.inTransaction {
-        replace(frameId, fragment)
+        if (tag == null) replace(frameId, fragment) else replace(frameId, fragment, tag)
         addToBackStack(null)
     }
 }
 
 fun AppCompatActivity.getRotation(): Int {
-    val display = (baseContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+    val display =
+        (baseContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
     return when (display.rotation) {
         Surface.ROTATION_90 -> R.integer.LANDSCAPE
         Surface.ROTATION_270 -> R.integer.LANDSCAPE

@@ -20,7 +20,7 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
-import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
+import be.hogent.faith.faith.details.photo.view.ViewPhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.util.replaceChildFragment
@@ -167,7 +167,7 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
             val childFragment = if (detail == null) {
                 TakePhotoFragment.newInstance()
             } else {
-                ReviewPhotoFragment.newInstance(detail)
+                ViewPhotoFragment.newInstance(detail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }

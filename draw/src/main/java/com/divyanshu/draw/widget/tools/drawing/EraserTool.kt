@@ -6,12 +6,14 @@ import com.divyanshu.draw.widget.tools.DrawingContext
 
 class EraserTool(
     drawingContext: DrawingContext,
-    paint: Paint
+    paint: Paint,
+    private val colorAlpha: Int
 ) : DrawingTool(drawingContext, paint) {
 
     override fun startNewPath() {
         currentPath = PathAction(Paint(paint).apply {
             color = Color.WHITE
+            alpha = colorAlpha
         })
     }
 }

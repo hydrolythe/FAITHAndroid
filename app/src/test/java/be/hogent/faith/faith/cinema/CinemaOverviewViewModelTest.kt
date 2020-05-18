@@ -36,7 +36,8 @@ class CinemaOverviewViewModelTest {
     private val detail_1_jan_photo = PhotoDetail(
         dateTime = LocalDateTime.of(2020, Month.JANUARY, 10, 10, 30),
         title = "title 1",
-        file = mockk<File>()
+        file = mockk<File>(),
+        thumbnail = ""
     )
     private val detail_2_jan_text = TextDetail(
         dateTime = LocalDateTime.of(2020, Month.JANUARY, 15, 10, 30),
@@ -46,7 +47,8 @@ class CinemaOverviewViewModelTest {
     private val detail_3_feb_drawing = DrawingDetail(
         dateTime = LocalDateTime.of(2020, Month.FEBRUARY, 15, 10, 30),
         title = "title 3",
-        file = mockk<File>()
+        file = mockk<File>(),
+        thumbnail = ""
     )
     private val detail_4_july_audio = AudioDetail(
         dateTime = LocalDateTime.of(2020, Month.MARCH, 15, 10, 30),

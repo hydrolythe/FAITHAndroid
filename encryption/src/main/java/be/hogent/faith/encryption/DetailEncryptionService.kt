@@ -3,7 +3,7 @@ package be.hogent.faith.encryption
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.ExternalVideoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
@@ -58,11 +58,12 @@ class DetailEncryptionService(
                         is TextDetail -> DetailType.Text
                         is DrawingDetail -> DetailType.Drawing
                         is PhotoDetail -> DetailType.Photo
-                        is ExternalVideoDetail -> DetailType.ExternalVideo
+                        is VideoDetail -> DetailType.ExternalVideo
                         is YoutubeVideoDetail -> DetailType.YoutubeVideo
                         is FilmDetail -> DetailType.Film
                     }.toString()
                 ),
+                thumbnail = detail.thumbnail?.let { dataEncrypter.encrypt(it) },
                 youtubeVideoID = when (detail) {
                     is YoutubeVideoDetail -> dataEncrypter.encrypt(detail.videoId)
                     else -> ""
@@ -97,13 +98,15 @@ class DetailEncryptionService(
                     file = encryptedDetail.file,
                     title = dataEncrypter.decrypt(encryptedDetail.title),
                     uuid = encryptedDetail.uuid,
-                    dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime))
+                    dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime)),
+                    thumbnail = encryptedDetail.thumbnail?.let { dataEncrypter.decrypt(it) }
                 )
                 DetailType.Photo -> PhotoDetail(
                     file = encryptedDetail.file,
                     title = dataEncrypter.decrypt(encryptedDetail.title),
                     uuid = encryptedDetail.uuid,
-                    dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime))
+                    dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime)),
+                    thumbnail = encryptedDetail.thumbnail?.let { dataEncrypter.decrypt(it) }
                 )
                 DetailType.YoutubeVideo -> YoutubeVideoDetail(
                     file = encryptedDetail.file,
@@ -112,7 +115,7 @@ class DetailEncryptionService(
                     dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime)),
                     videoId = encryptedDetail.youtubeVideoID
                 )
-                DetailType.ExternalVideo -> ExternalVideoDetail(
+                DetailType.ExternalVideo -> VideoDetail(
                     file = encryptedDetail.file,
                     title = dataEncrypter.decrypt(encryptedDetail.title),
                     uuid = encryptedDetail.uuid,

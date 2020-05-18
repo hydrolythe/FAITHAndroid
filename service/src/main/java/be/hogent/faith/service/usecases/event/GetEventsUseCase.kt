@@ -8,6 +8,7 @@ import be.hogent.faith.service.usecases.base.FlowableUseCase
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Returns all the events associated with a user. The files belonging to  these events are not guaranteed
@@ -16,8 +17,9 @@ import io.reactivex.Scheduler
 class GetEventsUseCase(
     private val eventRepository: IEventRepository,
     private val eventEncryptionService: IEventEncryptionService,
-    observeScheduler: Scheduler
-) : FlowableUseCase<List<Event>, GetEventsUseCase.Params>(observeScheduler) {
+    observer: Scheduler,
+    subscriber: Scheduler = Schedulers.io()
+) : FlowableUseCase<List<Event>, GetEventsUseCase.Params>(observer, subscriber) {
 
     override fun buildUseCaseObservable(params: Params): Flowable<List<Event>> {
         return eventRepository.getAll()

@@ -47,11 +47,12 @@
             android:id="@+id/tableLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="@+id/background_filter_menu"
             app:layout_constraintStart_toStartOf="@+id/background_filter_menu"
-            app:layout_constraintTop_toBottomOf="@+id/search_bar">
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout_backpack_detailslist_search">
 
             <TableRow
                 android:layout_width="wrap_content"
@@ -61,7 +62,7 @@
                     android:id="@+id/filterknop_teksten"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:backgroundTint="@{backpackViewModel.textFilterEnabled == true ? @color/md_lime_A700 : @color/red }"
+                    android:background="@null"
                     android:contentDescription="@string/filter_btn_text"
                     android:onClick="@{() -> backpackViewModel.onFilterTextClicked()}"
                     app:srcCompat="@drawable/filterknop_teksten" />
@@ -70,7 +71,9 @@
                     android:id="@+id/filterknop_audio"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:backgroundTint="@{backpackViewModel.audioFilterEnabled == true ? @color/md_lime_A700 : @color/red }"
+                    android:background="@null"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
                     android:contentDescription="@string/filter_btn_audio"
                     android:onClick="@{() -> backpackViewModel.onFilterAudioClicked()}"
                     app:srcCompat="@drawable/filterknop_audio" />
@@ -79,7 +82,7 @@
                     android:id="@+id/filterknop_foto"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:backgroundTint="@{backpackViewModel.photoFilterEnabled == true ? @color/md_lime_A700 : @color/red }"
+                    android:background="@null"
                     android:contentDescription="@string/filter_btn_foto"
                     android:onClick="@{() -> backpackViewModel.onFilterPhotosClicked()}"
                     app:srcCompat="@drawable/filterknop_foto" />
@@ -93,7 +96,7 @@
                     android:id="@+id/filterknop_tekeningen"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:backgroundTint="@{backpackViewModel.drawingFilterEnabled == true ? @color/md_lime_A700 : @color/red }"
+                    android:background="@null"
                     android:contentDescription="@string/filter_btn_drawing"
                     android:onClick="@{() -> backpackViewModel.onFilterDrawingClicked()}"
                     app:srcCompat="@drawable/filterknop_tekeningen" />
@@ -102,7 +105,7 @@
                     android:id="@+id/filterknop_film"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:backgroundTint="@{backpackViewModel.videoFilterEnabled == true ? @color/md_lime_A700 : @color/red }"
+                    android:background="@null"
                     android:contentDescription="@string/filter_btn_video"
                     android:onClick="@{() -> backpackViewModel.onFilterVideoClicked()}"
                     app:srcCompat="@drawable/filterknop_film" />
@@ -111,34 +114,45 @@
                     android:id="@+id/filterknop_extern_bestand"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:backgroundTint="@{backpackViewModel.externalVideoFilterEnabled == true ? @color/md_lime_A700 : @color/red }"
+                    android:background="@null"
                     android:contentDescription="@string/filter_btn_file"
                     android:onClick="@{() -> backpackViewModel.onFilterExternalVideoClicked()}"
                     app:srcCompat="@drawable/filterknop_extern_bestand" />
             </TableRow>
         </TableLayout>
-
-
-        <SearchView
-            android:id="@+id/search_bar"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_backpack_detailslist_search"
+            style="@style/faith_textInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:hint="@string/wat_zoek_je"
+            app:hintEnabled="true"
             app:layout_constraintEnd_toEndOf="@+id/tableLayout"
             app:layout_constraintStart_toStartOf="@+id/tableLayout"
-            app:layout_constraintTop_toTopOf="@id/background_content_filter_menu" />
+            app:layout_constraintTop_toTopOf="@id/background_content_filter_menu"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:startIconDrawable="@drawable/ic_search"
+            app:startIconTint="@null">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:text="@={backpackViewModel.searchString}" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
             android:id="@+id/search_close_btn"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="10dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="32dp"
             android:backgroundTint="#0000FF"
             android:contentDescription="@string/close_filter_btn"
             android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@+id/search_bar"
+            app:layout_constraintBottom_toTopOf="@+id/textInputLayout_backpack_detailslist_search"
             app:layout_constraintEnd_toEndOf="@+id/background_content_filter_menu"
             app:layout_constraintTop_toTopOf="@+id/background_filter_menu"
             app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />

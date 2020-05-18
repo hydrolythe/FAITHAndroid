@@ -8,6 +8,8 @@
         <variable
             name="eventViewModel"
             type="be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <FrameLayout
@@ -38,11 +40,11 @@
                 android:id="@+id/btn_draw_cancel"
                 android:layout_width="@dimen/material_icon_width"
                 android:layout_height="@dimen/material_icon_height"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
+                android:layout_marginTop="@dimen/margin_corner_button"
+                android:layout_marginStart="@dimen/margin_corner_button"
                 android:background="@drawable/ic_return"
                 android:contentDescription="@string/cancel"
-                android:onClick="@{() -> eventViewModel.onCancelButtonClicked()}"
+                android:onClick="@{() -> eventViewModel.onBackButtonClicked()}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -166,11 +168,13 @@
                 android:id="@+id/btn_event_send"
                 android:layout_width="@dimen/material_icon_width"
                 android:layout_height="@dimen/material_icon_height"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginTop="@dimen/margin_corner_button"
+                android:layout_marginEnd="@dimen/margin_corner_button"
                 android:background="@drawable/save_btn"
+                android:visibility="@{eventViewModel.eventDetails.size() > 0 ? View.VISIBLE : View.GONE}"
                 android:minWidth="24dp"
                 android:onClick="@{() -> eventViewModel.onSendButtonClicked()}"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:contentDescription="@string/save"/>

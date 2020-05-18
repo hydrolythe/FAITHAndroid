@@ -10,6 +10,7 @@ import be.hogent.faith.service.repositories.IUserRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import io.reactivex.Completable
 import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 class CreateUserUseCase(
@@ -20,8 +21,8 @@ class CreateUserUseCase(
     private val backpackEncryptionService: IDetailContainerEncryptionService<Backpack>,
     private val cinemaEncryptionService: IDetailContainerEncryptionService<Backpack>,
     observer: Scheduler,
-    private val subscriber: Scheduler
-) : CompletableUseCase<CreateUserUseCase.Params>(observer) {
+    subscriber: Scheduler = Schedulers.io()
+) : CompletableUseCase<CreateUserUseCase.Params>(observer, subscriber) {
 
     override fun buildUseCaseObservable(params: Params): Completable {
         val createUser = authManager.register("${params.username}@faith.be", params.password)

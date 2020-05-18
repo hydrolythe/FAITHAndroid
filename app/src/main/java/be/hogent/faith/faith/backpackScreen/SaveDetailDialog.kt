@@ -3,6 +3,8 @@ package be.hogent.faith.faith.backpackScreen
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,8 +58,8 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
     }
 
     private fun startListeners() {
-        saveDetailBinding.btnSaveBackpack.setOnClickListener {
-            backpackViewModel.onSaveClicked(saveDetailBinding.txtSaveEventTitle.text.toString(), userViewModel.user.value!!, detail)
+        saveDetailBinding.btnSaveDetail.setOnClickListener {
+            backpackViewModel.onSaveClicked(saveDetailBinding.txtSaveBackpackDetailTitle.text.toString(), userViewModel.user.value!!, detail)
         }
 
         backpackViewModel.detailIsSaved.observe(this, Observer {
@@ -74,10 +76,21 @@ class SaveDetailDialog(private var detail: Detail) : DialogFragment() {
             if (it != null)
                 Toast.makeText(context, resources.getString(it), Toast.LENGTH_SHORT).show()
         })
+
+        // when a user starts typing error message will disappear
+        saveDetailBinding.txtSaveBackpackDetailTitle.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                userViewModel.clearErrorMessage()
+            }
+        })
     }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
+        backpackViewModel.clearErrorMessage()
     }
 
     override fun onCancel(dialog: DialogInterface) {

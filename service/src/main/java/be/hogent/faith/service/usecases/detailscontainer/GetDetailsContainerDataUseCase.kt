@@ -7,6 +7,7 @@ import be.hogent.faith.service.repositories.IDetailContainerRepository
 import be.hogent.faith.service.usecases.base.ObservableUseCase
 import io.reactivex.Observable
 import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
 /**
@@ -15,12 +16,13 @@ import timber.log.Timber
 class GetDetailsContainerDataUseCase<T : DetailsContainer>(
     private val detailsContainerRepository: IDetailContainerRepository<T>,
     private val detailContainerEncryptionService: IDetailContainerEncryptionService<T>,
-    observeScheduler: Scheduler,
-    private val subscribeScheduler: Scheduler
-) : ObservableUseCase<List<Detail>, GetDetailsContainerDataUseCase.Params>(observeScheduler) {
+    observer: Scheduler,
+    subscriber: Scheduler = Schedulers.io()
+) : ObservableUseCase<List<Detail>, GetDetailsContainerDataUseCase.Params>(observer, subscriber) {
+
     override fun buildUseCaseObservable(params: Params): Observable<List<Detail>> {
         return detailsContainerRepository.getEncryptedContainer()
-            .subscribeOn(subscribeScheduler)
+            .subscribeOn(subscriber)
             .doOnSuccess { Timber.i("Got encrypted cinema") }
             .doOnError {
                 Timber.e("Error while fetching encrypted cinema: ${it.localizedMessage}")
@@ -28,7 +30,7 @@ class GetDetailsContainerDataUseCase<T : DetailsContainer>(
             }
             .flatMapObservable { container ->
                 detailsContainerRepository.getAll()
-                    .subscribeOn(subscribeScheduler)
+                    .subscribeOn(subscriber)
                     .doOnNext { Timber.i("Got encrypted cinema data") }
                     .doOnError {
                         Timber.e("Error while fetching encrypted cinema data: ${it.localizedMessage}")
@@ -39,7 +41,7 @@ class GetDetailsContainerDataUseCase<T : DetailsContainer>(
                         Observable.fromIterable(list)
                             .flatMapSingle {
                                 detailContainerEncryptionService.decryptData(it, container)
-                                    .subscribeOn(subscribeScheduler)
+                                    .subscribeOn(subscriber)
                                     .doOnSuccess { Timber.i("Decrypted data for detail ${it.uuid} in cinema") }
                                     .doOnError {
                                         Timber.e("Error while decrypting detail: ${it.localizedMessage}")
