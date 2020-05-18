@@ -68,17 +68,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/rv_container"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/achtergrond_publiek"
-            app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical2"
-            app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
-            app:layout_constraintTop_toTopOf="@+id/guide_rv_container_horizontal"
-            app:srcCompat="@drawable/cinema_film_container"
-            tools:srcCompat="@drawable/cinema_film_container" />
-
 
         <ToggleButton
             android:id="@+id/btn_films"
@@ -90,7 +79,7 @@
             android:textAllCaps="false"
             android:textOff="@string/mijn_filmpjes"
             android:textOn="@string/mijn_filmpjes"
-            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_cinema"
             app:layout_constraintEnd_toStartOf="@+id/guide_btns_vertical" />
 
         <ToggleButton
@@ -103,7 +92,7 @@
             android:textAllCaps="false"
             android:textOff="@string/mijn_bestanden"
             android:textOn="@string/mijn_bestanden"
-            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_cinema"
             app:layout_constraintStart_toStartOf="@+id/guide_btns_vertical" />
 
 
@@ -161,28 +150,29 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scrollbarSize="16dp"
+            android:background="@drawable/cinema_film_container"
             android:scrollbarThumbVertical="@drawable/scrollbarthumb_circle_rv"
             android:scrollbarTrackVertical="@drawable/scrollbartrack_rectangle_rv"
             android:scrollbars="vertical"
             android:verticalScrollbarPosition="right"
-            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
-            app:layout_constraintEnd_toEndOf="@+id/rv_container"
+            app:layout_constraintBottom_toTopOf="@+id/achtergrond_publiek"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical2"
+            app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
+            app:layout_constraintTop_toTopOf="@+id/guide_rv_container_horizontal"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/rv_container"
-            app:layout_constraintTop_toTopOf="@+id/rv_container"
             />
 
         <ImageButton
             android:id="@+id/btn_cinema_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="15dp"
             android:background="@drawable/ic_trashcan"
-            android:onClick="@{() -> cinemaOverviewViewModel.onDeleteClicked()}"
             android:contentDescription="@string/rv_btn_delete_detail"
-            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
-            app:layout_constraintStart_toStartOf="@+id/rv_container"
+            android:onClick="@{() -> cinemaOverviewViewModel.onDeleteClicked()}"
+            android:layout_marginStart="@dimen/margin_corner_button"
+            android:layout_marginBottom="@dimen/margin_corner_button"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_cinema"
+            app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
             app:srcCompat="@drawable/ic_trashcan" />
 
         <ImageView
@@ -205,7 +195,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/achtergrond_publiek"
             app:layout_constraintEnd_toEndOf="@+id/achtergrond_publiek"
             app:layout_constraintStart_toStartOf="@+id/achtergrond_publiek"
-            app:layout_constraintTop_toBottomOf="@+id/rv_container"
+            app:layout_constraintTop_toBottomOf="@+id/rv_cinema"
             app:srcCompat="@drawable/ic_btn_maak_filmpje" />
 
 
