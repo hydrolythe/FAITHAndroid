@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/skyscraper_create_objective"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/skyscraper_create_objective_background">
+
+        <ImageButton
+            android:id="@+id/btn_skyscraper_return"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginStart="@dimen/margin_corner_button"
+            android:layout_marginTop="@dimen/margin_corner_button"
+            android:background="@drawable/ic_return"
+            android:contentDescription="@string/cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/skyscraper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_skyscraper_return"
+            app:srcCompat="@drawable/skyscraper_blue" />
+
+        <TextView
+            android:id="@+id/skyscraper_objective_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/skyscraper_panel_blue"
+            android:gravity="center"
+            android:text="Beschrijving doel"
+            app:layout_constraintEnd_toStartOf="@+id/guide_panel"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper"
+            app:layout_constraintTop_toTopOf="@+id/skyscraper" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_panel"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.81" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_objective_goals"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/rectangle_white"
+            app:layout_constraintBottom_toBottomOf="@+id/skyscraper"
+            app:layout_constraintEnd_toStartOf="@+id/guide_panel"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper"
+            app:layout_constraintTop_toBottomOf="@id/skyscraper_objective_description" />
+
+        <ImageButton
+            android:id="@+id/btn_complete_objective"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_corner_button"
+            android:layout_marginTop="@dimen/margin_corner_button"
+            app:layout_constraintEnd_toEndOf="@+id/rv_objective_goals"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_objective_description"
+            android:background="@drawable/ic_complete_objective" />
+
+        <ImageButton
+            android:id="@+id/btn_add_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_corner_button"
+            android:layout_marginEnd="@dimen/margin_corner_button"
+            android:background="@drawable/ic_actie_toevoegen"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_objective_goals"
+            app:layout_constraintEnd_toEndOf="@+id/rv_objective_goals"
+             />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
