@@ -20,6 +20,8 @@ import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
 import be.hogent.faith.faith.cinema.CinemaActivity
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.details.DetailMetaDataType
+import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
@@ -32,7 +34,8 @@ import io.fotoapparat.selector.back
 import io.fotoapparat.selector.front
 import kotlinx.android.synthetic.main.fragment_take_photo.img_takePhoto_theTakenPhoto
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.getViewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 /**
@@ -40,11 +43,13 @@ import timber.log.Timber
  */
 const val REQUESTCODE_CAMERA = 1
 
+private const val STRATEGY = "The metadata strategy"
+
 class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
 
     override lateinit var detailFinishedListener: DetailFinishedListener
 
-    private val takePhotoViewModel: TakePhotoViewModel by viewModel()
+    private lateinit var takePhotoViewModel: TakePhotoViewModel
 
     private lateinit var takePhotoBinding: FragmentTakePhotoBinding
 
@@ -53,6 +58,17 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
     private var navigation: PhotoScreenNavigation? = null
 
     private val tempFileProvider by inject<TempFileProvider>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        takePhotoViewModel = getViewModel<TakePhotoViewModel> {
+            parametersOf(
+                DetailsFactory.createStrategy(
+                    arguments?.getSerializable(STRATEGY) as DetailMetaDataType
+                )
+            )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -114,10 +130,14 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
             }
         })
 
+        takePhotoViewModel.getDetailMetaData.observe(this, Observer {
+            detailFinishedListener.onGetDetailsMetaData(it)
+        })
+
         takePhotoViewModel.savedDetail.observe(this, Observer { newPhotoDetail ->
             if (requireActivity() is EmotionCaptureMainActivity) {
-            Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
-                .show()
+                Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
+                    .show()
             }
             detailFinishedListener.onDetailFinished(newPhotoDetail)
             navigation?.backToEvent()
@@ -150,7 +170,10 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
     }
 
     private fun hasCameraPermissions(): Boolean {
-        return checkSelfPermission(requireActivity(), Manifest.permission.CAMERA) == PERMISSION_GRANTED
+        return checkSelfPermission(
+            requireActivity(),
+            Manifest.permission.CAMERA
+        ) == PERMISSION_GRANTED
     }
 
     private fun showExitAlert() {
@@ -173,6 +196,7 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
         }
         alertDialog.show()
     }
+
     /**
      * Checks if requested permissions have been granted and starts the action that required the permission
      *  in the first place.
@@ -202,12 +226,16 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
     }
 
     companion object {
-        fun newInstance(): TakePhotoFragment {
-            return TakePhotoFragment()
+        fun newInstance(strategy: DetailMetaDataType): TakePhotoFragment {
+            return TakePhotoFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(STRATEGY, strategy)
+                }
+            }
         }
     }
 
-    interface PhotoScreenNavigation {
-        fun backToEvent()
+        interface PhotoScreenNavigation {
+            fun backToEvent()
+        }
     }
-}

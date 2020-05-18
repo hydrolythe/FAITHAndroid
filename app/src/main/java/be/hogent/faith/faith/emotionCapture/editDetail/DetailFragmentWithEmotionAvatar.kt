@@ -17,6 +17,7 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.faith.details.DetailMetaDataType
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
@@ -165,7 +166,7 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
         override fun setChildFragment() {
             val detail = arguments?.getSerializable(DETAIL) as PhotoDetail?
             val childFragment = if (detail == null) {
-                TakePhotoFragment.newInstance()
+                TakePhotoFragment.newInstance(DetailMetaDataType.EVENT)
             } else {
                 ViewPhotoFragment.newInstance(detail)
             }

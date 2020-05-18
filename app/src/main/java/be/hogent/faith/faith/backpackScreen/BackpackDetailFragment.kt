@@ -20,6 +20,7 @@ import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailFragment
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.view.ViewYoutubeVideoFragment
+import be.hogent.faith.faith.details.DetailMetaDataType
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
@@ -131,7 +132,7 @@ abstract class BackpackDetailFragment : Fragment() {
 
         override fun setChildFragment(detail: Detail?) {
             val childFragment = if (detail == null) {
-                TakePhotoFragment.newInstance()
+                TakePhotoFragment.newInstance(DetailMetaDataType.CINEMA)
             } else {
                 ViewPhotoFragment.newInstance(detail as PhotoDetail)
             }

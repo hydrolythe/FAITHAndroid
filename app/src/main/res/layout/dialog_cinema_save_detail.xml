@@ -5,11 +5,8 @@
     <data>
 
         <variable
-            name="userViewModel"
-            type="be.hogent.faith.faith.UserViewModel" />
-        <variable
             name="cinemaViewModel"
-            type="be.hogent.faith.faith.cinema.CinemaOverviewViewModel" />
+            type="be.hogent.faith.faith.details.DetailsMetaDataStrategy" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -149,6 +146,7 @@
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/save_btn"
                     android:contentDescription="@string/save"
+                    android:onClick="@{() -> cinemaViewModel.onSaveDetailsData()}"
                     android:text="@string/save"
                     app:cornerRadius="40dp"
                     app:icon="@drawable/save_btn"

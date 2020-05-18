@@ -18,6 +18,7 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.details.DetailMetaDataType
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.video.view.ViewVideoFragment
@@ -54,9 +55,11 @@ abstract class CinemaDetailFragment : Fragment() {
     }
 
     private fun showSaveDialog(detail: Detail) {
+        /*
         saveDialog = SaveCinemaDetailDialog.newInstance(detail)
         saveDialog.show(requireActivity().supportFragmentManager, null)
         cinemaViewModel.setCurrentFile(detail)
+        */
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -110,7 +113,7 @@ abstract class CinemaDetailFragment : Fragment() {
 
         override fun setChildFragment(detail: Detail?) {
             val childFragment = if (detail == null) {
-                TakePhotoFragment.newInstance()
+                TakePhotoFragment.newInstance(DetailMetaDataType.CINEMA)
             } else {
                 ViewPhotoFragment.newInstance(detail as PhotoDetail)
             }

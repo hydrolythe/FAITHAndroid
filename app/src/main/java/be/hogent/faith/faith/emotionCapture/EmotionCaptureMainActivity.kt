@@ -13,6 +13,7 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.DetailFinishedListener
+import be.hogent.faith.faith.details.DetailsMetaDataStrategy
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
@@ -229,6 +230,9 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         supportFragmentManager.beginTransaction()
             .add(R.id.emotionCapture_fragment_container, fragmentAvatar, tagEmotionAvatar)
             .hide(fragmentAvatar).commit()
+    }
+
+    override fun onGetDetailsMetaData(detailsMetaDataStrategy: DetailsMetaDataStrategy) {
     }
 
     override fun onDetailFinished(detail: Detail) {

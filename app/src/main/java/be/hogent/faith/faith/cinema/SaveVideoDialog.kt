@@ -37,7 +37,6 @@ class SaveVideoDialog : DialogFragment() {
     ): View? {
         saveVideoBinding =
                 DataBindingUtil.inflate(inflater, R.layout.dialog_cinema_save_detail, container, false)
-        saveVideoBinding.userViewModel = userViewModel
         saveVideoBinding.lifecycleOwner = this@SaveVideoDialog
         return saveVideoBinding.root
     }

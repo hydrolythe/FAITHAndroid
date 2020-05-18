@@ -281,7 +281,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         when (detail) {
             is DrawingDetail -> saveDrawingDetail(user, showSaveDialog.value as DrawingDetail)
             is TextDetail -> saveTextDetail(user, showSaveDialog.value as TextDetail)
-            is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
+            is PhotoDetail -> savePhotoDetail(user, detail)
             is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
             is VideoDetail -> saveExternalVideoDetail(
                 user,

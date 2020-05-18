@@ -9,18 +9,26 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.details.DetailViewModel
+import be.hogent.faith.faith.details.DetailsMetaDataStrategy
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
 import io.reactivex.observers.DisposableSingleObserver
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File
 
 class TakePhotoViewModel(
-    private val createPhotoDetailUseCase: CreatePhotoDetailUseCase
-) : ViewModel(), DetailViewModel<PhotoDetail> {
+    private val createPhotoDetailUseCase: CreatePhotoDetailUseCase,
+    private val detailsMetaDataStrategy: DetailsMetaDataStrategy
+) : ViewModel(), DetailViewModel<PhotoDetail>, DetailsMetaDataStrategy.ISaveDetailsMetaData {
 
     private val _savedDetail = MutableLiveData<PhotoDetail>()
     override val savedDetail: LiveData<PhotoDetail> = _savedDetail
+
+    private val _getDetailMetaData = MutableLiveData<DetailsMetaDataStrategy>()
+    val getDetailMetaData: LiveData<DetailsMetaDataStrategy> = _getDetailMetaData
+
+    private var currentDetail: PhotoDetail? = null
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
@@ -39,13 +47,19 @@ class TakePhotoViewModel(
     private inner class CreatePhotoDetailUseCaseHandler :
         DisposableSingleObserver<PhotoDetail>() {
         override fun onSuccess(createdDetail: PhotoDetail) {
-            _savedDetail.value = createdDetail
+            currentDetail = createdDetail
+            startGettingDetail()
         }
 
         override fun onError(e: Throwable) {
             _errorMessage.postValue(R.string.create_photo_failed)
             Timber.e(e)
         }
+    }
+
+    private fun startGettingDetail() {
+        detailsMetaDataStrategy.getDetailsData (this)
+        _getDetailMetaData.value = detailsMetaDataStrategy
     }
 
     private var _currentState = MutableLiveData<PhotoState>()
@@ -171,4 +185,12 @@ class TakePhotoViewModel(
     }
 
     internal class PhotoSavedState : PhotoState()
+
+    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        currentDetail?.let {
+            it.title = title
+            it.dateTime = dateTime
+        }
+        _savedDetail.value = currentDetail
+    }
 }

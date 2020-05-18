@@ -11,6 +11,7 @@ import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlay
 import be.hogent.faith.faith.cinema.CinemaCreateVideoViewModel
 import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
+import be.hogent.faith.faith.details.DetailsMetaDataStrategy
 import be.hogent.faith.faith.details.audio.AudioDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailViewModel
@@ -91,10 +92,8 @@ val appModule = module(override = true) {
     viewModel { WelcomeViewModel(get()) }
     viewModel { RegisterUserViewModel(get()) }
     viewModel { RegisterUserInfoViewModel(get()) }
-    viewModel { TakePhotoViewModel(get()) }
-    viewModel { RegisterUserInfoViewModel(get()) }
     viewModel { RegisterAvatarViewModel(get()) }
-    viewModel { TakePhotoViewModel(get()) }
+    viewModel { (strategy: DetailsMetaDataStrategy) -> TakePhotoViewModel(get(), strategy) }
     viewModel { YoutubeVideoDetailViewModel(get()) }
     viewModel { FaithYoutubePlayerViewModel() }
     viewModel { ExternalFileViewModel(get(), get()) }

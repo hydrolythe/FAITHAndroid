@@ -16,6 +16,7 @@ import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailFragment
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.details.DetailFinishedListener
+import be.hogent.faith.faith.details.DetailsMetaDataStrategy
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
@@ -74,6 +75,9 @@ class BackpackScreenActivity : AppCompatActivity(),
     override fun backToEvent() {
         supportFragmentManager.popBackStack()
         backpackViewModel.viewButtons(true)
+    }
+
+    override fun onGetDetailsMetaData(detailsMetaDataStrategy: DetailsMetaDataStrategy) {
     }
 
     override fun onDetailFinished(detail: Detail) {
