@@ -10,4 +10,6 @@ interface IVideoPlayer {
     fun stopVideo()
     fun seekTo(time: Float)
     fun stopPlayer()
+    fun getCurrentPosition() : Float
+    fun getDuration() : Float
 }

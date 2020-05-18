@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.videoplayer
 
 import android.content.Context
+import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
@@ -24,12 +25,25 @@ class FaithVideoPlayer(
     private var durationField: TextView? = null,
     private var stopButton: View? = null,
     private var fullscreenButton: View? = null
-) : IVideoPlayer {
+) {
 
     private var controller: IVideoPlayer? = null
 
+    private var handler: Handler? = null
+
+    private val updateCurrentPosition = object : Runnable {
+        override fun run() {
+            setCurrentTimeVideo(controller!!.getCurrentPosition())
+            setDurationVideo(controller!!.getDuration())
+            handler!!.postDelayed(this, ONE_SECOND.toLong())
+        }
+    }
+
     init {
         initPlayerListeners()
+
+        handler = Handler()
+        handler!!.post(updateCurrentPosition)
     }
 
     private fun initPlayerListeners() {
@@ -73,13 +87,13 @@ class FaithVideoPlayer(
 
     private fun playYoutubeVideo(detail: Detail, context: Context) {
         val youTubePlayerView = YouTubePlayerView(context)
-        controller = YoutubePlayerController(this, youTubePlayerView, detail as YoutubeVideoDetail)
+        controller = YoutubePlayerController(youTubePlayerView, detail as YoutubeVideoDetail)
         playerParentView.addView(youTubePlayerView)
     }
 
     private fun playVideoFile(detail: Detail, context: Context) {
         val videoView = VideoView(context)
-        controller = VideoFilePlayerController(this, videoView, detail.file)
+        controller = VideoFilePlayerController(videoView, detail.file)
         playerParentView.addView(videoView)
     }
 
@@ -93,31 +107,32 @@ class FaithVideoPlayer(
         currentTimeField?.text = createTimeLabel(second)
     }
 
-    override fun playVideo() {
+    private fun playVideo() {
         controller!!.playVideo()
     }
 
-    override fun resumeVideo() {
+    fun resumeVideo() {
         controller!!.resumeVideo()
     }
 
-    override fun pauseVideo() {
+    private fun pauseVideo() {
         controller!!.pauseVideo()
     }
 
-    override fun stopVideo() {
+    private fun stopVideo() {
         controller!!.stopVideo()
         seekBar?.progress = 0
         currentTimeField?.text = "0:00"
     }
 
-    override fun seekTo(time: Float) {
+    fun seekTo(time: Float) {
         controller!!.seekTo(time)
         currentTimeField?.text = createTimeLabel(time)
     }
 
-    override fun stopPlayer() {
+    fun stopPlayer() {
         controller!!.stopPlayer()
+        handler!!.removeCallbacks(updateCurrentPosition)
     }
 
     private fun setFullScreen() {

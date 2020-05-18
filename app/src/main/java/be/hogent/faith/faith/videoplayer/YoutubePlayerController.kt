@@ -36,7 +36,6 @@ import kotlinx.android.synthetic.main.player_youtube_custom.view.txt_title_playe
  */
 
 class YoutubePlayerController(
-    private val faithVideoPlayer: FaithVideoPlayer,
     private val youTubePlayerView: YouTubePlayerView,
     private val detail: YoutubeVideoDetail
 ) : IVideoPlayer, AbstractYouTubePlayerListener() {
@@ -49,6 +48,8 @@ class YoutubePlayerController(
     private var customPlayerContainer: ConstraintLayout? = null
     private var customPlayerUi: View? = null
     private var youTubePlayer: YouTubePlayer? = null
+    private var currentSecond : Float = 0F
+    private var duration : Float = 0F
 
     init {
         youTubePlayerView.addYouTubePlayerListener(this)
@@ -71,11 +72,11 @@ class YoutubePlayerController(
 
     override fun onVideoDuration(youTubePlayer: YouTubePlayer, duration: Float) {
         super.onVideoDuration(youTubePlayer, duration)
-        faithVideoPlayer.setDurationVideo(duration)
+        this.duration = duration
     }
 
     override fun onCurrentSecond(youTubePlayer: YouTubePlayer, second: Float) {
-        faithVideoPlayer.setCurrentTimeVideo(second)
+        currentSecond = second
     }
 
     private fun createCustomUiLayerAbovePlayerView(customPlayerUi: View) {
@@ -128,5 +129,13 @@ class YoutubePlayerController(
 
     override fun stopPlayer() {
         youTubePlayerView.release()
+    }
+
+    override fun getCurrentPosition(): Float {
+        return currentSecond
+    }
+
+    override fun getDuration(): Float {
+        return duration
     }
 }

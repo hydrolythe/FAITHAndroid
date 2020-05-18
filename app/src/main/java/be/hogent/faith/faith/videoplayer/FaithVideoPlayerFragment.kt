@@ -30,6 +30,7 @@ abstract class FaithVideoPlayerFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        player?.stopPlayer()
         player = null
         }
 }
