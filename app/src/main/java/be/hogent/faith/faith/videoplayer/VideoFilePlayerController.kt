@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.videoplayer
 
 import android.net.Uri
-import android.os.Handler
 import android.widget.VideoView
 import java.io.File
 
@@ -10,7 +9,6 @@ class VideoFilePlayerController(
     private val videoView: VideoView,
     source: File
 ) : IVideoPlayer {
-
 
     init {
         videoView.setVideoURI(Uri.fromFile(source))
@@ -25,7 +23,7 @@ class VideoFilePlayerController(
         return videoView.duration.toFloat()
     }
 
-    override fun getCurrentPosition() : Float{
+    override fun getCurrentPosition(): Float {
         return videoView.currentPosition.toFloat() / ONE_SECOND
     }
 

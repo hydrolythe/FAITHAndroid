@@ -48,8 +48,8 @@ class YoutubePlayerController(
     private var customPlayerContainer: ConstraintLayout? = null
     private var customPlayerUi: View? = null
     private var youTubePlayer: YouTubePlayer? = null
-    private var currentSecond : Float = 0F
-    private var duration : Float = 0F
+    private var currentSecond: Float = 0F
+    private var duration: Float = 0F
 
     init {
         youTubePlayerView.addYouTubePlayerListener(this)
