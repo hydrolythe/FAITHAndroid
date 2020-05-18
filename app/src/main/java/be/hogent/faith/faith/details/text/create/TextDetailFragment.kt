@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterTextBinding
 import be.hogent.faith.domain.models.detail.TextDetail
@@ -95,7 +97,12 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
         super.onStart()
         initEditor()
         setUpListeners()
-        textDetailDetailViewModel.pickTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        textDetailDetailViewModel.pickTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.black
+            )
+        )
     }
 
     private fun initEditor() {
@@ -132,7 +139,7 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
         })
 
         textDetailDetailViewModel.fontsizeClicked.observe(this, Observer {
-            cardView_size.visibility = if (it) View.VISIBLE else View.GONE
+            cardView_size.visibility = if (it) View.VISIBLE else View.INVISIBLE
         })
         textDetailDetailViewModel.selectedFontSize.observe(this, Observer { newSize ->
             enterText_editor.setFontSize(newSize.size)
@@ -142,7 +149,7 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
         })
         textDetailDetailViewModel.savedDetail.observe(this, Observer { savedTextDetail ->
             if (requireActivity() is EmotionCaptureMainActivity) {
-            Toast.makeText(context, R.string.save_text_success, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.save_text_success, Toast.LENGTH_SHORT).show()
             }
             detailFinishedListener.onDetailFinished(savedTextDetail)
             navigation?.backToEvent()
