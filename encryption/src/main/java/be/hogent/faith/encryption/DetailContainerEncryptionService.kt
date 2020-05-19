@@ -32,7 +32,7 @@ class DetailContainerEncryptionService<T>(
 
     override fun decryptFile(detail: Detail, container: EncryptedDetailsContainer): Completable {
         return keyEncrypter.decrypt(container.encryptedStreamingDEK)
-            .flatMapCompletable { sdek -> detailEncryptionService.decryptDetailFile(detail, sdek) }.doOnError{ Timber.e("Decrypt failed")}
+            .flatMapCompletable { sdek -> detailEncryptionService.decryptDetailFile(detail, sdek) }.doOnError { Timber.e("Decrypt failed") }
     }
 
     override fun decryptData(

@@ -9,7 +9,6 @@ import be.hogent.faith.service.usecases.base.CompletableUseCase
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import timber.log.Timber
-import kotlin.math.log
 
 class LoadDetailFileUseCase<Container : DetailsContainer>(
     private val storageRepo: IFileStorageRepository,
@@ -22,16 +21,15 @@ class LoadDetailFileUseCase<Container : DetailsContainer>(
         if (storageRepo.setFileIfReady(params.detail, params.container)) {
             return Completable.complete()
         } else {
-            return storageRepo.downloadFile(params.detail, params.container).doOnError{
-                Timber.e("Could not download file")
-            }
-                .andThen(containerRepository.getEncryptedContainer()).doOnError{
-                    Timber.e("Could not get container")
-                }
+            return storageRepo.downloadFile(params.detail, params.container)
+                .subscribeOn(subscriber)
+                .doOnError { Timber.e("Could not download file") }
+                .andThen(containerRepository.getEncryptedContainer())
+                .doOnError { Timber.e("Could not get container") }
                 .flatMapCompletable { container ->
-                    detailContainerEncryptionService.decryptFile(params.detail, container).doOnError{
-                        Timber.e("Could not decrypt file")
-                    }
+                    detailContainerEncryptionService.decryptFile(params.detail, container)
+                        .subscribeOn(subscriber)
+                        .doOnError { Timber.e("Could not decrypt file") }
                 }
         }
     }
