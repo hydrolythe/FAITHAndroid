@@ -67,7 +67,7 @@ class ViewVideoFragment : FaithVideoPlayerFragment() {
             super.onStart()
 
             binding.btnBackYtVideo.setOnClickListener {
-                navigation!!.backToEvent()
+                navigation?.backToEvent()
             }
 
             loadExistingVideo()

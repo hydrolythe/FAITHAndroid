@@ -126,6 +126,7 @@ class BackpackScreenActivity : AppCompatActivity(),
         backpackViewModel.setOpenDetailType(OpenDetailMode.EDIT)
         backpackViewModel.setCurrentFileAndLoadCorrespondingFile(detail)
         backpackViewModel.viewButtons(false)
+        replaceFragment(BackpackDetailFragment.newInstance(detail), R.id.backpack_fragment_container)
     }
 
     override fun closeBackpack() {
