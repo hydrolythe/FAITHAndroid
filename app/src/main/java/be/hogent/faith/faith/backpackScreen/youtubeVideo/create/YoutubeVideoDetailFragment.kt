@@ -14,10 +14,13 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCreateYoutubeVideoBinding
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
@@ -25,6 +28,7 @@ import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlay
 import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerFragment
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.di.KoinModules
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
 import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_back_yt_video
@@ -44,13 +48,16 @@ import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.youtube_p
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.threeten.bp.LocalDateTime
 import java.util.Timer
 import java.util.TimerTask
+import kotlin.reflect.KClass
 
 /**
  * A simple [Fragment] subclass.
  */
-class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<YoutubeVideoDetail> {
+class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(),
+    DetailFragment<YoutubeVideoDetail> {
 
     private val youtubeVideoDetailViewModel: YoutubeVideoDetailViewModel by viewModel()
     private var youtubeSnippetAdapter: YoutubeSnippetAdapter? = null
@@ -59,6 +66,11 @@ class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<
     private var popupview: View? = null
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     override lateinit var detailFinishedListener: DetailFinishedListener
+
+    override fun onFinishSaveDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        youtubeVideoDetailViewModel.setDetailsMetaData(title, dateTime)
+    }
+
     private var navigation: YoutubeVideoDetailScreenNavigation? = null
     private var timer: Timer? = null
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
@@ -69,7 +81,12 @@ class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        youtubeVideoDetailBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_youtube_video, container, false)
+        youtubeVideoDetailBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_create_youtube_video,
+            container,
+            false
+        )
 
         youtubeVideoDetailBinding.youtubeViewModel = youtubeVideoDetailViewModel
 
@@ -111,7 +128,7 @@ class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<
 
     private fun startListeners() {
         youtubeVideoDetailViewModel.snippets.observe(this, Observer {
-                youtubeSnippetAdapter!!.submitList(it)
+            youtubeSnippetAdapter!!.submitList(it)
         })
 
         youtubeVideoDetailBinding.btnSearchVideo.setOnClickListener {
@@ -139,16 +156,21 @@ class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<
             }
         })
 
-        youtubeVideoDetailViewModel.savedDetail.observe(this, Observer {
-            backpackViewModel.saveYoutubeVideoDetail(it.title, userViewModel.user.value!!, it)
+        youtubeVideoDetailViewModel.getDetailMetaData.observe(this, Observer {
+            popupWindow.dismiss()
+            val saveDialog = DetailsFactory.createMetaDataDialog(
+                requireActivity()::class as KClass<FragmentActivity>,
+                TextDetail::class as KClass<Detail>
+            )
+            if (saveDialog != null) {
+                saveDialog.setTargetFragment(this, 22)
+                saveDialog.show(getParentFragmentManager(), null)
+            }
         })
 
-        backpackViewModel.infoMessage.observe(this, Observer {
-            if (it == R.string.save_video_success) {
-                popupWindow.dismiss()
-                detailFinishedListener.onDetailFinished(youtubeVideoDetailViewModel.savedDetail.value!!)
-                navigation?.backToEvent()
-            }
+        youtubeVideoDetailViewModel.savedDetail.observe(this, Observer {
+            detailFinishedListener.onDetailFinished(youtubeVideoDetailViewModel.savedDetail.value!!)
+            navigation?.backToEvent()
         })
 
         /**
@@ -175,7 +197,7 @@ class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<
                     }
                 }, 500)
             }
-            })
+        })
 
         youtubeVideoDetailViewModel.backToBackpack.observe(this, Observer {
             navigation?.backToEvent()
@@ -199,7 +221,11 @@ class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<
         youtubeVideoDetailBinding.editTextSearchVideo.isEnabled = false
 
         popupview = layoutInflater.inflate(R.layout.fragment_view_youtube_video, null, false)
-        popupWindow = PopupWindow(popupview, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        popupWindow = PopupWindow(
+            popupview,
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
 
         /**
          * onBackPressed() dismisses popup window and doesn't destroy fragment by setting isOutsideTouchable and isFocusable

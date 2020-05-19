@@ -4,7 +4,6 @@ import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.DetailsContainer
@@ -26,7 +25,6 @@ import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableObserver
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
@@ -141,36 +139,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     protected val _detailIsSaved = SingleLiveEvent<Any>()
     val detailIsSaved: LiveData<Any> = _detailIsSaved
 
-    // detail moet worden opgeslaan, maar eerst dient de titel,... te worden opgevraagd via SaveDialog
-    private val _showSaveDialog = SingleLiveEvent<Detail>()
-    val showSaveDialog: LiveData<Detail> = _showSaveDialog
-
-    /**
-     * title and date of a new detail
-     */
-    val detailTitle = MutableLiveData<String>()
-    protected val _detailTitleErrorMessage = MutableLiveData<Int>()
-    val detailTitleErrorMessage: LiveData<Int>
-        get() = _detailTitleErrorMessage
-
-    val detailDate = MutableLiveData<LocalDateTime>()
-    val detailDateString: LiveData<String> =
-        Transformations.map(detailDate) { date ->
-            date.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
-        }
-    private val _detailDateButtonClicked = SingleLiveEvent<Unit>()
-    val detailDateButtonClicked: LiveData<Unit> = _detailDateButtonClicked
-
-    fun onDateButtonClicked() {
-        _detailDateButtonClicked.call()
-    }
-
-    fun resetDetails() {
-        detailTitle.value = ""
-        detailDate.value = LocalDateTime.now()
-        _detailTitleErrorMessage.postValue(null)
-    }
-
     /**
      * errormessages and information
      */
@@ -271,22 +239,14 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         _openDetailMode.postValue(openDetailMode)
     }
 
-    // detail is aangemaakt, maar titel,... moet nog worden opgevraagd
-    fun showSaveDialog(detail: Detail) {
-        _showSaveDialog.postValue(detail)
-    }
-
     // opslaan van detail
     open fun saveCurrentDetail(user: User, detail: Detail) {
         when (detail) {
-            is DrawingDetail -> saveDrawingDetail(user, showSaveDialog.value as DrawingDetail)
-            is TextDetail -> saveTextDetail(user, showSaveDialog.value as TextDetail)
+            is DrawingDetail -> saveDrawingDetail(user, detail)
+            is TextDetail -> saveTextDetail(user, detail)
             is PhotoDetail -> savePhotoDetail(user, detail)
-            is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
-            is VideoDetail -> saveExternalVideoDetail(
-                user,
-                showSaveDialog.value as VideoDetail
-            )
+            is AudioDetail -> saveAudioDetail(user, detail)
+            is VideoDetail -> saveExternalVideoDetail(user, detail)
             is YoutubeVideoDetail -> saveYoutubeDetail(user, detail)
         }
         _currentDetail.postValue(null)
@@ -304,29 +264,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
                 _errorMessage.postValue(R.string.error_load_detail_failed)
             }
         })
-    }
-
-    fun onSaveClicked(
-        title: String,
-        user: User,
-        detail: Detail,
-        date: LocalDateTime = LocalDateTime.now()
-    ) {
-        val notMaxCharacters = checkMaxCharacters(title)
-        val uniqueTitle = checkUniqueTitle(title)
-        if (title.isNotEmpty() && notMaxCharacters && uniqueTitle) {
-            detail.title = title
-            detail.dateTime = date
-            _detailTitleErrorMessage.value = R.string.empty
-            saveCurrentDetail(user, detail)
-        } else {
-            if (title.isBlank())
-                _detailTitleErrorMessage.postValue(R.string.save_detail_emptyString)
-            if (!notMaxCharacters)
-                _detailTitleErrorMessage.postValue(R.string.save_detail_maxChar)
-            if (!uniqueTitle)
-                _detailTitleErrorMessage.postValue(R.string.save_detail_uniqueName)
-        }
     }
 
     fun saveTextDetail(user: User, detail: TextDetail) {
@@ -450,14 +387,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         return Instant.ofEpochMilli(milliseconds) // Convert count-of-milliseconds-since-epoch into a date-time in UTC (`Instant`).
             .atZone(ZoneId.of("Europe/Brussels")) // Adjust into the wall-clock time used by the people of a particular region (a time zone). Produces a `ZonedDateTime` object.
             .toLocalDate()
-    }
-
-    protected fun checkUniqueTitle(title: String): Boolean {
-        return (details.find { e -> (e.title == title) } == null)
-    }
-
-    protected fun checkMaxCharacters(title: String): Boolean {
-        return title.length <= 30
     }
 
     private fun setDetails() {

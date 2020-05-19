@@ -16,6 +16,7 @@ import be.hogent.faith.faith.util.combineWith
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.util.toMinutesSecondString
 import io.reactivex.observers.DisposableSingleObserver
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File
 import kotlin.math.roundToLong
@@ -30,6 +31,8 @@ class AudioDetailViewModel(
 
     private var existingDetail: AudioDetail? = null
 
+    private val _getDetailMetaData = SingleLiveEvent<Unit>()
+    override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
     /**
      *
      * True when pausing an audio recording is supported.
@@ -174,7 +177,8 @@ class AudioDetailViewModel(
     private inner class CreateAudioDetailUseCaseHandler :
         DisposableSingleObserver<AudioDetail>() {
         override fun onSuccess(createdDetail: AudioDetail) {
-            _savedDetail.value = createdDetail
+            existingDetail = createdDetail
+            _getDetailMetaData.call()
         }
 
         override fun onError(e: Throwable) {
@@ -239,5 +243,13 @@ class AudioDetailViewModel(
             Timber.e(e)
             _errorMessage.postValue(R.string.error_load_events)
         }
+    }
+
+    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        existingDetail?.let {
+            it.title = title
+            it.dateTime = dateTime
+        }
+        _savedDetail.value = existingDetail
     }
 }

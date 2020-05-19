@@ -252,6 +252,8 @@
     <string name="je_filmpje_opslaan">Je filmpje opslaan</string>
     <string name="je_tekening_opslaan">Je tekening opslaan</string>
     <string name="je_foto_opslaan">Je foto opslaan</string>
+    <string name="je_tekst_opslaan">Je tekst opslaan</string>
+    <string name="je_audio_opslaan">Je geluidsfragment opslaan</string>
     <string name="je_extern_bestand_opslaan">Je extern bestand opslaan</string>
     <string name="save_video_title">Titel</string>
     <string name="error_load_detail_failed">Laden detail faalt</string>

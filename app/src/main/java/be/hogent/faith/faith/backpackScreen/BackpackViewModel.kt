@@ -3,14 +3,11 @@ package be.hogent.faith.faith.backpackScreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import be.hogent.faith.domain.models.Backpack
-import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.GetDetailsContainerDataUseCase
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
-import java.util.Date
 
 class BackpackViewModel(
     saveBackpackDetailUseCase: SaveDetailsContainerDetailUseCase<Backpack>,
@@ -33,6 +30,7 @@ class BackpackViewModel(
         _viewButtons.postValue(viewButtons)
     }
 
+    /* TODO : MAG DIT WEG EN VERVANGEN WORDEN DOOR SAVEDETAILSMETADATADIALOG
     fun saveYoutubeVideoDetail(title: String, user: User, detail: Detail) {
         val notMaxCharacters = checkMaxCharacters(title)
         val uniqueFilename = checkUniqueTitle(title)
@@ -45,4 +43,6 @@ class BackpackViewModel(
         }
         saveCurrentDetail(user, detail)
     }
+
+     */
 }

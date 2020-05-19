@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.details.DetailViewModel
-import be.hogent.faith.faith.details.DetailsMetaDataStrategy
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
 import io.reactivex.observers.DisposableSingleObserver
@@ -18,15 +17,14 @@ import timber.log.Timber
 import java.io.File
 
 class TakePhotoViewModel(
-    private val createPhotoDetailUseCase: CreatePhotoDetailUseCase,
-    private val detailsMetaDataStrategy: DetailsMetaDataStrategy
-) : ViewModel(), DetailViewModel<PhotoDetail>, DetailsMetaDataStrategy.ISaveDetailsMetaData {
+    private val createPhotoDetailUseCase: CreatePhotoDetailUseCase
+) : ViewModel(), DetailViewModel<PhotoDetail> {
 
     private val _savedDetail = MutableLiveData<PhotoDetail>()
     override val savedDetail: LiveData<PhotoDetail> = _savedDetail
 
-    private val _getDetailMetaData = MutableLiveData<DetailsMetaDataStrategy>()
-    val getDetailMetaData: LiveData<DetailsMetaDataStrategy> = _getDetailMetaData
+    private val _getDetailMetaData = SingleLiveEvent<Unit>()
+    override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
 
     private var currentDetail: PhotoDetail? = null
 
@@ -48,18 +46,13 @@ class TakePhotoViewModel(
         DisposableSingleObserver<PhotoDetail>() {
         override fun onSuccess(createdDetail: PhotoDetail) {
             currentDetail = createdDetail
-            startGettingDetail()
+            _getDetailMetaData.call()
         }
 
         override fun onError(e: Throwable) {
             _errorMessage.postValue(R.string.create_photo_failed)
             Timber.e(e)
         }
-    }
-
-    private fun startGettingDetail() {
-        detailsMetaDataStrategy.getDetailsData (this)
-        _getDetailMetaData.value = detailsMetaDataStrategy
     }
 
     private var _currentState = MutableLiveData<PhotoState>()

@@ -13,10 +13,8 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.DeleteDetailDialog
 import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.DetailFinishedListener
-import be.hogent.faith.faith.details.DetailMetaDataType
 import be.hogent.faith.faith.details.DetailType
 import be.hogent.faith.faith.details.DetailsFactory
-import be.hogent.faith.faith.details.DetailsMetaDataStrategy
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode
@@ -61,7 +59,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
 
         cinemaOverviewViewModel.goToDetail.observe(this, Observer {
             replaceFragment(
-                CinemaDetailFragment.newInstance(it),
+                DetailsFactory.editDetail(it),
                 R.id.cinema_fragment_container
             )
         })
@@ -82,7 +80,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
 
     override fun startPhotoDetailFragment() {
         replaceFragment(
-            DetailsFactory.createEditDetail<PhotoDetail>(DetailType.PHOTO, DetailMetaDataType.CINEMA, null),
+            DetailsFactory.createDetail(DetailType.PHOTO),
             R.id.cinema_fragment_container
         )
         cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.NEW)
@@ -90,7 +88,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
 
     override fun startDrawingDetailFragment() {
         replaceFragment(
-            CinemaDetailFragment.DrawingFragment.newInstance(),
+            DetailsFactory.createDetail(DetailType.DRAWING),
             R.id.cinema_fragment_container
         )
         cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.NEW)
@@ -98,7 +96,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
 
     override fun startExternalFileDetailFragment() {
         replaceFragment(
-            CinemaDetailFragment.ExternalFileFragment.newInstance(),
+            DetailsFactory.createDetail(DetailType.EXTERNALFILE),
             R.id.cinema_fragment_container
         )
         cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.NEW)
@@ -152,10 +150,5 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
     override fun backToEvent() {
         supportFragmentManager.popBackStack()
         cinemaOverviewViewModel.onFilesButtonClicked()
-    }
-
-    override fun onGetDetailsMetaData(detailsMetaDataStrategy: DetailsMetaDataStrategy) {
-        saveDialog = SaveCinemaDetailDialog.newInstance(detailsMetaDataStrategy)
-        saveDialog.show(supportFragmentManager, null)
     }
 }

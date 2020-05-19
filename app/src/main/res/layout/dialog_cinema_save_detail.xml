@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="cinemaViewModel"
-            type="be.hogent.faith.faith.details.DetailsMetaDataStrategy" />
+            name="detailsMetaDataViewModel"
+            type="be.hogent.faith.faith.details.DetailsMetaDataViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,6 +24,7 @@
             android:layout_marginTop="25dp"
             android:background="@drawable/ic_return"
             android:contentDescription="@string/cancel"
+            android:onClick="@{() -> detailsMetaDataViewModel.onCancelClicked()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,8 +84,8 @@
                     android:contentDescription="@string/save"
                     android:elevation="0dp"
                     android:fontFamily="@font/sourcesanspro"
-                    android:onClick="@{() -> cinemaViewModel.onDateButtonClicked()}"
-                    android:text="@{cinemaViewModel.detailDateString}"
+                    android:onClick="@{() -> detailsMetaDataViewModel.onDateButtonClicked()}"
+                    android:text="@{detailsMetaDataViewModel.detailDateString}"
                     android:textAppearance="?attr/textAppearanceSubtitle1"
                     android:textColor="@color/black"
                     app:icon="@drawable/ic_kalender"
@@ -98,9 +99,9 @@
                     android:id="@+id/save_cinemadetail_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
                     android:layout_marginTop="35dp"
-                    android:text="@string/je_filmpje_opslaan"
+                    android:layout_marginBottom="16dp"
+                    android:text="@{detailsMetaDataViewModel.header}"
                     android:textColor="@color/caption"
                     android:textSize="45sp"
                     android:textStyle="bold"
@@ -119,21 +120,21 @@
                     android:layout_marginTop="50dp"
                     android:layout_marginEnd="48dp"
                     android:hint="@string/save_video_title"
+                    app:errorEnabled="true"
+                    app:errorResId="@{detailsMetaDataViewModel.detailTitleErrorMessage}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/save_cinemadetail_title"
                     app:layout_constraintVertical_weight="1"
-                    app:startIconDrawable="@drawable/ic_titel"
-                    app:errorEnabled="true"
-                    app:errorResId="@{cinemaViewModel.detailTitleErrorMessage}">
+                    app:startIconDrawable="@drawable/ic_titel">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/txt_save_video_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
-                        android:text="@={cinemaViewModel.detailTitle}">
+                        android:text="@={detailsMetaDataViewModel.detailTitle}">
 
                         <requestFocus />
                     </com.google.android.material.textfield.TextInputEditText>
@@ -146,7 +147,7 @@
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/save_btn"
                     android:contentDescription="@string/save"
-                    android:onClick="@{() -> cinemaViewModel.onSaveDetailsData()}"
+                    android:onClick="@{() -> detailsMetaDataViewModel.onSaveDetailsData()}"
                     android:text="@string/save"
                     app:cornerRadius="40dp"
                     app:icon="@drawable/save_btn"

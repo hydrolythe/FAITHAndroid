@@ -12,15 +12,16 @@ import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
 import be.hogent.faith.faith.cinema.CinemaActivity
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
-import be.hogent.faith.faith.details.DetailMetaDataType
 import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.util.TempFileProvider
@@ -34,22 +35,21 @@ import io.fotoapparat.selector.back
 import io.fotoapparat.selector.front
 import kotlinx.android.synthetic.main.fragment_take_photo.img_takePhoto_theTakenPhoto
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.getViewModel
-import org.koin.core.parameter.parametersOf
+import org.koin.android.viewmodel.ext.android.viewModel
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
+import kotlin.reflect.KClass
 
 /**
  * The requestcode that will be used to request photoTaker permissions
  */
 const val REQUESTCODE_CAMERA = 1
 
-private const val STRATEGY = "The metadata strategy"
-
 class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
 
     override lateinit var detailFinishedListener: DetailFinishedListener
 
-    private lateinit var takePhotoViewModel: TakePhotoViewModel
+    private val takePhotoViewModel: TakePhotoViewModel by viewModel()
 
     private lateinit var takePhotoBinding: FragmentTakePhotoBinding
 
@@ -58,17 +58,6 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
     private var navigation: PhotoScreenNavigation? = null
 
     private val tempFileProvider by inject<TempFileProvider>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        takePhotoViewModel = getViewModel<TakePhotoViewModel> {
-            parametersOf(
-                DetailsFactory.createStrategy(
-                    arguments?.getSerializable(STRATEGY) as DetailMetaDataType
-                )
-            )
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -131,7 +120,19 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
         })
 
         takePhotoViewModel.getDetailMetaData.observe(this, Observer {
-            detailFinishedListener.onGetDetailsMetaData(it)
+            val saveDialog = DetailsFactory.createMetaDataDialog(
+                requireActivity()::class as KClass<FragmentActivity>,
+                PhotoDetail::class as KClass<Detail>
+            )
+            if (saveDialog == null)
+                takePhotoViewModel.setDetailsMetaData()
+            else {
+                saveDialog.setTargetFragment(
+                    this,
+                    22
+                )
+                saveDialog.show(getParentFragmentManager(), null)
+            }
         })
 
         takePhotoViewModel.savedDetail.observe(this, Observer { newPhotoDetail ->
@@ -146,6 +147,10 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
         takePhotoViewModel.cancelClicked.observe(this, Observer {
             showExitAlert()
         })
+    }
+
+    override fun onFinishSaveDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        takePhotoViewModel.setDetailsMetaData(title, dateTime)
     }
 
     /**
@@ -226,16 +231,12 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
     }
 
     companion object {
-        fun newInstance(strategy: DetailMetaDataType): TakePhotoFragment {
-            return TakePhotoFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(STRATEGY, strategy)
-                }
-            }
+        fun newInstance(): TakePhotoFragment {
+            return TakePhotoFragment()
         }
     }
 
-        interface PhotoScreenNavigation {
-            fun backToEvent()
-        }
+    interface PhotoScreenNavigation {
+        fun backToEvent()
     }
+}

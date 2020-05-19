@@ -6,12 +6,8 @@
     <data>
 
         <variable
-            name="backpackViewModel"
-            type="be.hogent.faith.faith.backpackScreen.BackpackViewModel" />
-
-        <variable
-            name="userViewModel"
-            type="be.hogent.faith.faith.UserViewModel" />
+            name="detailsMetaDataViewModel"
+            type="be.hogent.faith.faith.details.DetailsMetaDataViewModel" />
     </data>
 
     <FrameLayout
@@ -36,6 +32,7 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/ic_return"
                 android:contentDescription="@string/cancel"
+                android:onClick="@{() -> detailsMetaDataViewModel.onCancelClicked()}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
@@ -48,6 +45,7 @@
                 android:background="@drawable/save_btn"
                 android:contentDescription="@string/save"
                 android:minWidth="24dp"
+                android:onClick="@{() -> detailsMetaDataViewModel.onSaveDetailsData()}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,14 +81,14 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:hint="@string/save_event_title"
+                        app:errorEnabled="true"
+                        app:errorResId="@{detailsMetaDataViewModel.detailTitleErrorMessage}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_weight="1"
-                        app:errorEnabled="true"
-                        app:errorResId="@{backpackViewModel.detailTitleErrorMessage}">
+                        app:layout_constraintVertical_weight="1">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/txt_save_event_title"
@@ -98,7 +96,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="text"
                             android:maxLength="30"
-                            android:nextFocusDown="@+id/txt_save_event_notes" />
+                            android:text="@={detailsMetaDataViewModel.detailTitle}" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 

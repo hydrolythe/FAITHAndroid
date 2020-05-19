@@ -13,12 +13,15 @@ import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentRecordAudioBinding
 import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.details.audio.audioPlayer.AudioPlayerAdapter
 import be.hogent.faith.faith.details.audio.audioPlayer.AudioPlayerHolder
 import be.hogent.faith.faith.details.audio.audioPlayer.PlaybackInfoListener
@@ -29,7 +32,9 @@ import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.util.TempFileProvider
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
+import kotlin.reflect.KClass
 
 const val REQUESTCODE_AUDIO = 12
 private const val AUDIO_DETAIL = "An existing AudioDetail"
@@ -143,6 +148,18 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             audioRecorder.reset()
             requireActivity().onBackPressed()
         })
+        audioDetailViewModel.getDetailMetaData.observe(this, Observer {
+            val saveDialog = DetailsFactory.createMetaDataDialog(requireActivity()::class as KClass<FragmentActivity>, AudioDetail::class as KClass<Detail>)
+            if (saveDialog == null)
+                audioDetailViewModel.setDetailsMetaData()
+            else {
+                saveDialog.setTargetFragment(this, 22)
+                saveDialog.show(getParentFragmentManager(), null)
+            } })
+    }
+
+    override fun onFinishSaveDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        audioDetailViewModel.setDetailsMetaData(title, dateTime)
     }
 
     private fun initialiseSeekBar() {
