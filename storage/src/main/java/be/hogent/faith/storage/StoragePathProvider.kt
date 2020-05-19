@@ -53,6 +53,14 @@ class StoragePathProvider(
      * Returns the **relative** path in which a detail will be saved.
      * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path.
      */
+    fun detailPath(detail: EncryptedDetail, encryptedEvent: EncryptedEvent): File {
+        return File("${eventsFolderPath(encryptedEvent).path}/${detail.uuid}")
+    }
+
+    /**
+     * Returns the **relative** path in which a detail will be saved.
+     * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path.
+     */
     fun detailPath(detail: Detail, detailsContainer: DetailsContainer): File {
         return File("${detailsContainerFolderPath(detailsContainer).path}/${detail.uuid}")
     }
@@ -63,14 +71,6 @@ class StoragePathProvider(
      */
     fun detailPath(detail: Detail, event: Event): File {
         return File("${eventsFolderPath(event).path}/${detail.uuid}")
-    }
-
-    /**
-     * Returns the **relative** path in which a detail will be saved.
-     * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path.
-     */
-    fun detailPath(encryptedEvent: EncryptedEvent, encryptedDetail: EncryptedDetail): File {
-        return File("${eventsFolderPath(encryptedEvent).path}/${encryptedDetail.uuid}")
     }
 
     private fun eventsFolderPath(event: Event): File {

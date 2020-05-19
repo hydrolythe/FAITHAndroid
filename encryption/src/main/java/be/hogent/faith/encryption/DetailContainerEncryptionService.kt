@@ -23,15 +23,16 @@ class DetailContainerEncryptionService<T>(
         val dekSingle = keyEncrypter.decrypt(encryptedDetailsContainer.encryptedDEK)
         val sdekSingle = keyEncrypter.decrypt(encryptedDetailsContainer.encryptedStreamingDEK)
 
-        // TODO: Find a way around blockingGet()
-        return Singles.zip(dekSingle, sdekSingle) { dek, sdek ->
-            detailEncryptionService.encrypt(detail, dek, sdek).blockingGet()
+        return dekSingle.flatMap { dek ->
+            sdekSingle.flatMap { sdek ->
+                detailEncryptionService.encrypt(detail, dek, sdek)
+            }
         }
     }
 
     override fun decryptFile(detail: Detail, container: EncryptedDetailsContainer): Completable {
         return keyEncrypter.decrypt(container.encryptedStreamingDEK)
-            .flatMapCompletable { sdek -> detailEncryptionService.decryptDetailFiles(detail, sdek) }
+            .flatMapCompletable { sdek -> detailEncryptionService.decryptDetailFile(detail, sdek) }
     }
 
     override fun decryptData(
@@ -39,11 +40,9 @@ class DetailContainerEncryptionService<T>(
         container: EncryptedDetailsContainer
     ): Single<Detail> {
         val dekSingle = keyEncrypter.decrypt(container.encryptedDEK)
-        val sdekSingle = keyEncrypter.decrypt(container.encryptedStreamingDEK)
 
-        // TODO: Find a way around blockingGet()
-        return Singles.zip(dekSingle, sdekSingle) { dek, sdek ->
-            detailEncryptionService.decryptData(encryptedDetail, dek).blockingGet()
+        return dekSingle.flatMap { dek ->
+            detailEncryptionService.decryptData(encryptedDetail, dek)
         }
     }
 

@@ -4,17 +4,20 @@ import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.util.contentEqual
 import be.hogent.faith.util.factory.DetailFactory
+import io.mockk.mockk
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.io.File
+import java.nio.file.Files
 
 class DetailEncryptionServiceTest : TestWithFiles() {
     private val dek by lazy { KeyGenerator().generateKeysetHandle() }
     private val sdek by lazy { KeyGenerator().generateStreamingKeysetHandle() }
 
-    private val detailEncrypter = DetailEncryptionService(FileEncryptionService())
+    private val detailEncrypter =
+        DetailEncryptionService(FileEncryptionService(), mockk())
 
     private val detail = DetailFactory.makeRandomDetail()
 
@@ -89,12 +92,13 @@ class DetailEncryptionServiceTest : TestWithFiles() {
             .dispose()
 
         // Act
-        detailEncrypter.decryptDetailFiles(encryptedDetail, sdek)
+        val destination = Files.createTempFile("decryptedFile", null).toFile()
+        detailEncrypter.decryptDetailFile(encryptedDetail, sdek, destination)
             .test()
             .assertComplete()
             .dispose()
 
         // Assert
-        assertTrue(encryptedDetail.file.contentEqual(backupFile))
+        assertTrue(destination.contentEqual(backupFile))
     }
 }
