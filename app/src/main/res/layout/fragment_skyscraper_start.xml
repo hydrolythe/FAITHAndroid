@@ -38,12 +38,12 @@
             android:id="@+id/btn_skyscraper_history"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
-            android:layout_marginStart="@dimen/margin_corner_button"
-            android:layout_marginBottom="@dimen/margin_corner_button"
-            android:background="@drawable/ic_btn_history"
+            android:layout_marginTop="@dimen/margin_corner_button"
+            android:layout_marginEnd="@dimen/margin_corner_button"
+            android:background="@drawable/ic_knop_geschiedenis"
             android:contentDescription="@string/cancel"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/btn_skyscraper_add"
