@@ -33,8 +33,10 @@ class FaithVideoPlayer(
 
     private val updateCurrentPosition = object : Runnable {
         override fun run() {
-            setCurrentTimeVideo(controller!!.getCurrentPosition())
-            setDurationVideo(controller!!.getDuration())
+            if(controller != null){
+                setCurrentTimeVideo(controller!!.getCurrentPosition())
+                setDurationVideo(controller!!.getDuration())
+            }
             handler!!.postDelayed(this, ONE_SECOND.toLong())
         }
     }
