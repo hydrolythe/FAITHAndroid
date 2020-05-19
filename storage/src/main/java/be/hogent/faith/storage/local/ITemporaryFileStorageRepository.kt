@@ -35,4 +35,5 @@ interface ITemporaryFileStorageRepository {
      * Returns the file where the [detail]'s file is stored.
      */
     fun getFile(detail: Detail, container: DetailsContainer): File
+    fun setFilesToDecryptedVersions(event: Event)
 }

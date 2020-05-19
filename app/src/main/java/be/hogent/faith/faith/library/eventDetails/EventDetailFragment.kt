@@ -67,8 +67,11 @@ class EventDetailFragment : Fragment() {
         })
 
         eventDetailsViewModel.details.observe(viewLifecycleOwner, Observer { details ->
-            (binding.recyclerViewLibraryEventdetails.adapter as DetailThumbnailsAdapter)
-                .submitList(details)
+            with(binding.recyclerViewLibraryEventdetails.adapter as DetailThumbnailsAdapter) {
+                submitList(details)
+                // Added to ensure thumbnails are loaded once files have been downloaded.
+                notifyDataSetChanged()
+            }
         })
 
         eventDetailsViewModel.cancelButtonClicked.observe(viewLifecycleOwner, Observer {

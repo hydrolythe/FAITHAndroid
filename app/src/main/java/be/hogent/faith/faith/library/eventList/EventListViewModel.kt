@@ -22,7 +22,6 @@ class EventListViewModel(
     user: User,
     private val getEventsUseCase: GetEventsUseCase
 ) : ViewModel() {
-    // Currently like this to do testing
     private var events: List<Event> = emptyList()
 
     private val eventFilter = CombinedEventFilter()
@@ -115,16 +114,17 @@ class EventListViewModel(
                 object : DisposableSubscriber<List<Event>>() {
                     override fun onComplete() {}
 
-                    override fun onNext(t: List<Event>) {
-                        events = t.sortedByDescending { it.dateTime }
-                        audioFilterEnabled.value =
-                                audioFilterEnabled.value // anders wordt de lijst niet getoond
-                    }
+                override fun onNext(t: List<Event>) {
+                    events = t.sortedByDescending { it.dateTime }
+                    // Trigger update of filteredEvents
+                    audioFilterEnabled.value = audioFilterEnabled.value
+                }
 
-                    override fun onError(e: Throwable) {
-                        _errorMessage.postValue(R.string.error_load_events)
-                    }
-                })
+                override fun onError(e: Throwable) {
+                    Timber.e(e)
+                    _errorMessage.postValue(R.string.error_load_events)
+                }
+            })
     }
 
     private fun combineLatestDates(
@@ -182,8 +182,7 @@ class EventListViewModel(
     }
 
     fun deleteEvent(eventUUID: UUID) {
-        // TODO must be implemented
-        Timber.d("Item deleted $eventUUID")
+        TODO("Implement")
     }
 
     private fun toLocalDate(milliseconds: Long): LocalDate? {

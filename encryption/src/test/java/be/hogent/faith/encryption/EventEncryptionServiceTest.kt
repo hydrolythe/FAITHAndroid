@@ -5,13 +5,18 @@ import be.hogent.faith.encryption.di.encryptionModule
 import be.hogent.faith.encryption.encryptionService.DummyKeyEncryptionService
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
+import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.service.encryption.EncryptedEvent
+import be.hogent.faith.storage.StoragePathProvider
 import be.hogent.faith.util.contentEqual
 import be.hogent.faith.util.factory.EventFactory
+import io.mockk.every
+import io.mockk.mockk
 import io.reactivex.schedulers.Schedulers
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.koin.test.KoinTest
@@ -23,12 +28,14 @@ class EventEncryptionServiceTest : KoinTest, TestWithFiles() {
     private val keyEncrypter = KeyEncrypter(DummyKeyEncryptionService())
 
     private val fileEncryptionService = FileEncryptionService()
+    private val storagePathProvider = mockk<StoragePathProvider>()
 
     private val eventEncrypter = EventEncryptionService(
-        DetailEncryptionService(fileEncryptionService),
+        DetailEncryptionService(fileEncryptionService, mockk()),
         fileEncryptionService,
         keyGenerator,
-        keyEncrypter
+        keyEncrypter,
+        storagePathProvider
     )
 
     private val eventWithoutFiles =
@@ -48,6 +55,19 @@ class EventEncryptionServiceTest : KoinTest, TestWithFiles() {
     @get:Rule
     val koinTestRule = KoinTestRule.create {
         modules(encryptionModule)
+    }
+
+    @Before
+    fun setUp() {
+        every {
+            storagePathProvider.detailPath(any<EncryptedDetail>(), any<EncryptedEvent>())
+        } answers { File("${arg<EncryptedDetail>(0).uuid}/${arg<EncryptedEvent>(1).uuid}") }
+        every {
+            storagePathProvider.temporaryStorage(any<File>())
+        } answers { File("temp/${arg<File>(0).path}") }
+        every {
+            storagePathProvider.localStorage(any<File>())
+        } answers { File("local/${arg<File>(0).path}") }
     }
 
     @After
