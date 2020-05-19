@@ -133,8 +133,8 @@ class FaithVideoPlayer(
     }
 
     fun stopPlayer() {
-        controller!!.stopPlayer()
-        handler!!.removeCallbacks(updateCurrentPosition)
+        controller?.stopPlayer()
+        handler?.removeCallbacks(updateCurrentPosition)
     }
 
     private fun setFullScreen() {
