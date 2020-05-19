@@ -20,7 +20,7 @@ class VideoFilePlayerController(
     }
 
     override fun getDuration(): Float {
-        return videoView.duration.toFloat()
+        return videoView.duration.toFloat() / ONE_SECOND
     }
 
     override fun getCurrentPosition(): Float {
