@@ -16,7 +16,7 @@ abstract class FaithVideoPlayerFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         playerViewModel.currentVideo.observe(this, Observer {
-                player?.playNewVideo(it, requireContext())
+            player?.playNewVideo(it, requireContext())
         })
     }
 
@@ -32,5 +32,5 @@ abstract class FaithVideoPlayerFragment : Fragment() {
         super.onDestroy()
         player?.stopPlayer()
         player = null
-        }
+    }
 }

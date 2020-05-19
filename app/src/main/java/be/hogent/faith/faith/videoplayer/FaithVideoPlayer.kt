@@ -13,7 +13,6 @@ import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import com.google.android.material.card.MaterialCardView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-import java.lang.UnsupportedOperationException
 
 class FaithVideoPlayer(
     private val playerParentView: MaterialCardView,
@@ -33,9 +32,9 @@ class FaithVideoPlayer(
 
     private val updateCurrentPosition = object : Runnable {
         override fun run() {
-            if(controller != null){
-                setCurrentTimeVideo(controller!!.getCurrentPosition())
-                setDurationVideo(controller!!.getDuration())
+            controller?.let { controller ->
+                setCurrentTimeVideo(controller.getCurrentPosition())
+                setDurationVideo(controller.getDuration())
             }
             handler!!.postDelayed(this, ONE_SECOND.toLong())
         }
@@ -44,8 +43,9 @@ class FaithVideoPlayer(
     init {
         initPlayerListeners()
 
-        handler = Handler()
-        handler!!.post(updateCurrentPosition)
+        handler = Handler().apply {
+            post(updateCurrentPosition)
+        }
     }
 
     private fun initPlayerListeners() {
@@ -58,12 +58,12 @@ class FaithVideoPlayer(
         }
 
         stopButton?.setOnClickListener {
-                stopVideo()
-            }
+            stopVideo()
+        }
 
         fullscreenButton?.setOnClickListener {
-                setFullScreen()
-            }
+            setFullScreen()
+        }
 
         seekBar?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
