@@ -110,25 +110,25 @@ class FaithVideoPlayer(
     }
 
     private fun playVideo() {
-        controller!!.playVideo()
+        controller?.playVideo()
     }
 
     fun resumeVideo() {
-        controller!!.resumeVideo()
+        controller?.resumeVideo()
     }
 
     fun pauseVideo() {
-        controller!!.pauseVideo()
+        controller?.pauseVideo()
     }
 
     private fun stopVideo() {
-        controller!!.stopVideo()
+        controller?.stopVideo()
         seekBar?.progress = 0
         currentTimeField?.text = "0:00"
     }
 
     fun seekTo(time: Float) {
-        controller!!.seekTo(time)
+        controller?.seekTo(time)
         currentTimeField?.text = createTimeLabel(time)
     }
 
