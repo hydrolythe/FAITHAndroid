@@ -143,8 +143,6 @@ class BackpackScreenActivity : AppCompatActivity(),
     override fun openDetailScreenFor(detail: Detail) {
         backpackViewModel.setOpenDetailType(OpenDetailMode.EDIT)
         backpackViewModel.setCurrentFileAndLoadCorrespondingFile(detail)
-        // backpackViewModel.setCurrentFile(detail)
-        // replaceFragment(BackpackDetailFragment.newInstance(detail),R.id.backpack_fragment_container)
         backpackViewModel.viewButtons(false)
     }
 
