@@ -117,7 +117,7 @@ class FaithVideoPlayer(
         controller!!.resumeVideo()
     }
 
-    private fun pauseVideo() {
+    fun pauseVideo() {
         controller!!.pauseVideo()
     }
 
