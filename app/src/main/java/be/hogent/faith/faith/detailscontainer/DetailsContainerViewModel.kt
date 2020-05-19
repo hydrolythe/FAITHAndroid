@@ -128,8 +128,8 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         _currentDetail.postValue(detail)
     }
 
-    fun setCurrentFileAndLoadCorrespondingFile(detail: Detail?) {
-        _currentDetail.postValue(detail)
+    fun setCurrentFileAndLoadCorrespondingFile(detail: Detail) {
+        getCurrentDetailFile(detail)
     }
 
     // nieuw detail aanmaken of bestaand detail openen?

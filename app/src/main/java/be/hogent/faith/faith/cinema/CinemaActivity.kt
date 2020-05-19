@@ -127,6 +127,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
     override fun openDetailScreenFor(detail: Detail) {
         cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.EDIT)
         cinemaOverviewViewModel.setCurrentFileAndLoadCorrespondingFile(detail)
+        replaceFragment(CinemaDetailFragment.newInstance(detail),R.id.cinema_fragment_container)
         // cinemaOverviewViewModel.viewButtons(false)
     }
 

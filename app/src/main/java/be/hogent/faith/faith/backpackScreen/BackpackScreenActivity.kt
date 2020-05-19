@@ -63,10 +63,10 @@ class BackpackScreenActivity : AppCompatActivity(),
         })
 
         backpackViewModel.goToDetail.observe(this, Observer {
-            replaceFragment(
+            /*replaceFragment(
                 BackpackDetailFragment.newInstance(it),
                 R.id.backpack_fragment_container
-            )
+            )*/
         })
     }
 
@@ -125,6 +125,8 @@ class BackpackScreenActivity : AppCompatActivity(),
     override fun openDetailScreenFor(detail: Detail) {
         backpackViewModel.setOpenDetailType(OpenDetailMode.EDIT)
         backpackViewModel.setCurrentFileAndLoadCorrespondingFile(detail)
+        //backpackViewModel.setCurrentFile(detail)
+        //replaceFragment(BackpackDetailFragment.newInstance(detail),R.id.backpack_fragment_container)
         backpackViewModel.viewButtons(false)
     }
 
