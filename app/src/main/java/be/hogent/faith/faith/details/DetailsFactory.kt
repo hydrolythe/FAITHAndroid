@@ -28,10 +28,6 @@ enum class DetailType {
     PHOTO, DRAWING, AUDIO, TEXT, YOUTUBE, EXTERNALFILE
 }
 
-enum class DetailMetaDataType {
-    EVENT, BACKPACK, CINEMA
-}
-
 object DetailsFactory {
     fun createDetail(
         type: DetailType

@@ -9,6 +9,7 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 
 /**
  * Returns all the events associated with a user. The files belonging to  these events are not guaranteed
@@ -23,10 +24,17 @@ class GetEventsUseCase(
 
     override fun buildUseCaseObservable(params: Params): Flowable<List<Event>> {
         return eventRepository.getAll()
+            .doOnSubscribe { Timber.i("Started listening for new events for user ${params.user.username}") }
+            .doOnNext { Timber.i("Downloaded new encrypted events for user ${params.user.username}") }
             .concatMapSingle { list ->
                 Observable.fromIterable(list)
-                    .flatMapSingle(eventEncryptionService::decryptData)
+                    .flatMapSingle { encryptedEvent ->
+                        eventEncryptionService.decryptData(encryptedEvent)
+                            .subscribeOn(subscriber)
+                            .doOnSuccess { Timber.i("Decrypted data for event ${encryptedEvent.uuid}") }
+                    }
                     .toList()
+                    .doOnSuccess { Timber.i("Decrypted all events for user ${params.user.username}") }
             }
     }
 

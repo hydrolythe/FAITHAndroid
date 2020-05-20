@@ -43,6 +43,7 @@ class FirebaseStorageRepositoryTest {
         type = "encrypted type",
         // Empty string to emulate a non-YoutubeVideoDetail
         youtubeVideoID = "",
+        thumbnail = DataFactory.randomString(),
         dateTime = DataFactory.randomString()
     )
 

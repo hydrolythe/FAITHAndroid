@@ -4,6 +4,7 @@ import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.DetailsContainer
@@ -66,7 +67,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     val externalVideoFilterEnabled = MutableLiveData<Boolean>().apply { this.value = false }
 
     val deleteEnabled = MutableLiveData<Boolean>().apply { this.value = false }
-
     private var _dateRangeClicked = SingleLiveEvent<Unit>()
     val dateRangeClicked: LiveData<Unit> = _dateRangeClicked
 
@@ -74,6 +74,8 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         this.addSource(startDate) { value = combineLatestDates(startDate, endDate) }
         this.addSource(endDate) { value = combineLatestDates(startDate, endDate) }
     }
+
+    val detailsPresent: LiveData<Boolean> by lazy { Transformations.map(filteredDetails) { detailsList -> detailsList.isNotEmpty() } }
 
     val filteredDetails: LiveData<List<Detail>> = MediatorLiveData<List<Detail>>().apply {
         addSource(searchString) { query ->
@@ -125,8 +127,8 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         _currentDetail.postValue(detail)
     }
 
-    fun setCurrentFileAndLoadCorrespondingFile(detail: Detail?) {
-        _currentDetail.postValue(detail)
+    fun setCurrentFileAndLoadCorrespondingFile(detail: Detail) {
+        getCurrentDetailFile(detail)
     }
 
     // nieuw detail aanmaken of bestaand detail openen?
@@ -217,9 +219,9 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     ): String {
         val van =
             if (startDate.value == LocalDate.MIN.plusDays(1)) "van" else startDate.value!!.format(
-                DateTimeFormatter.ISO_DATE
+                DateTimeFormatter.ofPattern("dd,MMM yyyy")
             )
-        val tot = endDate.value!!.format(DateTimeFormatter.ISO_DATE)
+        val tot = endDate.value!!.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
         return "$van - $tot"
     }
 

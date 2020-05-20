@@ -104,10 +104,12 @@
             android:id="@+id/btn_backpack_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/margin_corner_button"
             android:background="@drawable/ic_trashcan"
+            android:contentDescription="@string/rv_btn_delete_detail"
             android:onClick="@{() -> backpackViewModel.onDeleteClicked()}"
-            app:layout_constraintEnd_toStartOf="@+id/guide_items_vertical_end"
+            android:clickable="@{backpackViewModel.detailsPresent == true? true : false}"
+            app:layout_constraintStart_toStartOf="@+id/guide_items_vertical_start"
             app:layout_constraintTop_toTopOf="@+id/guide_rv_horizontal_2"
             app:srcCompat="@drawable/ic_trashcan" />
 
@@ -120,7 +122,8 @@
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/search_btn" />
+            app:srcCompat="@drawable/search_btn"
+            android:contentDescription="@string/button_filter_menu" />
 
         <ImageButton
             android:id="@+id/btn_backpack_add"
@@ -130,20 +133,23 @@
             android:background="@drawable/add_btn"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/button_open_add_menu" />
 
         <ImageButton
             android:id="@+id/btn_backpack_draw_cancel"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="@dimen/margin_corner_button"
+            android:layout_marginTop="@dimen/margin_corner_button"
             android:alpha="@{backpackViewModel.deleteEnabled == true ? 0.5F : 1F}"
             android:background="@drawable/ic_return"
             android:clickable="@{backpackViewModel.viewButtons == true ? true : false}"
             android:contentDescription="@string/cancel"
             android:onClick="@{() -> backpackViewModel.goToCityScreen()}"
-            app:layout_constraintStart_toStartOf="@+id/btn_backpack_search"
-            app:layout_constraintTop_toTopOf="@+id/guide_undo_horizontal" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+             />
 
 
     </androidx.constraintlayout.motion.widget.MotionLayout>

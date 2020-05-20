@@ -112,12 +112,10 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
             is PhotoDetail -> save(detail)
             is VideoDetail -> save(detail)
         }
-        // cinemaOverviewViewModel.viewButtons(true)
     }
 
     fun save(detail: Detail) {
         cinemaOverviewViewModel.saveCurrentDetail(userViewModel.user.value!!, detail)
-        // cinemaOverviewViewModel.showSaveDialog(detail)
     }
 
     override fun startViewVideoFragment() {
@@ -131,7 +129,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
     override fun openDetailScreenFor(detail: Detail) {
         cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.EDIT)
         cinemaOverviewViewModel.setCurrentFileAndLoadCorrespondingFile(detail)
-        // cinemaOverviewViewModel.viewButtons(false)
+        replaceFragment(DetailsFactory.editDetail(detail), R.id.cinema_fragment_container)
     }
 
     override fun deleteDetail(detail: Detail) {

@@ -22,4 +22,6 @@
     <dimen name="textIcon_fontsize_large">45sp</dimen>
     <dimen name="icon_small">20dp</dimen>
     <dimen name="match_constraint">0dp</dimen>
+    <dimen name="padding_left">16dp</dimen>
+    <dimen name="margin_corner_button">16dp</dimen>
 </resources>

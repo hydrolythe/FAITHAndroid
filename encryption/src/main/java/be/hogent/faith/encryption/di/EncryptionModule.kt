@@ -28,8 +28,8 @@ val encryptionModule = module {
     single { KeyEncrypter(get()) }
     single { KeyGenerator() }
     single { FileEncryptionService() }
-    single { DetailEncryptionService(get()) }
-    factory<IEventEncryptionService> { EventEncryptionService(get(), get(), get(), get()) }
+    single { DetailEncryptionService(get(), get()) }
+    factory<IEventEncryptionService> { EventEncryptionService(get(), get(), get(), get(), get()) }
     factory<IDetailContainerEncryptionService<Backpack>> {
         DetailContainerEncryptionService<Backpack>(get(), get(), get())
     }

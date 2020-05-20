@@ -2,8 +2,6 @@ package be.hogent.faith.domain.models
 
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import org.threeten.bp.LocalDateTime
 import java.io.File
@@ -43,18 +41,6 @@ data class Event(
 
     fun removeDetail(detail: Detail) {
         _details -= detail
-    }
-
-    fun addNewPhotoDetail(saveFile: File): PhotoDetail {
-        val newDetail = PhotoDetail(saveFile)
-        addDetail(newDetail)
-        return newDetail
-    }
-
-    fun addNewDrawingDetail(saveFile: File): DrawingDetail {
-        val newDetail = DrawingDetail(saveFile)
-        addDetail(newDetail)
-        return newDetail
     }
 
     fun addNewAudioDetail(saveFile: File) {
