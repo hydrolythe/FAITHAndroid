@@ -75,6 +75,12 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.FullScreen"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".faith.skyscraper.SkyscraperActivity"
+            android:label="@string/lbl_activity_skyscraper"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.FullScreen"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>

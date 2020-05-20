@@ -75,6 +75,9 @@ class CityScreenFragment : Fragment() {
         cityScreenViewModel.cinemaClicked.observe(this, Observer {
             navigation?.startCinemaFragment()
         })
+        cityScreenViewModel.skyscraperClicked.observe(this, Observer {
+            navigation?.startSkyscraperFragment()
+        })
 
         userViewModel.user.observe(this, Observer { user ->
             Glide.with(requireContext()).load(avatarProvider.getAvatarDrawableStaan(user.avatarName))
@@ -97,5 +100,6 @@ class CityScreenFragment : Fragment() {
         fun logOut()
         fun startBackpackFragment()
         fun startCinemaFragment()
+        fun startSkyscraperFragment()
     }
 }
