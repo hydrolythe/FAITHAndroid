@@ -35,6 +35,7 @@ dependencies {
     implementation project(':domain')
     implementation project(':service')
     implementation project(':util')
+    implementation project(':storage')
 
     def commonDependencies = rootProject.ext.commonDependencies
     def testDependencies = rootProject.ext.testDependencies
@@ -61,8 +62,6 @@ dependencies {
     testImplementation("com.google.crypto.tink:tink:1.2.2") {
         exclude group: 'com.google.crypto.tink', module: 'tink-android'
     }
-    // TODO: check if this can be removed
-    annotationProcessor("com.google.auto.service:auto-service:1.0-rc4")
 
     implementation networkDependencies.moshi
     implementation networkDependencies.moshiConverter

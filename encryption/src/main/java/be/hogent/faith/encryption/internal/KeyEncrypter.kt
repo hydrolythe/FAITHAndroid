@@ -6,6 +6,7 @@ import com.google.crypto.tink.JsonKeysetReader
 import com.google.crypto.tink.JsonKeysetWriter
 import com.google.crypto.tink.KeysetHandle
 import io.reactivex.Single
+import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
 class KeyEncrypter(private val encryptionService: KeyEncryptionService) {
@@ -31,6 +32,11 @@ class KeyEncrypter(private val encryptionService: KeyEncryptionService) {
         return encryptionService
             .decrypt(DecryptionRequest(encryptedKey))
             .map(::convertStringToKeysetHandle)
+            .doOnSuccess { Timber.i("Decrypted key using API") }
+            .doOnError {
+                Timber.e("Error while decrypting key using API: $")
+                Timber.e(it)
+            }
     }
 
     private fun convertStringToKeysetHandle(jsonKeysetHandle: String): KeysetHandle {

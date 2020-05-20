@@ -10,6 +10,7 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.service.encryption.EncryptedDetail
+import be.hogent.faith.storage.StoragePathProvider
 import com.google.crypto.tink.KeysetHandle
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -19,19 +20,19 @@ import timber.log.Timber
 import java.io.File
 
 class DetailEncryptionService(
-    private val fileEncryptionService: FileEncryptionService
+    private val fileEncryptionService: FileEncryptionService,
+    private val pathProvider: StoragePathProvider
 ) {
 
     /**
-     * Encrypts both the data within a file and the files associated with it.
+     * Returns an encrypted version of the [Detail], both its data and its file.
      */
     fun encrypt(detail: Detail, dek: KeysetHandle, sdek: KeysetHandle): Single<EncryptedDetail> {
-        return encryptData(detail, dek).zipWith(
-            encryptDetailFiles(detail, sdek)
-        ) { encryptedDetail, file ->
-            encryptedDetail.file = file
-            encryptedDetail
-        }
+        return encryptData(detail, dek)
+            .zipWith(encryptDetailFiles(detail, sdek)) { encryptedDetail, file ->
+                encryptedDetail.file = file
+                encryptedDetail
+            }
     }
 
     private fun encryptDetailFiles(detail: Detail, sdek: KeysetHandle): Single<File> {
@@ -73,6 +74,10 @@ class DetailEncryptionService(
             .doOnSuccess { Timber.i("Encrypted detail data for detail ${detail.uuid}") }
     }
 
+    /**
+     * Decrypts the data of the [encryptedDetail], resulting in a regular [Detail].
+     * The file of the [encryptedDetail] will **not** be decrypted.
+     */
     fun decryptData(
         encryptedDetail: EncryptedDetail,
         dek: KeysetHandle
@@ -132,7 +137,11 @@ class DetailEncryptionService(
             .doOnSuccess { Timber.i("Decrypted detail data for detail ${encryptedDetail.uuid}") }
     }
 
-    fun decryptDetailFiles(
+    /**
+     * Decrypts the file in a [detail].
+     * The file of the detail will be updated to reflect the decrypted file.
+     */
+    fun decryptDetailFile(
         detail: Detail,
         sdek: KeysetHandle
     ): Completable {
@@ -143,17 +152,22 @@ class DetailEncryptionService(
                 .doOnComplete { Timber.i("Detail ${detail.uuid} is a YoutubeVideoDetail, nothing to encrypt") }
         } else {
             return fileEncrypter.decrypt(detail.file, sdek)
-                .map {
-                    Timber.i("Decrypted file for detail ${detail.uuid} is ${it.path}")
-                    detail.file = it
+                .flatMapCompletable {
+                    Completable.fromAction {
+                        Timber.i("Decrypted file for detail ${detail.uuid} is ${it.path}")
+                        detail.file = it
+                    }
                 }
-                .ignoreElement()
         }
     }
 
-    fun decryptDetailFiles(
+    /**
+     * Decrypts the file belonging to a detail, and places it in the given [destinationFile].
+     */
+    fun decryptDetailFile(
         encryptedDetail: EncryptedDetail,
-        sdek: KeysetHandle
+        sdek: KeysetHandle,
+        destinationFile: File
     ): Completable {
         val fileEncrypter = FileEncryptionService()
         // YoutubeVideos don't have a file that needs to be encrypted
@@ -161,12 +175,15 @@ class DetailEncryptionService(
             return Completable.complete()
                 .doOnComplete { Timber.i("Detail ${encryptedDetail.uuid} is a YoutubeVideoDetail, nothing to encrypt") }
         } else {
-            return fileEncrypter.decrypt(encryptedDetail.file, sdek)
-                .map {
-                    Timber.i("Decrypted file for detail ${encryptedDetail.uuid} is ${it.path}")
-                    encryptedDetail.file = it
+            return fileEncrypter
+                .decrypt(
+                    encryptedDetail.file,
+                    sdek,
+                    destinationFile
+                )
+                .doOnComplete {
+                    Timber.i("Decrypted file for detail ${encryptedDetail.uuid} to ${destinationFile.path}")
                 }
-                .ignoreElement()
         }
     }
 }

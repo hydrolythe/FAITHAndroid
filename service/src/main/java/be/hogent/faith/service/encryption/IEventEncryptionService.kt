@@ -18,8 +18,8 @@ interface IEventEncryptionService {
     fun decryptData(encryptedEvent: EncryptedEvent): Single<Event>
 
     /**
-     * Decrypts the files belonging to an event. After calling this, the paths inside the event
-     * may have been updated.
+     * Decrypts the files belonging to an event.
+     * All files will be placed in the paths designated by the [StoragePathProvider].
      */
     fun decryptFiles(encryptedEvent: EncryptedEvent): Completable
 }
