@@ -120,7 +120,10 @@ val serviceModule = module {
         )
     }
     factory {
-        GetYoutubeVideosFromSearchUseCase(get(), get())
+        GetYoutubeVideosFromSearchUseCase(
+            observer = get(named("observer")),
+            subscriber = get(named("subscriber"))
+        )
     }
     factory<SaveDetailsContainerDetailUseCase<Backpack>>(named("SaveBackpackDetailUseCase")) {
         SaveDetailsContainerDetailUseCase<Backpack>(
