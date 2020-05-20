@@ -12,14 +12,14 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailFragment
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
 import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
+import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailFragment
+import be.hogent.faith.faith.details.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder

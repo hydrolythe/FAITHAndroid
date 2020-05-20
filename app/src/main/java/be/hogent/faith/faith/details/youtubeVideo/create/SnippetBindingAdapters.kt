@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.backpackScreen.youtubeVideo.create
+package be.hogent.faith.faith.details.youtubeVideo.create
 
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
