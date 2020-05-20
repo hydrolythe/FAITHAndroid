@@ -6,8 +6,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerViewModel
+import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailViewModel
 import be.hogent.faith.faith.cinema.CinemaCreateVideoViewModel
 import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
@@ -36,6 +35,7 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvid
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
 import be.hogent.faith.faith.util.AndroidTempFileProvider
 import be.hogent.faith.faith.util.TempFileProvider
+import be.hogent.faith.faith.videoplayer.CurrentVideoViewModel
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.storage.SecureCredentialsManager
@@ -96,7 +96,7 @@ val appModule = module(override = true) {
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { TakePhotoViewModel(get()) }
     viewModel { YoutubeVideoDetailViewModel(get()) }
-    viewModel { FaithYoutubePlayerViewModel() }
+    viewModel { CurrentVideoViewModel() }
     viewModel { ExternalFileViewModel(get(), get()) }
     viewModel { (user: User) -> EventListViewModel(user, get()) }
     viewModel { EventDetailsViewModel(get()) }

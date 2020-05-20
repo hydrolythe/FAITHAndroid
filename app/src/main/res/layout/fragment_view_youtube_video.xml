@@ -32,9 +32,8 @@
                 android:id="@+id/seekbar_yt_video"
                 android:layout_width="443dp"
                 android:layout_height="wrap_content"
-                android:progressBackgroundTint="#A5F2C9"
-                android:progressTint="#16F48A"
-                android:thumbTint="#0000FF" />
+                android:progressDrawable="@drawable/audio_seekbar_progress"
+                />
 
             <TextView
                 android:id="@+id/text_duration_yt_video"
@@ -110,8 +109,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/colorTransparent"
-                app:srcCompat="@drawable/common_google_signin_btn_icon_light" />
+                android:src="@drawable/ic_fullscreen_black_24dp"
+                android:backgroundTint="@color/colorTransparent" />
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -283,13 +282,6 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline4"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toTopOf="@+id/guideline7">
-
-            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-                android:id="@+id/youtube_player_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:showFullScreenButton="false"
-                app:showYouTubeButton="false" />
 
         </com.google.android.material.card.MaterialCardView>
 
