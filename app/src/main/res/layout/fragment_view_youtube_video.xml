@@ -109,8 +109,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/colorTransparent"
-                app:srcCompat="@drawable/common_google_signin_btn_icon_light" />
+                android:src="@drawable/ic_fullscreen_black_24dp"
+                android:backgroundTint="@color/colorTransparent" />
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
