@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.details.youtubeVideo.create
+package be.hogent.faith.faith.backpackScreen.youtubeVideo.create
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -14,9 +14,7 @@ import be.hogent.faith.faith.util.getHighQualityThumbnailUrl
 import com.bumptech.glide.Glide
 
 class YoutubeSnippetAdapter(private val context: Context?, private val clickListener: SnippetClickListener) :
-    ListAdapter<YoutubeVideoDetail, YoutubeSnippetAdapter.SnippetViewHolder>(
-        SnippetDiffCallback()
-    ) {
+    ListAdapter<YoutubeVideoDetail, YoutubeSnippetAdapter.SnippetViewHolder>(SnippetDiffCallback()) {
 
     override fun onBindViewHolder(holder: SnippetViewHolder, position: Int) {
         holder.binding.containerSnippet.setOnClickListener {
@@ -33,9 +31,7 @@ class YoutubeSnippetAdapter(private val context: Context?, private val clickList
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SnippetViewHolder {
-        return SnippetViewHolder.from(
-            parent
-        )
+        return SnippetViewHolder.from(parent)
     }
 
     class SnippetViewHolder private constructor(val binding: YoutubeSnippetItemRvBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -55,9 +51,7 @@ class YoutubeSnippetAdapter(private val context: Context?, private val clickList
             fun from(parent: ViewGroup): SnippetViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = YoutubeSnippetItemRvBinding.inflate(layoutInflater, parent, false)
-                return SnippetViewHolder(
-                    binding
-                )
+                return SnippetViewHolder(binding)
             }
         }
     }

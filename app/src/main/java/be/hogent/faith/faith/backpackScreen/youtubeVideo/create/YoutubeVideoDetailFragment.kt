@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.details.youtubeVideo.create
+package be.hogent.faith.faith.backpackScreen.youtubeVideo.create
 
 import android.content.Context
 import android.os.Bundle
@@ -13,6 +13,7 @@ import android.widget.PopupWindow
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
@@ -20,19 +21,36 @@ import be.hogent.faith.databinding.FragmentCreateYoutubeVideoBinding
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayer
+import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerFragment
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.faith.videoplayer.FaithVideoPlayer
-import be.hogent.faith.faith.videoplayer.FaithVideoPlayerFragment
-import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.*
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_back_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_fullscreen_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_pause_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_play_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_save_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_stop_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.card_youtube_player
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.layer_fullscreen_yt_player
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.menu_container_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.seekbar_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.text_currentime_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.text_duration_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.time_container_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.youtube_player_view
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.Timer
 import java.util.TimerTask
 
-class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<YoutubeVideoDetail> {
+/**
+ * A simple [Fragment] subclass.
+ */
+class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(), DetailFragment<YoutubeVideoDetail> {
 
     private val youtubeVideoDetailViewModel: YoutubeVideoDetailViewModel by viewModel()
     private var youtubeSnippetAdapter: YoutubeSnippetAdapter? = null
@@ -44,18 +62,14 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
     private var navigation: YoutubeVideoDetailScreenNavigation? = null
     private var timer: Timer? = null
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
+    private var youtubePlayerListener: YouTubePlayerListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        youtubeVideoDetailBinding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_create_youtube_video,
-            container,
-            false
-        )
+        youtubeVideoDetailBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_create_youtube_video, container, false)
 
         youtubeVideoDetailBinding.youtubeViewModel = youtubeVideoDetailViewModel
 
@@ -79,31 +93,25 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
     }
 
     private fun updateUI() {
-        youtubeSnippetAdapter =
-            YoutubeSnippetAdapter(
-                context,
-                object :
-                    SnippetClickListener {
-                    override fun onSnippetClick(snippet: YoutubeVideoDetail) {
-                        /**
-                         * Opens a preview screen only when no other preview screen is already opened
-                         */
-                        if (youtubeVideoDetailViewModel.showPreview.value != ShowPreview.SHOW)
-                            youtubeVideoDetailViewModel.setSelectedSnippet(snippet)
-                    }
-                })
+        youtubeSnippetAdapter = YoutubeSnippetAdapter(context, object : SnippetClickListener {
+            override fun onSnippetClick(snippet: YoutubeVideoDetail) {
+                /**
+                 * Opens a preview screen only when no other preview screen is already opened
+                 */
+                if (youtubeVideoDetailViewModel.showPreview.value != ShowPreview.SHOW)
+                    youtubeVideoDetailViewModel.setSelectedSnippet(snippet)
+            }
+        })
 
-        youtubeVideoDetailBinding.rvYoutubeView.layoutManager = GridLayoutManager(context, 4)
+        val manager = GridLayoutManager(context, 4)
+        youtubeVideoDetailBinding.rvYoutubeView.layoutManager = manager
 
         youtubeVideoDetailBinding.rvYoutubeView.adapter = youtubeSnippetAdapter
-
-        popupview = layoutInflater.inflate(R.layout.fragment_view_youtube_video, null, false)
-        initYoutubePlayer()
     }
 
     private fun startListeners() {
         youtubeVideoDetailViewModel.snippets.observe(this, Observer {
-            youtubeSnippetAdapter!!.submitList(it)
+                youtubeSnippetAdapter!!.submitList(it)
         })
 
         youtubeVideoDetailBinding.btnSearchVideo.setOnClickListener {
@@ -123,9 +131,10 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
         youtubeVideoDetailViewModel.showPreview.observe(this, Observer {
             if (it == ShowPreview.SHOW) {
                 showPreviewScreen()
-                playNewVideo(youtubeVideoDetailViewModel.selectedSnippet.value!!)
+                startYoutubePlayer()
             } else if (it == ShowPreview.HIDE) {
                 hidePreviewScreen()
+                stopYoutubePlayer()
                 youtubeVideoDetailViewModel.clearSelectedSnippet()
             }
         })
@@ -166,7 +175,7 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
                     }
                 }, 500)
             }
-        })
+            })
 
         youtubeVideoDetailViewModel.backToBackpack.observe(this, Observer {
             navigation?.backToEvent()
@@ -189,11 +198,8 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
         youtubeVideoDetailBinding.rvYoutubeView.visibility = View.GONE
         youtubeVideoDetailBinding.editTextSearchVideo.isEnabled = false
 
-        popupWindow = PopupWindow(
-            popupview,
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
-        )
+        popupview = layoutInflater.inflate(R.layout.fragment_view_youtube_video, null, false)
+        popupWindow = PopupWindow(popupview, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
         /**
          * onBackPressed() dismisses popup window and doesn't destroy fragment by setting isOutsideTouchable and isFocusable
@@ -219,19 +225,44 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
     }
 
     /**
+     * Behaviour required by Play Store. The audio must be stopped when the video isn't visible.
+     */
+    private fun stopYoutubePlayer() {
+        resetPlayer()
+    }
+
+    /**
      * Everything you need to play a new video in your fragment
      */
-    private fun initYoutubePlayer() {
-        setFaithPlayer(FaithVideoPlayer(
-            playerParentView = popupview!!.card_youtube_player,
-            playButton = popupview!!.btn_play_yt_video as ImageButton,
-            pauseButton = popupview!!.btn_pause_yt_video as ImageButton,
-            currentTimeField = popupview!!.text_currentime_yt_video as TextView,
-            durationField = popupview!!.text_duration_yt_video as TextView,
-            seekBar = popupview!!.seekbar_yt_video as SeekBar,
-            stopButton = popupview!!.btn_stop_yt_video as ImageButton,
-            fullscreenButton = popupview!!.btn_fullscreen_yt_video as ImageButton
-        ))
+    private fun startYoutubePlayer() {
+        val faithYoutubePlayer =
+            FaithYoutubePlayer(
+                youtubeVideoDetail = youtubeVideoDetailViewModel.selectedSnippet.value!!,
+                youtubePlayerView = popupview!!.youtube_player_view,
+                playerParentView = popupview!!.card_youtube_player,
+                playButton = popupview!!.btn_play_yt_video as ImageButton,
+                pauseButton = popupview!!.btn_pause_yt_video as ImageButton
+            )
+
+        faithYoutubePlayer.currentTimeField = popupview!!.text_currentime_yt_video as TextView
+        faithYoutubePlayer.durationField = popupview!!.text_duration_yt_video as TextView
+        faithYoutubePlayer.seekBar = popupview!!.seekbar_yt_video as SeekBar
+        faithYoutubePlayer.stopButton = popupview!!.btn_stop_yt_video as ImageButton
+        faithYoutubePlayer.fullscreenButton = popupview!!.btn_fullscreen_yt_video as ImageButton
+        faithYoutubePlayer.menuContainer = popupview!!.menu_container_yt_video
+        faithYoutubePlayer.timeContainer = popupview!!.time_container_yt_video
+
+        setFaithYoutubePlayer(faithYoutubePlayer)
+    }
+
+    override fun onYouTubePlayerEnterFullScreen() {
+        super.onYouTubePlayerEnterFullScreen()
+        popupview!!.layer_fullscreen_yt_player.visibility = View.VISIBLE
+    }
+
+    override fun onYouTubePlayerExitFullScreen() {
+        super.onYouTubePlayerExitFullScreen()
+        popupview!!.layer_fullscreen_yt_player.visibility = View.GONE
     }
 
     companion object {

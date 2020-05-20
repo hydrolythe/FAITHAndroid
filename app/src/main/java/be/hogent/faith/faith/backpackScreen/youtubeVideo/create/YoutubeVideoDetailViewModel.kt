@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.details.youtubeVideo.create
+package be.hogent.faith.faith.backpackScreen.youtubeVideo.create
 
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData

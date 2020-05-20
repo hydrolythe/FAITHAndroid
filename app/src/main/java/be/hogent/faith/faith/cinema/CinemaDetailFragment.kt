@@ -20,7 +20,7 @@ import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
 import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
-import be.hogent.faith.faith.details.externalVideo.view.ViewVideoFragment
+import be.hogent.faith.faith.details.video.view.ViewVideoFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.photo.view.ViewPhotoFragment
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode

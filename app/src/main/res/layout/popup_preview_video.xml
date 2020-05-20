@@ -6,10 +6,10 @@
     <data>
         <variable
             name="youtubeViewModel"
-            type="be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailViewModel" />
+            type="be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel" />
         <variable
             name="preview"
-            type="be.hogent.faith.faith.details.youtubeVideo.create.ShowPreview" />
+            type="be.hogent.faith.faith.backpackScreen.youtubeVideo.create.ShowPreview" />
         <import type="android.view.View" />
     </data>
 
