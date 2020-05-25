@@ -35,10 +35,16 @@ class SkyscraperGoalFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         updateUI()
+        setOnclickListeners()
     }
 
     private fun updateUI() {
 
+    }
+    private fun setOnclickListeners(){
+        binding.btnSkyscraperReturn.setOnClickListener{
+            navigation?.goBack()
+        }
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)

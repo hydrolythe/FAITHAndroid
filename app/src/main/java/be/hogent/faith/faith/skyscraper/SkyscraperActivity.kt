@@ -11,7 +11,10 @@ import org.koin.android.ext.android.getKoin
 /**
  * An activity representing a list of Events of the user.
  */
-class SkyscraperActivity : AppCompatActivity(),SkyscraperViewHolder.SkyscraperNavigationListener {
+class SkyscraperActivity : AppCompatActivity(), SkyscraperViewHolder.SkyscraperNavigationListener,
+    SkyscraperStartScreenFragment.SkyscraperNavigationListener,
+    SkyscraperGoalFragment.SkyscraperNavigationListener,
+    SkyscraperHistoryFragment.SkyscraperNavigationListener {
 
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
@@ -31,7 +34,21 @@ class SkyscraperActivity : AppCompatActivity(),SkyscraperViewHolder.SkyscraperNa
         replaceFragment(SkyscraperGoalFragment.newInstance(), R.id.fragment_container)
     }
 
+    override fun openSkyscrapersHistory() {
+        replaceFragment(SkyscraperHistoryFragment.newInstance(), R.id.fragment_container)
+    }
+
     override fun deleteSkyscraper(skyscraper: Skyscraper) {
         TODO("Not yet implemented")
     }
+
+    override fun goBack() {
+        supportFragmentManager.popBackStack()
+    }
+
+    override fun closeSkyscrapers() {
+        finish()
+    }
+
+
 }

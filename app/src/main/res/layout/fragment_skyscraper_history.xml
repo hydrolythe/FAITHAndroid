@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
+    >
     <data>
 
     </data>
@@ -37,12 +36,13 @@
             android:id="@+id/btn_delete_skyscraper"
             android:layout_width="@dimen/material_icon_width"
             android:layout_height="@dimen/material_icon_height"
+            android:layout_marginBottom="@dimen/margin_corner_button"
             android:layout_marginStart="@dimen/margin_corner_button"
-            android:layout_marginTop="@dimen/margin_corner_button"
             android:background="@drawable/ic_trashcan"
             android:contentDescription="@string/delete"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+             />
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -115,6 +115,7 @@
             android:id="@+id/btn_cinema_chooseDate"
             style="@style/faith_textbutton"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
             android:backgroundTint="@color/color_white"
             android:gravity="center"
