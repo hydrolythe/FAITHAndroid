@@ -110,6 +110,7 @@ class FirebaseStorageRepository(
         } else {
             val localDestinationFile: File =
                 with(pathProvider) { localStorage(detailPath(detail, container)) }
+            localDestinationFile.parentFile.mkdirs()
             return Completable
                 .fromSingle(
                     rxFirebaseStorage.getFile(
