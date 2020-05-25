@@ -121,6 +121,7 @@ class FirebaseStorageRepository(
                     detail.file = localDestinationFile
                 }
                 .doOnComplete { "Downloaded file for detail ${detail.uuid} in ${container.javaClass}" }
+                .doOnError { Timber.e("Could not download file ${it.message} ${ storageRef.child(pathProvider.detailPath(detail, container).path)} ${localDestinationFile.path}") }
         }
     }
 

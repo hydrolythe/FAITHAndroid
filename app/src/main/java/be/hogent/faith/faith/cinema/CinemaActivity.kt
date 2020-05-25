@@ -57,6 +57,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
             closeCinema()
         })
 
+        //detail file is opgehaald
         cinemaOverviewViewModel.goToDetail.observe(this, Observer {
             replaceFragment(
                 DetailsFactory.editDetail(it),
@@ -129,7 +130,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
     override fun openDetailScreenFor(detail: Detail) {
         cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.EDIT)
         cinemaOverviewViewModel.setCurrentFileAndLoadCorrespondingFile(detail)
-        replaceFragment(DetailsFactory.editDetail(detail), R.id.cinema_fragment_container)
+ //       replaceFragment(DetailsFactory.editDetail(detail), R.id.cinema_fragment_container)
     }
 
     override fun deleteDetail(detail: Detail) {
