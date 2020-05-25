@@ -35,7 +35,7 @@
             app:layout_constraintGuide_percent="0.38" />
 
         <ImageView
-            android:id="@+id/skyscraper_blue"
+            android:id="@+id/skyscraper_base"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:paddingStart="10dp"
@@ -62,18 +62,16 @@
             android:id="@+id/txt_goal_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:layout_constraintBottom_toTopOf="@+id/skyscraper_blue"
             app:layout_constraintEnd_toStartOf="@+id/guide_textview_end"
             app:layout_constraintStart_toStartOf="@+id/guide_textview_start"
-            app:layout_constraintTop_toTopOf="@+id/skyscraper_panel" />
+            app:layout_constraintTop_toTopOf="@+id/guide_textview_top" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_textview_start"
             android:layout_width="8dp"
             android:layout_height="12dp"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.30" />
+            app:layout_constraintGuide_percent="0.25" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_textview_end"
@@ -81,6 +79,12 @@
             android:layout_height="12dp"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.70" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_textview_top"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.10" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

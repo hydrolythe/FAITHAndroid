@@ -46,8 +46,11 @@ class SkyscraperStartScreenFragment : Fragment() {
         binding.recyclerView2.layoutManager = GridLayoutManager(activity, 5)
         binding.recyclerView2.adapter = adapter
         val list = arrayListOf<Skyscraper>()
-        list.add(Skyscraper("Dit is een test"))
+        list.add(Skyscraper("Dit is een eerste wolkenkrabber"))
         list.add(Skyscraper("Dit is een tweede wolkenkrabber"))
+        list.add(Skyscraper("Dit is een derde wolkenkrabber"))
+        list.add(Skyscraper("Dit is een vierde wolkenkrabber"))
+        list.add(Skyscraper("Dit is een vijfde wolkenkrabber"))
         adapter.submitList(list)
     }
     override fun onAttach(context: Context) {

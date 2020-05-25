@@ -11,13 +11,20 @@ import be.hogent.faith.databinding.SkyscraperRvBlueBinding
 import be.hogent.faith.databinding.SkyscraperRvDarkGreenBinding
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.SkyscraperColors.SKYSCRAPER_BLUE
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.SkyscraperColors.SKYSCRAPER_DARK_GREEN
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.SkyscraperColors.SKYSCRAPER_GREEN
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.SkyscraperColors.SKYSCRAPER_PINK
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.SkyscraperColors.SKYSCRAPER_YELLOW
 import be.hogent.faith.faith.skyscraper.SkyscraperViewHolder
-import be.hogent.faith.faith.skyscraper.SkyscraperViewholderFactory
+import be.hogent.faith.faith.skyscraper.SkyscraperViewHolderFactory
 
 
 object SkyscraperColors {
     const val SKYSCRAPER_BLUE = 1
-    const val SKYSCRAPER_DARK_GREEN = 2
+    const val SKYSCRAPER_YELLOW = 2
+    const val SKYSCRAPER_PINK = 3
+    const val SKYSCRAPER_DARK_GREEN = 4
+    const val SKYSCRAPER_GREEN = 5
+
 
 }
 
@@ -27,7 +34,7 @@ class SkyscraperAdapter : ListAdapter<Skyscraper, SkyscraperViewHolder>(Skyscrap
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SkyscraperViewHolder {
-        return SkyscraperViewholderFactory.createViewHolder(
+        return SkyscraperViewHolderFactory.createViewHolder(
             parent,
             viewType
         )
@@ -36,7 +43,10 @@ class SkyscraperAdapter : ListAdapter<Skyscraper, SkyscraperViewHolder>(Skyscrap
     override fun getItemViewType(position: Int): Int {
         return when (position) {
             0 -> SKYSCRAPER_BLUE
-            1 -> SKYSCRAPER_DARK_GREEN
+            1 -> SKYSCRAPER_YELLOW
+            2 -> SKYSCRAPER_PINK
+            3 -> SKYSCRAPER_DARK_GREEN
+            4 -> SKYSCRAPER_GREEN
             else -> SKYSCRAPER_BLUE
         }
     }

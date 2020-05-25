@@ -28,52 +28,67 @@ import kotlinx.android.synthetic.main.detail_item_rv.view.text_detail_title
 import kotlinx.android.synthetic.main.skyscraper_rv_blue.view.txt_goal_description
 import org.koin.core.KoinComponent
 
-object SkyscraperViewholderFactory {
+object SkyscraperViewHolderFactory {
     fun createViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): SkyscraperViewHolder {
-        /*val thumbnailView = LayoutInflater.from(parent.context).inflate(
-            R.layout.detail_item_rv,
-            parent,
-            false
-        ) as LinearLayout*/
 
+        val view: ConstraintLayout
         return when (viewType) {
-            SkyscraperColors.SKYSCRAPER_BLUE -> createBlueViewHolder(parent)
-            SkyscraperColors.SKYSCRAPER_DARK_GREEN -> createDarkGreenViewHolder(parent)
-
-            else -> createBlueViewHolder(parent)
+            SkyscraperColors.SKYSCRAPER_BLUE -> {
+                view = LayoutInflater.from(parent.context).inflate(
+                    R.layout.skyscraper_rv_blue,
+                    parent,
+                    false
+                ) as ConstraintLayout
+                SkyscraperViewHolder(view)
+            }
+            SkyscraperColors.SKYSCRAPER_YELLOW -> {
+                view = LayoutInflater.from(parent.context).inflate(
+                    R.layout.skyscraper_rv_yellow,
+                    parent,
+                    false
+                ) as ConstraintLayout
+                SkyscraperViewHolder(view)
+            }
+            SkyscraperColors.SKYSCRAPER_PINK -> {
+                view = LayoutInflater.from(parent.context).inflate(
+                    R.layout.skyscraper_rv_dark_green,
+                    parent,
+                    false
+                ) as ConstraintLayout
+                SkyscraperViewHolder(view)
+            }
+            SkyscraperColors.SKYSCRAPER_DARK_GREEN -> {
+                view = LayoutInflater.from(parent.context).inflate(
+                    R.layout.skyscraper_rv_dark_green,
+                    parent,
+                    false
+                ) as ConstraintLayout
+                SkyscraperViewHolder(view)
+            }
+            SkyscraperColors.SKYSCRAPER_GREEN -> {
+                view = LayoutInflater.from(parent.context).inflate(
+                    R.layout.skyscraper_rv_green,
+                    parent,
+                    false
+                ) as ConstraintLayout
+                SkyscraperViewHolder(view)
+            }
+            else -> {
+                view = LayoutInflater.from(parent.context).inflate(
+                    R.layout.skyscraper_rv_blue,
+                    parent,
+                    false
+                ) as ConstraintLayout
+                SkyscraperViewHolder(view)
+            }
         }
     }
-
-    private fun createBlueViewHolder(parent: ViewGroup): SkyscraperViewHolder.BlueViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.skyscraper_rv_blue,
-            parent,
-            false
-        ) as ConstraintLayout
-        return SkyscraperViewHolder.BlueViewHolder(view)
-    }
-    private fun createDarkGreenViewHolder(parent: ViewGroup): SkyscraperViewHolder.DarkGreenViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.skyscraper_rv_dark_green,
-            parent,
-            false
-        ) as ConstraintLayout
-        return SkyscraperViewHolder.DarkGreenViewHolder(view)
-    }
-
-    /*private fun createTextDetailViewHolder(
-        thumbnailView: LinearLayout,
-        existingDetailNavigationListener: ExistingDetailNavigationListener
-    ): TextDetailViewHolder {
-        thumbnailView.background = null
-        return TextDetailViewHolder(thumbnailView, existingDetailNavigationListener)
-    }*/
 }
 
-sealed class SkyscraperViewHolder(
+class SkyscraperViewHolder(
     val view: ConstraintLayout
 ) : RecyclerView.ViewHolder(view), KoinComponent {
 
@@ -85,28 +100,4 @@ sealed class SkyscraperViewHolder(
                 60
             )}..."
     }
-
-    class BlueViewHolder(
-        view: ConstraintLayout
-    ) : SkyscraperViewHolder(view) {
-
-    }
-    class DarkGreenViewHolder(
-        view: ConstraintLayout
-    ) : SkyscraperViewHolder(view) {
-
-    }
-
-    /*class PictureDetailViewHolder(
-        imageView: LinearLayout,
-        existingDetailNavigationListener: ExistingDetailNavigationListener
-    ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
-
-        override fun load(detail: Detail): RequestBuilder<Drawable> {
-            if (detail.thumbnail == null)
-                return Glide.with(thumbnailView).load(if (detail is PhotoDetail) R.drawable.ic_camera else R.drawable.ic_tekenen)
-            return Glide.with(thumbnailView)
-                .load(Base64.decode(detail.thumbnail, Base64.DEFAULT))
-        }
-    }*/
 }
