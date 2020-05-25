@@ -5,12 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.ext.android.getKoin
 
 /**
  * An activity representing a list of Events of the user.
  */
-class SkyscraperActivity : AppCompatActivity() {
+class SkyscraperActivity : AppCompatActivity(),SkyscraperViewHolder.SkyscraperNavigationListener {
 
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
@@ -24,5 +25,13 @@ class SkyscraperActivity : AppCompatActivity() {
                 .add(R.id.fragment_container, fragment)
                 .commit()
         }
+    }
+
+    override fun openGoalScreenFor(skyscraper: Skyscraper) {
+        replaceFragment(SkyscraperGoalFragment.newInstance(), R.id.fragment_container)
+    }
+
+    override fun deleteSkyscraper(skyscraper: Skyscraper) {
+        TODO("Not yet implemented")
     }
 }

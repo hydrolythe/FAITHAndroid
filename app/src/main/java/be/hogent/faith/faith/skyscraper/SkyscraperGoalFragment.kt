@@ -1,5 +1,4 @@
 package be.hogent.faith.faith.skyscraper
-
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,20 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
-import be.hogent.faith.databinding.FragmentSkyscraperStartBinding
+import be.hogent.faith.databinding.FragmentSkyscraperGoalBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import org.koin.android.ext.android.getKoin
 
 
-class SkyscraperStartScreenFragment : Fragment() {
+class SkyscraperGoalFragment : Fragment() {
 
     private var navigation: SkyscraperNavigationListener? = null
-    private lateinit var binding: FragmentSkyscraperStartBinding
+    private lateinit var binding: FragmentSkyscraperGoalBinding
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
-    private lateinit var adapter: SkyscraperAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,7 +26,7 @@ class SkyscraperStartScreenFragment : Fragment() {
     ): View? {
 
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_skyscraper_start, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_skyscraper_goal, container, false)
         binding.lifecycleOwner = this
 
         return binding.root
@@ -40,16 +38,7 @@ class SkyscraperStartScreenFragment : Fragment() {
     }
 
     private fun updateUI() {
-        adapter = SkyscraperAdapter(requireNotNull(activity) as SkyscraperActivity)
-        binding.recyclerView2.layoutManager = GridLayoutManager(activity, 5)
-        binding.recyclerView2.adapter = adapter
-        val list = arrayListOf<Skyscraper>()
-        list.add(Skyscraper("Dit is een eerste wolkenkrabber"))
-        list.add(Skyscraper("Dit is een tweede wolkenkrabber"))
-        list.add(Skyscraper("Dit is een derde wolkenkrabber"))
-        list.add(Skyscraper("Dit is een vierde wolkenkrabber"))
-        list.add(Skyscraper("Dit is een vijfde wolkenkrabber"))
-        adapter.submitList(list)
+
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -59,13 +48,12 @@ class SkyscraperStartScreenFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(): SkyscraperStartScreenFragment {
-            return SkyscraperStartScreenFragment()
+        fun newInstance(): SkyscraperGoalFragment {
+            return SkyscraperGoalFragment()
         }
     }
 
     interface SkyscraperNavigationListener {
-
         fun goBack()
     }
 }

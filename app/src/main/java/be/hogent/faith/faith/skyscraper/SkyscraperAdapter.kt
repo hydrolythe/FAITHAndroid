@@ -1,22 +1,14 @@
-package be.hogent.faith.faith.emotionCapture.enterEventDetails
+package be.hogent.faith.faith.skyscraper
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import be.hogent.faith.R
-import be.hogent.faith.databinding.SkyscraperRvBlueBinding
-import be.hogent.faith.databinding.SkyscraperRvDarkGreenBinding
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.SkyscraperColors.SKYSCRAPER_BLUE
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.SkyscraperColors.SKYSCRAPER_DARK_GREEN
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.SkyscraperColors.SKYSCRAPER_GREEN
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.SkyscraperColors.SKYSCRAPER_PINK
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.SkyscraperColors.SKYSCRAPER_YELLOW
-import be.hogent.faith.faith.skyscraper.SkyscraperViewHolder
-import be.hogent.faith.faith.skyscraper.SkyscraperViewHolderFactory
-
+import be.hogent.faith.faith.skyscraper.SkyscraperColors.SKYSCRAPER_BLUE
+import be.hogent.faith.faith.skyscraper.SkyscraperColors.SKYSCRAPER_DARK_GREEN
+import be.hogent.faith.faith.skyscraper.SkyscraperColors.SKYSCRAPER_GREEN
+import be.hogent.faith.faith.skyscraper.SkyscraperColors.SKYSCRAPER_PINK
+import be.hogent.faith.faith.skyscraper.SkyscraperColors.SKYSCRAPER_YELLOW
+import be.hogent.faith.faith.skyscraper.SkyscraperViewHolder.SkyscraperNavigationListener
 
 object SkyscraperColors {
     const val SKYSCRAPER_BLUE = 1
@@ -30,13 +22,14 @@ object SkyscraperColors {
 
 
 
-class SkyscraperAdapter : ListAdapter<Skyscraper, SkyscraperViewHolder>(SkyscraperDiffCallback()) {
+class SkyscraperAdapter(private val skyscraperNavigationListener: SkyscraperNavigationListener) : ListAdapter<Skyscraper, SkyscraperViewHolder>(SkyscraperDiffCallback()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SkyscraperViewHolder {
         return SkyscraperViewHolderFactory.createViewHolder(
             parent,
-            viewType
+            viewType,
+            skyscraperNavigationListener
         )
     }
 
