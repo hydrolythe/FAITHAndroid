@@ -13,7 +13,6 @@ import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentRecordAudioBinding
@@ -149,7 +148,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             requireActivity().onBackPressed()
         })
         audioDetailViewModel.getDetailMetaData.observe(this, Observer {
-            val saveDialog = DetailsFactory.createMetaDataDialog(requireActivity()::class as KClass<FragmentActivity>, AudioDetail::class as KClass<Detail>)
+            val saveDialog = DetailsFactory.createMetaDataDialog(requireActivity(), AudioDetail::class as KClass<Detail>)
             if (saveDialog == null)
                 audioDetailViewModel.setDetailsMetaData()
             else {

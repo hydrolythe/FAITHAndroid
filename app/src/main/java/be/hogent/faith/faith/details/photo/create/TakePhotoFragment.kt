@@ -12,7 +12,6 @@ import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
@@ -121,7 +120,7 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
 
         takePhotoViewModel.getDetailMetaData.observe(this, Observer {
             val saveDialog = DetailsFactory.createMetaDataDialog(
-                requireActivity()::class as KClass<FragmentActivity>,
+                requireActivity(),
                 PhotoDetail::class as KClass<Detail>
             )
             if (saveDialog == null)

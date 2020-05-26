@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
@@ -156,7 +155,7 @@ class DrawingDetailFragment : DrawFragment(),
 
         drawingDetailViewModel.getDetailMetaData.observe(this, Observer {
             val saveDialog = DetailsFactory.createMetaDataDialog(
-                requireActivity()::class as KClass<FragmentActivity>,
+                requireActivity(),
                 DrawingDetail::class as KClass<Detail>
             )
             if (saveDialog == null)

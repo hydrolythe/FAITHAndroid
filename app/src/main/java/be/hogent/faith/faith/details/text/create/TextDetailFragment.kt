@@ -11,7 +11,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterTextBinding
@@ -174,7 +173,7 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
         })
         textDetailDetailViewModel.getDetailMetaData.observe(this, Observer {
             val saveDialog = DetailsFactory.createMetaDataDialog(
-                requireActivity()::class as KClass<FragmentActivity>,
+                requireActivity(),
                 TextDetail::class as KClass<Detail>
             )
             if (saveDialog == null)

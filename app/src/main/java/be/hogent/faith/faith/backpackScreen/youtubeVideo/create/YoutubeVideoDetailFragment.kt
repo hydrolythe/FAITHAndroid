@@ -14,7 +14,6 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
@@ -159,7 +158,7 @@ class YoutubeVideoDetailFragment : FaithYoutubePlayerFragment(),
         youtubeVideoDetailViewModel.getDetailMetaData.observe(this, Observer {
             popupWindow.dismiss()
             val saveDialog = DetailsFactory.createMetaDataDialog(
-                requireActivity()::class as KClass<FragmentActivity>,
+                requireActivity(),
                 TextDetail::class as KClass<Detail>
             )
             if (saveDialog != null) {

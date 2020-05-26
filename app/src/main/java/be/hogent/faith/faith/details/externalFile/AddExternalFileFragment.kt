@@ -18,7 +18,6 @@ import android.widget.VideoView
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentAddExternalFileBinding
@@ -98,7 +97,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
             // navigation?.backToEvent()
         })
         externalFileViewModel.getDetailMetaData.observe(this, Observer {
-            val saveDialog = DetailsFactory.createMetaDataDialog(requireActivity()::class as KClass<FragmentActivity>, PhotoDetail::class as KClass<Detail>)
+            val saveDialog = DetailsFactory.createMetaDataDialog(requireActivity(), PhotoDetail::class as KClass<Detail>)
             if (saveDialog == null)
                 externalFileViewModel.setDetailsMetaData()
             else {
