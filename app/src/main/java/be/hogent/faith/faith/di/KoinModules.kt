@@ -6,7 +6,6 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.BackpackViewModel
-import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailViewModel
 import be.hogent.faith.faith.cinema.CinemaCreateVideoViewModel
 import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
@@ -21,6 +20,7 @@ import be.hogent.faith.faith.details.photo.create.TakePhotoViewModel
 import be.hogent.faith.faith.details.photo.view.ViewPhotoDetailViewModel
 import be.hogent.faith.faith.details.text.create.TextDetailViewModel
 import be.hogent.faith.faith.details.text.view.ViewTextDetailViewModel
+import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
@@ -102,7 +102,7 @@ val appModule = module(override = true) {
     viewModel { EventDetailsViewModel(get()) }
     viewModel { ViewPhotoDetailViewModel() }
     viewModel { ViewDrawingDetailViewModel() }
-    viewModel { CinemaCreateVideoViewModel() }
+    viewModel { CinemaCreateVideoViewModel(get()) }
     viewModel {
         ViewTextDetailViewModel(
             get()

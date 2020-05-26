@@ -265,4 +265,5 @@
     <string name="voorwerpen">Voorwerpen</string>
     <string name="decors">Decors</string>
     <string name="metaforen">Metaforen</string>
+    <string name="no_source_details_selected">Je moet eerst beeldmateriaal selecteren voordat je een filmpje kan maken!</string>
 </resources>

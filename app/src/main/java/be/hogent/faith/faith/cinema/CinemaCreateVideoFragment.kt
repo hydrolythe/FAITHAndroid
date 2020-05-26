@@ -14,14 +14,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCinemaCreateVideoBinding
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
-import be.hogent.faith.domain.models.detail.FilmDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.*
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
-import kotlinx.android.synthetic.main.fragment_cinema_start.btn_cinema_chooseDate
+import kotlinx.android.synthetic.main.fragment_cinema_start.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import java.util.concurrent.TimeUnit
 
@@ -38,7 +34,6 @@ class CinemaCreateVideoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_cinema_create_video,
@@ -86,7 +81,6 @@ class CinemaCreateVideoFragment : Fragment() {
     }
 
     private fun startListeners() {
-
         binding.btnCinemaCancel.setOnClickListener {
             requireActivity().onBackPressed()
         }
@@ -102,9 +96,8 @@ class CinemaCreateVideoFragment : Fragment() {
             navigation!!.startViewVideoFragment()
         })
 
-        // TODO rendering
         binding.btnCreateVideo.setOnClickListener {
-            createVideoViewModel.setIsRendering()
+            createVideoViewModel.startRendering()
         }
 
         createVideoViewModel.currentFilmDetail.observe(this, Observer {
