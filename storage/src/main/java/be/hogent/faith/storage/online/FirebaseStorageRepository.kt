@@ -93,9 +93,11 @@ class FirebaseStorageRepository(
                         .doOnSuccess { "Downloaded file for detail ${detail.uuid} in event ${event.uuid}" }
                 )
                 .doOnError { Timber.e("Error while downloading detail ${detail.uuid} in event ${event.uuid}") }
-                .andThen {
-                    detail.file = localDestinationFile
-                }
+                .andThen(
+                    Completable.fromAction {
+                        detail.file = localDestinationFile
+                    }
+                )
         }
     }
 
@@ -110,6 +112,9 @@ class FirebaseStorageRepository(
         } else {
             val localDestinationFile: File =
                 with(pathProvider) { localStorage(detailPath(detail, container)) }
+            Timber.i("download : get detail from firebase, local path ${localDestinationFile.path}")
+            localDestinationFile.parentFile.mkdirs()
+            Timber.i("download : parentdir created for ${localDestinationFile.parentFile.path}")
             return Completable
                 .fromSingle(
                     rxFirebaseStorage.getFile(
@@ -117,11 +122,17 @@ class FirebaseStorageRepository(
                         localDestinationFile
                     )
                 )
-                .andThen {
+                .andThen(Completable.fromAction {
                     detail.file = localDestinationFile
-                }
+                })
                 .doOnComplete { "Downloaded file for detail ${detail.uuid} in ${container.javaClass}" }
-                .doOnError { Timber.e("Could not download file ${it.message} ${ storageRef.child(pathProvider.detailPath(detail, container).path)} ${localDestinationFile.path}") }
+                .doOnError {
+                    Timber.e(
+                        "Could not download file ${it.message} ${storageRef.child(
+                            pathProvider.detailPath(detail, container).path
+                        )} ${localDestinationFile.path}"
+                    )
+                }
         }
     }
 
@@ -142,10 +153,10 @@ class FirebaseStorageRepository(
                 )
                 .doOnError { Timber.e("Error while downloading emotionAvatar for event ${event.uuid}") }
                 .ignoreElement()
-                .andThen {
-                    event.emotionAvatar = localDestinationFile
-                }
-                .doOnComplete { "Downloaded emotionAvatar for event ${event.uuid}" }
+                .andThen(
+                    Completable.fromAction {
+                        event.emotionAvatar = localDestinationFile
+                    })
         }
     }
 
