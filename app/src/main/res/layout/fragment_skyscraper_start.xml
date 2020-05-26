@@ -25,12 +25,12 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView2"
-            android:layout_marginTop="100dp"
+            android:id="@+id/skyscraper_rv"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btn_skyscraper_add"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_skyscraper_return"
             app:layout_constraintTop_toBottomOf="@+id/btn_skyscraper_return" />
 

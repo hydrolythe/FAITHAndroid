@@ -1,15 +1,15 @@
-package be.hogent.faith.faith.skyscraper
+package be.hogent.faith.faith.skyscraper.startscreen
 
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import be.hogent.faith.faith.skyscraper.SkyscraperColors.SKYSCRAPER_BLUE
-import be.hogent.faith.faith.skyscraper.SkyscraperColors.SKYSCRAPER_DARK_GREEN
-import be.hogent.faith.faith.skyscraper.SkyscraperColors.SKYSCRAPER_GREEN
-import be.hogent.faith.faith.skyscraper.SkyscraperColors.SKYSCRAPER_PINK
-import be.hogent.faith.faith.skyscraper.SkyscraperColors.SKYSCRAPER_YELLOW
-import be.hogent.faith.faith.skyscraper.SkyscraperViewHolder.SkyscraperNavigationListener
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_BLUE
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_DARK_GREEN
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_GREEN
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_PINK
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_YELLOW
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperViewHolder.SkyscraperNavigationListener
 
 object SkyscraperColors {
     const val SKYSCRAPER_BLUE = 1
@@ -22,7 +22,9 @@ object SkyscraperColors {
 class SkyscraperAdapter(
     private val skyscraperNavigationListener: SkyscraperNavigationListener,
     private val skyscraperClickListener: SkyscraperClickListener
-) : ListAdapter<Skyscraper, SkyscraperViewHolder>(SkyscraperDiffCallback()) {
+) : ListAdapter<Skyscraper, SkyscraperViewHolder>(
+    SkyscraperDiffCallback()
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SkyscraperViewHolder {
         return SkyscraperViewHolderFactory.createViewHolder(

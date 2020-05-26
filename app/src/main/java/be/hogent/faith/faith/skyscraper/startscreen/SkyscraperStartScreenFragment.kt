@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.skyscraper
+package be.hogent.faith.faith.skyscraper.startscreen
 
 import android.content.Context
 import android.os.Bundle
@@ -14,10 +14,12 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentSkyscraperStartBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.skyscraper.SkyscraperActivity
 import kotlinx.android.synthetic.main.skyscraper_rv_blue.view.txt_goal_description
 import org.koin.android.ext.android.getKoin
 
-class SkyscraperStartScreenFragment : Fragment(), SkyscraperClickListener {
+class SkyscraperStartScreenFragment : Fragment(),
+    SkyscraperClickListener {
 
     private var navigation: SkyscraperNavigationListener? = null
     private lateinit var binding: FragmentSkyscraperStartBinding
@@ -43,9 +45,12 @@ class SkyscraperStartScreenFragment : Fragment(), SkyscraperClickListener {
     }
 
     private fun updateUI() {
-        adapter = SkyscraperAdapter(requireNotNull(activity) as SkyscraperActivity, this)
-        binding.recyclerView2.layoutManager = GridLayoutManager(activity, 5)
-        binding.recyclerView2.adapter = adapter
+        adapter = SkyscraperAdapter(
+            requireNotNull(activity) as SkyscraperActivity,
+            this
+        )
+        binding.skyscraperRv.layoutManager = GridLayoutManager(activity, 5)
+        binding.skyscraperRv.adapter = adapter
         val list = arrayListOf<Skyscraper>()
         list.add(Skyscraper("Dit is een eerste wolkenkrabber"))
         list.add(Skyscraper("Dit is een tweede wolkenkrabber"))

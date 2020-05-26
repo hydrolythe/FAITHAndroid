@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.skyscraper.startscreen.Skyscraper
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperStartScreenFragment
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperViewHolder
 import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.ext.android.getKoin
 

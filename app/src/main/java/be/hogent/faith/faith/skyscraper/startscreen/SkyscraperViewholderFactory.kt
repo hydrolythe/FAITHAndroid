@@ -1,11 +1,11 @@
-package be.hogent.faith.faith.skyscraper
+package be.hogent.faith.faith.skyscraper.startscreen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.faith.skyscraper.SkyscraperViewHolder.SkyscraperNavigationListener
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperViewHolder.SkyscraperNavigationListener
 import kotlinx.android.synthetic.main.skyscraper_rv_blue.view.skyscraper_base
 import kotlinx.android.synthetic.main.skyscraper_rv_blue.view.txt_goal_description
 import org.koin.core.KoinComponent
@@ -63,7 +63,11 @@ object SkyscraperViewHolderFactory {
                 ) as ConstraintLayout
             }
         }
-        return SkyscraperViewHolder(view, skyscraperNavigationListener, skyscraperClickListener)
+        return SkyscraperViewHolder(
+            view,
+            skyscraperNavigationListener,
+            skyscraperClickListener
+        )
     }
 }
 
