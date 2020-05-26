@@ -2,14 +2,13 @@ package be.hogent.faith.domain
 
 import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.domain.models.goals.SubGoal
-import io.mockk.mockk
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
 class GoalTest {
 
-    private lateinit var goal : Goal
+    private lateinit var goal: Goal
     private var subGoalPos1 = SubGoal("1")
     private var subGoalPos2 = SubGoal("2")
     private var subGoalPos3 = SubGoal("3")
@@ -40,7 +39,7 @@ class GoalTest {
         goal.addSubGoalToGoal(subGoalPos4)
         goal.addSubGoalToGoal(subGoalPos5)
 
-       goal.changeSubGoalPosition(subGoalPos3, 0)
+        goal.changeSubGoalPosition(subGoalPos3, 0)
 
         Assert.assertEquals(goal.subGoals.elementAt(0), subGoalPos3)
         Assert.assertEquals(goal.subGoals.elementAt(1), subGoalPos1)

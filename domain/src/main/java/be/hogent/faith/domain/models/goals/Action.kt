@@ -5,22 +5,21 @@ enum class ActionStatus {
 }
 
 class Action(
-    private var description : String = "",
-    private var currentStatus : ActionStatus = ActionStatus.NEUTRAL
+    private var description: String = "",
+    private var currentStatus: ActionStatus = ActionStatus.NEUTRAL
 ) {
 
-    var currentPosition : Int = 0
+    var currentPosition: Int = 0
 
-    fun updateStatus(actionStatus: ActionStatus){
+    fun updateStatus(actionStatus: ActionStatus) {
         currentStatus = actionStatus
     }
 
-    fun editDescription(newDescription : String){
-        if(newDescription.length <= 30)
+    fun editDescription(newDescription: String) {
+        if (newDescription.length <= 30)
             description = newDescription
         else
-            throw IllegalArgumentException("Description > 30 characters")}
+            throw IllegalArgumentException("Description > 30 characters") }
 
-    fun changeCurrentPosition(newPosition : Int){ currentPosition = newPosition}
-
+    fun changeCurrentPosition(newPosition: Int) { currentPosition = newPosition }
 }
