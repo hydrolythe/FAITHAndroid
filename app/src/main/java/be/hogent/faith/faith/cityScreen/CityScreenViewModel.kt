@@ -45,7 +45,7 @@ class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : Vi
         Timber.i("Fifth location clicked")
         cinemaClicked.call()
     }
-    fun onSkyscraperClicked(){
+    fun onSkyscraperClicked() {
         Timber.i("Sixth location clicked")
         skyscraperClicked.call()
     }

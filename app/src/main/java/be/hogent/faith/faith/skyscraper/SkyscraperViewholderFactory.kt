@@ -5,16 +5,17 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
+import be.hogent.faith.faith.skyscraper.SkyscraperViewHolder.SkyscraperNavigationListener
 import kotlinx.android.synthetic.main.skyscraper_rv_blue.view.skyscraper_base
 import kotlinx.android.synthetic.main.skyscraper_rv_blue.view.txt_goal_description
 import org.koin.core.KoinComponent
-import be.hogent.faith.faith.skyscraper.SkyscraperViewHolder.SkyscraperNavigationListener
 
 object SkyscraperViewHolderFactory {
     fun createViewHolder(
         parent: ViewGroup,
         viewType: Int,
-        skyscraperNavigationListener: SkyscraperNavigationListener
+        skyscraperNavigationListener: SkyscraperNavigationListener,
+        skyscraperClickListener: SkyscraperClickListener
     ): SkyscraperViewHolder {
 
         val view: ConstraintLayout
@@ -62,25 +63,27 @@ object SkyscraperViewHolderFactory {
                 ) as ConstraintLayout
             }
         }
-        return SkyscraperViewHolder(view, skyscraperNavigationListener)
+        return SkyscraperViewHolder(view, skyscraperNavigationListener, skyscraperClickListener)
     }
 }
 
 class SkyscraperViewHolder(
     val view: ConstraintLayout,
-    private val skyscraperNavigationListener: SkyscraperNavigationListener
+    private val skyscraperNavigationListener: SkyscraperNavigationListener,
+    private val skyscraperClickListener: SkyscraperClickListener
 ) : RecyclerView.ViewHolder(view), KoinComponent {
 
-
     fun bind(skyscraper: Skyscraper) {
-        view.txt_goal_description.text =
-            if (skyscraper.description.length < 60) skyscraper.description else "${skyscraper.description.substring(
-                0,
-                60
-            )}..."
+        view.txt_goal_description.setText(skyscraper.description)
 
         view.skyscraper_base.setOnClickListener {
             skyscraperNavigationListener.openGoalScreenFor(skyscraper)
+        }
+
+        view.txt_goal_description.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                skyscraperClickListener.getSelectedSkyscraper(view, this.layoutPosition)
+            }
         }
     }
 
@@ -89,4 +92,3 @@ class SkyscraperViewHolder(
         fun deleteSkyscraper(skyscraper: Skyscraper)
     }
 }
-

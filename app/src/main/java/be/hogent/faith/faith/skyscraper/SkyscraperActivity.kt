@@ -49,6 +49,4 @@ class SkyscraperActivity : AppCompatActivity(), SkyscraperViewHolder.SkyscraperN
     override fun closeSkyscrapers() {
         finish()
     }
-
-
 }

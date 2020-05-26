@@ -12,7 +12,6 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import org.koin.android.ext.android.getKoin
 
-
 class SkyscraperGoalFragment : Fragment() {
 
     private var navigation: SkyscraperNavigationListener? = null
@@ -39,10 +38,9 @@ class SkyscraperGoalFragment : Fragment() {
     }
 
     private fun updateUI() {
-
     }
-    private fun setOnclickListeners(){
-        binding.btnSkyscraperReturn.setOnClickListener{
+    private fun setOnclickListeners() {
+        binding.btnSkyscraperReturn.setOnClickListener {
             navigation?.goBack()
         }
     }

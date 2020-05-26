@@ -58,11 +58,12 @@
             app:layout_constraintTop_toTopOf="@+id/guide_panel_top"
             app:srcCompat="@drawable/skyscraper_panel_yellow_rv" />
 
-        <TextView
+        <EditText
             android:id="@+id/txt_goal_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-
+            android:autofillHints="Doelbeschrijving"
+            android:inputType="textMultiLine"
             app:layout_constraintEnd_toStartOf="@+id/guide_textview_end"
             app:layout_constraintStart_toStartOf="@+id/guide_textview_start"
             app:layout_constraintTop_toTopOf="@+id/guide_textview_top" />

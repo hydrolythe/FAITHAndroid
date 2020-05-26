@@ -1,6 +1,7 @@
 package be.hogent.faith.faith.skyscraper
 
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import be.hogent.faith.faith.skyscraper.SkyscraperColors.SKYSCRAPER_BLUE
@@ -16,20 +17,19 @@ object SkyscraperColors {
     const val SKYSCRAPER_PINK = 3
     const val SKYSCRAPER_DARK_GREEN = 4
     const val SKYSCRAPER_GREEN = 5
-
-
 }
 
-
-
-class SkyscraperAdapter(private val skyscraperNavigationListener: SkyscraperNavigationListener) : ListAdapter<Skyscraper, SkyscraperViewHolder>(SkyscraperDiffCallback()) {
-
+class SkyscraperAdapter(
+    private val skyscraperNavigationListener: SkyscraperNavigationListener,
+    private val skyscraperClickListener: SkyscraperClickListener
+) : ListAdapter<Skyscraper, SkyscraperViewHolder>(SkyscraperDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SkyscraperViewHolder {
         return SkyscraperViewHolderFactory.createViewHolder(
             parent,
             viewType,
-            skyscraperNavigationListener
+            skyscraperNavigationListener,
+            skyscraperClickListener
         )
     }
 
@@ -49,18 +49,20 @@ class SkyscraperAdapter(private val skyscraperNavigationListener: SkyscraperNavi
     }
 }
 
-
 data class Skyscraper(
-    val description: String
+    var description: String
 )
 
 class SkyscraperDiffCallback : DiffUtil.ItemCallback<Skyscraper>() {
-        override fun areItemsTheSame(oldItem: Skyscraper, newItem: Skyscraper): Boolean {
-            return oldItem.description == newItem.description
-        }
+    override fun areItemsTheSame(oldItem: Skyscraper, newItem: Skyscraper): Boolean {
+        return oldItem.description == newItem.description
+    }
 
-        override fun areContentsTheSame(oldItem: Skyscraper, newItem: Skyscraper): Boolean {
-            return oldItem == newItem
-        }
+    override fun areContentsTheSame(oldItem: Skyscraper, newItem: Skyscraper): Boolean {
+        return oldItem == newItem
+    }
+}
 
+interface SkyscraperClickListener {
+    fun getSelectedSkyscraper(layout: ConstraintLayout, position: Int)
 }

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -12,10 +14,10 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentSkyscraperStartBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import kotlinx.android.synthetic.main.skyscraper_rv_blue.view.txt_goal_description
 import org.koin.android.ext.android.getKoin
 
-
-class SkyscraperStartScreenFragment : Fragment() {
+class SkyscraperStartScreenFragment : Fragment(), SkyscraperClickListener {
 
     private var navigation: SkyscraperNavigationListener? = null
     private lateinit var binding: FragmentSkyscraperStartBinding
@@ -41,7 +43,7 @@ class SkyscraperStartScreenFragment : Fragment() {
     }
 
     private fun updateUI() {
-        adapter = SkyscraperAdapter(requireNotNull(activity) as SkyscraperActivity)
+        adapter = SkyscraperAdapter(requireNotNull(activity) as SkyscraperActivity, this)
         binding.recyclerView2.layoutManager = GridLayoutManager(activity, 5)
         binding.recyclerView2.adapter = adapter
         val list = arrayListOf<Skyscraper>()
@@ -52,11 +54,11 @@ class SkyscraperStartScreenFragment : Fragment() {
         list.add(Skyscraper("Dit is een vijfde wolkenkrabber"))
         adapter.submitList(list)
     }
-    private fun setOnclickListeners(){
-        binding.btnSkyscraperReturn.setOnClickListener{
+    private fun setOnclickListeners() {
+        binding.btnSkyscraperReturn.setOnClickListener {
             navigation?.closeSkyscrapers()
         }
-        binding.btnSkyscraperHistory.setOnClickListener{
+        binding.btnSkyscraperHistory.setOnClickListener {
             navigation?.openSkyscrapersHistory()
         }
     }
@@ -76,5 +78,10 @@ class SkyscraperStartScreenFragment : Fragment() {
     interface SkyscraperNavigationListener {
         fun closeSkyscrapers()
         fun openSkyscrapersHistory()
+    }
+
+    override fun getSelectedSkyscraper(layout: ConstraintLayout, position: Int) {
+        val help = layout.txt_goal_description.text
+        Toast.makeText(requireContext(), "$help", Toast.LENGTH_LONG).show()
     }
 }
