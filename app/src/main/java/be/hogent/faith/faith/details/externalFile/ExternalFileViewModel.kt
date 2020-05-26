@@ -8,6 +8,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.externalVideo.CreateVideoDetailUseCase
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase

@@ -15,6 +15,7 @@ import io.reactivex.observers.DisposableSingleObserver
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File
+import java.lang.UnsupportedOperationException
 
 class TakePhotoViewModel(
     private val createPhotoDetailUseCase: CreatePhotoDetailUseCase
@@ -33,7 +34,7 @@ class TakePhotoViewModel(
         get() = _errorMessage
 
     override fun loadExistingDetail(existingDetail: PhotoDetail) {
-        throw NotImplementedError("Use the ReviewPhotoFragment to show existing photoSaveFile details.")
+        throw UnsupportedOperationException("Use the ReviewPhotoFragment to show existing photoSaveFile details.")
     }
 
     override fun onSaveClicked() {

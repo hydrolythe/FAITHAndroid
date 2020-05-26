@@ -11,8 +11,6 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
 import be.hogent.faith.faith.backpackScreen.SaveBackpackDetailDialog
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailFragment
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.cinema.CinemaActivity
 import be.hogent.faith.faith.cinema.SaveCinemaDetailDialog
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
@@ -23,6 +21,8 @@ import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.photo.view.ViewPhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.details.text.view.ViewTextDetailFragment
+import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailFragment
+import be.hogent.faith.faith.details.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import java.lang.UnsupportedOperationException
 import kotlin.reflect.KClass

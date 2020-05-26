@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.backpackScreen.youtubeVideo.create
+package be.hogent.faith.faith.details.youtubeVideo.create
 
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
@@ -10,6 +10,7 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
 import io.reactivex.subscribers.DisposableSubscriber
 import org.threeten.bp.LocalDateTime
+import java.lang.UnsupportedOperationException
 
 class YoutubeVideoDetailViewModel(
     private val getYoutubeVideosFromSearchUseCase: GetYoutubeVideosFromSearchUseCase
@@ -66,6 +67,8 @@ class YoutubeVideoDetailViewModel(
         }
 
         override fun onError(e: Throwable) {
+            errorMessage.value = ""
+            e.printStackTrace()
         }
     }
 
@@ -75,7 +78,8 @@ class YoutubeVideoDetailViewModel(
 
     // Public for testing purposes
     fun saveVideoDetail(detail: YoutubeVideoDetail) {
-        _savedDetail.postValue(detail)
+        _getDetailMetaData.call()
+        //  _savedDetail.postValue(detail)
     }
 
     fun goBackToBackpack() {
@@ -111,11 +115,15 @@ class YoutubeVideoDetailViewModel(
     override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
 
     override fun loadExistingDetail(existingDetail: YoutubeVideoDetail) {
-        TODO("Not yet implemented")
+        throw UnsupportedOperationException("Use the ViewFragments to show existing external file.")
     }
 
     override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
-        TODO("Not yet implemented")
+        _selectedSnippet.value?.let {
+            it.title = title
+            it.dateTime = dateTime
+        }
+        _savedDetail.value = _selectedSnippet.value
     }
 }
 

@@ -149,25 +149,25 @@
                     android:id="@+id/tab_drawing_people"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Personen" />
+                    android:text="@string/personages" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_drawing_attributes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Attributen" />
+                    android:text="@string/voorwerpen" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_drawing_decor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Decors" />
+                    android:text="@string/decors" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_drawing_metaphors"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Metaforen" />
+                    android:text="@string/metaforen" />
             </com.google.android.material.tabs.TabLayout>
 
             <androidx.recyclerview.widget.RecyclerView
