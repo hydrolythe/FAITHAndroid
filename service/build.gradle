@@ -44,6 +44,8 @@ dependencies {
     implementation networkDependencies.gson
     implementation networkDependencies.rxjavaAdapter
 
+    implementation 'com.arthenica:mobile-ffmpeg-min-gpl:4.3.1.LTS'
+
     implementation injectionDependencies.koin
 
     testImplementation testDependencies.junit
