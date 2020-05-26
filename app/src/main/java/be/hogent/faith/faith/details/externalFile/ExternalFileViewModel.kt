@@ -8,6 +8,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.externalVideo.CreateVideoDetailUseCase
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
@@ -19,14 +20,14 @@ import java.util.Locale
 class ExternalFileViewModel(
     private val createPhotoDetailUseCase: CreatePhotoDetailUseCase,
     private val createVideoDetailUseCase: CreateVideoDetailUseCase
-) : ViewModel() {
+) : ViewModel(), DetailViewModel<Detail> {
 
     private val _cancelClicked = SingleLiveEvent<Unit>()
     val cancelClicked: LiveData<Unit>
         get() = _cancelClicked
 
     private val _savedDetail = MutableLiveData<Detail>()
-    val savedDetail: LiveData<Detail>
+    override val savedDetail: LiveData<Detail>
         get() = _savedDetail
 
     private var _currentFile = MutableLiveData<File>()
@@ -45,11 +46,11 @@ class ExternalFileViewModel(
         _cancelClicked.call()
     }
 
-    fun loadExistingDetail(detail: Detail) {
-        _currentFile.value = detail.file
+    override fun loadExistingDetail(existingDetail: Detail) {
+        _currentFile.value = existingDetail.file
     }
 
-    fun onSaveClicked() {
+    override fun onSaveClicked() {
         require(_currentFile.value != null)
         val file = File(_currentFile.value!!.path)
 
