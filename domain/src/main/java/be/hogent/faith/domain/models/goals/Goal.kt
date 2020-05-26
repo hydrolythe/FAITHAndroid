@@ -5,21 +5,42 @@ import org.threeten.bp.LocalDateTime
 
 const val MAX_AMOUNT_OF_SUBGOALS = 10
 
+enum class ReachGoalWay {
+    Stairs, Elevator, Rope
+}
+
 class Goal(
     val uuid: UUID = UUID.randomUUID(),
-    var description : String,
+    private var description : String,
     var dateTime: LocalDateTime = LocalDateTime.now(),
-    var isCompleted : Boolean = false
+    private var isCompleted : Boolean = false,
+    private var currentPositionAvatar : Int = 0
 ){
+    private var chosenReachGoalWay : ReachGoalWay = ReachGoalWay.Elevator
 
-    private val _subGoals = mutableListOf<SubGoal>()
+    private var _subGoals = mutableListOf<SubGoal>()
     val subGoals: List<SubGoal>
         get() = _subGoals
 
-    fun addSubGoalToGoal(subGoal: SubGoal){
+    fun changeSubGoalPosition(subGoalToUpdate: SubGoal, newPosition : Int){
+        _subGoals.remove(subGoalToUpdate)
+        _subGoals.add(newPosition, subGoalToUpdate)
+        updateSubGoalPositions()
+    }
+
+    private fun updateSubGoalPositions(){
+        for (goal in _subGoals)
+            goal.changeCurrentPosition(_subGoals.indexOf(goal))
+    }
+
+    fun addSubGoalToGoal(newSubGoal: SubGoal){
         checkIfGoalIsCompleted()
-            if(_subGoals.size >= MAX_AMOUNT_OF_SUBGOALS)
+            if(subGoals.size >= MAX_AMOUNT_OF_SUBGOALS)
                 throw IllegalArgumentException("Reached maximum amount of subgoals")
+        else{
+                newSubGoal.currentPosition = _subGoals.size
+                _subGoals.add(newSubGoal)
+            }
     }
 
     fun removeSubGoalFromGoal(subGoal: SubGoal){
@@ -34,12 +55,16 @@ class Goal(
         if(isCompleted) throw IllegalArgumentException("Goal is completed")
     }
 
-    fun editDescription(newDescription : String){
-        description = newDescription
+    fun moveAvatarToSubGoal(subGoal: SubGoal){
+        currentPositionAvatar = subGoal.currentPosition
     }
 
-    fun setIsCompleted(){
-        isCompleted = !isCompleted
-    }
+    fun editDescription(newDescription : String){
+        if(newDescription.length <= 30)
+        description = newDescription
+    else
+    throw IllegalArgumentException("Description > 30 characters")}
+    fun setIsCompleted(){ isCompleted = !isCompleted }
+    fun changeReachGoalWay(newReachGoalWay: ReachGoalWay){ chosenReachGoalWay = newReachGoalWay }
 }
 
