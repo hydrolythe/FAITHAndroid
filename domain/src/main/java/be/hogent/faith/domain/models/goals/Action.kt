@@ -9,17 +9,11 @@ class Action(
     private var currentStatus: ActionStatus = ActionStatus.NEUTRAL
 ) {
 
-    var currentPosition: Int = 0
-
-    fun updateStatus(actionStatus: ActionStatus) {
-        currentStatus = actionStatus
-    }
+    var currentPosition: Int? = -1
 
     fun editDescription(newDescription: String) {
         if (newDescription.length <= 30)
             description = newDescription
         else
             throw IllegalArgumentException("Description > 30 characters") }
-
-    fun changeCurrentPosition(newPosition: Int) { currentPosition = newPosition }
 }

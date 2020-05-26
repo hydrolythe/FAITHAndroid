@@ -4,8 +4,6 @@ class SubGoal(
     var description: String
 ) {
 
-    var currentPosition: Int = 0
-
     private val _actions = mutableListOf<Action>()
     val actions: List<Action>
         get() = _actions
@@ -14,11 +12,11 @@ class SubGoal(
         _actions.add(newAction)
     }
 
-    fun removeSubGoalFromGoal(action: Action) {
+    fun removeActionFromSubGoal(action: Action) {
         if (_actions.contains(action))
             _actions.remove(action)
         else
-            throw IllegalArgumentException("Unable to find the selected Action")
+            throw IllegalArgumentException("Deze actie hoort niet bij dit subdoel")
     }
 
     fun updateActionPosition(actionToUpdate: Action, newPosition: Int) {
@@ -29,7 +27,7 @@ class SubGoal(
 
     private fun updateActionPositions() {
         for (action in _actions)
-            action.changeCurrentPosition(_actions.indexOf(action))
+            action.currentPosition = _actions.indexOf(action)
     }
 
     fun editDescription(newDescription: String) {
@@ -37,6 +35,4 @@ class SubGoal(
             description = newDescription
         else
             throw IllegalArgumentException("Description > 30 characters") }
-
-    fun changeCurrentPosition(newPosition: Int) { currentPosition = newPosition }
 }

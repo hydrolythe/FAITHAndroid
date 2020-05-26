@@ -4,67 +4,57 @@ import java.util.UUID
 import org.threeten.bp.LocalDateTime
 
 const val MAX_AMOUNT_OF_SUBGOALS = 10
+const val MAX_CHARACTERS_GOAL_DESCRIPTION = 60
 
 enum class ReachGoalWay {
     Stairs, Elevator, Rope
 }
 
+//Ik vond kleuren als naam gebruiken verwarrend.
+enum class SkyscraperType{
+    Skyscraper_1, Skyscraper_2, Skyscraper_3, Skyscraper_4, Skyscraper_5
+}
+
 class Goal(
     val uuid: UUID = UUID.randomUUID(),
-    private var description: String,
+    var description: String,
+    val skyscraperType: SkyscraperType,
     var dateTime: LocalDateTime = LocalDateTime.now(),
-    private var isCompleted: Boolean = false,
-    private var currentPositionAvatar: Int = 0
+    var isCompleted: Boolean = false,
+    var currentPositionAvatar: Int = 0,
+    var subGoals: Array<SubGoal?> = arrayOfNulls(MAX_AMOUNT_OF_SUBGOALS)
 ) {
-    private var chosenReachGoalWay: ReachGoalWay = ReachGoalWay.Elevator
+    var chosenReachGoalWay: ReachGoalWay = ReachGoalWay.Elevator
 
-    private var _subGoals = mutableListOf<SubGoal>()
-    val subGoals: List<SubGoal>
-        get() = _subGoals
-
-    fun changeSubGoalPosition(subGoalToUpdate: SubGoal, newPosition: Int) {
-        _subGoals.remove(subGoalToUpdate)
-        _subGoals.add(newPosition, subGoalToUpdate)
-        updateSubGoalPositions()
-    }
-
-    private fun updateSubGoalPositions() {
-        for (goal in _subGoals)
-            goal.changeCurrentPosition(_subGoals.indexOf(goal))
-    }
-
-    fun addSubGoalToGoal(newSubGoal: SubGoal) {
-        checkIfGoalIsCompleted()
-            if (subGoals.size >= MAX_AMOUNT_OF_SUBGOALS)
-                throw IllegalArgumentException("Reached maximum amount of subgoals")
-        else {
-                newSubGoal.currentPosition = _subGoals.size
-                _subGoals.add(newSubGoal)
-            }
+    fun addSubGoalToGoal(newSubGoal: SubGoal, index : Int) {
+        subGoals[index] = newSubGoal
     }
 
     fun removeSubGoalFromGoal(subGoal: SubGoal) {
-        checkIfGoalIsCompleted()
-            if (_subGoals.contains(subGoal))
-                _subGoals.remove(subGoal)
-            else
-                throw IllegalArgumentException("Unable to find the selected SubGoal")
+        if (subGoals.contains(subGoal)){
+            val subGoalsList = subGoals.toMutableList()
+            subGoalsList.remove(subGoal)
+            subGoals = subGoalsList.toTypedArray()
+        }
+        else
+            throw IllegalArgumentException("Subdoel is niet aanwezig in de lijst")
     }
 
-    private fun checkIfGoalIsCompleted() {
-        if (isCompleted) throw IllegalArgumentException("Goal is completed")
+    //Verwisselen? of moet alles echt een positie opschuiven
+    fun changeIndexSubGoal(subGoal: SubGoal, newIndex : Int){
+        val temp = subGoals[subGoals.indexOf(subGoal)]
+        subGoals[subGoals.indexOf(subGoal)] = subGoals[newIndex]
+        subGoals[newIndex] = temp
     }
 
     fun moveAvatarToSubGoal(subGoal: SubGoal) {
-        currentPositionAvatar = subGoal.currentPosition
+        if(subGoals.contains(subGoal))
+            currentPositionAvatar = subGoals.indexOf(subGoal)
     }
 
     fun editDescription(newDescription: String) {
         if (newDescription.length <= 30)
-        description = newDescription
-    else
-    throw IllegalArgumentException("Description > 30 characters") }
-
-    fun setIsCompleted() { isCompleted = !isCompleted }
-    fun changeReachGoalWay(newReachGoalWay: ReachGoalWay) { chosenReachGoalWay = newReachGoalWay }
+            description = newDescription
+        else
+            throw IllegalArgumentException("Beschrijving mag niet groter zijn dan $MAX_CHARACTERS_GOAL_DESCRIPTION") }
 }

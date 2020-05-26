@@ -1,5 +1,6 @@
 package be.hogent.faith.domain.models
 
+import be.hogent.faith.domain.models.goals.Goal
 import java.util.UUID
 
 data class User(
@@ -15,6 +16,10 @@ data class User(
     private var _events = HashMap<UUID, Event>()
     val events: List<Event>
         get() = _events.values.toList()
+
+    private var _goals = HashMap<UUID, Goal>()
+    val goals: List<Goal>
+    get() = _goals.values.toList()
 
     val backpack = Backpack()
 
@@ -37,5 +42,13 @@ data class User(
 
     fun removeEvent(event: Event) {
         _events.remove(event.uuid)
+    }
+
+    fun addGoal(goal: Goal){
+        if(goals.filter { go -> go.isCompleted }.size >= 5)
+            throw IllegalArgumentException("Er kunnen maximum 5 actieve doelen zijn.")
+        if(goals.find { e -> e.skyscraperType == goal.skyscraperType } != null)
+            throw java.lang.IllegalArgumentException("Er is al een wolkenkrabber van dit type actief")
+        _goals[goal.uuid] = goal
     }
 }

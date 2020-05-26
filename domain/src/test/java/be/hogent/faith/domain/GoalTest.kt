@@ -1,6 +1,7 @@
 package be.hogent.faith.domain
 
 import be.hogent.faith.domain.models.goals.Goal
+import be.hogent.faith.domain.models.goals.SkyscraperType
 import be.hogent.faith.domain.models.goals.SubGoal
 import org.junit.Assert
 import org.junit.Before
@@ -17,40 +18,36 @@ class GoalTest {
 
     @Before
     fun setUp() {
-        goal = Goal(description = "desc")
+        goal = Goal(description = "desc", skyscraperType = SkyscraperType.Skyscraper_1)
     }
 
     @Test
-    fun `subgoals are correctly added to goal`() {
-        goal.addSubGoalToGoal(subGoalPos1)
-        goal.addSubGoalToGoal(subGoalPos2)
-        goal.addSubGoalToGoal(subGoalPos3)
-        goal.addSubGoalToGoal(subGoalPos4)
-        goal.addSubGoalToGoal(subGoalPos5)
+    fun `subgoals correctly added and assigned to correct position`() {
 
-        Assert.assertEquals(5, goal.subGoals.size)
-    }
+        goal.addSubGoalToGoal(subGoalPos1, 0)
+        goal.addSubGoalToGoal(subGoalPos2, 2)
+        goal.addSubGoalToGoal(subGoalPos3, 6)
+        goal.addSubGoalToGoal(subGoalPos4, 8)
+        goal.addSubGoalToGoal(subGoalPos5, 9)
 
-    @Test
-    fun `change position of subgoal`() {
-        goal.addSubGoalToGoal(subGoalPos1)
-        goal.addSubGoalToGoal(subGoalPos2)
-        goal.addSubGoalToGoal(subGoalPos3)
-        goal.addSubGoalToGoal(subGoalPos4)
-        goal.addSubGoalToGoal(subGoalPos5)
-
-        goal.changeSubGoalPosition(subGoalPos3, 0)
-
-        Assert.assertEquals(goal.subGoals.elementAt(0), subGoalPos3)
-        Assert.assertEquals(goal.subGoals.elementAt(1), subGoalPos1)
+        Assert.assertEquals(goal.subGoals.elementAt(6), subGoalPos3)
+        Assert.assertEquals(goal.subGoals.elementAt(0), subGoalPos1)
         Assert.assertEquals(goal.subGoals.elementAt(2), subGoalPos2)
-        Assert.assertEquals(goal.subGoals.elementAt(3), subGoalPos4)
-        Assert.assertEquals(goal.subGoals.elementAt(4), subGoalPos5)
+        Assert.assertEquals(goal.subGoals.elementAt(8), subGoalPos4)
+        Assert.assertEquals(goal.subGoals.elementAt(9), subGoalPos5)
+    }
 
-        Assert.assertEquals(0, subGoalPos3.currentPosition)
-        Assert.assertEquals(1, subGoalPos1.currentPosition)
-        Assert.assertEquals(2, subGoalPos2.currentPosition)
-        Assert.assertEquals(3, subGoalPos4.currentPosition)
-        Assert.assertEquals(4, subGoalPos5.currentPosition)
+    @Test
+    fun `change index subgoal`(){
+        goal.addSubGoalToGoal(subGoalPos1, 0)
+        goal.addSubGoalToGoal(subGoalPos2, 2)
+        goal.addSubGoalToGoal(subGoalPos3, 6)
+        goal.addSubGoalToGoal(subGoalPos4, 8)
+        goal.addSubGoalToGoal(subGoalPos5, 9)
+
+        goal.changeIndexSubGoal(subGoalPos3, 2)
+
+        Assert.assertEquals(goal.subGoals.elementAt(2), subGoalPos3)
+        Assert.assertEquals(goal.subGoals.elementAt(6), subGoalPos2)
     }
 }
