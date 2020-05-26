@@ -90,7 +90,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
         externalFileViewModel.savedDetail.observe(this, Observer { newDetail ->
 
             detailFinishedListener.onDetailFinished(newDetail)
-            // navigation?.backToEvent()
+            navigation?.backToEvent()
         })
         binding.btnRemoveFile.setOnClickListener {
             removeFile()
