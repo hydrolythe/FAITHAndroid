@@ -51,7 +51,6 @@ class SkyscraperStartScreenFragment : Fragment(), SkyscraperClickListener {
         list.add(Skyscraper("Dit is een tweede wolkenkrabber"))
         list.add(Skyscraper("Dit is een derde wolkenkrabber"))
         list.add(Skyscraper("Dit is een vierde wolkenkrabber"))
-        list.add(Skyscraper("Dit is een vijfde wolkenkrabber"))
         adapter.submitList(list)
     }
     private fun setOnclickListeners() {
@@ -60,6 +59,18 @@ class SkyscraperStartScreenFragment : Fragment(), SkyscraperClickListener {
         }
         binding.btnSkyscraperHistory.setOnClickListener {
             navigation?.openSkyscrapersHistory()
+        }
+        binding.btnSkyscraperAdd.setOnClickListener {
+            val list = arrayListOf<Skyscraper>()
+            list.add(Skyscraper("Dit is een eerste wolkenkrabber"))
+            list.add(Skyscraper("Dit is een tweede wolkenkrabber"))
+            list.add(Skyscraper("Dit is een derde wolkenkrabber"))
+            list.add(Skyscraper("Dit is een vierde wolkenkrabber"))
+            list.add(Skyscraper("Dit is een vijfde wolkenkrabber"))
+            adapter.submitList(list)
+            if(list.size == 5){
+                binding.btnSkyscraperAdd.visibility = View.GONE
+            }
         }
     }
     override fun onAttach(context: Context) {
