@@ -139,6 +139,7 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
                 YoutubeVideoDetail::class as KClass<Detail>
             )
             if (saveDialog != null) {
+                stopPlayer()
                 saveDialog.setTargetFragment(this, 22)
                 saveDialog.show(getParentFragmentManager(), null)
             }
