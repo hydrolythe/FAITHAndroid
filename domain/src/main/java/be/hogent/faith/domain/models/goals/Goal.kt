@@ -47,6 +47,10 @@ class Goal(
         subGoals[newIndex] = temp
     }
 
+    internal fun setCompleted(){
+        isCompleted = !isCompleted
+    }
+
     fun moveAvatarToSubGoal(subGoal: SubGoal) {
         if(subGoals.contains(subGoal))
             currentPositionAvatar = subGoals.indexOf(subGoal)
