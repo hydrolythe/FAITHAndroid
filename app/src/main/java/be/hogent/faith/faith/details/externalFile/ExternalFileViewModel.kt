@@ -28,7 +28,7 @@ class ExternalFileViewModel(
         get() = _cancelClicked
 
     private val _getDetailMetaData = SingleLiveEvent<Unit>()
-    val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
+    override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
 
     private var _existingDetail: Detail? = null
 
@@ -101,11 +101,12 @@ class ExternalFileViewModel(
         }
     }
 
-    fun setDetailsMetaData(title: String = "", dateTime: LocalDateTime = LocalDateTime.now()) {
+    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
         _existingDetail?.let {
             it.title = title
             it.dateTime = dateTime
         }
         _savedDetail.value = _existingDetail
     }
+
 }

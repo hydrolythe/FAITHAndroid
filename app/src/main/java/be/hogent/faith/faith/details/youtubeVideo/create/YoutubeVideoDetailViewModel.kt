@@ -4,6 +4,7 @@ import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
@@ -67,7 +68,7 @@ class YoutubeVideoDetailViewModel(
         }
 
         override fun onError(e: Throwable) {
-            errorMessage.value = ""
+            _errorMessage.postValue(R.string.create_video_failed)
             e.printStackTrace()
         }
     }
@@ -79,7 +80,6 @@ class YoutubeVideoDetailViewModel(
     // Public for testing purposes
     fun saveVideoDetail(detail: YoutubeVideoDetail) {
         _getDetailMetaData.call()
-        //  _savedDetail.postValue(detail)
     }
 
     fun goBackToBackpack() {
