@@ -1,8 +1,9 @@
 package be.hogent.faith.faith.library.eventList
 
-import java.util.UUID
+import be.hogent.faith.domain.models.Event
+import java.util.*
 
 interface EventListener {
     fun onEventClicked(eventUUID: UUID)
-    fun onEventDeleteClicked(eventUUID: UUID)
+    fun onEventDeleteClicked(event: Event)
 }
