@@ -265,5 +265,4 @@
     <string name="voorwerpen">Voorwerpen</string>
     <string name="decors">Decors</string>
     <string name="metaforen">Metaforen</string>
-    <string name="event_delete_error">Er ging iets fout bij het verwijderen van de gebeurtenis.</string>
 </resources>
