@@ -2,14 +2,12 @@ package be.hogent.faith.database.event
 
 import be.hogent.faith.database.common.EVENTS_KEY
 import be.hogent.faith.database.common.USERS_KEY
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import durdinapps.rxfirebase2.RxFirestore
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import java.util.*
+import java.util.UUID
 
 /**
  * uses RxFirebase: https://github.com/FrangSierra/RxFirebase
@@ -27,7 +25,9 @@ class EventDatabase(
      */
     fun get(eventUuid: UUID): Flowable<EncryptedEventEntity> {
         val currentUser = fbAuth.currentUser
-            ?: return Flowable.error(RuntimeException("Unauthorized user."))
+        if (currentUser == null) {
+            return Flowable.error(RuntimeException("Unauthorized user."))
+        }
         return RxFirestore.observeDocumentRef(
             firestore
                 .collection(USERS_KEY)
@@ -42,8 +42,10 @@ class EventDatabase(
      * get all events for current authenticated user, also listens for changes
      */
     fun getAll(): Flowable<List<EncryptedEventEntity>> {
-        val currentUser =
-            fbAuth.currentUser ?: return Flowable.error(RuntimeException("Unauthorized user."))
+        val currentUser = fbAuth.currentUser
+        if (currentUser == null) {
+            return Flowable.error(RuntimeException("Unauthorized user."))
+        }
         return RxFirestore.observeQueryRef(
             firestore
                 .collection(USERS_KEY)
@@ -57,30 +59,17 @@ class EventDatabase(
 
     fun insert(item: EncryptedEventEntity): Completable {
         val currentUser = fbAuth.currentUser
-            ?: return Completable.error(RuntimeException("Unauthorized user."))
+        if (currentUser == null) {
+            return Completable.error(RuntimeException("Unauthorized user."))
+        }
+        // sets the document reference for saving the event in firestore
         val document =
             firestore
                 .collection(USERS_KEY)
                 .document(currentUser.uid)
                 .collection(EVENTS_KEY)
                 .document(item.uuid)
-        return RxFirestore.setDocument(document, item)
-    }
-
-    fun delete(event: Event, user: User): Completable {
-        val currentUser = fbAuth.currentUser
-        if (currentUser!!.uid != user.uuid) {
-            return Completable.error(RuntimeException("Unauthorized user."))
-        }
-        val document =
-            firestore
-                .collection(USERS_KEY)
-                .document(currentUser.uid)
-                .collection(EVENTS_KEY)
-                .document(event.uuid.toString())
-        return RxFirestore.deleteDocument(document)
-            .onErrorComplete()
-
+        return RxFirestore.setDocument(document, item) // ) // stores the event in firestore
     }
 
     fun update(item: EncryptedEventEntity): Completable {

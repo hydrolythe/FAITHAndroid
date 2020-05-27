@@ -10,7 +10,6 @@ import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.storage.StoragePathProvider
 import com.google.firebase.storage.FirebaseStorage
 import io.reactivex.Completable
-import io.reactivex.Observable
 import io.reactivex.rxkotlin.toFlowable
 import timber.log.Timber
 import java.io.File
@@ -169,14 +168,9 @@ class FirebaseStorageRepository(
     }
 
     override fun deleteFiles(event: Event) : Completable{
-        // Can't just delete the directory because firebasestorage doesn't _really_ use directories,
-        // just paths.
-        return Observable.fromIterable(event.details)
-            .flatMapCompletable{ detail ->
-                rxFirebaseStorage.delete(
-                    storageRef.child(pathProvider.detailPath(detail, event).path)
-                ).doOnComplete { Timber.i("Deleted detail ${detail.uuid} from event") }
-            }
+        return rxFirebaseStorage.delete(
+            storageRef.child(pathProvider.eventsFolderPath(event).path)
+        )
     }
 
     override fun deleteFiles(detail: Detail, container: DetailsContainer): Completable {
