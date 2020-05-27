@@ -87,7 +87,7 @@ class EventsAdapter(private val eventListener: EventListener) :
             itemBinding.imgDelete.visibility = if (showDelete) View.VISIBLE else View.GONE
 
             itemBinding.imgDelete.setOnClickListener {
-                eventListener.onEventDeleteClicked(event)
+                eventListener.onEventDeleteClicked(event.uuid)
             }
 
             itemBinding.cardViewLibrary.setOnClickListener {
