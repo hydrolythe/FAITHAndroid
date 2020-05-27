@@ -63,6 +63,7 @@ class YoutubeVideoDetailViewModel(
         }
 
         override fun onError(e: Throwable) {
+            e.message
         }
     }
 

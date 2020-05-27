@@ -7,12 +7,12 @@ import be.hogent.faith.service.network.asDomainModel
 import be.hogent.faith.service.usecases.base.FlowableUseCase
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
+import io.reactivex.schedulers.Schedulers
 
 class GetYoutubeVideosFromSearchUseCase(
-    observer: Scheduler,
-    subscriber: Scheduler
+    observer: Scheduler
 ) : FlowableUseCase<List<YoutubeVideoDetail>, GetYoutubeVideosFromSearchUseCase.Params>(
-    observer, subscriber
+    observer
 ) {
 
     private val VIDEOPART = "snippet"
@@ -34,7 +34,7 @@ class GetYoutubeVideosFromSearchUseCase(
             type = TYPE,
             maxResults = MAXRESULTS,
             fields = FIELDS
-        )
+        ).subscribeOn(subscriber)
             .map {
                 asDomainModel(it.items)
             }
