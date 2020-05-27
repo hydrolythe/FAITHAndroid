@@ -17,13 +17,19 @@ enum class SkyscraperType{
 
 class Goal(
     val uuid: UUID = UUID.randomUUID(),
-    var description: String,
     val skyscraperType: SkyscraperType,
     var dateTime: LocalDateTime = LocalDateTime.now(),
     var isCompleted: Boolean = false,
     var currentPositionAvatar: Int = 0,
     var subGoals: Array<SubGoal?> = arrayOfNulls(MAX_AMOUNT_OF_SUBGOALS)
 ) {
+
+    var description: String = ""
+        set(value) {
+        checkMaxLengthDescription(value)
+        field = value
+    }
+
     var chosenReachGoalWay: ReachGoalWay = ReachGoalWay.Elevator
 
     fun addSubGoalToGoal(newSubGoal: SubGoal, index : Int) {
@@ -56,9 +62,8 @@ class Goal(
             currentPositionAvatar = subGoals.indexOf(subGoal)
     }
 
-    fun editDescription(newDescription: String) {
+    private fun checkMaxLengthDescription(newDescription: String) {
         if (newDescription.length <= 30)
-            description = newDescription
-        else
-            throw IllegalArgumentException("Beschrijving mag niet groter zijn dan $MAX_CHARACTERS_GOAL_DESCRIPTION") }
+            throw IllegalArgumentException("Beschrijving mag niet groter zijn dan $MAX_CHARACTERS_GOAL_DESCRIPTION")
+    }
 }
