@@ -99,7 +99,7 @@ val appModule = module(override = true) {
     viewModel { YoutubeVideoDetailViewModel(get()) }
     viewModel { CurrentVideoViewModel() }
     viewModel { ExternalFileViewModel(get(), get()) }
-    viewModel { (user: User) -> EventListViewModel(user, get()) }
+    viewModel { (user: User) -> EventListViewModel(user, get(), get()) }
     viewModel { EventDetailsViewModel(get()) }
     viewModel { ViewPhotoDetailViewModel() }
     viewModel { ViewDrawingDetailViewModel() }
