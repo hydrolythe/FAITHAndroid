@@ -1,7 +1,7 @@
 package be.hogent.faith.domain.models.goals
 
 class SubGoal(
-    var description: String
+    private var description: String
 ) {
 
     private val _actions = mutableListOf<Action>()
@@ -13,10 +13,8 @@ class SubGoal(
     }
 
     fun removeActionFromSubGoal(action: Action) {
-        if (_actions.contains(action))
-            _actions.remove(action)
-        else
-            throw IllegalArgumentException("Deze actie hoort niet bij dit subdoel")
+        require(_actions.contains(action)) { "Deze actie hoort niet bij dit subdoel" }
+        _actions.remove(action)
     }
 
     fun updateActionPosition(actionToUpdate: Action, newPosition: Int) {
@@ -31,8 +29,7 @@ class SubGoal(
     }
 
     fun editDescription(newDescription: String) {
-        if (newDescription.length <= 30)
-            description = newDescription
-        else
-            throw IllegalArgumentException("Description > 30 characters") }
+        require(newDescription.length <= 30) { "Description > 30 characters" }
+        description = newDescription
+    }
 }
