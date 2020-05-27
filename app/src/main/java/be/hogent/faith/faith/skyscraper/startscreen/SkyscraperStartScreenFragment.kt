@@ -73,7 +73,7 @@ class SkyscraperStartScreenFragment : Fragment(),
             list.add(Skyscraper("Dit is een vierde wolkenkrabber"))
             list.add(Skyscraper("Dit is een vijfde wolkenkrabber"))
             adapter.submitList(list)
-            if(list.size == 5){
+            if (list.size == 5) {
                 binding.btnSkyscraperAdd.visibility = View.GONE
             }
         }

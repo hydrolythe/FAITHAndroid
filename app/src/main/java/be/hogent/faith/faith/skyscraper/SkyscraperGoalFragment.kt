@@ -17,6 +17,8 @@ class SkyscraperGoalFragment : Fragment() {
     private var navigation: SkyscraperNavigationListener? = null
     private lateinit var binding: FragmentSkyscraperGoalBinding
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
+    private lateinit var dragDropOnDragListener: DragDropOnDragListener
+    private lateinit var dragDropOnTouchListener: DragDropOnTouchListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,7 +29,8 @@ class SkyscraperGoalFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_skyscraper_goal, container, false)
         binding.lifecycleOwner = this
-
+        dragDropOnTouchListener = DragDropOnTouchListener()
+        dragDropOnDragListener = DragDropOnDragListener(dragDropOnTouchListener)
         return binding.root
     }
 
@@ -43,6 +46,9 @@ class SkyscraperGoalFragment : Fragment() {
         binding.btnSkyscraperReturn.setOnClickListener {
             navigation?.goBack()
         }
+        binding.dragAvatar.setOnTouchListener(dragDropOnTouchListener)
+        binding.imageView16.setOnDragListener(dragDropOnDragListener)
+        binding.imageView4.setOnDragListener(dragDropOnDragListener)
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
