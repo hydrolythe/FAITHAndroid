@@ -63,7 +63,7 @@ class DetailEncryptionService(
                 ),
                 thumbnail = detail.thumbnail?.let { dataEncrypter.encrypt(it) },
                 youtubeVideoID = when (detail) {
-                    is YoutubeVideoDetail -> dataEncrypter.encrypt(detail.videoId)
+                    is YoutubeVideoDetail -> detail.videoId
                     else -> ""
                 }
             )
