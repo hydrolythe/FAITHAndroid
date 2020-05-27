@@ -30,19 +30,4 @@ class BackpackViewModel(
         _viewButtons.postValue(viewButtons)
     }
 
-    /* TODO : MAG DIT WEG EN VERVANGEN WORDEN DOOR SAVEDETAILSMETADATADIALOG
-    fun saveYoutubeVideoDetail(title: String, user: User, detail: Detail) {
-        val notMaxCharacters = checkMaxCharacters(title)
-        val uniqueFilename = checkUniqueTitle(title)
-
-        if (!notMaxCharacters)
-            detail.title = title.substring(0, 29)
-
-        if (!uniqueFilename) {
-            detail.title = detail.title + " (" + Date() + ")"
-        }
-        saveCurrentDetail(user, detail)
-    }
-
-     */
 }

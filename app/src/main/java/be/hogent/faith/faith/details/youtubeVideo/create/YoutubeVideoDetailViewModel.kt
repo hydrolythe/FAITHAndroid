@@ -21,9 +21,13 @@ class YoutubeVideoDetailViewModel(
     val snippets: LiveData<List<YoutubeVideoDetail>>
         get() = _snippets
 
+    //video dat zal worden bekeken
     private var _selectedSnippet = MutableLiveData<YoutubeVideoDetail>()
     val selectedSnippet: LiveData<YoutubeVideoDetail>
         get() = _selectedSnippet
+
+    //video die wordt opgeslaan en waarvan de metadata wordt opgevraagd
+    private var currentSnippet: YoutubeVideoDetail? = null
 
     private var _showPreview = MutableLiveData<ShowPreview>()
     val showPreview: LiveData<ShowPreview>
@@ -74,11 +78,7 @@ class YoutubeVideoDetailViewModel(
     }
 
     override fun onSaveClicked() {
-        saveVideoDetail(_selectedSnippet.value!!)
-    }
-
-    // Public for testing purposes
-    fun saveVideoDetail(detail: YoutubeVideoDetail) {
+        currentSnippet = _selectedSnippet.value
         _getDetailMetaData.call()
     }
 
@@ -119,11 +119,11 @@ class YoutubeVideoDetailViewModel(
     }
 
     override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
-        _selectedSnippet.value?.let {
+       currentSnippet?.let {
             it.title = title
             it.dateTime = dateTime
         }
-        _savedDetail.value = _selectedSnippet.value
+        _savedDetail.value = currentSnippet
     }
 }
 

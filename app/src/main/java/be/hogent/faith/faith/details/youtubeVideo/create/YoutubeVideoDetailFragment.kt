@@ -134,7 +134,7 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
 
         youtubeVideoDetailViewModel.getDetailMetaData.observe(this, Observer {
             popupWindow.dismiss()
-            val saveDialog = DetailsFactory.createMetaDataDialog(
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(
                 requireActivity(),
                 YoutubeVideoDetail::class as KClass<Detail>
             )
@@ -144,23 +144,11 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
             }
         })
 
-        youtubeVideoDetailViewModel.savedDetail.observe(this, Observer {
-            detailFinishedListener.onDetailFinished(it)
-            navigation?.backToEvent()
+       youtubeVideoDetailViewModel.savedDetail.observe(this, Observer {
+           detailFinishedListener.onDetailFinished(youtubeVideoDetailViewModel.savedDetail.value!!)
+           navigation?.backToEvent()
         })
 
-
-       /* youtubeVideoDetailViewModel.savedDetail.observe(this, Observer {
-            backpackViewModel.saveYoutubeVideoDetail(it.title, userViewModel.user.value!!, it)
-        })
-
-        backpackViewModel.infoMessage.observe(this, Observer {
-            if (it == R.string.save_video_success) {
-                popupWindow.dismiss()
-                detailFinishedListener.onDetailFinished(youtubeVideoDetailViewModel.savedDetail.value!!)
-                navigation?.backToEvent()
-            }
-        })*/
 
         /**
          * Based on Instagram search. Delay of 400ms to lower the amount of requests send to the YouTube Data API.

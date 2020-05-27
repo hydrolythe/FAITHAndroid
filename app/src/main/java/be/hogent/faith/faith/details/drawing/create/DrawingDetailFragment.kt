@@ -154,7 +154,7 @@ class DrawingDetailFragment : DrawFragment(),
         })
 
         drawingDetailViewModel.getDetailMetaData.observe(this, Observer {
-            val saveDialog = DetailsFactory.createMetaDataDialog(
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(
                 requireActivity(),
                 DrawingDetail::class as KClass<Detail>
             )

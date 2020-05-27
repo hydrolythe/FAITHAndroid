@@ -97,7 +97,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
             navigation?.backToEvent()
         })
         externalFileViewModel.getDetailMetaData.observe(this, Observer {
-            val saveDialog = DetailsFactory.createMetaDataDialog(requireActivity(), PhotoDetail::class as KClass<Detail>)
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(requireActivity(), PhotoDetail::class as KClass<Detail>)
             if (saveDialog == null)
                 externalFileViewModel.setDetailsMetaData()
             else {

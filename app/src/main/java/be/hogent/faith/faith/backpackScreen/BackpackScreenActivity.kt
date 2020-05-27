@@ -5,12 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.*
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailType
@@ -85,6 +80,7 @@ class BackpackScreenActivity : AppCompatActivity(),
             is PhotoDetail -> save(detail)
             is AudioDetail -> save(detail)
             is VideoDetail -> save(detail)
+            is YoutubeVideoDetail -> save(detail)
         }
         backpackViewModel.viewButtons(true)
     }

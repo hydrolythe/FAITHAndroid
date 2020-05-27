@@ -172,7 +172,7 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
             showExitAlert()
         })
         textDetailDetailViewModel.getDetailMetaData.observe(this, Observer {
-            val saveDialog = DetailsFactory.createMetaDataDialog(
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(
                 requireActivity(),
                 TextDetail::class as KClass<Detail>
             )

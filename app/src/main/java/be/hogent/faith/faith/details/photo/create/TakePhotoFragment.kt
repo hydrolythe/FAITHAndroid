@@ -119,7 +119,7 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
         })
 
         takePhotoViewModel.getDetailMetaData.observe(this, Observer {
-            val saveDialog = DetailsFactory.createMetaDataDialog(
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(
                 requireActivity(),
                 PhotoDetail::class as KClass<Detail>
             )

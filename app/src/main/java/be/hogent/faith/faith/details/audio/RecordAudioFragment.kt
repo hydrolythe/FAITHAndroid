@@ -148,7 +148,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             requireActivity().onBackPressed()
         })
         audioDetailViewModel.getDetailMetaData.observe(this, Observer {
-            val saveDialog = DetailsFactory.createMetaDataDialog(requireActivity(), AudioDetail::class as KClass<Detail>)
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(requireActivity(), AudioDetail::class as KClass<Detail>)
             if (saveDialog == null)
                 audioDetailViewModel.setDetailsMetaData()
             else {

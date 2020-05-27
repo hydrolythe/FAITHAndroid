@@ -342,7 +342,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         })
     }
 
-    // Youtube videos are only in the Backpack, so this is not in the [DetailsContainerViewModel].
     fun saveYoutubeDetail(user: User, detail: YoutubeVideoDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
