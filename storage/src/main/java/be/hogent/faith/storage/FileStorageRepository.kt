@@ -141,14 +141,6 @@ class FileStorageRepository(
         temporaryStorage.setFilesToDecryptedVersions(event)
     }
 
-    override fun deleteEventFiles(event: Event): Completable {
-        return Completable.mergeArray(
-            temporaryStorage.deleteFiles(event),
-            localStorage.deleteFiles(event),
-            onlineStorage.deleteFiles(event)
-        )
-    }
-
     private fun deleteDetailFile(detail: Detail): Completable {
         return Completable.fromAction {
             if (detail.file.exists()) {

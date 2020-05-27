@@ -48,6 +48,4 @@ interface ILocalFileStorageRepository {
     fun deleteFiles(detail: Detail, container: DetailsContainer): Completable
 
     fun deleteDetail(detail: Detail, event: Event): Completable
-
-    fun deleteFiles(event: Event): Completable
 }

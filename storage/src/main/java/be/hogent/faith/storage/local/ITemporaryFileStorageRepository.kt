@@ -36,6 +36,4 @@ interface ITemporaryFileStorageRepository {
      */
     fun getFile(detail: Detail, container: DetailsContainer): File
     fun setFilesToDecryptedVersions(event: Event)
-
-    fun deleteFiles(event: Event): Completable
 }

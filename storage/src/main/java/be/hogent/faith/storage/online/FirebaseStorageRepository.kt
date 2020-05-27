@@ -167,12 +167,6 @@ class FirebaseStorageRepository(
         }
     }
 
-    override fun deleteFiles(event: Event) : Completable{
-        return rxFirebaseStorage.delete(
-            storageRef.child(pathProvider.eventsFolderPath(event).path)
-        )
-    }
-
     override fun deleteFiles(detail: Detail, container: DetailsContainer): Completable {
         val refToFile = storageRef.child(pathProvider.detailPath(detail, container).path)
         return rxFirebaseStorage.delete(refToFile)

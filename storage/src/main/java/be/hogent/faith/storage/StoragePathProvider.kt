@@ -73,7 +73,7 @@ class StoragePathProvider(
         return File("${eventsFolderPath(event).path}/${detail.uuid}")
     }
 
-    fun eventsFolderPath(event: Event): File {
+    private fun eventsFolderPath(event: Event): File {
         return File("users/${user!!.uid}/events/${event.uuid}")
     }
 
