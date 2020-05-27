@@ -7,7 +7,6 @@ import be.hogent.faith.service.network.asDomainModel
 import be.hogent.faith.service.usecases.base.FlowableUseCase
 import io.reactivex.Flowable
 import io.reactivex.Scheduler
-import io.reactivex.schedulers.Schedulers
 
 class GetYoutubeVideosFromSearchUseCase(
     observer: Scheduler

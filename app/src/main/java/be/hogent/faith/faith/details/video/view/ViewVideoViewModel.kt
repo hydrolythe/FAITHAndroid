@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.detail.Detail
 import java.io.File
 
-class ViewVideoViewModel () : ViewModel(){
+class ViewVideoViewModel : ViewModel() {
 
     private var _currentFile = MutableLiveData<File>()
     val currentFile: LiveData<File>
@@ -15,5 +15,4 @@ class ViewVideoViewModel () : ViewModel(){
     fun loadExistingDetail(existingDetail: Detail) {
         _currentFile.value = existingDetail.file
     }
-
 }
