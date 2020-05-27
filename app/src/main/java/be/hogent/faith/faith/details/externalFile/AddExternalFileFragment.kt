@@ -94,7 +94,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
         externalFileViewModel.savedDetail.observe(this, Observer { newDetail ->
 
             detailFinishedListener.onDetailFinished(newDetail)
-            // navigation?.backToEvent()
+            navigation?.backToEvent()
         })
         externalFileViewModel.getDetailMetaData.observe(this, Observer {
             val saveDialog = DetailsFactory.createMetaDataDialog(requireActivity(), PhotoDetail::class as KClass<Detail>)

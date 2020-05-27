@@ -21,7 +21,7 @@ import java.util.Locale
 class ExternalFileViewModel(
     private val createPhotoDetailUseCase: CreatePhotoDetailUseCase,
     private val createVideoDetailUseCase: CreateVideoDetailUseCase
-) : ViewModel() {
+) : ViewModel(), DetailViewModel<Detail> {
 
     private val _cancelClicked = SingleLiveEvent<Unit>()
     val cancelClicked: LiveData<Unit>
@@ -33,7 +33,7 @@ class ExternalFileViewModel(
     private var _existingDetail: Detail? = null
 
     private val _savedDetail = MutableLiveData<Detail>()
-    val savedDetail: LiveData<Detail>
+    override val savedDetail: LiveData<Detail>
         get() = _savedDetail
 
     private var _currentFile = MutableLiveData<File>()
@@ -52,11 +52,11 @@ class ExternalFileViewModel(
         _cancelClicked.call()
     }
 
-    fun loadExistingDetail(detail: Detail) {
-        _currentFile.value = detail.file
+    override fun loadExistingDetail(existingDetail: Detail) {
+        _currentFile.value = existingDetail.file
     }
 
-    fun onSaveClicked() {
+    override fun onSaveClicked() {
         require(_currentFile.value != null)
         val file = File(_currentFile.value!!.path)
 
