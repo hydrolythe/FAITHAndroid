@@ -5,9 +5,13 @@ enum class ActionStatus {
 }
 
 class Action(
-    private var description: String = "",
     private var currentStatus: ActionStatus = ActionStatus.NEUTRAL
 ) {
+    private var description: String = ""
+        set(value) {
+            checkMaxLengthDescription(value)
+            field = value
+        }
 
     var currentPosition: Int? = -1
 

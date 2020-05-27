@@ -61,9 +61,9 @@ class Goal(
         if(subGoals.contains(subGoal))
             currentPositionAvatar = subGoals.indexOf(subGoal)
     }
+}
 
-    private fun checkMaxLengthDescription(newDescription: String) {
-        if (newDescription.length <= 30)
-            throw IllegalArgumentException("Beschrijving mag niet groter zijn dan $MAX_CHARACTERS_GOAL_DESCRIPTION")
-    }
+fun checkMaxLengthDescription(newDescription: String) {
+    if (newDescription.length <= 30)
+        throw IllegalArgumentException("Beschrijving mag niet groter zijn dan $MAX_CHARACTERS_GOAL_DESCRIPTION")
 }
