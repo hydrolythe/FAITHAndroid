@@ -49,7 +49,6 @@ class SaveCinemaDetailDialog(private var detail: Detail) : DialogFragment() {
         saveDetailBinding =
             DataBindingUtil.inflate(inflater, R.layout.dialog_cinema_save_detail, container, false)
         saveDetailBinding.cinemaViewModel = cinemaOverviewViewModel
-        saveDetailBinding.userViewModel = userViewModel
         saveDetailBinding.lifecycleOwner = this
         return saveDetailBinding.root
     }
