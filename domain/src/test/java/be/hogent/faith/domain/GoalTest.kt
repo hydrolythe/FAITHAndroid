@@ -18,11 +18,11 @@ class GoalTest {
 
     @Before
     fun setUp() {
-        goal = Goal(description = "desc", skyscraperType = SkyscraperType.Skyscraper_1)
+        goal = Goal(skyscraperType = SkyscraperType.Skyscraper_1)
     }
 
     @Test
-    fun `subgoals correctly added and assigned to correct position`() {
+    fun `subgoals added and assigned to correct position`() {
 
         goal.addSubGoalToGoal(subGoalPos1, 0)
         goal.addSubGoalToGoal(subGoalPos2, 2)

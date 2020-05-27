@@ -7,9 +7,9 @@ import be.hogent.faith.domain.models.goals.SkyscraperType
 object GoalFactory {
     fun makeGoal(skyscraperType: SkyscraperType, numberOfSubGoals: Int = 5): Goal {
         val goal = Goal(
-            description = DataFactory.randomString(),
             skyscraperType = skyscraperType
         )
+        goal.description = DataFactory.randomString(10)
         return goal
     }
 
