@@ -53,7 +53,7 @@ class ExternalFileViewModel(
     }
 
     override fun loadExistingDetail(existingDetail: Detail) {
-        _currentFile.value = existingDetail.file
+        throw UnsupportedOperationException("This viewmodel can't open details")
     }
 
     override fun onSaveClicked() {

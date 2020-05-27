@@ -23,6 +23,7 @@ import be.hogent.faith.faith.details.photo.create.TakePhotoViewModel
 import be.hogent.faith.faith.details.photo.view.ViewPhotoDetailViewModel
 import be.hogent.faith.faith.details.text.create.TextDetailViewModel
 import be.hogent.faith.faith.details.text.view.ViewTextDetailViewModel
+import be.hogent.faith.faith.details.video.view.ViewVideoViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
@@ -109,6 +110,10 @@ val appModule = module(override = true) {
         ViewTextDetailViewModel(
             get()
         )
+    }
+    
+    viewModel{
+        ViewVideoViewModel()
     }
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.

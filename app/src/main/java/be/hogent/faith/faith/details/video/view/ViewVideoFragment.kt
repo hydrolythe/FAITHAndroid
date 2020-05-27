@@ -13,6 +13,7 @@ import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayer
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayerFragment
 import be.hogent.faith.faith.details.externalFile.ExternalFileViewModel
+import be.hogent.faith.faith.details.video.view.ViewVideoViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val VIDEO_DETAIL = "The video to be shown"
@@ -20,8 +21,8 @@ private const val VIDEO_DETAIL = "The video to be shown"
 class ViewVideoFragment : FaithVideoPlayerFragment() {
 
     private lateinit var binding: FragmentViewYoutubeVideoBinding
-    private val externalFileViewModel: ExternalFileViewModel by viewModel()
     private var navigation: ViewExternalVideoNavigation? = null
+    private val viewModel : ViewVideoViewModel by viewModel()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -43,7 +44,7 @@ class ViewVideoFragment : FaithVideoPlayerFragment() {
             false
         )
 
-        externalFileViewModel.currentFile.observe(viewLifecycleOwner, Observer { file ->
+        viewModel.currentFile.observe(viewLifecycleOwner, Observer { file ->
             val faithYoutubePlayer =
                 FaithVideoPlayer(
                     playerParentView = binding.cardYoutubePlayer,
@@ -75,7 +76,7 @@ class ViewVideoFragment : FaithVideoPlayerFragment() {
 
                 private fun loadExistingVideo() {
             val externalVideoDetail = requireArguments().getSerializable(VIDEO_DETAIL) as VideoDetail
-            externalFileViewModel.loadExistingDetail(externalVideoDetail)
+            viewModel.loadExistingDetail(externalVideoDetail)
         }
                 companion object {
             fun newInstance(videoDetail: VideoDetail): ViewVideoFragment {
