@@ -26,7 +26,7 @@ class DeleteGoalUseCaseTest {
     fun `deleting a goal returns Completable on success`() {
         // Arrange
         val params = DeleteGoalUseCase.Params(goal, user)
-        every { goalRepository.delete(goal, user) } returns Completable.complete()
+        every { goalRepository.delete(goal.uuid) } returns Completable.complete()
 
         // Act
         deleteGoalUC.buildUseCaseObservable(params)
@@ -35,7 +35,7 @@ class DeleteGoalUseCaseTest {
             .assertComplete()
 
         // Assert
-        verify { goalRepository.delete(goal, user) }
+        verify { goalRepository.delete(goal.uuid) }
     }
 
     @Test
@@ -43,7 +43,7 @@ class DeleteGoalUseCaseTest {
         // Arrange
         // TODO user.addGoal(goal)
         val params = DeleteGoalUseCase.Params(goal, user)
-        every { goalRepository.delete(goal, user) } returns Completable.complete()
+        every { goalRepository.delete(goal.uuid) } returns Completable.complete()
 
         // Act
         deleteGoalUC.buildUseCaseObservable(params)
@@ -57,7 +57,7 @@ class DeleteGoalUseCaseTest {
     @Test
     fun `deleting a goal when an error occurs in the goalRepository returns an error`() {
         val params = DeleteGoalUseCase.Params(goal, user)
-        every { goalRepository.delete(goal, user) } returns Completable.error(RuntimeException())
+        every { goalRepository.delete(goal.uuid) } returns Completable.error(RuntimeException())
 
         // Act
         deleteGoalUC.buildUseCaseObservable(params)

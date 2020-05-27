@@ -21,44 +21,29 @@ class GetGoalsUseCaseTest {
 
     @Before
     fun setUp() {
-        getgoalsUC = GetGoalsUseCase(goalRepository, goalEncryptionService, mockk(), Schedulers.trampoline())
+        getgoalsUC =
+            GetGoalsUseCase(goalRepository, goalEncryptionService, mockk(), Schedulers.trampoline())
     }
 
     @Test
     fun `getting goals calls the repository`() {
-        every { goalRepository.getAll(true) } returns Flowable.just(
+        every { goalRepository.getAll() } returns Flowable.just(
             EncryptedGoalFactory.makeGoalList(2),
             EncryptedGoalFactory.makeGoalList(2)
         )
-        val params = GetGoalsUseCase.Params(UserFactory.makeUser(), true)
+        val params = GetGoalsUseCase.Params(UserFactory.makeUser())
 
         getgoalsUC.buildUseCaseObservable(params)
             .test()
 
-        verify { goalRepository.getAll(true) }
+        verify { goalRepository.getAll() }
     }
 
     @Test
     fun `getting all goals, given goals are present, returns all goals`() {
-        val params = GetGoalsUseCase.Params(UserFactory.makeUser(), false)
+        val params = GetGoalsUseCase.Params(UserFactory.makeUser())
         // Simulate two list of goals on the stream
-        every { goalRepository.getAll(false) } returns Flowable.just(
-            EncryptedGoalFactory.makeGoalList(2),
-            EncryptedGoalFactory.makeGoalList(2)
-        )
-        every { goalEncryptionService.decryptData(any()) } returns Single.defer { // Defer to ensure a new goal is made with each call
-            Single.just(GoalFactory.makeGoal())
-        }
-        getgoalsUC.buildUseCaseObservable(params)
-            .test()
-            .assertValueCount(2)
-    }
-
-    @Test
-    fun `getting all active goals, given active goals are present, returns all active goals`() {
-        val params = GetGoalsUseCase.Params(UserFactory.makeUser(), true)
-        // Simulate two list of goals on the stream
-        every { goalRepository.getAll(true) } returns Flowable.just(
+        every { goalRepository.getAll() } returns Flowable.just(
             EncryptedGoalFactory.makeGoalList(2),
             EncryptedGoalFactory.makeGoalList(2)
         )
@@ -72,8 +57,8 @@ class GetGoalsUseCaseTest {
 
     @Test
     fun `getting all goals, no goals present, returns nothing`() {
-        val params = GetGoalsUseCase.Params(UserFactory.makeUser(), false)
-        every { goalRepository.getAll(any()) } returns Flowable.empty()
+        val params = GetGoalsUseCase.Params(UserFactory.makeUser())
+        every { goalRepository.getAll() } returns Flowable.empty()
         getgoalsUC.buildUseCaseObservable(params).test().assertNoValues()
     }
 }

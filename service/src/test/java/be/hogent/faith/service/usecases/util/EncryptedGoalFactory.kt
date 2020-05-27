@@ -10,7 +10,6 @@ object EncryptedGoalFactory {
             description = DataFactory.randomString(),
             isCompleted = DataFactory.randomBoolean(),
             uuid = DataFactory.randomUUID(),
-            encryptedStreamingDEK = DataFactory.randomString(),
             encryptedDEK = DataFactory.randomString()
         )
         // TODO create subgoals and actions

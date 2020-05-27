@@ -4,6 +4,7 @@ import be.hogent.faith.database.common.EncryptedDetailEntity
 import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.converters.LocalDateTimeConverter
 import be.hogent.faith.database.event.EncryptedEventEntity
+import be.hogent.faith.database.goal.EncryptedGoalEntity
 import be.hogent.faith.database.user.UserEntity
 import be.hogent.faith.util.factory.DataFactory
 import java.util.UUID
@@ -80,6 +81,16 @@ object EntityFactory {
             uuid = DataFactory.randomUUID().toString(),
             details = makeDetailEntityList(nbrOfDetails),
             encryptedStreamingDEK = "sDEK",
+            encryptedDEK = "DEK"
+        )
+    }
+
+    fun makeGoal(uuid: UUID = DataFactory.randomUUID()): EncryptedGoalEntity {
+        return EncryptedGoalEntity(
+            dateTime = LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
+            description = DataFactory.randomString(),
+            uuid = uuid.toString(),
+            isCompleted = DataFactory.randomBoolean(),
             encryptedDEK = "DEK"
         )
     }

@@ -13,7 +13,7 @@ class DeleteGoalUseCase(
 ) : CompletableUseCase<DeleteGoalUseCase.Params>(observer) {
 
     override fun buildUseCaseObservable(params: Params): Completable {
-        return goalRepository.delete(params.goal, params.user)
+        return goalRepository.delete(params.goal.uuid)
         // TODO
         // .andThen( Completable.defer { Completable.fromAction { //params.user.removeGoal(params.goal) } )
     }

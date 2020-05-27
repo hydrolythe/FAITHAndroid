@@ -19,7 +19,7 @@ class GetGoalsUseCase(
 ) : FlowableUseCase<List<Goal>, GetGoalsUseCase.Params>(observer, subscriber) {
 
     override fun buildUseCaseObservable(params: Params): Flowable<List<Goal>> {
-        return goalRepository.getAll(params.onlyActive)
+        return goalRepository.getAll()
             .subscribeOn(subscriber)
             .doOnEach { Timber.i("Got encrypted goals") }
             .doOnError {
@@ -43,8 +43,6 @@ class GetGoalsUseCase(
     }
 
     data class Params(
-        val user: User,
-        val onlyActive: Boolean
-
+        val user: User
     )
 }

@@ -1,7 +1,5 @@
 package be.hogent.faith.service.repositories
 
-import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.service.encryption.EncryptedGoal
 import io.reactivex.Completable
 import io.reactivex.Flowable
@@ -21,13 +19,12 @@ interface IGoalRepository {
     fun get(uuid: UUID): Flowable<EncryptedGoal>
 
     /**
-     * Deletes the  given [goal]. The [user] is required to check that the goal belongs to
-     * the currently authenticated user.
+     * Deletes the goal with given [goalUuid] for the currently authenticated user.
      */
-    fun delete(goal: Goal, user: User): Completable
+    fun delete(goalUuid: UUID): Completable
 
     /**
-     * Returns the data of all goals (onlyActive = false) or the not completed goals (onlyActive = true) associated with the currently authenticated user.
+     * Returns all goals  associated with the currently authenticated user.
      */
-    fun getAll(onlyActive: Boolean = true): Flowable<List<EncryptedGoal>>
+    fun getAll(): Flowable<List<EncryptedGoal>>
 }
