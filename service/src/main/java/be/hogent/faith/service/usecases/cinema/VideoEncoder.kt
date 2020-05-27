@@ -4,6 +4,7 @@ import android.util.Log
 import com.arthenica.mobileffmpeg.Config
 import com.arthenica.mobileffmpeg.FFmpeg
 import com.arthenica.mobileffmpeg.FFprobe
+import timber.log.Timber
 import java.io.File
 import kotlin.math.roundToInt
 
@@ -174,7 +175,7 @@ class VideoEncoder {
 
     private fun getMediaType(file: File): MediaType {
         val info = FFprobe.getMediaInformation(file.absolutePath)
-        Log.d("VideoEncoder", "${file.path} has mediatype ${info.format}")
+        Timber.d("${file.path} has mediatype ${info.format}")
         val format = when {
             info.format == "image2" -> MediaType.PICTURE
             info.format == "jpeg_pipe" -> MediaType.PICTURE
@@ -183,7 +184,7 @@ class VideoEncoder {
             info.format.contains("mp4") -> MediaType.VIDEO
             else -> throw IllegalArgumentException("File ${file.path} is not a valid media type to add to a video")
         }
-        Log.d("VideoEncoder", "Resulted in type $format")
+        Timber.d("Resulted in type $format")
         return format
     }
 }
