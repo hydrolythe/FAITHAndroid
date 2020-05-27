@@ -55,4 +55,9 @@ interface IFileStorageRepository {
      * If not, an exception will be thrown.
      */
     fun setFilesToDecryptedVersions(event: Event)
+
+    /**
+     * Delete all files related to the given [event].
+     */
+    fun deleteEventFiles(event: Event) : Completable
 }
