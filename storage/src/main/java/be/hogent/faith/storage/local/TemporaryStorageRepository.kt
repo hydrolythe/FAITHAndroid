@@ -116,9 +116,9 @@ class TemporaryStorageRepository(
         }
     }
 
-    override fun deleteFiles(event: Event) : Completable{
-        return Completable.fromAction{
-            val eventFolder = with(pathProvider) {temporaryStorage(eventsFolderPath(event))}
+    override fun deleteFiles(event: Event): Completable {
+        return Completable.fromAction {
+            val eventFolder = with(pathProvider) { temporaryStorage(eventsFolderPath(event)) }
             eventFolder.deleteRecursively()
         }
     }

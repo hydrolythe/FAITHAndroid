@@ -24,7 +24,7 @@ class FirebaseStorageRepository(
     private var storageRef = firestorage.reference
 
     /**
-     * Saves all files associated with an [EncryptedEventEntity] (detail files, emotionavatar)
+     * Saves all files associated with an EncryptedEventEntity (detail files, emotionavatar)
      */
     override fun saveEventFiles(encryptedEvent: EncryptedEvent): Completable {
         // TODO: do all the downloading in parallel using merge instead of concat
@@ -168,11 +168,11 @@ class FirebaseStorageRepository(
         }
     }
 
-    override fun deleteFiles(event: Event) : Completable{
+    override fun deleteFiles(event: Event): Completable {
         // Can't just delete the directory because firebasestorage doesn't _really_ use directories,
         // just paths.
         return Observable.fromIterable(event.details)
-            .flatMapCompletable{ detail ->
+            .flatMapCompletable { detail ->
                 rxFirebaseStorage.delete(
                     storageRef.child(pathProvider.detailPath(detail, event).path)
                 ).doOnComplete { Timber.i("Deleted detail ${detail.uuid} from event") }

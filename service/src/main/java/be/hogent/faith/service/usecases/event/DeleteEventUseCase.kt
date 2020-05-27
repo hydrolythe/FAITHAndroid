@@ -22,7 +22,6 @@ class DeleteEventUseCase(
             .andThen(Completable.fromAction {
                 params.user.removeEvent(params.event)
             })
-
     }
 
     data class Params(
