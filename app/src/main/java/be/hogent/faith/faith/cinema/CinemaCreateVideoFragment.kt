@@ -19,13 +19,14 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.fragment_cinema_start.*
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.concurrent.TimeUnit
 
 class CinemaCreateVideoFragment : Fragment() {
 
     var navigation: CinemaCreateVideoFragmentNavigationListener? = null
     private lateinit var binding: FragmentCinemaCreateVideoBinding
-    private val createVideoViewModel: CinemaCreateVideoViewModel by sharedViewModel()
+    private val createVideoViewModel: CinemaCreateVideoViewModel by viewModel()
     private var selectedDetailsAdapter: SelectedDetailsAdapter? = null
     private val cinemaOverviewViewModel: CinemaOverviewViewModel by sharedViewModel()
 
@@ -77,7 +78,7 @@ class CinemaCreateVideoFragment : Fragment() {
         binding.rvVideoDetails.layoutManager = GridLayoutManager(activity, 6)
         binding.rvVideoDetails.adapter = selectedDetailsAdapter
 
-        binding.progressBarLengthVideo.max = VideoDurations.FILM_MAX_SECONDS
+        binding.progressBarCinema.max = VideoDurations.FILM_MAX_SECONDS
     }
 
     private fun startListeners() {
@@ -89,24 +90,25 @@ class CinemaCreateVideoFragment : Fragment() {
             showDateRangePicker()
         })
 
-        cinemaOverviewViewModel.dateRangeString.observe(
-            this, Observer { range -> btn_cinema_chooseDate.text = range })
+        cinemaOverviewViewModel.dateRangeString.observe(this, Observer { range ->
+            btn_cinema_chooseDate.text = range
+        })
 
-        createVideoViewModel.isDoneRendering.observe(this, Observer {
-            navigation!!.startViewVideoFragment()
+        createVideoViewModel.currentFilmDetail.observe(this, Observer {detail ->
+            navigation!!.startViewVideoFragment(detail)
         })
 
         binding.btnCreateVideo.setOnClickListener {
             createVideoViewModel.startRendering()
         }
 
-        createVideoViewModel.currentFilmDetail.observe(this, Observer {
-            if (it != null)
-                createVideoViewModel.setIsDoneRendering()
+        createVideoViewModel.selectedDuration.observe(this, Observer { duration ->
+            binding.progressBarCinema.progress = duration
         })
 
-        createVideoViewModel.selectedDuration.observe(this, Observer {
-            binding.progressBarLengthVideo.progress = it.toInt()
+        createVideoViewModel.encodingProgress.observe(this, Observer { progress ->
+            binding.progressBarCinema.max = 100
+            binding.progressBarCinema.progress = progress
         })
 
         cinemaOverviewViewModel.filteredDetails.observe(this, Observer {
@@ -121,10 +123,6 @@ class CinemaCreateVideoFragment : Fragment() {
             is VideoDetail -> return getVideoDuration(detail)
         }
         return 0
-    }
-
-    private fun viewRenderedVideo(filmDetail: FilmDetail) {
-        createVideoViewModel.setCurrentFilmDetail(filmDetail)
     }
 
     private fun getVideoDuration(videoDetail: VideoDetail): Int {
@@ -162,7 +160,7 @@ class CinemaCreateVideoFragment : Fragment() {
     }
 
     interface CinemaCreateVideoFragmentNavigationListener {
-        fun startViewVideoFragment()
+        fun startViewVideoFragment(detail: FilmDetail)
         fun goBack()
     }
 }

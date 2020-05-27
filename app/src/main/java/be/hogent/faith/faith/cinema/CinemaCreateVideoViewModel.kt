@@ -19,9 +19,6 @@ class CinemaCreateVideoViewModel(
     private val _selectedDetails = MutableLiveData<List<Detail>>().apply { value = emptyList() }
     val selectedDetails: LiveData<List<Detail>> = _selectedDetails
 
-    private val _isDoneRendering = SingleLiveEvent<Unit>()
-    val isDoneRendering: LiveData<Unit> = _isDoneRendering
-
     private val _isRendering = MutableLiveData<Boolean>().apply { value = false }
     val isRendering: LiveData<Boolean> = _isRendering
 
@@ -66,15 +63,6 @@ class CinemaCreateVideoViewModel(
         _selectedDuration.value = _selectedDuration.value?.minus(duration)
     }
 
-    fun setIsDoneRendering() {
-        _isDoneRendering.call()
-        _isRendering.postValue(false)
-    }
-
-    fun setCurrentFilmDetail(filmDetail: FilmDetail) {
-        _currentFilmDetail.postValue(filmDetail)
-    }
-
     fun startRendering() {
         _isRendering.postValue(true)
         if (_selectedDetails.value.isNullOrEmpty()) {
@@ -90,7 +78,6 @@ class CinemaCreateVideoViewModel(
             object : DisposableObserver<CreateCinemaVideoUseCase.Status>() {
                 override fun onComplete() {
                     _isRendering.postValue(false)
-                    _isDoneRendering.call()
                 }
 
                 override fun onNext(progress: CreateCinemaVideoUseCase.Status) {

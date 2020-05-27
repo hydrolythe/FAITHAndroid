@@ -5,15 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.*
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.DeleteDetailDialog
-import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
+import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
+import be.hogent.faith.faith.details.video.view.ViewVideoFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode
 import be.hogent.faith.faith.di.KoinModules
@@ -116,8 +114,8 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
         cinemaOverviewViewModel.showSaveDialog(detail)
     }
 
-    override fun startViewVideoFragment() {
-        TODO("Not yet implemented")
+    override fun startViewVideoFragment(detail: FilmDetail) {
+        replaceFragment(ViewVideoFragment.newInstance(detail), R.id.cinema_fragment_container)
     }
 
     override fun goBack() {
