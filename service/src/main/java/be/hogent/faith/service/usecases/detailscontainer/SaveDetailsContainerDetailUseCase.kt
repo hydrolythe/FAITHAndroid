@@ -26,7 +26,6 @@ class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
             .doOnSuccess { Timber.i("Got encrypted container for ${params.detailsContainer.javaClass}") }
             .doOnError {
                 Timber.e("Error while fetching ${params.detailsContainer.javaClass}: ${it.localizedMessage}")
-                it.printStackTrace()
             }
             .flatMap { container ->
                 detailContainerEncryptionService.encrypt(params.detail, container)
@@ -34,7 +33,6 @@ class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
                     .doOnSuccess { Timber.i("Encrypted detail ${params.detail.uuid} in ${params.detailsContainer.javaClass}") }
                     .doOnError {
                         Timber.e("Error while encrypting detail $params.detail.uuid} in ${params.detailsContainer.javaClass}: ${it.localizedMessage}")
-                        it.printStackTrace()
                     }
             }
             .flatMap { encryptedDetail ->
