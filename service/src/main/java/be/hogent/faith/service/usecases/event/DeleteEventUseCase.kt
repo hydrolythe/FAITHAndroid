@@ -16,11 +16,8 @@ class DeleteEventUseCase(
 
     override fun buildUseCaseObservable(params: Params): Completable {
         return fileStorageRepository.deleteEventFiles(params.event)
-            .subscribeOn(subscriber)
-            .andThen(eventRepository.delete(params.event, params.user)
-                .subscribeOn(subscriber))
-            .andThen(Completable.fromAction {
-                params.user.removeEvent(params.event)
+            .andThen(Completable.fromAction{
+                eventRepository.delete(params.event, params.user)
             })
 
     }

@@ -187,9 +187,7 @@ class EventListViewModel(
 
     fun deleteEvent(event: Event) {
         deleteEventUseCase.execute(DeleteEventUseCase.Params(event, user), object : DisposableCompletableObserver() {
-            override fun onComplete() {
-                Timber.i("Deleted event ${event.uuid}!")
-            }
+            override fun onComplete() {}
 
             override fun onError(e: Throwable) {
                 e.printStackTrace()
