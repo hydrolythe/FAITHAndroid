@@ -59,5 +59,5 @@ interface IFileStorageRepository {
     /**
      * Delete all files related to the given [event].
      */
-    fun deleteEventFiles(event: Event): Completable
+    fun deleteEventFiles(event: Event) : Completable
 }

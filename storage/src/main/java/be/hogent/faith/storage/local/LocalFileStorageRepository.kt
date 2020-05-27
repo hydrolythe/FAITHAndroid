@@ -152,9 +152,9 @@ class LocalFileStorageRepository(
         }
     }
 
-    override fun deleteFiles(event: Event): Completable {
-        return Completable.fromAction {
-            val eventFolder = with(pathProvider) { localStorage(eventsFolderPath(event)) }
+    override fun deleteFiles(event: Event) : Completable{
+        return Completable.fromAction{
+            val eventFolder = with(pathProvider) {localStorage(eventsFolderPath(event))}
             eventFolder.deleteRecursively()
         }
     }

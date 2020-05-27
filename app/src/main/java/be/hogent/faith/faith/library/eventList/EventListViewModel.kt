@@ -18,7 +18,7 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
-import java.util.UUID
+import java.util.*
 
 class EventListViewModel(
     private val user: User,
@@ -195,6 +195,7 @@ class EventListViewModel(
                 e.printStackTrace()
                 _errorMessage.value = R.string.event_delete_error
             }
+
         })
     }
 

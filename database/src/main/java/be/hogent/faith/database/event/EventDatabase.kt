@@ -9,7 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import durdinapps.rxfirebase2.RxFirestore
 import io.reactivex.Completable
 import io.reactivex.Flowable
-import java.util.UUID
+import java.util.*
 
 /**
  * uses RxFirebase: https://github.com/FrangSierra/RxFirebase
@@ -80,6 +80,7 @@ class EventDatabase(
                 .document(event.uuid.toString())
         return RxFirestore.deleteDocument(document)
             .onErrorComplete()
+
     }
 
     fun update(item: EncryptedEventEntity): Completable {
