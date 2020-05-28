@@ -24,16 +24,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/skyscraper"
+        <include
+            android:id="@+id/skyscraper_avatar_drag_drop"
+            layout="@layout/skyscraper_avatar_drag_drop"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_end"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_skyscraper_return"
-            app:srcCompat="@drawable/skyscraper_blue" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_skyscraper_return" />
+
+
 
         <TextView
             android:id="@+id/skyscraper_goal_description"
@@ -44,7 +46,7 @@
             android:text="Beschrijving doel"
             app:layout_constraintBottom_toTopOf="@+id/guide_panel_bottom"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel"
-            app:layout_constraintStart_toEndOf="@+id/skyscraper"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_avatar_drag_drop"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -61,9 +63,9 @@
             android:layout_height="0dp"
             android:background="@drawable/rectangle_white"
             android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/skyscraper"
+            app:layout_constraintBottom_toBottomOf="@+id/skyscraper_avatar_drag_drop"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel"
-            app:layout_constraintStart_toEndOf="@+id/skyscraper"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_avatar_drag_drop"
             app:layout_constraintTop_toTopOf="@+id/guide_panel_bottom" />
 
         <ImageButton
@@ -114,22 +116,12 @@
             app:layout_constraintGuide_percent="0.250" />
 
         <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/guide_roof_end"
-            app:layout_constraintEnd_toStartOf="@+id/skyscraper_goal_description"
-            app:layout_constraintStart_toStartOf="@+id/skyscraper"
-            app:layout_constraintTop_toTopOf="@+id/skyscraper"
-            app:srcCompat="@drawable/empty_shape" />
-
-        <ImageView
             android:id="@+id/imageView16"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/skyscraper"
-            app:layout_constraintStart_toStartOf="@+id/skyscraper"
+            app:layout_constraintEnd_toEndOf="@+id/skyscraper_avatar_drag_drop"
+            app:layout_constraintStart_toStartOf="@+id/skyscraper_avatar_drag_drop"
             app:layout_constraintTop_toTopOf="@+id/guide_cellar_top"
             app:srcCompat="@drawable/empty_shape" />
     </androidx.constraintlayout.widget.ConstraintLayout>

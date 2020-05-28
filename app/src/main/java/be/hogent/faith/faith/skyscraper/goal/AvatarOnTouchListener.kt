@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.skyscraper
+package be.hogent.faith.faith.skyscraper.goal
 
 import android.content.ClipData
 import android.os.Build
@@ -6,7 +6,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.DragShadowBuilder
 
-class DragDropOnTouchListener : View.OnTouchListener {
+class AvatarOnTouchListener : View.OnTouchListener {
     override fun onTouch(view: View?, event: MotionEvent?): Boolean {
 
         // Create clip data.

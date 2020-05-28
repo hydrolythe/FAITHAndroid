@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.skyscraper
+package be.hogent.faith.faith.skyscraper.goal
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,8 +17,8 @@ class SkyscraperGoalFragment : Fragment() {
     private var navigation: SkyscraperNavigationListener? = null
     private lateinit var binding: FragmentSkyscraperGoalBinding
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
-    private lateinit var dragDropOnDragListener: DragDropOnDragListener
-    private lateinit var dragDropOnTouchListener: DragDropOnTouchListener
+    private lateinit var avatarOnDragListener: AvatarOnDragListener
+    private lateinit var avatarOnTouchListener: AvatarOnTouchListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,8 +29,12 @@ class SkyscraperGoalFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_skyscraper_goal, container, false)
         binding.lifecycleOwner = this
-        dragDropOnTouchListener = DragDropOnTouchListener()
-        dragDropOnDragListener = DragDropOnDragListener(dragDropOnTouchListener)
+        avatarOnTouchListener =
+            AvatarOnTouchListener()
+        avatarOnDragListener =
+            AvatarOnDragListener(
+                avatarOnTouchListener
+            )
         return binding.root
     }
 
@@ -46,9 +50,17 @@ class SkyscraperGoalFragment : Fragment() {
         binding.btnSkyscraperReturn.setOnClickListener {
             navigation?.goBack()
         }
-        binding.dragAvatar.setOnTouchListener(dragDropOnTouchListener)
-        binding.imageView16.setOnDragListener(dragDropOnDragListener)
-        binding.imageView4.setOnDragListener(dragDropOnDragListener)
+        binding.dragAvatar.setOnTouchListener(avatarOnTouchListener)
+        binding.imageView16.setOnDragListener(avatarOnDragListener)
+
+        //Betere manier vinden?
+        binding.skyscraperAvatarDragDrop.avatarPosStairs1.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosStairs2.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosStairs3.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosStairs4.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosStairs5.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosStairs6.setOnDragListener(avatarOnDragListener)
+
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
