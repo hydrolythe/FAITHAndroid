@@ -1,11 +1,14 @@
 package be.hogent.faith.faith.skyscraper.goal
+
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentSkyscraperGoalBinding
 import be.hogent.faith.faith.UserViewModel
@@ -19,6 +22,7 @@ class SkyscraperGoalFragment : Fragment() {
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private lateinit var avatarOnDragListener: AvatarOnDragListener
     private lateinit var avatarOnTouchListener: AvatarOnTouchListener
+    private lateinit var adapter: ActionAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,20 +36,39 @@ class SkyscraperGoalFragment : Fragment() {
         avatarOnTouchListener =
             AvatarOnTouchListener()
         avatarOnDragListener =
-            AvatarOnDragListener(
-                avatarOnTouchListener
-            )
+            AvatarOnDragListener(avatarOnTouchListener)
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
         updateUI()
+        setupRecyclerView()
         setOnclickListeners()
     }
 
     private fun updateUI() {
     }
+
+    private fun setupRecyclerView() {
+        val actionListener = object : ActionListener {
+            override fun onActionClicked(action: Action) {
+
+            }
+        }
+        adapter = ActionAdapter(actionListener)
+        binding.rvGoalActions.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.rvGoalActions.adapter = adapter
+
+        val list = arrayListOf<Action>()
+        list.add(Action("Dit is een eerste actie"))
+        list.add(Action("Dit is een tweede actie"))
+        list.add(Action("Dit is een derde actie"))
+        list.add(Action("Dit is een vierde actie"))
+        adapter.updateActionsList(list)
+    }
+
     private fun setOnclickListeners() {
         binding.btnSkyscraperReturn.setOnClickListener {
             navigation?.goBack()
@@ -62,6 +85,7 @@ class SkyscraperGoalFragment : Fragment() {
         binding.skyscraperAvatarDragDrop.avatarPosStairs6.setOnDragListener(avatarOnDragListener)
 
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is SkyscraperNavigationListener) {
