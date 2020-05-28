@@ -71,7 +71,8 @@ class EventListViewModelTest {
         setUpGetEventsUseCase()
         viewModel = EventListViewModel(
             user = user,
-            getEventsUseCase = getEventsUseCase
+            getEventsUseCase = getEventsUseCase,
+            deleteEventUseCase = mockk()
         )
         eventsUseCaseSubscriber.captured.onNext(events)
         viewModel.filteredEvents.observeForever(eventsObserver)
