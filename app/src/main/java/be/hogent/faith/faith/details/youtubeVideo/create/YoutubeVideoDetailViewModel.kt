@@ -11,7 +11,6 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
 import io.reactivex.subscribers.DisposableSubscriber
 import org.threeten.bp.LocalDateTime
-import java.lang.UnsupportedOperationException
 
 class YoutubeVideoDetailViewModel(
     private val getYoutubeVideosFromSearchUseCase: GetYoutubeVideosFromSearchUseCase
@@ -21,12 +20,12 @@ class YoutubeVideoDetailViewModel(
     val snippets: LiveData<List<YoutubeVideoDetail>>
         get() = _snippets
 
-    //video dat zal worden bekeken
+    // video dat zal worden bekeken
     private var _selectedSnippet = MutableLiveData<YoutubeVideoDetail>()
     val selectedSnippet: LiveData<YoutubeVideoDetail>
         get() = _selectedSnippet
 
-    //video die wordt opgeslaan en waarvan de metadata wordt opgevraagd
+    // video die wordt opgeslaan en waarvan de metadata wordt opgevraagd
     private var currentSnippet: YoutubeVideoDetail? = null
 
     private var _showPreview = MutableLiveData<ShowPreview>()
@@ -119,7 +118,7 @@ class YoutubeVideoDetailViewModel(
     }
 
     override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
-       currentSnippet?.let {
+        currentSnippet?.let {
             it.title = title
             it.dateTime = dateTime
         }

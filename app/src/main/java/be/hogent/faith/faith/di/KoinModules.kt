@@ -111,8 +111,8 @@ val appModule = module(override = true) {
             get()
         )
     }
-    
-    viewModel{
+
+    viewModel {
         ViewVideoViewModel()
     }
 

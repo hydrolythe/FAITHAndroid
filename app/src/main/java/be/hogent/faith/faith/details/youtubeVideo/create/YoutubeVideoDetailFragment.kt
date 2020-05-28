@@ -24,7 +24,16 @@ import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayer
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayerFragment
-import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.*
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_back_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_fullscreen_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_pause_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_play_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_save_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_stop_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.card_youtube_player
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.seekbar_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.text_currentime_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.text_duration_yt_video
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.threeten.bp.LocalDateTime
 import java.util.Timer
@@ -78,7 +87,6 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
     override fun onFinishSaveDetailsMetaData(title: String, dateTime: LocalDateTime) {
         youtubeVideoDetailViewModel.setDetailsMetaData(title, dateTime)
     }
-
 
     private fun updateUI() {
         youtubeSnippetAdapter =
@@ -145,11 +153,10 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
             }
         })
 
-       youtubeVideoDetailViewModel.savedDetail.observe(this, Observer {
-           detailFinishedListener.onDetailFinished(youtubeVideoDetailViewModel.savedDetail.value!!)
-           navigation?.backToEvent()
+        youtubeVideoDetailViewModel.savedDetail.observe(this, Observer {
+            detailFinishedListener.onDetailFinished(youtubeVideoDetailViewModel.savedDetail.value!!)
+            navigation?.backToEvent()
         })
-
 
         /**
          * Based on Instagram search. Delay of 400ms to lower the amount of requests send to the YouTube Data API.
@@ -231,16 +238,18 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
      * Everything you need to play a new video in your fragment
      */
     private fun initYoutubePlayer() {
-        setFaithPlayer(FaithVideoPlayer(
-            playerParentView = popupview!!.card_youtube_player,
-            playButton = popupview!!.btn_play_yt_video as ImageButton,
-            pauseButton = popupview!!.btn_pause_yt_video as ImageButton,
-            currentTimeField = popupview!!.text_currentime_yt_video as TextView,
-            durationField = popupview!!.text_duration_yt_video as TextView,
-            seekBar = popupview!!.seekbar_yt_video as SeekBar,
-            stopButton = popupview!!.btn_stop_yt_video as ImageButton,
-            fullscreenButton = popupview!!.btn_fullscreen_yt_video as ImageButton
-        ))
+        setFaithPlayer(
+            FaithVideoPlayer(
+                playerParentView = popupview!!.card_youtube_player,
+                playButton = popupview!!.btn_play_yt_video as ImageButton,
+                pauseButton = popupview!!.btn_pause_yt_video as ImageButton,
+                currentTimeField = popupview!!.text_currentime_yt_video as TextView,
+                durationField = popupview!!.text_duration_yt_video as TextView,
+                seekBar = popupview!!.seekbar_yt_video as SeekBar,
+                stopButton = popupview!!.btn_stop_yt_video as ImageButton,
+                fullscreenButton = popupview!!.btn_fullscreen_yt_video as ImageButton
+            )
+        )
     }
 
     companion object {

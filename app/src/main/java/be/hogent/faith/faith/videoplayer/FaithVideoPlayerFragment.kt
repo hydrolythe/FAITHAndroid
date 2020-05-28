@@ -28,7 +28,7 @@ abstract class FaithVideoPlayerFragment : Fragment() {
         playerViewModel.setCurrentVideo(detail)
     }
 
-    fun stopPlayer(){
+    fun stopPlayer() {
         player?.stopPlayer()
     }
 

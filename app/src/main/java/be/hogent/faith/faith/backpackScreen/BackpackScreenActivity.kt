@@ -5,7 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.*
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailType
@@ -86,32 +92,50 @@ class BackpackScreenActivity : AppCompatActivity(),
     }
 
     override fun startPhotoDetailFragment() {
-        replaceFragment(DetailsFactory.createDetail(DetailType.PHOTO), R.id.backpack_fragment_container)
+        replaceFragment(
+            DetailsFactory.createDetail(DetailType.PHOTO),
+            R.id.backpack_fragment_container
+        )
         setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startAudioDetailFragment() {
-        replaceFragment(DetailsFactory.createDetail(DetailType.AUDIO), R.id.backpack_fragment_container)
+        replaceFragment(
+            DetailsFactory.createDetail(DetailType.AUDIO),
+            R.id.backpack_fragment_container
+        )
         setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startDrawingDetailFragment() {
-        replaceFragment(DetailsFactory.createDetail(DetailType.DRAWING), R.id.backpack_fragment_container)
+        replaceFragment(
+            DetailsFactory.createDetail(DetailType.DRAWING),
+            R.id.backpack_fragment_container
+        )
         setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startTextDetailFragment() {
-        replaceFragment(DetailsFactory.createDetail(DetailType.TEXT), R.id.backpack_fragment_container)
+        replaceFragment(
+            DetailsFactory.createDetail(DetailType.TEXT),
+            R.id.backpack_fragment_container
+        )
         setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startExternalFileDetailFragment() {
-        replaceFragment(DetailsFactory.createDetail(DetailType.EXTERNALFILE), R.id.backpack_fragment_container)
+        replaceFragment(
+            DetailsFactory.createDetail(DetailType.EXTERNALFILE),
+            R.id.backpack_fragment_container
+        )
         setLayoutListenersOnNewDetailOpened()
     }
 
     override fun startVideoDetailFragment() {
-        replaceFragment(DetailsFactory.createDetail(DetailType.YOUTUBE), R.id.backpack_fragment_container)
+        replaceFragment(
+            DetailsFactory.createDetail(DetailType.YOUTUBE),
+            R.id.backpack_fragment_container
+        )
         setLayoutListenersOnNewDetailOpened()
     }
 

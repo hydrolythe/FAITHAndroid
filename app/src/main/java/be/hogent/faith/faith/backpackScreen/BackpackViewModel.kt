@@ -29,5 +29,4 @@ class BackpackViewModel(
     fun viewButtons(viewButtons: Boolean) {
         _viewButtons.postValue(viewButtons)
     }
-
 }

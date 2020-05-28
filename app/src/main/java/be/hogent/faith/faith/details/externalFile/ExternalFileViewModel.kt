@@ -108,5 +108,4 @@ class ExternalFileViewModel(
         }
         _savedDetail.value = _existingDetail
     }
-
 }

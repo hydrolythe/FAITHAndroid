@@ -1,6 +1,5 @@
 package be.hogent.faith.faith.detailscontainer
 
-import android.util.Log
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
