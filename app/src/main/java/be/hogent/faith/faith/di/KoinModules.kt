@@ -9,6 +9,8 @@ import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.faith.cinema.CinemaCreateVideoViewModel
 import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
+import be.hogent.faith.faith.details.BackpackDetailsMetaDataViewModel
+import be.hogent.faith.faith.details.CinemaDetailsMetaDataViewModel
 import be.hogent.faith.faith.details.audio.AudioDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailViewModel
@@ -89,8 +91,6 @@ val appModule = module(override = true) {
     viewModel { WelcomeViewModel(get()) }
     viewModel { RegisterUserViewModel(get()) }
     viewModel { RegisterUserInfoViewModel(get()) }
-    viewModel { TakePhotoViewModel(get()) }
-    viewModel { RegisterUserInfoViewModel(get()) }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { TakePhotoViewModel(get()) }
     viewModel { YoutubeVideoDetailViewModel(get()) }
@@ -101,6 +101,8 @@ val appModule = module(override = true) {
     viewModel { ViewPhotoDetailViewModel() }
     viewModel { ViewDrawingDetailViewModel() }
     viewModel { CinemaCreateVideoViewModel() }
+    viewModel { CinemaDetailsMetaDataViewModel() }
+    viewModel { BackpackDetailsMetaDataViewModel() }
     viewModel {
         ViewTextDetailViewModel(
             get()

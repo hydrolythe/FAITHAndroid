@@ -2,6 +2,7 @@ package be.hogent.faith.faith.details
 
 import androidx.lifecycle.LiveData
 import be.hogent.faith.domain.models.detail.Detail
+import org.threeten.bp.LocalDateTime
 
 /**
  * This interface declares what the ViewModel for a Detail should at least provide.
@@ -16,11 +17,20 @@ interface DetailViewModel<T : Detail> {
     val savedDetail: LiveData<T>
 
     /**
+     * Trigger when de detailfile is saved and the user has to enter the details meta data
+     */
+    val getDetailMetaData: LiveData<Unit>
+
+    /**
      * Load an existing detail into this ViewModel. This will ensure the contents of the
      * given detail are shown.
      */
     fun loadExistingDetail(existingDetail: T)
 
+    /**
+     * Set the details meta data the user has filled in in a SaveDetailsContainerDetailDialog
+     */
+    fun setDetailsMetaData(title: String = "", dateTime: LocalDateTime = LocalDateTime.now())
     /**
      * Trigger when the user clicks the Save button
      */

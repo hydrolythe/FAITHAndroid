@@ -105,22 +105,22 @@ class YoutubePlayerController(
     }
 
     override fun playVideo() {
-        startScreen!!.visibility = View.GONE
-        youTubePlayer!!.play()
+        startScreen?.visibility = View.GONE
+        youTubePlayer?.play()
     }
 
     override fun resumeVideo() {
-        youTubePlayer!!.play()
+        youTubePlayer?.play()
     }
 
     override fun pauseVideo() {
-        youTubePlayer!!.pause()
+        youTubePlayer?.pause()
     }
 
     override fun stopVideo() {
-        youTubePlayer!!.seekTo(0F)
-        youTubePlayer!!.pause()
-        startScreen!!.visibility = View.VISIBLE
+        youTubePlayer?.seekTo(0F)
+        youTubePlayer?.pause()
+        startScreen?.visibility = View.VISIBLE
     }
 
     override fun seekTo(time: Float) {

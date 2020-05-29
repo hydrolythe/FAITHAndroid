@@ -21,7 +21,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentAddExternalFileBinding
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
+import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.util.TempFileProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,6 +40,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 import kotlin.coroutines.CoroutineContext
+import kotlin.reflect.KClass
 
 class AddExternalFileFragment : Fragment(), CoroutineScope {
 
@@ -92,6 +96,14 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
             detailFinishedListener.onDetailFinished(newDetail)
             navigation?.backToEvent()
         })
+        externalFileViewModel.getDetailMetaData.observe(this, Observer {
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(requireActivity(), PhotoDetail::class as KClass<Detail>)
+            if (saveDialog == null)
+                externalFileViewModel.setDetailsMetaData()
+            else {
+                saveDialog.setTargetFragment(this, 22) // in case of fragment to activity communication we do not need this line. But must write this i case of fragment to fragment communication
+                saveDialog.show(getParentFragmentManager(), null)
+            } })
         binding.btnRemoveFile.setOnClickListener {
             removeFile()
             selectFile()

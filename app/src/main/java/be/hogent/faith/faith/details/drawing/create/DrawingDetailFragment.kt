@@ -11,9 +11,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawBinding
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.details.drawing.create.draggableImages.DragListener
 import be.hogent.faith.faith.details.drawing.create.draggableImages.ImagesAdapter
 import be.hogent.faith.faith.di.KoinModules
@@ -24,7 +26,9 @@ import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import org.koin.android.ext.android.getKoin
 import org.koin.core.error.ScopeNotCreatedException
 import org.koin.core.qualifier.named
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
+import kotlin.reflect.KClass
 
 private const val DRAWING_DETAIL = "uuid of the DrawingDetail"
 
@@ -121,8 +125,10 @@ class DrawingDetailFragment : DrawFragment(),
 
                 .setPositiveButton(
                     getString(R.string.confirm),
-                    ColorEnvelopeListener { envelope, _ -> if (envelope != null)
-                        drawViewModel.setCustomColor(envelope.color) })
+                    ColorEnvelopeListener { envelope, _ ->
+                        if (envelope != null)
+                            drawViewModel.setCustomColor(envelope.color)
+                    })
                 .setNegativeButton(
                     getString(R.string.cancel)
                 ) { dialogInterface, _ -> dialogInterface.dismiss() }
@@ -146,6 +152,23 @@ class DrawingDetailFragment : DrawFragment(),
 
             navigation?.backToEvent()
         })
+
+        drawingDetailViewModel.getDetailMetaData.observe(this, Observer {
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(
+                requireActivity(),
+                DrawingDetail::class as KClass<Detail>
+            )
+            if (saveDialog == null)
+                drawingDetailViewModel.setDetailsMetaData()
+            else {
+                saveDialog.setTargetFragment(this, 22)
+                saveDialog.show(getParentFragmentManager(), null)
+            }
+        })
+    }
+
+    override fun onFinishSaveDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        drawingDetailViewModel.setDetailsMetaData(title, dateTime)
     }
 
     private fun configureDrawView() {

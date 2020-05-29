@@ -28,6 +28,10 @@ abstract class FaithVideoPlayerFragment : Fragment() {
         playerViewModel.setCurrentVideo(detail)
     }
 
+    fun stopPlayer() {
+        player?.stopPlayer()
+    }
+
     override fun onPause() {
         super.onPause()
         player?.pauseVideo()

@@ -33,7 +33,8 @@ class GetYoutubeVideosFromSearchUseCase(
             type = TYPE,
             maxResults = MAXRESULTS,
             fields = FIELDS
-        ).subscribeOn(subscriber)
+        )
+            .subscribeOn(subscriber)
             .map {
                 asDomainModel(it.items)
             }

@@ -13,6 +13,7 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.externalVideo.CreateVideoDetailUseCase
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
 import io.reactivex.observers.DisposableSingleObserver
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File
 import java.util.Locale
@@ -25,6 +26,11 @@ class ExternalFileViewModel(
     private val _cancelClicked = SingleLiveEvent<Unit>()
     val cancelClicked: LiveData<Unit>
         get() = _cancelClicked
+
+    private val _getDetailMetaData = SingleLiveEvent<Unit>()
+    override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
+
+    private var _existingDetail: Detail? = null
 
     private val _savedDetail = MutableLiveData<Detail>()
     override val savedDetail: LiveData<Detail>
@@ -65,7 +71,8 @@ class ExternalFileViewModel(
                     params,
                     object : DisposableSingleObserver<PhotoDetail>() {
                         override fun onSuccess(createdDetail: PhotoDetail) {
-                            _savedDetail.postValue(createdDetail)
+                            _existingDetail = createdDetail
+                            _getDetailMetaData.call()
                         }
 
                         override fun onError(e: Throwable) {
@@ -80,7 +87,8 @@ class ExternalFileViewModel(
                     params,
                     object : DisposableSingleObserver<VideoDetail>() {
                         override fun onSuccess(createdDetail: VideoDetail) {
-                            _savedDetail.postValue(createdDetail)
+                            _existingDetail = createdDetail
+                            _getDetailMetaData.call()
                         }
 
                         override fun onError(e: Throwable) {
@@ -91,5 +99,13 @@ class ExternalFileViewModel(
             }
             else -> _errorMessage.postValue(R.string.unauthorized_file_type)
         }
+    }
+
+    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        _existingDetail?.let {
+            it.title = title
+            it.dateTime = dateTime
+        }
+        _savedDetail.value = _existingDetail
     }
 }
