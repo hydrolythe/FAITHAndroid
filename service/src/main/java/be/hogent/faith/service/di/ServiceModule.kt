@@ -16,6 +16,7 @@ import be.hogent.faith.service.usecases.detailscontainer.GetDetailsContainerData
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.event.DeleteEventDetailUseCase
+import be.hogent.faith.service.usecases.event.DeleteEventUseCase
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import be.hogent.faith.service.usecases.event.MakeEventFilesAvailableUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
@@ -95,6 +96,7 @@ val serviceModule = module {
     factory { CreateTextDetailUseCase(get(), get()) }
     factory { CreateVideoDetailUseCase(get()) }
     factory { DeleteEventDetailUseCase(get()) }
+    factory { DeleteEventUseCase(get(), get(), get()) }
     factory {
         MakeEventFilesAvailableUseCase(
             fileStorageRepo = get(),

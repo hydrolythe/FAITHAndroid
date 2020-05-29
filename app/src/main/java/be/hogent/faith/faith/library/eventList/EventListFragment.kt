@@ -15,15 +15,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentLibraryEventlistBinding
+import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
-import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_chooseDate
-import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_searchAudio
-import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_searchDrawing
-import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_searchPhotos
-import kotlinx.android.synthetic.main.fragment_library_eventlist.btn_library_eventlist_searchText
+import kotlinx.android.synthetic.main.fragment_library_eventlist.*
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.core.parameter.parametersOf
@@ -78,8 +75,8 @@ class EventListFragment : Fragment() {
                 navigation?.startEventDetailsFragment(eventUUID)
             }
 
-            override fun onEventDeleteClicked(eventUUID: UUID) {
-                showDeleteAlert(eventUUID)
+            override fun onEventDeleteClicked(event: Event) {
+                showDeleteAlert(event)
             }
         }
         eventsAdapter = EventsAdapter(eventListener)
@@ -170,13 +167,13 @@ class EventListFragment : Fragment() {
         }
     }
 
-    private fun showDeleteAlert(eventUUID: UUID) {
+    private fun showDeleteAlert(event: Event) {
         val alertDialog: AlertDialog = this.run {
             val builder = AlertDialog.Builder(this.requireContext()).apply {
                 setTitle(getString(R.string.library_verwijder_event_title))
                 setMessage(getString(R.string.library_verwijder_event_message))
                 setPositiveButton(R.string.ok) { _, _ ->
-                    eventListViewModel.deleteEvent(eventUUID)
+                    eventListViewModel.deleteEvent(event)
                 }
                 setNegativeButton(R.string.cancel) { dialog, _ ->
                     dialog.cancel()
