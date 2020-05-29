@@ -116,6 +116,13 @@ class TemporaryStorageRepository(
         }
     }
 
+    override fun deleteFiles(event: Event): Completable {
+        return Completable.fromAction {
+            val eventFolder = with(pathProvider) { temporaryStorage(eventsFolderPath(event)) }
+            eventFolder.deleteRecursively()
+        }
+    }
+
     override fun isFilePresent(detail: Detail, event: Event): Boolean {
         // As there's no file in a YoutubeVideoDetail, we say yes
         if (detail is YoutubeVideoDetail) {

@@ -10,9 +10,9 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentViewYoutubeVideoBinding
 import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.faith.details.video.view.ViewVideoViewModel
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayer
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayerFragment
-import be.hogent.faith.faith.details.video.view.ViewVideoViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val VIDEO_DETAIL = "The video to be shown"
