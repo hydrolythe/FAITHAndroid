@@ -42,6 +42,7 @@ abstract class SaveDetailsContainerDetailDialog(
             "be.hogent.faith.domain.models.detail.AudioDetail" -> getString(R.string.je_audio_opslaan)
             "be.hogent.faith.domain.models.detail.YoutubeVideoDetail" -> getString(R.string.je_extern_bestand_opslaan)
             "be.hogent.faith.domain.models.detail.TextDetail" -> getString(R.string.je_tekst_opslaan)
+            "be.hogent.faith.domain.models.detail.FilmDetail" -> getString(R.string.je_film_opslaan)
             else -> throw UnsupportedOperationException()
         }
     }
