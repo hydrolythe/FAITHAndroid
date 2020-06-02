@@ -12,9 +12,9 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.detailscontainer.detailFilters.CombinedDetailFilter
 import be.hogent.faith.faith.util.SingleLiveEvent
@@ -213,16 +213,20 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         _endDate.value = endDate?.let { toLocalDate(it) } ?: LocalDate.now()
     }
 
+    protected fun forceDetailsUpdate() {
+        audioFilterEnabled.value = audioFilterEnabled.value
+    }
+
     private fun combineLatestDates(
         startDate: LiveData<LocalDate>,
         endDate: LiveData<LocalDate>
     ): String {
-        val van =
+        val from =
             if (startDate.value == LocalDate.MIN.plusDays(1)) "van" else startDate.value!!.format(
                 DateTimeFormatter.ofPattern("dd,MMM yyyy")
             )
-        val tot = endDate.value!!.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
-        return "$van - $tot"
+        val to = endDate.value!!.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
+        return "$from - $to"
     }
 
     fun onDateRangeClicked() {

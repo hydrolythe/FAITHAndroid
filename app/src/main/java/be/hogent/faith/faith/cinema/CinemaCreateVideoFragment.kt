@@ -109,7 +109,7 @@ class CinemaCreateVideoFragment : Fragment(), DetailFragment<FilmDetail> {
         })
 
         createVideoViewModel.savedDetail.observe(viewLifecycleOwner, Observer { detail ->
-            detailFinishedListener.onDetailFinished(detail)
+            navigation?.onFilmFinished(detail)
         })
 
         binding.btnCreateVideo.setOnClickListener {

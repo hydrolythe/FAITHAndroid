@@ -31,6 +31,7 @@
     <string name="lbl_detail_name">Naam:</string>
     <string name="hint_audio_recording_name">Een naam voor deze opname</string>
     <string name="save">Opslaan</string>
+    <string name="save_film_error">Er ging iets fout bij het opslaan van je film.</string>
     <string name="save_film_success">Je film werd opgeslagen</string>
     <string name="save_audio_success">Je opname werd opgeslagen</string>
     <string name="save_drawing_success">Je tekening werd opgeslagen</string>

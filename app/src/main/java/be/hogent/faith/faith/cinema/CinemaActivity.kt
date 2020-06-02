@@ -14,7 +14,6 @@ import be.hogent.faith.faith.details.DetailType
 import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
 import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
-import be.hogent.faith.faith.details.video.view.ViewVideoFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode
 import be.hogent.faith.faith.di.KoinModules
@@ -115,7 +114,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
     }
 
     override fun onFilmFinished(filmDetail: FilmDetail) {
-        cinemaOverviewViewModel.saveFilm(filmDetail)
+        cinemaOverviewViewModel.saveFilm(filmDetail, userViewModel.user.value!!)
     }
 
     override fun goBack() {
