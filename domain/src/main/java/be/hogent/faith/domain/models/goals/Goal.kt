@@ -10,17 +10,12 @@ enum class ReachGoalWay {
     Stairs, Elevator, Rope
 }
 
-//Ik vond kleuren als naam gebruiken verwarrend.
-enum class SkyscraperType{
-    Skyscraper_1, Skyscraper_2, Skyscraper_3, Skyscraper_4, Skyscraper_5
-}
-
 class Goal(
     val uuid: UUID = UUID.randomUUID(),
-    val skyscraperType: SkyscraperType,
     var dateTime: LocalDateTime = LocalDateTime.now(),
     var isCompleted: Boolean = false,
     var currentPositionAvatar: Int = 0,
+    val color : Int,
     var subGoals: Array<SubGoal?> = arrayOfNulls(MAX_AMOUNT_OF_SUBGOALS)
 ) {
 

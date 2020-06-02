@@ -44,11 +44,10 @@ data class User(
         _events.remove(event.uuid)
     }
 
-    fun addGoal(goal: Goal){
+    fun addGoal(){
         if(goals.filter { go -> go.isCompleted }.size >= 5)
             throw IllegalArgumentException("Er kunnen maximum 5 actieve doelen zijn.")
-        if(goals.find { e -> e.skyscraperType == goal.skyscraperType } != null)
-            throw java.lang.IllegalArgumentException("Er is al een wolkenkrabber van dit type actief")
+        val goal = Goal()
         _goals[goal.uuid] = goal
     }
 }
