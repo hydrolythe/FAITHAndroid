@@ -37,7 +37,7 @@ class GoalTest {
     }
 
     @Test
-    fun `change index subgoal`(){
+    fun `change index subgoal`() {
         goal.addSubGoalToGoal(subGoalPos1, 0)
         goal.addSubGoalToGoal(subGoalPos2, 2)
         goal.addSubGoalToGoal(subGoalPos3, 6)

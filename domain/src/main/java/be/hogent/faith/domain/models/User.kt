@@ -5,7 +5,7 @@ import java.util.UUID
 
 private const val MAX_AMOUNT_OF_ACTIVE_GOALS = 5
 
-object SkyscraperColors{
+object SkyscraperColors {
     val color1 = 1
     val color2 = 2
     val color3 = 3
@@ -31,8 +31,7 @@ data class User(
     val goals: List<Goal>
         get() = _goals.values.toList()
 
-    private var _colors = Array(MAX_AMOUNT_OF_ACTIVE_GOALS)
-    {SkyscraperColors.color1; SkyscraperColors.color2; SkyscraperColors.color3; SkyscraperColors.color4; SkyscraperColors.color5}
+    private var _colors = Array(MAX_AMOUNT_OF_ACTIVE_GOALS) { SkyscraperColors.color1; SkyscraperColors.color2; SkyscraperColors.color3; SkyscraperColors.color4; SkyscraperColors.color5 }
 
     private var _activeGoals = arrayOfNulls<Goal>(MAX_AMOUNT_OF_ACTIVE_GOALS)
     val activeGoals: List<Goal?>
@@ -69,12 +68,11 @@ data class User(
         _goals[goal.uuid] = goal
     }
 
-    fun setGoalCompleted(goal: Goal){
+    fun setGoalCompleted(goal: Goal) {
         goal.toggleCompleted()
-        if(goal.isCompleted)
+        if (goal.isCompleted)
             _activeGoals[_activeGoals.indexOf(goal)] = null
-        else
-            if(numberOfCompletedGoals() < MAX_AMOUNT_OF_ACTIVE_GOALS)
+        else if (numberOfCompletedGoals() < MAX_AMOUNT_OF_ACTIVE_GOALS)
             _activeGoals[_activeGoals.indexOf(goal)] = goal
     }
 

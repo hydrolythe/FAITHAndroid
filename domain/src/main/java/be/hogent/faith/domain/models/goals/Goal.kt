@@ -19,7 +19,7 @@ class Goal(
     var dateTime: LocalDateTime = LocalDateTime.now(),
     var isCompleted: Boolean = false,
     var currentPositionAvatar: Int = 0,
-    val color : Int,
+    val color: Int,
     var subGoals: Array<SubGoal?> = arrayOfNulls(MAX_AMOUNT_OF_SUBGOALS)
 ) {
 
@@ -55,8 +55,7 @@ class Goal(
     }
 
     fun moveAvatarToSubGoal(subGoal: SubGoal) {
-        require (subGoals.contains(subGoal)) { "Subdoel is niet aanwezig in de lijst" }
+        require(subGoals.contains(subGoal)) { "Subdoel is niet aanwezig in de lijst" }
             currentPositionAvatar = subGoals.indexOf(subGoal)
     }
 }
-
