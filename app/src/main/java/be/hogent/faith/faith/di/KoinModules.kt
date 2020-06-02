@@ -31,6 +31,7 @@ import be.hogent.faith.faith.library.eventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.library.eventList.EventListViewModel
 import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvider
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
@@ -109,9 +110,7 @@ val appModule = module(override = true) {
         )
     }
 
-    viewModel {
-        ViewVideoViewModel()
-    }
+    viewModel { ViewVideoViewModel() }
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.
@@ -129,7 +128,7 @@ val appModule = module(override = true) {
 
     single { AndroidTempFileProvider(androidContext()) }
 
-    single { ResourceAvatarProvider(androidContext()) }
+    single { ResourceAvatarProvider(androidContext()) as AvatarProvider}
 
     single { PremadeImagesProviderFromResources() }
 
