@@ -5,6 +5,7 @@ import java.util.UUID
 
 private const val MAX_AMOUNT_OF_ACTIVE_GOALS = 5
 
+//TODO change to value of the colors
 object SkyscraperColors {
     val color1 = 1
     val color2 = 2
