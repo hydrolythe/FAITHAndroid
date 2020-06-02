@@ -5,6 +5,14 @@ import java.util.UUID
 
 private const val MAX_AMOUNT_OF_ACTIVE_GOALS = 5
 
+object SkyscraperColors{
+    val color1 = 1
+    val color2 = 2
+    val color3 = 3
+    val color4 = 4
+    val color5 = 5
+}
+
 data class User(
     val username: String,
     /**
@@ -23,20 +31,16 @@ data class User(
     val goals: List<Goal>
         get() = _goals.values.toList()
 
-    private var _activeGoals = HashMap<Int, Goal?>()
+    private var _colors = Array(MAX_AMOUNT_OF_ACTIVE_GOALS)
+    {SkyscraperColors.color1; SkyscraperColors.color2; SkyscraperColors.color3; SkyscraperColors.color4; SkyscraperColors.color5}
+
+    private var _activeGoals = arrayOfNulls<Goal>(MAX_AMOUNT_OF_ACTIVE_GOALS)
     val activeGoals: List<Goal?>
-    get() = _activeGoals.values.toList()
+        get() = _activeGoals.toList()
 
     val backpack = Backpack()
 
     val cinema = Cinema()
-
-    init {
-        val colors = listOf<Int>(1, 2, 3, 4, 5)
-        colors.forEach { color ->
-            _activeGoals[color] = null
-        }
-    }
 
     fun addEvent(event: Event) {
         if (event.title.isNullOrBlank()) {
@@ -59,19 +63,19 @@ data class User(
 
     fun addGoal() {
         require(numberOfCompletedGoals() < MAX_AMOUNT_OF_ACTIVE_GOALS) { "Er kunnen maximum 5 actieve doelen zijn." }
-        val temp = _activeGoals.filter { e -> e.value != null }.entries.first()
-        val goal = Goal(color = temp.key)
-        _activeGoals[temp.key] = goal
+        val indexToAdd = _activeGoals.indexOf(_activeGoals.first { e -> e == null })
+        val goal = Goal(color = _colors[indexToAdd])
+        _activeGoals[indexToAdd] = goal
         _goals[goal.uuid] = goal
     }
 
     fun setGoalCompleted(goal: Goal){
         goal.toggleCompleted()
         if(goal.isCompleted)
-            _activeGoals[goal.color] = null
+            _activeGoals[_activeGoals.indexOf(goal)] = null
         else
-            if(numberOfCompletedGoals() < MAX_AMOUNT_OF_ACTIVE_GOALS && _activeGoals.containsKey(goal.color))
-            _activeGoals[goal.color] = goal
+            if(numberOfCompletedGoals() < MAX_AMOUNT_OF_ACTIVE_GOALS)
+            _activeGoals[_activeGoals.indexOf(goal)] = goal
     }
 
     private fun numberOfCompletedGoals() = goals.filter { go -> go.isCompleted }.size
