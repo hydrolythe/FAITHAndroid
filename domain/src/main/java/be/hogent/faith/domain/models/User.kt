@@ -59,7 +59,9 @@ data class User(
 
     fun addGoal() {
         require(numberOfCompletedGoals() < MAX_AMOUNT_OF_ACTIVE_GOALS) { "Er kunnen maximum 5 actieve doelen zijn." }
-        val goal = Goal()
+        val temp = _activeGoals.filter { e -> e.value != null }.entries.first()
+        val goal = Goal(color = temp.key)
+        _activeGoals[temp.key] = goal
         _goals[goal.uuid] = goal
     }
 
