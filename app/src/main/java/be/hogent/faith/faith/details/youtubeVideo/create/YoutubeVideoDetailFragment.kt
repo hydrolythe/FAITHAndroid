@@ -17,20 +17,28 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCreateYoutubeVideoBinding
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
-import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
-import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayer
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayerFragment
-import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.*
-import org.koin.android.ext.android.getKoin
-import org.koin.android.viewmodel.ext.android.sharedViewModel
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_back_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_fullscreen_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_pause_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_play_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_save_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.btn_stop_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.card_youtube_player
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.seekbar_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.text_currentime_yt_video
+import kotlinx.android.synthetic.main.fragment_view_youtube_video.view.text_duration_yt_video
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.threeten.bp.LocalDateTime
 import java.util.Timer
 import java.util.TimerTask
+import kotlin.reflect.KClass
 
 class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<YoutubeVideoDetail> {
 
@@ -39,11 +47,9 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
     private lateinit var youtubeVideoDetailBinding: FragmentCreateYoutubeVideoBinding
     private lateinit var popupWindow: PopupWindow
     private var popupview: View? = null
-    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     override lateinit var detailFinishedListener: DetailFinishedListener
     private var navigation: YoutubeVideoDetailScreenNavigation? = null
     private var timer: Timer? = null
-    private val backpackViewModel: BackpackViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,6 +82,10 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
         if (context is DetailFinishedListener) {
             detailFinishedListener = context
         }
+    }
+
+    override fun onFinishSaveDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        youtubeVideoDetailViewModel.setDetailsMetaData(title, dateTime)
     }
 
     private fun updateUI() {
@@ -130,16 +140,22 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
             }
         })
 
-        youtubeVideoDetailViewModel.savedDetail.observe(this, Observer {
-            backpackViewModel.saveYoutubeVideoDetail(it.title, userViewModel.user.value!!, it)
+        youtubeVideoDetailViewModel.getDetailMetaData.observe(this, Observer {
+            popupWindow.dismiss()
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(
+                requireActivity(),
+                YoutubeVideoDetail::class as KClass<Detail>
+            )
+            if (saveDialog != null) {
+                stopPlayer()
+                saveDialog.setTargetFragment(this, 22)
+                saveDialog.show(getParentFragmentManager(), null)
+            }
         })
 
-        backpackViewModel.infoMessage.observe(this, Observer {
-            if (it == R.string.save_video_success) {
-                popupWindow.dismiss()
-                detailFinishedListener.onDetailFinished(youtubeVideoDetailViewModel.savedDetail.value!!)
-                navigation?.backToEvent()
-            }
+        youtubeVideoDetailViewModel.savedDetail.observe(this, Observer {
+            detailFinishedListener.onDetailFinished(youtubeVideoDetailViewModel.savedDetail.value!!)
+            navigation?.backToEvent()
         })
 
         /**
@@ -222,16 +238,18 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
      * Everything you need to play a new video in your fragment
      */
     private fun initYoutubePlayer() {
-        setFaithPlayer(FaithVideoPlayer(
-            playerParentView = popupview!!.card_youtube_player,
-            playButton = popupview!!.btn_play_yt_video as ImageButton,
-            pauseButton = popupview!!.btn_pause_yt_video as ImageButton,
-            currentTimeField = popupview!!.text_currentime_yt_video as TextView,
-            durationField = popupview!!.text_duration_yt_video as TextView,
-            seekBar = popupview!!.seekbar_yt_video as SeekBar,
-            stopButton = popupview!!.btn_stop_yt_video as ImageButton,
-            fullscreenButton = popupview!!.btn_fullscreen_yt_video as ImageButton
-        ))
+        setFaithPlayer(
+            FaithVideoPlayer(
+                playerParentView = popupview!!.card_youtube_player,
+                playButton = popupview!!.btn_play_yt_video as ImageButton,
+                pauseButton = popupview!!.btn_pause_yt_video as ImageButton,
+                currentTimeField = popupview!!.text_currentime_yt_video as TextView,
+                durationField = popupview!!.text_duration_yt_video as TextView,
+                seekBar = popupview!!.seekbar_yt_video as SeekBar,
+                stopButton = popupview!!.btn_stop_yt_video as ImageButton,
+                fullscreenButton = popupview!!.btn_fullscreen_yt_video as ImageButton
+            )
+        )
     }
 
     companion object {

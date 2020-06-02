@@ -9,6 +9,8 @@ import be.hogent.faith.domain.models.detail.*
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.DeleteDetailDialog
 import be.hogent.faith.faith.details.DetailFinishedListener
+import be.hogent.faith.faith.details.DetailType
+import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
 import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.video.view.ViewVideoFragment
@@ -30,6 +32,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
     AddExternalFileFragment.ExternalFileScreenNavigation,
     CinemaCreateVideoFragment.CinemaCreateVideoFragmentNavigationListener {
 
+    private lateinit var saveDialog: SaveCinemaDetailDialog
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private val cinemaOverviewViewModel: CinemaOverviewViewModel by viewModel {
         parametersOf(
@@ -52,9 +55,10 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
             closeCinema()
         })
 
+        // detail file is opgehaald
         cinemaOverviewViewModel.goToDetail.observe(this, Observer {
             replaceFragment(
-                CinemaDetailFragment.newInstance(it),
+                DetailsFactory.editDetail(it),
                 R.id.cinema_fragment_container
             )
         })
@@ -75,7 +79,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
 
     override fun startPhotoDetailFragment() {
         replaceFragment(
-            CinemaDetailFragment.PhotoFragment.newInstance(),
+            DetailsFactory.createDetail(DetailType.PHOTO),
             R.id.cinema_fragment_container
         )
         cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.NEW)
@@ -83,7 +87,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
 
     override fun startDrawingDetailFragment() {
         replaceFragment(
-            CinemaDetailFragment.DrawingFragment.newInstance(),
+            DetailsFactory.createDetail(DetailType.DRAWING),
             R.id.cinema_fragment_container
         )
         cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.NEW)
@@ -91,7 +95,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
 
     override fun startExternalFileDetailFragment() {
         replaceFragment(
-            CinemaDetailFragment.ExternalFileFragment.newInstance(),
+            DetailsFactory.createDetail(DetailType.EXTERNALFILE),
             R.id.cinema_fragment_container
         )
         cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.NEW)
@@ -107,11 +111,10 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
             is PhotoDetail -> save(detail)
             is VideoDetail -> save(detail)
         }
-        // cinemaOverviewViewModel.viewButtons(true)
     }
 
     fun save(detail: Detail) {
-        cinemaOverviewViewModel.showSaveDialog(detail)
+        cinemaOverviewViewModel.saveCurrentDetail(userViewModel.user.value!!, detail)
     }
 
     override fun startViewVideoFragment(detail: FilmDetail) {
@@ -125,8 +128,6 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
     override fun openDetailScreenFor(detail: Detail) {
         cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.EDIT)
         cinemaOverviewViewModel.setCurrentFileAndLoadCorrespondingFile(detail)
-        replaceFragment(CinemaDetailFragment.newInstance(detail), R.id.cinema_fragment_container)
-        // cinemaOverviewViewModel.viewButtons(false)
     }
 
     override fun deleteDetail(detail: Detail) {

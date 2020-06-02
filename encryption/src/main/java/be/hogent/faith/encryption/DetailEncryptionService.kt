@@ -3,10 +3,10 @@ package be.hogent.faith.encryption
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.service.encryption.EncryptedDetail
@@ -28,11 +28,15 @@ class DetailEncryptionService(
      * Returns an encrypted version of the [Detail], both its data and its file.
      */
     fun encrypt(detail: Detail, dek: KeysetHandle, sdek: KeysetHandle): Single<EncryptedDetail> {
-        return encryptData(detail, dek)
-            .zipWith(encryptDetailFiles(detail, sdek)) { encryptedDetail, file ->
-                encryptedDetail.file = file
-                encryptedDetail
-            }
+        return if (detail is YoutubeVideoDetail) {
+            encryptData(detail, dek)
+        } else {
+            encryptData(detail, dek)
+                .zipWith(encryptDetailFiles(detail, sdek)) { encryptedDetail, file ->
+                    encryptedDetail.file = file
+                    encryptedDetail
+                }
+        }
     }
 
     private fun encryptDetailFiles(detail: Detail, sdek: KeysetHandle): Single<File> {
@@ -66,7 +70,7 @@ class DetailEncryptionService(
                 ),
                 thumbnail = detail.thumbnail?.let { dataEncrypter.encrypt(it) },
                 youtubeVideoID = when (detail) {
-                    is YoutubeVideoDetail -> dataEncrypter.encrypt(detail.videoId)
+                    is YoutubeVideoDetail -> detail.videoId
                     else -> ""
                 }
             )

@@ -17,8 +17,18 @@ import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerD
 import be.hogent.faith.service.usecases.detailscontainer.GetDetailsContainerDataUseCase
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
-import be.hogent.faith.service.usecases.event.*
-import be.hogent.faith.service.usecases.user.*
+import be.hogent.faith.service.usecases.event.DeleteEventDetailUseCase
+import be.hogent.faith.service.usecases.event.DeleteEventUseCase
+import be.hogent.faith.service.usecases.event.GetEventsUseCase
+import be.hogent.faith.service.usecases.event.MakeEventFilesAvailableUseCase
+import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
+import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventUseCase
+import be.hogent.faith.service.usecases.user.CreateUserUseCase
+import be.hogent.faith.service.usecases.user.GetUserUseCase
+import be.hogent.faith.service.usecases.user.IsUsernameUniqueUseCase
+import be.hogent.faith.service.usecases.user.LoginUserUseCase
+import be.hogent.faith.service.usecases.user.LogoutUserUseCase
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -88,6 +98,7 @@ val serviceModule = module {
     factory { CreateTextDetailUseCase(get(), get()) }
     factory { CreateVideoDetailUseCase(get()) }
     factory { DeleteEventDetailUseCase(get()) }
+    factory { DeleteEventUseCase(get(), get(), get()) }
     factory { CreateCinemaVideoUseCase(VideoEncoder(), get()) }
     factory {
         MakeEventFilesAvailableUseCase(
@@ -114,7 +125,7 @@ val serviceModule = module {
         )
     }
     factory {
-        GetYoutubeVideosFromSearchUseCase(get(), get())
+        GetYoutubeVideosFromSearchUseCase(get())
     }
     factory<SaveDetailsContainerDetailUseCase<Backpack>>(named("SaveBackpackDetailUseCase")) {
         SaveDetailsContainerDetailUseCase<Backpack>(

@@ -9,10 +9,9 @@ import io.reactivex.Flowable
 import io.reactivex.Scheduler
 
 class GetYoutubeVideosFromSearchUseCase(
-    observer: Scheduler,
-    subscriber: Scheduler
+    observer: Scheduler
 ) : FlowableUseCase<List<YoutubeVideoDetail>, GetYoutubeVideosFromSearchUseCase.Params>(
-    observer, subscriber
+    observer
 ) {
 
     private val VIDEOPART = "snippet"
@@ -35,6 +34,7 @@ class GetYoutubeVideosFromSearchUseCase(
             maxResults = MAXRESULTS,
             fields = FIELDS
         )
+            .subscribeOn(subscriber)
             .map {
                 asDomainModel(it.items)
             }

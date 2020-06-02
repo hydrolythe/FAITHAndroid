@@ -12,8 +12,10 @@ import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
 import io.reactivex.observers.DisposableSingleObserver
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File
+import java.lang.UnsupportedOperationException
 
 class TakePhotoViewModel(
     private val createPhotoDetailUseCase: CreatePhotoDetailUseCase
@@ -22,12 +24,17 @@ class TakePhotoViewModel(
     private val _savedDetail = MutableLiveData<PhotoDetail>()
     override val savedDetail: LiveData<PhotoDetail> = _savedDetail
 
+    private val _getDetailMetaData = SingleLiveEvent<Unit>()
+    override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
+
+    private var currentDetail: PhotoDetail? = null
+
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
 
     override fun loadExistingDetail(existingDetail: PhotoDetail) {
-        throw NotImplementedError("Use the ReviewPhotoFragment to show existing photoSaveFile details.")
+        throw UnsupportedOperationException("Use the ReviewPhotoFragment to show existing photoSaveFile details.")
     }
 
     override fun onSaveClicked() {
@@ -39,7 +46,8 @@ class TakePhotoViewModel(
     private inner class CreatePhotoDetailUseCaseHandler :
         DisposableSingleObserver<PhotoDetail>() {
         override fun onSuccess(createdDetail: PhotoDetail) {
-            _savedDetail.value = createdDetail
+            currentDetail = createdDetail
+            _getDetailMetaData.call()
         }
 
         override fun onError(e: Throwable) {
@@ -171,4 +179,12 @@ class TakePhotoViewModel(
     }
 
     internal class PhotoSavedState : PhotoState()
+
+    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        currentDetail?.let {
+            it.title = title
+            it.dateTime = dateTime
+        }
+        _savedDetail.value = currentDetail
+    }
 }
