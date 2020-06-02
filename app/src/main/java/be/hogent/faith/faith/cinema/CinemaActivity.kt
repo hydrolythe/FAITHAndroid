@@ -5,7 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.*
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.FilmDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.DeleteDetailDialog
 import be.hogent.faith.faith.details.DetailFinishedListener

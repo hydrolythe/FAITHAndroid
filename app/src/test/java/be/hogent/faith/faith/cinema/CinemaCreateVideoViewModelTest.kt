@@ -2,7 +2,11 @@ package be.hogent.faith.faith.cinema
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import be.hogent.faith.domain.models.detail.*
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.TestUtils
 import io.mockk.mockk
 import org.junit.Assert

@@ -14,7 +14,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCinemaCreateVideoBinding
-import be.hogent.faith.domain.models.detail.*
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.FilmDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.fragment_cinema_start.*
@@ -94,7 +98,7 @@ class CinemaCreateVideoFragment : Fragment() {
             btn_cinema_chooseDate.text = range
         })
 
-        createVideoViewModel.currentFilmDetail.observe(this, Observer {detail ->
+        createVideoViewModel.currentFilmDetail.observe(this, Observer { detail ->
             navigation!!.startViewVideoFragment(detail)
         })
 

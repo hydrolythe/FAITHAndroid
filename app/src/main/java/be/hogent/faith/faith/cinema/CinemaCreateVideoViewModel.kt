@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.FilmDetail
-import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Status.Completed
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Status.InProgress

@@ -11,8 +11,6 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentViewYoutubeVideoBinding
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.VideoDetail
-import be.hogent.faith.faith.details.video.view.ViewVideoViewModel
-import be.hogent.faith.faith.details.externalFile.ExternalFileViewModel
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayer
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayerFragment
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -76,9 +74,9 @@ class ViewVideoFragment : FaithVideoPlayerFragment() {
     }
 
     private fun loadExistingVideo() {
-        when(val detail = requireArguments().getSerializable(VIDEO_DETAIL)) {
-            is VideoDetail ->viewModel.loadExistingDetail(detail)
-            is FilmDetail ->viewModel.loadExistingDetail(detail)
+        when (val detail = requireArguments().getSerializable(VIDEO_DETAIL)) {
+            is VideoDetail -> viewModel.loadExistingDetail(detail)
+            is FilmDetail -> viewModel.loadExistingDetail(detail)
             else -> throw IllegalArgumentException("Invalid type of detail to play video")
         }
     }
