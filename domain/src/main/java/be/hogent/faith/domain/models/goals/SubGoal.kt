@@ -20,12 +20,6 @@ class SubGoal(
     fun updateActionPosition(actionToUpdate: Action, newPosition: Int) {
         _actions.remove(actionToUpdate)
         _actions.add(newPosition, actionToUpdate)
-        updateActionPositions()
-    }
-
-    private fun updateActionPositions() {
-        for (action in _actions)
-            action.currentPosition = _actions.indexOf(action)
     }
 
     fun editDescription(newDescription: String) {

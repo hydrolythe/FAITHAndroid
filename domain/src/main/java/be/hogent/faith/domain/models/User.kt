@@ -3,6 +3,8 @@ package be.hogent.faith.domain.models
 import be.hogent.faith.domain.models.goals.Goal
 import java.util.UUID
 
+private const val MAX_AMOUNT_OF_ACTIVE_GOALS = 5
+
 data class User(
     val username: String,
     /**
@@ -20,6 +22,10 @@ data class User(
     private var _goals = HashMap<UUID, Goal>()
     val goals: List<Goal>
         get() = _goals.values.toList()
+
+    private var _activeGoals = HashMap<Int, Goal?>()
+    val activeGoals: List<Goal?>
+    get() = _activeGoals.values.toList()
 
     val backpack = Backpack()
 
@@ -44,10 +50,19 @@ data class User(
         _events.remove(event.uuid)
     }
 
-    fun addGoal(goal: Goal) {
-        require(numberOfCompletedGoals() < 5) { "Er kunnen maximum 5 actieve doelen zijn." }
-        require(goals.find { e -> e.skyscraperType == goal.skyscraperType } == null) { "Er is al een wolkenkrabber van dit type actief" }
+    fun addGoal() {
+        require(numberOfCompletedGoals() < MAX_AMOUNT_OF_ACTIVE_GOALS) { "Er kunnen maximum 5 actieve doelen zijn." }
+        val goal = Goal()
         _goals[goal.uuid] = goal
+    }
+
+    fun setGoalCompleted(goal: Goal){
+        goal.toggleCompleted()
+        if(goal.isCompleted)
+            _activeGoals[goal.color] = null
+        else
+            if(numberOfCompletedGoals() < MAX_AMOUNT_OF_ACTIVE_GOALS && _activeGoals.containsKey(goal.color))
+            _activeGoals[goal.color] = goal
     }
 
     private fun numberOfCompletedGoals() = goals.filter { go -> go.isCompleted }.size

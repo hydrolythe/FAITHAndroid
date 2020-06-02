@@ -42,11 +42,12 @@ class Goal(
         subGoals = subGoalsList.toTypedArray()
     }
 
-    //Verwisselen? of moet alles echt een positie opschuiven
     fun changeIndexSubGoal(subGoal: SubGoal, newIndex: Int) {
-        val temp = subGoals[subGoals.indexOf(subGoal)]
-        subGoals[subGoals.indexOf(subGoal)] = subGoals[newIndex]
-        subGoals[newIndex] = temp
+        val temp = subGoal
+        val subGoalsList = subGoals.toMutableList()
+        subGoalsList.remove(subGoal)
+        subGoalsList.add(newIndex, temp)
+        subGoals = subGoalsList.toTypedArray()
     }
 
     internal fun toggleCompleted() {
@@ -54,7 +55,7 @@ class Goal(
     }
 
     fun moveAvatarToSubGoal(subGoal: SubGoal) {
-        if (subGoals.contains(subGoal))
+        require (subGoals.contains(subGoal)) { "Subdoel is niet aanwezig in de lijst" }
             currentPositionAvatar = subGoals.indexOf(subGoal)
     }
 }

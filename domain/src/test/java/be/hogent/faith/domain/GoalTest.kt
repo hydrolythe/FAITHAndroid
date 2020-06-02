@@ -1,7 +1,6 @@
 package be.hogent.faith.domain
 
 import be.hogent.faith.domain.models.goals.Goal
-import be.hogent.faith.domain.models.goals.SkyscraperType
 import be.hogent.faith.domain.models.goals.SubGoal
 import org.junit.Assert
 import org.junit.Before
@@ -18,7 +17,7 @@ class GoalTest {
 
     @Before
     fun setUp() {
-        goal = Goal(skyscraperType = SkyscraperType.Skyscraper_1)
+        goal = Goal(color = 0)
     }
 
     @Test
@@ -48,6 +47,6 @@ class GoalTest {
         goal.changeIndexSubGoal(subGoalPos3, 2)
 
         Assert.assertEquals(goal.subGoals.elementAt(2), subGoalPos3)
-        Assert.assertEquals(goal.subGoals.elementAt(6), subGoalPos2)
+        Assert.assertEquals(goal.subGoals.elementAt(3), subGoalPos2)
     }
 }
