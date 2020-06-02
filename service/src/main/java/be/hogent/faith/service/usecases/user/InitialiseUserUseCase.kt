@@ -13,8 +13,7 @@ import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
-class CreateUserUseCase(
-    private val authManager: IAuthManager,
+class InitialiseUserUseCase(
     private val userRepository: IUserRepository,
     private val backpackRepository: IDetailContainerRepository<Backpack>,
     private val cinemaRepository: IDetailContainerRepository<Cinema>,
@@ -22,16 +21,13 @@ class CreateUserUseCase(
     private val cinemaEncryptionService: IDetailContainerEncryptionService<Backpack>,
     observer: Scheduler,
     subscriber: Scheduler = Schedulers.io()
-) : CompletableUseCase<CreateUserUseCase.Params>(observer, subscriber) {
+) : CompletableUseCase<InitialiseUserUseCase.Params>(observer, subscriber) {
 
     override fun buildUseCaseObservable(params: Params): Completable {
-        val createUser = authManager.register("${params.username}@faith.be", params.password)
-            .doOnComplete { Timber.i("User registered with firebase") }
-            .flatMapCompletable { uuid ->
-                userRepository
-                    .insert(User(params.username, params.avatarName, uuid))
-                    .doOnComplete { Timber.i("Created user in repo") }
-            }
+        val user = userRepository
+            .initialiseUser(User(params.user.username, params.user.avatarName, params.user.uuid))
+            .doOnComplete { Timber.i("Created user in repo") }
+            .doOnError{Timber.e("Fout bij initialisatie avatar")}
 
         val createBackpack = backpackEncryptionService.createContainer()
             .subscribeOn(subscriber)
@@ -55,7 +51,7 @@ class CreateUserUseCase(
                 it.printStackTrace()
             }
 
-        return createUser
+        return user
             .andThen(
                 Completable.defer { createCinema }
             )
@@ -65,8 +61,6 @@ class CreateUserUseCase(
     }
 
     data class Params(
-        val username: String,
-        val avatarName: String,
-        val password: String
+        val user: User
     )
 }

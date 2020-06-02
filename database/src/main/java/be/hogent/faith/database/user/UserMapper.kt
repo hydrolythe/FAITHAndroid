@@ -17,15 +17,7 @@ object UserMapper : Mapper<UserEntity, User> {
         return UserEntity(
             uuid = model.uuid,
             username = model.username,
-            avatarName = model.avatarName
-        )
-    }
-
-    fun mapToEntityWithUUID(model: User, uuid: String): UserEntity {
-        return UserEntity(
-            uuid = uuid,
-            username = model.username,
-            avatarName = model.avatarName
+            avatarName = model.avatarName.toString()
         )
     }
 

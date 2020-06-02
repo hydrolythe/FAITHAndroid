@@ -8,7 +8,7 @@ interface IUserRepository {
 
     fun delete(user: User): Completable
 
-    fun insert(user: User): Completable
+    fun initialiseUser(user: User): Completable
 
     fun get(uid: String): Flowable<User>
 }

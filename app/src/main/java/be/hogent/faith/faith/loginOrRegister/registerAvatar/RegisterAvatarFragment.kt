@@ -17,7 +17,6 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter.OnAvatarClickListener
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
@@ -44,7 +43,6 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
      * ViewModel used for the avatars.
      */
     private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel()
-    private val registerUserViewModel by sharedViewModel<RegisterUserViewModel>()
     private lateinit var adapter: AvatarItemAdapter
 
     override fun onCreateView(
@@ -66,14 +64,13 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
 
     private fun registerListeners() {
         registerAvatarViewModel.finishRegistrationClicked.observe(this, Observer {
-            registerUserViewModel.setAvatar(registerAvatarViewModel.selectedAvatar!!)
-            registerUserViewModel.register()
+            navigation!!.initialiseUser()
         })
 
         registerAvatarViewModel.errorMessage.observe(this, Observer { errorMessageID ->
             Toast.makeText(context, errorMessageID, Toast.LENGTH_LONG).show()
         })
-        registerUserViewModel.userRegisteredState.observe(this, Observer {
+        registerAvatarViewModel.userRegisteredState.observe(this, Observer {
             it?.let {
                 handleDataState(it)
             }
@@ -154,6 +151,7 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
 
     interface AvatarFragmentNavigationListener {
         fun userIsRegistered()
+        fun initialiseUser()
     }
 
     override fun onAvatarClicked(index: Int) {

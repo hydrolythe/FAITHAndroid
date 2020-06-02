@@ -22,8 +22,8 @@ import be.hogent.faith.service.usecases.event.MakeEventFilesAvailableUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
-import be.hogent.faith.service.usecases.user.CreateUserUseCase
 import be.hogent.faith.service.usecases.user.GetUserUseCase
+import be.hogent.faith.service.usecases.user.InitialiseUserUseCase
 import be.hogent.faith.service.usecases.user.IsUsernameUniqueUseCase
 import be.hogent.faith.service.usecases.user.LoginUserUseCase
 import be.hogent.faith.service.usecases.user.LogoutUserUseCase
@@ -63,8 +63,7 @@ val serviceModule = module {
         )
     }
     factory {
-        CreateUserUseCase(
-            authManager = get(),
+        InitialiseUserUseCase(
             userRepository = get(),
             backpackRepository = get(named(BackpackNames.repo)),
             cinemaRepository = get(named(CinemaNames.repo)),

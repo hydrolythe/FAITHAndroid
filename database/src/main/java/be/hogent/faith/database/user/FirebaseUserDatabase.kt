@@ -28,9 +28,9 @@ class FirebaseUserDatabase(
     }
 
     /**
-     * Insert user in Firestorage in users/uuid
+     * Set user in Firestorage in users/uuid
      */
-    override fun insert(item: UserEntity): Completable {
+    override fun initialiseUser(item: UserEntity): Completable {
         val currentUser = fbAuth.currentUser
         if (currentUser == null || currentUser.uid != item.uuid) {
             return Completable.error(RuntimeException("Unauthorized user."))
@@ -38,7 +38,7 @@ class FirebaseUserDatabase(
         val document = firestore.collection(USERS_KEY).document(currentUser.uid)
         return RxFirestore.setDocument(document, item)
             .onErrorResumeNext {
-                Completable.error(Throwable(java.lang.RuntimeException("Failed to create user")))
+                Completable.error(Throwable(java.lang.RuntimeException("Failed to initialize user")))
             }
     }
 

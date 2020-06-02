@@ -29,11 +29,9 @@ import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.library.eventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.library.eventList.EventListViewModel
-import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
 import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvider
-import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
 import be.hogent.faith.faith.util.AndroidTempFileProvider
 import be.hogent.faith.faith.videoplayer.CurrentVideoViewModel
 import com.auth0.android.Auth0
@@ -85,13 +83,10 @@ val appModule = module(override = true) {
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }
     viewModel { TextDetailViewModel(get(), get(), get()) }
-    viewModel { RegisterAvatarViewModel(get()) }
+    viewModel { RegisterAvatarViewModel(get(),get()) }
     viewModel { WelcomeViewModel(get()) }
     viewModel { AudioDetailViewModel(get(), get()) }
     viewModel { WelcomeViewModel(get()) }
-    viewModel { RegisterUserViewModel(get()) }
-    viewModel { RegisterUserInfoViewModel(get()) }
-    viewModel { RegisterAvatarViewModel(get()) }
     viewModel { TakePhotoViewModel(get()) }
     viewModel { YoutubeVideoDetailViewModel(get()) }
     viewModel { CurrentVideoViewModel() }

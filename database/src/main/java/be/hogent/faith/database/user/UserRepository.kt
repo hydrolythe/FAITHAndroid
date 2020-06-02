@@ -18,10 +18,10 @@ open class UserRepository(
     }
 
     /**
-     * registers a user. A new user has no events yet
+     * Initialize a user.
      */
-    override fun insert(user: User): Completable {
-        return userDatabase.insert(userMapper.mapToEntity(user))
+    override fun initialiseUser(user: User): Completable {
+        return userDatabase.initialiseUser(userMapper.mapToEntity(user))
     }
 
     /**

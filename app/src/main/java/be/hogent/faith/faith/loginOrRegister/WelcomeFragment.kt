@@ -1,6 +1,8 @@
 package be.hogent.faith.faith.loginOrRegister
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -41,7 +43,8 @@ class WelcomeFragment : Fragment() {
     private fun registerListeners() {
         // user wants to register
         welcomeViewModel.registerButtonClicked.observe(this, Observer {
-            navigation!!.goToRegistrationScreen()
+            val intent = Intent(Intent.ACTION_VIEW,Uri.parse("https://faith-dev-38aa1.ey.r.appspot.com"))
+            startActivity(intent)
         })
 
         // user is logging in....
@@ -76,7 +79,6 @@ class WelcomeFragment : Fragment() {
     }
 
     interface WelcomeNavigationListener {
-        fun goToRegistrationScreen()
         fun userIsLoggedIn()
     }
 
