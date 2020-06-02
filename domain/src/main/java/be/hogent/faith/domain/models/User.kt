@@ -31,6 +31,13 @@ data class User(
 
     val cinema = Cinema()
 
+    init {
+        val colors = listOf<Int>(1, 2, 3, 4, 5)
+        colors.forEach { color ->
+            _activeGoals[color] = null
+        }
+    }
+
     fun addEvent(event: Event) {
         if (event.title.isNullOrBlank()) {
             throw IllegalArgumentException("Een gebeurtenis moet een ingevulde titel hebben.")
