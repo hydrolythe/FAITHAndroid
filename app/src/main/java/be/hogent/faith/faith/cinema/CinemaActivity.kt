@@ -6,10 +6,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpackScreen.DeleteDetailDialog
 import be.hogent.faith.faith.details.DetailFinishedListener
@@ -110,19 +107,15 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
     }
 
     override fun onDetailFinished(detail: Detail) {
-        when (detail) {
-            is DrawingDetail -> save(detail)
-            is PhotoDetail -> save(detail)
-            is VideoDetail -> save(detail)
-        }
+        saveToTimeLine(detail)
     }
 
-    fun save(detail: Detail) {
+    fun saveToTimeLine(detail: Detail) {
         cinemaOverviewViewModel.saveCurrentDetail(userViewModel.user.value!!, detail)
     }
 
-    override fun startViewVideoFragment(detail: FilmDetail) {
-        replaceFragment(ViewVideoFragment.newInstance(detail), R.id.cinema_fragment_container)
+    override fun onFilmFinished(filmDetail: FilmDetail) {
+        cinemaOverviewViewModel.saveFilm(filmDetail)
     }
 
     override fun goBack() {

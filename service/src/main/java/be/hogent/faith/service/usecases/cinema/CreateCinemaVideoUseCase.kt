@@ -7,6 +7,7 @@ import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Params
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Status
 import io.reactivex.Observable
 import io.reactivex.Scheduler
+import timber.log.Timber
 
 class CreateCinemaVideoUseCase(
     private val videoEncoder: VideoEncoder,
@@ -37,6 +38,7 @@ class CreateCinemaVideoUseCase(
                 encoderListener
             )
             emitter.onNext(Status.Completed(FilmDetail(resultingFile)))
+            emitter.onComplete()
         }
     }
 }

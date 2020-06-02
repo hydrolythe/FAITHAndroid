@@ -19,14 +19,21 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.faith.details.DetailFinishedListener
+import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.details.DetailsFactory
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
-import kotlinx.android.synthetic.main.fragment_cinema_start.*
+import kotlinx.android.synthetic.main.fragment_cinema_start.btn_cinema_chooseDate
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.threeten.bp.LocalDateTime
 import java.util.concurrent.TimeUnit
+import kotlin.reflect.KClass
 
-class CinemaCreateVideoFragment : Fragment() {
+class CinemaCreateVideoFragment : Fragment(), DetailFragment<FilmDetail> {
+
+    override lateinit var detailFinishedListener: DetailFinishedListener
 
     var navigation: CinemaCreateVideoFragmentNavigationListener? = null
     private lateinit var binding: FragmentCinemaCreateVideoBinding
@@ -56,6 +63,9 @@ class CinemaCreateVideoFragment : Fragment() {
         super.onAttach(context)
         if (context is CinemaCreateVideoFragmentNavigationListener) {
             navigation = context
+        }
+        if (context is DetailFinishedListener) {
+            detailFinishedListener = context
         }
     }
 
@@ -90,33 +100,46 @@ class CinemaCreateVideoFragment : Fragment() {
             requireActivity().onBackPressed()
         }
 
-        cinemaOverviewViewModel.dateRangeClicked.observe(this, Observer {
+        cinemaOverviewViewModel.dateRangeClicked.observe(viewLifecycleOwner, Observer {
             showDateRangePicker()
         })
 
-        cinemaOverviewViewModel.dateRangeString.observe(this, Observer { range ->
+        cinemaOverviewViewModel.dateRangeString.observe(viewLifecycleOwner, Observer { range ->
             btn_cinema_chooseDate.text = range
         })
 
-        createVideoViewModel.currentFilmDetail.observe(this, Observer { detail ->
-            navigation!!.startViewVideoFragment(detail)
+        createVideoViewModel.savedDetail.observe(viewLifecycleOwner, Observer { detail ->
+            detailFinishedListener.onDetailFinished(detail)
         })
 
         binding.btnCreateVideo.setOnClickListener {
-            createVideoViewModel.startRendering()
+            createVideoViewModel.onSaveClicked()
         }
 
-        createVideoViewModel.selectedDuration.observe(this, Observer { duration ->
+        createVideoViewModel.selectedDuration.observe(viewLifecycleOwner, Observer { duration ->
             binding.progressBarCinema.progress = duration
         })
 
-        createVideoViewModel.encodingProgress.observe(this, Observer { progress ->
+        createVideoViewModel.encodingProgress.observe(viewLifecycleOwner, Observer { progress ->
             binding.progressBarCinema.max = 100
             binding.progressBarCinema.progress = progress
         })
 
-        cinemaOverviewViewModel.filteredDetails.observe(this, Observer {
+        cinemaOverviewViewModel.filteredDetails.observe(viewLifecycleOwner, Observer {
             selectedDetailsAdapter!!.submitList(it)
+        })
+
+        createVideoViewModel.getDetailMetaData.observe(viewLifecycleOwner, Observer {
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(
+                requireActivity(),
+                FilmDetail::class as KClass<Detail>
+            )
+            if (saveDialog == null)
+                createVideoViewModel.setDetailsMetaData()
+            else {
+                saveDialog.setTargetFragment(this, 22)
+                saveDialog.show(parentFragmentManager, null)
+            }
         })
     }
 
@@ -164,7 +187,12 @@ class CinemaCreateVideoFragment : Fragment() {
     }
 
     interface CinemaCreateVideoFragmentNavigationListener {
-        fun startViewVideoFragment(detail: FilmDetail)
+        fun onFilmFinished(detail: FilmDetail)
         fun goBack()
+    }
+
+
+    override fun onFinishSaveDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        createVideoViewModel.setDetailsMetaData(title, dateTime)
     }
 }

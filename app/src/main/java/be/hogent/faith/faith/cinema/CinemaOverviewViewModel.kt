@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
@@ -70,5 +71,9 @@ class CinemaOverviewViewModel(
     fun resetDateRange() {
         _startDate.value = LocalDate.MIN.plusDays(1)
         _endDate.value = LocalDate.now()
+    }
+
+    fun saveFilm(filmDetail: FilmDetail) {
+
     }
 }
