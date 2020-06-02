@@ -19,7 +19,7 @@ data class User(
 
     private var _goals = HashMap<UUID, Goal>()
     val goals: List<Goal>
-    get() = _goals.values.toList()
+        get() = _goals.values.toList()
 
     val backpack = Backpack()
 
@@ -44,10 +44,11 @@ data class User(
         _events.remove(event.uuid)
     }
 
-    fun addGoal(){
-        if(goals.filter { go -> go.isCompleted }.size >= 5)
-            throw IllegalArgumentException("Er kunnen maximum 5 actieve doelen zijn.")
-        val goal = Goal()
+    fun addGoal(goal: Goal) {
+        require(numberOfCompletedGoals() < 5) { "Er kunnen maximum 5 actieve doelen zijn." }
+        require(goals.find { e -> e.skyscraperType == goal.skyscraperType } == null) { "Er is al een wolkenkrabber van dit type actief" }
         _goals[goal.uuid] = goal
     }
+
+    private fun numberOfCompletedGoals() = goals.filter { go -> go.isCompleted }.size
 }
