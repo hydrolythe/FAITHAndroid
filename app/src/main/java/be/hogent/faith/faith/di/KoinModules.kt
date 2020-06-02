@@ -14,6 +14,7 @@ import be.hogent.faith.faith.details.CinemaDetailsMetaDataViewModel
 import be.hogent.faith.faith.details.audio.AudioDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailViewModel
+import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProviderFromResources
 import be.hogent.faith.faith.details.drawing.view.ViewDrawingDetailViewModel
 import be.hogent.faith.faith.details.externalFile.ExternalFileViewModel
@@ -36,6 +37,7 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewMo
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvider
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
 import be.hogent.faith.faith.util.AndroidTempFileProvider
+import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.faith.videoplayer.CurrentVideoViewModel
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
@@ -126,11 +128,11 @@ val appModule = module(override = true) {
         scoped { DrawViewModel() }
     }
 
-    single { AndroidTempFileProvider(androidContext()) }
+    single { AndroidTempFileProvider(androidContext()) as TempFileProvider}
 
     single { ResourceAvatarProvider(androidContext()) as AvatarProvider}
 
-    single { PremadeImagesProviderFromResources() }
+    single { PremadeImagesProviderFromResources() as PremadeImagesProvider}
 
     // Dependency injection for the login, authentication
     single { Auth0(androidContext()) }
