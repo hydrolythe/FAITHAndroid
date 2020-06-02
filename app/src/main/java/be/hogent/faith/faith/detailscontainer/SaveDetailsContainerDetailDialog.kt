@@ -10,16 +10,17 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.details.DetailsMetaDataViewModel
-import be.hogent.faith.faith.details.SaveDetailsMetaDataDialogListener
 import org.threeten.bp.LocalDate
 import kotlin.reflect.KClass
 
-abstract class SaveDetailsContainerDetailDialog(protected val detailType: KClass<Detail>) :
-    DialogFragment() {
+abstract class SaveDetailsContainerDetailDialog(
+    protected val detailType: KClass<Detail>
+) : DialogFragment() {
+
     protected lateinit var saveDetailBinding: ViewDataBinding
     protected abstract val detailsMetadataViewModel: DetailsMetaDataViewModel
-    private lateinit var saveDetailsMetaDataDialogListener: SaveDetailsMetaDataDialogListener
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return Dialog(requireActivity(), R.style.Dialog_NearlyFullScreen).apply {
@@ -51,11 +52,7 @@ abstract class SaveDetailsContainerDetailDialog(protected val detailType: KClass
             val dateSetListener =
                 OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                     detailsMetadataViewModel.detailDate.postValue(
-                        LocalDate.of(
-                            year,
-                            monthOfYear,
-                            dayOfMonth
-                        )
+                        LocalDate.of(year, monthOfYear, dayOfMonth)
                     )
                 }
             DatePickerDialog(
@@ -65,8 +62,6 @@ abstract class SaveDetailsContainerDetailDialog(protected val detailType: KClass
                 now.monthValue,
                 now.dayOfMonth
             ).show()
-            /*   DetailsContainerDateDialog.newInstance()
-                   .show(requireActivity().supportFragmentManager, null)*/
         })
 
         detailsMetadataViewModel.cancelClicked.observe(this, Observer {
@@ -74,9 +69,9 @@ abstract class SaveDetailsContainerDetailDialog(protected val detailType: KClass
         })
 
         detailsMetadataViewModel.detailMetaDataSet.observe(this, Observer {
-            val saveDetailsMetaDataDialogListener: SaveDetailsMetaDataDialogListener? =
-                targetFragment as SaveDetailsMetaDataDialogListener?
-            saveDetailsMetaDataDialogListener?.onFinishSaveDetailsMetaData(
+            val detailFragment: DetailFragment<Detail>? =
+                targetFragment as DetailFragment<Detail>?
+            detailFragment?.onFinishSaveDetailsMetaData(
                 detailsMetadataViewModel.detailTitle.value!!,
                 detailsMetadataViewModel.detailDate.value!!.atStartOfDay()
             )
