@@ -6,6 +6,8 @@ import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.skyscraper.goal.SkyscraperGoalFragment
+import be.hogent.faith.faith.skyscraper.history.SkyscraperHistoryFragment
+import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder
 import be.hogent.faith.faith.skyscraper.startscreen.Skyscraper
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperStartScreenFragment
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperViewHolder
@@ -18,7 +20,8 @@ import org.koin.android.ext.android.getKoin
 class SkyscraperActivity : AppCompatActivity(), SkyscraperViewHolder.SkyscraperNavigationListener,
     SkyscraperStartScreenFragment.SkyscraperNavigationListener,
     SkyscraperGoalFragment.SkyscraperNavigationListener,
-    SkyscraperHistoryFragment.SkyscraperNavigationListener {
+    SkyscraperHistoryFragment.SkyscraperNavigationListener,
+    SkyscraperThumbnailViewHolder.SkyscraperHistoryNavigationListener{
 
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
@@ -53,4 +56,9 @@ class SkyscraperActivity : AppCompatActivity(), SkyscraperViewHolder.SkyscraperN
     override fun closeSkyscrapers() {
         finish()
     }
+
+    override fun openSkyscraperHistoryScreenFor(skyscraper: Skyscraper) {
+        TODO("Not yet implemented")
+    }
+
 }

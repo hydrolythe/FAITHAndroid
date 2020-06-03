@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.skyscraper
+package be.hogent.faith.faith.skyscraper.history
 
 import android.content.Context
 import android.os.Bundle
@@ -7,10 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentSkyscraperHistoryBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.skyscraper.SkyscraperActivity
+import be.hogent.faith.faith.skyscraper.startscreen.Skyscraper
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors
 import org.koin.android.ext.android.getKoin
 
 class SkyscraperHistoryFragment : Fragment() {
@@ -18,7 +22,8 @@ class SkyscraperHistoryFragment : Fragment() {
     private var navigation: SkyscraperNavigationListener? = null
     private lateinit var binding: FragmentSkyscraperHistoryBinding
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
-
+    private lateinit var adapter: HistoryAdapter
+    val list = arrayListOf<Skyscraper>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,7 +40,25 @@ class SkyscraperHistoryFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         updateUI()
+        setUpRecyclerView()
         setOnclickListeners()
+    }
+
+    private fun setUpRecyclerView() {
+        adapter = HistoryAdapter(
+            requireNotNull(activity) as SkyscraperActivity
+        )
+        binding.recyclerView.layoutManager = GridLayoutManager(activity, 5)
+        binding.recyclerView.adapter = adapter
+
+        list.add(Skyscraper("Dit is een eerste actie",SkyscraperColors.SKYSCRAPER_BLUE))
+        list.add(Skyscraper("Dit is een tweede actie",SkyscraperColors.SKYSCRAPER_DARK_GREEN))
+        list.add(Skyscraper("Dit is een derde actie",SkyscraperColors.SKYSCRAPER_GREEN))
+        list.add(Skyscraper("Dit is een vierde actie",SkyscraperColors.SKYSCRAPER_YELLOW))
+        list.add(Skyscraper("Dit is een vierde actie",SkyscraperColors.SKYSCRAPER_YELLOW))
+
+        adapter.submitList(list)
+
     }
 
     private fun updateUI() {

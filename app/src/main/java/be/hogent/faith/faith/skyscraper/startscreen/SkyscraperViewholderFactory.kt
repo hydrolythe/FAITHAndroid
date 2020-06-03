@@ -20,35 +20,35 @@ object SkyscraperViewHolderFactory {
 
         val view: ConstraintLayout
         when (viewType) {
-            SkyscraperColors.SKYSCRAPER_BLUE -> {
+            SkyscraperColors.SKYSCRAPER_BLUE.value -> {
                 view = LayoutInflater.from(parent.context).inflate(
                     R.layout.skyscraper_rv_blue,
                     parent,
                     false
                 ) as ConstraintLayout
             }
-            SkyscraperColors.SKYSCRAPER_YELLOW -> {
+            SkyscraperColors.SKYSCRAPER_YELLOW.value -> {
                 view = LayoutInflater.from(parent.context).inflate(
                     R.layout.skyscraper_rv_yellow,
                     parent,
                     false
                 ) as ConstraintLayout
             }
-            SkyscraperColors.SKYSCRAPER_PINK -> {
+            SkyscraperColors.SKYSCRAPER_PINK.value -> {
                 view = LayoutInflater.from(parent.context).inflate(
                     R.layout.skyscraper_rv_dark_green,
                     parent,
                     false
                 ) as ConstraintLayout
             }
-            SkyscraperColors.SKYSCRAPER_DARK_GREEN -> {
+            SkyscraperColors.SKYSCRAPER_DARK_GREEN.value -> {
                 view = LayoutInflater.from(parent.context).inflate(
                     R.layout.skyscraper_rv_dark_green,
                     parent,
                     false
                 ) as ConstraintLayout
             }
-            SkyscraperColors.SKYSCRAPER_GREEN -> {
+            SkyscraperColors.SKYSCRAPER_GREEN.value -> {
                 view = LayoutInflater.from(parent.context).inflate(
                     R.layout.skyscraper_rv_green,
                     parent,
