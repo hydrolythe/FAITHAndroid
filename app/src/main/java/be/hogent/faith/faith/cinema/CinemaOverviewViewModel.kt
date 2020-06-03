@@ -50,7 +50,6 @@ class CinemaOverviewViewModel(
     private val _filmSavedSuccessFully = SingleLiveEvent<Unit>()
     val filmSavedSuccessFully: LiveData<Unit> = _filmSavedSuccessFully
 
-
     fun onFilesButtonClicked() {
         _filmsVisible.value = false
         initSearch()
@@ -96,7 +95,6 @@ class CinemaOverviewViewModel(
                 e.printStackTrace()
                 _errorMessage.postValue(R.string.save_film_error)
             }
-
         })
     }
 }

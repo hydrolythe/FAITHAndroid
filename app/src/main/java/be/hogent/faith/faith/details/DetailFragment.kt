@@ -24,4 +24,3 @@ interface DetailFinishedListener {
      */
     fun onDetailFinished(detail: Detail)
 }
-

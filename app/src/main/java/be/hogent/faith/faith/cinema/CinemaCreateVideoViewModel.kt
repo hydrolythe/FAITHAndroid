@@ -123,5 +123,4 @@ class CinemaCreateVideoViewModel(
         }
         _savedDetail.value = currentDetail
     }
-
 }

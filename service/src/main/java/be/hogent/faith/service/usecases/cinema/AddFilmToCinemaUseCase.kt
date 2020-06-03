@@ -35,7 +35,7 @@ class AddFilmToCinemaUseCase(
                     params.user
                 ).subscribeOn(subscriber)
             }.andThen {
-                Completable.fromAction{
+                Completable.fromAction {
                     params.cinema.addFilm(params.film)
                 }
             }

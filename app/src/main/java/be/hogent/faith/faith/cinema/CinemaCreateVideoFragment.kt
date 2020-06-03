@@ -192,7 +192,6 @@ class CinemaCreateVideoFragment : Fragment(), DetailFragment<FilmDetail> {
         fun goBack()
     }
 
-
     override fun onFinishSaveDetailsMetaData(title: String, dateTime: LocalDateTime) {
         createVideoViewModel.setDetailsMetaData(title, dateTime)
     }
