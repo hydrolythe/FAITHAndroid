@@ -3,6 +3,7 @@ package be.hogent.faith.faith.cinema
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.faith.details.DetailViewModel
@@ -22,6 +23,8 @@ import org.threeten.bp.LocalDateTime
 class CinemaCreateVideoViewModel(
     private val createCinemaVideoUseCase: CreateCinemaVideoUseCase
 ) : ViewModel(), DetailViewModel<FilmDetail> {
+
+    var cinema: Cinema? = null
 
     private val _selectedDetails = MutableLiveData<List<Detail>>().apply { value = emptyList() }
     val selectedDetails: LiveData<List<Detail>> = _selectedDetails
@@ -77,6 +80,7 @@ class CinemaCreateVideoViewModel(
         }
         val params = CreateCinemaVideoUseCase.Params(
             _selectedDetails.value!!,
+            cinema!!,
             VideoEncoder.Resolution(800, 600)
         )
         createCinemaVideoUseCase.execute(

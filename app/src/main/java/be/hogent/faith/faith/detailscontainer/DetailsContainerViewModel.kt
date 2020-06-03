@@ -35,7 +35,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     private val deleteDetailsContainerDetailUseCase: DeleteDetailsContainerDetailUseCase<T>,
     private val loadDetailFileUseCase: LoadDetailFileUseCase<T>,
     private val getDetailsContainerDataUseCase: GetDetailsContainerDataUseCase<T>,
-    protected val detailsContainer: T
+    val detailsContainer: T
 ) : ViewModel() {
 
     protected open val details: List<Detail>

@@ -100,13 +100,14 @@ val serviceModule = module {
     factory { CreateVideoDetailUseCase(get()) }
     factory { DeleteEventDetailUseCase(get()) }
     factory { DeleteEventUseCase(get(), get(), get()) }
-    factory { CreateCinemaVideoUseCase(VideoEncoder(), get()) }
-    factory { AddFilmToCinemaUseCase(
-        containerEncryptionService = get(named(CinemaNames.encryptionService)),
-        cinemaRepository = get(named(CinemaNames.repo)),
-        fileStorageRepository = get(),
-        observer = get()
-    )}
+    factory {
+        AddFilmToCinemaUseCase(
+            containerEncryptionService = get(named(CinemaNames.encryptionService)),
+            cinemaRepository = get(named(CinemaNames.repo)),
+            fileStorageRepository = get(),
+            observer = get()
+        )
+    }
     factory {
         MakeEventFilesAvailableUseCase(
             fileStorageRepo = get(),
@@ -175,6 +176,13 @@ val serviceModule = module {
         GetDetailsContainerDataUseCase<Cinema>(
             detailsContainerRepository = get(named(CinemaNames.repo)),
             detailContainerEncryptionService = get(named(CinemaNames.encryptionService)),
+            observer = get()
+        )
+    }
+    factory {
+        CreateCinemaVideoUseCase(
+            videoEncoder = VideoEncoder(),
+            loadFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
             observer = get()
         )
     }

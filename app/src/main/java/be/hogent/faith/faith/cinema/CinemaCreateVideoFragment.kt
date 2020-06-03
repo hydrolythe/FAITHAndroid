@@ -55,6 +55,7 @@ class CinemaCreateVideoFragment : Fragment(), DetailFragment<FilmDetail> {
         binding.lifecycleOwner = this
         binding.viewModel = createVideoViewModel
         binding.cinemaOverviewViewModel = cinemaOverviewViewModel
+        (binding.viewModel as CinemaCreateVideoViewModel).cinema = cinemaOverviewViewModel.detailsContainer
 
         return binding.root
     }
