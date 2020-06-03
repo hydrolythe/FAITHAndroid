@@ -38,6 +38,10 @@ class ActionAdapter(private val actionListener: ActionListener) :
         _actions.addAll(newActions)
         diffResult.dispatchUpdatesTo(this)
     }
+    fun removeItem(viewHolder: ViewHolder){
+        _actions.removeAt(viewHolder.adapterPosition)
+        notifyItemRemoved(viewHolder.adapterPosition)
+    }
 
     inner class ViewHolder(private val itemBinding: SkyscraperActionRvItemBinding) :
         RecyclerView.ViewHolder(itemBinding.root) {

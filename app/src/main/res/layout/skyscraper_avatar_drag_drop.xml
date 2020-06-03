@@ -15,8 +15,9 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:background="@drawable/skyscraper_blue" />
+            android:background="@drawable/skyscraper_blue"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="-41dp" />
 
         <ImageView
             android:id="@+id/avatar_pos_stairs_1"
@@ -323,6 +324,51 @@
             android:layout_height="12dp"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.90" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rope_start"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintTop_toTopOf="@+id/guide_stairs_top" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rope_start"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_1" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_2"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rope_start"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_end" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rope_start"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_2" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_3"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rope_start"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_end" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_pos_1"
