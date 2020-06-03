@@ -189,6 +189,7 @@
             android:id="@+id/achtergrond_publiek"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -202,9 +203,9 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/create_film"
             android:onClick="@{() -> cinemaOverviewViewModel.onMakeFilmClicked()}"
-            app:layout_constraintBottom_toBottomOf="@+id/achtergrond_publiek"
-            app:layout_constraintEnd_toEndOf="@+id/achtergrond_publiek"
-            app:layout_constraintStart_toStartOf="@+id/achtergrond_publiek"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_container"
             app:srcCompat="@drawable/ic_btn_maak_filmpje" />
 
