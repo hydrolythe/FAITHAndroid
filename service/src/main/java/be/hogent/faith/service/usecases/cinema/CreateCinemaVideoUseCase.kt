@@ -1,5 +1,7 @@
 package be.hogent.faith.service.usecases.cinema
 
+import android.media.ThumbnailUtils
+import android.provider.MediaStore
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.FilmDetail
@@ -7,6 +9,7 @@ import be.hogent.faith.service.usecases.base.ObservableUseCase
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Params
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Status
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
+import be.hogent.faith.service.util.base64encodeImage
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import timber.log.Timber
@@ -49,7 +52,10 @@ class CreateCinemaVideoUseCase(
                         params.resolution,
                         encoderListener
                     )
-                    emitter.onNext(Status.Completed(FilmDetail(resultingFile)))
+                    val resultingFilmDetail = FilmDetail(resultingFile).apply {
+                        thumbnail = ThumbnailUtils.createVideoThumbnail(file.path, MediaStore.Images.Thumbnails.MINI_KIND).base64encodeImage()
+                    }
+                    emitter.onNext(Status.Completed(resultingFilmDetail))
                     emitter.onComplete()
                 }
             )
