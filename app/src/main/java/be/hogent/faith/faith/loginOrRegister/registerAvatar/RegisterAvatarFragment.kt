@@ -25,7 +25,6 @@ import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
 import kotlinx.android.synthetic.main.fragment_register_avatar.btn_register_skincolor_blank
 import kotlinx.android.synthetic.main.fragment_register_avatar.btn_register_skincolor_darkbrown
 import kotlinx.android.synthetic.main.fragment_register_avatar.btn_register_skincolor_lightbrown
-import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**

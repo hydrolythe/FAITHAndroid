@@ -62,14 +62,12 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         when (resource.status) {
             ResourceState.SUCCESS -> {
                 userViewModel.user.observe(this, Observer {
-                    if(it.avatarName == "null"){
+                    if (it.avatarName == "null") {
                         goToRegisterAvatarScreen()
-                    }else{
+                    } else {
                         goToCityScreen()
                     }
-
                 })
-
             }
             ResourceState.LOADING -> {
             }

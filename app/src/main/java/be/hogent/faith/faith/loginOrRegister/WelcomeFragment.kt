@@ -43,7 +43,7 @@ class WelcomeFragment : Fragment() {
     private fun registerListeners() {
         // user wants to register
         welcomeViewModel.registerButtonClicked.observe(this, Observer {
-            val intent = Intent(Intent.ACTION_VIEW,Uri.parse("https://faith-dev-38aa1.ey.r.appspot.com"))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://faith-dev-38aa1.ey.r.appspot.com"))
             startActivity(intent)
         })
 

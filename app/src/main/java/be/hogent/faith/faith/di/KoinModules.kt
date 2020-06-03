@@ -86,7 +86,7 @@ val appModule = module(override = true) {
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }
     viewModel { TextDetailViewModel(get(), get(), get()) }
-    viewModel { RegisterAvatarViewModel(get(),get()) }
+    viewModel { RegisterAvatarViewModel(get(), get()) }
     viewModel { WelcomeViewModel(get()) }
     viewModel { AudioDetailViewModel(get(), get()) }
     viewModel { WelcomeViewModel(get()) }
@@ -123,11 +123,11 @@ val appModule = module(override = true) {
         scoped { DrawViewModel() }
     }
 
-    single { AndroidTempFileProvider(androidContext()) as TempFileProvider}
+    single { AndroidTempFileProvider(androidContext()) as TempFileProvider }
 
-    single { ResourceAvatarProvider(androidContext()) as AvatarProvider}
+    single { ResourceAvatarProvider(androidContext()) as AvatarProvider }
 
-    single { PremadeImagesProviderFromResources() as PremadeImagesProvider}
+    single { PremadeImagesProviderFromResources() as PremadeImagesProvider }
 
     // Dependency injection for the login, authentication
     single { Auth0(androidContext()) }

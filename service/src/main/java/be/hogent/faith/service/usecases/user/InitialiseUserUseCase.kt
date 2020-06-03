@@ -4,7 +4,6 @@ import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
-import be.hogent.faith.service.repositories.IAuthManager
 import be.hogent.faith.service.repositories.IDetailContainerRepository
 import be.hogent.faith.service.repositories.IUserRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
@@ -25,9 +24,9 @@ class InitialiseUserUseCase(
 
     override fun buildUseCaseObservable(params: Params): Completable {
         val user = userRepository
-            .initialiseUser(User(params.user.username, params.user.avatarName, params.user.uuid))
+            .initialiseUser(params.user)
             .doOnComplete { Timber.i("Created user in repo") }
-            .doOnError{Timber.e("Fout bij initialisatie avatar")}
+            .doOnError { Timber.e("Fout bij initialisatie avatar") }
 
         val createBackpack = backpackEncryptionService.createContainer()
             .subscribeOn(subscriber)
