@@ -95,8 +95,16 @@ class SkyscraperGoalFragment : Fragment() {
         binding.btnSkyscraperReturn.setOnClickListener {
             navigation?.goBack()
         }
+        setDragDropListeners()
+
+        binding.btnAddAction.setOnClickListener{
+            list.add(Action("Dit is een actie"))
+            adapter.updateActionsList(list)
+        }
+    }
+
+    private fun setDragDropListeners() {
         binding.dragAvatar.setOnTouchListener(avatarOnTouchListener)
-        binding.imageView16.setOnDragListener(avatarOnDragListener)
 
         //Betere manier vinden?
         binding.skyscraperAvatarDragDrop.avatarPosStairs1.setOnDragListener(avatarOnDragListener)
@@ -105,11 +113,25 @@ class SkyscraperGoalFragment : Fragment() {
         binding.skyscraperAvatarDragDrop.avatarPosStairs4.setOnDragListener(avatarOnDragListener)
         binding.skyscraperAvatarDragDrop.avatarPosStairs5.setOnDragListener(avatarOnDragListener)
         binding.skyscraperAvatarDragDrop.avatarPosStairs6.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosStairs7.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosStairs8.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosStairs9.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosStairs10.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosStairs11.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosStairs12.setOnDragListener(avatarOnDragListener)
 
-        binding.btnAddAction.setOnClickListener{
-            list.add(Action("Dit is een actie"))
-            adapter.updateActionsList(list)
-        }
+        binding.skyscraperAvatarDragDrop.avatarPosLift1.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosLift2.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosLift3.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosLift4.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosLift5.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosLift6.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosLift7.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosLift8.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosLift9.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosLift10.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosLift11.setOnDragListener(avatarOnDragListener)
+        binding.skyscraperAvatarDragDrop.avatarPosLift12.setOnDragListener(avatarOnDragListener)
     }
 
     override fun onAttach(context: Context) {
