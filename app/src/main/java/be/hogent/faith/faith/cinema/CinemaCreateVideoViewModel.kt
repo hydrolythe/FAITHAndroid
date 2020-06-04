@@ -3,6 +3,7 @@ package be.hogent.faith.faith.cinema
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.R
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.FilmDetail
@@ -14,6 +15,7 @@ import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Status.I
 import be.hogent.faith.service.usecases.cinema.VideoEncoder
 import io.reactivex.observers.DisposableObserver
 import org.threeten.bp.LocalDateTime
+import timber.log.Timber
 
 /**
  * Allows for the creation of [FilmDetail]s that will be added to the user's movies ("Mijn filmpjes")
@@ -99,9 +101,8 @@ class CinemaCreateVideoViewModel(
                 }
 
                 override fun onError(e: Throwable) {
-                    // TODO: message
-                    _errorMessage.value = -1
-                    e.printStackTrace()
+                    _errorMessage.value = R.string.encode_film_error
+                    Timber.e(e)
                 }
             })
     }
