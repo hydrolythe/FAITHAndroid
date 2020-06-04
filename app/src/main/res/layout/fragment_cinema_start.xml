@@ -101,8 +101,8 @@
             android:background="@drawable/btn_cinema_mijn_bestanden_achtergrond"
             android:checked="false"
             android:textAllCaps="false"
-            android:textOff="@string/mijn_bestanden"
-            android:textOn="@string/mijn_bestanden"
+            android:textOff="@string/mijn_tijdslijn"
+            android:textOn="@string/mijn_tijdslijn"
             app:layout_constraintBottom_toBottomOf="@+id/rv_container"
             app:layout_constraintStart_toStartOf="@+id/guide_btns_vertical" />
 

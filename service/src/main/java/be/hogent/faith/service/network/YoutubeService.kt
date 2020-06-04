@@ -69,7 +69,7 @@ class YoutubeConfig() {
      * TODO temporary, SHOULD BE STORED IN A KEY VAULT!!!
      * */
 
-    private val API_KEY = "AIzaSyBQ2XjSjv_UHpSkdJjRNEX50RtgEybhZ18"
+    private val API_KEY = "AIzaSyAnxKPALTBvTnJAeSSYiXkbD9RqLigWbQY"
 
     fun getKey(): String {
         return API_KEY

@@ -15,11 +15,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
 import be.hogent.faith.faith.cinema.CinemaActivity
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
@@ -33,7 +35,9 @@ import io.fotoapparat.selector.front
 import kotlinx.android.synthetic.main.fragment_take_photo.img_takePhoto_theTakenPhoto
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
+import kotlin.reflect.KClass
 
 /**
  * The requestcode that will be used to request photoTaker permissions
@@ -114,10 +118,26 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
             }
         })
 
+        takePhotoViewModel.getDetailMetaData.observe(this, Observer {
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(
+                requireActivity(),
+                PhotoDetail::class as KClass<Detail>
+            )
+            if (saveDialog == null)
+                takePhotoViewModel.setDetailsMetaData()
+            else {
+                saveDialog.setTargetFragment(
+                    this,
+                    22
+                )
+                saveDialog.show(getParentFragmentManager(), null)
+            }
+        })
+
         takePhotoViewModel.savedDetail.observe(this, Observer { newPhotoDetail ->
             if (requireActivity() is EmotionCaptureMainActivity) {
-            Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
-                .show()
+                Toast.makeText(context, getString(R.string.save_photo_success), Toast.LENGTH_SHORT)
+                    .show()
             }
             detailFinishedListener.onDetailFinished(newPhotoDetail)
             navigation?.backToEvent()
@@ -126,6 +146,10 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
         takePhotoViewModel.cancelClicked.observe(this, Observer {
             showExitAlert()
         })
+    }
+
+    override fun onFinishSaveDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        takePhotoViewModel.setDetailsMetaData(title, dateTime)
     }
 
     /**
@@ -150,7 +174,10 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
     }
 
     private fun hasCameraPermissions(): Boolean {
-        return checkSelfPermission(requireActivity(), Manifest.permission.CAMERA) == PERMISSION_GRANTED
+        return checkSelfPermission(
+            requireActivity(),
+            Manifest.permission.CAMERA
+        ) == PERMISSION_GRANTED
     }
 
     private fun showExitAlert() {
@@ -173,6 +200,7 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
         }
         alertDialog.show()
     }
+
     /**
      * Checks if requested permissions have been granted and starts the action that required the permission
      *  in the first place.

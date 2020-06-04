@@ -52,7 +52,7 @@
     <string name="frag_takePhoto_takePhoto">Neem foto</string>
     <string name="description_thumbnail">Miniatuur</string>
     <string name="description_addText">Schrijven</string>
-    <string name="description_addPhoto">Foto</string>
+    <string name="description_addPhoto">Foto maken</string>
     <string name="description_addAudio">Inspreken</string>
     <string name="description_addDrawing">Tekenen</string>
     <string name="error_save_photo">Er ging iets mis bij het opslaan van je foto.</string>
@@ -241,7 +241,7 @@
     <string name="rv_btn_delete_detail">Knop verwijder bestand</string>
     <string name="rv_detail_title">Detail Title</string>
     <string name="mijn_filmpjes">mijn filmpjes</string>
-    <string name="mijn_bestanden">mijn bestanden</string>
+    <string name="mijn_tijdslijn">mijn tijdslijn</string>
     <string name="create_film">Maak filmpje</string>
     <string name="search_hint_film">zoek hier een film op naam</string>
     <string name="search_hint_bestand">zoek hier een bestand op naam</string>
@@ -250,6 +250,8 @@
     <string name="je_filmpje_opslaan">Je filmpje opslaan</string>
     <string name="je_tekening_opslaan">Je tekening opslaan</string>
     <string name="je_foto_opslaan">Je foto opslaan</string>
+    <string name="je_tekst_opslaan">Je tekst opslaan</string>
+    <string name="je_audio_opslaan">Je geluidsfragment opslaan</string>
     <string name="je_extern_bestand_opslaan">Je extern bestand opslaan</string>
     <string name="save_video_title">Titel</string>
     <string name="error_load_detail_failed">Laden detail faalt</string>
@@ -261,4 +263,9 @@
     <string name="button_open_add_menu">knop open toevoeg menu</string>
     <string name="delete_event">Verwijder opgeslagen event</string>
     <string name="delete">Verwijder</string>
+    <string name="personages">Personages</string>
+    <string name="voorwerpen">Voorwerpen</string>
+    <string name="decors">Decors</string>
+    <string name="metaforen">Metaforen</string>
+    <string name="event_delete_error">Er ging iets fout bij het verwijderen van de gebeurtenis.</string>
 </resources>

@@ -17,11 +17,8 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.details.audio.RecordAudioFragment
-import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
-import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
-import be.hogent.faith.faith.details.photo.view.ViewPhotoFragment
-import be.hogent.faith.faith.details.text.create.TextDetailFragment
+import be.hogent.faith.faith.details.DetailType
+import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.util.replaceChildFragment
 import com.bumptech.glide.Glide
@@ -165,9 +162,9 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
         override fun setChildFragment() {
             val detail = arguments?.getSerializable(DETAIL) as PhotoDetail?
             val childFragment = if (detail == null) {
-                TakePhotoFragment.newInstance()
+                DetailsFactory.createDetail(DetailType.PHOTO)
             } else {
-                ViewPhotoFragment.newInstance(detail)
+                DetailsFactory.editDetail(detail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }
@@ -193,9 +190,9 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
         override fun setChildFragment() {
             val detail = arguments?.getSerializable(DETAIL) as DrawingDetail?
             val childFragment = if (detail == null) {
-                DrawingDetailFragment.newInstance()
+                DetailsFactory.createDetail(DetailType.DRAWING)
             } else {
-                DrawingDetailFragment.newInstance(detail)
+                DetailsFactory.editDetail(detail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }
@@ -221,9 +218,9 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
         override fun setChildFragment() {
             val detail = arguments?.getSerializable(DETAIL) as TextDetail?
             val childFragment = if (detail == null) {
-                TextDetailFragment.newInstance()
+                DetailsFactory.createDetail(DetailType.TEXT)
             } else {
-                TextDetailFragment.newInstance(detail)
+                DetailsFactory.editDetail(detail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }
@@ -243,9 +240,9 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
         override fun setChildFragment() {
             val existingDetail = arguments?.getSerializable(DETAIL) as AudioDetail?
             val childFragment = if (existingDetail == null) {
-                RecordAudioFragment.newInstance()
+                DetailsFactory.createDetail(DetailType.AUDIO)
             } else {
-                RecordAudioFragment.newInstance(existingDetail)
+                DetailsFactory.editDetail(existingDetail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }

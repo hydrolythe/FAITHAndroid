@@ -15,6 +15,7 @@ import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.OverwriteTextDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableSingleObserver
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 
 class TextDetailViewModel(
@@ -26,8 +27,11 @@ class TextDetailViewModel(
     private val _savedDetail = MutableLiveData<TextDetail>()
     override val savedDetail: LiveData<TextDetail> = _savedDetail
 
+    private val _getDetailMetaData = SingleLiveEvent<Unit>()
+    override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
+
     override fun loadExistingDetail(existingDetail: TextDetail) {
-        _existingDetail.value = existingDetail
+        _existingDetail = existingDetail
         val params = LoadTextDetailUseCase.LoadTextParams(existingDetail)
         loadTextDetailUseCase.execute(params, LoadTextUseCaseHandler())
     }
@@ -46,7 +50,7 @@ class TextDetailViewModel(
      */
     val initialText: LiveData<String> = _initialText
 
-    private val _existingDetail = MutableLiveData<TextDetail>()
+    private var _existingDetail: TextDetail? = null
 
     protected val _selectedTextColor = MutableLiveData<@ColorInt Int>()
     val selectedTextColor: LiveData<Int>
@@ -145,12 +149,12 @@ class TextDetailViewModel(
 
     override fun onSaveClicked() {
         if (!_text.value.isNullOrEmpty()) {
-            if (_existingDetail.value == null) {
+            if (_existingDetail == null) {
                 val params = CreateTextDetailUseCase.Params(text.value!!)
                 createTextDetailUseCase.execute(params, CreateTextDetailUseCaseHandler())
             } else {
                 val params =
-                    OverwriteTextDetailUseCase.Params(_text.value!!, _existingDetail.value!!)
+                    OverwriteTextDetailUseCase.Params(_text.value!!, _existingDetail!!)
                 overwriteTextDetailUseCase.execute(params, OverwriteTextDetailUseCaseHandler())
             }
         } else {
@@ -160,7 +164,7 @@ class TextDetailViewModel(
 
     private inner class OverwriteTextDetailUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            _savedDetail.value = _existingDetail.value
+            _savedDetail.value = _existingDetail
         }
 
         override fun onError(e: Throwable) {
@@ -171,7 +175,8 @@ class TextDetailViewModel(
 
     private inner class CreateTextDetailUseCaseHandler : DisposableSingleObserver<TextDetail>() {
         override fun onSuccess(createdDetail: TextDetail) {
-            _savedDetail.value = createdDetail
+            _existingDetail = createdDetail
+            _getDetailMetaData.call()
         }
 
         override fun onError(e: Throwable) {
@@ -195,5 +200,13 @@ class TextDetailViewModel(
             Timber.e(e)
             _errorMessage.postValue(R.string.error_ophalen_textdetail)
         }
+    }
+
+    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        _existingDetail?.let {
+            it.title = title
+            it.dateTime = dateTime
+        }
+        _savedDetail.value = _existingDetail
     }
 }

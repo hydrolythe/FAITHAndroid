@@ -42,7 +42,7 @@ class TakePhotoViewModelUseCaseTests {
     @Test
     fun takePhotoViewModel_onSaveClicked_updatesDetailWhenUseCaseSucceeds() {
         // Arrange
-        val detailObserver = mockk<Observer<PhotoDetail>>(relaxed = true)
+        val getDetailMetaDataObserver = mockk<Observer<Unit>>(relaxed = true)
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val useCaseObserver = slot<DisposableSingleObserver<PhotoDetail>>()
         val useCaseParams = slot<CreatePhotoDetailUseCase.Params>()
@@ -51,7 +51,7 @@ class TakePhotoViewModelUseCaseTests {
         val photoSaveFile = mockk<File>()
         viewModel.photoTaken(photoSaveFile)
 
-        viewModel.savedDetail.observeForever(detailObserver)
+        viewModel.getDetailMetaData.observeForever(getDetailMetaDataObserver)
         viewModel.errorMessage.observeForever(errorObserver)
 
         // Act
@@ -66,7 +66,7 @@ class TakePhotoViewModelUseCaseTests {
 
         // Assert
         assertEquals(photoSaveFile, useCaseParams.captured.tempPhotoSaveFile)
-        verify { detailObserver.onChanged(createdDetail) }
+        verify { getDetailMetaDataObserver.onChanged(any()) }
         verify { errorObserver wasNot Called }
     }
 

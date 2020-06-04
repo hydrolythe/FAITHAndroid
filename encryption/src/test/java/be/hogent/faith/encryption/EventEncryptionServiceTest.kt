@@ -68,6 +68,9 @@ class EventEncryptionServiceTest : KoinTest, TestWithFiles() {
         every {
             storagePathProvider.localStorage(any<File>())
         } answers { File("local/${arg<File>(0).path}") }
+        every {
+            storagePathProvider.emotionAvatarPath(any<EncryptedEvent>())
+        } answers { File("${arg<EncryptedEvent>(0).emotionAvatar}") }
     }
 
     @After
@@ -156,6 +159,7 @@ class EventEncryptionServiceTest : KoinTest, TestWithFiles() {
         lateinit var encryptedEvent: EncryptedEvent
         createFilesForEvent(eventWithFiles)
         eventEncrypter.encrypt(eventWithFiles)
+            .subscribeOn(Schedulers.trampoline())
             .doOnSuccess { encryptedEvent = it }
             .test()
             .dispose()

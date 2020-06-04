@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -9,7 +8,7 @@
             type="be.hogent.faith.domain.models.detail.YoutubeVideoDetail" />
         <variable
             name="clickListener"
-            type="be.hogent.faith.faith.backpackScreen.youtubeVideo.create.SnippetClickListener" />
+            type="be.hogent.faith.faith.details.youtubeVideo.create.SnippetClickListener" />
     </data>
 
 <!--    <com.google.android.material.card.MaterialCardView

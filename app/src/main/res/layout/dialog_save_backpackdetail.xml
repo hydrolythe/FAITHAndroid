@@ -6,12 +6,9 @@
     <data>
 
         <variable
-            name="backpackViewModel"
-            type="be.hogent.faith.faith.backpackScreen.BackpackViewModel" />
+            name="detailsMetaDataViewModel"
+            type="be.hogent.faith.faith.details.DetailsMetaDataViewModel" />
 
-        <variable
-            name="userViewModel"
-            type="be.hogent.faith.faith.UserViewModel" />
     </data>
 
     <FrameLayout
@@ -70,6 +67,7 @@
                 android:layout_marginTop="@dimen/margin_corner_button"
                 android:background="@drawable/ic_return"
                 android:contentDescription="@string/cancel"
+                android:onClick="@{() -> detailsMetaDataViewModel.onCancelClicked()}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,7 +81,6 @@
                 android:padding="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guide_save_painter_end"
-
                 app:layout_constraintTop_toBottomOf="@+id/btn_save_backpack_cancel"
                 app:srcCompat="@drawable/schilder" />
 
@@ -108,15 +105,14 @@
                         android:id="@+id/save_backpack_detail_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
                         android:text="@string/je_werkje_opslaan"
                         android:textColor="@color/caption"
                         android:textSize="45sp"
                         android:textStyle="bold"
-                        android:layout_marginBottom="24dp"
                         app:layout_constraintBottom_toTopOf="@+id/textInputLayout_detailtitle"
                         app:layout_constraintEnd_toEndOf="@+id/textInputLayout_detailtitle"
-                        app:layout_constraintStart_toStartOf="@+id/textInputLayout_detailtitle"
-                        />
+                        app:layout_constraintStart_toStartOf="@+id/textInputLayout_detailtitle" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputLayout_detailtitle"
@@ -128,7 +124,7 @@
 
                         android:hint="@string/save_event_title"
                         app:errorEnabled="true"
-                        app:errorResId="@{backpackViewModel.detailTitleErrorMessage}"
+                        app:errorResId="@{detailsMetaDataViewModel.detailTitleErrorMessage}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
 
@@ -141,7 +137,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="text"
-                            android:nextFocusDown="@+id/txt_save_event_notes">
+                            android:nextFocusDown="@+id/txt_save_event_notes"
+                            android:text="@={detailsMetaDataViewModel.detailTitle}">
 
                             <requestFocus />
                         </com.google.android.material.textfield.TextInputEditText>
@@ -151,16 +148,15 @@
                         android:id="@+id/btn_save_detail"
                         style="@style/faith_button"
                         android:layout_width="wrap_content"
-
                         android:background="@drawable/save_btn"
                         android:contentDescription="@string/save"
+                        android:onClick="@{() -> detailsMetaDataViewModel.onSaveDetailsData()}"
                         android:text="@string/save"
                         app:cornerRadius="40dp"
                         app:icon="@drawable/save_btn"
                         app:iconGravity="textStart"
                         app:iconPadding="5dp"
                         app:iconSize="44dp"
-
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textInputLayout_detailtitle" />

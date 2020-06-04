@@ -41,7 +41,7 @@ open class EventRepository(
     }
 
     override fun delete(event: Event, user: User): Completable {
-        TODO("not implemented")
+        return eventDatabase.delete(event, user)
     }
 
     override fun getAll(): Flowable<List<EncryptedEvent>> {
