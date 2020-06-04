@@ -65,16 +65,33 @@
             app:layout_constraintGuide_percent="0.81" />
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_goal_actions"
+        <LinearLayout
+            android:id="@+id/rv_actions_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:orientation="vertical"
             android:background="@drawable/rectangle_white"
-            android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/skyscraper_avatar_drag_drop"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel"
             app:layout_constraintStart_toEndOf="@+id/skyscraper_avatar_drag_drop"
-            app:layout_constraintTop_toTopOf="@+id/guide_panel_bottom" />
+            app:layout_constraintTop_toTopOf="@+id/guide_panel_bottom"
+            android:layout_marginBottom="16dp">
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Beschrijving subdoel"
+                android:textSize="20sp"
+                android:textColor="#0000FF"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_goal_actions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                                />
+        </LinearLayout>
+
+
 
         <ImageButton
             android:id="@+id/btn_add_action"
@@ -83,8 +100,8 @@
             android:layout_marginBottom="@dimen/margin_corner_button"
             android:layout_marginEnd="@dimen/margin_corner_button"
             android:background="@drawable/ic_actie_toevoegen"
-            app:layout_constraintBottom_toBottomOf="@+id/rv_goal_actions"
-            app:layout_constraintEnd_toEndOf="@+id/rv_goal_actions"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_actions_container"
+            app:layout_constraintEnd_toEndOf="@+id/rv_actions_container"
              />
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_panel_bottom"
