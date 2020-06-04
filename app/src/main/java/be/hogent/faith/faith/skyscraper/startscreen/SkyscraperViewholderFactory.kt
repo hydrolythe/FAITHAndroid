@@ -77,11 +77,11 @@ class SkyscraperViewHolder(
     private val skyscraperClickListener: SkyscraperClickListener
 ) : RecyclerView.ViewHolder(view), KoinComponent {
 
-    fun bind(skyscraper: Skyscraper) {
-        view.txt_goal_description.setText(skyscraper.description)
+    fun bind(goal: Goal) {
+        view.txt_goal_description.setText(goal.description)
 
         view.skyscraper_base.setOnClickListener {
-            skyscraperNavigationListener.openGoalScreenFor(skyscraper)
+            skyscraperNavigationListener.openGoalScreenFor(goal)
         }
 
         view.txt_goal_description.setOnFocusChangeListener { v, hasFocus ->
@@ -92,7 +92,7 @@ class SkyscraperViewHolder(
     }
 
     interface SkyscraperNavigationListener {
-        fun openGoalScreenFor(skyscraper: Skyscraper)
-        fun deleteSkyscraper(skyscraper: Skyscraper)
+        fun openGoalScreenFor(goal: Goal)
+        fun deleteSkyscraper(goal: Goal)
     }
 }

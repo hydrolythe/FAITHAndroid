@@ -25,7 +25,7 @@ class SkyscraperStartScreenFragment : Fragment(),
     private lateinit var binding: FragmentSkyscraperStartBinding
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private lateinit var adapter: SkyscraperAdapter
-    val list = arrayListOf<Skyscraper>()
+    val list = arrayListOf<Goal>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,7 +62,7 @@ class SkyscraperStartScreenFragment : Fragment(),
             navigation?.openSkyscrapersHistory()
         }
         binding.btnSkyscraperAdd.setOnClickListener {
-            list.add(Skyscraper("Dit is een wolkenkrabber",SkyscraperColors.SKYSCRAPER_GREEN))
+            list.add(Goal("Dit is een wolkenkrabber",SkyscraperColors.SKYSCRAPER_GREEN, arrayListOf()))
             adapter.submitList(list)
             adapter.notifyDataSetChanged()
         }

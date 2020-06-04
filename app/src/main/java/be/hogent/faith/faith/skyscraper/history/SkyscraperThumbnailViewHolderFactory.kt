@@ -8,12 +8,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.faith.skyscraper.startscreen.Skyscraper
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
-import kotlinx.android.synthetic.main.detail_item_rv.view.btn_delete_detailRv
-import kotlinx.android.synthetic.main.detail_item_rv.view.text_detail_title
 import org.koin.core.KoinComponent
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder.SkyscraperThumbnailBlueViewHolder
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder.SkyscraperHistoryNavigationListener
@@ -21,6 +18,7 @@ import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder.Sk
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder.SkyscraperThumbnailGreenViewHolder
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder.SkyscraperThumbnailPinkViewHolder
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder.SkyscraperThumbnailYellowViewHolder
+import be.hogent.faith.faith.skyscraper.startscreen.Goal
 import kotlinx.android.synthetic.main.fragment_skyscraper_history.view.btn_delete_skyscraper
 import kotlinx.android.synthetic.main.skyscraper_thumbnail_item_rv.view.skyscraper_img
 import kotlinx.android.synthetic.main.skyscraper_thumbnail_item_rv.view.text_skyscraper_description
@@ -111,9 +109,9 @@ sealed class SkyscraperThumbnailViewHolder(
 ) : RecyclerView.ViewHolder(thumbnailView), KoinComponent {
 
     // clicklisteners on separate views to make sure there's no overlap
-    fun bind(skyscraper: Skyscraper, isDeletable: Boolean) {
-        load(skyscraper).into(thumbnailView.skyscraper_img)
-        thumbnailView.setTag(R.id.TAG_DETAIL, skyscraper)
+    fun bind(goal: Goal, isDeletable: Boolean) {
+        load().into(thumbnailView.skyscraper_img)
+        thumbnailView.setTag(R.id.TAG_GOAL, goal)
        /* thumbnailView.detail_img.setOnClickListener {
             existingDetailNavigationListener.openDetailScreenFor(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
         }
@@ -123,7 +121,7 @@ sealed class SkyscraperThumbnailViewHolder(
         thumbnailView.btn_delete_detailRv.setOnClickListener {
             existingDetailNavigationListener.deleteDetail(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
         }*/
-        thumbnailView.text_skyscraper_description.text = skyscraper.description
+        thumbnailView.text_skyscraper_description.text = goal.description
         setDeletable(isDeletable)
     }
 
@@ -138,14 +136,14 @@ sealed class SkyscraperThumbnailViewHolder(
         }
     }
 
-    abstract fun load(skyscraper: Skyscraper): RequestBuilder<Drawable>
+    abstract fun load(): RequestBuilder<Drawable>
 
     class SkyscraperThumbnailBlueViewHolder(
         imageView: LinearLayout,
         skyscraperHistoryNavigationListener: SkyscraperHistoryNavigationListener
     ) : SkyscraperThumbnailViewHolder(imageView, skyscraperHistoryNavigationListener) {
 
-        override fun load(skyscraper: Skyscraper): RequestBuilder<Drawable> {
+        override fun load(): RequestBuilder<Drawable> {
             return Glide.with(thumbnailView).load(R.drawable.skyscraper_panel_blue_rv)
         }
     }
@@ -154,7 +152,7 @@ sealed class SkyscraperThumbnailViewHolder(
         skyscraperHistoryNavigationListener: SkyscraperHistoryNavigationListener
     ) : SkyscraperThumbnailViewHolder(imageView, skyscraperHistoryNavigationListener) {
 
-        override fun load(skyscraper: Skyscraper): RequestBuilder<Drawable> {
+        override fun load(): RequestBuilder<Drawable> {
             return Glide.with(thumbnailView).load(R.drawable.skyscraper_panel_dark_green_rv)
         }
     }
@@ -164,7 +162,7 @@ sealed class SkyscraperThumbnailViewHolder(
         skyscraperHistoryNavigationListener: SkyscraperHistoryNavigationListener
     ) : SkyscraperThumbnailViewHolder(imageView, skyscraperHistoryNavigationListener) {
 
-        override fun load(skyscraper: Skyscraper): RequestBuilder<Drawable> {
+        override fun load(): RequestBuilder<Drawable> {
             return Glide.with(thumbnailView).load(R.drawable.skyscraper_panel_green_rv)
         }
     }
@@ -174,7 +172,7 @@ sealed class SkyscraperThumbnailViewHolder(
         skyscraperHistoryNavigationListener: SkyscraperHistoryNavigationListener
     ) : SkyscraperThumbnailViewHolder(imageView, skyscraperHistoryNavigationListener) {
 
-        override fun load(skyscraper: Skyscraper): RequestBuilder<Drawable> {
+        override fun load(): RequestBuilder<Drawable> {
             return Glide.with(thumbnailView).load(R.drawable.skyscraper_panel_blue)
         }
     }
@@ -184,7 +182,7 @@ sealed class SkyscraperThumbnailViewHolder(
         skyscraperHistoryNavigationListener: SkyscraperHistoryNavigationListener
     ) : SkyscraperThumbnailViewHolder(imageView, skyscraperHistoryNavigationListener) {
 
-        override fun load(skyscraper: Skyscraper): RequestBuilder<Drawable> {
+        override fun load(): RequestBuilder<Drawable> {
             return Glide.with(thumbnailView).load(R.drawable.skyscraper_panel_yellow_rv)
         }
     }
@@ -192,7 +190,7 @@ sealed class SkyscraperThumbnailViewHolder(
 
 
     interface SkyscraperHistoryNavigationListener {
-        fun openSkyscraperHistoryScreenFor(skyscraper: Skyscraper)
-        fun deleteSkyscraper(skyscraper: Skyscraper)
+        fun openSkyscraperHistoryScreenFor(goal: Goal)
+        fun deleteSkyscraper(goal: Goal)
     }
 }

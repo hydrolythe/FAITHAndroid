@@ -13,8 +13,10 @@ import be.hogent.faith.databinding.FragmentSkyscraperHistoryBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.skyscraper.SkyscraperActivity
-import be.hogent.faith.faith.skyscraper.startscreen.Skyscraper
+import be.hogent.faith.faith.skyscraper.goal.Action
+import be.hogent.faith.faith.skyscraper.startscreen.Goal
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors
+import be.hogent.faith.faith.skyscraper.startscreen.Subgoal
 import org.koin.android.ext.android.getKoin
 
 class SkyscraperHistoryFragment : Fragment() {
@@ -23,7 +25,8 @@ class SkyscraperHistoryFragment : Fragment() {
     private lateinit var binding: FragmentSkyscraperHistoryBinding
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private lateinit var adapter: HistoryAdapter
-    val list = arrayListOf<Skyscraper>()
+    private lateinit var overviewGoalDialog: OverviewGoalDialog
+    val list = arrayListOf<Goal>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,11 +54,11 @@ class SkyscraperHistoryFragment : Fragment() {
         binding.recyclerView.layoutManager = GridLayoutManager(activity, 5)
         binding.recyclerView.adapter = adapter
 
-        list.add(Skyscraper("Dit is een eerste actie",SkyscraperColors.SKYSCRAPER_BLUE))
-        list.add(Skyscraper("Dit is een tweede actie",SkyscraperColors.SKYSCRAPER_DARK_GREEN))
-        list.add(Skyscraper("Dit is een derde actie",SkyscraperColors.SKYSCRAPER_GREEN))
-        list.add(Skyscraper("Dit is een vierde actie",SkyscraperColors.SKYSCRAPER_YELLOW))
-        list.add(Skyscraper("Dit is een vierde actie",SkyscraperColors.SKYSCRAPER_YELLOW))
+        list.add(Goal("Dit is een eerste actie",SkyscraperColors.SKYSCRAPER_BLUE, arrayListOf()))
+        list.add(Goal("Dit is een tweede actie",SkyscraperColors.SKYSCRAPER_DARK_GREEN, arrayListOf()))
+        list.add(Goal("Dit is een derde actie",SkyscraperColors.SKYSCRAPER_GREEN, arrayListOf()))
+        list.add(Goal("Dit is een vierde actie",SkyscraperColors.SKYSCRAPER_YELLOW, arrayListOf()))
+        list.add(Goal("Dit is een vierde actie",SkyscraperColors.SKYSCRAPER_YELLOW, arrayListOf()))
 
         adapter.submitList(list)
 
@@ -65,7 +68,14 @@ class SkyscraperHistoryFragment : Fragment() {
     }
     private fun setOnclickListeners() {
         binding.btnSkyscraperReturn.setOnClickListener {
-            navigation?.goBack()
+            //navigation?.goBack()
+            val helpList = arrayListOf<Subgoal>()
+            val helpList2 = arrayListOf<Action>()
+            helpList2.add(Action("Dit is een actie"))
+            helpList2.add(Action("Dit is een andere actie"))
+            helpList.add(Subgoal("Dit is een subgoal",helpList2))
+            helpList.add(Subgoal("Dit is een andere subgoal",helpList2))
+            showOverviewDialog(Goal("test",SkyscraperColors.SKYSCRAPER_YELLOW, helpList))
         }
     }
     override fun onAttach(context: Context) {
@@ -73,6 +83,11 @@ class SkyscraperHistoryFragment : Fragment() {
         if (context is SkyscraperNavigationListener) {
             navigation = context
         }
+    }
+
+    private fun showOverviewDialog(goal: Goal) {
+        overviewGoalDialog = OverviewGoalDialog.newInstance(goal)
+        overviewGoalDialog.show(requireActivity().supportFragmentManager, null)
     }
 
     companion object {

@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import be.hogent.faith.faith.skyscraper.goal.Action
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_BLUE
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_DARK_GREEN
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_GREEN
@@ -22,7 +23,7 @@ enum class SkyscraperColors(val value: Int) {
 class SkyscraperAdapter(
     private val skyscraperNavigationListener: SkyscraperNavigationListener,
     private val skyscraperClickListener: SkyscraperClickListener
-) : ListAdapter<Skyscraper, SkyscraperViewHolder>(
+) : ListAdapter<Goal, SkyscraperViewHolder>(
     SkyscraperDiffCallback()
 ) {
 
@@ -51,17 +52,14 @@ class SkyscraperAdapter(
     }
 }
 
-data class Skyscraper(
-    var description: String,
-    var color : SkyscraperColors
-)
 
-class SkyscraperDiffCallback : DiffUtil.ItemCallback<Skyscraper>() {
-    override fun areItemsTheSame(oldItem: Skyscraper, newItem: Skyscraper): Boolean {
+
+class SkyscraperDiffCallback : DiffUtil.ItemCallback<Goal>() {
+    override fun areItemsTheSame(oldItem: Goal, newItem: Goal): Boolean {
         return oldItem.description == newItem.description
     }
 
-    override fun areContentsTheSame(oldItem: Skyscraper, newItem: Skyscraper): Boolean {
+    override fun areContentsTheSame(oldItem: Goal, newItem: Goal): Boolean {
         return oldItem == newItem
     }
 }
@@ -69,3 +67,14 @@ class SkyscraperDiffCallback : DiffUtil.ItemCallback<Skyscraper>() {
 interface SkyscraperClickListener {
     fun getSelectedSkyscraper(layout: ConstraintLayout, position: Int)
 }
+
+data class Goal(
+    var description: String,
+    var color : SkyscraperColors,
+    var subgoals: ArrayList<Subgoal>
+)
+
+data class Subgoal(
+    var description: String,
+    var actions: ArrayList<Action>
+)

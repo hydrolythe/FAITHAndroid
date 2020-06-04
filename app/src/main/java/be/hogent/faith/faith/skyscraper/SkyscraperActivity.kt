@@ -8,7 +8,7 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.skyscraper.goal.SkyscraperGoalFragment
 import be.hogent.faith.faith.skyscraper.history.SkyscraperHistoryFragment
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder
-import be.hogent.faith.faith.skyscraper.startscreen.Skyscraper
+import be.hogent.faith.faith.skyscraper.startscreen.Goal
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperStartScreenFragment
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperViewHolder
 import be.hogent.faith.faith.util.replaceFragment
@@ -37,7 +37,7 @@ class SkyscraperActivity : AppCompatActivity(), SkyscraperViewHolder.SkyscraperN
         }
     }
 
-    override fun openGoalScreenFor(skyscraper: Skyscraper) {
+    override fun openGoalScreenFor(goal: Goal) {
         replaceFragment(SkyscraperGoalFragment.newInstance(), R.id.fragment_container)
     }
 
@@ -45,7 +45,7 @@ class SkyscraperActivity : AppCompatActivity(), SkyscraperViewHolder.SkyscraperN
         replaceFragment(SkyscraperHistoryFragment.newInstance(), R.id.fragment_container)
     }
 
-    override fun deleteSkyscraper(skyscraper: Skyscraper) {
+    override fun deleteSkyscraper(goal: Goal) {
         TODO("Not yet implemented")
     }
 
@@ -57,7 +57,7 @@ class SkyscraperActivity : AppCompatActivity(), SkyscraperViewHolder.SkyscraperN
         finish()
     }
 
-    override fun openSkyscraperHistoryScreenFor(skyscraper: Skyscraper) {
+    override fun openSkyscraperHistoryScreenFor(goal: Goal) {
         TODO("Not yet implemented")
     }
 
