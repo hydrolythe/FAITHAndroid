@@ -6,6 +6,7 @@ import be.hogent.faith.R
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.skyscraper.goal.SkyscraperGoalFragment
+import be.hogent.faith.faith.skyscraper.history.OverviewGoalDialog
 import be.hogent.faith.faith.skyscraper.history.SkyscraperHistoryFragment
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder
 import be.hogent.faith.faith.skyscraper.startscreen.Goal
@@ -58,7 +59,8 @@ class SkyscraperActivity : AppCompatActivity(), SkyscraperViewHolder.SkyscraperN
     }
 
     override fun openSkyscraperHistoryScreenFor(goal: Goal) {
-        TODO("Not yet implemented")
+        val overviewGoalDialog = OverviewGoalDialog.newInstance(goal)
+        overviewGoalDialog.show(supportFragmentManager, null)
     }
 
 }

@@ -105,23 +105,17 @@ object SkyscraperThumbnailViewHolderFactory {
 
 sealed class SkyscraperThumbnailViewHolder(
     val thumbnailView: LinearLayout,
-    private val skyscraperHistoryNavigationListener: SkyscraperThumbnailViewHolder.SkyscraperHistoryNavigationListener
+    private val skyscraperHistoryNavigationListener: SkyscraperHistoryNavigationListener
 ) : RecyclerView.ViewHolder(thumbnailView), KoinComponent {
 
-    // clicklisteners on separate views to make sure there's no overlap
+
     fun bind(goal: Goal, isDeletable: Boolean) {
         load().into(thumbnailView.skyscraper_img)
         thumbnailView.setTag(R.id.TAG_GOAL, goal)
-       /* thumbnailView.detail_img.setOnClickListener {
-            existingDetailNavigationListener.openDetailScreenFor(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
-        }
-        thumbnailView.text_detail_title.setOnClickListener {
-            existingDetailNavigationListener.openDetailScreenFor(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
-        }
-        thumbnailView.btn_delete_detailRv.setOnClickListener {
-            existingDetailNavigationListener.deleteDetail(thumbnailView.getTag(R.id.TAG_DETAIL) as Detail)
-        }*/
         thumbnailView.text_skyscraper_description.text = goal.description
+        thumbnailView.setOnClickListener{
+            skyscraperHistoryNavigationListener.openSkyscraperHistoryScreenFor(goal)
+        }
         setDeletable(isDeletable)
     }
 

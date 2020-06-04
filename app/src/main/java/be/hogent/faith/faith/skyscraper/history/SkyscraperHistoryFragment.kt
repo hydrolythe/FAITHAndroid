@@ -54,11 +54,18 @@ class SkyscraperHistoryFragment : Fragment() {
         binding.recyclerView.layoutManager = GridLayoutManager(activity, 5)
         binding.recyclerView.adapter = adapter
 
-        list.add(Goal("Dit is een eerste actie",SkyscraperColors.SKYSCRAPER_BLUE, arrayListOf()))
-        list.add(Goal("Dit is een tweede actie",SkyscraperColors.SKYSCRAPER_DARK_GREEN, arrayListOf()))
-        list.add(Goal("Dit is een derde actie",SkyscraperColors.SKYSCRAPER_GREEN, arrayListOf()))
-        list.add(Goal("Dit is een vierde actie",SkyscraperColors.SKYSCRAPER_YELLOW, arrayListOf()))
-        list.add(Goal("Dit is een vierde actie",SkyscraperColors.SKYSCRAPER_YELLOW, arrayListOf()))
+        val helpList = arrayListOf<Subgoal>()
+            val helpList2 = arrayListOf<Action>()
+            helpList2.add(Action("Dit is een actie"))
+            helpList2.add(Action("Dit is een andere actie"))
+            helpList.add(Subgoal("Dit is een subgoal",helpList2))
+            helpList.add(Subgoal("Dit is een andere subgoal",helpList2))
+
+        list.add(Goal("Dit is een eerste actie",SkyscraperColors.SKYSCRAPER_BLUE, helpList))
+        list.add(Goal("Dit is een tweede actie",SkyscraperColors.SKYSCRAPER_DARK_GREEN, helpList))
+        list.add(Goal("Dit is een derde actie",SkyscraperColors.SKYSCRAPER_GREEN, helpList))
+        list.add(Goal("Dit is een vierde actie",SkyscraperColors.SKYSCRAPER_YELLOW, helpList))
+        list.add(Goal("Dit is een vierde actie",SkyscraperColors.SKYSCRAPER_YELLOW, helpList))
 
         adapter.submitList(list)
 
@@ -68,14 +75,7 @@ class SkyscraperHistoryFragment : Fragment() {
     }
     private fun setOnclickListeners() {
         binding.btnSkyscraperReturn.setOnClickListener {
-            //navigation?.goBack()
-            val helpList = arrayListOf<Subgoal>()
-            val helpList2 = arrayListOf<Action>()
-            helpList2.add(Action("Dit is een actie"))
-            helpList2.add(Action("Dit is een andere actie"))
-            helpList.add(Subgoal("Dit is een subgoal",helpList2))
-            helpList.add(Subgoal("Dit is een andere subgoal",helpList2))
-            showOverviewDialog(Goal("test",SkyscraperColors.SKYSCRAPER_YELLOW, helpList))
+            navigation?.goBack()
         }
     }
     override fun onAttach(context: Context) {
@@ -85,10 +85,10 @@ class SkyscraperHistoryFragment : Fragment() {
         }
     }
 
-    private fun showOverviewDialog(goal: Goal) {
+    /*private fun showOverviewDialog(goal: Goal) {
         overviewGoalDialog = OverviewGoalDialog.newInstance(goal)
         overviewGoalDialog.show(requireActivity().supportFragmentManager, null)
-    }
+    }*/
 
     companion object {
         fun newInstance(): SkyscraperHistoryFragment {

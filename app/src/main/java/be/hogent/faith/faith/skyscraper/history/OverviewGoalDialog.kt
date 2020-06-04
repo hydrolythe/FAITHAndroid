@@ -50,9 +50,9 @@ class OverviewGoalDialog(private var goal: Goal) : DialogFragment() {
         adapter = SubgoalAdapter(goal.subgoals)
         binding.rvSubgoals.layoutManager = LinearLayoutManager(requireContext())
         binding.rvSubgoals.adapter = adapter
-        /*binding.btnCancel.setOnClickListener {
+        binding.btnCloseOverview.setOnClickListener {
             dismiss()
-        }*/
+        }
     }
 
 }
