@@ -2,6 +2,7 @@ package be.hogent.faith.faith.loginOrRegister.registerAvatar
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import be.hogent.faith.service.usecases.user.InitialiseUserUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.called
 import io.mockk.every
@@ -18,14 +19,14 @@ class RegisterAvatarViewModelTest {
     private val listOfAvatars = listOf(Avatar(DataFactory.randomString()))
     private val selection = 0
     private val selectedSkinColor = SkinColor.dark_brown
-
+    private val initialiseUserUseCase = mockk<InitialiseUserUseCase>(relaxed = true)
     @get:Rule
     val testRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {
         every { avatarProvider.getAvatars(SkinColor.blank) } returns listOfAvatars
-        registerAvatarViewModel = RegisterAvatarViewModel(avatarProvider)
+        registerAvatarViewModel = RegisterAvatarViewModel(avatarProvider, initialiseUserUseCase)
     }
 
     @Test

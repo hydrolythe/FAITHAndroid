@@ -103,6 +103,7 @@ class RegisterAvatarViewModel(
 
     fun initialiseUser(user: User) {
         _userRegisteredState.postValue(Resource(ResourceState.LOADING, Unit, null))
+        user.avatarName = selectedAvatar!!.avatarName
         val params = InitialiseUserUseCase.Params(user)
         initialiseUserUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {

@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
 import kotlinx.android.synthetic.main.fragment_register_avatar.btn_register_skincolor_blank
 import kotlinx.android.synthetic.main.fragment_register_avatar.btn_register_skincolor_darkbrown
 import kotlinx.android.synthetic.main.fragment_register_avatar.btn_register_skincolor_lightbrown
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 
 /**
  * A [Fragment] subclass which allows the user to register a new Avatar.
@@ -41,7 +41,7 @@ class RegisterAvatarFragment : Fragment(), OnAvatarClickListener {
     /**
      * ViewModel used for the avatars.
      */
-    private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel()
+    private val registerAvatarViewModel: RegisterAvatarViewModel by sharedViewModel()
     private lateinit var adapter: AvatarItemAdapter
 
     override fun onCreateView(

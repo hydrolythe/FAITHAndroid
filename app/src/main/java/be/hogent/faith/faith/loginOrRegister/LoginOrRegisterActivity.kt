@@ -27,8 +27,7 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     RegisterAvatarFragment.AvatarFragmentNavigationListener {
 
     private lateinit var userViewModel: UserViewModel
-    private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel<RegisterAvatarViewModel>()
-    private val welcomeViewModel: WelcomeViewModel by viewModel<WelcomeViewModel>()
+    private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
