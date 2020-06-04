@@ -3,7 +3,7 @@ package be.hogent.faith.domain.models
 import be.hogent.faith.domain.models.goals.Goal
 import java.util.UUID
 
-private const val MAX_AMOUNT_OF_ACTIVE_GOALS = 5
+const val MAX_AMOUNT_OF_ACTIVE_GOALS = 5
 
 // TODO change to value of the colors
 object SkyscraperColors {
@@ -32,7 +32,7 @@ data class User(
     val goals: List<Goal>
         get() = _goals.values.toList()
 
-    private var _colors = Array(MAX_AMOUNT_OF_ACTIVE_GOALS) { SkyscraperColors.color1; SkyscraperColors.color2; SkyscraperColors.color3; SkyscraperColors.color4; SkyscraperColors.color5 }
+    private var _colors = intArrayOf(SkyscraperColors.color1, SkyscraperColors.color2, SkyscraperColors.color3, SkyscraperColors.color4, SkyscraperColors.color5)
 
     private var _activeGoals = arrayOfNulls<Goal>(MAX_AMOUNT_OF_ACTIVE_GOALS)
     val activeGoals: List<Goal?>
