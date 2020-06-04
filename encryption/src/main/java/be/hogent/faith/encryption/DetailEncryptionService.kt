@@ -134,7 +134,8 @@ class DetailEncryptionService(
                     file = encryptedDetail.file,
                     title = dataEncrypter.decrypt(encryptedDetail.title),
                     uuid = encryptedDetail.uuid,
-                    dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime))
+                    dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime)),
+                    thumbnail = encryptedDetail.thumbnail?.let { dataEncrypter.decrypt(it) }
                 )
             }
         )

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.details.DetailViewModel
+import be.hogent.faith.faith.details.audio.audioPlayer.PlaybackInfoListener
 import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.RecordingState
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
@@ -32,6 +33,7 @@ class AudioDetailViewModel(
 
     private val _getDetailMetaData = SingleLiveEvent<Unit>()
     override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
+
     /**
      *
      * True when pausing an audio recording is supported.
@@ -201,7 +203,7 @@ class AudioDetailViewModel(
             loadDetailFile.execute(params, LoadFileUseCaseHandler())
         } else
         */
-            _file.value = existingDetail.file
+        _file.value = existingDetail.file
     }
 
     fun onRecordingStateChanged(state: RecordingState) {
@@ -248,5 +250,9 @@ class AudioDetailViewModel(
             it.dateTime = dateTime
         }
         _savedDetail.value = existingDetail
+    }
+
+    fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {
+        Timber.i("Now in state $state")
     }
 }

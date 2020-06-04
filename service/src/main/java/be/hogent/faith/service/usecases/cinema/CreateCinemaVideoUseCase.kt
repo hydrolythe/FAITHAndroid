@@ -52,9 +52,15 @@ class CreateCinemaVideoUseCase(
                         params.resolution,
                         encoderListener
                     )
-                    val resultingFilmDetail = FilmDetail(resultingFile).apply {
-                        thumbnail = ThumbnailUtils.createVideoThumbnail(file.path, MediaStore.Images.Thumbnails.MINI_KIND).base64encodeImage()
-                    }
+                    val resultingFilmDetail = FilmDetail(
+                        file = resultingFile,
+                        thumbnail = ThumbnailUtils
+                            .createVideoThumbnail(
+                                resultingFile.path,
+                                MediaStore.Images.Thumbnails.MINI_KIND
+                            )
+                            .base64encodeImage()
+                    )
                     emitter.onNext(Status.Completed(resultingFilmDetail))
                     emitter.onComplete()
                 }
