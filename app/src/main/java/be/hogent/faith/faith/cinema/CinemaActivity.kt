@@ -109,7 +109,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
         saveToTimeLine(detail)
     }
 
-    fun saveToTimeLine(detail: Detail) {
+    private fun saveToTimeLine(detail: Detail) {
         cinemaOverviewViewModel.saveCurrentDetail(userViewModel.user.value!!, detail)
     }
 

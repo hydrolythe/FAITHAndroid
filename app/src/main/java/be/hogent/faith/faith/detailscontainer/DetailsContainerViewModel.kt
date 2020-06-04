@@ -292,7 +292,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_audio_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -307,7 +307,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_photo_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -322,7 +322,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_drawing_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -337,7 +337,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_video_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -352,7 +352,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_video_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -393,10 +393,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         return Instant.ofEpochMilli(milliseconds) // Convert count-of-milliseconds-since-epoch into a date-time in UTC (`Instant`).
             .atZone(ZoneId.of("Europe/Brussels")) // Adjust into the wall-clock time used by the people of a particular region (a time zone). Produces a `ZonedDateTime` object.
             .toLocalDate()
-    }
-
-    private fun setDetails() {
-        audioFilterEnabled.postValue(false)
     }
 
     fun clearErrorMessage() {

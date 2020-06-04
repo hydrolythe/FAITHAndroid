@@ -161,10 +161,6 @@ class CinemaStartScreenFragment : Fragment() {
 
         cinemaOverviewViewModel.dateRangeString.observe(
             this, Observer { range -> btn_cinema_chooseDate.text = range })
-
-        cinemaOverviewViewModel.filteredDetails.observe(this, Observer { list ->
-            detailThumbnailsAdapter!!.submitList(list)
-        })
     }
 
     private fun showDateRangePicker() {

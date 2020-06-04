@@ -55,15 +55,12 @@ class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
                         Timber.e("Error while storing detail data $params.detail.uuid} in ${params.detailsContainer.javaClass}: ${it.localizedMessage}")
                         it.printStackTrace()
                     }
-            }.andThen(
-                Completable.defer { Completable.fromAction { addDetailToContainer(params) } }
-                    .doOnComplete { Timber.i("Detail ${params.detail.uuid} added to ${params.detailsContainer.javaClass.simpleName}") }
-            )
+            }
+        // We don't have to add the detail to the container ourselves because we updated in the
+        // database and updates to the container are automatically send to whoever is listening to
+        // the GetDetailsContainerDataUseCase.
     }
 
-    private fun addDetailToContainer(params: Params) {
-        with(params) { detailsContainer.addDetail(detail) }
-    }
 
     data class Params(val user: User, val detailsContainer: DetailsContainer, val detail: Detail)
 }
