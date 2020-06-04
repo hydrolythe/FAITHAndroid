@@ -232,8 +232,6 @@ class AudioDetailViewModel(
         _recordingTime.postValue(duration)
     }
 
-    fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {}
-
     private inner class LoadFileUseCaseHandler : DisposableSingleObserver<File>() {
         override fun onSuccess(loadedFile: File) {
             _file.value = loadedFile

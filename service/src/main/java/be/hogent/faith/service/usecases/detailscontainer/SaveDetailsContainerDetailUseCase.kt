@@ -61,6 +61,5 @@ class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
         // the GetDetailsContainerDataUseCase.
     }
 
-
     data class Params(val user: User, val detailsContainer: DetailsContainer, val detail: Detail)
 }

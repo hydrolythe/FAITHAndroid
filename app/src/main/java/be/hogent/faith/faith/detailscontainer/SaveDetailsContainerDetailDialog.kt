@@ -51,7 +51,7 @@ abstract class SaveDetailsContainerDetailDialog(
         detailsMetadataViewModel.detailDateButtonClicked.observe(this, Observer {
             val now = detailsMetadataViewModel.detailDate.value!!
             val dateSetListener =
-                OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                     detailsMetadataViewModel.detailDate.postValue(
                         LocalDate.of(year, monthOfYear, dayOfMonth)
                     )
