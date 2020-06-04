@@ -113,8 +113,8 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
         cinemaOverviewViewModel.saveCurrentDetail(userViewModel.user.value!!, detail)
     }
 
-    override fun onFilmFinished(filmDetail: FilmDetail) {
-        cinemaOverviewViewModel.saveFilm(filmDetail, userViewModel.user.value!!)
+    override fun onFilmFinished(detail: FilmDetail) {
+        cinemaOverviewViewModel.saveFilm(detail, userViewModel.user.value!!)
     }
 
     override fun goBack() {

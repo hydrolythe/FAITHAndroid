@@ -30,14 +30,11 @@ val encryptionModule = module {
     single { FileEncryptionService() }
     single { DetailEncryptionService(get(), get()) }
     factory<IEventEncryptionService> { EventEncryptionService(get(), get(), get(), get(), get()) }
-    factory<IDetailContainerEncryptionService<Backpack>> {
-        DetailContainerEncryptionService<Backpack>(get(), get(), get())
-    }
     factory<IDetailContainerEncryptionService<Backpack>>(named(BackpackNames.encryptionService)) {
-        DetailContainerEncryptionService<Backpack>(get(), get(), get())
+        DetailContainerEncryptionService<Backpack>(get(), get(), get(), get())
     }
     factory<IDetailContainerEncryptionService<Cinema>>(named(CinemaNames.encryptionService)) {
-        DetailContainerEncryptionService<Cinema>(get(), get(), get())
+        DetailContainerEncryptionService<Cinema>(get(), get(), get(), get())
     }
 }
 
