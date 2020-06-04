@@ -1,23 +1,21 @@
 package be.hogent.faith.util.factory
 
 import be.hogent.faith.domain.models.goals.Goal
-import be.hogent.faith.domain.models.goals.SkyscraperType
 
 object GoalFactory {
-    fun makeGoal(skyscraperType: SkyscraperType, numberOfSubGoals: Int = 5): Goal {
-        val goal = Goal(
-            skyscraperType = skyscraperType
-        )
+    fun makeGoal(numberOfSubGoals: Int = 5): Goal {
+        val goal = Goal(color = 1)
         goal.description = DataFactory.randomString(10)
         return goal
     }
 
     fun makeGoalsList(count: Int = 5): List<Goal> {
-        val types = SkyscraperType.values()
         val goals = mutableListOf<Goal>()
-        repeat(count) {
-            makeGoal(types.get(it))
-        }
+        do{
+            var counter = count
+            goals.add(count, makeGoal())
+            counter--
+        }while (counter >= 0)
         return goals
     }
 }
