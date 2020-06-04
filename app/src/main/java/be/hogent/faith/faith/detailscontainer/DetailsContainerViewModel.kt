@@ -80,39 +80,39 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     val filteredDetails: LiveData<List<Detail>> = MediatorLiveData<List<Detail>>().apply {
         addSource(searchString) { query ->
             detailFilter.titleFilter.searchString = query
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(startDate) { startDate ->
             detailFilter.dateFilter.startDate = startDate
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(endDate) { endDate ->
             detailFilter.dateFilter.endDate = endDate
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(drawingFilterEnabled) { enabled ->
             detailFilter.hasDrawingDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(textFilterEnabled) { enabled ->
             detailFilter.hasTextDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(photoFilterEnabled) { enabled ->
             detailFilter.hasPhotoDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(audioFilterEnabled) { enabled ->
             detailFilter.hasAudioDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(externalVideoFilterEnabled) { enabled ->
             detailFilter.hasVideoDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(videoFilterEnabled) { enabled ->
             detailFilter.hasYoutubeDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
     }
 
