@@ -3,6 +3,7 @@ package be.hogent.faith.service.usecases
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.service.encryption.ContainerType
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import be.hogent.faith.service.repositories.IAuthManager
 import be.hogent.faith.service.repositories.IDetailContainerRepository
@@ -38,9 +39,13 @@ class CreateUserUseCaseTest {
     @Before
     fun setUp() {
         every { backpackRepository.saveEncryptedContainer(any()) } returns Completable.complete()
-        every { backpackEncryptionService.createContainer() } returns Single.just(mockk())
+        every { backpackEncryptionService.createContainer(ContainerType.BACKPACK) } returns Single.just(
+            mockk()
+        )
         every { cinemaRepository.saveEncryptedContainer(any()) } returns Completable.complete()
-        every { cinemaEncryptionService.createContainer() } returns Single.just(mockk())
+        every { cinemaEncryptionService.createContainer(ContainerType.CINEMA) } returns Single.just(
+            mockk()
+        )
         scheduler = mockk()
         createUserUseCase =
             CreateUserUseCase(
