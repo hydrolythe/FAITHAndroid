@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.details.DetailViewModel
-import be.hogent.faith.faith.details.audio.audioPlayer.PlaybackInfoListener
 import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.RecordingState
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
