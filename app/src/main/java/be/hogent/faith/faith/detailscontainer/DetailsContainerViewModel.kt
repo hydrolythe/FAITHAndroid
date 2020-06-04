@@ -268,6 +268,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_load_detail_failed)
+                Timber.e(e)
             }
         })
     }
