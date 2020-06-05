@@ -79,7 +79,8 @@ class CinemaOverviewViewModelTest {
             deleteDetailsContainerDetailUseCase,
             loadDetailFileUseCase,
             cinema,
-            getCinemaDataUseCase
+            getCinemaDataUseCase,
+            mockk()
         )
         viewModel.onFilesButtonClicked()
         viewModel.filteredDetails.observeForever(detailsObserver)

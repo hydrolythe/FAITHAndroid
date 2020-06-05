@@ -25,5 +25,5 @@ interface IDetailContainerEncryptionService<T> {
 
     fun decryptFile(detail: Detail, container: EncryptedDetailsContainer): Completable
 
-    fun createContainer(): Single<EncryptedDetailsContainer>
+    fun createContainer(type: ContainerType): Single<EncryptedDetailsContainer>
 }

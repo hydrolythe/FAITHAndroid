@@ -243,5 +243,20 @@
         <item name="cardBackgroundColor">@color/colorTransparent</item>
     </style>
 
+    <style name="cinema_insets_vertical">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginEnd">32dp</item>
+        <item name="android:background">@drawable/cinema_video_border</item>
+    </style>
+
+    <style name="cinema_insets_horizontal">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:background">@drawable/img_filmstrip_side</item>
+        <item name="android:backgroundTint">#E7FFF8</item>
+    </style>
+
 
 </resources>

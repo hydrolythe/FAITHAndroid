@@ -26,8 +26,8 @@ class LoadDetailFileUseCase<Container : DetailsContainer>(
                 .doOnError { Timber.e("Could not download file") }
                 .andThen(containerRepository.getEncryptedContainer())
                 .doOnError { Timber.e("Could not get container") }
-                .flatMapCompletable { container ->
-                    detailContainerEncryptionService.decryptFile(params.detail, container)
+                .flatMapCompletable { encryptedContainer ->
+                    detailContainerEncryptionService.decryptFile(params.detail, encryptedContainer)
                         .subscribeOn(subscriber)
                         .doOnError { Timber.e("Could not decrypt file") }
                 }

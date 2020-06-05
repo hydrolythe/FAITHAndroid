@@ -51,7 +51,7 @@
                 android:id="@+id/img_snippet_thumbnail"
                 android:layout_width="250dp"
                 android:layout_height="190dp"
-                android:background="@drawable/rv_background_youtubeview"
+                android:background="@drawable/img_filmstrip_side"
                 android:contentDescription="@string/youtube_snippet_thumbnail"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/icoon_tekst_bestand" />

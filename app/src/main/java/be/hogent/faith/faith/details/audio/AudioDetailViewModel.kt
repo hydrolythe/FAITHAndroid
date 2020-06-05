@@ -33,6 +33,7 @@ class AudioDetailViewModel(
 
     private val _getDetailMetaData = SingleLiveEvent<Unit>()
     override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
+
     /**
      *
      * True when pausing an audio recording is supported.
@@ -202,7 +203,7 @@ class AudioDetailViewModel(
             loadDetailFile.execute(params, LoadFileUseCaseHandler())
         } else
         */
-            _file.value = existingDetail.file
+        _file.value = existingDetail.file
     }
 
     fun onRecordingStateChanged(state: RecordingState) {
@@ -232,8 +233,6 @@ class AudioDetailViewModel(
         _recordingTime.postValue(duration)
     }
 
-    fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {}
-
     private inner class LoadFileUseCaseHandler : DisposableSingleObserver<File>() {
         override fun onSuccess(loadedFile: File) {
             _file.value = loadedFile
@@ -251,5 +250,9 @@ class AudioDetailViewModel(
             it.dateTime = dateTime
         }
         _savedDetail.value = existingDetail
+    }
+
+    fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {
+        Timber.i("Now in state $state")
     }
 }
