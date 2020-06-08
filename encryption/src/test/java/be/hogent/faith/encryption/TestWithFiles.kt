@@ -6,6 +6,10 @@ import java.io.File
 open class TestWithFiles {
     @After
     fun cleanUpEncryptionFiles() {
+        val tempFiles =
+            File("temp").listFiles()
+        tempFiles?.forEach { it.deleteRecursively() }
+
         val testResourceFiles =
             File("src/test/java/be/hogent/faith/encryption/testResources").listFiles { _, fileName ->
                 fileName.contains("encrypted") || fileName.contains("decrypted")
