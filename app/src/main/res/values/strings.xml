@@ -256,7 +256,7 @@
     <string name="je_audio_opslaan">Je geluidsfragment opslaan</string>
     <string name="je_extern_bestand_opslaan">Je extern bestand opslaan</string>
     <string name="save_video_title">Titel</string>
-    <string name="error_load_detail_failed">Laden detail faalt</string>
+    <string name="error_load_detail_failed">Er ging iets fout bij het laden van je detail.</string>
     <string name="error_load_backpack">Er ging iets fout bij het laden van je rugzak.</string>
     <string name="error_load_cinema">Er ging iets fout bij het laden van je cinema.</string>
     <string name="selected_detail_error">Dit bestand kan niet meer toegevoegd worden. Je filmpje duurt te lang</string>
