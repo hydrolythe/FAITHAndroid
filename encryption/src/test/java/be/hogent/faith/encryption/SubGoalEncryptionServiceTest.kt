@@ -30,7 +30,7 @@ class SubGoalEncryptionServiceTest {
             .assertValue { decryptedSubGoal ->
                 subgoal.description == decryptedSubGoal.first.description &&
                 subgoal.actions.count() == decryptedSubGoal.first.actions.count()
-                1==decryptedSubGoal.second
+                1 == decryptedSubGoal.second
             }
             .dispose()
     }

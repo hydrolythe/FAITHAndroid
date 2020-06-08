@@ -23,13 +23,6 @@ open class SaveGoalUseCase(
             .doOnSuccess { Timber.i("encrypted goal ${params.goal.uuid}") }
             .flatMapCompletable(goalRepository::insert)
             .doOnComplete { Timber.i("stored data for goal ${params.goal.uuid}") }
-            .andThen(Completable.fromAction {
-                with(params) {
-                    // TODO
-                     // params.user.addGoal(goal)
-                    Timber.i("added goal to user")
-                }
-            })
     }
 
     data class Params(

@@ -55,8 +55,8 @@ class GoalEncryptionService(
                         uuid = goal.uuid,
                         isCompleted = goal.isCompleted,
                         currentPositionAvatar = goal.currentPositionAvatar,
-                        goalColor = encrypt(goal.goalColor.name),
-                        reachGoalWay = encrypt(goal.chosenReachGoalWay.name),
+                        goalColor = goal.goalColor.name,
+                        reachGoalWay = goal.chosenReachGoalWay.name,
                         encryptedDEK = dek
                     )
                 })
@@ -69,11 +69,7 @@ class GoalEncryptionService(
     ): Single<List<EncryptedSubGoal>> {
         return Observable.fromIterable(goal.subGoals.entries)
         .flatMapSingle { subgoalEncryptionService.encrypt(it.component1(), it.component2(), dek) }
-            .toList() // todo remove null
-        /*
-        return Observable.fromArray(goal.subGoals)
-            .flatMapSingle { subgoalEncryptionService.encrypt(it, dek) }.toList().map{it.toTypedArray()}
-         */
+            .toList()
     }
 
     override fun decryptData(encryptedGoal: EncryptedGoal): Single<Goal> {

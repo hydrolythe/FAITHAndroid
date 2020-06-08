@@ -16,7 +16,7 @@ class SubGoalEncryptionService(private val actionEncryptionService: ActionEncryp
     /**
      * Returns an encrypted version of the [SubGoal], both its data and its actions.
      */
-     fun encrypt(index: Int, subgoal: SubGoal, dek: KeysetHandle): Single<EncryptedSubGoal> {
+    fun encrypt(index: Int, subgoal: SubGoal, dek: KeysetHandle): Single<EncryptedSubGoal> {
 
         val encryptedActions = encryptActions(subgoal, dek)
         return Singles.zip(
@@ -33,7 +33,11 @@ class SubGoalEncryptionService(private val actionEncryptionService: ActionEncryp
      * Does not set the [EncryptedSubGoal.actions] to an en encrypted version of the actions!
      * This should be done afterwards, once the actions have been encrypted.
      */
-    private fun encryptData(index: Int, subgoal: SubGoal, dek: KeysetHandle): Single<EncryptedSubGoal> {
+    private fun encryptData(
+        index: Int,
+        subgoal: SubGoal,
+        dek: KeysetHandle
+    ): Single<EncryptedSubGoal> {
         val dataEncrypter = DataEncrypter(dek)
         return Single.just(
             EncryptedSubGoal(
@@ -72,6 +76,7 @@ class SubGoalEncryptionService(private val actionEncryptionService: ActionEncryp
             subgoal
         }
     }
+
     /**
      * Decrypts the data of the [encryptedSubGoal], resulting in a regular [SubGoal].
      * The actions of the [encryptedSubGoal] will **not** be decrypted, they wil be decrypted afterwards
@@ -81,8 +86,11 @@ class SubGoalEncryptionService(private val actionEncryptionService: ActionEncryp
         dek: KeysetHandle
     ): Single<Pair<SubGoal, Int>> {
         val dataEncrypter = DataEncrypter(dek)
-        return Single.just(Pair(
-            SubGoal(description = dataEncrypter.decrypt(encryptedSubGoal.description)), encryptedSubGoal.sequenceNumber)
+        return Single.just(
+            Pair(
+                SubGoal(description = dataEncrypter.decrypt(encryptedSubGoal.description)),
+                encryptedSubGoal.sequenceNumber
+            )
         )
             .doOnSuccess { Timber.i("Decrypted subgoal data for subgoal ${encryptedSubGoal.description}") }
     }

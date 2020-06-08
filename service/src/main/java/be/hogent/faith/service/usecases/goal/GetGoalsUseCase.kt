@@ -38,7 +38,9 @@ class GetGoalsUseCase(
                             }
                     }
                     .toList()
-                    .doOnSuccess { Timber.i("Decrypted goals for user ${params.user.username}") }
+                    .doOnSuccess {
+                        params.user.setGoals(it)
+                        Timber.i("Decrypted goals for user ${params.user.username}") }
             }
     }
 

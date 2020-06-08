@@ -13,6 +13,4 @@ object SubGoalFactory {
         }
         return subgoal
     }
-
-
 }

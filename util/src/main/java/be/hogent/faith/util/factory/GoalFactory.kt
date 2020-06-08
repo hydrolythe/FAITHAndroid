@@ -4,11 +4,13 @@ import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.domain.models.goals.GoalColor
 
 object GoalFactory {
-    fun makeGoal(numberOfSubGoals: Int = 5,
-                 numberOfActionsPerSubgoal: Int = 3): Goal {
+    fun makeGoal(
+        numberOfSubGoals: Int = 5,
+        numberOfActionsPerSubgoal: Int = 3
+    ): Goal {
         val goal = Goal(
-            GoalColor.GREEN).also{
-            it.description = DataFactory.randomString()}
+            GoalColor.GREEN).also {
+            it.description = DataFactory.randomString() }
         repeat(numberOfSubGoals) {
             goal.addSubGoal(
                 SubGoalFactory.makeSubGoal(numberOfActionsPerSubgoal),

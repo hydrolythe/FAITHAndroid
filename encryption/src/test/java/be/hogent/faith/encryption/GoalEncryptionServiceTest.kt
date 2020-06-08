@@ -50,7 +50,7 @@ class GoalEncryptionServiceTest {
         assertEquals(decryptedGoal!!.uuid, goal.uuid)
         assertEquals(decryptedGoal!!.isCompleted, goal.isCompleted)
         assertEquals(decryptedGoal!!.currentPositionAvatar, goal.currentPositionAvatar)
-        assertEquals(decryptedGoal!!.color, goal.color)
+        assertEquals(decryptedGoal!!.goalColor, goal.goalColor)
         assertEquals(decryptedGoal!!.chosenReachGoalWay, goal.chosenReachGoalWay)
         assertEquals(decryptedGoal!!.subGoals.count(), goal.subGoals.count())
     }

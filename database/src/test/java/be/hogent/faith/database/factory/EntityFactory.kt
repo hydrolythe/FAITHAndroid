@@ -8,6 +8,8 @@ import be.hogent.faith.database.goal.EncryptedActionEntity
 import be.hogent.faith.database.goal.EncryptedGoalEntity
 import be.hogent.faith.database.goal.EncryptedSubGoalEntity
 import be.hogent.faith.database.user.UserEntity
+import be.hogent.faith.domain.models.goals.GoalColor
+import be.hogent.faith.domain.models.goals.ReachGoalWay
 import be.hogent.faith.util.factory.DataFactory
 import java.util.UUID
 
@@ -94,7 +96,8 @@ object EntityFactory {
             uuid = uuid.toString(),
             isCompleted = DataFactory.randomBoolean(),
             currentPositionAvatar = DataFactory.randomInt(1, 10),
-            color = DataFactory.randomString(),
+            color = GoalColor.GREEN.name,
+            reachGoalWay = ReachGoalWay.Elevator.name,
             subgoals = makeSubGoalEntityList(10),
             encryptedDEK = "DEK"
         )
