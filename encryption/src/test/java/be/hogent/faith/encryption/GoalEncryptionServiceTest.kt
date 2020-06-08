@@ -1,7 +1,6 @@
 package be.hogent.faith.encryption
 
 import be.hogent.faith.domain.models.goals.Goal
-import be.hogent.faith.encryption.di.encryptionModule
 import be.hogent.faith.encryption.encryptionService.DummyKeyEncryptionService
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
@@ -11,42 +10,20 @@ import io.reactivex.schedulers.Schedulers
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Rule
 import org.junit.Test
-import org.koin.test.KoinTest
-import org.koin.test.KoinTestRule
 
-class GoalEncryptionServiceTest : KoinTest {
+class GoalEncryptionServiceTest {
     private val keyGenerator = KeyGenerator()
     private val keyEncrypter = KeyEncrypter(DummyKeyEncryptionService())
 
     private val goalEncrypter = GoalEncryptionService(
         keyGenerator,
-        keyEncrypter
+        keyEncrypter,
+        SubGoalEncryptionService(ActionEncryptionService())
     )
 
     private val goal =
         GoalFactory.makeGoal()
-
-    @get:Rule
-    val koinTestRule = KoinTestRule.create {
-        modules(encryptionModule)
-    }
-
-    @Test
-    fun `After encrypting a goal none of the sensitive data is in a human readable format`() {
-        // Act
-        goalEncrypter.encrypt(goal)
-            .test()
-            .assertNoErrors()
-            .assertComplete()
-            .assertValue { encryptedGoal ->
-                encryptedGoal.dateTime != goal.dateTime.toString() &&
-                        encryptedGoal.description != goal.description &&
-                        encryptedGoal.uuid == goal.uuid
-            }
-            .dispose()
-    }
 
     @Test()
     fun `After decrypting an encrypted goal all its data is back to the original values`() {
@@ -72,6 +49,10 @@ class GoalEncryptionServiceTest : KoinTest {
         assertEquals(decryptedGoal!!.description, goal.description)
         assertEquals(decryptedGoal!!.uuid, goal.uuid)
         assertEquals(decryptedGoal!!.isCompleted, goal.isCompleted)
+        assertEquals(decryptedGoal!!.currentPositionAvatar, goal.currentPositionAvatar)
+        assertEquals(decryptedGoal!!.color, goal.color)
+        assertEquals(decryptedGoal!!.chosenReachGoalWay, goal.chosenReachGoalWay)
+        assertEquals(decryptedGoal!!.subGoals.count(), goal.subGoals.count())
     }
 
     @Test

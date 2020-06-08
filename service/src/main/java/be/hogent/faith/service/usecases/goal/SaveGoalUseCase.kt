@@ -26,7 +26,7 @@ open class SaveGoalUseCase(
             .andThen(Completable.fromAction {
                 with(params) {
                     // TODO
-                    // user.addGoal(goal)
+                     // params.user.addGoal(goal)
                     Timber.i("added goal to user")
                 }
             })

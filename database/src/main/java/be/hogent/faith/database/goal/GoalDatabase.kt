@@ -1,6 +1,5 @@
 package be.hogent.faith.database.goal
 
-import be.hogent.faith.database.common.EVENTS_KEY
 import be.hogent.faith.database.common.GOALS_KEY
 import be.hogent.faith.database.common.USERS_KEY
 import com.google.firebase.auth.FirebaseAuth
@@ -46,7 +45,7 @@ class GoalDatabase(
             firestore
                 .collection(USERS_KEY)
                 .document(currentUser.uid)
-                .collection(EVENTS_KEY)
+                .collection(GOALS_KEY)
         )
             .map {
                 it.map { document -> document.toObject(EncryptedGoalEntity::class.java) }

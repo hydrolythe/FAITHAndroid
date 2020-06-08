@@ -6,6 +6,9 @@ import be.hogent.faith.encryption.DetailContainerEncryptionService
 import be.hogent.faith.encryption.DetailEncryptionService
 import be.hogent.faith.encryption.EventEncryptionService
 import be.hogent.faith.encryption.FileEncryptionService
+import be.hogent.faith.encryption.GoalEncryptionService
+import be.hogent.faith.encryption.SubGoalEncryptionService
+import be.hogent.faith.encryption.ActionEncryptionService
 import be.hogent.faith.encryption.internal.ENDPOINT
 import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyEncryptionService
@@ -14,6 +17,7 @@ import be.hogent.faith.service.di.BackpackNames
 import be.hogent.faith.service.di.CinemaNames
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import be.hogent.faith.service.encryption.IEventEncryptionService
+import be.hogent.faith.service.encryption.IGoalEncryptionService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import org.koin.core.qualifier.named
@@ -30,6 +34,9 @@ val encryptionModule = module {
     single { FileEncryptionService() }
     single { DetailEncryptionService(get(), get()) }
     factory<IEventEncryptionService> { EventEncryptionService(get(), get(), get(), get(), get()) }
+    factory<IGoalEncryptionService> { GoalEncryptionService(get(), get(), get()) }
+    single { SubGoalEncryptionService(get()) }
+    single { ActionEncryptionService() }
     factory<IDetailContainerEncryptionService<Backpack>> {
         DetailContainerEncryptionService<Backpack>(get(), get(), get())
     }

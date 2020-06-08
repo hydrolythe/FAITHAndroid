@@ -21,6 +21,10 @@ import be.hogent.faith.service.usecases.event.MakeEventFilesAvailableUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
+import be.hogent.faith.service.usecases.goal.DeleteGoalUseCase
+import be.hogent.faith.service.usecases.goal.GetGoalsUseCase
+import be.hogent.faith.service.usecases.goal.SaveGoalUseCase
+import be.hogent.faith.service.usecases.goal.UpdateGoalUseCase
 import be.hogent.faith.service.usecases.user.CreateUserUseCase
 import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.service.usecases.user.IsUsernameUniqueUseCase
@@ -166,4 +170,8 @@ val serviceModule = module {
             observer = get()
         )
     }
+    factory { DeleteGoalUseCase(get(), get()) }
+    factory { SaveGoalUseCase(get(), get(), get()) }
+    factory { UpdateGoalUseCase(get(), get(), get()) }
+    factory { GetGoalsUseCase(get(), get(), get()) }
 }

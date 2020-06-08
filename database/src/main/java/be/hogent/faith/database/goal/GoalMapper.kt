@@ -13,6 +13,12 @@ internal object GoalMapper :
             description = entity.description,
             uuid = UUID.fromString(entity.uuid),
             isCompleted = entity.isCompleted,
+            currentPositionAvatar = entity.currentPositionAvatar,
+            color = entity.color,
+            reachGoalWay = entity.reachGoalWay,
+            subgoals = SubGoalMapper.mapFromEntities(
+                entity.subgoals
+            ),
             encryptedDEK = entity.encryptedDEK
         )
     }
@@ -23,6 +29,12 @@ internal object GoalMapper :
             description = model.description,
             uuid = model.uuid.toString(),
             isCompleted = model.isCompleted,
+            currentPositionAvatar = model.currentPositionAvatar,
+            color = model.color,
+            reachGoalWay = model.reachGoalWay,
+            subgoals = SubGoalMapper.mapToEntities(
+                model.subgoals.toList()
+            ),
             encryptedDEK = model.encryptedDEK
         )
     }
