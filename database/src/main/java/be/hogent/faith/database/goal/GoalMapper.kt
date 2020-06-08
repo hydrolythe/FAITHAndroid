@@ -14,7 +14,7 @@ internal object GoalMapper :
             uuid = UUID.fromString(entity.uuid),
             isCompleted = entity.isCompleted,
             currentPositionAvatar = entity.currentPositionAvatar,
-            color = entity.color,
+            goalColor = entity.color,
             reachGoalWay = entity.reachGoalWay,
             subgoals = SubGoalMapper.mapFromEntities(
                 entity.subgoals
@@ -30,7 +30,7 @@ internal object GoalMapper :
             uuid = model.uuid.toString(),
             isCompleted = model.isCompleted,
             currentPositionAvatar = model.currentPositionAvatar,
-            color = model.color,
+            color = model.goalColor,
             reachGoalWay = model.reachGoalWay,
             subgoals = SubGoalMapper.mapToEntities(
                 model.subgoals.toList()

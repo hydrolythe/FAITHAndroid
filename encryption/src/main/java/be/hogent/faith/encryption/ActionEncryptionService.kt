@@ -34,9 +34,9 @@ class ActionEncryptionService {
         val dataEncrypter = DataEncrypter(dek)
         return Single.just(
             Action(
-                description = dataEncrypter.decrypt(encryptedAction.description),
                 currentStatus = ActionStatus.valueOf(dataEncrypter.decrypt(encryptedAction.currentStatus))
             )
+                .also { it.description = dataEncrypter.decrypt(encryptedAction.description) }
         )
             .doOnSuccess { Timber.i("Decrypted action data for action ${encryptedAction.description}") }
     }

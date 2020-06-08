@@ -35,7 +35,7 @@ class GoalMapperTest {
         dateTime = DataFactory.randomString(),
         isCompleted = DataFactory.randomBoolean(),
         currentPositionAvatar = DataFactory.randomInt(1, 10),
-        color = DataFactory.randomString(),
+        goalColor = DataFactory.randomString(),
         subgoals = listOf(encryptedSubGoal),
         reachGoalWay = DataFactory.randomString(),
         encryptedDEK = "encrypted version of DEK"
@@ -63,7 +63,7 @@ class GoalMapperTest {
         assertEquals(entity.description, model.description)
         assertEquals(entity.isCompleted, model.isCompleted)
         assertEquals(entity.currentPositionAvatar, model.currentPositionAvatar)
-        assertEquals(entity.color, model.color)
+        assertEquals(entity.color, model.goalColor)
         assertEquals(entity.reachGoalWay, model.reachGoalWay)
         assertEquals(entity.encryptedDEK, model.encryptedDEK)
         for ((index, value) in entity.subgoals.withIndex())

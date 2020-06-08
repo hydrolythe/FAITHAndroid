@@ -8,7 +8,7 @@ class EncryptedGoal(
     var dateTime: EncryptedString,
     var isCompleted: Boolean = false,
     val currentPositionAvatar: Int,
-    val color: EncryptedString,
+    val goalColor: EncryptedString,
     val reachGoalWay: EncryptedString = "",
     var subgoals: List<EncryptedSubGoal> = emptyList(),
     /**
