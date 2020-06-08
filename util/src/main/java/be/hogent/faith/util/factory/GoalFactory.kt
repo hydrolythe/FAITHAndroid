@@ -1,10 +1,11 @@
 package be.hogent.faith.util.factory
 
 import be.hogent.faith.domain.models.goals.Goal
+import be.hogent.faith.domain.models.goals.GoalColor
 
 object GoalFactory {
     fun makeGoal(numberOfSubGoals: Int = 5): Goal {
-        val goal = Goal(color = 1)
+        val goal = Goal(goalColor = GoalColor.GREEN)
         goal.description = DataFactory.randomString(10)
         return goal
     }

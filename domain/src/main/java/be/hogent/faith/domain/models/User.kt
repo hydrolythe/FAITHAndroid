@@ -1,18 +1,10 @@
 package be.hogent.faith.domain.models
 
 import be.hogent.faith.domain.models.goals.Goal
+import be.hogent.faith.domain.models.goals.GoalColor
 import java.util.UUID
 
-const val MAX_AMOUNT_OF_ACTIVE_GOALS = 5
-
-// TODO change to value of the colors
-object SkyscraperColors {
-    val color1 = 1
-    val color2 = 2
-    val color3 = 3
-    val color4 = 4
-    val color5 = 5
-}
+const val MAX_NUMBER_OF_ACTIVE_GOALS = 5
 
 data class User(
     val username: String,
@@ -28,15 +20,13 @@ data class User(
     val events: List<Event>
         get() = _events.values.toList()
 
-    private var _goals = HashMap<UUID, Goal>()
-    val goals: List<Goal>
-        get() = _goals.values.toList()
+    private val allGoals = mutableListOf<Goal>()
 
-    private var _colors = intArrayOf(SkyscraperColors.color1, SkyscraperColors.color2, SkyscraperColors.color3, SkyscraperColors.color4, SkyscraperColors.color5)
+    val achievedGoals: List<Goal>
+        get() = allGoals.filter { it.isCompleted }
 
-    private var _activeGoals = arrayOfNulls<Goal>(MAX_AMOUNT_OF_ACTIVE_GOALS)
-    val activeGoals: List<Goal?>
-        get() = _activeGoals.toList()
+    val activeGoals: List<Goal>
+        get() = allGoals.filter { it.isCompleted.not() }
 
     val backpack = Backpack()
 
@@ -62,20 +52,22 @@ data class User(
     }
 
     fun addGoal() {
-        require(numberOfCompletedGoals() < MAX_AMOUNT_OF_ACTIVE_GOALS) { "Er kunnen maximum 5 actieve doelen zijn." }
-        val indexToAdd = _activeGoals.indexOf(_activeGoals.first { e -> e == null })
-        val goal = Goal(color = _colors[indexToAdd])
-        _activeGoals[indexToAdd] = goal
-        _goals[goal.uuid] = goal
+        require(achievedGoals.size < MAX_NUMBER_OF_ACTIVE_GOALS) { "Er kunnen maximum $MAX_NUMBER_OF_ACTIVE_GOALS actieve doelen zijn." }
+        val uniqueColor = findUnusedColor()
+        val goal = Goal(uniqueColor)
+        allGoals.add(goal)
+    }
+
+    /**
+     * Uses the list of [GoalColor]s to find a color that is not currently used in the [activeGoals].
+     */
+    private fun findUnusedColor(): GoalColor {
+        val currentlyUsedColors = activeGoals.map { it.goalColor }
+        val availableColors = GoalColor.values().subtract(currentlyUsedColors)
+        return availableColors.first()
     }
 
     fun setGoalCompleted(goal: Goal) {
         goal.toggleCompleted()
-        if (goal.isCompleted)
-            _activeGoals[_activeGoals.indexOf(goal)] = null
-        else if (numberOfCompletedGoals() < MAX_AMOUNT_OF_ACTIVE_GOALS)
-            _activeGoals[_activeGoals.indexOf(goal)] = goal
     }
-
-    private fun numberOfCompletedGoals() = goals.filter { go -> go.isCompleted }.size
 }

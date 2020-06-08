@@ -3,8 +3,19 @@ package be.hogent.faith.domain.models.goals
 import org.threeten.bp.LocalDateTime
 import java.util.UUID
 
-private const val MAX_AMOUNT_OF_SUBGOALS = 10
-private const val MAX_CHARACTERS_GOAL_DESCRIPTION = 30
+/**
+ * -1 indicates the basement
+ */
+private const val SUBGOALS_LOWER_BOUND = -1
+
+// There are 10 floors, including the ground floor, making 9 the top floor.
+private const val SUBGOALS_UPPER_BOUND = 9
+private const val DESCRIPTION_MAX_LENGTH = 30
+
+// TODO change to value of the colors
+enum class GoalColor {
+    RED, GREEN, YELLOW, BLUE, PURPLE
+}
 
 /**
  * The possible options of where the avatar can be placed, indicating the different ways to
@@ -15,39 +26,47 @@ enum class ReachGoalWay {
 }
 
 class Goal(
-    val uuid: UUID = UUID.randomUUID(),
-    var dateTime: LocalDateTime = LocalDateTime.now(),
-    var isCompleted: Boolean = false,
-    var currentPositionAvatar: Int = 0,
-    val color: Int,
-    var subGoals: Array<SubGoal?> = arrayOfNulls(MAX_AMOUNT_OF_SUBGOALS)
+    val goalColor: GoalColor,
+    val uuid: UUID = UUID.randomUUID()
 ) {
+    var dateTime: LocalDateTime = LocalDateTime.now()
+
+    var isCompleted: Boolean = false
+
+    var currentPositionAvatar: Int = 0
+
+    val _subGoals = mutableMapOf<Int, SubGoal>()
+    val subGoals: Map<Int, SubGoal> = _subGoals
 
     var description: String = ""
         set(value) {
-            require(value.length <= MAX_CHARACTERS_GOAL_DESCRIPTION) { "Beschrijving mag niet langer zijn dan $MAX_CHARACTERS_GOAL_DESCRIPTION tekens." }
+            require(value.length <= DESCRIPTION_MAX_LENGTH) { "Beschrijving mag niet langer zijn dan $DESCRIPTION_MAX_LENGTH tekens." }
             field = value
         }
 
     var chosenReachGoalWay: ReachGoalWay = ReachGoalWay.Elevator
 
-    fun addSubGoalToGoal(newSubGoal: SubGoal, index: Int) {
-        subGoals[index] = newSubGoal
+    fun addSubGoal(newSubGoal: SubGoal, floor: Int) {
+        require((SUBGOALS_LOWER_BOUND..SUBGOALS_UPPER_BOUND).contains(floor))
+        _subGoals[floor] = newSubGoal
     }
 
-    fun removeSubGoalFromGoal(subGoal: SubGoal) {
-        require(subGoals.contains(subGoal)) { "Subdoel is niet aanwezig in de lijst" }
-        val subGoalsList = subGoals.toMutableList()
-        subGoalsList.remove(subGoal)
-        subGoals = subGoalsList.toTypedArray()
+    fun removeSubGoal(subGoal: SubGoal) {
+        val floor = findFloorForSubgoal(subGoal)
+        _subGoals.remove(floor)
     }
 
-    fun changeIndexSubGoal(subGoal: SubGoal, newIndex: Int) {
-        val temp = subGoal
-        val subGoalsList = subGoals.toMutableList()
-        subGoalsList.remove(subGoal)
-        subGoalsList.add(newIndex, temp)
-        subGoals = subGoalsList.toTypedArray()
+    fun changeFloorSubGoal(subGoal: SubGoal, floor: Int) {
+        val currentGoalAtFloor = _subGoals[floor]
+        if (currentGoalAtFloor == null) {
+            removeSubGoal(subGoal)
+            _subGoals[floor] = subGoal
+        } else {
+            val originalFloor = findFloorForSubgoal(subGoal)
+            removeSubGoal(subGoal)
+            _subGoals[floor] = subGoal
+            _subGoals[originalFloor] = currentGoalAtFloor
+        }
     }
 
     internal fun toggleCompleted() {
@@ -55,7 +74,15 @@ class Goal(
     }
 
     fun moveAvatarToSubGoal(subGoal: SubGoal) {
-        require(subGoals.contains(subGoal)) { "Subdoel is niet aanwezig in de lijst" }
-            currentPositionAvatar = subGoals.indexOf(subGoal)
+        currentPositionAvatar = findFloorForSubgoal(subGoal)
+    }
+
+    private fun findFloorForSubgoal(subGoal: SubGoal): Int {
+        _subGoals.entries.forEach { (index, goal) ->
+            if (goal == subGoal) {
+                return index
+            }
+        }
+        throw NoSuchElementException()
     }
 }

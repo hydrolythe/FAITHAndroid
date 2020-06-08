@@ -27,10 +27,10 @@ class SubGoalTest {
 
     @Test
     fun `change index action`() {
-        subGoal.addActionToSubGoal(action1)
-        subGoal.addActionToSubGoal(action2)
-        subGoal.addActionToSubGoal(action3)
-        subGoal.addActionToSubGoal(action4)
+        subGoal.addAction(action1)
+        subGoal.addAction(action2)
+        subGoal.addAction(action3)
+        subGoal.addAction(action4)
 
         subGoal.updateActionPosition(action2, 2)
 
@@ -43,16 +43,16 @@ class SubGoalTest {
     // action 3 naar plaats van action 8 : 1 - 2 - 3 - 4 - 5 - 6 - 7 - 8 - 9 - 10 --> 1 - 2 - 4 - 5 - 6 - 7 - 8 - 3 - 9- 10
     @Test
     fun `list 10 actions test`() {
-        subGoal.addActionToSubGoal(action1)
-        subGoal.addActionToSubGoal(action2)
-        subGoal.addActionToSubGoal(action3)
-        subGoal.addActionToSubGoal(action4)
-        subGoal.addActionToSubGoal(action5)
-        subGoal.addActionToSubGoal(action6)
-        subGoal.addActionToSubGoal(action7)
-        subGoal.addActionToSubGoal(action8)
-        subGoal.addActionToSubGoal(action9)
-        subGoal.addActionToSubGoal(action10)
+        subGoal.addAction(action1)
+        subGoal.addAction(action2)
+        subGoal.addAction(action3)
+        subGoal.addAction(action4)
+        subGoal.addAction(action5)
+        subGoal.addAction(action6)
+        subGoal.addAction(action7)
+        subGoal.addAction(action8)
+        subGoal.addAction(action9)
+        subGoal.addAction(action10)
 
         subGoal.updateActionPosition(action3, 7)
 

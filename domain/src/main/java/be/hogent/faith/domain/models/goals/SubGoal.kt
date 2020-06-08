@@ -1,18 +1,25 @@
 package be.hogent.faith.domain.models.goals
 
+private const val DESCRIPTION_MAX_LENGTH = 30
+
 class SubGoal(
-    private var description: String
+    description: String
 ) {
+    var description = description
+        set(value) {
+            require(value.length <= DESCRIPTION_MAX_LENGTH) { "Beschrijving mag niet langer dan $DESCRIPTION_MAX_LENGTH tekens zijn." }
+            field = value
+        }
 
     private val _actions = mutableListOf<Action>()
     val actions: List<Action>
         get() = _actions
 
-    fun addActionToSubGoal(newAction: Action) {
+    fun addAction(newAction: Action) {
         _actions.add(newAction)
     }
 
-    fun removeActionFromSubGoal(action: Action) {
+    fun removeAction(action: Action) {
         require(_actions.contains(action)) { "Deze actie hoort niet bij dit subdoel" }
         _actions.remove(action)
     }
@@ -20,10 +27,5 @@ class SubGoal(
     fun updateActionPosition(actionToUpdate: Action, newPosition: Int) {
         _actions.remove(actionToUpdate)
         _actions.add(newPosition, actionToUpdate)
-    }
-
-    fun editDescription(newDescription: String) {
-        require(newDescription.length <= 30) { "Description > 30 characters" }
-        description = newDescription
     }
 }
