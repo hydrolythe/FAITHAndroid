@@ -12,9 +12,9 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.detailscontainer.detailFilters.CombinedDetailFilter
 import be.hogent.faith.faith.util.SingleLiveEvent
@@ -26,7 +26,6 @@ import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.observers.DisposableObserver
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 import timber.log.Timber
@@ -36,7 +35,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     private val deleteDetailsContainerDetailUseCase: DeleteDetailsContainerDetailUseCase<T>,
     private val loadDetailFileUseCase: LoadDetailFileUseCase<T>,
     private val getDetailsContainerDataUseCase: GetDetailsContainerDataUseCase<T>,
-    protected val detailsContainer: T
+    val detailsContainer: T
 ) : ViewModel() {
 
     protected open val details: List<Detail>
@@ -81,39 +80,39 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     val filteredDetails: LiveData<List<Detail>> = MediatorLiveData<List<Detail>>().apply {
         addSource(searchString) { query ->
             detailFilter.titleFilter.searchString = query
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(startDate) { startDate ->
             detailFilter.dateFilter.startDate = startDate
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(endDate) { endDate ->
             detailFilter.dateFilter.endDate = endDate
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(drawingFilterEnabled) { enabled ->
             detailFilter.hasDrawingDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(textFilterEnabled) { enabled ->
             detailFilter.hasTextDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(photoFilterEnabled) { enabled ->
             detailFilter.hasPhotoDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(audioFilterEnabled) { enabled ->
             detailFilter.hasAudioDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(externalVideoFilterEnabled) { enabled ->
             detailFilter.hasVideoDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(videoFilterEnabled) { enabled ->
             detailFilter.hasYoutubeDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
     }
 
@@ -141,36 +140,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
 
     protected val _detailIsSaved = SingleLiveEvent<Any>()
     val detailIsSaved: LiveData<Any> = _detailIsSaved
-
-    // detail moet worden opgeslaan, maar eerst dient de titel,... te worden opgevraagd via SaveDialog
-    private val _showSaveDialog = SingleLiveEvent<Detail>()
-    val showSaveDialog: LiveData<Detail> = _showSaveDialog
-
-    /**
-     * title and date of a new detail
-     */
-    val detailTitle = MutableLiveData<String>()
-    protected val _detailTitleErrorMessage = MutableLiveData<Int>()
-    val detailTitleErrorMessage: LiveData<Int>
-        get() = _detailTitleErrorMessage
-
-    val detailDate = MutableLiveData<LocalDateTime>()
-    val detailDateString: LiveData<String> =
-        Transformations.map(detailDate) { date ->
-            date.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
-        }
-    private val _detailDateButtonClicked = SingleLiveEvent<Unit>()
-    val detailDateButtonClicked: LiveData<Unit> = _detailDateButtonClicked
-
-    fun onDateButtonClicked() {
-        _detailDateButtonClicked.call()
-    }
-
-    fun resetDetails() {
-        detailTitle.value = ""
-        detailDate.value = LocalDateTime.now()
-        _detailTitleErrorMessage.postValue(null)
-    }
 
     /**
      * errormessages and information
@@ -244,16 +213,20 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         _endDate.value = endDate?.let { toLocalDate(it) } ?: LocalDate.now()
     }
 
+    protected fun forceDetailsUpdate() {
+        audioFilterEnabled.value = audioFilterEnabled.value
+    }
+
     private fun combineLatestDates(
         startDate: LiveData<LocalDate>,
         endDate: LiveData<LocalDate>
     ): String {
-        val van =
+        val from =
             if (startDate.value == LocalDate.MIN.plusDays(1)) "van" else startDate.value!!.format(
                 DateTimeFormatter.ofPattern("dd,MMM yyyy")
             )
-        val tot = endDate.value!!.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
-        return "$van - $tot"
+        val to = endDate.value!!.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
+        return "$from - $to"
     }
 
     fun onDateRangeClicked() {
@@ -272,22 +245,14 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         _openDetailMode.postValue(openDetailMode)
     }
 
-    // detail is aangemaakt, maar titel,... moet nog worden opgevraagd
-    fun showSaveDialog(detail: Detail) {
-        _showSaveDialog.postValue(detail)
-    }
-
     // opslaan van detail
     open fun saveCurrentDetail(user: User, detail: Detail) {
         when (detail) {
-            is DrawingDetail -> saveDrawingDetail(user, showSaveDialog.value as DrawingDetail)
-            is TextDetail -> saveTextDetail(user, showSaveDialog.value as TextDetail)
-            is PhotoDetail -> savePhotoDetail(user, showSaveDialog.value as PhotoDetail)
-            is AudioDetail -> saveAudioDetail(user, showSaveDialog.value as AudioDetail)
-            is VideoDetail -> saveExternalVideoDetail(
-                user,
-                showSaveDialog.value as VideoDetail
-            )
+            is DrawingDetail -> saveDrawingDetail(user, detail)
+            is TextDetail -> saveTextDetail(user, detail)
+            is PhotoDetail -> savePhotoDetail(user, detail)
+            is AudioDetail -> saveAudioDetail(user, detail)
+            is VideoDetail -> saveExternalVideoDetail(user, detail)
             is YoutubeVideoDetail -> saveYoutubeDetail(user, detail)
         }
         _currentDetail.postValue(null)
@@ -303,31 +268,9 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_load_detail_failed)
+                Timber.e(e)
             }
         })
-    }
-
-    fun onSaveClicked(
-        title: String,
-        user: User,
-        detail: Detail,
-        date: LocalDateTime = LocalDateTime.now()
-    ) {
-        val notMaxCharacters = checkMaxCharacters(title)
-        val uniqueTitle = checkUniqueTitle(title)
-        if (title.isNotEmpty() && notMaxCharacters && uniqueTitle) {
-            detail.title = title
-            detail.dateTime = date
-            _detailTitleErrorMessage.value = R.string.empty
-            saveCurrentDetail(user, detail)
-        } else {
-            if (title.isBlank())
-                _detailTitleErrorMessage.postValue(R.string.save_detail_emptyString)
-            if (!notMaxCharacters)
-                _detailTitleErrorMessage.postValue(R.string.save_detail_maxChar)
-            if (!uniqueTitle)
-                _detailTitleErrorMessage.postValue(R.string.save_detail_uniqueName)
-        }
     }
 
     fun saveTextDetail(user: User, detail: TextDetail) {
@@ -349,7 +292,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_audio_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -364,7 +307,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_photo_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -379,7 +322,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_drawing_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -394,7 +337,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_video_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -404,13 +347,12 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         })
     }
 
-    // Youtube videos are only in the Backpack, so this is not in the [DetailsContainerViewModel].
     fun saveYoutubeDetail(user: User, detail: YoutubeVideoDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_video_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -451,18 +393,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         return Instant.ofEpochMilli(milliseconds) // Convert count-of-milliseconds-since-epoch into a date-time in UTC (`Instant`).
             .atZone(ZoneId.of("Europe/Brussels")) // Adjust into the wall-clock time used by the people of a particular region (a time zone). Produces a `ZonedDateTime` object.
             .toLocalDate()
-    }
-
-    protected fun checkUniqueTitle(title: String): Boolean {
-        return (details.find { e -> (e.title == title) } == null)
-    }
-
-    protected fun checkMaxCharacters(title: String): Boolean {
-        return title.length <= 30
-    }
-
-    private fun setDetails() {
-        audioFilterEnabled.postValue(false)
     }
 
     fun clearErrorMessage() {

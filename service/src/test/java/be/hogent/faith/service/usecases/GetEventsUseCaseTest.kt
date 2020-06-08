@@ -22,7 +22,12 @@ class GetEventsUseCaseTest {
 
     @Before
     fun setUp() {
-        getEventsUC = GetEventsUseCase(eventRepository, eventEncryptionService, mockk(), Schedulers.trampoline())
+        getEventsUC = GetEventsUseCase(
+            eventRepository,
+            eventEncryptionService,
+            mockk(),
+            Schedulers.trampoline()
+        )
     }
 
     @Test

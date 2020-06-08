@@ -140,15 +140,15 @@ class TextDetailViewModelUseCaseTests : KoinTest {
     }
 
     @Test
-    fun textDetailViewModel_onSaveClicked_noExistingDetail_updatesDetailOnUseCaseCompleted() {
+    fun textDetailViewModel_onSaveClicked_noExistingDetail_callsGetMetaDataOnUseCaseCompleted() {
         // Arrange
-        val detailObserver = mockk<Observer<TextDetail>>(relaxed = true)
+        val getDetailsMetaDataObserver = mockk<Observer<Unit>>(relaxed = true)
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val observer = slot<DisposableSingleObserver<TextDetail>>()
         val createdDetail = mockk<TextDetail>()
         viewModel.setText("We need to input text so we can save")
 
-        viewModel.savedDetail.observeForever(detailObserver)
+        viewModel.getDetailMetaData.observeForever(getDetailsMetaDataObserver)
         viewModel.errorMessage.observeForever(errorObserver)
 
         // Act
@@ -158,7 +158,7 @@ class TextDetailViewModelUseCaseTests : KoinTest {
         observer.captured.onSuccess(createdDetail)
 
         // Assert
-        verify { detailObserver.onChanged(createdDetail) }
+        verify { getDetailsMetaDataObserver.onChanged(any()) }
         verify { errorObserver wasNot Called }
     }
 

@@ -7,6 +7,7 @@ import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.service.encryption.EncryptedEvent
 import io.reactivex.Completable
 import io.reactivex.Single
+import java.io.File
 
 interface ILocalFileStorageRepository {
 
@@ -26,6 +27,12 @@ interface ILocalFileStorageRepository {
      * Checks if a [container]'s [detail]'s file is present in local storage.
      */
     fun isFilePresent(detail: Detail, container: DetailsContainer): Boolean
+
+    /**
+     * Get the file for the given [detail].
+     * This assumes that the file is present on local storage. Use [isFilePresent] to check.
+     */
+    fun getDetailFile(detail: Detail, container: DetailsContainer): File
 
     /**
      * Checks if emotion avatar is present in localStorage
@@ -48,4 +55,6 @@ interface ILocalFileStorageRepository {
     fun deleteFiles(detail: Detail, container: DetailsContainer): Completable
 
     fun deleteDetail(detail: Detail, event: Event): Completable
+
+    fun deleteFiles(event: Event): Completable
 }

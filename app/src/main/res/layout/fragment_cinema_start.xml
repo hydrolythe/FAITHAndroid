@@ -13,6 +13,8 @@
         android:id="@+id/cinema_start_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:background="@drawable/achtergrond_cinema">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -189,6 +191,7 @@
             android:id="@+id/achtergrond_publiek"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -196,15 +199,15 @@
             tools:srcCompat="@drawable/publiek_cinema" />
 
         <ImageButton
-            android:id="@+id/create_film"
+            android:id="@+id/btn_create_film"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:contentDescription="@string/create_film"
             android:onClick="@{() -> cinemaOverviewViewModel.onMakeFilmClicked()}"
-            app:layout_constraintBottom_toBottomOf="@+id/achtergrond_publiek"
-            app:layout_constraintEnd_toEndOf="@+id/achtergrond_publiek"
-            app:layout_constraintStart_toStartOf="@+id/achtergrond_publiek"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rv_container"
             app:srcCompat="@drawable/ic_btn_maak_filmpje" />
 

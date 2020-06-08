@@ -16,6 +16,7 @@ import be.hogent.faith.faith.util.combineWith
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.util.toMinutesSecondString
 import io.reactivex.observers.DisposableSingleObserver
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File
 import kotlin.math.roundToLong
@@ -29,6 +30,9 @@ class AudioDetailViewModel(
     override val savedDetail: LiveData<AudioDetail> = _savedDetail
 
     private var existingDetail: AudioDetail? = null
+
+    private val _getDetailMetaData = SingleLiveEvent<Unit>()
+    override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
 
     /**
      *
@@ -174,7 +178,8 @@ class AudioDetailViewModel(
     private inner class CreateAudioDetailUseCaseHandler :
         DisposableSingleObserver<AudioDetail>() {
         override fun onSuccess(createdDetail: AudioDetail) {
-            _savedDetail.value = createdDetail
+            existingDetail = createdDetail
+            _getDetailMetaData.call()
         }
 
         override fun onError(e: Throwable) {
@@ -198,7 +203,7 @@ class AudioDetailViewModel(
             loadDetailFile.execute(params, LoadFileUseCaseHandler())
         } else
         */
-            _file.value = existingDetail.file
+        _file.value = existingDetail.file
     }
 
     fun onRecordingStateChanged(state: RecordingState) {
@@ -228,8 +233,6 @@ class AudioDetailViewModel(
         _recordingTime.postValue(duration)
     }
 
-    fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {}
-
     private inner class LoadFileUseCaseHandler : DisposableSingleObserver<File>() {
         override fun onSuccess(loadedFile: File) {
             _file.value = loadedFile
@@ -239,5 +242,17 @@ class AudioDetailViewModel(
             Timber.e(e)
             _errorMessage.postValue(R.string.error_load_events)
         }
+    }
+
+    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        existingDetail?.let {
+            it.title = title
+            it.dateTime = dateTime
+        }
+        _savedDetail.value = existingDetail
+    }
+
+    fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {
+        Timber.i("Now in state $state")
     }
 }

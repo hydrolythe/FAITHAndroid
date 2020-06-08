@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.details.externalVideo.view
+package be.hogent.faith.faith.details.video.view
 
 import android.content.Context
 import android.os.Bundle
@@ -9,10 +9,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentViewYoutubeVideoBinding
+import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayer
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayerFragment
-import be.hogent.faith.faith.details.externalFile.ExternalFileViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val VIDEO_DETAIL = "The video to be shown"
@@ -20,8 +20,8 @@ private const val VIDEO_DETAIL = "The video to be shown"
 class ViewVideoFragment : FaithVideoPlayerFragment() {
 
     private lateinit var binding: FragmentViewYoutubeVideoBinding
-    private val externalFileViewModel: ExternalFileViewModel by viewModel()
     private var navigation: ViewExternalVideoNavigation? = null
+    private val viewModel: ViewVideoViewModel by viewModel()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -43,7 +43,7 @@ class ViewVideoFragment : FaithVideoPlayerFragment() {
             false
         )
 
-        externalFileViewModel.currentFile.observe(viewLifecycleOwner, Observer { file ->
+        viewModel.currentFile.observe(viewLifecycleOwner, Observer { file ->
             val faithYoutubePlayer =
                 FaithVideoPlayer(
                     playerParentView = binding.cardYoutubePlayer,
@@ -63,31 +63,42 @@ class ViewVideoFragment : FaithVideoPlayerFragment() {
         return binding.root
     }
 
-                override fun onStart() {
-            super.onStart()
+    override fun onStart() {
+        super.onStart()
 
-            binding.btnBackYtVideo.setOnClickListener {
-                navigation?.backToEvent()
-            }
-
-            loadExistingVideo()
+        binding.btnBackYtVideo.setOnClickListener {
+            navigation?.backToEvent()
         }
 
-                private fun loadExistingVideo() {
-            val externalVideoDetail = requireArguments().getSerializable(VIDEO_DETAIL) as VideoDetail
-            externalFileViewModel.loadExistingDetail(externalVideoDetail)
+        loadExistingVideo()
+    }
+
+    private fun loadExistingVideo() {
+        when (val detail = requireArguments().getSerializable(VIDEO_DETAIL)) {
+            is VideoDetail -> viewModel.loadExistingDetail(detail)
+            is FilmDetail -> viewModel.loadExistingDetail(detail)
+            else -> throw IllegalArgumentException("Invalid type of detail to play video")
         }
-                companion object {
-            fun newInstance(videoDetail: VideoDetail): ViewVideoFragment {
-                return ViewVideoFragment().apply {
-                    arguments = Bundle().apply {
-                        putSerializable(VIDEO_DETAIL, videoDetail)
-                    }
+    }
+
+    companion object {
+        fun newInstance(filmDetail: FilmDetail): ViewVideoFragment {
+            return ViewVideoFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(VIDEO_DETAIL, filmDetail)
                 }
             }
         }
-
-            interface ViewExternalVideoNavigation {
-            fun backToEvent()
+        fun newInstance(videoDetail: VideoDetail): ViewVideoFragment {
+            return ViewVideoFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(VIDEO_DETAIL, videoDetail)
+                }
+            }
         }
     }
+
+    interface ViewExternalVideoNavigation {
+        fun backToEvent()
+    }
+}

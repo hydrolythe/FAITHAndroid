@@ -7,7 +7,9 @@ import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.service.encryption.ContainerType
 import be.hogent.faith.service.encryption.EncryptedDetail
+import be.hogent.faith.service.encryption.EncryptedDetailsContainer
 import be.hogent.faith.service.encryption.EncryptedEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -34,11 +36,29 @@ class StoragePathProvider(
     /**
      * Returns the folder path in which a user's detailsContainer will be saved.
      */
-    fun detailsContainerFolderPath(detailsContainer: DetailsContainer): File {
+    private fun detailsContainerFolderPath(encryptedContainer: EncryptedDetailsContainer): File {
+        return when (encryptedContainer.containerType) {
+            ContainerType.BACKPACK -> File("users/${user!!.uid}/containers/backpack")
+            ContainerType.CINEMA -> File("users/${user!!.uid}/containers/cinema")
+        }
+    }
+
+    /**
+     * Returns the folder path in which a user's detailsContainer will be saved.
+     */
+    private fun detailsContainerFolderPath(detailsContainer: DetailsContainer): File {
         return when (detailsContainer) {
             is Backpack -> File("users/${user!!.uid}/containers/backpack")
             is Cinema -> File("users/${user!!.uid}/containers/cinema")
         }
+    }
+
+    /**
+     * Returns the **relative** path in which a detail will be saved.
+     * Should usually be prefixed with [temporaryStorage] or [localStorage] to be a valid path.
+     */
+    fun detailPath(detail: Detail, detailsContainer: EncryptedDetailsContainer): File {
+        return File("${detailsContainerFolderPath(detailsContainer).path}/${detail.uuid}")
     }
 
     /**
@@ -73,7 +93,7 @@ class StoragePathProvider(
         return File("${eventsFolderPath(event).path}/${detail.uuid}")
     }
 
-    private fun eventsFolderPath(event: Event): File {
+    fun eventsFolderPath(event: Event): File {
         return File("users/${user!!.uid}/events/${event.uuid}")
     }
 

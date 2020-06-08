@@ -164,7 +164,11 @@ class EventEncryptionService(
                         // Where the file of event.emotionAvatar points to is not relevant, as that is just where it was pointing
                         // the moment it was saved to the database.
                         // The encrypted version of the file should be in localstorage at this time, so we assume that path.
-                        pathProvider.localStorage(pathProvider.emotionAvatarPath(encryptedEvent)),
+                        (if (event.emotionAvatar != null && event.emotionAvatar!!.exists()) {
+                            event.emotionAvatar!!
+                        } else {
+                            pathProvider.localStorage(pathProvider.emotionAvatarPath(encryptedEvent))
+                        }),
                         sdek,
                         destinationFile
                     )
@@ -191,6 +195,9 @@ class EventEncryptionService(
                         detail,
                         sdek,
                         with(pathProvider) { temporaryStorage(detailPath(detail, encryptedEvent)) })
+                        .andThen(Completable.fromAction {
+                            detail.file = with(pathProvider) { temporaryStorage(detailPath(detail, encryptedEvent)) }
+                        })
                 }
             )
             .doOnComplete { Timber.i("Decrypted all details' files for event ${encryptedEvent.uuid}") }

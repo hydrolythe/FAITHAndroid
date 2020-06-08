@@ -3,6 +3,9 @@ package be.hogent.faith.service.di
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
+import be.hogent.faith.service.usecases.cinema.AddFilmToCinemaUseCase
+import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase
+import be.hogent.faith.service.usecases.cinema.VideoEncoder
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
@@ -16,6 +19,7 @@ import be.hogent.faith.service.usecases.detailscontainer.GetDetailsContainerData
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.event.DeleteEventDetailUseCase
+import be.hogent.faith.service.usecases.event.DeleteEventUseCase
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import be.hogent.faith.service.usecases.event.MakeEventFilesAvailableUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
@@ -99,6 +103,15 @@ val serviceModule = module {
     factory { CreateTextDetailUseCase(get(), get()) }
     factory { CreateVideoDetailUseCase(get()) }
     factory { DeleteEventDetailUseCase(get()) }
+    factory { DeleteEventUseCase(get(), get(), get()) }
+    factory {
+        AddFilmToCinemaUseCase(
+            containerEncryptionService = get(named(CinemaNames.encryptionService)),
+            cinemaRepository = get(named(CinemaNames.repo)),
+            fileStorageRepository = get(),
+            observer = get()
+        )
+    }
     factory {
         MakeEventFilesAvailableUseCase(
             fileStorageRepo = get(),
@@ -124,7 +137,7 @@ val serviceModule = module {
         )
     }
     factory {
-        GetYoutubeVideosFromSearchUseCase(get(), get())
+        GetYoutubeVideosFromSearchUseCase(get())
     }
     factory<SaveDetailsContainerDetailUseCase<Backpack>>(named("SaveBackpackDetailUseCase")) {
         SaveDetailsContainerDetailUseCase<Backpack>(
@@ -167,6 +180,13 @@ val serviceModule = module {
         GetDetailsContainerDataUseCase<Cinema>(
             detailsContainerRepository = get(named(CinemaNames.repo)),
             detailContainerEncryptionService = get(named(CinemaNames.encryptionService)),
+            observer = get()
+        )
+    }
+    factory {
+        CreateCinemaVideoUseCase(
+            videoEncoder = VideoEncoder(),
+            loadFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
             observer = get()
         )
     }

@@ -3,10 +3,10 @@ package be.hogent.faith.encryption
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.service.encryption.EncryptedDetail
@@ -28,11 +28,15 @@ class DetailEncryptionService(
      * Returns an encrypted version of the [Detail], both its data and its file.
      */
     fun encrypt(detail: Detail, dek: KeysetHandle, sdek: KeysetHandle): Single<EncryptedDetail> {
-        return encryptData(detail, dek)
-            .zipWith(encryptDetailFiles(detail, sdek)) { encryptedDetail, file ->
-                encryptedDetail.file = file
-                encryptedDetail
-            }
+        return if (detail is YoutubeVideoDetail) {
+            encryptData(detail, dek)
+        } else {
+            encryptData(detail, dek)
+                .zipWith(encryptDetailFiles(detail, sdek)) { encryptedDetail, file ->
+                    encryptedDetail.file = file
+                    encryptedDetail
+                }
+        }
     }
 
     private fun encryptDetailFiles(detail: Detail, sdek: KeysetHandle): Single<File> {
@@ -66,7 +70,7 @@ class DetailEncryptionService(
                 ),
                 thumbnail = detail.thumbnail?.let { dataEncrypter.encrypt(it) },
                 youtubeVideoID = when (detail) {
-                    is YoutubeVideoDetail -> dataEncrypter.encrypt(detail.videoId)
+                    is YoutubeVideoDetail -> detail.videoId
                     else -> ""
                 }
             )
@@ -130,7 +134,8 @@ class DetailEncryptionService(
                     file = encryptedDetail.file,
                     title = dataEncrypter.decrypt(encryptedDetail.title),
                     uuid = encryptedDetail.uuid,
-                    dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime))
+                    dateTime = LocalDateTime.parse(dataEncrypter.decrypt(encryptedDetail.dateTime)),
+                    thumbnail = encryptedDetail.thumbnail?.let { dataEncrypter.decrypt(it) }
                 )
             }
         )
@@ -145,19 +150,52 @@ class DetailEncryptionService(
         detail: Detail,
         sdek: KeysetHandle
     ): Completable {
-        val fileEncrypter = FileEncryptionService()
-        // YoutubeVideos don't have a file that needs to be encrypted
-        if (detail is YoutubeVideoDetail) {
-            return Completable.complete()
-                .doOnComplete { Timber.i("Detail ${detail.uuid} is a YoutubeVideoDetail, nothing to encrypt") }
-        } else {
-            return fileEncrypter.decrypt(detail.file, sdek)
-                .flatMapCompletable {
-                    Completable.fromAction {
-                        Timber.i("Decrypted file for detail ${detail.uuid} is ${it.path}")
-                        detail.file = it
+        return Completable.defer {
+            // YoutubeVideos don't have a file that needs to be encrypted
+            if (detail is YoutubeVideoDetail) {
+                Completable.complete()
+                    .doOnComplete { Timber.i("Detail ${detail.uuid} is a YoutubeVideoDetail, nothing to encrypt") }
+            } else {
+                val fileEncrypter = FileEncryptionService()
+                fileEncrypter.decrypt(detail.file, sdek)
+                    .flatMapCompletable {
+                        Completable.fromAction {
+                            Timber.i("Decrypted file for detail ${detail.uuid} is ${it.path}")
+                            detail.file = it
+                        }
                     }
-                }
+            }
+        }
+    }
+
+    /**
+     * Decrypts the file belonging to a detail, and places it in the given [destinationFile].
+     */
+    fun decryptDetailFile(
+        file: File,
+        sdek: KeysetHandle,
+        destinationFile: File
+    ): Completable {
+        return FileEncryptionService().decrypt(file, sdek, destinationFile)
+    }
+
+    /**
+     * Decrypts the file belonging to a detail, and places it in the given [destinationFile].
+     */
+    fun decryptDetailFile(
+        detail: Detail,
+        sdek: KeysetHandle,
+        destinationFile: File
+    ): Completable {
+        return Completable.defer {
+            if (detail is YoutubeVideoDetail) {
+                Completable
+                    .complete()
+                    .doOnComplete { Timber.i("Detail ${detail.uuid} is a YoutubeVideoDetail, nothing to encrypt") }
+            } else {
+                decryptDetailFile(detail.file, sdek, destinationFile)
+                    .doOnComplete { Timber.i("Decrypted file for detail ${detail.uuid} to ${destinationFile.path}") }
+            }
         }
     }
 
@@ -169,31 +207,25 @@ class DetailEncryptionService(
         sdek: KeysetHandle,
         destinationFile: File
     ): Completable {
-        val fileEncrypter = FileEncryptionService()
-        // YoutubeVideos don't have a file that needs to be encrypted
-        if (encryptedDetail.youtubeVideoID.isNotEmpty()) {
-            return Completable.complete()
-                .doOnComplete { Timber.i("Detail ${encryptedDetail.uuid} is a YoutubeVideoDetail, nothing to encrypt") }
-        } else {
-            return fileEncrypter
-                .decrypt(
-                    encryptedDetail.file,
-                    sdek,
-                    destinationFile
-                )
-                .doOnComplete {
-                    Timber.i("Decrypted file for detail ${encryptedDetail.uuid} to ${destinationFile.path}")
-                }
+        return Completable.defer {
+            if (encryptedDetail.youtubeVideoID.isNotEmpty()) {
+                Completable
+                    .complete()
+                    .doOnComplete { Timber.i("Detail ${encryptedDetail.uuid} is a YoutubeVideoDetail, nothing to encrypt") }
+            } else {
+                decryptDetailFile(encryptedDetail.file, sdek, destinationFile)
+                    .doOnComplete { Timber.i("Decrypted file for detail ${encryptedDetail.uuid} to ${destinationFile.path}") }
+            }
         }
     }
-}
 
-internal enum class DetailType {
-    Audio,
-    Text,
-    Drawing,
-    Photo,
-    ExternalVideo,
-    YoutubeVideo,
-    Film
+    internal enum class DetailType {
+        Audio,
+        Text,
+        Drawing,
+        Photo,
+        ExternalVideo,
+        YoutubeVideo,
+        Film
+    }
 }

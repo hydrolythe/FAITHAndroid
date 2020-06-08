@@ -99,7 +99,9 @@ class FileStorageRepository(
 
     override fun downloadFile(detail: Detail, container: DetailsContainer): Completable {
         if (localStorage.isFilePresent(detail, container)) {
-            return Completable.complete()
+            return Completable.fromAction {
+                detail.file = localStorage.getDetailFile(detail, container)
+            }
         } else {
             return onlineStorage.downloadDetail(detail, container)
         }
@@ -139,6 +141,14 @@ class FileStorageRepository(
 
     override fun setFilesToDecryptedVersions(event: Event) {
         temporaryStorage.setFilesToDecryptedVersions(event)
+    }
+
+    override fun deleteEventFiles(event: Event): Completable {
+        return Completable.mergeArray(
+            temporaryStorage.deleteFiles(event),
+            localStorage.deleteFiles(event),
+            onlineStorage.deleteFiles(event)
+        )
     }
 
     private fun deleteDetailFile(detail: Detail): Completable {

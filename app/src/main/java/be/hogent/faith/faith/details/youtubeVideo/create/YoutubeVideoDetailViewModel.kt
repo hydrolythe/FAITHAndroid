@@ -4,29 +4,36 @@ import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
+import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
 import io.reactivex.subscribers.DisposableSubscriber
+import org.threeten.bp.LocalDateTime
 
 class YoutubeVideoDetailViewModel(
     private val getYoutubeVideosFromSearchUseCase: GetYoutubeVideosFromSearchUseCase
-) : ViewModel() {
+) : ViewModel(), DetailViewModel<YoutubeVideoDetail> {
 
     private var _snippets = MutableLiveData<List<YoutubeVideoDetail>>()
     val snippets: LiveData<List<YoutubeVideoDetail>>
         get() = _snippets
 
+    // video dat zal worden bekeken
     private var _selectedSnippet = MutableLiveData<YoutubeVideoDetail>()
     val selectedSnippet: LiveData<YoutubeVideoDetail>
-    get() = _selectedSnippet
+        get() = _selectedSnippet
+
+    // video die wordt opgeslaan en waarvan de metadata wordt opgevraagd
+    private var currentSnippet: YoutubeVideoDetail? = null
 
     private var _showPreview = MutableLiveData<ShowPreview>()
     val showPreview: LiveData<ShowPreview>
         get() = _showPreview
 
     private var _savedDetail = MutableLiveData<YoutubeVideoDetail>()
-    val savedDetail: LiveData<YoutubeVideoDetail>
+    override val savedDetail: LiveData<YoutubeVideoDetail>
         get() = _savedDetail
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
@@ -54,7 +61,8 @@ class YoutubeVideoDetailViewModel(
         getYoutubeVideosFromSearchUseCase.execute(params, GetYoutubeSnippetsUseCaseHandler())
     }
 
-    private inner class GetYoutubeSnippetsUseCaseHandler : DisposableSubscriber<List<YoutubeVideoDetail>>() {
+    private inner class GetYoutubeSnippetsUseCaseHandler :
+        DisposableSubscriber<List<YoutubeVideoDetail>>() {
         override fun onNext(t: List<YoutubeVideoDetail>?) {
             _snippets.postValue(t)
         }
@@ -63,16 +71,14 @@ class YoutubeVideoDetailViewModel(
         }
 
         override fun onError(e: Throwable) {
+            _errorMessage.postValue(R.string.create_video_failed)
+            e.printStackTrace()
         }
     }
 
-    fun onSaveClicked() {
-        saveVideoDetail(_selectedSnippet.value!!)
-    }
-
-    // Public for testing purposes
-    fun saveVideoDetail(detail: YoutubeVideoDetail) {
-        _savedDetail.postValue(detail)
+    override fun onSaveClicked() {
+        currentSnippet = _selectedSnippet.value
+        _getDetailMetaData.call()
     }
 
     fun goBackToBackpack() {
@@ -102,6 +108,21 @@ class YoutubeVideoDetailViewModel(
     override fun onCleared() {
         super.onCleared()
         getYoutubeVideosFromSearchUseCase.dispose()
+    }
+
+    private val _getDetailMetaData = SingleLiveEvent<Unit>()
+    override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
+
+    override fun loadExistingDetail(existingDetail: YoutubeVideoDetail) {
+        throw UnsupportedOperationException("Use the ViewFragments to show existing external file.")
+    }
+
+    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        currentSnippet?.let {
+            it.title = title
+            it.dateTime = dateTime
+        }
+        _savedDetail.value = currentSnippet
     }
 }
 
