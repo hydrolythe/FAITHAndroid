@@ -13,7 +13,7 @@ object UserFactory {
             user.addEvent(EventFactory.makeEvent())
         }
         repeat(numberOfGoals) {
-            // TODO
+            user.setGoals(GoalFactory.makeGoalsList(numberOfGoals))
         }
         return user
     }

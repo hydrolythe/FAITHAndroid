@@ -22,11 +22,9 @@ object GoalFactory {
 
     fun makeGoalsList(count: Int = 5): List<Goal> {
         val goals = mutableListOf<Goal>()
-        do {
-            var counter = count
-            goals.add(count, makeGoal())
-            counter--
-        } while (counter >= 0)
+        repeat (count) {
+            goals.add(makeGoal())
+        }
         return goals
     }
 }
