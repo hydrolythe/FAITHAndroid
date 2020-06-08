@@ -9,14 +9,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import be.hogent.faith.R
 import be.hogent.faith.databinding.DialogCinemaSaveDetailBinding
-import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.di.KoinModules
-import org.koin.android.ext.android.getKoin
 
 class SaveVideoDialog : DialogFragment() {
     private lateinit var saveVideoBinding: DialogCinemaSaveDetailBinding
-
-    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
     companion object {
         fun newInstance(): SaveVideoDialog {

@@ -18,11 +18,11 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.AUDIO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.DRAW_DETAIL
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.EXTERNAL_VIDEO_DETAIL
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.VIDEO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.FILM_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.PICTURE_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.TEXT_DETAIL
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.VIDEO_DETAIL
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.YOUTUBE_DETAIL
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.faith.util.getDefaultThumbnailUrl
 import com.bumptech.glide.Glide
@@ -39,8 +39,8 @@ class SelectedDetailsAdapter(private val clickListener: SelectedDetailsClickList
             is DrawingDetail -> DRAW_DETAIL
             is TextDetail -> TEXT_DETAIL
             is PhotoDetail -> PICTURE_DETAIL
-            is YoutubeVideoDetail -> VIDEO_DETAIL
-            is VideoDetail -> EXTERNAL_VIDEO_DETAIL
+            is YoutubeVideoDetail -> YOUTUBE_DETAIL
+            is VideoDetail -> VIDEO_DETAIL
             is FilmDetail -> FILM_DETAIL
         }
     }
@@ -84,8 +84,8 @@ class SelectedDetailsAdapter(private val clickListener: SelectedDetailsClickList
                 DRAW_DETAIL -> (Glide.with(binding.detailImg).load(androidTempFileProvider.getFile(binding.detail!! as DrawingDetail)).signature(
                                 MediaStoreSignature("", binding.detail!!.file.lastModified(), 0)).into(binding.detailImg))
                 TEXT_DETAIL -> (Glide.with(binding.detailImg).load(R.drawable.event_detail_text).into(binding.detailImg))
-                EXTERNAL_VIDEO_DETAIL -> (Glide.with(binding.detailImg).load(R.drawable.event_detail_camera).into(binding.detailImg))
-                VIDEO_DETAIL -> {
+                VIDEO_DETAIL -> (Glide.with(binding.detailImg).load(R.drawable.event_detail_camera).into(binding.detailImg))
+                YOUTUBE_DETAIL -> {
                     detail as YoutubeVideoDetail
                     Glide.with(binding.detailImg).load(getDefaultThumbnailUrl(detail.videoId)).into(binding.detailImg)
                 } }

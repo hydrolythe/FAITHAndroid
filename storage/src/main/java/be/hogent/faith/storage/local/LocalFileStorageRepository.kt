@@ -102,6 +102,11 @@ class LocalFileStorageRepository(
         }
     }
 
+    override fun getDetailFile(detail: Detail, container: DetailsContainer): File {
+        require(isFilePresent(detail, container))
+        return with(pathProvider) { localStorage(detailPath(detail, container)) }
+    }
+
     override fun isFilePresent(detail: Detail, container: DetailsContainer): Boolean {
         return with(pathProvider) {
             val supposedPath = localStorage(detailPath(detail, container))

@@ -126,11 +126,8 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
             if (saveDialog == null)
                 takePhotoViewModel.setDetailsMetaData()
             else {
-                saveDialog.setTargetFragment(
-                    this,
-                    22
-                )
-                saveDialog.show(getParentFragmentManager(), null)
+                saveDialog.setTargetFragment(this, 22)
+                saveDialog.show(parentFragmentManager, null)
             }
         })
 

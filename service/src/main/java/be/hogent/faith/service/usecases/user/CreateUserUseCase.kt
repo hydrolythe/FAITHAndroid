@@ -3,6 +3,7 @@ package be.hogent.faith.service.usecases.user
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.service.encryption.ContainerType
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import be.hogent.faith.service.repositories.IAuthManager
 import be.hogent.faith.service.repositories.IDetailContainerRepository
@@ -33,7 +34,7 @@ class CreateUserUseCase(
                     .doOnComplete { Timber.i("Created user in repo") }
             }
 
-        val createBackpack = backpackEncryptionService.createContainer()
+        val createBackpack = backpackEncryptionService.createContainer(ContainerType.BACKPACK)
             .subscribeOn(subscriber)
             .doOnSuccess { Timber.i("Created container for backpack") }
             .doOnError { Timber.e("Fout bij aanmaken container backpack") }
@@ -41,7 +42,7 @@ class CreateUserUseCase(
             .doOnComplete { Timber.i("Saved container for backpack") }
             .doOnError { Timber.e("Fout bij opslaan container backpack") }
 
-        val createCinema = cinemaEncryptionService.createContainer()
+        val createCinema = cinemaEncryptionService.createContainer(ContainerType.CINEMA)
             .subscribeOn(subscriber)
             .doOnSuccess { Timber.i("Created container for cinema") }
             .doOnError {

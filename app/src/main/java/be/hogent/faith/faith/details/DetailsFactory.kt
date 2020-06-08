@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
@@ -21,6 +22,7 @@ import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.photo.view.ViewPhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.details.text.view.ViewTextDetailFragment
+import be.hogent.faith.faith.details.video.view.ViewVideoFragment
 import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailFragment
 import be.hogent.faith.faith.details.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
@@ -54,6 +56,7 @@ object DetailsFactory {
             is DrawingDetail -> DrawingDetailFragment.newInstance(detail)
             is PhotoDetail -> ViewPhotoFragment.newInstance(detail)
             is YoutubeVideoDetail -> ViewYoutubeVideoFragment.newInstance(detail)
+            is FilmDetail -> ViewVideoFragment.newInstance(detail)
             else -> throw UnsupportedOperationException()
         }
     }

@@ -2,6 +2,7 @@ package be.hogent.faith.service.usecases.backpack
 
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.service.encryption.ContainerType
 import be.hogent.faith.service.encryption.EncryptedDetailsContainer
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import be.hogent.faith.service.repositories.IDetailContainerRepository
@@ -49,7 +50,8 @@ class SaveBackpackDetailUseCaseTest {
         // Arrange
         val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
 
-        val encryptedContainer = EncryptedDetailsContainer("encryptedDEK", "encryptedSDEK")
+        val encryptedContainer =
+            EncryptedDetailsContainer(ContainerType.BACKPACK, "encryptedDEK", "encryptedSDEK")
         every { containerRepository.getEncryptedContainer() } returns Single.just(encryptedContainer)
 
         val encryptedDetail = EncryptedDetailFactory.makeRandomDetail()

@@ -13,9 +13,9 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.AudioDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.ExistingDetailNavigationListener
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.VideoDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.PictureDetailViewHolder
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.TextDetailViewHolder
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder.VideoDetailViewHolder
 import be.hogent.faith.faith.util.getDefaultThumbnailUrl
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -45,15 +45,14 @@ object DetailViewHolderFactory {
                 thumbnailView,
                 existingDetailNavigationListener
             )
-            DetailTypes.EXTERNAL_VIDEO_DETAIL -> createExternalVideoDetailViewHolder(
+            DetailTypes.VIDEO_DETAIL, DetailTypes.FILM_DETAIL -> createVideoDetailViewHolder(
                 thumbnailView,
                 existingDetailNavigationListener
             )
-            DetailTypes.VIDEO_DETAIL -> createYoutubeVideoDetailViewholder(
+            DetailTypes.YOUTUBE_DETAIL -> createYoutubeVideoDetailViewholder(
                 thumbnailView,
                 existingDetailNavigationListener
             )
-            // TEXT_DETAIL
             else -> createTextDetailViewHolder(
                 thumbnailView,
                 existingDetailNavigationListener
@@ -84,7 +83,7 @@ object DetailViewHolderFactory {
         return PictureDetailViewHolder(thumbnailView, existingDetailNavigationListener)
     }
 
-    private fun createExternalVideoDetailViewHolder(
+    private fun createVideoDetailViewHolder(
         thumbnailView: LinearLayout,
         existingDetailNavigationListener: ExistingDetailNavigationListener
     ): VideoDetailViewHolder {
@@ -154,7 +153,8 @@ sealed class DetailViewHolder(
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {
             if (detail.thumbnail == null)
-                return Glide.with(thumbnailView).load(if (detail is PhotoDetail) R.drawable.ic_camera else R.drawable.ic_tekenen)
+                return Glide.with(thumbnailView)
+                    .load(if (detail is PhotoDetail) R.drawable.ic_camera else R.drawable.ic_tekenen)
             return Glide.with(thumbnailView)
                 .load(Base64.decode(detail.thumbnail, Base64.DEFAULT))
         }
@@ -176,7 +176,10 @@ sealed class DetailViewHolder(
     ) : DetailViewHolder(imageView, existingDetailNavigationListener) {
 
         override fun load(detail: Detail): RequestBuilder<Drawable> {
-            return Glide.with(thumbnailView).load(R.drawable.event_detail_camera) // Vervangen door?
+            if (detail.thumbnail == null)
+                return Glide.with(thumbnailView).load(R.drawable.ic_camera)
+            return Glide.with(thumbnailView)
+                .load(Base64.decode(detail.thumbnail, Base64.DEFAULT))
         }
     }
 
