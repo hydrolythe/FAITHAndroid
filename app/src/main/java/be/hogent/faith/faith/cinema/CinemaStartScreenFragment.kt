@@ -81,6 +81,7 @@ class CinemaStartScreenFragment : Fragment() {
                 binding.popupWindowCinema.popupCinema.visibility = View.GONE
                 binding.btnCinemaAdd.setImageResource(R.drawable.add_btn)
             }
+            addDetailMenu.show()
         })
 
         binding.popupWindowCinema.addDrawing.setOnClickListener {
@@ -139,11 +140,7 @@ class CinemaStartScreenFragment : Fragment() {
             detailThumbnailsAdapter?.submitList(details)
         })
 
-        cinemaOverviewViewModel.addButtonClicked.observe(this, Observer {
-            addDetailMenu.show()
-        })
-
-        cinemaOverviewViewModel.deleteEnabled.observe(this, Observer { enabled ->
+        cinemaOverviewViewModel.deleteModeEnabled.observe(this, Observer { enabled ->
             if (enabled) {
                 detailThumbnailsAdapter!!.setItemsAsDeletable(true)
             } else {

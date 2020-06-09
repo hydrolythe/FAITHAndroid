@@ -73,17 +73,16 @@ class BackpackScreenFragment : Fragment() {
     }
 
     private fun startListeners() {
-
         backpackViewModel.filteredDetails.observe(this, Observer { details ->
             detailThumbnailsAdapter?.submitList(details)
             if (details.isEmpty()) {
-                backpackViewModel.deleteEnabled.postValue(false)
+                backpackViewModel.deleteModeEnabled.postValue(false)
             } else {
                 backpackBinding.btnBackpackDelete.isClickable = true
             }
         })
 
-        backpackViewModel.deleteEnabled.observe(this, Observer { enabled ->
+        backpackViewModel.deleteModeEnabled.observe(this, Observer { enabled ->
             if (enabled) {
                 detailThumbnailsAdapter!!.setItemsAsDeletable(true)
                 backpackViewModel.viewButtons(false)
@@ -92,7 +91,8 @@ class BackpackScreenFragment : Fragment() {
                 backpackViewModel.viewButtons(true)
             }
         })
-        backpackBinding.btnBackpackAdd.setOnClickListener {
+
+        backpackViewModel.addButtonClicked.observe(viewLifecycleOwner, Observer {
             menuIsOpen = menuIsOpen.not()
             if (menuIsOpen) {
                 backpackBinding.btnBackpackAdd.setImageResource(R.drawable.ic_knop_sluit_opties)
@@ -100,7 +100,7 @@ class BackpackScreenFragment : Fragment() {
                 backpackBinding.btnBackpackAdd.setImageResource(R.drawable.add_btn)
             }
             addDetailMenu.show()
-        }
+        })
 
         backpackViewModel.textFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setDrawable(

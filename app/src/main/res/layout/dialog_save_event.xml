@@ -14,6 +14,7 @@
             type="be.hogent.faith.faith.UserViewModel" />
 
     </data>
+    <!-- TODO: toevoegen van captions Titel en notities -->
 
     <FrameLayout
         android:layout_width="match_parent"

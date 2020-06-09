@@ -44,8 +44,6 @@ class CinemaOverviewViewModel(
     private val _makeFilmButtonClicked = SingleLiveEvent<Unit>()
     val makeFilmButtonClicked: LiveData<Unit> = _makeFilmButtonClicked
 
-    private val _addButtonClicked = SingleLiveEvent<Unit>()
-    val addButtonClicked: LiveData<Unit> = _addButtonClicked
 
     private val _filmSavedSuccessFully = SingleLiveEvent<Unit>()
     val filmSavedSuccessFully: LiveData<Unit> = _filmSavedSuccessFully
@@ -66,10 +64,6 @@ class CinemaOverviewViewModel(
             initSearch()
         }
         _makeFilmButtonClicked.call()
-    }
-
-    fun onAddButtonClicked() {
-        _addButtonClicked.call()
     }
 
     private fun initSearch() {

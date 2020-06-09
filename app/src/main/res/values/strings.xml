@@ -189,7 +189,8 @@
     <string name="foto_nemen">Foto\nnemen</string>
     <string name="add_video">Filmen</string>
     <string name="title_backpack">Backpack</string>
-    <string name="add_detail_menu_backpack">Bestand toevoegen aan rugzak</string>
+    <string name="add_detail_menu_backpack">Detail toevoegen aan rugzak</string>
+    <string name="add_detail_menu_treasurechest">Detail toevoegen aan schatkist</string>
     <string name="filter_menu_background">Filter menu achtergrond</string>
     <string name="filter_menu_content">Filter menu inhoud</string>
     <string name="filter_boy">Filter jongen afbeelding</string>

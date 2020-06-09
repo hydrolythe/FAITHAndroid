@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="treasureChestViewModel"
             type="be.hogent.faith.faith.treasureChest.TreasureChestViewModel" />
@@ -57,7 +59,8 @@
             app:iconGravity="textStart"
             app:iconSize="34dp"
             app:layout_constraintEnd_toStartOf="@+id/guide_treasurechest_rv_right"
-            app:layout_constraintTop_toTopOf="@+id/textInputLayout_treasurechest_details_search" />
+            app:layout_constraintTop_toTopOf="@+id/textInputLayout_treasurechest_details_search"
+            tools:text="28/10/1991-28/10/2020" />
 
 
         <ImageButton
@@ -141,6 +144,7 @@
             android:background="@drawable/ic_trashcan"
             android:contentDescription="@string/rv_btn_delete_detail"
             android:onClick="@{() -> treasureChestViewModel.onDeleteClicked()}"
+            android:visibility="@{treasureChestViewModel.deleteButtonVisible== true ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toTopOf="@+id/guide_treasurechest_rv_bottom"
             app:layout_constraintEnd_toStartOf="@+id/guide_treasurechest_rv_left"
             app:srcCompat="@drawable/ic_trashcan" />

@@ -26,7 +26,8 @@ import be.hogent.faith.faith.details.video.view.ViewVideoFragment
 import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailFragment
 import be.hogent.faith.faith.details.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
-import java.lang.UnsupportedOperationException
+import be.hogent.faith.faith.treasureChest.SaveTreasureChestDetailDialog
+import be.hogent.faith.faith.treasureChest.TreasureChestActivity
 import kotlin.reflect.KClass
 
 enum class DetailType {
@@ -80,6 +81,7 @@ object DetailsFactory {
             is EmotionCaptureMainActivity -> null
             is BackpackScreenActivity -> SaveBackpackDetailDialog(detailType)
             is CinemaActivity -> SaveCinemaDetailDialog.newInstance(detailType)
+            is TreasureChestActivity -> SaveTreasureChestDetailDialog.newInstance(detailType)
             else -> throw UnsupportedOperationException()
         }
     }
