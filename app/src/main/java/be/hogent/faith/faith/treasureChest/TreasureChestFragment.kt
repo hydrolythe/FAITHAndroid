@@ -17,13 +17,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 
 class TreasureChestFragment : Fragment() {
 
     private var navigation: TreasureChestDetailsNavigationListener? = null
-    private val treasureChestViewModel: TreasureChestViewModel by viewModel()
+    private val treasureChestViewModel: TreasureChestViewModel by sharedViewModel()
     private lateinit var treasureChestBinding: be.hogent.faith.databinding.FragmentTreasurechestBinding
     private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
     private lateinit var addDetailMenu: PopupMenu

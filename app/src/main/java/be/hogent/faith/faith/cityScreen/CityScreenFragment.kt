@@ -59,8 +59,8 @@ class CityScreenFragment : Fragment() {
     }
 
     private fun registerListeners() {
-        cityScreenViewModel.archiveClicked.observe(this, Observer {
-            navigation?.startOverviewEventsFragment()
+        cityScreenViewModel.libraryClicked.observe(this, Observer {
+            navigation?.startLibrary()
         })
         cityScreenViewModel.parkClicked.observe(this, Observer {
             navigation?.startEmotionCapture()
@@ -69,15 +69,18 @@ class CityScreenFragment : Fragment() {
             navigation?.logOut()
         })
         cityScreenViewModel.backpackClicked.observe(this, Observer {
-            navigation?.startBackpackFragment()
+            navigation?.startBackpack()
         })
-
+        cityScreenViewModel.treehouseClicked.observe(this, Observer {
+            navigation?.startTreasureChest()
+        })
         cityScreenViewModel.cinemaClicked.observe(this, Observer {
-            navigation?.startCinemaFragment()
+            navigation?.startCinema()
         })
 
         userViewModel.user.observe(this, Observer { user ->
-            Glide.with(requireContext()).load(avatarProvider.getAvatarDrawableStaan(user.avatarName))
+            Glide.with(requireContext())
+                .load(avatarProvider.getAvatarDrawableStaan(user.avatarName))
                 .diskCacheStrategy(
                     DiskCacheStrategy.ALL
                 ).into(image_main_avatar)
@@ -93,9 +96,10 @@ class CityScreenFragment : Fragment() {
 
     interface CityScreenNavigationListener {
         fun startEmotionCapture()
-        fun startOverviewEventsFragment()
+        fun startLibrary()
         fun logOut()
-        fun startBackpackFragment()
-        fun startCinemaFragment()
+        fun startBackpack()
+        fun startCinema()
+        fun startTreasureChest()
     }
 }

@@ -88,6 +88,7 @@
     <string name="lbl_save_event_title">Titel</string>
     <string name="lbl_back">Terug</string>
     <string name="lbl_activity_emotionCapture">Emotiecaptatie</string>
+    <string name="lbl_activity_treasurechest">Schatkist</string>
     <string name="lbl_activity_city">De Stad</string>
     <string name="description_event_avatar">Getekende avatar voor de gebeurtenis</string>
     <string name="descr_city_park">Het stadspark</string>
@@ -174,7 +175,7 @@
     <string name="ster">ster</string>
     <string name="naar_de_stad">Naar de stad</string>
     <string name="register_background">register background</string>
-    <string name="confirm">ok</string>
+    <string name="confirm">OK</string>
     <string name="kies_een_kleur">Kies een kleur</string>
     <string name="huidskleur">huidskleur</string>
     <string name="wegwijzerpaal">wegwijzerpaal</string>
