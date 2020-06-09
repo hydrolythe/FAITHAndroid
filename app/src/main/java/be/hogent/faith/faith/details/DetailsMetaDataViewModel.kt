@@ -55,7 +55,6 @@ abstract class DetailsMetaDataViewModel : ViewModel() {
         this.value = ""
     }
 
-
     fun onCancelClicked() {
         _cancelClicked.call()
     }

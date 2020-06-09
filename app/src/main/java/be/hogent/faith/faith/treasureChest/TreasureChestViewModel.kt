@@ -19,4 +19,4 @@ class TreasureChestViewModel(
     loadDetailFileUseCase,
     getDataUseCase,
     treasureChest
-) {}
+)
