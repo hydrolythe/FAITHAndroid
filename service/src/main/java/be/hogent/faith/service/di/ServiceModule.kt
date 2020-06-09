@@ -49,6 +49,12 @@ object CinemaNames {
     const val encryptionService = "CinemaEncryptionService"
 }
 
+object TreasureChestNames {
+    const val repo = "TreasureChestRepository"
+    const val database = "TreasureChestDatabase"
+    const val encryptionService = "TreasureChestEncryptionService"
+}
+
 val serviceModule = module {
     factory {
         GetEventsUseCase(
@@ -71,8 +77,10 @@ val serviceModule = module {
             userRepository = get(),
             backpackRepository = get(named(BackpackNames.repo)),
             cinemaRepository = get(named(CinemaNames.repo)),
-            backpackEncryptionService = get(),
-            cinemaEncryptionService = get(),
+            backpackEncryptionService = get(named(BackpackNames.encryptionService)),
+            cinemaEncryptionService = get(named(CinemaNames.encryptionService)),
+            treasureChestEncryptionService = get(named(TreasureChestNames.encryptionService)),
+            treasureChestRepository = get(named(TreasureChestNames.repo)),
             observer = get()
         )
     }

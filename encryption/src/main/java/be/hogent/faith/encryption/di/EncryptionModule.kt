@@ -2,6 +2,7 @@ package be.hogent.faith.encryption.di
 
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
+import be.hogent.faith.domain.models.TreasureChest
 import be.hogent.faith.encryption.DetailContainerEncryptionService
 import be.hogent.faith.encryption.DetailEncryptionService
 import be.hogent.faith.encryption.EventEncryptionService
@@ -12,6 +13,7 @@ import be.hogent.faith.encryption.internal.KeyEncryptionService
 import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.service.di.BackpackNames
 import be.hogent.faith.service.di.CinemaNames
+import be.hogent.faith.service.di.TreasureChestNames
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import be.hogent.faith.service.encryption.IEventEncryptionService
 import com.squareup.moshi.Moshi
@@ -32,6 +34,9 @@ val encryptionModule = module {
     factory<IEventEncryptionService> { EventEncryptionService(get(), get(), get(), get(), get()) }
     factory<IDetailContainerEncryptionService<Backpack>>(named(BackpackNames.encryptionService)) {
         DetailContainerEncryptionService<Backpack>(get(), get(), get(), get())
+    }
+    factory<IDetailContainerEncryptionService<TreasureChest>>(named(TreasureChestNames.encryptionService)) {
+        DetailContainerEncryptionService<TreasureChest>(get(), get(), get(), get())
     }
     factory<IDetailContainerEncryptionService<Cinema>>(named(CinemaNames.encryptionService)) {
         DetailContainerEncryptionService<Cinema>(get(), get(), get(), get())
