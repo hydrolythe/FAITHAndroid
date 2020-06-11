@@ -24,6 +24,7 @@ import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailFragment
 import be.hogent.faith.faith.details.youtubeVideo.view.ViewYoutubeVideoFragment
+import be.hogent.faith.faith.detailscontainer.DetailsContainerFragment
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
@@ -33,7 +34,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 class TreasureChestActivity : AppCompatActivity(),
-    TreasureChestFragment.TreasureChestDetailsNavigationListener,
+    DetailsContainerFragment.DetailsContainerNavigationListener,
     RecordAudioFragment.AudioScreenNavigation,
     DrawFragment.DrawingScreenNavigation,
     DetailFinishedListener,
@@ -67,7 +68,7 @@ class TreasureChestActivity : AppCompatActivity(),
         }
 
         treasureChestViewModel.goToCityScreen.observe(this, Observer {
-            closeTreasureChest()
+            closeScreen()
         })
 
         treasureChestViewModel.goToDetail.observe(this, Observer {
@@ -151,7 +152,7 @@ class TreasureChestActivity : AppCompatActivity(),
         treasureChestViewModel.setCurrentFileAndLoadCorrespondingFile(detail)
     }
 
-    override fun closeTreasureChest() {
+    override fun closeScreen() {
         closeBackpackSpecificScopes()
         finish()
     }

@@ -15,7 +15,6 @@ import be.hogent.faith.service.usecases.detailscontainer.GetDetailsContainerData
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
-import org.threeten.bp.LocalDate
 import timber.log.Timber
 
 class CinemaOverviewViewModel(
@@ -68,11 +67,6 @@ class CinemaOverviewViewModel(
     private fun initSearch() {
         setSearchStringText("")
         resetDateRange()
-    }
-
-    fun resetDateRange() {
-        _startDate.value = LocalDate.MIN.plusDays(1)
-        _endDate.value = LocalDate.now()
     }
 
     fun saveFilm(filmDetail: FilmDetail, user: User) {

@@ -1,109 +1,52 @@
 package be.hogent.faith.faith.backpackScreen
 
-import android.content.Context
-import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.Toast
-
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.appcompat.widget.PopupMenu
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
+import be.hogent.faith.databinding.FragmentBackpackBinding
+import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.faith.detailscontainer.DetailsContainerFragment
+import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
+import kotlinx.android.synthetic.main.fragment_backpack.btn_backpack_add
+import kotlinx.android.synthetic.main.fragment_backpack.btn_backpack_delete
+import kotlinx.android.synthetic.main.fragment_backpack.recyclerview_backpack
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import timber.log.Timber
 
-class BackpackScreenFragment : Fragment() {
+class BackpackScreenFragment : DetailsContainerFragment<Backpack>() {
 
-    private var navigation: BackpackDetailsNavigationListener? = null
+    override val addButton: ImageButton
+        get() = btn_backpack_add
+    override val deleteButton: ImageButton
+        get() = btn_backpack_delete
+    override val detailsRecyclerView: RecyclerView
+        get() = recyclerview_backpack
+
+    override val layoutResourceID: Int = R.layout.fragment_backpack
+    override val menuResourceID: Int = R.menu.menu_backpack
+
     private val backpackViewModel: BackpackViewModel by sharedViewModel()
-    private lateinit var backpackBinding: be.hogent.faith.databinding.FragmentBackpackBinding
-    private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
-    private lateinit var addDetailMenu: PopupMenu
-    private var menuIsOpen: Boolean = false
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        backpackBinding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_backpack, container, false)
 
-        backpackViewModel.viewButtons(true)
+    override val detailsContainerViewModel: DetailsContainerViewModel<Backpack>
+        get() = backpackViewModel
 
+    private val backpackBinding: FragmentBackpackBinding
+        get() = binding as FragmentBackpackBinding
+
+    override fun setViewModel() {
         backpackBinding.backpackViewModel = backpackViewModel
-        backpackBinding.lifecycleOwner = this@BackpackScreenFragment
-
-        return backpackBinding.root
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is BackpackDetailsNavigationListener) {
-            navigation = context
-        }
     }
 
     override fun onStart() {
         super.onStart()
-        startListeners()
-        updateUI()
-        initialiseMenu()
+        backpackViewModel.viewButtons(true)
+        startDetailFilterListeners()
     }
 
-    private fun updateUI() {
-        detailThumbnailsAdapter = DetailThumbnailsAdapter(
-            requireNotNull(activity) as BackpackScreenActivity
-        )
-        backpackBinding.recyclerviewBackpack.layoutManager = GridLayoutManager(activity, 5)
-        backpackBinding.recyclerviewBackpack.adapter = detailThumbnailsAdapter
-    }
-
-    override fun onStop() {
-        super.onStop()
-        detailThumbnailsAdapter = null
-    }
-
-    private fun startListeners() {
-        backpackViewModel.filteredDetails.observe(this, Observer { details ->
-            detailThumbnailsAdapter?.submitList(details)
-            if (details.isEmpty()) {
-                backpackViewModel.deleteModeEnabled.postValue(false)
-            } else {
-                backpackBinding.btnBackpackDelete.isClickable = true
-            }
-        })
-
-        backpackViewModel.deleteModeEnabled.observe(this, Observer { enabled ->
-            if (enabled) {
-                detailThumbnailsAdapter!!.setItemsAsDeletable(true)
-                backpackViewModel.viewButtons(false)
-            } else {
-                detailThumbnailsAdapter!!.setItemsAsDeletable(false)
-                backpackViewModel.viewButtons(true)
-            }
-        })
-
-        backpackViewModel.addButtonClicked.observe(viewLifecycleOwner, Observer {
-            menuIsOpen = menuIsOpen.not()
-            if (menuIsOpen) {
-                backpackBinding.btnBackpackAdd.setImageResource(R.drawable.ic_knop_sluit_opties)
-            } else {
-                backpackBinding.btnBackpackAdd.setImageResource(R.drawable.add_btn)
-            }
-            addDetailMenu.show()
-        })
-
+    private fun startDetailFilterListeners() {
         backpackViewModel.textFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
-            setDrawable(
+            setFilterStateDrawable(
                 enabled,
                 backpackBinding.backpackMenuFilter.filterknopTeksten,
                 R.drawable.ic_filterknop_teksten,
@@ -111,7 +54,7 @@ class BackpackScreenFragment : Fragment() {
             )
         })
         backpackViewModel.audioFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
-            setDrawable(
+            setFilterStateDrawable(
                 enabled,
                 backpackBinding.backpackMenuFilter.filterknopAudio,
                 R.drawable.ic_filterknop_audio,
@@ -119,7 +62,7 @@ class BackpackScreenFragment : Fragment() {
             )
         })
         backpackViewModel.photoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
-            setDrawable(
+            setFilterStateDrawable(
                 enabled,
                 backpackBinding.backpackMenuFilter.filterknopFoto,
                 R.drawable.ic_filterknop_foto,
@@ -127,7 +70,7 @@ class BackpackScreenFragment : Fragment() {
             )
         })
         backpackViewModel.drawingFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
-            setDrawable(
+            setFilterStateDrawable(
                 enabled,
                 backpackBinding.backpackMenuFilter.filterknopTekeningen,
                 R.drawable.ic_filterknop_tekeningen,
@@ -136,7 +79,7 @@ class BackpackScreenFragment : Fragment() {
         })
         // TODO
         backpackViewModel.videoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
-            setDrawable(
+            setFilterStateDrawable(
                 enabled,
                 backpackBinding.backpackMenuFilter.filterknopFilm,
                 R.drawable.filterknop_film,
@@ -147,88 +90,30 @@ class BackpackScreenFragment : Fragment() {
         backpackViewModel.externalVideoFilterEnabled.observe(
             viewLifecycleOwner,
             Observer { enabled ->
-                setDrawable(
+                setFilterStateDrawable(
                     enabled,
                     backpackBinding.backpackMenuFilter.filterknopExternBestand,
                     R.drawable.filterknop_extern_bestand,
                     R.drawable.circle_green // Placeholder, juiste drawable ontbreekt
                 )
             })
-
-        backpackViewModel.errorMessage.observe(this, Observer { message ->
-            Toast.makeText(context, resources.getString(message), Toast.LENGTH_LONG).show()
-        })
     }
 
-    private fun initialiseMenu() {
-        addDetailMenu = PopupMenu(
-            backpackBinding.btnBackpackAdd.context,
-            backpackBinding.btnBackpackAdd,
-            Gravity.END,
-            0,
-            R.style.PopupMenu_AddDetail
-        )
-
-        addDetailMenu.menuInflater.inflate(R.menu.menu_backpack, addDetailMenu.menu)
-
-        addDetailMenu.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.backpack_menu_addAudio ->
-                    navigation?.startAudioDetailFragment()
-                R.id.backpack_menu_addDrawing ->
-                    navigation?.startDrawingDetailFragment()
-                R.id.backpack_menu_addFile ->
-                    navigation?.startExternalFileDetailFragment()
-                R.id.backpack_menu_addFoto ->
-                    navigation?.startPhotoDetailFragment()
-                R.id.backpack_menu_addText ->
-                    navigation?.startTextDetailFragment()
-                R.id.backpack_menu_addVideo ->
-                    navigation?.startVideoDetailFragment()
-            }
-            true
-        }
-        addDetailMenu.setOnDismissListener {
-            menuIsOpen = menuIsOpen.not()
-            if (menuIsOpen) {
-                backpackBinding.btnBackpackAdd.setImageResource(R.drawable.ic_knop_sluit_opties)
-            } else {
-                backpackBinding.btnBackpackAdd.setImageResource(R.drawable.add_btn)
-            }
-        }
-        try {
-            val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
-            fieldMPopup.isAccessible = true
-            val mPopup = fieldMPopup.get(addDetailMenu)
-            mPopup.javaClass
-                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                .invoke(mPopup, true)
-        } catch (e: Exception) {
-            Timber.e("Error showing icons")
-        }
-    }
-
-    private fun setDrawable(enabled: Boolean, button: ImageButton, image: Int, imageSelected: Int) {
-        button.setImageDrawable(
+    private fun setFilterStateDrawable(
+        filterEnabled: Boolean,
+        filterButton: ImageButton,
+        disabledImageResId: Int,
+        enabledFilterResId: Int
+    ) {
+        filterButton.setImageDrawable(
             AppCompatResources.getDrawable(
                 this.requireContext(),
-                if (enabled) imageSelected else image
+                if (filterEnabled) enabledFilterResId else disabledImageResId
             )
         )
     }
 
-    interface BackpackDetailsNavigationListener {
-        fun startPhotoDetailFragment()
-        fun startAudioDetailFragment()
-        fun startDrawingDetailFragment()
-        fun startTextDetailFragment()
-        fun startVideoDetailFragment()
-        fun startExternalFileDetailFragment()
-
-        fun openDetailScreenFor(detail: Detail)
-
-        fun closeBackpack()
-    }
+    interface BackpackDetailsNavigationListener : DetailsContainerNavigationListener
 
     companion object {
         fun newInstance(): BackpackScreenFragment {

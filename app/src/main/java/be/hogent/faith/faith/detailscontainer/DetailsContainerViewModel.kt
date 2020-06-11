@@ -259,6 +259,11 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         _openDetailMode.postValue(openDetailMode)
     }
 
+    fun resetDateRange() {
+        _startDate.value = LocalDate.MIN.plusDays(1)
+        _endDate.value = LocalDate.now()
+    }
+
     // opslaan van detail
     open fun saveCurrentDetail(user: User, detail: Detail) {
         when (detail) {

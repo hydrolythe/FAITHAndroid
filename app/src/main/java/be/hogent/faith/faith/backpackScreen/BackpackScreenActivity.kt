@@ -62,7 +62,7 @@ class BackpackScreenActivity : AppCompatActivity(),
         }
 
         backpackViewModel.goToCityScreen.observe(this, Observer {
-            closeBackpack()
+            closeScreen()
         })
 
         backpackViewModel.goToDetail.observe(this, Observer {
@@ -150,12 +150,12 @@ class BackpackScreenActivity : AppCompatActivity(),
         backpackViewModel.viewButtons(false)
     }
 
-    override fun closeBackpack() {
-        closeBackpackSpecificScopes()
+    override fun closeScreen() {
+        closeActivitySpecificScopes()
         finish()
     }
 
-    private fun closeBackpackSpecificScopes() {
+    private fun closeActivitySpecificScopes() {
         // Close the drawing scope so unfinished drawings aren't shown when capturing
         // a new event.
         runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {

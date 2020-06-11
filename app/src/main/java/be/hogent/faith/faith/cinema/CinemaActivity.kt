@@ -52,7 +52,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
         }
 
         cinemaOverviewViewModel.goToCityScreen.observe(this, Observer {
-            closeCinema()
+            closeScreen()
         })
 
         // detail file is opgehaald
@@ -64,7 +64,7 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
         })
     }
 
-    override fun closeCinema() {
+    override fun closeScreen() {
         closeCinemaSpecificScopes()
         finish()
     }
@@ -85,9 +85,33 @@ class CinemaActivity : AppCompatActivity(), CinemaStartScreenFragment.CinemaNavi
         cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.NEW)
     }
 
+    override fun startAudioDetailFragment() {
+        replaceFragment(
+            DetailsFactory.createDetail(DetailType.AUDIO),
+            R.id.cinema_fragment_container
+        )
+        cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.NEW)
+    }
+
     override fun startDrawingDetailFragment() {
         replaceFragment(
             DetailsFactory.createDetail(DetailType.DRAWING),
+            R.id.cinema_fragment_container
+        )
+        cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.NEW)
+    }
+
+    override fun startTextDetailFragment() {
+        replaceFragment(
+            DetailsFactory.createDetail(DetailType.TEXT),
+            R.id.cinema_fragment_container
+        )
+        cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.NEW)
+    }
+
+    override fun startVideoDetailFragment() {
+        replaceFragment(
+            DetailsFactory.createDetail(DetailType.YOUTUBE),
             R.id.cinema_fragment_container
         )
         cinemaOverviewViewModel.setOpenDetailType(OpenDetailMode.NEW)

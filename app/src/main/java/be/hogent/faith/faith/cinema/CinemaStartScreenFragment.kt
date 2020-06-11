@@ -3,48 +3,47 @@ package be.hogent.faith.faith.cinema
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.CompoundButton
-import androidx.appcompat.widget.PopupMenu
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
+import android.widget.ImageButton
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCinemaStartBinding
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
+import be.hogent.faith.domain.models.Cinema
+import be.hogent.faith.faith.detailscontainer.DetailsContainerFragment
+import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
+import kotlinx.android.synthetic.main.fragment_cinema_start.btn_cinema_add
 import kotlinx.android.synthetic.main.fragment_cinema_start.btn_cinema_chooseDate
+import kotlinx.android.synthetic.main.fragment_cinema_start.btn_cinema_delete
+import kotlinx.android.synthetic.main.fragment_cinema_start.rv_cinema
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import timber.log.Timber
 
-class CinemaStartScreenFragment : Fragment() {
+class CinemaStartScreenFragment : DetailsContainerFragment<Cinema>() {
 
     private var navigation: CinemaNavigationListener? = null
-    private var detailThumbnailsAdapter: DetailThumbnailsAdapter? = null
-    private lateinit var binding: FragmentCinemaStartBinding
-    private lateinit var addDetailMenu: PopupMenu
-    private var menuIsOpen: Boolean = false
+    override val addButton: ImageButton
+        get() = btn_cinema_add
+    override val deleteButton: ImageButton
+        get() = btn_cinema_delete
+    override val detailsRecyclerView: RecyclerView
+        get() = rv_cinema
+
+    override val layoutResourceID: Int = R.layout.fragment_cinema_start
+    override val menuResourceID: Int = R.menu.menu_cinema
+
     private val cinemaOverviewViewModel: CinemaOverviewViewModel by sharedViewModel()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override val detailsContainerViewModel: DetailsContainerViewModel<Cinema>
+        get() = cinemaOverviewViewModel
 
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_cinema_start, container, false)
-        binding.lifecycleOwner = this
-        binding.cinemaOverviewViewModel = cinemaOverviewViewModel
+    private val cinemaBinding: FragmentCinemaStartBinding
+        get() = binding as FragmentCinemaStartBinding
 
-        return binding.root
+    override fun setViewModel() {
+        cinemaBinding.cinemaOverviewViewModel = cinemaOverviewViewModel
     }
 
     override fun onAttach(context: Context) {
@@ -57,124 +56,51 @@ class CinemaStartScreenFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         startListeners()
-        updateUI()
-        initialiseMenu()
-    }
-
-    private fun initialiseMenu() {
-        addDetailMenu = PopupMenu(
-            binding.btnCinemaAdd.context,
-            binding.btnCinemaAdd,
-            Gravity.END,
-            0,
-            R.style.PopupMenu_AddDetail
-        )
-
-        addDetailMenu.menuInflater.inflate(R.menu.menu_cinema, addDetailMenu.menu)
-
-        addDetailMenu.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.cinema_menu_addDrawing ->
-                    navigation?.startDrawingDetailFragment()
-                R.id.cinema_menu_addFile ->
-                    navigation?.startExternalFileDetailFragment()
-                R.id.backpack_menu_addFoto ->
-                    navigation?.startPhotoDetailFragment()
-            }
-            true
-        }
-        addDetailMenu.setOnDismissListener {
-            menuIsOpen = menuIsOpen.not()
-            if (menuIsOpen) {
-                binding.btnCinemaAdd.setImageResource(R.drawable.ic_knop_sluit_opties)
-            } else {
-                binding.btnCinemaAdd.setImageResource(R.drawable.add_btn)
-            }
-        }
-        try {
-            val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
-            fieldMPopup.isAccessible = true
-            val mPopup = fieldMPopup.get(addDetailMenu)
-            mPopup.javaClass
-                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                .invoke(mPopup, true)
-        } catch (e: Exception) {
-            Timber.e("Error showing icons")
-        }
-    }
-
-    private fun updateUI() {
-        detailThumbnailsAdapter = DetailThumbnailsAdapter(
-            requireNotNull(activity) as CinemaActivity
-        )
-        binding.rvCinema.layoutManager = GridLayoutManager(activity, 6)
-        binding.rvCinema.adapter = detailThumbnailsAdapter
     }
 
     private fun startListeners() {
-        cinemaOverviewViewModel.addButtonClicked.observe(this, Observer {
-            menuIsOpen = menuIsOpen.not()
-            if (menuIsOpen) {
-                binding.btnCinemaAdd.setImageResource(R.drawable.ic_knop_sluit_opties)
-            } else {
-                binding.btnCinemaAdd.setImageResource(R.drawable.add_btn)
-            }
-            addDetailMenu.show()
-        })
-
         cinemaOverviewViewModel.makeFilmButtonClicked.observe(this, Observer {
             navigation?.startCreateFilmFragment()
         })
         val toggle =
             CompoundButton.OnCheckedChangeListener { compoundButton: CompoundButton, isChecked: Boolean ->
-                if (isChecked && compoundButton == binding.btnDetails) {
+                if (isChecked && compoundButton == cinemaBinding.btnDetails) {
                     cinemaOverviewViewModel.onFilesButtonClicked()
-                } else if (isChecked && compoundButton == binding.btnFilms) {
+                } else if (isChecked && compoundButton == cinemaBinding.btnFilms) {
                     if (menuIsOpen) {
-                        binding.btnCinemaAdd.setImageResource(R.drawable.add_btn)
+                        cinemaBinding.btnCinemaAdd.setImageResource(R.drawable.add_btn)
                         menuIsOpen = false
                     }
                     cinemaOverviewViewModel.onFilmsButtonClicked()
                 }
             }
-        binding.btnDetails.setOnCheckedChangeListener(toggle)
-        binding.btnFilms.setOnCheckedChangeListener(toggle)
+        cinemaBinding.btnDetails.setOnCheckedChangeListener(toggle)
+        cinemaBinding.btnFilms.setOnCheckedChangeListener(toggle)
 
         cinemaOverviewViewModel.filmsVisible.observe(this, Observer { filmsVisible ->
             if (!filmsVisible) {
-                binding.btnCinemaAdd.visibility = View.VISIBLE
-                binding.btnDetails.backgroundTintList = ColorStateList.valueOf(Color.LTGRAY)
-                binding.btnFilms.isChecked = false
-                binding.btnFilms.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT)
-
-                binding.textInputEditTextCinemaDetailsSearch.hint =
-                    resources.getString(R.string.search_hint_bestand)
-            } else {
-                binding.btnCinemaAdd.visibility = View.GONE
-                binding.btnFilms.backgroundTintList = ColorStateList.valueOf(Color.LTGRAY)
-                binding.btnDetails.isChecked = false
-                binding.btnDetails.backgroundTintList =
+                cinemaBinding.btnCinemaAdd.visibility = View.VISIBLE
+                cinemaBinding.btnDetails.backgroundTintList = ColorStateList.valueOf(Color.LTGRAY)
+                cinemaBinding.btnFilms.isChecked = false
+                cinemaBinding.btnFilms.backgroundTintList =
                     ColorStateList.valueOf(Color.TRANSPARENT)
 
-                binding.textInputEditTextCinemaDetailsSearch.hint =
+                cinemaBinding.textInputEditTextCinemaDetailsSearch.hint =
+                    resources.getString(R.string.search_hint_bestand)
+            } else {
+                cinemaBinding.btnCinemaAdd.visibility = View.GONE
+                cinemaBinding.btnFilms.backgroundTintList = ColorStateList.valueOf(Color.LTGRAY)
+                cinemaBinding.btnDetails.isChecked = false
+                cinemaBinding.btnDetails.backgroundTintList =
+                    ColorStateList.valueOf(Color.TRANSPARENT)
+
+                cinemaBinding.textInputEditTextCinemaDetailsSearch.hint =
                     resources.getString(R.string.search_hint_film)
             }
         })
 
-        cinemaOverviewViewModel.filteredDetails.observe(this, Observer { details ->
-            detailThumbnailsAdapter?.submitList(details)
-        })
-
-        cinemaOverviewViewModel.deleteModeEnabled.observe(this, Observer { enabled ->
-            if (enabled) {
-                detailThumbnailsAdapter!!.setItemsAsDeletable(true)
-            } else {
-                detailThumbnailsAdapter!!.setItemsAsDeletable(false)
-            }
-        })
-
         cinemaOverviewViewModel.goToCityScreen.observe(this, Observer {
-            navigation!!.closeCinema()
+            navigation!!.closeScreen()
         })
 
         cinemaOverviewViewModel.dateRangeClicked.observe(this, Observer {
@@ -211,14 +137,7 @@ class CinemaStartScreenFragment : Fragment() {
         }
     }
 
-    interface CinemaNavigationListener {
-        fun startPhotoDetailFragment()
-        fun startDrawingDetailFragment()
-        fun startExternalFileDetailFragment()
+    interface CinemaNavigationListener : DetailsContainerNavigationListener {
         fun startCreateFilmFragment()
-
-        fun openDetailScreenFor(detail: Detail)
-
-        fun closeCinema()
     }
 }
