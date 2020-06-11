@@ -35,7 +35,7 @@
             android:name=".faith.cinema.CinemaActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".faith.backpackScreen.BackpackScreenActivity"
+            android:name=".faith.backpack.BackpackScreenActivity"
             android:label="@string/title_backpack"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.FullScreen">

@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/backpackScreenFragment"
-        android:name="be.hogent.faith.faith.backpackScreen.BackpackScreenFragment"
+        android:name="be.hogent.faith.faith.backpack.BackpackScreenFragment"
         android:label="BackpackScreenFragment" />
 
 </navigation>

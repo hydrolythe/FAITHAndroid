@@ -6,7 +6,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.TreasureChest
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.backpackScreen.BackpackViewModel
+import be.hogent.faith.faith.backpack.BackpackViewModel
 import be.hogent.faith.faith.cinema.CinemaCreateVideoViewModel
 import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel

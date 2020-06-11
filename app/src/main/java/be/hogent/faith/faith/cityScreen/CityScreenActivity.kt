@@ -6,7 +6,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
+import be.hogent.faith.faith.backpack.BackpackScreenActivity
 import be.hogent.faith.faith.cinema.CinemaActivity
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity

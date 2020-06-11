@@ -13,7 +13,7 @@ import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.backpackScreen.DeleteDetailDialog
+import be.hogent.faith.faith.backpack.DeleteDetailDialog
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailType
 import be.hogent.faith.faith.details.DetailsFactory

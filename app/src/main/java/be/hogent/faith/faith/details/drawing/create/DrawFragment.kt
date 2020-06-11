@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
+import be.hogent.faith.faith.backpack.BackpackScreenActivity
 import be.hogent.faith.faith.cinema.CinemaActivity
 import be.hogent.faith.faith.treasureChest.TreasureChestActivity
 import com.divyanshu.draw.widget.DrawView

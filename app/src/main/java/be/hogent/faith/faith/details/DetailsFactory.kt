@@ -10,8 +10,8 @@ import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
-import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
-import be.hogent.faith.faith.backpackScreen.SaveBackpackDetailDialog
+import be.hogent.faith.faith.backpack.BackpackScreenActivity
+import be.hogent.faith.faith.backpack.SaveBackpackDetailDialog
 import be.hogent.faith.faith.cinema.CinemaActivity
 import be.hogent.faith.faith.cinema.SaveCinemaDetailDialog
 import be.hogent.faith.faith.details.audio.RecordAudioFragment

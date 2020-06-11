@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.backpackScreen
+package be.hogent.faith.faith.backpack
 
 import android.os.Bundle
 import android.view.LayoutInflater

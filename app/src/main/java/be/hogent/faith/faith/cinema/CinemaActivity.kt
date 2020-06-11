@@ -8,7 +8,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.backpackScreen.DeleteDetailDialog
+import be.hogent.faith.faith.backpack.DeleteDetailDialog
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailType
 import be.hogent.faith.faith.details.DetailsFactory
