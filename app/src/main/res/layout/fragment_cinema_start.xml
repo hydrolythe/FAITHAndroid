@@ -78,8 +78,8 @@
             app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical2"
             app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
             app:layout_constraintTop_toTopOf="@+id/guide_rv_container_horizontal"
-            app:srcCompat="@drawable/cinema_film_container"
-            tools:srcCompat="@drawable/cinema_film_container" />
+            app:srcCompat="@drawable/rect_rounded_white"
+            tools:srcCompat="@drawable/rect_rounded_white" />
 
 
         <ToggleButton

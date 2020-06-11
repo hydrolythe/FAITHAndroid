@@ -88,21 +88,21 @@
             android:layout_width="8dp"
             android:layout_height="12dp"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.76" />
+            app:layout_constraintGuide_percent="0.77" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_treasurechest_rv_top"
             android:layout_width="8dp"
             android:layout_height="12dp"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.15" />
+            app:layout_constraintGuide_percent="0.12" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_treasurechest_rv_bottom"
             android:layout_width="8dp"
             android:layout_height="12dp"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.65" />
+            app:layout_constraintGuide_percent="0.66" />
 
         <ImageButton
             android:id="@+id/btn_treasurechest_add"
@@ -123,11 +123,11 @@
             android:id="@+id/rv_treasurechest"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:scrollbarSize="16dp"
-            android:scrollbarThumbVertical="@drawable/scrollbarthumb_circle_rv"
-            android:scrollbarTrackVertical="@drawable/scrollbartrack_rectangle_rv"
-            android:scrollbars="vertical"
-            android:verticalScrollbarPosition="right"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rect_rounded_white"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/guide_treasurechest_rv_bottom"
             app:layout_constraintEnd_toStartOf="@+id/guide_treasurechest_rv_right"
@@ -139,14 +139,14 @@
             android:id="@+id/btn_treasurechest_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/ic_trashcan"
             android:contentDescription="@string/rv_btn_delete_detail"
             android:onClick="@{() -> treasureChestViewModel.onDeleteClicked()}"
             android:visibility="@{treasureChestViewModel.deleteButtonVisible== true ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toTopOf="@+id/guide_treasurechest_rv_bottom"
-            app:layout_constraintEnd_toStartOf="@+id/guide_treasurechest_rv_left"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_treasurechest"
+            app:layout_constraintEnd_toEndOf="@+id/rv_treasurechest"
             app:srcCompat="@drawable/ic_trashcan" />
 
 
