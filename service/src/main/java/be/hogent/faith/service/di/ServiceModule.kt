@@ -30,6 +30,7 @@ import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.service.usecases.user.IsUsernameUniqueUseCase
 import be.hogent.faith.service.usecases.user.LoginUserUseCase
 import be.hogent.faith.service.usecases.user.LogoutUserUseCase
+import be.hogent.faith.util.ThumbnailProvider
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -99,10 +100,10 @@ val serviceModule = module {
     factory { LoginUserUseCase(get(), get()) }
     factory { LogoutUserUseCase(get(), get()) }
     factory { LoadTextDetailUseCase(get(), get()) }
-    factory { CreateDrawingDetailUseCase(get(), get()) }
-    factory { OverwriteDrawingDetailUseCase(get(), get()) }
+    factory { CreateDrawingDetailUseCase(get(), get(), get()) }
+    factory { OverwriteDrawingDetailUseCase(get(), get(), get()) }
     factory { OverwriteTextDetailUseCase(get(), get()) }
-    factory { CreatePhotoDetailUseCase(get()) }
+    factory { CreatePhotoDetailUseCase(get(), get()) }
     factory { CreateAudioDetailUseCase(get()) }
     factory { CreateTextDetailUseCase(get(), get()) }
     factory { CreateVideoDetailUseCase(get()) }
@@ -116,6 +117,7 @@ val serviceModule = module {
             observer = get()
         )
     }
+    single { ThumbnailProvider() }
     factory {
         MakeEventFilesAvailableUseCase(
             fileStorageRepo = get(),
@@ -191,6 +193,7 @@ val serviceModule = module {
         CreateCinemaVideoUseCase(
             videoEncoder = VideoEncoder(),
             loadFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
+            thumbnailProvider = get(),
             observer = get()
         )
     }

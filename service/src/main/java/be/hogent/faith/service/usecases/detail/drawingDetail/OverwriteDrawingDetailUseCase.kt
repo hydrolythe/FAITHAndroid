@@ -4,8 +4,7 @@ import android.graphics.Bitmap
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import be.hogent.faith.service.util.base64encodeImage
-import be.hogent.faith.service.util.getThumbnail
+import be.hogent.faith.util.ThumbnailProvider
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 
@@ -15,13 +14,14 @@ import io.reactivex.Scheduler
  */
 class OverwriteDrawingDetailUseCase(
     private val storageRepo: ITemporaryFileStorageRepository,
+    private val thumbnailProvider: ThumbnailProvider,
     observer: Scheduler
 ) : CompletableUseCase<OverwriteDrawingDetailUseCase.Params>(observer) {
 
     override fun buildUseCaseObservable(params: Params): Completable {
         return storageRepo.overwriteExistingDrawingDetail(params.bitmap, params.detail)
             .andThen(Completable.fromAction {
-                params.detail.thumbnail = params.bitmap.getThumbnail().base64encodeImage()
+                params.detail.thumbnail = thumbnailProvider.getBase64EncodedThumbnail(params.bitmap)
             })
     }
 

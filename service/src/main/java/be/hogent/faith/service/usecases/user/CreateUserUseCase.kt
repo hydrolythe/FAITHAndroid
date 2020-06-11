@@ -59,7 +59,7 @@ class CreateUserUseCase(
             }
 
         val createTreasureChest =
-            treasureChestEncryptionService.createContainer(ContainerType.CINEMA)
+            treasureChestEncryptionService.createContainer(ContainerType.TREASURECHEST)
                 .subscribeOn(subscriber)
                 .doOnSuccess { Timber.i("Created container for treasurechest") }
                 .doOnError { Timber.e("Fout bij aanmaken container schatkist: ${it.localizedMessage}") }
