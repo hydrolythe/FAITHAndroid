@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.12" />
+                app:layout_constraintGuide_percent="0.26" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide_save_bottom"
@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.21" />
+                app:layout_constraintGuide_percent="0.24" />
 
             <ImageButton
                 android:id="@+id/btn_save_treasurechest_cancel"
