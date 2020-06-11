@@ -92,7 +92,7 @@ abstract class DetailsContainerFragment<T : DetailsContainer> : Fragment() {
                 R.id.container_menu_addText ->
                     navigation?.startTextDetailFragment()
                 R.id.container_menu_addVideo ->
-                    navigation?.startVideoDetailFragment()
+                    navigation?.startYoutubeDetailFragment()
             }
             true
         }
@@ -162,7 +162,7 @@ abstract class DetailsContainerFragment<T : DetailsContainer> : Fragment() {
         fun startAudioDetailFragment()
         fun startDrawingDetailFragment()
         fun startTextDetailFragment()
-        fun startVideoDetailFragment()
+        fun startYoutubeDetailFragment()
         fun startExternalFileDetailFragment()
 
         fun openDetailScreenFor(detail: Detail)
