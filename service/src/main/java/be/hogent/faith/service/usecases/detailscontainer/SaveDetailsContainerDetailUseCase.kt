@@ -26,7 +26,6 @@ class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
             .doOnSuccess { Timber.i("Got encrypted container for ${params.detailsContainer.javaClass}") }
             .doOnError {
                 Timber.e("Error while fetching ${params.detailsContainer.javaClass}: ${it.localizedMessage}")
-                it.printStackTrace()
             }
             .flatMap { container ->
                 detailContainerEncryptionService.encrypt(params.detail, container)
@@ -34,7 +33,6 @@ class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
                     .doOnSuccess { Timber.i("Encrypted detail ${params.detail.uuid} in ${params.detailsContainer.javaClass}") }
                     .doOnError {
                         Timber.e("Error while encrypting detail $params.detail.uuid} in ${params.detailsContainer.javaClass}: ${it.localizedMessage}")
-                        it.printStackTrace()
                     }
             }
             .flatMap { encryptedDetail ->
@@ -57,14 +55,10 @@ class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
                         Timber.e("Error while storing detail data $params.detail.uuid} in ${params.detailsContainer.javaClass}: ${it.localizedMessage}")
                         it.printStackTrace()
                     }
-            }.andThen(
-                Completable.defer { Completable.fromAction { addDetailToContainer(params) } }
-                    .doOnComplete { Timber.i("Detail ${params.detail.uuid} added to ${params.detailsContainer.javaClass.simpleName}") }
-            )
-    }
-
-    private fun addDetailToContainer(params: Params) {
-        with(params) { detailsContainer.addDetail(detail) }
+            }
+        // We don't have to add the detail to the container ourselves because we updated in the
+        // database and updates to the container are automatically send to whoever is listening to
+        // the GetDetailsContainerDataUseCase.
     }
 
     data class Params(val user: User, val detailsContainer: DetailsContainer, val detail: Detail)

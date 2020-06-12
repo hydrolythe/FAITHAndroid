@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 
 import androidx.fragment.app.Fragment
@@ -67,13 +68,21 @@ class EventDetailFragment : Fragment() {
         })
 
         eventDetailsViewModel.details.observe(viewLifecycleOwner, Observer { details ->
-            (binding.recyclerViewLibraryEventdetails.adapter as DetailThumbnailsAdapter)
-                .submitList(details)
+            with(binding.recyclerViewLibraryEventdetails.adapter as DetailThumbnailsAdapter) {
+                submitList(details)
+                // Added to ensure thumbnails are loaded once files have been downloaded.
+                notifyDataSetChanged()
+            }
         })
 
         eventDetailsViewModel.cancelButtonClicked.observe(viewLifecycleOwner, Observer {
             requireActivity().onBackPressed()
         })
+        eventDetailsViewModel.errorMessage.observe(
+            viewLifecycleOwner,
+            Observer { errorMessageResourceID ->
+                Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
+            })
     }
 
     companion object {

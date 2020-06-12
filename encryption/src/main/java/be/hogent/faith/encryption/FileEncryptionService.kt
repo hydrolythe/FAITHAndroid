@@ -3,6 +3,7 @@ package be.hogent.faith.encryption
 import be.hogent.faith.util.withSuffix
 import com.google.crypto.tink.KeysetHandle
 import com.google.crypto.tink.streamingaead.StreamingAeadFactory
+import io.reactivex.Completable
 import io.reactivex.Single
 import java.io.File
 import java.io.FileInputStream
@@ -53,18 +54,22 @@ class FileEncryptionService {
     }
 
     /**
-     * Writes a decrypted version of the given [cypherTextFile] the returning [File].
+     * Writes a decrypted version of the given [cypherTextFile] to the specified [destinationFile].
      */
-    fun decrypt(cypherTextFile: File, streamingDEK: KeysetHandle): Single<File> {
-        return Single.fromCallable {
+    fun decrypt(
+        cypherTextFile: File,
+        streamingDEK: KeysetHandle,
+        destinationFile: File
+    ): Completable {
+        return Completable.fromCallable {
             val streamingAead = StreamingAeadFactory.getPrimitive(streamingDEK)
-            val plainTextFile = File(cypherTextFile.path.withSuffix(DECRYPTED_FILE_SUFFIX))
 
             val cipherTextChannel = FileInputStream(cypherTextFile).channel
             val decryptingChannel =
                 streamingAead.newDecryptingChannel(cipherTextChannel, associatedData)
 
-            val plainTextChannel = FileOutputStream(plainTextFile, false).channel
+            destinationFile.parentFile.mkdirs()
+            val plainTextChannel = FileOutputStream(destinationFile, false).channel
             val buffer = createBuffer(cipherTextChannel)
 
             var bytesRead = decryptingChannel.read(buffer)
@@ -77,9 +82,16 @@ class FileEncryptionService {
 
             decryptingChannel.close()
             plainTextChannel.close()
-
-            plainTextFile
         }
+    }
+
+    /**
+     * Writes a decrypted version of the given [cypherTextFile] to a File, and returns it.
+     */
+    fun decrypt(cypherTextFile: File, streamingDEK: KeysetHandle): Single<File> {
+        val plainTextFile = File(cypherTextFile.path.withSuffix(DECRYPTED_FILE_SUFFIX))
+        return decrypt(cypherTextFile, streamingDEK, plainTextFile)
+            .andThen(Single.just(plainTextFile))
     }
 
     private fun createBuffer(channel: FileChannel): ByteBuffer {

@@ -1,6 +1,10 @@
 package be.hogent.faith.domain.models
 
+import be.hogent.faith.domain.models.goals.Goal
+import be.hogent.faith.domain.models.goals.GoalColor
 import java.util.UUID
+
+const val MAX_NUMBER_OF_ACTIVE_GOALS = 5
 
 data class User(
     val username: String,
@@ -16,9 +20,19 @@ data class User(
     val events: List<Event>
         get() = _events.values.toList()
 
+    private val allGoals = mutableListOf<Goal>()
+
+    val achievedGoals: List<Goal>
+        get() = allGoals.filter { it.isCompleted }
+
+    val activeGoals: List<Goal>
+        get() = allGoals.filter { it.isCompleted.not() }
+
     val backpack = Backpack()
 
     val cinema = Cinema()
+
+    val treasureChest = TreasureChest()
 
     fun addEvent(event: Event) {
         if (event.title.isNullOrBlank()) {
@@ -37,5 +51,25 @@ data class User(
 
     fun removeEvent(event: Event) {
         _events.remove(event.uuid)
+    }
+
+    fun addGoal() {
+        require(achievedGoals.size < MAX_NUMBER_OF_ACTIVE_GOALS) { "Er kunnen maximum $MAX_NUMBER_OF_ACTIVE_GOALS actieve doelen zijn." }
+        val uniqueColor = findUnusedColor()
+        val goal = Goal(uniqueColor)
+        allGoals.add(goal)
+    }
+
+    /**
+     * Uses the list of [GoalColor]s to find a color that is not currently used in the [activeGoals].
+     */
+    private fun findUnusedColor(): GoalColor {
+        val currentlyUsedColors = activeGoals.map { it.goalColor }
+        val availableColors = GoalColor.values().subtract(currentlyUsedColors)
+        return availableColors.first()
+    }
+
+    fun setGoalCompleted(goal: Goal) {
+        goal.toggleCompleted()
     }
 }

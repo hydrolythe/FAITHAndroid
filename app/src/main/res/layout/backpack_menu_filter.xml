@@ -8,7 +8,7 @@
 
         <variable
             name="backpackViewModel"
-            type="be.hogent.faith.faith.backpackScreen.BackpackViewModel" />
+            type="be.hogent.faith.faith.backpack.BackpackViewModel" />
 
         <import type="android.view.View" />
     </data>

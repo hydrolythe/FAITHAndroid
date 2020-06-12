@@ -48,4 +48,16 @@ interface IFileStorageRepository {
      * Delete all files belonging to this detail.
      */
     fun deleteFiles(detail: Detail, container: DetailsContainer): Completable
+
+    /**
+     * Tries to set the [event]s files to unencrypted, ready-to-use versions.
+     * This assumes that all the files are in the location specified by the [StoragePathProvider].
+     * If not, an exception will be thrown.
+     */
+    fun setFilesToDecryptedVersions(event: Event)
+
+    /**
+     * Delete all files related to the given [event].
+     */
+    fun deleteEventFiles(event: Event): Completable
 }

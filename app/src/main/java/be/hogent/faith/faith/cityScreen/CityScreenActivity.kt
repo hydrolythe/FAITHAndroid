@@ -6,13 +6,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
+import be.hogent.faith.faith.backpack.BackpackScreenActivity
 import be.hogent.faith.faith.cinema.CinemaActivity
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.library.LibraryActivity
 import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
 import be.hogent.faith.faith.skyscraper.SkyscraperActivity
+import be.hogent.faith.faith.treasureChest.TreasureChestActivity
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.builders.footer
 import co.zsmb.materialdrawerkt.draweritems.badgeable.primaryItem
@@ -70,17 +71,22 @@ class CityScreenActivity : AppCompatActivity(),
         startActivity(intent)
     }
 
-    override fun startOverviewEventsFragment() {
+    override fun startLibrary() {
         val intent = Intent(this, LibraryActivity::class.java)
         startActivity(intent)
     }
 
-    override fun startBackpackFragment() {
+    override fun startBackpack() {
         val intent = Intent(this, BackpackScreenActivity::class.java)
         startActivity(intent)
     }
 
-    override fun startCinemaFragment() {
+    override fun startTreasureChest() {
+        val intent = Intent(this, TreasureChestActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun startCinema() {
         val intent = Intent(this, CinemaActivity::class.java)
         startActivity(intent)
     }

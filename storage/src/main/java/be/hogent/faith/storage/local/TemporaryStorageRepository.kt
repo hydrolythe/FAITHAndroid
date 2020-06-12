@@ -13,6 +13,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import timber.log.Timber
 import java.io.File
+import java.io.FileNotFoundException
 import java.util.UUID
 
 class TemporaryStorageRepository(
@@ -115,6 +116,13 @@ class TemporaryStorageRepository(
         }
     }
 
+    override fun deleteFiles(event: Event): Completable {
+        return Completable.fromAction {
+            val eventFolder = with(pathProvider) { temporaryStorage(eventsFolderPath(event)) }
+            eventFolder.deleteRecursively()
+        }
+    }
+
     override fun isFilePresent(detail: Detail, event: Event): Boolean {
         // As there's no file in a YoutubeVideoDetail, we say yes
         if (detail is YoutubeVideoDetail) {
@@ -164,5 +172,22 @@ class TemporaryStorageRepository(
 
     override fun getFile(detail: Detail, container: DetailsContainer): File {
         return with(pathProvider) { temporaryStorage(detailPath(detail, container)) }
+    }
+
+    override fun setFilesToDecryptedVersions(event: Event) {
+        with(pathProvider) {
+            if (event.emotionAvatar != null) {
+                val supposedPath = temporaryStorage(emotionAvatarPath(event))
+                if (!supposedPath.exists()) throw FileNotFoundException("EmotionAvatarfile for ${event.uuid} not found at ${supposedPath.path}")
+                Timber.i("Set emotionAvatar for event ${event.uuid} to ${supposedPath.path}")
+                event.emotionAvatar = supposedPath
+            }
+            event.details.forEach { detail ->
+                val supposedPath = temporaryStorage(detailPath(detail, event))
+                if (!supposedPath.exists()) throw FileNotFoundException("Detail file detail ${detail.uuid} in event ${event.uuid} not found at ${supposedPath.path}")
+                Timber.i("Set detail file for detail ${detail.uuid} to ${supposedPath.path}")
+                detail.file = supposedPath
+            }
+        }
     }
 }

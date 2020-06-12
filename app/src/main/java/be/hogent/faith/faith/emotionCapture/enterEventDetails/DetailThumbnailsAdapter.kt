@@ -11,19 +11,19 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.AUDIO_DETAIL
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.EXTERNAL_VIDEO_DETAIL
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.VIDEO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.FILM_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.PICTURE_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.TEXT_DETAIL
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.VIDEO_DETAIL
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.YOUTUBE_DETAIL
 
 object DetailTypes {
     const val AUDIO_DETAIL = 1
     const val TEXT_DETAIL = 2
     const val PICTURE_DETAIL = 3
     const val DRAW_DETAIL = 4
-    const val VIDEO_DETAIL = 5
-    const val EXTERNAL_VIDEO_DETAIL = 6
+    const val YOUTUBE_DETAIL = 5
+    const val VIDEO_DETAIL = 6
     const val FILM_DETAIL = 7
 }
 
@@ -56,8 +56,8 @@ class DetailThumbnailsAdapter(
             is DrawingDetail -> PICTURE_DETAIL
             is TextDetail -> TEXT_DETAIL
             is PhotoDetail -> PICTURE_DETAIL
-            is VideoDetail -> EXTERNAL_VIDEO_DETAIL
-            is YoutubeVideoDetail -> VIDEO_DETAIL
+            is VideoDetail -> VIDEO_DETAIL
+            is YoutubeVideoDetail -> YOUTUBE_DETAIL
             is FilmDetail -> FILM_DETAIL
         }
     }

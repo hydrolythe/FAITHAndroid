@@ -12,9 +12,9 @@ import timber.log.Timber
  */
 class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : ViewModel() {
 
-    val archiveClicked = SingleLiveEvent<Unit>()
+    val libraryClicked = SingleLiveEvent<Unit>()
     val parkClicked = SingleLiveEvent<Unit>()
-    val thirdLocation = SingleLiveEvent<Unit>()
+    val treehouseClicked = SingleLiveEvent<Unit>()
     val backpackClicked = SingleLiveEvent<Unit>()
     val cinemaClicked = SingleLiveEvent<Unit>()
     val skyscraperClicked = SingleLiveEvent<Unit>()
@@ -24,25 +24,22 @@ class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : Vi
         get() = _logoutSuccessFull
 
     fun onArchiveClicked() {
-        Timber.i("First location clicked")
-        archiveClicked.call()
+        libraryClicked.call()
     }
 
     fun onParkClicked() {
-        Timber.i("Second location clicked")
         parkClicked.call()
     }
 
-    fun thirdLocationClicked() {
-        Timber.i("third location clicked")
-        thirdLocation.call()
+    fun onTreehouseClicked() {
+        treehouseClicked.call()
     }
+
     fun onBackpackClicked() {
-        Timber.i("Fourth location clicked")
         backpackClicked.call()
     }
+
     fun onCinemaClicked() {
-        Timber.i("Fifth location clicked")
         cinemaClicked.call()
     }
     fun onSkyscraperClicked() {

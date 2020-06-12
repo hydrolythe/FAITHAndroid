@@ -13,6 +13,8 @@
         android:id="@+id/cinema_start_screen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:background="@drawable/achtergrond_cinema">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -68,6 +70,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/rv_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/achtergrond_publiek"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical2"
+            app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
+            app:layout_constraintTop_toTopOf="@+id/guide_rv_container_horizontal"
+            app:srcCompat="@drawable/rect_rounded_white"
+            tools:srcCompat="@drawable/rect_rounded_white" />
+
 
         <ToggleButton
             android:id="@+id/btn_films"
@@ -79,7 +92,7 @@
             android:textAllCaps="false"
             android:textOff="@string/mijn_filmpjes"
             android:textOn="@string/mijn_filmpjes"
-            app:layout_constraintBottom_toBottomOf="@+id/rv_cinema"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
             app:layout_constraintEnd_toStartOf="@+id/guide_btns_vertical" />
 
         <ToggleButton
@@ -90,9 +103,9 @@
             android:background="@drawable/btn_cinema_mijn_bestanden_achtergrond"
             android:checked="false"
             android:textAllCaps="false"
-            android:textOff="@string/mijn_bestanden"
-            android:textOn="@string/mijn_bestanden"
-            app:layout_constraintBottom_toBottomOf="@+id/rv_cinema"
+            android:textOff="@string/mijn_tijdslijn"
+            android:textOn="@string/mijn_tijdslijn"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
             app:layout_constraintStart_toStartOf="@+id/guide_btns_vertical" />
 
 
@@ -129,56 +142,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/add_btn"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/achtergrond_publiek"
             android:onClick="@{() -> cinemaOverviewViewModel.onAddButtonClicked()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/rv_container"
             app:srcCompat="@drawable/add_btn" />
-        <include
-            android:id="@+id/popup_window_cinema"
-            layout="@layout/popup_window_cinema"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/btn_cinema_add"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/rv_container" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_cinema"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:scrollbarSize="16dp"
-            android:background="@drawable/cinema_film_container"
             android:scrollbarThumbVertical="@drawable/scrollbarthumb_circle_rv"
             android:scrollbarTrackVertical="@drawable/scrollbartrack_rectangle_rv"
             android:scrollbars="vertical"
             android:verticalScrollbarPosition="right"
-            app:layout_constraintBottom_toTopOf="@+id/achtergrond_publiek"
-            app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical2"
-            app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
-            app:layout_constraintTop_toTopOf="@+id/guide_rv_container_horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintEnd_toEndOf="@+id/rv_container"
             app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/rv_container"
+            app:layout_constraintTop_toTopOf="@+id/rv_container"
             />
 
         <ImageButton
             android:id="@+id/btn_cinema_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/ic_trashcan"
-            android:contentDescription="@string/rv_btn_delete_detail"
             android:onClick="@{() -> cinemaOverviewViewModel.onDeleteClicked()}"
-            android:layout_marginStart="@dimen/margin_corner_button"
-            android:layout_marginBottom="@dimen/margin_corner_button"
-            app:layout_constraintBottom_toBottomOf="@+id/rv_cinema"
-            app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
+            android:contentDescription="@string/rv_btn_delete_detail"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_container"
+            app:layout_constraintStart_toStartOf="@+id/rv_container"
             app:srcCompat="@drawable/ic_trashcan" />
 
         <ImageView
             android:id="@+id/achtergrond_publiek"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -186,16 +190,16 @@
             tools:srcCompat="@drawable/publiek_cinema" />
 
         <ImageButton
-            android:id="@+id/create_film"
+            android:id="@+id/btn_create_film"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:contentDescription="@string/create_film"
             android:onClick="@{() -> cinemaOverviewViewModel.onMakeFilmClicked()}"
-            app:layout_constraintBottom_toBottomOf="@+id/achtergrond_publiek"
-            app:layout_constraintEnd_toEndOf="@+id/achtergrond_publiek"
-            app:layout_constraintStart_toStartOf="@+id/achtergrond_publiek"
-            app:layout_constraintTop_toBottomOf="@+id/rv_cinema"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rv_container"
             app:srcCompat="@drawable/ic_btn_maak_filmpje" />
 
 

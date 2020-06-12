@@ -31,6 +31,8 @@
     <string name="lbl_detail_name">Naam:</string>
     <string name="hint_audio_recording_name">Een naam voor deze opname</string>
     <string name="save">Opslaan</string>
+    <string name="save_film_error">Er ging iets fout bij het opslaan van je film.</string>
+    <string name="encode_film_error">Er ging iets fout bij het aanmaken van je film.</string>
     <string name="save_film_success">Je film werd opgeslagen</string>
     <string name="save_audio_success">Je opname werd opgeslagen</string>
     <string name="save_drawing_success">Je tekening werd opgeslagen</string>
@@ -52,7 +54,7 @@
     <string name="frag_takePhoto_takePhoto">Neem foto</string>
     <string name="description_thumbnail">Miniatuur</string>
     <string name="description_addText">Schrijven</string>
-    <string name="description_addPhoto">Foto</string>
+    <string name="description_addPhoto">Foto maken</string>
     <string name="description_addAudio">Inspreken</string>
     <string name="description_addDrawing">Tekenen</string>
     <string name="error_save_photo">Er ging iets mis bij het opslaan van je foto.</string>
@@ -66,8 +68,9 @@
     <string name="navigation_terugNaarDeStad">Terug naar de stad</string>
     <string name="header_emotie_regulatie">Emotie regulatie</string>
     <string name="frag_viewEvent_notes">notes</string>
-    <string name="dialog_to_the_event_title">"Wil je teruggaan naar het park?</string>
-    <string name="dialog_to_the_cinema_title">"Wil je teruggaan naar de cinema?</string>
+    <string name="dialog_to_the_event_title">Wil je teruggaan naar het park?</string>
+    <string name="dialog_to_the_treasurechest_title">Wil je teruggaan naar het park?</string>
+    <string name="dialog_to_the_cinema_title">Wil je teruggaan naar de cinema?</string>
     <string name="dialog_takePhoto_cancel_message">Ben je zeker? Je foto is nog niet opgeslagen!</string>
     <string name="dialog_enterText_cancel_message">Ben je zeker? Je tekst is nog niet opgeslagen!</string>
     <string name="dialog_to_the_event_message">Ben je zeker? Je tekening is nog niet opgeslagen!</string>
@@ -86,6 +89,7 @@
     <string name="lbl_save_event_title">Titel</string>
     <string name="lbl_back">Terug</string>
     <string name="lbl_activity_emotionCapture">Emotiecaptatie</string>
+    <string name="lbl_activity_treasurechest">Schatkist</string>
     <string name="lbl_activity_city">De Stad</string>
     <string name="description_event_avatar">Getekende avatar voor de gebeurtenis</string>
     <string name="descr_city_park">Het stadspark</string>
@@ -172,7 +176,7 @@
     <string name="ster">ster</string>
     <string name="naar_de_stad">Naar de stad</string>
     <string name="register_background">register background</string>
-    <string name="confirm">ok</string>
+    <string name="confirm">OK</string>
     <string name="kies_een_kleur">Kies een kleur</string>
     <string name="huidskleur">huidskleur</string>
     <string name="wegwijzerpaal">wegwijzerpaal</string>
@@ -187,7 +191,8 @@
     <string name="foto_nemen">Foto\nnemen</string>
     <string name="add_video">Filmen</string>
     <string name="title_backpack">Backpack</string>
-    <string name="add_detail_menu_backpack">Bestand toevoegen aan rugzak</string>
+    <string name="add_detail_menu_backpack">Detail toevoegen aan rugzak</string>
+    <string name="add_detail_menu_treasurechest">Detail toevoegen aan schatkist</string>
     <string name="filter_menu_background">Filter menu achtergrond</string>
     <string name="filter_menu_content">Filter menu inhoud</string>
     <string name="filter_boy">Filter jongen afbeelding</string>
@@ -241,18 +246,20 @@
     <string name="rv_btn_delete_detail">Knop verwijder bestand</string>
     <string name="rv_detail_title">Detail Title</string>
     <string name="mijn_filmpjes">mijn filmpjes</string>
-    <string name="mijn_bestanden">mijn bestanden</string>
+    <string name="mijn_tijdslijn">mijn tijdslijn</string>
     <string name="create_film">Maak filmpje</string>
     <string name="search_hint_film">zoek hier een film op naam</string>
     <string name="search_hint_bestand">zoek hier een bestand op naam</string>
     <string name="unauthorized_file_type">Dit bestandstype is niet toegelaten.</string>
     <string name="btn_create_video">Maak video</string>
-    <string name="je_filmpje_opslaan">Je filmpje opslaan</string>
     <string name="je_tekening_opslaan">Je tekening opslaan</string>
     <string name="je_foto_opslaan">Je foto opslaan</string>
+    <string name="je_tekst_opslaan">Je tekst opslaan</string>
+    <string name="je_film_opslaan">Je film opslaan</string>
+    <string name="je_audio_opslaan">Je geluidsfragment opslaan</string>
     <string name="je_extern_bestand_opslaan">Je extern bestand opslaan</string>
     <string name="save_video_title">Titel</string>
-    <string name="error_load_detail_failed">Laden detail faalt</string>
+    <string name="error_load_detail_failed">Er ging iets fout bij het laden van je detail.</string>
     <string name="error_load_backpack">Er ging iets fout bij het laden van je rugzak.</string>
     <string name="error_load_cinema">Er ging iets fout bij het laden van je cinema.</string>
     <string name="selected_detail_error">Dit bestand kan niet meer toegevoegd worden. Je filmpje duurt te lang</string>
@@ -264,4 +271,10 @@
     <string name="button_add_skyscraper">Voeg wolkenkrabber toe</string>
     <string name="lbl_activity_skyscraper">De wolkenkrabber</string>
     <string name="rv_btn_delete_skyscraper">Verwijder wolkenkrabber</string>
+    <string name="personages">Personages</string>
+    <string name="voorwerpen">Voorwerpen</string>
+    <string name="decors">Decors</string>
+    <string name="metaforen">Metaforen</string>
+    <string name="no_source_details_selected">Je moet eerst beeldmateriaal selecteren voordat je een filmpje kan maken!</string>
+    <string name="event_delete_error">Er ging iets fout bij het verwijderen van de gebeurtenis.</string>
 </resources>

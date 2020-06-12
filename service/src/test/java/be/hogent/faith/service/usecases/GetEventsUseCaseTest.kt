@@ -11,6 +11,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import io.reactivex.Flowable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Test
 
@@ -21,7 +22,12 @@ class GetEventsUseCaseTest {
 
     @Before
     fun setUp() {
-        getEventsUC = GetEventsUseCase(eventRepository, eventEncryptionService, mockk())
+        getEventsUC = GetEventsUseCase(
+            eventRepository,
+            eventEncryptionService,
+            mockk(),
+            Schedulers.trampoline()
+        )
     }
 
     @Test

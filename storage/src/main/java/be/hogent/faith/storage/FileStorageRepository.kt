@@ -68,20 +68,26 @@ class FileStorageRepository(
     }
 
     /**
-     * download emotion avatar from firebase to localStorage if not present yet
+     * Downloads emotion avatar from online storage to local storage if not present yet.
      */
     private fun getEmotionAvatarFile(event: Event): Completable {
-        if (event.emotionAvatar == null || localStorage.isEmotionAvatarPresent(event)) {
-            return Completable.complete()
+        if (event.emotionAvatar == null) {
+            return Completable
+                .complete()
+                .doOnComplete { Timber.i("Event ${event.uuid} has no emotionAvatar, skipping download") }
+        }
+        if (localStorage.isEmotionAvatarPresent(event)) {
+            return Completable
+                .complete()
+                .doOnComplete { Timber.i("EmotionAvatar for event ${event.uuid} already on local storage, skipping download") }
         } else {
             return onlineStorage.downloadEmotionAvatar(event)
         }
     }
 
     /**
-     * Checks if files are available ready to use.
-     * This can change the event, as paths to the events files can be changed if they are found
-     * in storage.
+     * Checks if files for the [event] are available ready to use.
+     * This means they are on the devices in an unencrypted format.
      */
     override fun filesReadyToUse(event: Event): Boolean {
         // We  are using the fact that decrypted files are stored in the cache directory.
@@ -93,7 +99,9 @@ class FileStorageRepository(
 
     override fun downloadFile(detail: Detail, container: DetailsContainer): Completable {
         if (localStorage.isFilePresent(detail, container)) {
-            return Completable.complete()
+            return Completable.fromAction {
+                detail.file = localStorage.getDetailFile(detail, container)
+            }
         } else {
             return onlineStorage.downloadDetail(detail, container)
         }
@@ -128,6 +136,18 @@ class FileStorageRepository(
             temporaryStorage.deleteFiles(detail, container),
             localStorage.deleteFiles(detail, container),
             onlineStorage.deleteFiles(detail, container)
+        )
+    }
+
+    override fun setFilesToDecryptedVersions(event: Event) {
+        temporaryStorage.setFilesToDecryptedVersions(event)
+    }
+
+    override fun deleteEventFiles(event: Event): Completable {
+        return Completable.mergeArray(
+            temporaryStorage.deleteFiles(event),
+            localStorage.deleteFiles(event),
+            onlineStorage.deleteFiles(event)
         )
     }
 

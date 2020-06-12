@@ -66,7 +66,7 @@ class LocalFileStorageRepository(
             return
         }
         val localStoragePath =
-            with(pathProvider) { localStorage(detailPath(encryptedEvent, encryptedDetail)) }
+            with(pathProvider) { localStorage(detailPath(encryptedDetail, encryptedEvent)) }
         moveFile(encryptedDetail.file, localStoragePath)
         encryptedDetail.file = localStoragePath
         Timber.i("Saved detail ${encryptedDetail.uuid} to ${encryptedDetail.file.absolutePath}")
@@ -100,6 +100,11 @@ class LocalFileStorageRepository(
                 supposedPath.exists()
             }
         }
+    }
+
+    override fun getDetailFile(detail: Detail, container: DetailsContainer): File {
+        require(isFilePresent(detail, container))
+        return with(pathProvider) { localStorage(detailPath(detail, container)) }
     }
 
     override fun isFilePresent(detail: Detail, container: DetailsContainer): Boolean {
@@ -149,6 +154,13 @@ class LocalFileStorageRepository(
             if (localStorageFile.exists()) {
                 localStorageFile.delete()
             }
+        }
+    }
+
+    override fun deleteFiles(event: Event): Completable {
+        return Completable.fromAction {
+            val eventFolder = with(pathProvider) { localStorage(eventsFolderPath(event)) }
+            eventFolder.deleteRecursively()
         }
     }
 

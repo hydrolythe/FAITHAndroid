@@ -9,7 +9,9 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.library.eventfilters.CombinedEventFilter
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.event.DeleteEventUseCase
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
+import io.reactivex.observers.DisposableCompletableObserver
 import io.reactivex.subscribers.DisposableSubscriber
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
@@ -19,10 +21,11 @@ import timber.log.Timber
 import java.util.UUID
 
 class EventListViewModel(
-    user: User,
-    private val getEventsUseCase: GetEventsUseCase
+    private val user: User,
+    private val getEventsUseCase: GetEventsUseCase,
+    private val deleteEventUseCase: DeleteEventUseCase
 ) : ViewModel() {
-    // Currently like this to do testing
+
     private var events: List<Event> = emptyList()
 
     private val eventFilter = CombinedEventFilter()
@@ -112,19 +115,20 @@ class EventListViewModel(
 
     private fun loadEvents(user: User) {
         getEventsUseCase.execute(GetEventsUseCase.Params(user),
-                object : DisposableSubscriber<List<Event>>() {
-                    override fun onComplete() {}
+            object : DisposableSubscriber<List<Event>>() {
+                override fun onComplete() {}
 
-                    override fun onNext(t: List<Event>) {
-                        events = t.sortedByDescending { it.dateTime }
-                        audioFilterEnabled.value =
-                                audioFilterEnabled.value // anders wordt de lijst niet getoond
-                    }
+                override fun onNext(t: List<Event>) {
+                    events = t.sortedByDescending { it.dateTime }
+                    // Trigger update of filteredEvents
+                    audioFilterEnabled.value = audioFilterEnabled.value
+                }
 
-                    override fun onError(e: Throwable) {
-                        _errorMessage.postValue(R.string.error_load_events)
-                    }
-                })
+                override fun onError(e: Throwable) {
+                    Timber.e(e)
+                    _errorMessage.postValue(R.string.error_load_events)
+                }
+            })
     }
 
     private fun combineLatestDates(
@@ -132,9 +136,9 @@ class EventListViewModel(
         endDate: LiveData<LocalDate>
     ): String {
         val van =
-                if (startDate.value == LocalDate.MIN.plusDays(1)) "van" else startDate.value!!.format(
-                        DateTimeFormatter.ofPattern("dd,MMM yyyy")
-                )
+            if (startDate.value == LocalDate.MIN.plusDays(1)) "van" else startDate.value!!.format(
+                DateTimeFormatter.ofPattern("dd,MMM yyyy")
+            )
         val tot = endDate.value!!.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
         return "$van - $tot"
     }
@@ -177,18 +181,26 @@ class EventListViewModel(
 
     fun setDateRange(startDate: Long?, endDate: Long?) {
         _startDate.value =
-                if (startDate != null) toLocalDate(startDate) else LocalDate.MIN.plusDays(1)
+            if (startDate != null) toLocalDate(startDate) else LocalDate.MIN.plusDays(1)
         _endDate.value = if (endDate != null) toLocalDate(endDate) else LocalDate.now()
     }
 
-    fun deleteEvent(eventUUID: UUID) {
-        // TODO must be implemented
-        Timber.d("Item deleted $eventUUID")
+    fun deleteEvent(event: Event) {
+        deleteEventUseCase.execute(DeleteEventUseCase.Params(event, user), object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                Timber.i("Deleted event ${event.uuid}!")
+            }
+
+            override fun onError(e: Throwable) {
+                e.printStackTrace()
+                _errorMessage.value = R.string.event_delete_error
+            }
+        })
     }
 
     private fun toLocalDate(milliseconds: Long): LocalDate? {
         return Instant.ofEpochMilli(milliseconds) // Convert count-of-milliseconds-since-epoch into a date-time in UTC (`Instant`).
-                .atZone(ZoneId.systemDefault()) // Adjust into the wall-clock time used by the people of a particular region (a time zone). Produces a `ZonedDateTime` object.
-                .toLocalDate()
+            .atZone(ZoneId.systemDefault()) // Adjust into the wall-clock time used by the people of a particular region (a time zone). Produces a `ZonedDateTime` object.
+            .toLocalDate()
     }
 }

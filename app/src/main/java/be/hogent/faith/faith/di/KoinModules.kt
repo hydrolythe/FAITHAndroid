@@ -3,14 +3,16 @@ package be.hogent.faith.faith.di
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.TreasureChest
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.backpackScreen.BackpackViewModel
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.create.YoutubeVideoDetailViewModel
-import be.hogent.faith.faith.backpackScreen.youtubeVideo.player.FaithYoutubePlayerViewModel
+import be.hogent.faith.faith.backpack.BackpackViewModel
 import be.hogent.faith.faith.cinema.CinemaCreateVideoViewModel
 import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
+import be.hogent.faith.faith.details.BackpackDetailsMetaDataViewModel
+import be.hogent.faith.faith.details.CinemaDetailsMetaDataViewModel
+import be.hogent.faith.faith.details.TreasureChestDetailsMetaDataViewModel
 import be.hogent.faith.faith.details.audio.AudioDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailViewModel
@@ -22,6 +24,8 @@ import be.hogent.faith.faith.details.photo.create.TakePhotoViewModel
 import be.hogent.faith.faith.details.photo.view.ViewPhotoDetailViewModel
 import be.hogent.faith.faith.details.text.create.TextDetailViewModel
 import be.hogent.faith.faith.details.text.view.ViewTextDetailViewModel
+import be.hogent.faith.faith.details.video.view.ViewVideoViewModel
+import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
@@ -34,8 +38,10 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvider
 import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
+import be.hogent.faith.faith.treasureChest.TreasureChestViewModel
 import be.hogent.faith.faith.util.AndroidTempFileProvider
 import be.hogent.faith.faith.util.TempFileProvider
+import be.hogent.faith.faith.videoplayer.CurrentVideoViewModel
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.storage.SecureCredentialsManager
@@ -72,13 +78,23 @@ val appModule = module(override = true) {
             getBackPackDataUseCase = get(named("GetBackpackDataUseCase"))
         )
     }
+    viewModel { (treasurechest: TreasureChest) ->
+        TreasureChestViewModel(
+            saveDetailUseCase = get(named("SaveCinemaDetailUseCase")),
+            deleteDetailUseCase = get(named("DeleteCinemaDetailUseCase")),
+            loadDetailFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
+            treasureChest = treasurechest,
+            getDataUseCase = get(named("GetCinemaDataUseCase"))
+        )
+    }
     viewModel { (cinema: Cinema) ->
         CinemaOverviewViewModel(
             saveBackpackDetailUseCase = get(named("SaveCinemaDetailUseCase")),
             deleteBackpackDetailUseCase = get(named("DeleteCinemaDetailUseCase")),
             loadDetailFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
             cinema = cinema,
-            getCinemaDataUseCase = get(named("GetCinemaDataUseCase"))
+            getCinemaDataUseCase = get(named("GetCinemaDataUseCase")),
+            addFilmToCinemaUseCase = get()
         )
     }
     viewModel { DrawViewModel() }
@@ -91,23 +107,22 @@ val appModule = module(override = true) {
     viewModel { WelcomeViewModel(get()) }
     viewModel { RegisterUserViewModel(get()) }
     viewModel { RegisterUserInfoViewModel(get()) }
-    viewModel { TakePhotoViewModel(get()) }
-    viewModel { RegisterUserInfoViewModel(get()) }
     viewModel { RegisterAvatarViewModel(get()) }
     viewModel { TakePhotoViewModel(get()) }
     viewModel { YoutubeVideoDetailViewModel(get()) }
-    viewModel { FaithYoutubePlayerViewModel() }
+    viewModel { CurrentVideoViewModel() }
     viewModel { ExternalFileViewModel(get(), get()) }
-    viewModel { (user: User) -> EventListViewModel(user, get()) }
+    viewModel { (user: User) -> EventListViewModel(user, get(), get()) }
     viewModel { EventDetailsViewModel(get()) }
     viewModel { ViewPhotoDetailViewModel() }
     viewModel { ViewDrawingDetailViewModel() }
-    viewModel { CinemaCreateVideoViewModel() }
-    viewModel {
-        ViewTextDetailViewModel(
-            get()
-        )
-    }
+    viewModel { CinemaCreateVideoViewModel(get()) }
+    viewModel { CinemaDetailsMetaDataViewModel() }
+    viewModel { BackpackDetailsMetaDataViewModel() }
+    viewModel { TreasureChestDetailsMetaDataViewModel() }
+    viewModel { ViewTextDetailViewModel(get()) }
+
+    viewModel { ViewVideoViewModel() }
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.

@@ -60,15 +60,15 @@ class DrawingDetailViewModelUseCaseTests {
     }
 
     @Test
-    fun drawingDetailVM_noDetailGiven_onBitmapAvailable_savesNewDetail() {
+    fun drawingDetailVM_noDetailGiven_onBitmapAvailable_callsGetDetailMetadata() {
         // Arrange
         val bitmap: Bitmap = mockk()
         val createdDetail: DrawingDetail = mockk()
-        val detailObserver = mockk<Observer<DrawingDetail>>(relaxed = true)
+        val getDetailMetaDataObserver = mockk<Observer<Unit>>(relaxed = true)
         val params = slot<CreateDrawingDetailUseCase.Params>()
         val resultingDetailObserver = slot<DisposableSingleObserver<DrawingDetail>>()
 
-        viewModel.savedDetail.observeForever(detailObserver)
+        viewModel.getDetailMetaData.observeForever(getDetailMetaDataObserver)
 
         // Act
         viewModel.onBitMapAvailable(bitmap)
@@ -82,7 +82,7 @@ class DrawingDetailViewModelUseCaseTests {
 
         // Assert
         assertEquals(bitmap, params.captured.bitmap)
-        assertEquals(createdDetail, getValue(viewModel.savedDetail))
+        verify { getDetailMetaDataObserver.onChanged(any()) }
     }
 
     @Test

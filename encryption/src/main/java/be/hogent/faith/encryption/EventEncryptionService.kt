@@ -8,6 +8,7 @@ import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.service.encryption.IEventEncryptionService
+import be.hogent.faith.storage.StoragePathProvider
 import com.google.crypto.tink.KeysetHandle
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -26,7 +27,8 @@ class EventEncryptionService(
     private val detailEncryptionService: DetailEncryptionService,
     private val fileEncryptionService: FileEncryptionService,
     private val keyGenerator: KeyGenerator,
-    private val keyEncrypter: KeyEncrypter
+    private val keyEncrypter: KeyEncrypter,
+    private val pathProvider: StoragePathProvider
 ) : IEventEncryptionService, KoinComponent {
 
     override fun encrypt(event: Event): Single<EncryptedEvent> {
@@ -137,7 +139,6 @@ class EventEncryptionService(
     override fun decryptFiles(encryptedEvent: EncryptedEvent): Completable {
         return keyEncrypter.decrypt(encryptedEvent.encryptedStreamingDEK)
             .doOnSuccess { Timber.i("decrypted sdek for event ${encryptedEvent.uuid}") }
-            .doOnSuccess { println("decrypted sdek for ${encryptedEvent.uuid}") }
             .flatMapCompletable {
                 Completable.mergeArray(
                     decryptEmotionAvatar(encryptedEvent, it),
@@ -157,14 +158,25 @@ class EventEncryptionService(
                         .complete()
                         .doOnComplete { Timber.i("No emotionAvatar to decrypt for event ${encryptedEvent.uuid}") }
                 } else {
-                    fileEncryptionService
-                        .decrypt(event.emotionAvatar!!, sdek)
-                        .flatMapCompletable {
+                    val destinationFile =
+                        with(pathProvider) { temporaryStorage(emotionAvatarPath(encryptedEvent)) }
+                    fileEncryptionService.decrypt(
+                        // Where the file of event.emotionAvatar points to is not relevant, as that is just where it was pointing
+                        // the moment it was saved to the database.
+                        // The encrypted version of the file should be in localstorage at this time, so we assume that path.
+                        (if (event.emotionAvatar != null && event.emotionAvatar!!.exists()) {
+                            event.emotionAvatar!!
+                        } else {
+                            pathProvider.localStorage(pathProvider.emotionAvatarPath(encryptedEvent))
+                        }),
+                        sdek,
+                        destinationFile
+                    )
+                        .andThen(Completable.defer {
                             Completable.fromAction {
-                                Timber.i("Decrypted emotionavatar for event ${event.uuid} is ${it.path}")
-                                event.emotionAvatar = it
+                                encryptedEvent.emotionAvatar = destinationFile
                             }
-                        }
+                        })
                 }
             }
     }
@@ -176,9 +188,18 @@ class EventEncryptionService(
         return Completable
             .merge(
                 encryptedEvent.details.map { detail ->
-                    detailEncryptionService.decryptDetailFiles(detail, sdek)
+                    // Where the file of the detail points to is not relevant, as that is just where it was pointing
+                    // the moment it was saved to the database.
+                    // The encrypted version of the file should be in localstorage at this time, so we assume that path.
+                    detailEncryptionService.decryptDetailFile(
+                        detail,
+                        sdek,
+                        with(pathProvider) { temporaryStorage(detailPath(detail, encryptedEvent)) })
+                        .andThen(Completable.fromAction {
+                            detail.file = with(pathProvider) { temporaryStorage(detailPath(detail, encryptedEvent)) }
+                        })
                 }
             )
-            .doOnComplete { Timber.i("Decrypted detail files for event ${encryptedEvent.uuid}") }
+            .doOnComplete { Timber.i("Decrypted all details' files for event ${encryptedEvent.uuid}") }
     }
 }

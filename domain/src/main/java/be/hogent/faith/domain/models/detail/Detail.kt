@@ -72,5 +72,6 @@ class FilmDetail(
     file: File,
     title: String = "",
     uuid: UUID = UUID.randomUUID(),
-    dateTime: LocalDateTime = LocalDateTime.now()
-) : Detail(file, title, uuid, dateTime)
+    dateTime: LocalDateTime = LocalDateTime.now(),
+    thumbnail: String?
+) : Detail(file, title, uuid, dateTime, thumbnail)
