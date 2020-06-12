@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperViewHolder.SkyscraperNavigationListener
 import kotlinx.android.synthetic.main.skyscraper_rv_blue.view.skyscraper_base
 import kotlinx.android.synthetic.main.skyscraper_rv_blue.view.txt_goal_description
@@ -84,7 +85,7 @@ class SkyscraperViewHolder(
             skyscraperNavigationListener.openGoalScreenFor(goal)
         }
 
-        view.txt_goal_description.setOnFocusChangeListener { v, hasFocus ->
+        view.txt_goal_description.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 skyscraperClickListener.getSelectedSkyscraper(view, this.layoutPosition)
             }

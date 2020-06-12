@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -18,7 +19,6 @@ import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder.Sk
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder.SkyscraperThumbnailGreenViewHolder
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder.SkyscraperThumbnailPinkViewHolder
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder.SkyscraperThumbnailYellowViewHolder
-import be.hogent.faith.faith.skyscraper.startscreen.Goal
 import kotlinx.android.synthetic.main.fragment_skyscraper_history.view.btn_delete_skyscraper
 import kotlinx.android.synthetic.main.skyscraper_thumbnail_item_rv.view.skyscraper_img
 import kotlinx.android.synthetic.main.skyscraper_thumbnail_item_rv.view.text_skyscraper_description

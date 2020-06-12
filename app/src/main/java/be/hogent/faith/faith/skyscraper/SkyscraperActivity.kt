@@ -3,13 +3,13 @@ package be.hogent.faith.faith.skyscraper
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.skyscraper.goal.SkyscraperGoalFragment
 import be.hogent.faith.faith.skyscraper.history.OverviewGoalDialog
 import be.hogent.faith.faith.skyscraper.history.SkyscraperHistoryFragment
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder
-import be.hogent.faith.faith.skyscraper.startscreen.Goal
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperStartScreenFragment
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperViewHolder
 import be.hogent.faith.faith.util.replaceFragment

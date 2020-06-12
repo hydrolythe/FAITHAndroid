@@ -3,15 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/FAITH.iml" filepath="$PROJECT_DIR$/FAITH.iml" group="FAITH" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FAITH-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FAITH-app.iml" group="FAITH/app" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/database/FAITH-database.iml" filepath="$PROJECT_DIR$/.idea/modules/database/FAITH-database.iml" group="FAITH/database" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain/FAITH-domain.iml" filepath="$PROJECT_DIR$/.idea/modules/domain/FAITH-domain.iml" group="FAITH/domain" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/draw/FAITH-draw.iml" filepath="$PROJECT_DIR$/.idea/modules/draw/FAITH-draw.iml" group="FAITH/draw" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/encryption/FAITH-encryption.iml" filepath="$PROJECT_DIR$/.idea/modules/encryption/FAITH-encryption.iml" group="FAITH/encryption" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/service/FAITH-service.iml" filepath="$PROJECT_DIR$/.idea/modules/service/FAITH-service.iml" group="FAITH/service" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/storage/FAITH-storage.iml" filepath="$PROJECT_DIR$/.idea/modules/storage/FAITH-storage.iml" group="FAITH/storage" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/util/FAITH-util.iml" filepath="$PROJECT_DIR$/.idea/modules/util/FAITH-util.iml" group="FAITH/util" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/StudioProjects-FAITH.iml" filepath="$PROJECT_DIR$/.idea/modules/StudioProjects-FAITH.iml" group="FAITH" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="FAITH/app" />
       <module fileurl="file://$PROJECT_DIR$/database/database.iml" filepath="$PROJECT_DIR$/database/database.iml" group="FAITH/database" />
       <module fileurl="file://$PROJECT_DIR$/domain/domain.iml" filepath="$PROJECT_DIR$/domain/domain.iml" group="FAITH/domain" />

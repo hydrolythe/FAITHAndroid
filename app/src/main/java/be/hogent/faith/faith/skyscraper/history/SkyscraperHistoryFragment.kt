@@ -10,13 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentSkyscraperHistoryBinding
+import be.hogent.faith.domain.models.goals.Goal
+import be.hogent.faith.domain.models.goals.SubGoal
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.skyscraper.SkyscraperActivity
 import be.hogent.faith.faith.skyscraper.goal.Action
-import be.hogent.faith.faith.skyscraper.startscreen.Goal
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors
-import be.hogent.faith.faith.skyscraper.startscreen.Subgoal
 import org.koin.android.ext.android.getKoin
 
 class SkyscraperHistoryFragment : Fragment() {
@@ -54,18 +54,21 @@ class SkyscraperHistoryFragment : Fragment() {
         binding.recyclerView.layoutManager = GridLayoutManager(activity, 5)
         binding.recyclerView.adapter = adapter
 
-        val helpList = arrayListOf<Subgoal>()
+        /*
+        val helpList = arrayListOf<SubGoal>()
             val helpList2 = arrayListOf<Action>()
             helpList2.add(Action("Dit is een actie"))
             helpList2.add(Action("Dit is een andere actie"))
-            helpList.add(Subgoal("Dit is een subgoal",helpList2))
-            helpList.add(Subgoal("Dit is een andere subgoal",helpList2))
+            helpList.add(SubGoal("Dit is een subgoal"))
+            helpList.add(SubGoal("Dit is een andere subgoal",helpList2))
 
-        list.add(Goal("Dit is een eerste actie",SkyscraperColors.SKYSCRAPER_BLUE, helpList))
-        list.add(Goal("Dit is een tweede actie",SkyscraperColors.SKYSCRAPER_DARK_GREEN, helpList))
-        list.add(Goal("Dit is een derde actie",SkyscraperColors.SKYSCRAPER_GREEN, helpList))
+        list.add(Goal("Dit is een eerste goal",SkyscraperColors.SKYSCRAPER_BLUE, helpList))
+        list.add(Goal("Dit is een tweede goal",SkyscraperColors.SKYSCRAPER_DARK_GREEN, helpList))
+        list.add(Goal("Dit is een derde goal",SkyscraperColors.SKYSCRAPER_GREEN, helpList))
+        list.add(Goal("Dit is een vierde goal",SkyscraperColors.SKYSCRAPER_YELLOW, helpList))
         list.add(Goal("Dit is een vierde actie",SkyscraperColors.SKYSCRAPER_YELLOW, helpList))
-        list.add(Goal("Dit is een vierde actie",SkyscraperColors.SKYSCRAPER_YELLOW, helpList))
+
+         */
 
         adapter.submitList(list)
 

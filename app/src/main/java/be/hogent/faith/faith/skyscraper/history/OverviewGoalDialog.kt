@@ -9,13 +9,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
-import be.hogent.faith.databinding.DialogCinemaSaveDetailBinding
 import be.hogent.faith.databinding.DialogGoalOverviewBinding
-import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.di.KoinModules
-import be.hogent.faith.faith.skyscraper.startscreen.Goal
+import be.hogent.faith.domain.models.goals.Goal
 
-import org.koin.android.ext.android.getKoin
 
 
 class OverviewGoalDialog(private var goal: Goal) : DialogFragment() {
@@ -47,7 +43,7 @@ class OverviewGoalDialog(private var goal: Goal) : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        adapter = SubgoalAdapter(goal.subgoals)
+        adapter = SubgoalAdapter(goal.subGoals)
         binding.rvSubgoals.layoutManager = LinearLayoutManager(requireContext())
         binding.rvSubgoals.adapter = adapter
         binding.btnCloseOverview.setOnClickListener {

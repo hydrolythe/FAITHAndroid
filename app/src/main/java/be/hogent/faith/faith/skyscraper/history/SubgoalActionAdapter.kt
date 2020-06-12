@@ -5,12 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.faith.skyscraper.startscreen.Subgoal
+import be.hogent.faith.domain.models.goals.SubGoal
 import kotlinx.android.synthetic.main.subgoal_action_rv_item.view.action_description
 
 
 class SubgoalActionAdapter(
-    val subgoal: Subgoal
+    val subgoal: SubGoal
 
 ) : RecyclerView.Adapter<ViewHolder>() {
 

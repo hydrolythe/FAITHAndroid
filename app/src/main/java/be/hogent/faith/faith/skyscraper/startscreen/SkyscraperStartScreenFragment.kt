@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentSkyscraperStartBinding
+import be.hogent.faith.domain.models.goals.Goal
+import be.hogent.faith.domain.models.goals.GoalColor
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.skyscraper.SkyscraperActivity
@@ -62,7 +64,7 @@ class SkyscraperStartScreenFragment : Fragment(),
             navigation?.openSkyscrapersHistory()
         }
         binding.btnSkyscraperAdd.setOnClickListener {
-            list.add(Goal("Dit is een wolkenkrabber",SkyscraperColors.SKYSCRAPER_GREEN, arrayListOf()))
+            list.add(Goal(GoalColor.GREEN))
             adapter.submitList(list)
             adapter.notifyDataSetChanged()
         }

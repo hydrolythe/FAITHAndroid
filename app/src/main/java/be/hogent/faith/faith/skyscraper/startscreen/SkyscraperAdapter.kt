@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import be.hogent.faith.faith.skyscraper.goal.Action
+import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_BLUE
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_DARK_GREEN
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_GREEN
@@ -68,13 +68,3 @@ interface SkyscraperClickListener {
     fun getSelectedSkyscraper(layout: ConstraintLayout, position: Int)
 }
 
-data class Goal(
-    var description: String,
-    var color : SkyscraperColors,
-    var subgoals: ArrayList<Subgoal>
-)
-
-data class Subgoal(
-    var description: String,
-    var actions: ArrayList<Action>
-)
