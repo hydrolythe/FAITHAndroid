@@ -41,7 +41,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     protected open val details: List<Detail>
         get() = detailsContainer.details
 
-    // filter
     private val detailFilter = CombinedDetailFilter()
 
     val searchString = MutableLiveData<String>()
@@ -66,7 +65,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     val videoFilterEnabled = MutableLiveData<Boolean>().apply { this.value = false }
     val externalVideoFilterEnabled = MutableLiveData<Boolean>().apply { this.value = false }
 
-    val deleteEnabled = MutableLiveData<Boolean>().apply { this.value = false }
     private var _dateRangeClicked = SingleLiveEvent<Unit>()
     val dateRangeClicked: LiveData<Unit> = _dateRangeClicked
 
@@ -74,6 +72,9 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         this.addSource(startDate) { value = combineLatestDates(startDate, endDate) }
         this.addSource(endDate) { value = combineLatestDates(startDate, endDate) }
     }
+
+    private val _addButtonClicked = SingleLiveEvent<Unit>()
+    val addButtonClicked: LiveData<Unit> = _addButtonClicked
 
     val detailsPresent: LiveData<Boolean> by lazy { Transformations.map(filteredDetails) { detailsList -> detailsList.isNotEmpty() } }
 
@@ -115,6 +116,15 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
             value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
     }
+
+    /**
+     * Indicates that the user is currently deleting items from the container.
+     * (Indicated by the x's being shown next to each detail.
+     */
+    val deleteModeEnabled = MutableLiveData<Boolean>().apply { this.value = false }
+
+    val deleteButtonVisible: LiveData<Boolean> =
+        Transformations.map(filteredDetails) { list -> list.isNotEmpty() }
 
     /**
      *  opening and saving (first showSaveDialog, then  ,  a detail
@@ -217,6 +227,10 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         audioFilterEnabled.value = audioFilterEnabled.value
     }
 
+    fun onAddButtonClicked() {
+        _addButtonClicked.call()
+    }
+
     private fun combineLatestDates(
         startDate: LiveData<LocalDate>,
         endDate: LiveData<LocalDate>
@@ -234,7 +248,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     }
 
     fun onDeleteClicked() {
-        deleteEnabled.value = deleteEnabled.value!!.not()
+        deleteModeEnabled.value = deleteModeEnabled.value!!.not()
     }
 
     fun goToCityScreen() {
@@ -243,6 +257,11 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
 
     fun setOpenDetailType(openDetailMode: OpenDetailMode) {
         _openDetailMode.postValue(openDetailMode)
+    }
+
+    fun resetDateRange() {
+        _startDate.value = LocalDate.MIN.plusDays(1)
+        _endDate.value = LocalDate.now()
     }
 
     // opslaan van detail

@@ -2,6 +2,7 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
+import be.hogent.faith.domain.models.TreasureChest
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.service.encryption.ContainerType
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
@@ -31,10 +32,14 @@ class CreateUserUseCaseTest {
     private lateinit var scheduler: Scheduler
     private val userRepository: IUserRepository = mockk()
     private val authManager: IAuthManager = mockk()
+
     private val backpackRepository: IDetailContainerRepository<Backpack> = mockk()
     private val cinemaRepository: IDetailContainerRepository<Cinema> = mockk()
+    private val treasureChestRepository: IDetailContainerRepository<TreasureChest> = mockk()
+
     private val backpackEncryptionService: IDetailContainerEncryptionService<Backpack> = mockk()
-    private val cinemaEncryptionService: IDetailContainerEncryptionService<Backpack> = mockk()
+    private val cinemaEncryptionService: IDetailContainerEncryptionService<Cinema> = mockk()
+    private val treasureChestEncryptionService: IDetailContainerEncryptionService<TreasureChest> = mockk()
 
     @Before
     fun setUp() {
@@ -46,6 +51,10 @@ class CreateUserUseCaseTest {
         every { cinemaEncryptionService.createContainer(ContainerType.CINEMA) } returns Single.just(
             mockk()
         )
+        every { treasureChestRepository.saveEncryptedContainer(any()) } returns Completable.complete()
+        every { treasureChestEncryptionService.createContainer(ContainerType.TREASURECHEST) } returns Single.just(
+            mockk()
+        )
         scheduler = mockk()
         createUserUseCase =
             CreateUserUseCase(
@@ -53,8 +62,10 @@ class CreateUserUseCaseTest {
                 userRepository,
                 backpackRepository,
                 cinemaRepository,
+                treasureChestRepository,
                 backpackEncryptionService,
                 cinemaEncryptionService,
+                treasureChestEncryptionService,
                 scheduler,
                 Schedulers.trampoline()
             )

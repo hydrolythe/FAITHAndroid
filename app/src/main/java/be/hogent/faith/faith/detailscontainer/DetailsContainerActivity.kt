@@ -1,18 +1,13 @@
-package be.hogent.faith.faith.backpackScreen
+package be.hogent.faith.faith.detailscontainer
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
-import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
-import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.backpack.DeleteDetailDialog
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailType
 import be.hogent.faith.faith.details.DetailsFactory
@@ -23,16 +18,13 @@ import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
 import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailFragment
 import be.hogent.faith.faith.details.youtubeVideo.view.ViewYoutubeVideoFragment
-import be.hogent.faith.faith.detailscontainer.OpenDetailMode
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
 import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.ext.android.getKoin
-import org.koin.android.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 
-class BackpackScreenActivity : AppCompatActivity(),
-    BackpackScreenFragment.BackpackDetailsNavigationListener,
+abstract class DetailsContainerActivity<T : DetailsContainer> : AppCompatActivity(),
+    DetailsContainerFragment.DetailsContainerNavigationListener,
     RecordAudioFragment.AudioScreenNavigation,
     DrawFragment.DrawingScreenNavigation,
     DetailFinishedListener,
@@ -44,57 +36,54 @@ class BackpackScreenActivity : AppCompatActivity(),
     YoutubeVideoDetailFragment.YoutubeVideoDetailScreenNavigation,
     ViewYoutubeVideoFragment.ViewYoutubeVideoNavigation {
 
-    private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
-    private val backpackViewModel: BackpackViewModel by viewModel { parametersOf(userViewModel.user.value!!.backpack) }
+    protected val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
+    abstract val detailsContainerViewModel: DetailsContainerViewModel<T>
+
+    abstract val activityResourceId: Int
+    abstract val fragmentContainerResourceId: Int
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_backpackscreen)
+        setContentView(activityResourceId)
 
-        // If a configuration state occurs we don't want to remove all fragments and start again from scratch.
-        // savedInstanceState is null when the activity is first created, and not null when being recreated.
-        // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
-            val fragment = BackpackScreenFragment.newInstance()
+            val fragment = createNewFragmentInstance()
             supportFragmentManager.beginTransaction()
-                .add(R.id.backpack_fragment_container, fragment)
+                .add(fragmentContainerResourceId, fragment)
                 .commit()
         }
+    }
 
-        backpackViewModel.goToCityScreen.observe(this, Observer {
-            closeBackpack()
+    abstract fun createNewFragmentInstance(): DetailsContainerFragment<T>
+
+    override fun onStart() {
+        super.onStart()
+        startListeners()
+    }
+
+    private fun startListeners() {
+        detailsContainerViewModel.goToCityScreen.observe(this, Observer {
+            closeScreen()
         })
 
-        backpackViewModel.goToDetail.observe(this, Observer {
-            replaceFragment(
-                DetailsFactory.editDetail(it),
-                R.id.backpack_fragment_container
-            )
+        detailsContainerViewModel.goToDetail.observe(this, Observer {
+            replaceFragment(DetailsFactory.editDetail(it), fragmentContainerResourceId)
         })
     }
 
     // BackToBackpack overrides method already defined in details
     override fun backToEvent() {
         supportFragmentManager.popBackStack()
-        backpackViewModel.viewButtons(true)
     }
 
     override fun onDetailFinished(detail: Detail) {
-        when (detail) {
-            is DrawingDetail -> save(detail)
-            is TextDetail -> save(detail)
-            is PhotoDetail -> save(detail)
-            is AudioDetail -> save(detail)
-            is VideoDetail -> save(detail)
-            is YoutubeVideoDetail -> save(detail)
-        }
-        backpackViewModel.viewButtons(true)
+        detailsContainerViewModel.saveCurrentDetail(userViewModel.user.value!!, detail)
     }
 
     override fun startPhotoDetailFragment() {
         replaceFragment(
             DetailsFactory.createDetail(DetailType.PHOTO),
-            R.id.backpack_fragment_container
+            fragmentContainerResourceId
         )
         setLayoutListenersOnNewDetailOpened()
     }
@@ -102,7 +91,7 @@ class BackpackScreenActivity : AppCompatActivity(),
     override fun startAudioDetailFragment() {
         replaceFragment(
             DetailsFactory.createDetail(DetailType.AUDIO),
-            R.id.backpack_fragment_container
+            fragmentContainerResourceId
         )
         setLayoutListenersOnNewDetailOpened()
     }
@@ -110,7 +99,7 @@ class BackpackScreenActivity : AppCompatActivity(),
     override fun startDrawingDetailFragment() {
         replaceFragment(
             DetailsFactory.createDetail(DetailType.DRAWING),
-            R.id.backpack_fragment_container
+            fragmentContainerResourceId
         )
         setLayoutListenersOnNewDetailOpened()
     }
@@ -118,7 +107,7 @@ class BackpackScreenActivity : AppCompatActivity(),
     override fun startTextDetailFragment() {
         replaceFragment(
             DetailsFactory.createDetail(DetailType.TEXT),
-            R.id.backpack_fragment_container
+            fragmentContainerResourceId
         )
         setLayoutListenersOnNewDetailOpened()
     }
@@ -126,45 +115,34 @@ class BackpackScreenActivity : AppCompatActivity(),
     override fun startExternalFileDetailFragment() {
         replaceFragment(
             DetailsFactory.createDetail(DetailType.EXTERNALFILE),
-            R.id.backpack_fragment_container
+            fragmentContainerResourceId
         )
         setLayoutListenersOnNewDetailOpened()
     }
 
-    override fun startVideoDetailFragment() {
+    override fun startYoutubeDetailFragment() {
         replaceFragment(
             DetailsFactory.createDetail(DetailType.YOUTUBE),
-            R.id.backpack_fragment_container
+            fragmentContainerResourceId
         )
         setLayoutListenersOnNewDetailOpened()
     }
 
-    private fun setLayoutListenersOnNewDetailOpened() {
-        backpackViewModel.viewButtons(false)
-        backpackViewModel.setOpenDetailType(OpenDetailMode.NEW)
+    protected open fun setLayoutListenersOnNewDetailOpened() {
+        detailsContainerViewModel.setOpenDetailType(OpenDetailMode.NEW)
     }
 
-    override fun openDetailScreenFor(detail: Detail) {
-        backpackViewModel.setOpenDetailType(OpenDetailMode.EDIT)
-        backpackViewModel.setCurrentFileAndLoadCorrespondingFile(detail)
-        backpackViewModel.viewButtons(false)
-    }
-
-    override fun closeBackpack() {
-        closeBackpackSpecificScopes()
+    override fun closeScreen() {
+        closeActivitySpecificScopes()
         finish()
     }
 
-    private fun closeBackpackSpecificScopes() {
+    private fun closeActivitySpecificScopes() {
         // Close the drawing scope so unfinished drawings aren't shown when capturing
         // a new event.
         runCatching { getKoin().getScope(KoinModules.DRAWING_SCOPE_ID) }.onSuccess {
             it.close()
         }
-    }
-
-    fun save(detail: Detail) {
-        backpackViewModel.saveCurrentDetail(userViewModel.user.value!!, detail)
     }
 
     override fun deleteDetail(detail: Detail) {
@@ -173,10 +151,15 @@ class BackpackScreenActivity : AppCompatActivity(),
     }
 
     override fun onDetailDeleteClick(dialog: DialogFragment, detail: Detail) {
-        backpackViewModel.deleteDetail(detail)
+        detailsContainerViewModel.deleteDetail(detail)
     }
 
     override fun onDetailCancelClick(dialog: DialogFragment) {
         dialog.dismiss()
+    }
+
+    override fun openDetailScreenFor(detail: Detail) {
+        detailsContainerViewModel.setOpenDetailType(OpenDetailMode.EDIT)
+        detailsContainerViewModel.setCurrentFileAndLoadCorrespondingFile(detail)
     }
 }

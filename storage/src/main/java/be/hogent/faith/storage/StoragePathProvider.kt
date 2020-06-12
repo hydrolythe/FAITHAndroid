@@ -5,6 +5,7 @@ import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.TreasureChest
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.encryption.ContainerType
@@ -40,6 +41,7 @@ class StoragePathProvider(
         return when (encryptedContainer.containerType) {
             ContainerType.BACKPACK -> File("users/${user!!.uid}/containers/backpack")
             ContainerType.CINEMA -> File("users/${user!!.uid}/containers/cinema")
+            ContainerType.TREASURECHEST -> File("users/${user!!.uid}/containers/treasurechest")
         }
     }
 
@@ -50,6 +52,7 @@ class StoragePathProvider(
         return when (detailsContainer) {
             is Backpack -> File("users/${user!!.uid}/containers/backpack")
             is Cinema -> File("users/${user!!.uid}/containers/cinema")
+            is TreasureChest -> File("users/${user!!.uid}/containers/treasurechest")
         }
     }
 

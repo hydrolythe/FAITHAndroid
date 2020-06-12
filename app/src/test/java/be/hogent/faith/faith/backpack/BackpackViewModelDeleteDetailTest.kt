@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.faith.backpackScreen.BackpackViewModel
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.GetDetailsContainerDataUseCase
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase

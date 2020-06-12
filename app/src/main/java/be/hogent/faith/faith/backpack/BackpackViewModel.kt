@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.backpackScreen
+package be.hogent.faith.faith.backpack
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

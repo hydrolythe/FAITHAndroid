@@ -34,6 +34,7 @@ import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.service.usecases.user.IsUsernameUniqueUseCase
 import be.hogent.faith.service.usecases.user.LoginUserUseCase
 import be.hogent.faith.service.usecases.user.LogoutUserUseCase
+import be.hogent.faith.util.ThumbnailProvider
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -51,6 +52,12 @@ object CinemaNames {
     const val repo = "CinemaRepository"
     const val database = "CinemaDatabase"
     const val encryptionService = "CinemaEncryptionService"
+}
+
+object TreasureChestNames {
+    const val repo = "TreasureChestRepository"
+    const val database = "TreasureChestDatabase"
+    const val encryptionService = "TreasureChestEncryptionService"
 }
 
 val serviceModule = module {
@@ -75,8 +82,10 @@ val serviceModule = module {
             userRepository = get(),
             backpackRepository = get(named(BackpackNames.repo)),
             cinemaRepository = get(named(CinemaNames.repo)),
-            backpackEncryptionService = get(),
-            cinemaEncryptionService = get(),
+            backpackEncryptionService = get(named(BackpackNames.encryptionService)),
+            cinemaEncryptionService = get(named(CinemaNames.encryptionService)),
+            treasureChestEncryptionService = get(named(TreasureChestNames.encryptionService)),
+            treasureChestRepository = get(named(TreasureChestNames.repo)),
             observer = get()
         )
     }
@@ -95,10 +104,10 @@ val serviceModule = module {
     factory { LoginUserUseCase(get(), get()) }
     factory { LogoutUserUseCase(get(), get()) }
     factory { LoadTextDetailUseCase(get(), get()) }
-    factory { CreateDrawingDetailUseCase(get(), get()) }
-    factory { OverwriteDrawingDetailUseCase(get(), get()) }
+    factory { CreateDrawingDetailUseCase(get(), get(), get()) }
+    factory { OverwriteDrawingDetailUseCase(get(), get(), get()) }
     factory { OverwriteTextDetailUseCase(get(), get()) }
-    factory { CreatePhotoDetailUseCase(get()) }
+    factory { CreatePhotoDetailUseCase(get(), get()) }
     factory { CreateAudioDetailUseCase(get()) }
     factory { CreateTextDetailUseCase(get(), get()) }
     factory { CreateVideoDetailUseCase(get()) }
@@ -112,6 +121,7 @@ val serviceModule = module {
             observer = get()
         )
     }
+    single { ThumbnailProvider() }
     factory {
         MakeEventFilesAvailableUseCase(
             fileStorageRepo = get(),
@@ -187,6 +197,7 @@ val serviceModule = module {
         CreateCinemaVideoUseCase(
             videoEncoder = VideoEncoder(),
             loadFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
+            thumbnailProvider = get(),
             observer = get()
         )
     }

@@ -3,6 +3,7 @@ package be.hogent.faith.service.usecases.detail.drawingDetail
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
+import be.hogent.faith.util.ThumbnailProvider
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.every
 import io.mockk.mockk
@@ -23,6 +24,7 @@ class OverwriteDrawingDetailUseCaseTest {
     private lateinit var storageRepository: ITemporaryFileStorageRepository
 
     private val bitmap = mockk<Bitmap>()
+    private val thumbnailProvider = mockk<ThumbnailProvider>()
 
     @Before
     fun setUp() {
@@ -32,8 +34,10 @@ class OverwriteDrawingDetailUseCaseTest {
         overwriteDrawingDetailUseCase =
             OverwriteDrawingDetailUseCase(
                 storageRepository,
+                thumbnailProvider,
                 scheduler
             )
+        every { thumbnailProvider.getBase64EncodedThumbnail(any<Bitmap>()) } returns "b64encThumb"
     }
 
     @Test
@@ -59,6 +63,5 @@ class OverwriteDrawingDetailUseCaseTest {
             .assertNoErrors()
         verify { storageRepository.overwriteExistingDrawingDetail(bitmap, drawingDetail) }
         assertEquals(saveFile, drawingDetail.file)
-        assertEquals(thumbnail, drawingDetail.thumbnail)
     }
 }

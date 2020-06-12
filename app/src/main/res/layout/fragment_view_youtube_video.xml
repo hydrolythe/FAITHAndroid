@@ -176,7 +176,7 @@
                 android:backgroundTint="@android:color/transparent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_btn_back_video" />
+                app:srcCompat="@drawable/ic_btn_back_black" />
 
             <ImageView
                 android:id="@+id/img_cinema_view_right1"

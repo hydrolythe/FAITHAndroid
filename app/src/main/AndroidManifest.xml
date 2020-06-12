@@ -33,10 +33,9 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
             android:name=".faith.cinema.CinemaActivity"
-            android:screenOrientation="landscape"
-            ></activity>
+            android:screenOrientation="landscape" />
         <activity
-            android:name=".faith.backpackScreen.BackpackScreenActivity"
+            android:name=".faith.backpack.BackpackScreenActivity"
             android:label="@string/title_backpack"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.FullScreen">
@@ -72,6 +71,12 @@
         <activity
             android:name=".faith.emotionCapture.EmotionCaptureMainActivity"
             android:label="@string/lbl_activity_emotionCapture"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.FullScreen"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".faith.treasureChest.TreasureChestActivity"
+            android:label="@string/lbl_activity_treasurechest"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.FullScreen"
             android:windowSoftInputMode="stateHidden|adjustResize" />
