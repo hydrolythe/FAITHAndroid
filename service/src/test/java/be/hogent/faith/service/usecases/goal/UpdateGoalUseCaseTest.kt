@@ -21,14 +21,11 @@ class UpdateGoalUseCaseTest {
     private lateinit var updateGoalUseCase: UpdateGoalUseCase
 
     private lateinit var goal: Goal
-    private lateinit var user: User
-
     private val encryptedGoal = EncryptedGoalFactory.makeGoal()
 
     @Before
     fun setUp() {
         goal = GoalFactory.makeGoal()
-        user = UserFactory.makeUser()
         updateGoalUseCase =
             UpdateGoalUseCase(
                 goalEncryptionService,
@@ -41,7 +38,7 @@ class UpdateGoalUseCaseTest {
 
     @Test
     fun `updating the Goal should complete without errors`() {
-        val params = UpdateGoalUseCase.Params(goal, user)
+        val params = UpdateGoalUseCase.Params(goal)
         every { goalEncryptionService.encrypt(any()) } returns Single.just(encryptedGoal)
         every { goalRepository.update(any()) } returns Completable.complete()
 
@@ -61,7 +58,7 @@ class UpdateGoalUseCaseTest {
         every { goalEncryptionService.encrypt(any()) } returns Single.just(encryptedGoal)
         every { goalRepository.update(any()) } returns Completable.error(RuntimeException())
 
-        val params = UpdateGoalUseCase.Params(goal, user)
+        val params = UpdateGoalUseCase.Params(goal)
 
         updateGoalUseCase.buildUseCaseObservable(params)
             .test()

@@ -14,7 +14,7 @@ object EncryptedGoalFactory {
             dateTime = DataFactory.randomDateTime().toString(),
             description = DataFactory.randomString(),
             isCompleted = DataFactory.randomBoolean(),
-            uuid = DataFactory.randomUUID(),
+            uuid = DataFactory.randomUUID().toString(),
             encryptedDEK = DataFactory.randomString(),
             currentPositionAvatar = DataFactory.randomInt(0, 9),
             goalColor = GoalColor.GREEN.name,

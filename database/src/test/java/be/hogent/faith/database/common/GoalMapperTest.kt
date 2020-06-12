@@ -31,7 +31,7 @@ class GoalMapperTest {
 
     private val encryptedGoal = EncryptedGoal(
         description = DataFactory.randomString(),
-        uuid = DataFactory.randomUUID(),
+        uuid = DataFactory.randomUUID().toString(),
         dateTime = DataFactory.randomString(),
         isCompleted = DataFactory.randomBoolean(),
         currentPositionAvatar = DataFactory.randomInt(1, 10),
@@ -58,7 +58,7 @@ class GoalMapperTest {
         entity: EncryptedGoalEntity,
         model: EncryptedGoal
     ) {
-        assertEquals(entity.uuid, model.uuid.toString())
+        assertEquals(entity.uuid, model.uuid)
         assertEquals(entity.dateTime, model.dateTime)
         assertEquals(entity.description, model.description)
         assertEquals(entity.isCompleted, model.isCompleted)

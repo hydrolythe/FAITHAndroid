@@ -11,7 +11,7 @@ internal object GoalMapper :
         return EncryptedGoal(
             dateTime = entity.dateTime,
             description = entity.description,
-            uuid = UUID.fromString(entity.uuid),
+            uuid = entity.uuid,
             isCompleted = entity.isCompleted,
             currentPositionAvatar = entity.currentPositionAvatar,
             goalColor = entity.color,
@@ -27,7 +27,7 @@ internal object GoalMapper :
         return EncryptedGoalEntity(
             dateTime = model.dateTime,
             description = model.description,
-            uuid = model.uuid.toString(),
+            uuid = model.uuid,
             isCompleted = model.isCompleted,
             currentPositionAvatar = model.currentPositionAvatar,
             color = model.goalColor,

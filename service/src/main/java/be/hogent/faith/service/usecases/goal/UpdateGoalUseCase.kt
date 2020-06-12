@@ -18,7 +18,6 @@ class UpdateGoalUseCase(
     private var params: Params? = null
 
     override fun buildUseCaseObservable(params: Params): Completable {
-        this.params = params
         return goalEncryptionService.encrypt(params.goal)
             .doOnSuccess { Timber.i("encrypted goal ${params.goal.uuid}") }
             .flatMapCompletable(goalRepository::update)
@@ -27,7 +26,6 @@ class UpdateGoalUseCase(
     }
 
     data class Params(
-        var goal: Goal,
-        val user: User
+        var goal: Goal
     )
 }

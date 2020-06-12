@@ -16,6 +16,7 @@ import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
+import java.util.UUID
 
 class GoalEncryptionService(
     private val keyGenerator: KeyGenerator,
@@ -52,7 +53,7 @@ class GoalEncryptionService(
                     EncryptedGoal(
                         dateTime = encrypt(goal.dateTime.toString()),
                         description = encrypt(goal.description),
-                        uuid = goal.uuid,
+                        uuid = encrypt(goal.uuid.toString()),
                         isCompleted = goal.isCompleted,
                         currentPositionAvatar = goal.currentPositionAvatar,
                         goalColor = goal.goalColor.name,
@@ -83,16 +84,20 @@ class GoalEncryptionService(
         return decryptSubGoals(encryptedGoal, dek)
             .map { decryptedSubgoals ->
                 with(DataEncrypter(dek)) {
-                    val goal = Goal(GoalColor.valueOf(encryptedGoal.goalColor), encryptedGoal.uuid)
+                    val goal = Goal(GoalColor.valueOf(encryptedGoal.goalColor), UUID.fromString(decrypt(encryptedGoal.uuid)))
                         .also {
-                        it.dateTime = LocalDateTime.parse(decrypt(encryptedGoal.dateTime))
-                        it.description = encryptedGoal.description.let { decrypt(it) }
-                        it.isCompleted = encryptedGoal.isCompleted
-                        it.currentPositionAvatar = encryptedGoal.currentPositionAvatar
-                        it.chosenReachGoalWay = ReachGoalWay.valueOf(encryptedGoal.reachGoalWay)
+                            it.dateTime = LocalDateTime.parse(decrypt(encryptedGoal.dateTime))
+                            it.description = decrypt(encryptedGoal.description)
+                            it.isCompleted = encryptedGoal.isCompleted
+                            it.currentPositionAvatar = encryptedGoal.currentPositionAvatar
+                            it.chosenReachGoalWay = ReachGoalWay.valueOf(encryptedGoal.reachGoalWay)
+                        }
+                    decryptedSubgoals.forEach { subgoalpair ->
+                        goal.addSubGoal(
+                            subgoalpair.first,
+                            subgoalpair.second
+                        )
                     }
-                    decryptedSubgoals.forEach {
-                            subgoalpair -> goal.addSubGoal(subgoalpair.first, subgoalpair.second) }
                     goal
                 }
             }
@@ -104,9 +109,5 @@ class GoalEncryptionService(
     ): Single<List<Pair<SubGoal, Int>>> {
         return Observable.fromIterable(encryptedGoal.subgoals)
             .flatMapSingle { subgoalEncryptionService.decrypt(it, dek) }.toList()
-    }
-
-    private fun addGoals(goal: Goal, subgoals: List<Pair<SubGoal, Int>>) {
-        subgoals.forEach { goal.addSubGoal(it.first, it.second) }
     }
 }

@@ -28,8 +28,6 @@ class ActionEncryptionServiceTest {
             .test()
             .assertComplete()
             .assertValue { decryptedAction ->
-                // Not a full equals check because file may still be different if the files have
-                // not been decrypted yet.
                 action.description == decryptedAction.description &&
                         action.currentStatus == decryptedAction.currentStatus
             }
