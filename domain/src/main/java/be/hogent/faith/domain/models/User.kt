@@ -32,6 +32,8 @@ data class User(
 
     val cinema = Cinema()
 
+    val treasureChest = TreasureChest()
+
     fun addEvent(event: Event) {
         if (event.title.isNullOrBlank()) {
             throw IllegalArgumentException("Een gebeurtenis moet een ingevulde titel hebben.")

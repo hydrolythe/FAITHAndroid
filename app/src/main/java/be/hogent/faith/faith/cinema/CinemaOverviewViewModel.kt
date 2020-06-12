@@ -15,7 +15,6 @@ import be.hogent.faith.service.usecases.detailscontainer.GetDetailsContainerData
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
 import io.reactivex.observers.DisposableCompletableObserver
-import org.threeten.bp.LocalDate
 import timber.log.Timber
 
 class CinemaOverviewViewModel(
@@ -44,9 +43,6 @@ class CinemaOverviewViewModel(
     private val _makeFilmButtonClicked = SingleLiveEvent<Unit>()
     val makeFilmButtonClicked: LiveData<Unit> = _makeFilmButtonClicked
 
-    private val _addButtonClicked = SingleLiveEvent<Unit>()
-    val addButtonClicked: LiveData<Unit> = _addButtonClicked
-
     private val _filmSavedSuccessFully = SingleLiveEvent<Unit>()
     val filmSavedSuccessFully: LiveData<Unit> = _filmSavedSuccessFully
 
@@ -68,18 +64,9 @@ class CinemaOverviewViewModel(
         _makeFilmButtonClicked.call()
     }
 
-    fun onAddButtonClicked() {
-        _addButtonClicked.call()
-    }
-
     private fun initSearch() {
         setSearchStringText("")
         resetDateRange()
-    }
-
-    fun resetDateRange() {
-        _startDate.value = LocalDate.MIN.plusDays(1)
-        _endDate.value = LocalDate.now()
     }
 
     fun saveFilm(filmDetail: FilmDetail, user: User) {

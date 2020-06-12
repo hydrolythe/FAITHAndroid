@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.backpackScreen
+package be.hogent.faith.faith.backpack
 
 import android.app.AlertDialog
 import android.app.Dialog

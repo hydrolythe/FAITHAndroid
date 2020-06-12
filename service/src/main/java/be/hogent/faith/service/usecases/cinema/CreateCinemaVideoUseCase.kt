@@ -9,7 +9,7 @@ import be.hogent.faith.service.usecases.base.ObservableUseCase
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Params
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Status
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
-import be.hogent.faith.service.util.base64encodeImage
+import be.hogent.faith.util.ThumbnailProvider
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import timber.log.Timber
@@ -17,6 +17,7 @@ import timber.log.Timber
 class CreateCinemaVideoUseCase(
     private val videoEncoder: VideoEncoder,
     private val loadFileUseCase: LoadDetailFileUseCase<Cinema>,
+    private val thumbnailProvider: ThumbnailProvider,
     observer: Scheduler
 ) : ObservableUseCase<Status, Params>(
     observer
@@ -54,12 +55,13 @@ class CreateCinemaVideoUseCase(
                     )
                     val resultingFilmDetail = FilmDetail(
                         file = resultingFile,
-                        thumbnail = ThumbnailUtils
-                            .createVideoThumbnail(
-                                resultingFile.path,
-                                MediaStore.Images.Thumbnails.MINI_KIND
-                            )
-                            .base64encodeImage()
+                        thumbnail = thumbnailProvider.getBase64EncodedThumbnail(
+                            ThumbnailUtils
+                                .createVideoThumbnail(
+                                    resultingFile.path,
+                                    MediaStore.Images.Thumbnails.MINI_KIND
+                                )
+                        )
                     )
                     emitter.onNext(Status.Completed(resultingFilmDetail))
                     emitter.onComplete()

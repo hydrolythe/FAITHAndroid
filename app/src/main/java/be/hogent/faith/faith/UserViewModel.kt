@@ -40,7 +40,10 @@ class UserViewModel(
 
     private var _user = MutableLiveData<User>()
     val user: LiveData<User>
-        get() = _user
+        get() {
+            Timber.i("Requested user")
+            return _user
+        }
 
     private val _titleErrorMessage = MutableLiveData<Int>()
     val titleErrorMessage: LiveData<Int>

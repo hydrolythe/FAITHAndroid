@@ -51,10 +51,8 @@ abstract class DetailsMetaDataViewModel : ViewModel() {
         _detailDateButtonClicked.call()
     }
 
-    fun resetDetails() {
-        detailTitle.value = ""
-        detailDate.value = LocalDate.now()
-        _detailTitleErrorMessage.postValue(null)
+    val detailNotes = MutableLiveData<String>().apply {
+        this.value = ""
     }
 
     fun onCancelClicked() {
@@ -86,3 +84,4 @@ abstract class DetailsMetaDataViewModel : ViewModel() {
 
 class CinemaDetailsMetaDataViewModel : DetailsMetaDataViewModel()
 class BackpackDetailsMetaDataViewModel : DetailsMetaDataViewModel()
+class TreasureChestDetailsMetaDataViewModel : DetailsMetaDataViewModel()

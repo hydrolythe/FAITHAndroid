@@ -37,10 +37,12 @@ object DetailContainerMapper : Mapper<EncryptedDetailsContainerEntity, Encrypted
 
     val containerTypeToString = mapOf(
         ContainerType.BACKPACK to "backpack",
-        ContainerType.CINEMA to "cinema"
+        ContainerType.CINEMA to "cinema",
+        ContainerType.TREASURECHEST to "treasurechest"
     )
     val stringToContainerType = mapOf(
         "backpack" to ContainerType.BACKPACK,
-        "cinema" to ContainerType.CINEMA
+        "cinema" to ContainerType.CINEMA,
+        "treasurechest" to ContainerType.TREASURECHEST
     )
 }

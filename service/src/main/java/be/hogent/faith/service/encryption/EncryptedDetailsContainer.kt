@@ -2,7 +2,8 @@ package be.hogent.faith.service.encryption
 
 enum class ContainerType {
     CINEMA,
-    BACKPACK
+    BACKPACK,
+    TREASURECHEST
 }
 
 class EncryptedDetailsContainer(

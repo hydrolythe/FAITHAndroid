@@ -68,8 +68,9 @@
     <string name="navigation_terugNaarDeStad">Terug naar de stad</string>
     <string name="header_emotie_regulatie">Emotie regulatie</string>
     <string name="frag_viewEvent_notes">notes</string>
-    <string name="dialog_to_the_event_title">"Wil je teruggaan naar het park?</string>
-    <string name="dialog_to_the_cinema_title">"Wil je teruggaan naar de cinema?</string>
+    <string name="dialog_to_the_event_title">Wil je teruggaan naar het park?</string>
+    <string name="dialog_to_the_treasurechest_title">Wil je teruggaan naar het park?</string>
+    <string name="dialog_to_the_cinema_title">Wil je teruggaan naar de cinema?</string>
     <string name="dialog_takePhoto_cancel_message">Ben je zeker? Je foto is nog niet opgeslagen!</string>
     <string name="dialog_enterText_cancel_message">Ben je zeker? Je tekst is nog niet opgeslagen!</string>
     <string name="dialog_to_the_event_message">Ben je zeker? Je tekening is nog niet opgeslagen!</string>
@@ -88,6 +89,7 @@
     <string name="lbl_save_event_title">Titel</string>
     <string name="lbl_back">Terug</string>
     <string name="lbl_activity_emotionCapture">Emotiecaptatie</string>
+    <string name="lbl_activity_treasurechest">Schatkist</string>
     <string name="lbl_activity_city">De Stad</string>
     <string name="description_event_avatar">Getekende avatar voor de gebeurtenis</string>
     <string name="descr_city_park">Het stadspark</string>
@@ -174,7 +176,7 @@
     <string name="ster">ster</string>
     <string name="naar_de_stad">Naar de stad</string>
     <string name="register_background">register background</string>
-    <string name="confirm">ok</string>
+    <string name="confirm">OK</string>
     <string name="kies_een_kleur">Kies een kleur</string>
     <string name="huidskleur">huidskleur</string>
     <string name="wegwijzerpaal">wegwijzerpaal</string>
@@ -189,7 +191,8 @@
     <string name="foto_nemen">Foto\nnemen</string>
     <string name="add_video">Filmen</string>
     <string name="title_backpack">Backpack</string>
-    <string name="add_detail_menu_backpack">Bestand toevoegen aan rugzak</string>
+    <string name="add_detail_menu_backpack">Detail toevoegen aan rugzak</string>
+    <string name="add_detail_menu_treasurechest">Detail toevoegen aan schatkist</string>
     <string name="filter_menu_background">Filter menu achtergrond</string>
     <string name="filter_menu_content">Filter menu inhoud</string>
     <string name="filter_boy">Filter jongen afbeelding</string>

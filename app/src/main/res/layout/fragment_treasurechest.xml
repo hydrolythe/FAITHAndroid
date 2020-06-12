@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="treasureChestViewModel"
+            type="be.hogent.faith.faith.treasureChest.TreasureChestViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/treasurechest_start_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/achtergrond_schatkist"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_treasurechest_details_search"
+            style="@style/faith_textInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/event_textInput_height"
+            android:layout_marginTop="8dp"
+            android:hint="@string/wat_zoek_je"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toTopOf="@+id/guide_treasurechest_rv_top"
+            app:layout_constraintEnd_toStartOf="@+id/btn_treasurechest_chooseDate"
+            app:layout_constraintStart_toStartOf="@+id/guide_treasurechest_rv_left"
+            app:layout_constraintTop_toTopOf="parent"
+            app:startIconDrawable="@drawable/ic_search"
+            app:startIconTint="@null">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_treasurechest_details_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/wat_zoek_je"
+                android:inputType="text"
+                android:text="@={treasureChestViewModel.searchString}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_treasurechest_chooseDate"
+            style="@style/faith_textbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/color_white"
+            android:gravity="center"
+            android:onClick="@{() -> treasureChestViewModel.onDateRangeClicked()}"
+            android:text="@{treasureChestViewModel.dateRangeString}"
+            app:icon="@drawable/ic_kalender"
+            app:iconGravity="textStart"
+            app:iconSize="34dp"
+            app:layout_constraintEnd_toStartOf="@+id/guide_treasurechest_rv_right"
+            app:layout_constraintTop_toTopOf="@+id/textInputLayout_treasurechest_details_search"
+            tools:text="28/10/1991-28/10/2020" />
+
+
+        <ImageButton
+            android:id="@+id/btn_treasurechest_cancel"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginStart="@dimen/margin_corner_button"
+            android:layout_marginTop="@dimen/margin_corner_button"
+            android:background="@drawable/ic_btn_back_black"
+            android:contentDescription="@string/cancel"
+            android:onClick="@{() -> treasureChestViewModel.goToCityScreen()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_treasurechest_rv_left"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.23" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_treasurechest_rv_right"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.77" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_treasurechest_rv_top"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.12" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_treasurechest_rv_bottom"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.66" />
+
+        <ImageButton
+            android:id="@+id/btn_treasurechest_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/add_btn"
+            android:contentDescription="@string/add_detail_menu_treasurechest"
+            android:onClick="@{() -> treasureChestViewModel.onAddButtonClicked()}"
+            android:src="@drawable/add_btn"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/add_btn" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_treasurechest"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rect_rounded_white"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/guide_treasurechest_rv_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/guide_treasurechest_rv_right"
+            app:layout_constraintStart_toStartOf="@+id/guide_treasurechest_rv_left"
+            app:layout_constraintTop_toTopOf="@+id/guide_treasurechest_rv_top"
+            tools:listitem="@layout/detail_item_rv" />
+
+        <ImageButton
+            android:id="@+id/btn_treasurechest_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/ic_trashcan"
+            android:contentDescription="@string/rv_btn_delete_detail"
+            android:onClick="@{() -> treasureChestViewModel.onDeleteClicked()}"
+            android:visibility="@{treasureChestViewModel.deleteButtonVisible== true ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/rv_treasurechest"
+            app:layout_constraintEnd_toEndOf="@+id/rv_treasurechest"
+            app:srcCompat="@drawable/ic_trashcan" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
