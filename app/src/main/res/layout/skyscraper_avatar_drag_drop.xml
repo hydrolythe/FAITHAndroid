@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/skyscraper_create_goal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/skyscraper_blue"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="-41dp" />
+
+        <ImageView
+            android:id="@+id/avatar_pos_stairs_1"
+            android:layout_width="50dp"
+            android:layout_height="65dp"
+            android:tag="@string/your_avatar"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_1"
+            app:layout_constraintEnd_toStartOf="@+id/guide_stairs_end"
+            app:srcCompat="@drawable/empty_shape"
+            android:contentDescription="@string/your_avatar"/>
+
+        <ImageView
+            android:id="@+id/avatar_pos_stairs_2"
+            android:layout_width="50dp"
+            android:layout_height="65dp"
+            android:tag="@string/your_avatar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_1"
+            app:srcCompat="@drawable/empty_shape"
+            android:contentDescription="@string/your_avatar"/>
+
+        <ImageView
+            android:id="@+id/avatar_pos_stairs_3"
+            android:layout_width="50dp"
+            android:layout_height="65dp"
+            android:tag="@string/your_avatar"
+            app:layout_columnSpan="2"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_2"
+            app:layout_constraintEnd_toStartOf="@+id/guide_stairs_end"
+            app:layout_gravity="end"
+            app:srcCompat="@drawable/empty_shape"
+            android:contentDescription="@string/your_avatar"/>
+
+        <ImageView
+            android:id="@+id/avatar_pos_stairs_4"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:tag="@string/your_avatar"
+            app:layout_columnSpan="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_2"
+            app:srcCompat="@drawable/empty_shape"
+            android:contentDescription="@string/your_avatar"/>
+
+        <ImageView
+            android:id="@+id/avatar_pos_stairs_5"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:tag="@string/your_avatar"
+            app:layout_columnSpan="2"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_3"
+            app:layout_constraintEnd_toStartOf="@+id/guide_stairs_end"
+            app:layout_gravity="end"
+            app:srcCompat="@drawable/empty_shape"
+            android:contentDescription="@string/your_avatar"/>
+
+        <ImageView
+            android:id="@+id/avatar_pos_stairs_6"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:tag="@string/your_avatar"
+            app:layout_columnSpan="2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_3"
+            app:srcCompat="@drawable/empty_shape"
+            android:contentDescription="@string/your_avatar"/>
+
+        <ImageView
+            android:id="@+id/avatar_pos_stairs_7"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:tag="@string/your_avatar"
+            app:layout_columnSpan="2"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_4"
+
+            app:layout_constraintEnd_toStartOf="@+id/guide_stairs_end"
+            app:layout_gravity="end"
+            app:srcCompat="@drawable/empty_shape"
+            android:contentDescription="@string/your_avatar"/>
+
+        <ImageView
+            android:id="@+id/avatar_pos_stairs_8"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:tag="@string/your_avatar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_4"
+            app:srcCompat="@drawable/empty_shape"
+            android:contentDescription="@string/your_avatar"/>
+
+        <ImageView
+            android:id="@+id/avatar_pos_stairs_9"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:tag="@string/your_avatar"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_5"
+            app:layout_constraintEnd_toStartOf="@+id/guide_stairs_end"
+            app:srcCompat="@drawable/empty_shape"
+            android:contentDescription="@string/your_avatar"/>
+
+        <ImageView
+            android:id="@+id/avatar_pos_stairs_10"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:tag="@string/your_avatar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_5"
+            app:srcCompat="@drawable/empty_shape"
+            android:contentDescription="@string/your_avatar"/>
+
+        <ImageView
+            android:id="@+id/avatar_pos_stairs_11"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:tag="@string/your_avatar"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_6"
+            app:layout_constraintEnd_toStartOf="@+id/guide_stairs_end"
+            app:srcCompat="@drawable/empty_shape"
+            android:contentDescription="@string/your_avatar"/>
+
+        <ImageView
+            android:id="@+id/avatar_pos_stairs_12"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:tag="@string/your_avatar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_6"
+            app:srcCompat="@drawable/empty_shape"
+            android:contentDescription="@string/your_avatar" />
+
+        <ImageView
+            android:id="@+id/avatar_pos_lift_1"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/your_avatar"
+            android:tag="@string/your_avatar"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_1"
+            app:layout_constraintEnd_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_start"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/empty_shape" />
+        <ImageView
+            android:id="@+id/avatar_pos_lift_2"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/your_avatar"
+            android:tag="@string/your_avatar"
+            app:layout_constraintEnd_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_1"
+            app:srcCompat="@drawable/empty_shape" />
+
+        <ImageView
+            android:id="@+id/avatar_pos_lift_3"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/your_avatar"
+            android:tag="@string/your_avatar"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_2"
+            app:layout_constraintEnd_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_start"
+            app:srcCompat="@drawable/empty_shape" />
+
+        <ImageView
+            android:id="@+id/avatar_pos_lift_4"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/your_avatar"
+            android:tag="@string/your_avatar"
+            app:layout_constraintEnd_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_2"
+            app:srcCompat="@drawable/empty_shape" />
+
+        <ImageView
+            android:id="@+id/avatar_pos_lift_5"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/your_avatar"
+            android:tag="@string/your_avatar"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_3"
+            app:layout_constraintEnd_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_start"
+            app:srcCompat="@drawable/empty_shape" />
+
+        <ImageView
+            android:id="@+id/avatar_pos_lift_6"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/your_avatar"
+            android:tag="@string/your_avatar"
+            app:layout_constraintEnd_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_3"
+            app:srcCompat="@drawable/empty_shape" />
+
+        <ImageView
+            android:id="@+id/avatar_pos_lift_7"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/your_avatar"
+            android:tag="@string/your_avatar"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_4"
+            app:layout_constraintEnd_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_start"
+            app:srcCompat="@drawable/empty_shape" />
+
+        <ImageView
+            android:id="@+id/avatar_pos_lift_8"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/your_avatar"
+            android:tag="@string/your_avatar"
+            app:layout_constraintEnd_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_4"
+            app:srcCompat="@drawable/empty_shape" />
+
+        <ImageView
+            android:id="@+id/avatar_pos_lift_9"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/your_avatar"
+            android:tag="@string/your_avatar"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_5"
+            app:layout_constraintEnd_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_start"
+            app:srcCompat="@drawable/empty_shape" />
+
+        <ImageView
+            android:id="@+id/avatar_pos_lift_10"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/your_avatar"
+            android:tag="@string/your_avatar"
+            app:layout_constraintEnd_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_5"
+            app:srcCompat="@drawable/empty_shape" />
+
+        <ImageView
+            android:id="@+id/avatar_pos_lift_11"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/your_avatar"
+            android:tag="@string/your_avatar"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_6"
+            app:layout_constraintEnd_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_start"
+            app:srcCompat="@drawable/empty_shape" />
+
+        <ImageView
+            android:id="@+id/avatar_pos_lift_12"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:contentDescription="@string/your_avatar"
+            android:tag="@string/your_avatar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_start"
+
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_6"
+            app:srcCompat="@drawable/empty_shape" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_stairs_end"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.18" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_stairs_top"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.04" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_lift_start"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.22" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_lift_end"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.30" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rope_start"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.80" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rope_end"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.90" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rope_start"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintTop_toTopOf="@+id/guide_stairs_top" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rope_start"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_1" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_2"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rope_start"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_end" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rope_start"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_end"
+            app:layout_constraintTop_toTopOf="@+id/guide_pos_2" />
+
+        <Button
+            android:id="@+id/button5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintBottom_toTopOf="@+id/guide_pos_3"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rope_start"
+            app:layout_constraintStart_toStartOf="@+id/guide_lift_end" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_pos_1"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.15" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_pos_2"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.28" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_pos_3"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.40" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_pos_4"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.52" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_pos_5"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.64" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_pos_6"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.78" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

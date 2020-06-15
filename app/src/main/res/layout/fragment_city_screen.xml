@@ -149,6 +149,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/kantoor"
+            android:onClick="@{() -> cityScreenViewModel.onSkyscraperClicked()}"
             app:srcCompat="@drawable/avatar_placeholder" />
 
         <ImageView

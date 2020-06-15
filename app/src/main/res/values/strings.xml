@@ -268,6 +268,9 @@
     <string name="button_open_add_menu">knop open toevoeg menu</string>
     <string name="delete_event">Verwijder opgeslagen event</string>
     <string name="delete">Verwijder</string>
+    <string name="button_add_skyscraper">Voeg wolkenkrabber toe</string>
+    <string name="lbl_activity_skyscraper">De wolkenkrabber</string>
+    <string name="rv_btn_delete_skyscraper">Verwijder wolkenkrabber</string>
     <string name="personages">Personages</string>
     <string name="voorwerpen">Voorwerpen</string>
     <string name="decors">Decors</string>

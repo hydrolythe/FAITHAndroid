@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/skyscraper_history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/skyscraper_history_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guide_background"
+            app:srcCompat="@drawable/skyscraper_history_background" />
+
+        <ImageButton
+            android:id="@+id/btn_skyscraper_return"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginStart="@dimen/margin_corner_button"
+            android:layout_marginTop="@dimen/margin_corner_button"
+            android:background="@drawable/ic_return"
+            android:contentDescription="@string/cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_delete_skyscraper"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginBottom="@dimen/margin_corner_button"
+            android:layout_marginStart="@dimen/margin_corner_button"
+            android:background="@drawable/ic_trashcan"
+            android:contentDescription="@string/delete"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+             />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rv_container_vertical1"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.08" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rv_container_vertical2"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.90" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_searchbar"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rv_container_horizontal1"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.20" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rv_container_horizontal2"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.90" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_background"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.40" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_skyscraper_history_search"
+            style="@style/faith_textInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/event_textInput_height"
+            android:layout_marginBottom="20dp"
+            android:hint="@string/wat_zoek_je"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+            app:layout_constraintEnd_toStartOf="@+id/guide_searchbar"
+            app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
+            app:startIconDrawable="@drawable/ic_search"
+            app:startIconTint="@null">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_skyscraper_history_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_hint_film"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cinema_chooseDate"
+            style="@style/faith_textbutton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:backgroundTint="@color/color_white"
+            android:gravity="center"
+            app:icon="@drawable/ic_kalender"
+            app:iconGravity="textStart"
+            app:iconSize="34dp"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+            app:layout_constraintStart_toEndOf="@+id/textInputLayout_skyscraper_history_search"
+            app:layout_constraintTop_toTopOf="@+id/textInputLayout_skyscraper_history_search" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/skyscraper_history_rv_background"
+            app:layout_constraintBottom_toTopOf="@+id/guide_rv_container_horizontal2"
+            app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical2"
+            app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
+            app:layout_constraintTop_toTopOf="@+id/guide_rv_container_horizontal1" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

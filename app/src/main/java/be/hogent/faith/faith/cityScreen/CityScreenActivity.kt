@@ -12,6 +12,7 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.library.LibraryActivity
 import be.hogent.faith.faith.loginOrRegister.LoginOrRegisterActivity
+import be.hogent.faith.faith.skyscraper.SkyscraperActivity
 import be.hogent.faith.faith.treasureChest.TreasureChestActivity
 import co.zsmb.materialdrawerkt.builders.drawer
 import co.zsmb.materialdrawerkt.builders.footer
@@ -87,6 +88,11 @@ class CityScreenActivity : AppCompatActivity(),
 
     override fun startCinema() {
         val intent = Intent(this, CinemaActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun startSkyscraperFragment() {
+        val intent = Intent(this, SkyscraperActivity::class.java)
         startActivity(intent)
     }
 

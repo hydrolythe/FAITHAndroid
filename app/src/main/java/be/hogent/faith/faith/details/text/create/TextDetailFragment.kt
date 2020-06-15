@@ -101,7 +101,12 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
         super.onStart()
         initEditor()
         setUpListeners()
-        textDetailDetailViewModel.pickTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        textDetailDetailViewModel.pickTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.black
+            )
+        )
     }
 
     private fun initEditor() {
@@ -138,7 +143,7 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
         })
 
         textDetailDetailViewModel.fontsizeClicked.observe(this, Observer {
-            cardView_size.visibility = if (it) View.VISIBLE else View.GONE
+            cardView_size.visibility = if (it) View.VISIBLE else View.INVISIBLE
         })
         textDetailDetailViewModel.selectedFontSize.observe(this, Observer { newSize ->
             enterText_editor.setFontSize(newSize.size)

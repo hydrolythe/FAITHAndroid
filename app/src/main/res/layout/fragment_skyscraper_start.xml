@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/skyscraper_startscreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/achtergrond_wolkenkrabber">
+
+        <ImageButton
+            android:id="@+id/btn_skyscraper_return"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginStart="@dimen/margin_corner_button"
+            android:layout_marginTop="@dimen/margin_corner_button"
+            android:background="@drawable/ic_return"
+            android:contentDescription="@string/cancel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/skyscraper_rv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_skyscraper_return"
+            app:layout_constraintTop_toBottomOf="@+id/btn_skyscraper_return" />
+
+        <ImageButton
+            android:id="@+id/btn_skyscraper_history"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginTop="@dimen/margin_corner_button"
+            android:layout_marginEnd="@dimen/margin_corner_button"
+            android:background="@drawable/ic_knop_geschiedenis"
+            android:contentDescription="@string/cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_skyscraper_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/add_btn"
+            android:contentDescription="@string/button_add_skyscraper"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
