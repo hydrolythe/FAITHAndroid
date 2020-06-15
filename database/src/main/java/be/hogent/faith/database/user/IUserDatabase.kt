@@ -12,7 +12,7 @@ interface IUserDatabase {
     /**
      * Insert user in Firestorage in users/uuid
      */
-    fun insert(item: UserEntity): Completable
+    fun initialiseUser(item: UserEntity): Completable
 
     /**
      * delete the user corresponding the currentUser in firestore

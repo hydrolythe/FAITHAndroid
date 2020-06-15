@@ -22,7 +22,7 @@ object GoalFactory {
 
     fun makeGoalsList(count: Int = 5): List<Goal> {
         val goals = mutableListOf<Goal>()
-        repeat (count) {
+        repeat(count) {
             goals.add(makeGoal())
         }
         return goals

@@ -1,12 +1,10 @@
 package be.hogent.faith.service.usecases.goal
 
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.service.encryption.IGoalEncryptionService
 import be.hogent.faith.service.repositories.IGoalRepository
 import be.hogent.faith.service.usecases.util.EncryptedGoalFactory
 import be.hogent.faith.util.factory.GoalFactory
-import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

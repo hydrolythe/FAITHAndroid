@@ -29,8 +29,8 @@ import be.hogent.faith.service.usecases.goal.DeleteGoalUseCase
 import be.hogent.faith.service.usecases.goal.GetGoalsUseCase
 import be.hogent.faith.service.usecases.goal.SaveGoalUseCase
 import be.hogent.faith.service.usecases.goal.UpdateGoalUseCase
-import be.hogent.faith.service.usecases.user.CreateUserUseCase
 import be.hogent.faith.service.usecases.user.GetUserUseCase
+import be.hogent.faith.service.usecases.user.InitialiseUserUseCase
 import be.hogent.faith.service.usecases.user.IsUsernameUniqueUseCase
 import be.hogent.faith.service.usecases.user.LoginUserUseCase
 import be.hogent.faith.service.usecases.user.LogoutUserUseCase
@@ -77,8 +77,7 @@ val serviceModule = module {
         )
     }
     factory {
-        CreateUserUseCase(
-            authManager = get(),
+        InitialiseUserUseCase(
             userRepository = get(),
             backpackRepository = get(named(BackpackNames.repo)),
             cinemaRepository = get(named(CinemaNames.repo)),

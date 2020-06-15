@@ -2,7 +2,6 @@ package be.hogent.faith.database.goal
 
 import be.hogent.faith.database.Mapper
 import be.hogent.faith.service.encryption.EncryptedGoal
-import java.util.UUID
 
 internal object GoalMapper :
     Mapper<EncryptedGoalEntity, EncryptedGoal> {

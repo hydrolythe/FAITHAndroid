@@ -1,6 +1,5 @@
 package be.hogent.faith.service.usecases.goal
 
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.service.encryption.IGoalEncryptionService
 import be.hogent.faith.service.repositories.IGoalRepository

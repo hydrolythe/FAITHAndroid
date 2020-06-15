@@ -10,7 +10,8 @@ import be.hogent.faith.service.repositories.IAuthManager
 import be.hogent.faith.service.repositories.IDetailContainerRepository
 import be.hogent.faith.service.repositories.IUserRepository
 import be.hogent.faith.service.repositories.UserCollisionException
-import be.hogent.faith.service.usecases.user.CreateUserUseCase
+import be.hogent.faith.service.usecases.user.InitialiseUserUseCase
+import be.hogent.faith.util.factory.UserFactory
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -27,8 +28,8 @@ import org.junit.Before
 import org.junit.Test
 import java.util.UUID
 
-class CreateUserUseCaseTest {
-    private lateinit var createUserUseCase: CreateUserUseCase
+class InitialiseUserUseCaseTest {
+    private lateinit var userUseCase: InitialiseUserUseCase
     private lateinit var scheduler: Scheduler
     private val userRepository: IUserRepository = mockk()
     private val authManager: IAuthManager = mockk()
@@ -40,6 +41,8 @@ class CreateUserUseCaseTest {
     private val backpackEncryptionService: IDetailContainerEncryptionService<Backpack> = mockk()
     private val cinemaEncryptionService: IDetailContainerEncryptionService<Cinema> = mockk()
     private val treasureChestEncryptionService: IDetailContainerEncryptionService<TreasureChest> = mockk()
+
+    private val user: User = UserFactory.makeUser()
 
     @Before
     fun setUp() {
@@ -56,9 +59,8 @@ class CreateUserUseCaseTest {
             mockk()
         )
         scheduler = mockk()
-        createUserUseCase =
-            CreateUserUseCase(
-                authManager,
+        userUseCase =
+            InitialiseUserUseCase(
                 userRepository,
                 backpackRepository,
                 cinemaRepository,
@@ -79,77 +81,42 @@ class CreateUserUseCaseTest {
     @Test
     fun registerUserUC_nonExistingUser_Succeeds() {
         // Arrange
-        val emailArg = slot<String>()
-        val passwordArg = slot<String>()
         val userArg = slot<User>()
 
-        val uid = UUID.randomUUID().toString()
+        every { userRepository.initialiseUser(capture(userArg)) } returns Completable.complete()
 
-        every {
-            authManager.register(capture(emailArg), capture(passwordArg))
-        } returns Maybe.just(uid)
-
-        every { userRepository.insert(capture(userArg)) } returns Completable.complete()
-
-        val params = CreateUserUseCase.Params("username", "avatarName", "testPassword")
+        val params = InitialiseUserUseCase.Params(user)
 
         // Act
-        val result = createUserUseCase.buildUseCaseObservable(params)
+        val result = userUseCase.buildUseCaseObservable(params)
 
         // Assert
         result.test()
             .assertNoErrors()
             .assertComplete()
 
-        Assert.assertEquals(params.username + "@faith.be", emailArg.captured)
-        Assert.assertEquals(params.password, passwordArg.captured)
+        Assert.assertEquals(params.user.username, userArg.captured.username)
 
-        Assert.assertEquals(params.avatarName, userArg.captured.avatarName)
-        Assert.assertEquals(uid, userArg.captured.uuid)
-        Assert.assertEquals(params.username, userArg.captured.username)
+        Assert.assertEquals(params.user.avatarName, userArg.captured.avatarName)
+        Assert.assertEquals(params.user.username, userArg.captured.username)
     }
 
-    @Test
-    fun registerUserUC_existingUser_Fails() {
-        val emailArg = slot<String>()
-        val passwordArg = slot<String>()
-        val userArg = slot<User>()
-
-        every { authManager.register(capture(emailArg), capture(passwordArg)) } returns Maybe.error(
-            UserCollisionException(Exception("error"))
-        )
-        every { userRepository.insert(capture(userArg)) } returns Completable.complete()
-        // Act
-        val params = CreateUserUseCase.Params("username", "testPassword", "avatarName")
-
-        // Act
-        val result = createUserUseCase.buildUseCaseObservable(params)
-
-        result.test()
-            .assertError(UserCollisionException::class.java)
-            .assertNotComplete()
-
-        // Assert
-        Assert.assertEquals(params.username + "@faith.be", emailArg.captured)
-        Assert.assertEquals(params.password, passwordArg.captured)
-        verify(exactly = 0) { userRepository.insert(allAny()) }
-    }
 
     @Test
     fun createUserUC_normal_userIsPassedToRepo() {
         // Arrange
         val userArg = slot<User>()
-        every { userRepository.insert(capture(userArg)) } returns Completable.complete()
+        every { userRepository.initialiseUser(capture(userArg)) } returns Completable.complete()
         every { authManager.register(any(), any()) } returns Maybe.just("uuid")
 
-        val params = CreateUserUseCase.Params("username", "avatarName", "testPassword")
+        val params = InitialiseUserUseCase.Params(user)
 
         // Act
-        createUserUseCase.buildUseCaseObservable(params)
+        userUseCase.buildUseCaseObservable(params)
             .test()
 
         // Assert
-        Assert.assertEquals(params.username, userArg.captured.username)
-        Assert.assertEquals(params.avatarName, userArg.captured.avatarName)
+        Assert.assertEquals(params.user.username, userArg.captured.username)
+        Assert.assertEquals(params.user.avatarName, userArg.captured.avatarName)
     }
 }

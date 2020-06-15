@@ -42,10 +42,6 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     val registerButtonClicked: LiveData<Unit>
         get() = _registerButtonClicked
 
-    init {
-        // TODO Moet er gecontrolleerd worden of de user reeds aangemeld is: eerst nagaan of user reeds is aangemeld (isUserLoggedInUseCase), dan user ophalen en dan call van userLoggedInSuccessfully
-    }
-
     /**
      * user is new and wants to register
      */
@@ -63,7 +59,6 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
             userName.value = ""
-            //   _userNameErrorMessage.value = R.string.registerOrLogin_username_empty
             _userLoggedInState.postValue(
                 Resource(
                     ResourceState.ERROR,

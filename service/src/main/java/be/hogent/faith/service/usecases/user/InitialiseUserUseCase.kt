@@ -6,7 +6,6 @@ import be.hogent.faith.domain.models.TreasureChest
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.service.encryption.ContainerType
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
-import be.hogent.faith.service.repositories.IAuthManager
 import be.hogent.faith.service.repositories.IDetailContainerRepository
 import be.hogent.faith.service.repositories.IUserRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
@@ -15,8 +14,7 @@ import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
-class CreateUserUseCase(
-    private val authManager: IAuthManager,
+class InitialiseUserUseCase(
     private val userRepository: IUserRepository,
     private val backpackRepository: IDetailContainerRepository<Backpack>,
     private val cinemaRepository: IDetailContainerRepository<Cinema>,
@@ -26,16 +24,13 @@ class CreateUserUseCase(
     private val treasureChestEncryptionService: IDetailContainerEncryptionService<TreasureChest>,
     observer: Scheduler,
     subscriber: Scheduler = Schedulers.io()
-) : CompletableUseCase<CreateUserUseCase.Params>(observer, subscriber) {
+) : CompletableUseCase<InitialiseUserUseCase.Params>(observer, subscriber) {
 
     override fun buildUseCaseObservable(params: Params): Completable {
-        val createUser = authManager.register("${params.username}@faith.be", params.password)
-            .doOnComplete { Timber.i("User registered with firebase") }
-            .flatMapCompletable { uuid ->
-                userRepository
-                    .insert(User(params.username, params.avatarName, uuid))
-                    .doOnComplete { Timber.i("Created user in repo") }
-            }
+        val createUser = userRepository
+            .initialiseUser(params.user)
+            .doOnComplete { Timber.i("Created user in repo") }
+            .doOnError { Timber.e("Fout bij initialisatie avatar") }
 
         val createBackpack = backpackEncryptionService.createContainer(ContainerType.BACKPACK)
             .subscribeOn(subscriber)
@@ -83,8 +78,6 @@ class CreateUserUseCase(
     }
 
     data class Params(
-        val username: String,
-        val avatarName: String,
-        val password: String
+        val user: User
     )
 }

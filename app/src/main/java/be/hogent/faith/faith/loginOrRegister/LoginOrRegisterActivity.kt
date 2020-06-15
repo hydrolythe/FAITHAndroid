@@ -11,7 +11,7 @@ import be.hogent.faith.faith.cityScreen.CityScreenActivity
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarFragment
-import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoFragment
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel
 import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
 import be.hogent.faith.faith.util.replaceFragment
@@ -24,12 +24,10 @@ import timber.log.Timber
 
 class LoginOrRegisterActivity : AppCompatActivity(),
     WelcomeFragment.WelcomeNavigationListener,
-    RegisterUserInfoFragment.RegisterUserInfoNavigationListener,
     RegisterAvatarFragment.AvatarFragmentNavigationListener {
 
     private lateinit var userViewModel: UserViewModel
-    private val registerUserViewModel: RegisterUserViewModel by viewModel<RegisterUserViewModel>()
-    private val welcomeViewModel: WelcomeViewModel by viewModel<WelcomeViewModel>()
+    private val registerAvatarViewModel: RegisterAvatarViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +60,13 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     private fun handleDataStateGetLoggedInUser(resource: Resource<Unit>) {
         when (resource.status) {
             ResourceState.SUCCESS -> {
-                goToCityScreen()
+                userViewModel.user.observe(this, Observer {
+                    if (it.avatarName == "") {
+                        goToRegisterAvatarScreen()
+                    } else {
+                        goToCityScreen()
+                    }
+                })
             }
             ResourceState.LOADING -> {
             }
@@ -95,15 +99,15 @@ class LoginOrRegisterActivity : AppCompatActivity(),
         userViewModel.getLoggedInUser()
     }
 
+    override fun initialiseUser() {
+        registerAvatarViewModel.initialiseUser(userViewModel.user.value!!)
+    }
+
     override fun userIsLoggedIn() {
         userViewModel.getLoggedInUser()
     }
 
-    override fun goToRegistrationScreen() {
-        replaceFragment(RegisterUserInfoFragment.newInstance(), R.id.fragment_container)
-    }
-
-    override fun goToRegisterAvatarScreen() {
+    private fun goToRegisterAvatarScreen() {
         replaceFragment(RegisterAvatarFragment.newInstance(), R.id.fragment_container)
     }
 }

@@ -42,14 +42,14 @@ class UserRepositoryImplTest {
 
     @Test
     fun userRepository_insert_authenticatedUser_Completes() {
-        every { firebaseUserRepository.insert(userEntity) } returns Completable.complete()
+        every { firebaseUserRepository.initialiseUser(userEntity) } returns Completable.complete()
         stubUserMapperToEntity(userWithoutEvents, userEntity)
-        userRepository.insert(userWithoutEvents).test().assertComplete()
+        userRepository.initialiseUser(userWithoutEvents).test().assertComplete()
     }
 
     @Test
     fun userRepository_insert_nonAuthenticatedUser_Fails() {
-        every { firebaseUserRepository.insert(userEntity) } returns Completable.error(
+        every { firebaseUserRepository.initialiseUser(userEntity) } returns Completable.error(
             RuntimeException("Unauthorized used.")
         )
         stubUserMapperToEntity(userWithoutEvents, userEntity)
