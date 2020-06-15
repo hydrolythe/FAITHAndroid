@@ -20,7 +20,7 @@ data class User(
     val events: List<Event>
         get() = _events.values.toList()
 
-    private val allGoals = mutableListOf<Goal>()
+    private var allGoals = mutableListOf<Goal>()
 
     val achievedGoals: List<Goal>
         get() = allGoals.filter { it.isCompleted }
@@ -54,12 +54,15 @@ data class User(
     }
 
     fun addGoal() {
-        require(achievedGoals.size < MAX_NUMBER_OF_ACTIVE_GOALS) { "Er kunnen maximum $MAX_NUMBER_OF_ACTIVE_GOALS actieve doelen zijn." }
+        require(activeGoals.size < MAX_NUMBER_OF_ACTIVE_GOALS) { "Er kunnen maximum $MAX_NUMBER_OF_ACTIVE_GOALS actieve doelen zijn." }
         val uniqueColor = findUnusedColor()
         val goal = Goal(uniqueColor)
         allGoals.add(goal)
     }
 
+    fun removeGoal(goal: Goal) {
+        allGoals.remove(goal)
+    }
     /**
      * Uses the list of [GoalColor]s to find a color that is not currently used in the [activeGoals].
      */
@@ -71,5 +74,9 @@ data class User(
 
     fun setGoalCompleted(goal: Goal) {
         goal.toggleCompleted()
+    }
+
+    fun setGoals(goals: List<Goal>) {
+        allGoals = goals.toMutableList()
     }
 }
