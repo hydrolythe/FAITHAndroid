@@ -36,6 +36,7 @@ sealed class DetailsContainer {
 }
 
 class Backpack : DetailsContainer()
+class TreasureChest : DetailsContainer()
 
 class Cinema : DetailsContainer() {
 

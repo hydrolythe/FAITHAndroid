@@ -99,7 +99,9 @@ class FileStorageRepository(
 
     override fun downloadFile(detail: Detail, container: DetailsContainer): Completable {
         if (localStorage.isFilePresent(detail, container)) {
-            return Completable.complete()
+            return Completable.fromAction {
+                detail.file = localStorage.getDetailFile(detail, container)
+            }
         } else {
             return onlineStorage.downloadDetail(detail, container)
         }

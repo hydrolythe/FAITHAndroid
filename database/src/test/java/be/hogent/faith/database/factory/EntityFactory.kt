@@ -4,7 +4,12 @@ import be.hogent.faith.database.common.EncryptedDetailEntity
 import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.converters.LocalDateTimeConverter
 import be.hogent.faith.database.event.EncryptedEventEntity
+import be.hogent.faith.database.goal.EncryptedActionEntity
+import be.hogent.faith.database.goal.EncryptedGoalEntity
+import be.hogent.faith.database.goal.EncryptedSubGoalEntity
 import be.hogent.faith.database.user.UserEntity
+import be.hogent.faith.domain.models.goals.GoalColor
+import be.hogent.faith.domain.models.goals.ReachGoalWay
 import be.hogent.faith.util.factory.DataFactory
 import java.util.UUID
 
@@ -82,6 +87,51 @@ object EntityFactory {
             encryptedStreamingDEK = "sDEK",
             encryptedDEK = "DEK"
         )
+    }
+
+    fun makeGoalEntity(uuid: UUID = DataFactory.randomUUID()): EncryptedGoalEntity {
+        return EncryptedGoalEntity(
+            dateTime = LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
+            description = DataFactory.randomString(),
+            uuid = uuid.toString(),
+            isCompleted = DataFactory.randomBoolean(),
+            currentPositionAvatar = DataFactory.randomInt(1, 10),
+            color = GoalColor.GREEN.name,
+            reachGoalWay = ReachGoalWay.Elevator.name,
+            subgoals = makeSubGoalEntityList(10),
+            encryptedDEK = "DEK"
+        )
+    }
+
+    fun makeSubGoalEntity(sequenceNumber: Int): EncryptedSubGoalEntity {
+        return EncryptedSubGoalEntity(
+            sequenceNumber = sequenceNumber,
+            description = DataFactory.randomString(),
+            actions = makeActionEntityList(5)
+        )
+    }
+
+    fun makeSubGoalEntityList(count: Int): List<EncryptedSubGoalEntity> {
+        val subgoals = mutableListOf<EncryptedSubGoalEntity>()
+        repeat(count) {
+            subgoals.add(makeSubGoalEntity(it - 1))
+        }
+        return subgoals
+    }
+
+    fun makeActionEntity(): EncryptedActionEntity {
+        return EncryptedActionEntity(
+            description = DataFactory.randomString(),
+            currentStatus = DataFactory.randomString()
+        )
+    }
+
+    fun makeActionEntityList(count: Int): List<EncryptedActionEntity> {
+        val actions = mutableListOf<EncryptedActionEntity>()
+        repeat(count) {
+            actions.add(makeActionEntity())
+        }
+        return actions
     }
 
     fun makeUserEntity(): UserEntity {

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="detailsMetaDataViewModel"
+            type="be.hogent.faith.faith.details.DetailsMetaDataViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--ACHTERGROND-->
+
+        <!-- KNOPPEN -->
+        <!-- Invisible to make it transparent -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/achtergrond_schatkist_opslaan">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.26" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.88" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.74" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.24" />
+
+            <ImageButton
+                android:id="@+id/btn_save_treasurechest_cancel"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="@dimen/material_icon_height"
+                android:layout_marginStart="@dimen/margin_corner_button"
+                android:layout_marginTop="@dimen/margin_corner_button"
+                android:background="@drawable/ic_return"
+                android:contentDescription="@string/cancel"
+                android:onClick="@{() -> detailsMetaDataViewModel.onCancelClicked()}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/save_treasurechest_cardview"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:cardBackgroundColor="@color/color_white"
+                app:cardCornerRadius="60dp"
+                app:cardElevation="@dimen/panel_elevation"
+                app:layout_constraintBottom_toTopOf="@+id/guide_save_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/guide_save_end"
+                app:layout_constraintStart_toEndOf="@+id/guide_save_start"
+                app:layout_constraintTop_toBottomOf="@+id/guide_save_top">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/save_treasurechest_btn_date"
+                        style="@style/faith_calendar_button"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/event_textInput_height"
+                        android:layout_marginEnd="32dp"
+                        android:contentDescription="@string/save"
+                        android:elevation="0dp"
+                        android:fontFamily="@font/sourcesanspro"
+                        android:onClick="@{() -> detailsMetaDataViewModel.onDateButtonClicked()}"
+                        android:text="@{detailsMetaDataViewModel.detailDateString}"
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:textColor="@color/black"
+                        app:icon="@drawable/ic_kalender"
+                        app:iconGravity="textStart"
+                        app:iconPadding="5dp"
+                        app:iconSize="44dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/lbl_treasurechest_title"
+                        style="@style/caption_textinput"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="32dp"
+                        android:text="@string/save_event_title"
+                        app:layout_constraintBottom_toTopOf="@id/textInputLayout_treasurechesttitle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/save_treasurechest_btn_date" />
+
+
+                    <!--                    TODO: zoals in saveEventDialog errorResID toevoegen-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_treasurechesttitle"
+                        style="@style/faith_textInputLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="48dp"
+                        android:layout_marginBottom="16dp"
+                        android:hint="@string/save_event_title"
+                        app:errorEnabled="true"
+                        app:layout_constraintBottom_toTopOf="@+id/lbl_treasurechest_notes"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/lbl_treasurechest_title"
+
+                        app:layout_constraintTop_toBottomOf="@id/lbl_treasurechest_title"
+                        app:startIconDrawable="@drawable/ic_titel">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/txt_save_treasurechest_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:nextFocusDown="@+id/txt_save_treasurechest_notes"
+                            android:text="@={detailsMetaDataViewModel.detailTitle}">
+
+                            <requestFocus />
+                        </com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/lbl_treasurechest_notes"
+                        style="@style/caption_textinput"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@string/lbl_save_event_notes"
+                        app:layout_constraintBottom_toTopOf="@id/textInputLayout_notes"
+                        app:layout_constraintStart_toStartOf="@+id/lbl_treasurechest_title"
+                        app:layout_constraintTop_toBottomOf="@id/textInputLayout_treasurechesttitle" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_notes"
+                        style="@style/faith_textInputLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginBottom="32dp"
+                        android:hint="@string/hier_kan_je_de_notities_kwijt"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_treasurechesttitle"
+                        app:layout_constraintStart_toStartOf="@+id/textInputLayout_treasurechesttitle"
+                        app:layout_constraintTop_toBottomOf="@+id/lbl_treasurechest_notes"
+                        app:startIconDrawable="@drawable/ic_notities">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/txt_save_treasurechest_notes"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="top|start"
+                            android:inputType="textMultiLine"
+                            android:nextFocusDown="@+id/btn_save_treasurechest_save"
+                            android:singleLine="false"
+                            android:text="@={detailsMetaDataViewModel.detailNotes}" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_treasurechest_save"
+                style="@style/faith_button"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/save_btn"
+                android:contentDescription="@string/save"
+                android:onClick="@{() -> detailsMetaDataViewModel.onSaveDetailsData()}"
+                app:cornerRadius="40dp"
+                app:icon="@drawable/save_btn"
+                app:iconGravity="textStart"
+                app:iconPadding="5dp"
+                app:iconSize="44dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_treasurechest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</layout>

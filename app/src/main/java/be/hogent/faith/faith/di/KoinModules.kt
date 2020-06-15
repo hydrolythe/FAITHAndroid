@@ -3,14 +3,16 @@ package be.hogent.faith.faith.di
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.TreasureChest
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.UserViewModel
-import be.hogent.faith.faith.backpackScreen.BackpackViewModel
+import be.hogent.faith.faith.backpack.BackpackViewModel
 import be.hogent.faith.faith.cinema.CinemaCreateVideoViewModel
 import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
 import be.hogent.faith.faith.details.BackpackDetailsMetaDataViewModel
 import be.hogent.faith.faith.details.CinemaDetailsMetaDataViewModel
+import be.hogent.faith.faith.details.TreasureChestDetailsMetaDataViewModel
 import be.hogent.faith.faith.details.audio.AudioDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailViewModel
@@ -34,6 +36,7 @@ import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvider
+import be.hogent.faith.faith.treasureChest.TreasureChestViewModel
 import be.hogent.faith.faith.util.AndroidTempFileProvider
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.faith.videoplayer.CurrentVideoViewModel
@@ -73,13 +76,23 @@ val appModule = module(override = true) {
             getBackPackDataUseCase = get(named("GetBackpackDataUseCase"))
         )
     }
+    viewModel { (treasurechest: TreasureChest) ->
+        TreasureChestViewModel(
+            saveDetailUseCase = get(named("SaveCinemaDetailUseCase")),
+            deleteDetailUseCase = get(named("DeleteCinemaDetailUseCase")),
+            loadDetailFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
+            treasureChest = treasurechest,
+            getDataUseCase = get(named("GetCinemaDataUseCase"))
+        )
+    }
     viewModel { (cinema: Cinema) ->
         CinemaOverviewViewModel(
             saveBackpackDetailUseCase = get(named("SaveCinemaDetailUseCase")),
             deleteBackpackDetailUseCase = get(named("DeleteCinemaDetailUseCase")),
             loadDetailFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
             cinema = cinema,
-            getCinemaDataUseCase = get(named("GetCinemaDataUseCase"))
+            getCinemaDataUseCase = get(named("GetCinemaDataUseCase")),
+            addFilmToCinemaUseCase = get()
         )
     }
     viewModel { DrawViewModel() }
@@ -98,14 +111,11 @@ val appModule = module(override = true) {
     viewModel { EventDetailsViewModel(get()) }
     viewModel { ViewPhotoDetailViewModel() }
     viewModel { ViewDrawingDetailViewModel() }
-    viewModel { CinemaCreateVideoViewModel() }
+    viewModel { CinemaCreateVideoViewModel(get()) }
     viewModel { CinemaDetailsMetaDataViewModel() }
     viewModel { BackpackDetailsMetaDataViewModel() }
-    viewModel {
-        ViewTextDetailViewModel(
-            get()
-        )
-    }
+    viewModel { TreasureChestDetailsMetaDataViewModel() }
+    viewModel { ViewTextDetailViewModel(get()) }
 
     viewModel { ViewVideoViewModel() }
 

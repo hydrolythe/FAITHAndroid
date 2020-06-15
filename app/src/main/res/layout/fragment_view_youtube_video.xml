@@ -17,9 +17,9 @@
             android:layout_marginBottom="16dp"
             android:orientation="horizontal"
             android:translationZ="2dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline7"
+            app:layout_constraintBottom_toTopOf="@+id/guide_cinema_view_top"
             app:layout_constraintEnd_toStartOf="@+id/guideline10"
-            app:layout_constraintStart_toStartOf="@+id/guideline9">
+            app:layout_constraintStart_toStartOf="@+id/guide_cinema_view_left">
 
             <TextView
                 android:id="@+id/text_currentime_yt_video"
@@ -47,15 +47,15 @@
             android:id="@+id/menu_container_yt_video"
             android:layout_width="373dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/rv_background_youtubeview"
+            android:background="@drawable/img_filmstrip_side"
             android:backgroundTint="@color/color_white"
             android:orientation="horizontal"
             android:padding="8dp"
             android:translationZ="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
+            app:layout_constraintEnd_toStartOf="@+id/guide_cinema_view_right"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toBottomOf="@id/guideline6">
+            app:layout_constraintTop_toBottomOf="@id/guide_cinema_view_bottom">
 
             <ImageButton
                 android:id="@+id/btn_stop_yt_video"
@@ -124,46 +124,46 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/img_cinema_view_left2"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="64dp"
-                android:background="@drawable/rv_background_youtubeview"
+                android:background="@drawable/img_filmstrip_side"
                 android:backgroundTint="#233D4C"
-                app:layout_constraintBottom_toTopOf="@+id/imageView6"
+                app:layout_constraintBottom_toTopOf="@+id/img_cinema_view_left3"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+                app:layout_constraintTop_toBottomOf="@+id/img_cinema_view_left1" />
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/img_cinema_view_left3"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="64dp"
-                android:background="@drawable/rv_background_youtubeview"
+                android:background="@drawable/img_filmstrip_side"
                 android:backgroundTint="#233D4C"
-                app:layout_constraintBottom_toTopOf="@+id/imageView7"
+                app:layout_constraintBottom_toTopOf="@+id/img_cinema_view_left4"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+                app:layout_constraintTop_toBottomOf="@+id/img_cinema_view_left2" />
 
             <ImageView
-                android:id="@+id/imageView7"
+                android:id="@+id/img_cinema_view_left4"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="64dp"
-                android:background="@drawable/rv_background_youtubeview"
+                android:background="@drawable/img_filmstrip_side"
                 android:backgroundTint="#233D4C"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+                app:layout_constraintTop_toBottomOf="@+id/img_cinema_view_left3" />
 
             <ImageView
-                android:id="@+id/imageView8"
+                android:id="@+id/img_cinema_view_left1"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="64dp"
-                android:background="@drawable/rv_background_youtubeview"
+                android:background="@drawable/img_filmstrip_side"
                 android:backgroundTint="#233D4C"
-                app:layout_constraintBottom_toTopOf="@+id/imageView5"
+                app:layout_constraintBottom_toTopOf="@+id/img_cinema_view_left2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btn_back_yt_video" />
 
@@ -176,51 +176,51 @@
                 android:backgroundTint="@android:color/transparent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_btn_back_video" />
+                app:srcCompat="@drawable/ic_btn_back_black" />
 
             <ImageView
-                android:id="@+id/imageView9"
+                android:id="@+id/img_cinema_view_right1"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="64dp"
-                android:background="@drawable/rv_background_youtubeview"
+                android:background="@drawable/img_filmstrip_side"
                 android:backgroundTint="#233D4C"
-                app:layout_constraintBottom_toTopOf="@+id/imageView11"
+                app:layout_constraintBottom_toTopOf="@+id/img_cinema_view_right2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btn_back_yt_video" />
 
             <ImageView
-                android:id="@+id/imageView11"
+                android:id="@+id/img_cinema_view_right2"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="64dp"
-                android:background="@drawable/rv_background_youtubeview"
+                android:background="@drawable/img_filmstrip_side"
                 android:backgroundTint="#233D4C"
-                app:layout_constraintBottom_toTopOf="@+id/imageView12"
+                app:layout_constraintBottom_toTopOf="@+id/img_cinema_view_right3"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+                app:layout_constraintTop_toBottomOf="@+id/img_cinema_view_right1" />
 
             <ImageView
-                android:id="@+id/imageView12"
+                android:id="@+id/img_cinema_view_right3"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="64dp"
-                android:background="@drawable/rv_background_youtubeview"
+                android:background="@drawable/img_filmstrip_side"
                 android:backgroundTint="#233D4C"
-                app:layout_constraintBottom_toTopOf="@+id/imageView13"
+                app:layout_constraintBottom_toTopOf="@+id/img_cinema_view_right4"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView11" />
+                app:layout_constraintTop_toBottomOf="@+id/img_cinema_view_right2" />
 
             <ImageView
-                android:id="@+id/imageView13"
+                android:id="@+id/img_cinema_view_right4"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="64dp"
-                android:background="@drawable/rv_background_youtubeview"
+                android:background="@drawable/img_filmstrip_side"
                 android:backgroundTint="#233D4C"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView12" />
+                app:layout_constraintTop_toBottomOf="@+id/img_cinema_view_right3" />
 
             <ImageView
                 android:id="@+id/imageView14"
@@ -231,8 +231,8 @@
                 android:background="@drawable/rv_background"
                 android:backgroundTint="#16F48A"
                 android:scaleY="-1"
-                app:layout_constraintEnd_toStartOf="@+id/imageView9"
-                app:layout_constraintStart_toEndOf="@+id/imageView8"
+                app:layout_constraintEnd_toStartOf="@+id/img_cinema_view_right1"
+                app:layout_constraintStart_toEndOf="@+id/img_cinema_view_left1"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -244,8 +244,8 @@
                 android:background="@drawable/rv_background"
                 android:backgroundTint="#16F48A"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/imageView13"
-                app:layout_constraintStart_toEndOf="@+id/imageView7" />
+                app:layout_constraintEnd_toStartOf="@+id/img_cinema_view_right4"
+                app:layout_constraintStart_toEndOf="@+id/img_cinema_view_left4" />
 
             <ImageButton
                 android:id="@+id/btn_save_yt_video"
@@ -278,10 +278,10 @@
             android:layout_height="0dp"
             android:visibility="visible"
             app:cardCornerRadius="35dp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline6"
-            app:layout_constraintEnd_toStartOf="@+id/guideline4"
+            app:layout_constraintBottom_toTopOf="@+id/guide_cinema_view_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/guide_cinema_view_right"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toTopOf="@+id/guideline7">
+            app:layout_constraintTop_toTopOf="@+id/guide_cinema_view_top">
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -293,28 +293,28 @@
             app:layout_constraintGuide_percent="0.26" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
+            android:id="@+id/guide_cinema_view_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.74" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline6"
+            android:id="@+id/guide_cinema_view_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.795" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline7"
+            android:id="@+id/guide_cinema_view_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.21" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline9"
+            android:id="@+id/guide_cinema_view_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"

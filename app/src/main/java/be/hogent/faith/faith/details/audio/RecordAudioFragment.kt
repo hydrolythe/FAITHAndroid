@@ -38,7 +38,6 @@ import kotlin.reflect.KClass
 const val REQUESTCODE_AUDIO = 12
 private const val AUDIO_DETAIL = "An existing AudioDetail"
 
-// TODO: might be cleaner to be split in a record and play fragment, now this does both
 class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     private val tempFileProvider: TempFileProvider by inject()
@@ -76,8 +75,6 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
     private fun loadExistingAudioDetail() {
         val existingDetail = arguments?.getSerializable(AUDIO_DETAIL) as AudioDetail
         audioDetailViewModel.loadExistingDetail(existingDetail)
-        // TODO : als encryptie geimplementeerd
-        // audioPlayer.loadMedia(existingDetail.file)
     }
 
     private fun existingDetailGiven(): Boolean {

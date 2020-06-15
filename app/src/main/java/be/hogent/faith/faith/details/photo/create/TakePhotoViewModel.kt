@@ -40,20 +40,17 @@ class TakePhotoViewModel(
     override fun onSaveClicked() {
         require(_tempPhotoSaveFile.value != null)
         val params = CreatePhotoDetailUseCase.Params(_tempPhotoSaveFile.value!!)
-        createPhotoDetailUseCase.execute(params, CreatePhotoDetailUseCaseHandler())
-    }
+        createPhotoDetailUseCase.execute(params, object : DisposableSingleObserver<PhotoDetail>() {
+            override fun onSuccess(createdDetail: PhotoDetail) {
+                currentDetail = createdDetail
+                _getDetailMetaData.call()
+            }
 
-    private inner class CreatePhotoDetailUseCaseHandler :
-        DisposableSingleObserver<PhotoDetail>() {
-        override fun onSuccess(createdDetail: PhotoDetail) {
-            currentDetail = createdDetail
-            _getDetailMetaData.call()
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.create_photo_failed)
-            Timber.e(e)
-        }
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.create_photo_failed)
+                Timber.e(e)
+            }
+        })
     }
 
     private var _currentState = MutableLiveData<PhotoState>()
@@ -135,6 +132,14 @@ class TakePhotoViewModel(
         _cancelClicked.call()
     }
 
+    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        currentDetail?.let {
+            it.title = title
+            it.dateTime = dateTime
+        }
+        _savedDetail.value = currentDetail
+    }
+
     internal abstract class PhotoState {
         open fun takePhoto(context: TakePhotoViewModel) {
             Timber.e("Take photoSaveFile not allowed")
@@ -179,12 +184,4 @@ class TakePhotoViewModel(
     }
 
     internal class PhotoSavedState : PhotoState()
-
-    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
-        currentDetail?.let {
-            it.title = title
-            it.dateTime = dateTime
-        }
-        _savedDetail.value = currentDetail
-    }
 }

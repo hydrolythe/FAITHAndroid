@@ -3,6 +3,9 @@ package be.hogent.faith.service.di
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
+import be.hogent.faith.service.usecases.cinema.AddFilmToCinemaUseCase
+import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase
+import be.hogent.faith.service.usecases.cinema.VideoEncoder
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
@@ -22,11 +25,16 @@ import be.hogent.faith.service.usecases.event.MakeEventFilesAvailableUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
+import be.hogent.faith.service.usecases.goal.DeleteGoalUseCase
+import be.hogent.faith.service.usecases.goal.GetGoalsUseCase
+import be.hogent.faith.service.usecases.goal.SaveGoalUseCase
+import be.hogent.faith.service.usecases.goal.UpdateGoalUseCase
 import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.service.usecases.user.InitialiseUserUseCase
 import be.hogent.faith.service.usecases.user.IsUsernameUniqueUseCase
 import be.hogent.faith.service.usecases.user.LoginUserUseCase
 import be.hogent.faith.service.usecases.user.LogoutUserUseCase
+import be.hogent.faith.util.ThumbnailProvider
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -44,6 +52,12 @@ object CinemaNames {
     const val repo = "CinemaRepository"
     const val database = "CinemaDatabase"
     const val encryptionService = "CinemaEncryptionService"
+}
+
+object TreasureChestNames {
+    const val repo = "TreasureChestRepository"
+    const val database = "TreasureChestDatabase"
+    const val encryptionService = "TreasureChestEncryptionService"
 }
 
 val serviceModule = module {
@@ -67,8 +81,10 @@ val serviceModule = module {
             userRepository = get(),
             backpackRepository = get(named(BackpackNames.repo)),
             cinemaRepository = get(named(CinemaNames.repo)),
-            backpackEncryptionService = get(),
-            cinemaEncryptionService = get(),
+            backpackEncryptionService = get(named(BackpackNames.encryptionService)),
+            cinemaEncryptionService = get(named(CinemaNames.encryptionService)),
+            treasureChestEncryptionService = get(named(TreasureChestNames.encryptionService)),
+            treasureChestRepository = get(named(TreasureChestNames.repo)),
             observer = get()
         )
     }
@@ -87,15 +103,24 @@ val serviceModule = module {
     factory { LoginUserUseCase(get(), get()) }
     factory { LogoutUserUseCase(get(), get()) }
     factory { LoadTextDetailUseCase(get(), get()) }
-    factory { CreateDrawingDetailUseCase(get(), get()) }
-    factory { OverwriteDrawingDetailUseCase(get(), get()) }
+    factory { CreateDrawingDetailUseCase(get(), get(), get()) }
+    factory { OverwriteDrawingDetailUseCase(get(), get(), get()) }
     factory { OverwriteTextDetailUseCase(get(), get()) }
-    factory { CreatePhotoDetailUseCase(get()) }
+    factory { CreatePhotoDetailUseCase(get(), get()) }
     factory { CreateAudioDetailUseCase(get()) }
     factory { CreateTextDetailUseCase(get(), get()) }
     factory { CreateVideoDetailUseCase(get()) }
     factory { DeleteEventDetailUseCase(get()) }
     factory { DeleteEventUseCase(get(), get(), get()) }
+    factory {
+        AddFilmToCinemaUseCase(
+            containerEncryptionService = get(named(CinemaNames.encryptionService)),
+            cinemaRepository = get(named(CinemaNames.repo)),
+            fileStorageRepository = get(),
+            observer = get()
+        )
+    }
+    single { ThumbnailProvider() }
     factory {
         MakeEventFilesAvailableUseCase(
             fileStorageRepo = get(),
@@ -167,4 +192,16 @@ val serviceModule = module {
             observer = get()
         )
     }
+    factory {
+        CreateCinemaVideoUseCase(
+            videoEncoder = VideoEncoder(),
+            loadFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
+            thumbnailProvider = get(),
+            observer = get()
+        )
+    }
+    factory { DeleteGoalUseCase(get(), get()) }
+    factory { SaveGoalUseCase(get(), get(), get()) }
+    factory { UpdateGoalUseCase(get(), get(), get()) }
+    factory { GetGoalsUseCase(get(), get(), get()) }
 }

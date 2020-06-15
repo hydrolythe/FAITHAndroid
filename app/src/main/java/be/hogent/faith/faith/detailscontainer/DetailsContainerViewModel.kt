@@ -12,9 +12,9 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.detailscontainer.detailFilters.CombinedDetailFilter
 import be.hogent.faith.faith.util.SingleLiveEvent
@@ -35,13 +35,12 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     private val deleteDetailsContainerDetailUseCase: DeleteDetailsContainerDetailUseCase<T>,
     private val loadDetailFileUseCase: LoadDetailFileUseCase<T>,
     private val getDetailsContainerDataUseCase: GetDetailsContainerDataUseCase<T>,
-    protected val detailsContainer: T
+    val detailsContainer: T
 ) : ViewModel() {
 
     protected open val details: List<Detail>
         get() = detailsContainer.details
 
-    // filter
     private val detailFilter = CombinedDetailFilter()
 
     val searchString = MutableLiveData<String>()
@@ -66,7 +65,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     val videoFilterEnabled = MutableLiveData<Boolean>().apply { this.value = false }
     val externalVideoFilterEnabled = MutableLiveData<Boolean>().apply { this.value = false }
 
-    val deleteEnabled = MutableLiveData<Boolean>().apply { this.value = false }
     private var _dateRangeClicked = SingleLiveEvent<Unit>()
     val dateRangeClicked: LiveData<Unit> = _dateRangeClicked
 
@@ -75,46 +73,58 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         this.addSource(endDate) { value = combineLatestDates(startDate, endDate) }
     }
 
+    private val _addButtonClicked = SingleLiveEvent<Unit>()
+    val addButtonClicked: LiveData<Unit> = _addButtonClicked
+
     val detailsPresent: LiveData<Boolean> by lazy { Transformations.map(filteredDetails) { detailsList -> detailsList.isNotEmpty() } }
 
     val filteredDetails: LiveData<List<Detail>> = MediatorLiveData<List<Detail>>().apply {
         addSource(searchString) { query ->
             detailFilter.titleFilter.searchString = query
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(startDate) { startDate ->
             detailFilter.dateFilter.startDate = startDate
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(endDate) { endDate ->
             detailFilter.dateFilter.endDate = endDate
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(drawingFilterEnabled) { enabled ->
             detailFilter.hasDrawingDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(textFilterEnabled) { enabled ->
             detailFilter.hasTextDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(photoFilterEnabled) { enabled ->
             detailFilter.hasPhotoDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(audioFilterEnabled) { enabled ->
             detailFilter.hasAudioDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(externalVideoFilterEnabled) { enabled ->
             detailFilter.hasVideoDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
         addSource(videoFilterEnabled) { enabled ->
             detailFilter.hasYoutubeDetailFilter.isEnabled = enabled
-            value = detailFilter.filter(details)
+            value = detailFilter.filter(details).sortedBy { it.dateTime }.reversed()
         }
     }
+
+    /**
+     * Indicates that the user is currently deleting items from the container.
+     * (Indicated by the x's being shown next to each detail.
+     */
+    val deleteModeEnabled = MutableLiveData<Boolean>().apply { this.value = false }
+
+    val deleteButtonVisible: LiveData<Boolean> =
+        Transformations.map(filteredDetails) { list -> list.isNotEmpty() }
 
     /**
      *  opening and saving (first showSaveDialog, then  ,  a detail
@@ -213,16 +223,24 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         _endDate.value = endDate?.let { toLocalDate(it) } ?: LocalDate.now()
     }
 
+    protected fun forceDetailsUpdate() {
+        audioFilterEnabled.value = audioFilterEnabled.value
+    }
+
+    fun onAddButtonClicked() {
+        _addButtonClicked.call()
+    }
+
     private fun combineLatestDates(
         startDate: LiveData<LocalDate>,
         endDate: LiveData<LocalDate>
     ): String {
-        val van =
+        val from =
             if (startDate.value == LocalDate.MIN.plusDays(1)) "van" else startDate.value!!.format(
                 DateTimeFormatter.ofPattern("dd,MMM yyyy")
             )
-        val tot = endDate.value!!.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
-        return "$van - $tot"
+        val to = endDate.value!!.format(DateTimeFormatter.ofPattern("dd,MMM yyyy"))
+        return "$from - $to"
     }
 
     fun onDateRangeClicked() {
@@ -230,7 +248,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     }
 
     fun onDeleteClicked() {
-        deleteEnabled.value = deleteEnabled.value!!.not()
+        deleteModeEnabled.value = deleteModeEnabled.value!!.not()
     }
 
     fun goToCityScreen() {
@@ -239,6 +257,11 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
 
     fun setOpenDetailType(openDetailMode: OpenDetailMode) {
         _openDetailMode.postValue(openDetailMode)
+    }
+
+    fun resetDateRange() {
+        _startDate.value = LocalDate.MIN.plusDays(1)
+        _endDate.value = LocalDate.now()
     }
 
     // opslaan van detail
@@ -264,6 +287,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_load_detail_failed)
+                Timber.e(e)
             }
         })
     }
@@ -287,7 +311,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_audio_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -302,7 +326,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_photo_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -317,7 +341,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_drawing_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -332,7 +356,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_video_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -347,7 +371,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_video_success)
-                setDetails()
+                forceDetailsUpdate()
                 _detailIsSaved.call()
             }
 
@@ -388,10 +412,6 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         return Instant.ofEpochMilli(milliseconds) // Convert count-of-milliseconds-since-epoch into a date-time in UTC (`Instant`).
             .atZone(ZoneId.of("Europe/Brussels")) // Adjust into the wall-clock time used by the people of a particular region (a time zone). Produces a `ZonedDateTime` object.
             .toLocalDate()
-    }
-
-    private fun setDetails() {
-        audioFilterEnabled.postValue(false)
     }
 
     fun clearErrorMessage() {

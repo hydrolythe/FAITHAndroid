@@ -45,7 +45,7 @@ class CinemaCreateVideoViewModelTest {
 
     @Before
     fun setUp() {
-        cinemaCreateVideoViewModel = CinemaCreateVideoViewModel()
+        cinemaCreateVideoViewModel = CinemaCreateVideoViewModel(mockk())
         cinemaCreateVideoViewModel.selectedDetails.observeForever(detailsObserver)
     }
 

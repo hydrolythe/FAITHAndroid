@@ -17,12 +17,13 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTakePhotoBinding
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.faith.backpackScreen.BackpackScreenActivity
+import be.hogent.faith.faith.backpack.BackpackScreenActivity
 import be.hogent.faith.faith.cinema.CinemaActivity
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
+import be.hogent.faith.faith.treasureChest.TreasureChestActivity
 import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -126,11 +127,8 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
             if (saveDialog == null)
                 takePhotoViewModel.setDetailsMetaData()
             else {
-                saveDialog.setTargetFragment(
-                    this,
-                    22
-                )
-                saveDialog.show(getParentFragmentManager(), null)
+                saveDialog.setTargetFragment(this, 22)
+                saveDialog.show(parentFragmentManager, null)
             }
         })
 
@@ -186,6 +184,7 @@ class TakePhotoFragment : Fragment(), DetailFragment<PhotoDetail> {
                 when (requireActivity()) {
                     is BackpackScreenActivity -> setTitle(R.string.dialog_to_the_backpack)
                     is CinemaActivity -> setTitle(R.string.dialog_to_the_cinema_title)
+                    is TreasureChestActivity -> setTitle(R.string.dialog_to_the_treasurechest_title)
                     else -> setTitle(R.string.dialog_to_the_event_title)
                 }
                 setMessage(R.string.dialog_takePhoto_cancel_message)
