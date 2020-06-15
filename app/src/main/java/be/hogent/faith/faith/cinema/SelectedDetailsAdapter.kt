@@ -1,8 +1,10 @@
 package be.hogent.faith.faith.cinema
 
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,27 +13,27 @@ import be.hogent.faith.databinding.SelectedDetailItemRvBinding
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.AUDIO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.DRAW_DETAIL
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.VIDEO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.FILM_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.PICTURE_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.TEXT_DETAIL
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.VIDEO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.YOUTUBE_DETAIL
 import be.hogent.faith.faith.util.TempFileProvider
-import be.hogent.faith.faith.util.getDefaultThumbnailUrl
 import com.bumptech.glide.Glide
-import com.bumptech.glide.signature.MediaStoreSignature
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
 class SelectedDetailsAdapter(private val clickListener: SelectedDetailsClickListener) :
-    ListAdapter<Detail, SelectedDetailsAdapter.SelectedDetailsViewHolder>(SelectedDetailsDiffCallback()) {
+    ListAdapter<Detail, SelectedDetailsAdapter.SelectedDetailsViewHolder>(
+        SelectedDetailsDiffCallback()
+    ) {
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)!!) {
@@ -64,7 +66,10 @@ class SelectedDetailsAdapter(private val clickListener: SelectedDetailsClickList
         return SelectedDetailsViewHolder.from(parent, viewType)
     }
 
-    class SelectedDetailsViewHolder private constructor(val binding: SelectedDetailItemRvBinding, private val viewType: Int) :
+    class SelectedDetailsViewHolder private constructor(
+        val binding: SelectedDetailItemRvBinding,
+        private val viewType: Int
+    ) :
         RecyclerView.ViewHolder(binding.root), KoinComponent {
 
         private val androidTempFileProvider: TempFileProvider by inject()
@@ -78,17 +83,37 @@ class SelectedDetailsAdapter(private val clickListener: SelectedDetailsClickList
             binding.clickListener = clickListener
 
             when (viewType) {
-                AUDIO_DETAIL -> (Glide.with(binding.detailImg).load(R.drawable.event_detail_audio).into(binding.detailImg))
-                PICTURE_DETAIL -> (Glide.with(binding.detailImg).load(androidTempFileProvider.getFile(binding.detail!! as PhotoDetail)).signature
-                            (MediaStoreSignature("", binding.detail!!.file.lastModified(), 0)).into(binding.detailImg))
-                DRAW_DETAIL -> (Glide.with(binding.detailImg).load(androidTempFileProvider.getFile(binding.detail!! as DrawingDetail)).signature(
-                                MediaStoreSignature("", binding.detail!!.file.lastModified(), 0)).into(binding.detailImg))
-                TEXT_DETAIL -> (Glide.with(binding.detailImg).load(R.drawable.event_detail_text).into(binding.detailImg))
-                VIDEO_DETAIL -> (Glide.with(binding.detailImg).load(R.drawable.event_detail_camera).into(binding.detailImg))
-                YOUTUBE_DETAIL -> {
-                    detail as YoutubeVideoDetail
-                    Glide.with(binding.detailImg).load(getDefaultThumbnailUrl(detail.videoId)).into(binding.detailImg)
-                } }
+                AUDIO_DETAIL -> loadThumbnailOrFallback(
+                    detail,
+                    R.drawable.event_detail_audio,
+                    binding.detailImg
+                )
+                PICTURE_DETAIL -> loadThumbnailOrFallback(
+                    detail,
+                    R.drawable.event_detail_camera,
+                    binding.detailImg
+                )
+                DRAW_DETAIL -> loadThumbnailOrFallback(
+                    detail,
+                    R.drawable.event_detail_drawing,
+                    binding.detailImg
+                )
+                TEXT_DETAIL -> loadThumbnailOrFallback(
+                    detail,
+                    R.drawable.event_detail_text,
+                    binding.detailImg
+                )
+                VIDEO_DETAIL -> loadThumbnailOrFallback(
+                    detail,
+                    R.drawable.event_detail_camera,
+                    binding.detailImg
+                )
+                YOUTUBE_DETAIL -> loadThumbnailOrFallback(
+                    detail,
+                    R.drawable.event_detail_camera,
+                    binding.detailImg
+                )
+            }
 
             binding.executePendingBindings()
         }
@@ -98,6 +123,18 @@ class SelectedDetailsAdapter(private val clickListener: SelectedDetailsClickList
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = SelectedDetailItemRvBinding.inflate(layoutInflater, parent, false)
                 return SelectedDetailsViewHolder(binding, viewType)
+            }
+        }
+
+        private fun loadThumbnailOrFallback(detail: Detail, fallbackImage: Int, target: ImageView) {
+            if (detail.thumbnail == null) {
+                Glide.with(target)
+                    .load(fallbackImage)
+                    .into(target)
+            } else {
+                Glide.with(target)
+                    .load(Base64.decode(detail.thumbnail, Base64.DEFAULT))
+                    .into(target)
             }
         }
     }

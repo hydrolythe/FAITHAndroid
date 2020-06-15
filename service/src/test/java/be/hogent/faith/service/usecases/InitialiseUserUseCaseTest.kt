@@ -9,14 +9,12 @@ import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import be.hogent.faith.service.repositories.IAuthManager
 import be.hogent.faith.service.repositories.IDetailContainerRepository
 import be.hogent.faith.service.repositories.IUserRepository
-import be.hogent.faith.service.repositories.UserCollisionException
 import be.hogent.faith.service.usecases.user.InitialiseUserUseCase
 import be.hogent.faith.util.factory.UserFactory
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import io.mockk.verify
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Scheduler
@@ -26,7 +24,6 @@ import org.junit.After
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import java.util.UUID
 
 class InitialiseUserUseCaseTest {
     private lateinit var userUseCase: InitialiseUserUseCase
@@ -100,7 +97,6 @@ class InitialiseUserUseCaseTest {
         Assert.assertEquals(params.user.avatarName, userArg.captured.avatarName)
         Assert.assertEquals(params.user.username, userArg.captured.username)
     }
-
 
     @Test
     fun createUserUC_normal_userIsPassedToRepo() {

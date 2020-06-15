@@ -11,12 +11,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentSkyscraperHistoryBinding
 import be.hogent.faith.domain.models.goals.Goal
-import be.hogent.faith.domain.models.goals.SubGoal
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.skyscraper.SkyscraperActivity
-import be.hogent.faith.faith.skyscraper.goal.Action
-import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors
 import org.koin.android.ext.android.getKoin
 
 class SkyscraperHistoryFragment : Fragment() {
@@ -71,7 +68,6 @@ class SkyscraperHistoryFragment : Fragment() {
          */
 
         adapter.submitList(list)
-
     }
 
     private fun updateUI() {

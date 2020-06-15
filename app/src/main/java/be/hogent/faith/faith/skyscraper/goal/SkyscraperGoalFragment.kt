@@ -2,14 +2,10 @@ package be.hogent.faith.faith.skyscraper.goal
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -58,7 +54,7 @@ class SkyscraperGoalFragment : Fragment() {
     private fun setupRecyclerView() {
         val actionListener = object : ActionListener {
             override fun onActionClicked(action: Action) {
-                //TODO
+                // TODO
             }
         }
         setupItemTouchHelper()
@@ -67,15 +63,12 @@ class SkyscraperGoalFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvGoalActions.adapter = adapter
 
-
         list.add(Action("Dit is een eerste actie"))
         list.add(Action("Dit is een tweede actie"))
         list.add(Action("Dit is een derde actie"))
         list.add(Action("Dit is een vierde actie"))
         adapter.updateActionsList(list)
     }
-
-
 
     private fun setOnclickListeners() {
         binding.btnSkyscraperReturn.setOnClickListener {
@@ -92,7 +85,7 @@ class SkyscraperGoalFragment : Fragment() {
     private fun setDragDropListeners() {
         binding.dragAvatar.setOnTouchListener(avatarOnTouchListener)
 
-        //Betere manier vinden?
+        // Betere manier vinden?
         binding.skyscraperAvatarDragDrop.avatarPosStairs1.setOnDragListener(avatarOnDragListener)
         binding.skyscraperAvatarDragDrop.avatarPosStairs2.setOnDragListener(avatarOnDragListener)
         binding.skyscraperAvatarDragDrop.avatarPosStairs3.setOnDragListener(avatarOnDragListener)
@@ -184,12 +177,17 @@ class SkyscraperGoalFragment : Fragment() {
                     }
                     deleteIcon.draw(c)
                     c.restore()
-
-
                 }
-                super.onChildDraw(c,recyclerView,viewHolder,dX,dY,actionState,isCurrentlyActive)
+                super.onChildDraw(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
             }
-
         })
         itemTouchHelper.attachToRecyclerView(binding.rvGoalActions)
     }

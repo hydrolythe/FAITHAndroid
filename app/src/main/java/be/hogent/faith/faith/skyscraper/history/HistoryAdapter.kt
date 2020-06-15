@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.ListAdapter
 import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.SkyscraperThumbnailDiffCallback
 
-
 class HistoryAdapter(
     private val skyscraperHistoryNavigationListener: SkyscraperThumbnailViewHolder.SkyscraperHistoryNavigationListener
 ) : ListAdapter<Goal, SkyscraperThumbnailViewHolder>(SkyscraperThumbnailDiffCallback()) {
@@ -37,5 +36,3 @@ class HistoryAdapter(
         holder.bind(getItem(position), itemsAreDeletable)
     }
 }
-
-

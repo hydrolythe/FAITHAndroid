@@ -8,7 +8,6 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.goals.SubGoal
 import kotlinx.android.synthetic.main.subgoal_action_rv_item.view.action_description
 
-
 class SubgoalActionAdapter(
     val subgoal: SubGoal
 
