@@ -8,7 +8,7 @@ import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_BLUE
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_DARK_GREEN
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_GREEN
-import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_PINK
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_RED
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_YELLOW
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperViewHolder.SkyscraperNavigationListener
 
@@ -16,7 +16,7 @@ import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperViewHolder.Skyscra
 enum class SkyscraperColors(val value: Int) {
     SKYSCRAPER_BLUE(1) ,
     SKYSCRAPER_YELLOW(2),
-    SKYSCRAPER_PINK(3),
+    SKYSCRAPER_RED(3),
     SKYSCRAPER_DARK_GREEN(4),
     SKYSCRAPER_GREEN(5)
 }
@@ -40,7 +40,7 @@ class SkyscraperAdapter(
         return when (position) {
             0 -> SKYSCRAPER_BLUE.value
             1 -> SKYSCRAPER_YELLOW.value
-            2 -> SKYSCRAPER_PINK.value
+            2 -> SKYSCRAPER_RED.value
             3 -> SKYSCRAPER_DARK_GREEN.value
             4 -> SKYSCRAPER_GREEN.value
             else -> SKYSCRAPER_BLUE.value

@@ -48,7 +48,7 @@ object SkyscraperThumbnailViewHolderFactory {
                 thumbnailView,
                 skyscraperHistoryNavigationListener
             )
-            SkyscraperColors.SKYSCRAPER_PINK.value -> createSkyscraperThumbnailPinkViewHolder(
+            SkyscraperColors.SKYSCRAPER_RED.value -> createSkyscraperThumbnailPinkViewHolder(
                 thumbnailView,
                 skyscraperHistoryNavigationListener
             )

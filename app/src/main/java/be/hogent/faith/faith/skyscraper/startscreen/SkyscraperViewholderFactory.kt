@@ -35,9 +35,9 @@ object SkyscraperViewHolderFactory {
                     false
                 ) as ConstraintLayout
             }
-            SkyscraperColors.SKYSCRAPER_PINK.value -> {
+            SkyscraperColors.SKYSCRAPER_RED.value -> {
                 view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.skyscraper_rv_dark_green,
+                    R.layout.skyscraper_rv_red,
                     parent,
                     false
                 ) as ConstraintLayout

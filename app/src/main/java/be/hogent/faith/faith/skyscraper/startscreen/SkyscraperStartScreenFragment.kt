@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentSkyscraperStartBinding
 import be.hogent.faith.domain.models.goals.Goal
@@ -52,10 +53,11 @@ class SkyscraperStartScreenFragment : Fragment(),
             requireNotNull(activity) as SkyscraperActivity,
             this
         )
-        binding.skyscraperRv.layoutManager = GridLayoutManager(activity, 5)
+        binding.skyscraperRv.layoutManager = GridLayoutManager(requireContext(), 5)
         binding.skyscraperRv.adapter = adapter
         adapter.submitList(list)
     }
+
     private fun setOnclickListeners() {
         binding.btnSkyscraperReturn.setOnClickListener {
             navigation?.closeSkyscrapers()
@@ -69,6 +71,7 @@ class SkyscraperStartScreenFragment : Fragment(),
             adapter.notifyDataSetChanged()
         }
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is SkyscraperNavigationListener) {
