@@ -19,56 +19,19 @@ object SkyscraperViewHolderFactory {
         skyscraperClickListener: SkyscraperClickListener
     ): SkyscraperViewHolder {
 
-        val view: ConstraintLayout
-        when (viewType) {
-            SkyscraperColors.SKYSCRAPER_BLUE.value -> {
-                view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.skyscraper_rv_blue,
-                    parent,
-                    false
-                ) as ConstraintLayout
-            }
-            SkyscraperColors.SKYSCRAPER_YELLOW.value -> {
-                view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.skyscraper_rv_yellow,
-                    parent,
-                    false
-                ) as ConstraintLayout
-            }
-            SkyscraperColors.SKYSCRAPER_RED.value -> {
-                view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.skyscraper_rv_red,
-                    parent,
-                    false
-                ) as ConstraintLayout
-            }
-            SkyscraperColors.SKYSCRAPER_DARK_GREEN.value -> {
-                view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.skyscraper_rv_dark_green,
-                    parent,
-                    false
-                ) as ConstraintLayout
-            }
-            SkyscraperColors.SKYSCRAPER_GREEN.value -> {
-                view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.skyscraper_rv_green,
-                    parent,
-                    false
-                ) as ConstraintLayout
-            }
-            else -> {
-                view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.skyscraper_rv_blue,
-                    parent,
-                    false
-                ) as ConstraintLayout
-            }
+        val skyscraperLayoutFile = when (viewType) {
+            SkyscraperColors.SKYSCRAPER_BLUE.value -> R.layout.skyscraper_rv_blue
+            SkyscraperColors.SKYSCRAPER_YELLOW.value -> R.layout.skyscraper_rv_yellow
+            SkyscraperColors.SKYSCRAPER_RED.value -> R.layout.skyscraper_rv_red
+            SkyscraperColors.SKYSCRAPER_DARK_GREEN.value -> R.layout.skyscraper_rv_dark_green
+            SkyscraperColors.SKYSCRAPER_GREEN.value -> R.layout.skyscraper_rv_green
+            else -> R.layout.skyscraper_rv_blue
         }
-        return SkyscraperViewHolder(
-            view,
-            skyscraperNavigationListener,
-            skyscraperClickListener
-        )
+
+        val view: ConstraintLayout = LayoutInflater.from(parent.context)
+            .inflate(skyscraperLayoutFile, parent, false) as ConstraintLayout
+
+        return SkyscraperViewHolder(view, skyscraperNavigationListener, skyscraperClickListener)
     }
 }
 
