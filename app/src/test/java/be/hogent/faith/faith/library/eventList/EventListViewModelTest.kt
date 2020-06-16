@@ -10,7 +10,7 @@ import be.hogent.faith.util.factory.DetailFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import io.reactivex.subscribers.DisposableSubscriber
+import io.reactivex.rxjava3.subscribers.DisposableSubscriber
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

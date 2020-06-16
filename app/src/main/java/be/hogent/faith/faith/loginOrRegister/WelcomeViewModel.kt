@@ -122,7 +122,6 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
                 )
             )
         }
-
     }
 
     override fun onCleared() {
