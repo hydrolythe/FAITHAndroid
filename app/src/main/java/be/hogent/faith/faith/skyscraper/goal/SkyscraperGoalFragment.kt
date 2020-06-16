@@ -1,7 +1,13 @@
 package be.hogent.faith.faith.skyscraper.goal
 
+import android.R.attr.thumb
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Matrix
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +22,12 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentSkyscraperGoalBinding
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
+import kotlinx.android.synthetic.main.fragment_skyscraper_goal.seekbar
 import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.android.inject
 import java.util.Collections
+
 
 class SkyscraperGoalFragment : Fragment() {
 
@@ -28,6 +38,8 @@ class SkyscraperGoalFragment : Fragment() {
     private lateinit var avatarOnTouchListener: AvatarOnTouchListener
     private lateinit var adapter: ActionAdapter
     private lateinit var itemTouchHelper: ItemTouchHelper
+    private val avatarProvider: AvatarProvider by inject()
+
     val list = arrayListOf<Action>()
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,6 +80,7 @@ class SkyscraperGoalFragment : Fragment() {
         list.add(Action("Dit is een derde actie"))
         list.add(Action("Dit is een vierde actie"))
         adapter.updateActionsList(list)
+        setThumb(userViewModel.user.value!!.avatarName)
     }
 
     private fun setOnclickListeners() {
@@ -112,6 +125,8 @@ class SkyscraperGoalFragment : Fragment() {
         binding.skyscraperAvatarDragDrop.avatarPosLift11.setOnDragListener(avatarOnDragListener)
         binding.skyscraperAvatarDragDrop.avatarPosLift12.setOnDragListener(avatarOnDragListener)
     }
+
+
     private fun setupItemTouchHelper() {
         itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             ItemTouchHelper.UP or ItemTouchHelper.DOWN,
@@ -191,6 +206,56 @@ class SkyscraperGoalFragment : Fragment() {
         })
         itemTouchHelper.attachToRecyclerView(binding.rvGoalActions)
     }
+
+    private fun setThumb(avatarName:String)
+    {
+        val targetWidth = 50
+        val targetHeight = 50
+        val resID = resources.getIdentifier(
+            avatarName,
+            "drawable", context?.packageName)
+        val matrix = Matrix()
+        matrix.postRotate(90F)
+
+        /* Get the size of the image */
+        val bmOptions = BitmapFactory.Options()
+        bmOptions.inJustDecodeBounds = true
+        var bitmap = BitmapFactory.decodeResource(resources, resID, bmOptions)
+        val avatarWitdh = bmOptions.outWidth
+        val avatarHeight = bmOptions.outHeight
+
+        /* Figure out which way needs to be reduced less */
+        var scaleFactor = 1
+        if (targetWidth > 0 || targetHeight > 0) {
+            scaleFactor = Math.min(avatarWitdh / targetWidth, avatarHeight / targetHeight)
+        }
+
+        /* Set bitmap options to scale the image decode target */
+        bmOptions.inJustDecodeBounds =
+            false
+        bmOptions.inSampleSize = scaleFactor
+      //  bmOptions.inPurgeable = true
+        //schall de bitmap
+        bitmap = BitmapFactory.decodeResource(resources, resID, bmOptions)
+        //roteer de bitmap
+        bitmap = Bitmap.createBitmap(
+            bitmap, 0, 0,
+            bitmap.width, bitmap.height, matrix, true)
+        //als met lift
+     /*
+     stel thumb is beeld lift
+        val canvas = Canvas(thumb)
+
+        canvas.drawBitmap(
+            bitmap, Rect(0, 0, bitmap.width, bitmap.height),
+            Rect(0, 0, thumb.getWidth(), thumb.getHeight()), null)
+                    val drawable: Drawable = BitmapDrawable(resources, thumb)
+                            seekbar.setThumb(drawable)
+              */
+        val drawable: Drawable = BitmapDrawable(resources, bitmap)
+        seekbar.setThumb(drawable)
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is SkyscraperNavigationListener) {

@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/skyscraper_create_objective_background">
 
+
         <ImageButton
             android:id="@+id/btn_skyscraper_return"
             android:layout_width="@dimen/material_icon_width"
@@ -23,6 +24,7 @@
             android:contentDescription="@string/cancel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <ImageButton
             android:id="@+id/btn_save_goal"
             android:layout_width="@dimen/material_icon_width"
@@ -34,6 +36,28 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <FrameLayout
+            android:layout_width="50dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginEnd="100dp"
+            android:background="@drawable/touw"
+            app:layout_constraintStart_toStartOf="@+id/guide_rope"
+            app:layout_constraintEnd_toEndOf="@+id/guide_rope"
+            app:layout_constraintTop_toTopOf="@+id/guide_roof_end"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_cellar_top">
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/seekbar"
+                android:layout_width="500dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@android:color/transparent"
+                android:color="@android:color/transparent"
+                android:progressTint="@android:color/transparent"
+                android:rotation="270" />
+        </FrameLayout>
+
         <include
             android:id="@+id/skyscraper_avatar_drag_drop"
             layout="@layout/skyscraper_avatar_drag_drop"
@@ -43,6 +67,8 @@
             app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_end"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_skyscraper_return" />
+
+
 
         <EditText
             android:id="@+id/skyscraper_goal_description"
@@ -55,7 +81,8 @@
             app:layout_constraintBottom_toTopOf="@+id/guide_panel_bottom"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel"
             app:layout_constraintStart_toEndOf="@+id/skyscraper_avatar_drag_drop"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:inputType="text" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_panel"
@@ -69,40 +96,40 @@
             android:id="@+id/rv_actions_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:orientation="vertical"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/rectangle_white"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@+id/skyscraper_avatar_drag_drop"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel"
             app:layout_constraintStart_toEndOf="@+id/skyscraper_avatar_drag_drop"
-            app:layout_constraintTop_toTopOf="@+id/guide_panel_bottom"
-            android:layout_marginBottom="16dp">
+            app:layout_constraintTop_toTopOf="@+id/guide_panel_bottom">
+
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Beschrijving subdoel"
-                android:textSize="20sp"
-                android:textColor="#0000FF"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="16dp"
+                android:text="Beschrijving subdoel"
+                android:textColor="#0000FF"
+                android:textSize="20sp" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_goal_actions"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                                />
+                android:layout_height="wrap_content" />
         </LinearLayout>
-
 
 
         <ImageButton
             android:id="@+id/btn_add_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_corner_button"
             android:layout_marginEnd="@dimen/margin_corner_button"
+            android:layout_marginBottom="@dimen/margin_corner_button"
             android:background="@drawable/ic_actie_toevoegen"
             app:layout_constraintBottom_toBottomOf="@+id/rv_actions_container"
-            app:layout_constraintEnd_toEndOf="@+id/rv_actions_container"
-             />
+            app:layout_constraintEnd_toEndOf="@+id/rv_actions_container" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_panel_bottom"
             android:layout_width="8dp"
@@ -139,6 +166,13 @@
             android:layout_height="12dp"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.250" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_rope"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.35" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
