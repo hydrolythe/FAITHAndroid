@@ -25,7 +25,7 @@ enum class ReachGoalWay {
     Stairs, Elevator, Rope
 }
 
-class Goal(
+data class Goal(
     val goalColor: GoalColor,
     val uuid: UUID = UUID.randomUUID()
 ) {

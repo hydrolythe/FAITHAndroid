@@ -14,7 +14,7 @@
             app:layout_constraintStart_toStartOf="@+id/skyscraper_base"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/skyscraper_panel_blue_rv" />
+            app:srcCompat="@drawable/skyscraper_blue_panel" />
 
         <EditText
             android:id="@+id/txt_goal_description"
@@ -43,7 +43,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/skyscraper_panel"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/skyscraper_blue_rv" />
+            app:srcCompat="@drawable/skyscraper_blue_base" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

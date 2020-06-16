@@ -36,6 +36,7 @@ import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvider
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperOverviewViewModel
 import be.hogent.faith.faith.treasureChest.TreasureChestViewModel
 import be.hogent.faith.faith.util.AndroidTempFileProvider
 import be.hogent.faith.faith.util.TempFileProvider
@@ -66,6 +67,7 @@ val appModule = module(override = true) {
     // ViewModels
     viewModel { CityScreenViewModel(get()) }
     viewModel { (event: Event) -> EventViewModel(get(), get(), get(), event) }
+    viewModel { (user: User) -> SkyscraperOverviewViewModel(get(), get(), get(), user) }
     viewModel { EventViewModel(get(), get(), get()) }
     viewModel { (backpack: Backpack) ->
         BackpackViewModel(

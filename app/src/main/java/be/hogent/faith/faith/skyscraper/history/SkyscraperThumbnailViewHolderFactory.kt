@@ -135,7 +135,7 @@ sealed class SkyscraperThumbnailViewHolder(
     ) : SkyscraperThumbnailViewHolder(imageView, skyscraperHistoryNavigationListener) {
 
         override fun load(): RequestBuilder<Drawable> {
-            return Glide.with(thumbnailView).load(R.drawable.skyscraper_panel_blue_rv)
+            return Glide.with(thumbnailView).load(R.drawable.skyscraper_blue_panel)
         }
     }
     class SkyscraperThumbnailDarkGreenViewHolder(
@@ -144,7 +144,7 @@ sealed class SkyscraperThumbnailViewHolder(
     ) : SkyscraperThumbnailViewHolder(imageView, skyscraperHistoryNavigationListener) {
 
         override fun load(): RequestBuilder<Drawable> {
-            return Glide.with(thumbnailView).load(R.drawable.skyscraper_panel_dark_green_rv)
+            return Glide.with(thumbnailView).load(R.drawable.skyscraper_darkgreen_panel)
         }
     }
 
@@ -154,7 +154,7 @@ sealed class SkyscraperThumbnailViewHolder(
     ) : SkyscraperThumbnailViewHolder(imageView, skyscraperHistoryNavigationListener) {
 
         override fun load(): RequestBuilder<Drawable> {
-            return Glide.with(thumbnailView).load(R.drawable.skyscraper_panel_green_rv)
+            return Glide.with(thumbnailView).load(R.drawable.skyscraper_green_panel)
         }
     }
 
@@ -174,7 +174,7 @@ sealed class SkyscraperThumbnailViewHolder(
     ) : SkyscraperThumbnailViewHolder(imageView, skyscraperHistoryNavigationListener) {
 
         override fun load(): RequestBuilder<Drawable> {
-            return Glide.with(thumbnailView).load(R.drawable.skyscraper_panel_yellow_rv)
+            return Glide.with(thumbnailView).load(R.drawable.skyscraper_yellow_panel)
         }
     }
 

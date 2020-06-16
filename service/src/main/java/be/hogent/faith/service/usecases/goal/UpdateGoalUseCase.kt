@@ -14,10 +14,9 @@ class UpdateGoalUseCase(
     observer: Scheduler
 ) : CompletableUseCase<UpdateGoalUseCase.Params>(observer) {
 
-    private var params: Params? = null
-
     override fun buildUseCaseObservable(params: Params): Completable {
-        return goalEncryptionService.encrypt(params.goal)
+        return goalEncryptionService
+            .encrypt(params.goal)
             .doOnSuccess { Timber.i("encrypted goal ${params.goal.uuid}") }
             .flatMapCompletable(goalRepository::update)
             .doOnComplete { Timber.i("updated the goal ${params.goal.uuid}") }
