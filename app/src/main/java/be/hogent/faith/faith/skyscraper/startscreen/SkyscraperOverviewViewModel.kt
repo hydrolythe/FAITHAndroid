@@ -11,8 +11,8 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.goal.GetGoalsUseCase
 import be.hogent.faith.service.usecases.goal.SaveGoalUseCase
 import be.hogent.faith.service.usecases.goal.UpdateGoalUseCase
-import io.reactivex.rxjava3.observer.DisposableCompletableObserver
-import io.reactivex.subscribers.DisposableSubscriber
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.subscribers.DisposableSubscriber
 import timber.log.Timber
 
 class SkyscraperOverviewViewModel(

@@ -13,7 +13,8 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.textDetail.CreateTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.OverwriteTextDetailUseCase
-import io.reactivex.rxjava3.observer.DisposableCompletableObserver
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 

@@ -7,7 +7,7 @@ import be.hogent.faith.database.user.UserEntity
 import be.hogent.faith.domain.models.detail.Detail
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import durdinapps.rxfirebase2.RxFirestore
+import be.hogent.faith.database.rxfirebase3.RxFirestore
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Maybe

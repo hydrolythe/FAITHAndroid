@@ -11,7 +11,7 @@ import be.hogent.faith.storage.StoragePathProvider
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxkotlin.Singles
+import io.reactivex.rxjava3.kotlin.Singles
 import timber.log.Timber
 
 class DetailContainerEncryptionService<T>(

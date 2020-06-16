@@ -11,6 +11,7 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
+import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File

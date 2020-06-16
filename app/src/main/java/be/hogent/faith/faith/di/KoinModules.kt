@@ -45,7 +45,7 @@ import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.storage.SecureCredentialsManager
 import com.auth0.android.authentication.storage.SharedPreferencesStorage
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named

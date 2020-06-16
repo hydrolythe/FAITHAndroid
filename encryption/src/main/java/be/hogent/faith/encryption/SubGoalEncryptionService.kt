@@ -8,7 +8,7 @@ import be.hogent.faith.service.encryption.EncryptedSubGoal
 import com.google.crypto.tink.KeysetHandle
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxkotlin.Singles
+import io.reactivex.rxjava3.kotlin.Singles
 import timber.log.Timber
 
 class SubGoalEncryptionService(private val actionEncryptionService: ActionEncryptionService) {

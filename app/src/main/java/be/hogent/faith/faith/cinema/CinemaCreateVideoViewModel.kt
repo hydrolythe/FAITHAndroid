@@ -13,7 +13,7 @@ import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Status.Completed
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Status.InProgress
 import be.hogent.faith.service.usecases.cinema.VideoEncoder
-import io.reactivex.observers.DisposableObserver
+import io.reactivex.rxjava3.observers.DisposableObserver
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 

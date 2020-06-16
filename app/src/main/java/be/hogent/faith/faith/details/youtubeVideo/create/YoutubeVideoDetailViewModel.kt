@@ -9,7 +9,7 @@ import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
-import io.reactivex.subscribers.DisposableSubscriber
+import io.reactivex.rxjava3.subscribers.DisposableSubscriber
 import org.threeten.bp.LocalDateTime
 
 class YoutubeVideoDetailViewModel(

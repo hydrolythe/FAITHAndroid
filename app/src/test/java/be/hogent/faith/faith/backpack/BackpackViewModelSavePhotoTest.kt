@@ -8,7 +8,7 @@ import io.mockk.called
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import io.reactivex.rxjava3.observer.DisposableCompletableObserver
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import org.junit.Assert.assertEquals
 import androidx.lifecycle.Observer
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule

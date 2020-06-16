@@ -14,7 +14,7 @@ import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerD
 import be.hogent.faith.service.usecases.detailscontainer.GetDetailsContainerDataUseCase
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.service.usecases.detailscontainer.SaveDetailsContainerDetailUseCase
-import io.reactivex.rxjava3.observer.DisposableCompletableObserver
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import timber.log.Timber
 
 class CinemaOverviewViewModel(

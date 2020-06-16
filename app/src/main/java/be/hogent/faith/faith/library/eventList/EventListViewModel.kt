@@ -11,8 +11,8 @@ import be.hogent.faith.faith.library.eventfilters.CombinedEventFilter
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.event.DeleteEventUseCase
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
-import io.reactivex.rxjava3.observer.DisposableCompletableObserver
-import io.reactivex.subscribers.DisposableSubscriber
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.subscribers.DisposableSubscriber
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId

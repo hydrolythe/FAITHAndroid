@@ -9,7 +9,7 @@ import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.domain.models.goals.GoalColor
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperViewHolder.SkyscraperNavigationListener
 import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.skyscraper_rv_blue.view.skyscraper_base
 import kotlinx.android.synthetic.main.skyscraper_rv_blue.view.skyscraper_panel
 import kotlinx.android.synthetic.main.skyscraper_rv_blue.view.txt_goal_description
@@ -45,7 +45,7 @@ class SkyscraperViewHolder(
     private val skyscraperNavigationListener: SkyscraperNavigationListener,
     private val skyscraperPanelTextListener: SkyscraperPanelTextListener
 ) : RecyclerView.ViewHolder(view), KoinComponent {
-    private var disposables = io.reactivex.rxjava3.disposables.CompositeDisposable()
+    private var disposables = CompositeDisposable()
 
     fun bind(goal: Goal) {
         val baseDrawable = when (goal.goalColor) {

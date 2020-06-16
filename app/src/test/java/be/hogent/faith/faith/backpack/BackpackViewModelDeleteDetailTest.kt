@@ -16,7 +16,7 @@ import io.mockk.Called
 import io.mockk.called
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.rxjava3.observer.DisposableCompletableObserver
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import org.junit.Assert.assertEquals
 
 class BackpackViewModelDeleteDetailTest {

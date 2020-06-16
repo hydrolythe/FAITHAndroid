@@ -13,7 +13,7 @@ import org.junit.Test
 import java.util.UUID
 
 class AuthManagerImplTest {
-    private val firebaseAuthManager = mockk<FirebaseAuthManager>(relaxed = true)
+    private val firebaseAuthManager = mockk<be.hogent.faith.database.authentication.FirebaseAuthManager>(relaxed = true)
     private val authManagerImpl = AuthManager(firebaseAuthManager)
     private val email = "jan@faith.be"
     private val password = "azerty"
