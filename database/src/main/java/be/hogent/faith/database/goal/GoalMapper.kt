@@ -2,6 +2,7 @@ package be.hogent.faith.database.goal
 
 import be.hogent.faith.database.Mapper
 import be.hogent.faith.service.encryption.EncryptedGoal
+import java.util.UUID
 
 internal object GoalMapper :
     Mapper<EncryptedGoalEntity, EncryptedGoal> {
@@ -10,8 +11,8 @@ internal object GoalMapper :
         return EncryptedGoal(
             dateTime = entity.dateTime,
             description = entity.description,
-            uuid = entity.uuid,
-            isCompleted = entity.isCompleted,
+            uuid = UUID.fromString(entity.uuid),
+            isCompleted = entity.completed,
             currentPositionAvatar = entity.currentPositionAvatar,
             goalColor = entity.color,
             reachGoalWay = entity.reachGoalWay,
@@ -26,8 +27,8 @@ internal object GoalMapper :
         return EncryptedGoalEntity(
             dateTime = model.dateTime,
             description = model.description,
-            uuid = model.uuid,
-            isCompleted = model.isCompleted,
+            uuid = model.uuid.toString(),
+            completed = model.isCompleted,
             currentPositionAvatar = model.currentPositionAvatar,
             color = model.goalColor,
             reachGoalWay = model.reachGoalWay,
