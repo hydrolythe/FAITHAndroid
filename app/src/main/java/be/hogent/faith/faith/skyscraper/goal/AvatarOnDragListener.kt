@@ -12,7 +12,7 @@ class AvatarOnDragListener(private val avatarOnTouchListener: AvatarOnTouchListe
         val startLocation = event.localState as ImageView
         val targetLocation = v as ImageView
         if (event.action == DragEvent.ACTION_DROP) {
-            if(startLocation.drawable != targetLocation.drawable ) {
+            if (startLocation.drawable != targetLocation.drawable) {
                 targetLocation.setOnTouchListener(avatarOnTouchListener)
                 targetLocation.setImageDrawable(startLocation.drawable)
                 startLocation.setImageDrawable(null)

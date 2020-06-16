@@ -12,8 +12,6 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.DialogGoalOverviewBinding
 import be.hogent.faith.domain.models.goals.Goal
 
-
-
 class OverviewGoalDialog(private var goal: Goal) : DialogFragment() {
     private lateinit var binding: DialogGoalOverviewBinding
     private lateinit var adapter: SubgoalAdapter
@@ -50,5 +48,4 @@ class OverviewGoalDialog(private var goal: Goal) : DialogFragment() {
             dismiss()
         }
     }
-
 }

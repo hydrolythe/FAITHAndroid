@@ -22,7 +22,7 @@ class SkyscraperActivity : AppCompatActivity(), SkyscraperViewHolder.SkyscraperN
     SkyscraperStartScreenFragment.SkyscraperNavigationListener,
     SkyscraperGoalFragment.SkyscraperNavigationListener,
     SkyscraperHistoryFragment.SkyscraperNavigationListener,
-    SkyscraperThumbnailViewHolder.SkyscraperHistoryNavigationListener{
+    SkyscraperThumbnailViewHolder.SkyscraperHistoryNavigationListener {
 
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
 
@@ -62,5 +62,4 @@ class SkyscraperActivity : AppCompatActivity(), SkyscraperViewHolder.SkyscraperN
         val overviewGoalDialog = OverviewGoalDialog.newInstance(goal)
         overviewGoalDialog.show(supportFragmentManager, null)
     }
-
 }

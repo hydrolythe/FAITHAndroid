@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.skyscraper.goal
 
 import androidx.recyclerview.widget.DiffUtil
-import be.hogent.faith.domain.models.Event
 
 class ActionListDiffCallback(
     private val oldActions: List<Action>,

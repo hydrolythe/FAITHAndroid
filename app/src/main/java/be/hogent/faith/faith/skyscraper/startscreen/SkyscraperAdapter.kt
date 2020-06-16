@@ -12,9 +12,8 @@ import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperColors.SKYSCRAPER_YELLOW
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperViewHolder.SkyscraperNavigationListener
 
-
 enum class SkyscraperColors(val value: Int) {
-    SKYSCRAPER_BLUE(1) ,
+    SKYSCRAPER_BLUE(1),
     SKYSCRAPER_YELLOW(2),
     SKYSCRAPER_RED(3),
     SKYSCRAPER_DARK_GREEN(4),
@@ -52,8 +51,6 @@ class SkyscraperAdapter(
     }
 }
 
-
-
 class SkyscraperDiffCallback : DiffUtil.ItemCallback<Goal>() {
     override fun areItemsTheSame(oldItem: Goal, newItem: Goal): Boolean {
         return oldItem.description == newItem.description
@@ -67,4 +64,3 @@ class SkyscraperDiffCallback : DiffUtil.ItemCallback<Goal>() {
 interface SkyscraperClickListener {
     fun getSelectedSkyscraper(layout: ConstraintLayout, position: Int)
 }
-

@@ -99,8 +99,6 @@ object SkyscraperThumbnailViewHolderFactory {
     ): SkyscraperThumbnailYellowViewHolder {
         return SkyscraperThumbnailYellowViewHolder(thumbnailView, skyscraperHistoryNavigationListener)
     }
-
-
 }
 
 sealed class SkyscraperThumbnailViewHolder(
@@ -108,12 +106,11 @@ sealed class SkyscraperThumbnailViewHolder(
     private val skyscraperHistoryNavigationListener: SkyscraperHistoryNavigationListener
 ) : RecyclerView.ViewHolder(thumbnailView), KoinComponent {
 
-
     fun bind(goal: Goal, isDeletable: Boolean) {
         load().into(thumbnailView.skyscraper_img)
         thumbnailView.setTag(R.id.TAG_GOAL, goal)
         thumbnailView.text_skyscraper_description.text = goal.description
-        thumbnailView.setOnClickListener{
+        thumbnailView.setOnClickListener {
             skyscraperHistoryNavigationListener.openSkyscraperHistoryScreenFor(goal)
         }
         setDeletable(isDeletable)
@@ -180,8 +177,6 @@ sealed class SkyscraperThumbnailViewHolder(
             return Glide.with(thumbnailView).load(R.drawable.skyscraper_panel_yellow_rv)
         }
     }
-
-
 
     interface SkyscraperHistoryNavigationListener {
         fun openSkyscraperHistoryScreenFor(goal: Goal)

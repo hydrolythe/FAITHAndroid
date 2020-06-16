@@ -13,7 +13,7 @@ private const val SUBGOALS_UPPER_BOUND = 9
 private const val DESCRIPTION_MAX_LENGTH = 30
 
 // TODO change to value of the colors
-enum class GoalColor(val value:Int) {
+enum class GoalColor(val value: Int) {
     RED(0), GREEN(1), YELLOW(2), BLUE(3), PURPLE(4)
 }
 
