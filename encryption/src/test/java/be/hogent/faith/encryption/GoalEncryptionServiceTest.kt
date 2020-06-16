@@ -6,7 +6,7 @@ import be.hogent.faith.encryption.internal.KeyEncrypter
 import be.hogent.faith.encryption.internal.KeyGenerator
 import be.hogent.faith.service.encryption.EncryptedGoal
 import be.hogent.faith.util.factory.GoalFactory
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

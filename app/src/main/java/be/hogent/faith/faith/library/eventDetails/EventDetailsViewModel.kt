@@ -9,7 +9,6 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.event.MakeEventFilesAvailableUseCase
-import io.reactivex.observers.DisposableSingleObserver
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 import timber.log.Timber

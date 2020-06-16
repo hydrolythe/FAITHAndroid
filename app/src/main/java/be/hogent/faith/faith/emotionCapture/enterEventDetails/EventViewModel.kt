@@ -18,7 +18,7 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.event.DeleteEventDetailUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
-import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.observer.DisposableCompletableObserver
 import org.koin.core.KoinComponent
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter

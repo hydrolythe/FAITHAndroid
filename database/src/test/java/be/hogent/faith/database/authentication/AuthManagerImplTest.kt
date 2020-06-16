@@ -5,9 +5,9 @@ import be.hogent.faith.service.repositories.SignOutException
 import be.hogent.faith.service.repositories.UserCollisionException
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Single
 import org.junit.Before
 import org.junit.Test
 import java.util.UUID

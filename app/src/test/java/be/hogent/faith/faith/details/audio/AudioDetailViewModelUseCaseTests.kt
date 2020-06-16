@@ -10,7 +10,6 @@ import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.observers.DisposableSingleObserver
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

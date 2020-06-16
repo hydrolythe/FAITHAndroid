@@ -5,9 +5,9 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import be.hogent.faith.service.repositories.IDetailContainerRepository
 import be.hogent.faith.service.usecases.base.ObservableUseCase
-import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.schedulers.Schedulers
 import timber.log.Timber
 
 /**

@@ -5,8 +5,8 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 import java.io.File
 
 /**

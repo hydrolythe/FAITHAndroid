@@ -5,8 +5,8 @@ import be.hogent.faith.database.common.USERS_KEY
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import durdinapps.rxfirebase2.RxFirestore
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
 import java.util.UUID
 
 /**

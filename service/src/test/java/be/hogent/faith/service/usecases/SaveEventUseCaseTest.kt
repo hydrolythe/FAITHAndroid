@@ -11,8 +11,8 @@ import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before

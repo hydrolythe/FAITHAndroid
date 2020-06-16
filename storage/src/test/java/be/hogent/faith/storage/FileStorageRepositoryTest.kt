@@ -10,8 +10,8 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyAll
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 import org.junit.Test
 import java.io.File
 import java.util.UUID

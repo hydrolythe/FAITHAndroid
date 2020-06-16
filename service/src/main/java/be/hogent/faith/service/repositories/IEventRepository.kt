@@ -3,8 +3,8 @@ package be.hogent.faith.service.repositories
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.service.encryption.EncryptedEvent
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
 import java.util.UUID
 
 interface IEventRepository {

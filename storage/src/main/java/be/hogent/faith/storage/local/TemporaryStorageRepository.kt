@@ -9,8 +9,8 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.storage.StoragePathProvider
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 import timber.log.Timber
 import java.io.File
 import java.io.FileNotFoundException

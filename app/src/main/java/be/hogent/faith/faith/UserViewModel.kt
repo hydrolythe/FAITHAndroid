@@ -13,8 +13,8 @@ import be.hogent.faith.service.repositories.NetworkError
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.util.TAG
-import io.reactivex.observers.DisposableCompletableObserver
-import io.reactivex.subscribers.DisposableSubscriber
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.subscribers.DisposableSubscriber
 import timber.log.Timber
 
 /**

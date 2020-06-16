@@ -13,7 +13,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

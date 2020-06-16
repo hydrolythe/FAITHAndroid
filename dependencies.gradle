@@ -14,9 +14,9 @@ ext {
     threeTenABP_version = '1.2.4'
     threeTenBP_version = '1.4.4'
 
-    rxjava_version = '2.2.19'
-    rxjava_android_version = '2.1.1'
-    rxkotlin_version = '2.4.0'
+    rxjava_version = '3.0.4'
+    rxjava_android_version = '3.0.0'
+    rxkotlin_version = '3.0.0'
 
     fotoApparat_version = '2.7.0'
 
@@ -91,9 +91,9 @@ ext {
     commonDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
 
-            rxjava            : "io.reactivex.rxjava2:rxjava:$rxjava_version",
-            rxandroid         : "io.reactivex.rxjava2:rxandroid:$rxjava_android_version",
-            rxkotlin          : "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version",
+            rxjava            : "io.reactivex.rxjava3:rxjava:$rxjava_version",
+            rxandroid         : "io.reactivex.rxjava3:rxandroid:$rxjava_android_version",
+            rxkotlin          : "io.reactivex.rxjava3:rxkotlin:$rxkotlin_version",
 
             threeTenABP       : "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version",
 

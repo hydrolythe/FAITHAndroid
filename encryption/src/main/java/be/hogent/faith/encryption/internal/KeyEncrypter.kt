@@ -5,7 +5,7 @@ import com.google.crypto.tink.CleartextKeysetHandle
 import com.google.crypto.tink.JsonKeysetReader
 import com.google.crypto.tink.JsonKeysetWriter
 import com.google.crypto.tink.KeysetHandle
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 

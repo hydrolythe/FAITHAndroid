@@ -9,9 +9,9 @@ import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Test
 

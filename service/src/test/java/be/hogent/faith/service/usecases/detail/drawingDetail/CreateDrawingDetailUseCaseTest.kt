@@ -6,8 +6,8 @@ import be.hogent.faith.util.ThumbnailProvider
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.Scheduler
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.Single
 import org.junit.Before
 import org.junit.Test
 import java.io.File

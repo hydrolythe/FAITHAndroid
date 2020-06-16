@@ -9,9 +9,9 @@ import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.storage.StoragePathProvider
 import com.google.firebase.storage.FirebaseStorage
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.toFlowable
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.toFlowable
 import timber.log.Timber
 import java.io.File
 

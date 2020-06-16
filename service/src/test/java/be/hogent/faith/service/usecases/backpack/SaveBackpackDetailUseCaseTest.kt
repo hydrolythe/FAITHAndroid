@@ -13,10 +13,10 @@ import be.hogent.faith.util.factory.DetailFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Completable
-import io.reactivex.Scheduler
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Test
 

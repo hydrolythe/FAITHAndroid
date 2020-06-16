@@ -5,8 +5,8 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
 import be.hogent.faith.service.usecases.base.SingleUseCase
 import be.hogent.faith.util.ThumbnailProvider
-import io.reactivex.Scheduler
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.Single
 
 class CreateDrawingDetailUseCase(
     private val storageRepository: ITemporaryFileStorageRepository,

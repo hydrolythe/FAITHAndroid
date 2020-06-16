@@ -1,7 +1,7 @@
 package be.hogent.faith.service.encryption
 
 import be.hogent.faith.domain.models.goals.Goal
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 
 interface IGoalEncryptionService {
     /**

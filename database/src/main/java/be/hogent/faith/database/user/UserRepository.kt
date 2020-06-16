@@ -2,8 +2,8 @@ package be.hogent.faith.database.user
 
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.service.repositories.IUserRepository
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
 
 open class UserRepository(
     private val userMapper: UserMapper,

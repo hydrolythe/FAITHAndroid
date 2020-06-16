@@ -7,8 +7,8 @@ import be.hogent.faith.service.encryption.IDetailContainerEncryptionService
 import be.hogent.faith.service.repositories.IDetailContainerRepository
 import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import io.reactivex.Completable
-import io.reactivex.Scheduler
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Scheduler
 import timber.log.Timber
 
 class AddFilmToCinemaUseCase(

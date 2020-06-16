@@ -3,7 +3,7 @@ package be.hogent.faith.storage.local
 import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
-import io.reactivex.Completable
+import io.reactivex.rxjava3.core.Completable
 import java.io.File
 
 /**

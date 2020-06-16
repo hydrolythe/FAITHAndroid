@@ -5,10 +5,10 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.service.encryption.IEventEncryptionService
 import be.hogent.faith.service.repositories.IEventRepository
 import be.hogent.faith.service.usecases.base.FlowableUseCase
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.schedulers.Schedulers
 import timber.log.Timber
 
 /**

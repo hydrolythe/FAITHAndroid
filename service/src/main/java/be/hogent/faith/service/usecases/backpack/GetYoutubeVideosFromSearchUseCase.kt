@@ -5,8 +5,8 @@ import be.hogent.faith.service.network.YoutubeApi
 import be.hogent.faith.service.network.YoutubeConfig
 import be.hogent.faith.service.network.asDomainModel
 import be.hogent.faith.service.usecases.base.FlowableUseCase
-import io.reactivex.Flowable
-import io.reactivex.Scheduler
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Scheduler
 
 class GetYoutubeVideosFromSearchUseCase(
     observer: Scheduler

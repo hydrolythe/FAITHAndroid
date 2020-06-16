@@ -11,8 +11,8 @@ import be.hogent.faith.service.encryption.EncryptedGoal
 import be.hogent.faith.service.encryption.EncryptedSubGoal
 import be.hogent.faith.service.encryption.IGoalEncryptionService
 import com.google.crypto.tink.KeysetHandle
-import io.reactivex.Observable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxkotlin.Singles
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber

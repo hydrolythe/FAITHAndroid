@@ -15,8 +15,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.observers.DisposableCompletableObserver
-import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.rxjava3.observer.DisposableCompletableObserver
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
