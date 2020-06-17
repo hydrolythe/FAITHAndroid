@@ -5,6 +5,12 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="be.hogent.faith.faith.skyscraper.startscreen.SkyscraperOverviewViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,11 +34,18 @@
             android:id="@+id/skyscraper_rv"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="64dp"
+            android:layout_marginBottom="64dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_skyscraper_return"
-            app:layout_constraintTop_toBottomOf="@+id/btn_skyscraper_return" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_skyscraper_return"
+            tools:itemCount="5"
+            tools:listitem="@layout/skyscraper_rv_green" />
 
         <ImageButton
             android:id="@+id/btn_skyscraper_history"
@@ -51,8 +64,21 @@
             android:layout_height="wrap_content"
             android:background="@drawable/add_btn"
             android:contentDescription="@string/button_add_skyscraper"
+            android:onClick="@{() ->viewModel.addNewGoal()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/spinner_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="@{viewModel.isLoading() == true ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/loading_spinner"
+            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

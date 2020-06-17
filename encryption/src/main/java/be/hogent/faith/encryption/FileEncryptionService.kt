@@ -3,8 +3,8 @@ package be.hogent.faith.encryption
 import be.hogent.faith.util.withSuffix
 import com.google.crypto.tink.KeysetHandle
 import com.google.crypto.tink.streamingaead.StreamingAeadFactory
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream

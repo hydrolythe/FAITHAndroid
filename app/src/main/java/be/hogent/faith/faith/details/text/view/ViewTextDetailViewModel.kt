@@ -6,7 +6,7 @@ import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.details.ViewDetailBaseViewModel
 import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
-import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import timber.log.Timber
 
 class ViewTextDetailViewModel(

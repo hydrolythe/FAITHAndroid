@@ -178,15 +178,7 @@ class SkyscraperGoalFragment : Fragment() {
                     deleteIcon.draw(c)
                     c.restore()
                 }
-                super.onChildDraw(
-                    c,
-                    recyclerView,
-                    viewHolder,
-                    dX,
-                    dY,
-                    actionState,
-                    isCurrentlyActive
-                )
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             }
         })
         itemTouchHelper.attachToRecyclerView(binding.rvGoalActions)

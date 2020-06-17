@@ -1,8 +1,8 @@
 package be.hogent.faith.service.encryption
 
 import be.hogent.faith.domain.models.detail.Detail
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 
 interface IDetailContainerEncryptionService<T> {
     /**

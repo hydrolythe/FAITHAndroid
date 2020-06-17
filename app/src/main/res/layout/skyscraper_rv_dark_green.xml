@@ -3,91 +3,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/skyscraper_rv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide_panel_bottom"
-            android:layout_width="8dp"
-            android:layout_height="12dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.45" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide_panel_top"
-            android:layout_width="8dp"
-            android:layout_height="12dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.05" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide_skyscraper"
-            android:layout_width="8dp"
-            android:layout_height="12dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.38" />
-
-        <ImageView
-            android:id="@+id/skyscraper_base"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper"
-            app:srcCompat="@drawable/skyscraper_dark_green_rv" />
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/skyscraper_container">
 
         <ImageView
             android:id="@+id/skyscraper_panel"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:foregroundGravity="center"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toTopOf="@+id/guide_panel_bottom"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guide_panel_top"
-            app:srcCompat="@drawable/skyscraper_panel_dark_green_rv" />
+            style="@style/skyscraper_panel"
+            app:layout_constraintBottom_toTopOf="@+id/negativemargin"
+            app:layout_constraintEnd_toEndOf="@+id/skyscraper_base"
+            app:layout_constraintStart_toStartOf="@+id/skyscraper_base"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/skyscraper_darkgreen_panel" />
 
         <EditText
             android:id="@+id/txt_goal_description"
+            style="@style/skyscraper_panel_text"
+            app:layout_constraintBottom_toBottomOf="@id/skyscraper_panel"
+            app:layout_constraintEnd_toEndOf="@id/skyscraper_panel"
+            app:layout_constraintStart_toStartOf="@id/skyscraper_panel"
+            app:layout_constraintTop_toTopOf="@id/skyscraper_panel"
+            tools:text="BESCHRIJVING DOEL" />
+
+        <View
+            android:id="@+id/negativemargin"
             android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="52dp"
+            app:layout_constraintEnd_toEndOf="@id/skyscraper_panel"
+            app:layout_constraintStart_toStartOf="@id/skyscraper_panel"
+            app:layout_constraintTop_toTopOf="@id/skyscraper_base" />
+
+        <ImageView
+            android:id="@+id/skyscraper_base"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autofillHints="Doelbeschrijving"
-            android:inputType="textMultiLine"
-            app:layout_constraintEnd_toStartOf="@+id/guide_textview_end"
-            app:layout_constraintStart_toStartOf="@+id/guide_textview_start"
-            app:layout_constraintTop_toTopOf="@+id/guide_textview_top" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/skyscraper_panel"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/skyscraper_darkgreen_base" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide_textview_start"
-            android:layout_width="8dp"
-            android:layout_height="12dp"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.25" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide_textview_end"
-            android:layout_width="8dp"
-            android:layout_height="12dp"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.70" />
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide_textview_top"
-            android:layout_width="8dp"
-            android:layout_height="12dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.10" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </layout>

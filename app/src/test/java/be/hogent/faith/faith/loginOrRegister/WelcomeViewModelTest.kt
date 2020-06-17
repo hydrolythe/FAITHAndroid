@@ -10,7 +10,7 @@ import io.mockk.called
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.observers.DisposableMaybeObserver
+import io.reactivex.rxjava3.observers.DisposableMaybeObserver
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule

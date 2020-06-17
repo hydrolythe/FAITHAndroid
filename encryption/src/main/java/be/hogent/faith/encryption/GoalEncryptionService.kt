@@ -11,12 +11,11 @@ import be.hogent.faith.service.encryption.EncryptedGoal
 import be.hogent.faith.service.encryption.EncryptedSubGoal
 import be.hogent.faith.service.encryption.IGoalEncryptionService
 import com.google.crypto.tink.KeysetHandle
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.rxkotlin.Singles
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.kotlin.Singles
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
-import java.util.UUID
 
 class GoalEncryptionService(
     private val keyGenerator: KeyGenerator,
@@ -53,8 +52,8 @@ class GoalEncryptionService(
                     EncryptedGoal(
                         dateTime = encrypt(goal.dateTime.toString()),
                         description = encrypt(goal.description),
-                        uuid = encrypt(goal.uuid.toString()),
-                        isCompleted = goal.isCompleted,
+                        uuid = goal.uuid,
+                        isCompleted = encrypt(if (goal.isCompleted) "true" else "false"),
                         currentPositionAvatar = goal.currentPositionAvatar,
                         goalColor = goal.goalColor.name,
                         reachGoalWay = goal.chosenReachGoalWay.name,
@@ -69,7 +68,13 @@ class GoalEncryptionService(
         dek: KeysetHandle
     ): Single<List<EncryptedSubGoal>> {
         return Observable.fromIterable(goal.subGoals.entries)
-        .flatMapSingle { subgoalEncryptionService.encrypt(it.component1(), it.component2(), dek) }
+            .flatMapSingle {
+                subgoalEncryptionService.encrypt(
+                    it.component1(),
+                    it.component2(),
+                    dek
+                )
+            }
             .toList()
     }
 
@@ -84,11 +89,14 @@ class GoalEncryptionService(
         return decryptSubGoals(encryptedGoal, dek)
             .map { decryptedSubgoals ->
                 with(DataEncrypter(dek)) {
-                    val goal = Goal(GoalColor.valueOf(encryptedGoal.goalColor), UUID.fromString(decrypt(encryptedGoal.uuid)))
+                    val goal = Goal(
+                        GoalColor.valueOf(encryptedGoal.goalColor),
+                        encryptedGoal.uuid
+                    )
                         .also {
                             it.dateTime = LocalDateTime.parse(decrypt(encryptedGoal.dateTime))
                             it.description = decrypt(encryptedGoal.description)
-                            it.isCompleted = encryptedGoal.isCompleted
+                            it.isCompleted = decrypt(encryptedGoal.isCompleted) == "true"
                             it.currentPositionAvatar = encryptedGoal.currentPositionAvatar
                             it.chosenReachGoalWay = ReachGoalWay.valueOf(encryptedGoal.reachGoalWay)
                         }

@@ -10,8 +10,8 @@ import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Params
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Status
 import be.hogent.faith.service.usecases.detailscontainer.LoadDetailFileUseCase
 import be.hogent.faith.util.ThumbnailProvider
-import io.reactivex.Observable
-import io.reactivex.Scheduler
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Scheduler
 import timber.log.Timber
 
 class CreateCinemaVideoUseCase(

@@ -5,7 +5,7 @@ import be.hogent.faith.domain.models.goals.ActionStatus
 import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.service.encryption.EncryptedAction
 import com.google.crypto.tink.KeysetHandle
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 import timber.log.Timber
 
 class ActionEncryptionService {

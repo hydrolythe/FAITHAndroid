@@ -14,10 +14,10 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
-import durdinapps.rxfirebase2.RxFirebaseAuth
-import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.Single
+import be.hogent.faith.rxfirebase3.RxFirebaseAuth
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Maybe
+import io.reactivex.rxjava3.core.Single
 import timber.log.Timber
 
 /**

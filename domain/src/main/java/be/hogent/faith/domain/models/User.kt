@@ -1,5 +1,6 @@
 package be.hogent.faith.domain.models
 
+import be.hogent.faith.domain.models.exceptions.MaxNumberOfGoalsReachedException
 import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.domain.models.goals.GoalColor
 import java.util.UUID
@@ -53,16 +54,20 @@ data class User(
         _events.remove(event.uuid)
     }
 
-    fun addGoal() {
-        require(activeGoals.size < MAX_NUMBER_OF_ACTIVE_GOALS) { "Er kunnen maximum $MAX_NUMBER_OF_ACTIVE_GOALS actieve doelen zijn." }
+    fun addNewGoal(): Goal {
+        if (activeGoals.size >= MAX_NUMBER_OF_ACTIVE_GOALS) {
+            throw MaxNumberOfGoalsReachedException()
+        }
         val uniqueColor = findUnusedColor()
         val goal = Goal(uniqueColor)
         allGoals.add(goal)
+        return goal
     }
 
     fun removeGoal(goal: Goal) {
         allGoals.remove(goal)
     }
+
     /**
      * Uses the list of [GoalColor]s to find a color that is not currently used in the [activeGoals].
      */

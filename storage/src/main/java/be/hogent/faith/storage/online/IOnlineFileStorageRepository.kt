@@ -5,7 +5,7 @@ import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.service.encryption.EncryptedEvent
-import io.reactivex.Completable
+import io.reactivex.rxjava3.core.Completable
 
 interface IOnlineFileStorageRepository {
 

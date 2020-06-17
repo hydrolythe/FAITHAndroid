@@ -5,8 +5,8 @@ import be.hogent.faith.service.usecases.user.IsUsernameUniqueUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
-import io.reactivex.Scheduler
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.Single
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test

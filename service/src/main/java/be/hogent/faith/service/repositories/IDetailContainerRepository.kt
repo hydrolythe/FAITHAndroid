@@ -4,9 +4,9 @@ import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.encryption.EncryptedDetail
 import be.hogent.faith.service.encryption.EncryptedDetailsContainer
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
 
 interface IDetailContainerRepository<T> {
     fun insertDetail(encryptedDetail: EncryptedDetail, user: User): Completable

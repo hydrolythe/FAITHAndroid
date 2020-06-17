@@ -6,7 +6,7 @@ import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Completable
+import io.reactivex.rxjava3.core.Completable
 import org.junit.Before
 import org.junit.Test
 import java.lang.RuntimeException

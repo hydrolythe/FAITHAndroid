@@ -25,6 +25,7 @@ import be.hogent.faith.service.usecases.event.MakeEventFilesAvailableUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
 import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
+import be.hogent.faith.service.usecases.goal.AddNewGoalUseCase
 import be.hogent.faith.service.usecases.goal.DeleteGoalUseCase
 import be.hogent.faith.service.usecases.goal.GetGoalsUseCase
 import be.hogent.faith.service.usecases.goal.SaveGoalUseCase
@@ -129,6 +130,7 @@ val serviceModule = module {
             observer = get()
         )
     }
+    factory { AddNewGoalUseCase(get(), get(), get()) }
     factory<LoadDetailFileUseCase<Backpack>>(named("LoadBackpackDetailFileUseCase")) {
         LoadDetailFileUseCase<Backpack>(
             storageRepo = get(),

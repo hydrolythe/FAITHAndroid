@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
-
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
     compileSdkVersion globalConfig["androidCompileSdkVersion"]
@@ -53,8 +52,6 @@ dependencies {
     implementation firebaseDependencies.rxfirebase
     implementation firebaseDependencies.firebaseauth
     implementation firebaseDependencies.firestore
-    implementation firebaseDependencies.firebasestorage
-    implementation 'com.github.FrangSierra:RxFirebase:1.5.6'
 
     //test
     testImplementation testDependencies.junit

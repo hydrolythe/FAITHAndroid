@@ -64,19 +64,19 @@ class UserTest {
 
     @Test
     fun shouldAddNewGoalToActiveGoals() {
-        user.addGoal()
+        user.addNewGoal()
 
         assertEquals(1, user.activeGoals.size)
     }
 
     @Test(expected = RuntimeException::class)
     fun shouldNotAllowMoreThan5ActiveGoals() {
-        repeat(6) { user.addGoal() }
+        repeat(6) { user.addNewGoal() }
     }
 
     @Test
     fun shouldAssignUniqueColorToEachActiveGoal() {
-        repeat(5) { user.addGoal() }
+        repeat(5) { user.addNewGoal() }
 
         val usedColors = user.activeGoals.map { it.goalColor }
         assertEquals(usedColors.distinct().size, usedColors.size)
@@ -84,7 +84,7 @@ class UserTest {
 
     @Test
     fun shouldMoveGoalToAchievedGoalsWhenSetToAchieved() {
-        user.addGoal()
+        user.addNewGoal()
         val addedGoal = user.activeGoals.first()
 
         user.setGoalCompleted(addedGoal)

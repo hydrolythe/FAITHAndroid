@@ -1,8 +1,8 @@
 package be.hogent.faith.service.repositories
 
 import be.hogent.faith.service.encryption.EncryptedGoal
-import io.reactivex.Completable
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
 import java.util.UUID
 
 interface IGoalRepository {

@@ -9,9 +9,9 @@ import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.storage.local.ILocalFileStorageRepository
 import be.hogent.faith.storage.local.ITemporaryFileStorageRepository
 import be.hogent.faith.storage.online.IOnlineFileStorageRepository
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import timber.log.Timber
 
 /**

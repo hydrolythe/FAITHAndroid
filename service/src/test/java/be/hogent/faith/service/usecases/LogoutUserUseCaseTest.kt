@@ -4,8 +4,8 @@ import be.hogent.faith.service.repositories.IAuthManager
 import be.hogent.faith.service.usecases.user.LogoutUserUseCase
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.Completable
-import io.reactivex.Scheduler
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Scheduler
 import org.junit.Before
 import org.junit.Test
 import java.util.concurrent.Executor

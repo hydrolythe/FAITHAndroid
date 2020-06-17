@@ -7,11 +7,11 @@ import be.hogent.faith.service.repositories.IAuthManager
 import be.hogent.faith.service.repositories.IEventRepository
 import be.hogent.faith.service.repositories.IUserRepository
 import be.hogent.faith.service.usecases.base.FlowableUseCase
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.rxkotlin.Flowables
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.kotlin.Flowables
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class GetUserUseCase(
     private val userRepository: IUserRepository,
@@ -24,9 +24,7 @@ class GetUserUseCase(
 
     override fun buildUseCaseObservable(params: Params): Flowable<User> {
         val currentUser = authManager.getLoggedInUserUUID()
-        if (currentUser == null) {
-            return Flowable.error(RuntimeException("You are not allowed to access the user, please log in"))
-        }
+            ?: return Flowable.error(RuntimeException("You are not allowed to access the user, please log in"))
         return Flowables.combineLatest(
             userRepository.get(currentUser)
                 .subscribeOn(subscriber),
