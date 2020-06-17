@@ -58,7 +58,7 @@ class GoalMapperTest {
         entity: EncryptedGoalEntity,
         model: EncryptedGoal
     ) {
-        assertEquals(entity.uuid, model.uuid)
+        assertEquals(entity.uuid, model.uuid.toString())
         assertEquals(entity.dateTime, model.dateTime)
         assertEquals(entity.description, model.description)
         assertEquals(entity.completed, model.isCompleted)

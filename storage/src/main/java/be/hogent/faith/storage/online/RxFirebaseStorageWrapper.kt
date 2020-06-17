@@ -1,7 +1,7 @@
 package be.hogent.faith.storage.online
 
 import android.net.Uri
-import be.hogent.faith.database.rxfirebase3.RxFirebaseStorage
+import be.hogent.faith.rxfirebase3.RxFirebaseStorage
 import com.google.firebase.storage.FileDownloadTask
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask

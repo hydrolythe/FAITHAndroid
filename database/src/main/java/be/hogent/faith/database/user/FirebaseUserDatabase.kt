@@ -1,7 +1,7 @@
 package be.hogent.faith.database.user
 
 import be.hogent.faith.database.common.USERS_KEY
-import be.hogent.faith.database.rxfirebase3.RxFirestore
+import be.hogent.faith.rxfirebase3.RxFirestore
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.rxjava3.core.Completable

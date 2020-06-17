@@ -43,7 +43,7 @@ ext {
     youtube_playerview_version = '10.0.5'
 
     firebaseui_version = '6.0.2'
-    rxfirebase_version = '1.5.6'
+    rxfirebase_version = '3.1'
     firebaseauth_version = '19.2.0'
     firestore_version = '21.3.1'
     firebasestorage_version = '19.1.0'
@@ -149,7 +149,7 @@ ext {
     firebaseDependencies = [
             analytics        : "com.google.firebase:firebase-analytics:$firebase_analytics_version",
             firebaseui       : "com.firebaseui:firebase-ui-storage:$firebaseui_version",
-            rxfirebase       : "com.github.FrangSierra:RxFirebase:$rxfirebase_version",
+            rxfirebase       : "com.github.FAITH-HoGent:RxFirebase:$rxfirebase_version",
             firebaseauth     : "com.google.firebase:firebase-auth:$firebaseauth_version",
             firestore        : "com.google.firebase:firebase-firestore-ktx:$firestore_version",
             firebasestorage  : "com.google.firebase:firebase-storage:$firebasestorage_version",
