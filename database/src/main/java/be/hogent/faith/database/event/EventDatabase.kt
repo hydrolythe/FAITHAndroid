@@ -2,7 +2,7 @@ package be.hogent.faith.database.event
 
 import be.hogent.faith.database.common.EVENTS_KEY
 import be.hogent.faith.database.common.USERS_KEY
-import be.hogent.faith.database.rxfirebase3.RxFirestore
+import be.hogent.faith.rxfirebase3.RxFirestore
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import com.google.firebase.auth.FirebaseAuth
@@ -12,7 +12,6 @@ import io.reactivex.rxjava3.core.Flowable
 import java.util.UUID
 
 /**
- * uses RxFirebase: https://github.com/FrangSierra/RxFirebase
  * document hierarchy in Firestore : users/{userUid}/events/{eventUuid}.
  * storage hierarchy in Firestorage : idem
  * the ruleset on both storages is so that a user can only CRUD his documents

@@ -29,8 +29,6 @@ dependencies {
     implementation project(':domain')
     implementation project(':service')
     implementation project(':util')
-    // TODO: clean up once RxFirebase3 has successfully been modularised
-    implementation project(':database')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

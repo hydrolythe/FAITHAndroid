@@ -280,6 +280,7 @@
     <string name="error_skyscraper_add_goal_failed">Er ging iets fout bij het toevoegen van je doel.</string>
     <string name="error_skyscraper_load_goals_failed">Er ging iets fout bij het laden van je doelen.</string>
     <string name="error_skyscraper_change_description_failed">Er ging iets fout bij het aanpassen van beschrijving van je doel.</string>
+    <string name="error_skyscraper_max_number_of_goals_reached">Je kan maximum 5 actieve doelen hebben!</string>
     <string name="error_skyscraper_update_goal_failed">aanpassen van doel is mislukt</string>
     <string name="lift">lift</string>
 </resources>
