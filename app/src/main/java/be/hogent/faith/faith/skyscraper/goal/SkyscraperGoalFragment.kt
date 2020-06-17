@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -44,7 +45,6 @@ class SkyscraperGoalFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_skyscraper_goal, container, false)
         binding.lifecycleOwner = this
@@ -65,7 +65,15 @@ class SkyscraperGoalFragment : Fragment() {
             adapter.notifyDataSetChanged()
         })
 
+        goalViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
+            Toast.makeText(context, errorMessageResourceID, Toast.LENGTH_SHORT).show()
+        })
+
         goalViewModel.cancelButtonClicked.observe(this, Observer {
+            navigation?.goBack()
+        })
+
+        goalViewModel.goalSavedSuccessfully.observe(this, Observer {
             navigation?.goBack()
         })
     }

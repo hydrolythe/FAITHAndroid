@@ -16,7 +16,7 @@ import be.hogent.faith.faith.details.drawing.create.DrawFragment
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import com.divyanshu.draw.widget.DrawView
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.panel_drawing_colors.hr_customColor
 import kotlinx.android.synthetic.main.panel_drawing_colors.paintpot_customColor
 import org.koin.android.viewmodel.ext.android.sharedViewModel

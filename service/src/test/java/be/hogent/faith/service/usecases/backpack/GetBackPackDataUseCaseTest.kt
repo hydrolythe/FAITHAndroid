@@ -9,9 +9,9 @@ import be.hogent.faith.service.usecases.util.EncryptedDetailFactory
 import be.hogent.faith.util.factory.DetailFactory
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.Flowable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Test
 import be.hogent.faith.service.repositories.IDetailContainerRepository as IDetailContainerRepository1

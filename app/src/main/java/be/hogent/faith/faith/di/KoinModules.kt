@@ -38,6 +38,7 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvider
 import be.hogent.faith.faith.skyscraper.goal.GoalViewModel
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperOverviewViewModel
 import be.hogent.faith.faith.treasureChest.TreasureChestViewModel
 import be.hogent.faith.faith.util.AndroidTempFileProvider
 import be.hogent.faith.faith.util.TempFileProvider
@@ -46,7 +47,7 @@ import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.storage.SecureCredentialsManager
 import com.auth0.android.authentication.storage.SharedPreferencesStorage
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -68,6 +69,7 @@ val appModule = module(override = true) {
     // ViewModels
     viewModel { CityScreenViewModel(get()) }
     viewModel { (event: Event) -> EventViewModel(get(), get(), get(), event) }
+    viewModel { (user: User) -> SkyscraperOverviewViewModel(get(), get(), get(), user) }
     viewModel { EventViewModel(get(), get(), get()) }
     viewModel { (backpack: Backpack) ->
         BackpackViewModel(
@@ -117,7 +119,7 @@ val appModule = module(override = true) {
     viewModel { CinemaDetailsMetaDataViewModel() }
     viewModel { BackpackDetailsMetaDataViewModel() }
     viewModel { TreasureChestDetailsMetaDataViewModel() }
-    viewModel { (goal: Goal) -> GoalViewModel(goal) }
+    viewModel { (goal: Goal) -> GoalViewModel(get(), goal) }
     viewModel { ViewTextDetailViewModel(get()) }
 
     viewModel { ViewVideoViewModel() }

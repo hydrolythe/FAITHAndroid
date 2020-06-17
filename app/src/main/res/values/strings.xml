@@ -277,4 +277,8 @@
     <string name="metaforen">Metaforen</string>
     <string name="no_source_details_selected">Je moet eerst beeldmateriaal selecteren voordat je een filmpje kan maken!</string>
     <string name="event_delete_error">Er ging iets fout bij het verwijderen van de gebeurtenis.</string>
+    <string name="error_skyscraper_add_goal_failed">Er ging iets fout bij het toevoegen van je doel.</string>
+    <string name="error_skyscraper_load_goals_failed">Er ging iets fout bij het laden van je doelen.</string>
+    <string name="error_skyscraper_change_description_failed">Er ging iets fout bij het aanpassen van beschrijving van je doel.</string>
+    <string name="error_skyscraper_update_goal_failed">aanpassen van doel is mislukt</string>
 </resources>

@@ -15,7 +15,7 @@ import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.faith.util.combineWith
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.util.toMinutesSecondString
-import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File

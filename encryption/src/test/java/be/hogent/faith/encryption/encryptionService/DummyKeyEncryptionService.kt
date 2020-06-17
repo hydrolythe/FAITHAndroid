@@ -4,7 +4,7 @@ import be.hogent.faith.encryption.internal.DecryptionRequest
 import be.hogent.faith.encryption.internal.EncryptionRequest
 import be.hogent.faith.encryption.internal.KeyEncryptionService
 import be.hogent.faith.util.withSuffix
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 
 private const val SUFFIX = "_encrypted"
 

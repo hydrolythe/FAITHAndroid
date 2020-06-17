@@ -2,7 +2,7 @@ package be.hogent.faith.service.network
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory

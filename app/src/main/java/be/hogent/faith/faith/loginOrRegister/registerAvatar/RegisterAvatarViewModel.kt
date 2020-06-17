@@ -10,7 +10,7 @@ import be.hogent.faith.faith.state.Resource
 import be.hogent.faith.faith.state.ResourceState
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.user.InitialiseUserUseCase
-import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 
 /**
  * Represents the [ViewModel] for the user during the registering process - Part 2

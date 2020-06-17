@@ -10,8 +10,8 @@ import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Completable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
 import org.junit.Before
 import org.junit.Test
 
@@ -41,7 +41,7 @@ class SaveGoalUseCaseTest {
 
     @Test
     fun `saving the Goal should complete without errors`() {
-        val params = SaveGoalUseCase.Params(goal, user)
+        val params = SaveGoalUseCase.Params(goal)
 
         val result = saveGoalUseCase.buildUseCaseObservable(params)
 
@@ -55,7 +55,7 @@ class SaveGoalUseCaseTest {
 
     @Test
     fun `saving the Goal it should call the repository`() {
-        val params = SaveGoalUseCase.Params(goal, user)
+        val params = SaveGoalUseCase.Params(goal)
 
         val result = saveGoalUseCase.buildUseCaseObservable(params)
 
@@ -67,7 +67,7 @@ class SaveGoalUseCaseTest {
 
     @Test
     fun `After saving the Goal it should be in the user's list of Goals`() {
-        val params = SaveGoalUseCase.Params(goal, user)
+        val params = SaveGoalUseCase.Params(goal)
 
         val result = saveGoalUseCase.buildUseCaseObservable(params)
 
@@ -82,7 +82,7 @@ class SaveGoalUseCaseTest {
         // Arrange
         every { goalRepository.insert(any()) } returns Completable.error(RuntimeException())
 
-        val params = SaveGoalUseCase.Params(goal, user)
+        val params = SaveGoalUseCase.Params(goal)
 
         saveGoalUseCase.buildUseCaseObservable(params)
             .test()
@@ -93,7 +93,7 @@ class SaveGoalUseCaseTest {
     fun `When an error occurs in the GoalRepository the Goal is not added to the user's Goals`() {
         every { goalRepository.insert(any()) } returns Completable.error(RuntimeException())
 
-        val params = SaveGoalUseCase.Params(goal, user)
+        val params = SaveGoalUseCase.Params(goal)
 
         val result = saveGoalUseCase.buildUseCaseObservable(params)
         result.test()

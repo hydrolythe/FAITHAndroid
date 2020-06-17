@@ -5,10 +5,10 @@ import be.hogent.faith.service.encryption.IEventEncryptionService
 import be.hogent.faith.service.repositories.IEventRepository
 import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.service.usecases.base.SingleUseCase
-import io.reactivex.Completable
-import io.reactivex.Scheduler
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import timber.log.Timber
 
 /**

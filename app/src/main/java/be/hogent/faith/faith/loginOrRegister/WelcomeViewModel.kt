@@ -12,7 +12,7 @@ import be.hogent.faith.service.repositories.NetworkError
 import be.hogent.faith.service.repositories.SignInException
 import be.hogent.faith.service.usecases.user.LoginUserUseCase
 import be.hogent.faith.util.TAG
-import io.reactivex.observers.DisposableMaybeObserver
+import io.reactivex.rxjava3.observers.DisposableMaybeObserver
 import timber.log.Timber
 
 class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewModel() {
@@ -103,7 +103,7 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
 
     private inner class LoginUserUseCaseHandler : DisposableMaybeObserver<String?>() {
         // returns uuid when successfully logged in
-        override fun onSuccess(t: String) {
+        override fun onSuccess(t: String?) {
             _userLoggedInState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
         }
 

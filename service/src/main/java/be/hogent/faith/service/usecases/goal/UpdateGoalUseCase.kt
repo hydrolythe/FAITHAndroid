@@ -4,8 +4,8 @@ import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.service.encryption.IGoalEncryptionService
 import be.hogent.faith.service.repositories.IGoalRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import io.reactivex.Completable
-import io.reactivex.Scheduler
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Scheduler
 import timber.log.Timber
 
 class UpdateGoalUseCase(
@@ -14,10 +14,9 @@ class UpdateGoalUseCase(
     observer: Scheduler
 ) : CompletableUseCase<UpdateGoalUseCase.Params>(observer) {
 
-    private var params: Params? = null
-
     override fun buildUseCaseObservable(params: Params): Completable {
-        return goalEncryptionService.encrypt(params.goal)
+        return goalEncryptionService
+            .encrypt(params.goal)
             .doOnSuccess { Timber.i("encrypted goal ${params.goal.uuid}") }
             .flatMapCompletable(goalRepository::update)
             .doOnComplete { Timber.i("updated the goal ${params.goal.uuid}") }

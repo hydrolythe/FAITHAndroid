@@ -3,8 +3,8 @@ package be.hogent.faith.service.usecases.event
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.service.usecases.base.CompletableUseCase
-import io.reactivex.Completable
-import io.reactivex.Scheduler
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Scheduler
 
 class DeleteEventDetailUseCase(
     observer: Scheduler

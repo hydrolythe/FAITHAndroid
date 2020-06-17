@@ -1,10 +1,12 @@
 package be.hogent.faith.service.encryption
 
+import java.util.UUID
+
 class EncryptedGoal(
-    val uuid: EncryptedString,
+    val uuid: UUID,
     var description: EncryptedString,
     var dateTime: EncryptedString,
-    var isCompleted: Boolean = false,
+    var isCompleted: EncryptedString,
     val currentPositionAvatar: Int,
     val goalColor: EncryptedString,
     val reachGoalWay: EncryptedString = "",

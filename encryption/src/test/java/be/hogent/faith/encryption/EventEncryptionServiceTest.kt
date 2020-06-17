@@ -12,7 +12,7 @@ import be.hogent.faith.util.contentEqual
 import be.hogent.faith.util.factory.EventFactory
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

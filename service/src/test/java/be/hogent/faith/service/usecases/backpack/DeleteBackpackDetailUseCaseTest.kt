@@ -9,7 +9,7 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Completable
+import io.reactivex.rxjava3.core.Completable
 import org.junit.After
 import org.junit.Assert.assertFalse
 import org.junit.Before

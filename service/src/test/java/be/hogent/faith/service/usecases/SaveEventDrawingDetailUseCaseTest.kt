@@ -6,8 +6,8 @@ import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
 import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.Completable
-import io.reactivex.Scheduler
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Scheduler
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test

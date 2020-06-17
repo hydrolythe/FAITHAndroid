@@ -2,19 +2,21 @@ package be.hogent.faith.faith.skyscraper.goal
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.widget.doOnTextChanged
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
+import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import be.hogent.faith.databinding.SkyscraperActionRvItemBinding
 import be.hogent.faith.domain.models.goals.Action
+import java.util.concurrent.TimeUnit
 
 class ActionAdapter(private val actionListener: ActionListener) :
-    ListAdapter<Action, ActionAdapter.ViewHolder>(ActionDiffCallback()),
+    ListAdapter<Action, ActionAdapter.ActionViewHolder>(ActionDiffCallback()),
     ActionTouchHelperCallback.IActionTouchHelper {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActionViewHolder {
         val layoutInflater = LayoutInflater
             .from(parent.context)
         val binding: SkyscraperActionRvItemBinding =
@@ -24,10 +26,10 @@ class ActionAdapter(private val actionListener: ActionListener) :
                 parent,
                 false
             )
-        return ViewHolder(binding)
+        return ActionViewHolder(binding, actionListener)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ActionViewHolder, position: Int) {
         holder.bind(getItem(position), position)
     }
 
@@ -44,20 +46,27 @@ class ActionAdapter(private val actionListener: ActionListener) :
         actionListener.onActionDismiss(position)
     }
 
-    inner class ViewHolder(private val itemBinding: SkyscraperActionRvItemBinding) :
-        RecyclerView.ViewHolder(itemBinding.root) {
+    inner class ActionViewHolder(
+        private val view: SkyscraperActionRvItemBinding,
+        private val actionListener: ActionListener
+    ) :
+        RecyclerView.ViewHolder(view.root) {
+        private var disposables = CompositeDisposable()
 
         fun bind(action: Action, position: Int) {
             if (action.description.isNotEmpty()) {
-                itemBinding.txtActionDescription.tag = position
-                itemBinding.txtActionDescription.setText(action.description)
+                view.txtActionDescription.tag = position
+                view.txtActionDescription.setText(action.description)
             }
-        }
-
-        init {
-            itemBinding.txtActionDescription.doOnTextChanged { text, start, count, after ->
-                updateAction(itemBinding.txtActionDescription.tag.toString().toInt(), text.toString())
-            }
+            disposables.add(view.txtActionDescription.afterTextChangeEvents()
+                .skip(1)
+                .debounce(1, TimeUnit.SECONDS)
+                .map {
+                    actionListener.onActionUpdated(
+                        view.txtActionDescription.tag.toString().toInt(), it.editable.toString()
+                    )
+                }
+                .subscribe())
         }
     }
 }

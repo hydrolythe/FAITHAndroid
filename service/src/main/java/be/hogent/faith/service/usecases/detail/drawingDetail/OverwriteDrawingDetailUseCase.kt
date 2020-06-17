@@ -5,8 +5,8 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
 import be.hogent.faith.util.ThumbnailProvider
-import io.reactivex.Completable
-import io.reactivex.Scheduler
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Scheduler
 
 /**
  * Use case to be used when the bitmap inside an existing [DrawingDetail] should be overwritten

@@ -94,7 +94,7 @@ object EntityFactory {
             dateTime = LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
             description = DataFactory.randomString(),
             uuid = uuid.toString(),
-            isCompleted = DataFactory.randomBoolean(),
+            completed = DataFactory.randomBoolean().toString(),
             currentPositionAvatar = DataFactory.randomInt(1, 10),
             color = GoalColor.GREEN.name,
             reachGoalWay = ReachGoalWay.Elevator.name,

@@ -10,11 +10,11 @@ import be.hogent.faith.service.encryption.EncryptedEvent
 import be.hogent.faith.service.encryption.IEventEncryptionService
 import be.hogent.faith.storage.StoragePathProvider
 import com.google.crypto.tink.KeysetHandle
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.rxkotlin.Singles
-import io.reactivex.rxkotlin.zipWith
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.kotlin.Singles
+import io.reactivex.rxjava3.kotlin.zipWith
 import org.koin.core.KoinComponent
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
