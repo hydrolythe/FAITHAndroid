@@ -34,36 +34,52 @@ class SkyscraperOverviewViewModel(
     private val _errorMessage = SingleLiveEvent<Int>()
     val errorMessage: LiveData<Int> = _errorMessage
 
+    private val _isLoading = MutableLiveData<Boolean>().apply { value = false }
+    val isLoading: LiveData<Boolean> = _isLoading
+
     init {
         loadGoals()
     }
 
     private fun loadGoals() {
         val params = GetGoalsUseCase.Params(user)
+        _isLoading.value = true
         getGoalsUseCase.execute(params, object : DisposableSubscriber<List<Goal>>() {
-            override fun onComplete() {}
+            override fun onComplete() {
+                _isLoading.value = false
+            }
 
             override fun onNext(goals: List<Goal>?) {
                 _goals.value = goals
+                _isLoading.value = false
             }
 
             override fun onError(error: Throwable?) {
                 Timber.e(error)
                 _errorMessage.postValue(R.string.error_skyscraper_load_goals_failed)
+                _isLoading.value = false
             }
         })
     }
 
     fun addNewGoal() {
-        user.addGoal()
+        try {
+            user.addGoal()
+        } catch (e: IllegalArgumentException) {
+            _errorMessage.value = R.string.error_skyscraper_max_number_of_goals_reached
+            return
+        }
+        _isLoading.value = true
         val params = SaveGoalUseCase.Params(user.activeGoals.last())
         saveGoalUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _goalSavedSuccessfully.call()
+                _isLoading.value = false
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_skyscraper_add_goal_failed)
+                _isLoading.value = false
             }
         })
     }
