@@ -23,6 +23,8 @@ import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.util.factory.GoalFactory
+import kotlinx.android.synthetic.main.fragment_skyscraper_goal.guide_skyscraper_bottom_floors
+import kotlinx.android.synthetic.main.fragment_skyscraper_goal.guide_skyscraper_top_floors
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.seekbar
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
@@ -36,8 +38,11 @@ class SkyscraperGoalFragment : Fragment() {
 
     // TODO inject the selected goal
     private val goalViewModel: GoalViewModel by inject { parametersOf(GoalFactory.makeGoal(5)) }
-    private lateinit var adapter: ActionAdapter
+    private lateinit var actionAdapter: ActionAdapter
+    private lateinit var subgoalAdapter: SubGoalAdapter
     private val avatarProvider: AvatarProvider by inject()
+    private val floortop = IntArray(2)
+    private val floorbottom = IntArray(2)
 
     val list = arrayListOf<Action>()
     override fun onCreateView(
@@ -58,11 +63,21 @@ class SkyscraperGoalFragment : Fragment() {
         startListeners()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        guide_skyscraper_bottom_floors.post {
+            guide_skyscraper_bottom_floors.getLocationOnScreen(floorbottom) // or getLocationInWindow(point)
+        }
+        guide_skyscraper_top_floors.post {
+            guide_skyscraper_top_floors.getLocationOnScreen(floortop) // or getLocationInWindow(point)
+        }
+    }
+
     private fun startListeners() {
         // Update adapter when event changes
         goalViewModel.actions.observe(this, Observer { actions ->
-            adapter.submitList(actions)
-            adapter.notifyDataSetChanged()
+            actionAdapter.submitList(actions)
+            actionAdapter.notifyDataSetChanged()
         })
 
         goalViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
@@ -92,14 +107,26 @@ class SkyscraperGoalFragment : Fragment() {
                 goalViewModel.updateAction(position, description)
             }
         }
-        adapter = ActionAdapter(actionListener)
+        actionAdapter = ActionAdapter(actionListener)
         val callback: ItemTouchHelper.Callback =
-            ActionTouchHelperCallback(adapter, requireContext())
+            ActionTouchHelperCallback(actionAdapter, requireContext())
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(binding.rvGoalActions)
         binding.rvGoalActions.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.rvGoalActions.adapter = adapter
+        binding.rvGoalActions.adapter = actionAdapter
+        val floorHeight: Int = (floorbottom[1] - floortop[1]) / 10 - 50
+
+        val subgoalSelectedListener = object : SubGoalSelectedListener {
+            override fun onSubGoalSelected(position: Int) {
+                goalViewModel.onSelectSubGoal(position)
+            }
+        }
+        subgoalAdapter = SubGoalAdapter(subgoalSelectedListener, floorHeight)
+        binding.rvGoalActions.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.skyscraperRvSubgoals.adapter = subgoalAdapter
+
         setThumb(userViewModel.user.value!!.avatarName)
     }
 

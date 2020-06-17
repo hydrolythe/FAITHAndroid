@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -44,21 +45,40 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
-            android:layout_width="50dp"
+
+        <ImageView
+            android:id="@+id/skyscraper"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="100dp"
-            android:layout_marginEnd="100dp"
-            android:background="@drawable/touw"
-            app:layout_constraintBottom_toBottomOf="@+id/guide_cellar_top"
-            app:layout_constraintEnd_toEndOf="@+id/guide_rope"
-            app:layout_constraintStart_toStartOf="@+id/guide_rope"
-            app:layout_constraintTop_toTopOf="@+id/guide_roof_end">
+            app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/skyscraper_blue_empty" />
+
+      <!--  <ImageView
+            android:id="@+id/skyscraper_elevator"
+            android:layout_width="19dp"
+            android:layout_height="0dp"
+            android:src="@drawable/elevator"
+            android:contentDescription="@string/lift"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom_floors"
+            app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_elevator_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors" />-->
+        <FrameLayout
+            android:id="@+id/skyscraper_elevator"
+            android:layout_width="19dp"
+            android:layout_height="0dp"
+            android:src="@drawable/elevator"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom_floors"
+            app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_elevator_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors" >
 
             <androidx.appcompat.widget.AppCompatSeekBar
                 android:id="@+id/seekbar"
-                android:layout_width="500dp"
-                android:layout_height="50dp"
+                android:layout_width="0dp"
+                android:layout_height="19dp"
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
                 android:color="@android:color/transparent"
@@ -66,50 +86,79 @@
                 android:rotation="270" />
         </FrameLayout>
 
-        <include
-            android:id="@+id/skyscraper_avatar_drag_drop"
-            layout="@layout/skyscraper_avatar_drag_drop"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:goalViewModel="@{goalViewModel}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_end"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_skyscraper_return" />
 
-        <EditText
-            android:id="@+id/skyscraper_goal_description"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/skyscraper_rv_subgoals"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:autofillHints="Beschrijving doel"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom_floors"
+            app:layout_constraintEnd_toEndOf="@+id/guide_skyscraper_end"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_elevator"
+            app:layout_constraintTop_toBottomOf="@+id/guide_skyscraper_top_floors"
+            tools:itemCount="10"
+            tools:listitem="@layout/skyscraper_subgoal_rv_item" />
+
+        <TextView
+            android:id="@+id/skyscraper_window"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/skyscraper_blue"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom"
+            app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/skyscraper_blue_empty" />
+
+        <!-- <include
+             android:id="@+id/skyscraper_avatar_drag_drop"
+             layout="@layout/skyscraper_avatar_drag_drop"
+             android:layout_width="0dp"
+             android:layout_height="0dp"
+             app:goalViewModel="@{goalViewModel}"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_end"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toBottomOf="@+id/btn_skyscraper_return" />-->
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/guide_panel_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/guide_panel_end"
+            app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"
+            android:scaleType="fitXY"
             android:background="@drawable/skyscraper_panel_blue"
-            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/skyscraper_goal_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints="Beschrijving doel"
             android:hint="Beschrijving doel"
             android:inputType="text"
             android:text="@{goalViewModel.goal.description}"
             app:layout_constraintBottom_toTopOf="@+id/guide_panel_bottom"
-            app:layout_constraintEnd_toStartOf="@+id/guide_panel"
-            app:layout_constraintStart_toEndOf="@+id/skyscraper_avatar_drag_drop"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/guide_panel_end"
+            app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"/>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide_panel"
-            android:layout_width="8dp"
-            android:layout_height="12dp"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.81" />
 
         <LinearLayout
             android:id="@+id/rv_actions_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="16dp"
             android:background="@drawable/rectangle_white"
             android:orientation="vertical"
             android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }"
-            app:layout_constraintBottom_toBottomOf="@+id/skyscraper_avatar_drag_drop"
-            app:layout_constraintEnd_toStartOf="@+id/guide_panel"
-            app:layout_constraintStart_toEndOf="@+id/skyscraper_avatar_drag_drop"
+            app:layout_constraintBottom_toBottomOf="@+id/skyscraper"
+            app:layout_constraintEnd_toStartOf="@+id/guide_panel_end"
+            app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
             app:layout_constraintTop_toTopOf="@+id/guide_panel_bottom">
 
             <EditText
@@ -148,7 +197,7 @@
             app:layout_constraintGuide_percent="0.40" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guide_skyscraper_end"
+            android:id="@+id/guide_skyscraper_test_slider"
             android:layout_width="8dp"
             android:layout_height="12dp"
             android:orientation="vertical"
@@ -162,6 +211,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/jongen_gamer_bl" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_panel_end"
+            android:layout_width="8dp"
+            android:layout_height="12dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.81" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_cellar_top"
@@ -182,7 +238,70 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.35" />
+            app:layout_constraintGuide_percent="0.33" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_skyscraper_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.067" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_skyscraper_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.96" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_skyscraper_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.13" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_skyscraper_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.33" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_skyscraper_top_floors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.21" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_skyscraper_bottom_floors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.7" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_skyscraper_elevator_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.16" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_skyscraper_rope_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.354" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_panel_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.418" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
