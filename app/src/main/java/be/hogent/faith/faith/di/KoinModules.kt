@@ -5,6 +5,7 @@ import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.TreasureChest
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpack.BackpackViewModel
 import be.hogent.faith.faith.cinema.CinemaCreateVideoViewModel
@@ -36,6 +37,7 @@ import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvider
+import be.hogent.faith.faith.skyscraper.goal.GoalViewModel
 import be.hogent.faith.faith.treasureChest.TreasureChestViewModel
 import be.hogent.faith.faith.util.AndroidTempFileProvider
 import be.hogent.faith.faith.util.TempFileProvider
@@ -115,6 +117,7 @@ val appModule = module(override = true) {
     viewModel { CinemaDetailsMetaDataViewModel() }
     viewModel { BackpackDetailsMetaDataViewModel() }
     viewModel { TreasureChestDetailsMetaDataViewModel() }
+    viewModel { (goal: Goal) -> GoalViewModel(goal) }
     viewModel { ViewTextDetailViewModel(get()) }
 
     viewModel { ViewVideoViewModel() }

@@ -1,5 +1,7 @@
 package be.hogent.faith.domain.models.goals
 
+import java.util.Collections
+
 private const val DESCRIPTION_MAX_LENGTH = 30
 
 class SubGoal(
@@ -24,8 +26,24 @@ class SubGoal(
         _actions.remove(action)
     }
 
+    fun updateAction(position: Int, description: String) {
+        _actions[position].description = description
+    }
+
     fun updateActionPosition(actionToUpdate: Action, newPosition: Int) {
         _actions.remove(actionToUpdate)
         _actions.add(newPosition, actionToUpdate)
+    }
+
+    fun updateActionPosition(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(_actions, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(_actions, i, i - 1)
+            }
+        }
     }
 }
