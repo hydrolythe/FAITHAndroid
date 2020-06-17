@@ -190,7 +190,7 @@ ext {
             gson          : "com.squareup.retrofit2:converter-gson:$gson_version",
             moshi         : "com.squareup.moshi:moshi-kotlin:$moshi_version",
             moshiConverter: "com.squareup.retrofit2:converter-moshi:2.8.1",
-            rxjavaAdapter : "com.squareup.retrofit2:adapter-rxjava2:2.8.1"
+            rxjavaAdapter : "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
     ]
 
 }
