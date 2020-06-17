@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.skyscraper.goal
 
 import be.hogent.faith.databinding.SkyscraperActionRvItemBinding
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -37,6 +36,7 @@ class ActionAdapter(private val actionListener: ActionListener) :
         _actions.addAll(newActions)
         diffResult.dispatchUpdatesTo(this)
     }
+
     fun removeItem(viewHolder: ViewHolder) {
         _actions.removeAt(viewHolder.adapterPosition)
         notifyItemRemoved(viewHolder.adapterPosition)
@@ -46,7 +46,7 @@ class ActionAdapter(private val actionListener: ActionListener) :
         RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(action: Action) {
             if (action.description.isNotEmpty())
-            itemBinding.txtActionDescription.setText(action.description)
+                itemBinding.txtActionDescription.setText(action.description)
 
             itemBinding.txtActionDescription.setOnClickListener {
                 actionListener.onActionClicked(action)

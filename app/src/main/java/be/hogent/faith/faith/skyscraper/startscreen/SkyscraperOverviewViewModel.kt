@@ -6,8 +6,10 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
+import be.hogent.faith.domain.models.exceptions.MaxNumberOfGoalsReachedException
 import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.goal.AddNewGoalUseCase
 import be.hogent.faith.service.usecases.goal.GetGoalsUseCase
 import be.hogent.faith.service.usecases.goal.SaveGoalUseCase
 import be.hogent.faith.service.usecases.goal.UpdateGoalUseCase
@@ -18,6 +20,7 @@ import timber.log.Timber
 class SkyscraperOverviewViewModel(
     private val getGoalsUseCase: GetGoalsUseCase,
     private val saveGoalUseCase: SaveGoalUseCase,
+    private val addNewGoalUseCase: AddNewGoalUseCase,
     private val updateGoalUseCase: UpdateGoalUseCase,
     private val user: User
 ) : ViewModel() {
@@ -63,22 +66,20 @@ class SkyscraperOverviewViewModel(
     }
 
     fun addNewGoal() {
-        try {
-            user.addGoal()
-        } catch (e: IllegalArgumentException) {
-            _errorMessage.value = R.string.error_skyscraper_max_number_of_goals_reached
-            return
-        }
         _isLoading.value = true
-        val params = SaveGoalUseCase.Params(user.activeGoals.last())
-        saveGoalUseCase.execute(params, object : DisposableCompletableObserver() {
+        val params = AddNewGoalUseCase.Params(user)
+        addNewGoalUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _goalSavedSuccessfully.call()
                 _isLoading.value = false
             }
 
             override fun onError(e: Throwable) {
-                _errorMessage.postValue(R.string.error_skyscraper_add_goal_failed)
+                if (e is MaxNumberOfGoalsReachedException) {
+                    _errorMessage.postValue(R.string.error_skyscraper_max_number_of_goals_reached)
+                } else {
+                    _errorMessage.postValue(R.string.error_skyscraper_add_goal_failed)
+                }
                 _isLoading.value = false
             }
         })

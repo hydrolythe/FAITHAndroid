@@ -51,6 +51,7 @@ class SkyscraperAdapter(
 
     override fun onViewDetachedFromWindow(holder: SkyscraperViewHolder) {
         super.onViewDetachedFromWindow(holder)
+        holder.unbind()
     }
 }
 

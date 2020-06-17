@@ -14,10 +14,7 @@ open class SaveGoalUseCase(
     observer: Scheduler
 ) : CompletableUseCase<SaveGoalUseCase.Params>(observer) {
 
-    private var params: Params? = null
-
-    override fun buildUseCaseObservable(params: Params): Completable {
-        this.params = params
+    override fun buildUseCaseObservable(params: SaveGoalUseCase.Params): Completable {
         return goalEncryptionService.encrypt(params.goal)
             .doOnSuccess { Timber.i("encrypted goal ${params.goal.uuid}") }
             .flatMapCompletable(goalRepository::insert)

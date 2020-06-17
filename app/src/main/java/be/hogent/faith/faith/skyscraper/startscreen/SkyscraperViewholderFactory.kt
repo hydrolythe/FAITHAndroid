@@ -80,6 +80,10 @@ class SkyscraperViewHolder(
             .subscribe())
     }
 
+    fun unbind() {
+        disposables.dispose()
+    }
+
     interface SkyscraperNavigationListener {
         fun openGoalScreenFor(goal: Goal)
         fun deleteSkyscraper(goal: Goal)
