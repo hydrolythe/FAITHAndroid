@@ -68,6 +68,10 @@ data class User(
         allGoals.remove(goal)
     }
 
+    fun getGoal(goalUUID: UUID): Goal? {
+        return allGoals.filter { it.uuid == goalUUID }.firstOrNull()
+    }
+
     /**
      * Uses the list of [GoalColor]s to find a color that is not currently used in the [activeGoals].
      */

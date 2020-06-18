@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import be.hogent.faith.databinding.SkyscraperSubgoalRvItemBinding
+import be.hogent.faith.domain.models.goals.GoalColor
 import be.hogent.faith.domain.models.goals.SubGoal
 
 class SubGoalAdapter(
+    private val goalColor: GoalColor,
     private val onSubGoalSelectedListener: SubGoalSelectedListener,
     var floorHeight: Int
 ) :
@@ -27,7 +29,7 @@ class SubGoalAdapter(
                 parent,
                 false
             )
-        return SubGoalViewHolder(binding, onSubGoalSelectedListener, floorHeight)
+        return SubGoalViewHolder(binding, onSubGoalSelectedListener, goalColor, floorHeight)
     }
 
     override fun onBindViewHolder(holder: SubGoalViewHolder, position: Int) {
@@ -37,6 +39,7 @@ class SubGoalAdapter(
     inner class SubGoalViewHolder(
         private val view: SkyscraperSubgoalRvItemBinding,
         private val subGoalSelectedListener: SubGoalSelectedListener,
+        goalColor: GoalColor,
         floorHeight: Int
     ) :
         RecyclerView.ViewHolder(view.root) {
@@ -44,6 +47,16 @@ class SubGoalAdapter(
 
         init {
             view.txtSubgoalDescription.layoutParams.height = floorHeight
+            view.txtSubgoalDescription.setBackgroundResource(
+                when (goalColor) {
+                    GoalColor.BLUE -> R.color.skyscraper_blue
+                    GoalColor.YELLOW -> R.color.skyscraper_yellow
+                    GoalColor.RED -> R.color.skyscraper_red
+                    GoalColor.DARKGREEN -> R.color.skyscraper_darkgreen
+                    GoalColor.GREEN -> R.color.skyscraper_green
+                    else -> R.color.skyscraper_blue
+                }
+            )
             view.txtSubgoalDescription.setOnClickListener {
                 subGoalSelectedListener.onSubGoalSelected(
                     view.txtSubgoalDescription.tag.toString().toInt()

@@ -87,7 +87,6 @@
             android:contentDescription="@string/lift"
             android:onClick="@{()->goalViewModel.setReachGoalWay(ReachGoalWay.Elevator)}"
             android:scaleType="fitXY"
-            android:src="@drawable/elevator"
             app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom_floors"
             app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_elevator_start"
             app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors" />
@@ -163,9 +162,9 @@
             app:srcCompat="@drawable/skyscraper_blue_empty" />
 
         <ImageView
+            android:id="@+id/skyscraper_panel"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/skyscraper_panel_blue"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/guide_panel_bottom"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel_end"

@@ -50,6 +50,7 @@ class GoalViewModel(
         updateGoalUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 Timber.i("Goal ${goal.value!!.uuid} updated")
+                _goalSavedSuccessfully.call()
             }
 
             override fun onError(e: Throwable) {
@@ -103,8 +104,8 @@ class GoalViewModel(
     }
 
     fun updateAction(position: Int, description: String) {
-        if (selectedSubGoal.value!!.second?.actions?.get(position)?.description != description)
-            selectedSubGoal.value!!.second?.updateAction(position, description)
+        if (selectedSubGoal.value!!.second.actions.get(position).description != description)
+            selectedSubGoal.value!!.second.updateAction(position, description)
     }
 
     fun setPositionAvatar(position: Int) {
