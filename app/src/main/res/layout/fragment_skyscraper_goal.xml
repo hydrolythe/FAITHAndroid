@@ -10,6 +10,7 @@
             type="be.hogent.faith.faith.skyscraper.goal.GoalViewModel" />
 
         <import type="android.view.View" />
+        <import type="be.hogent.faith.domain.models.goals.ReachGoalWay" />
     </data>
 
 
@@ -50,48 +51,95 @@
             android:id="@+id/skyscraper"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom"
             app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_end"
             app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_start"
             app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"
-            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/skyscraper_blue_empty" />
 
-      <!--  <ImageView
-            android:id="@+id/skyscraper_elevator"
-            android:layout_width="19dp"
+        <View
+            android:id="@+id/skyscraper_roof"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@drawable/elevator"
+            android:onClick="@{()->goalViewModel.setCompleted()}"
+            app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_top_floors"
+            app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"
+            app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_end"
+            />
+
+        <ImageView
+            android:id="@+id/skyscraper_roof_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/your_avatar"
+            app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_top_floors"
+            app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"
+            app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_end" />
+
+        <ImageView
+            android:id="@+id/skyscraper_elevator"
+            android:layout_width="18.5dp"
+            android:layout_height="0dp"
             android:contentDescription="@string/lift"
-            app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom_floors"
-            app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_elevator_start"
-            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors" />-->
-        <FrameLayout
-            android:id="@+id/skyscraper_elevator"
-            android:layout_width="19dp"
-            android:layout_height="0dp"
+            android:onClick="@{()->goalViewModel.setReachGoalWay(ReachGoalWay.Elevator)}"
+            android:scaleType="fitXY"
             android:src="@drawable/elevator"
             app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom_floors"
             app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_elevator_start"
-            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors" >
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors" />
 
-            <androidx.appcompat.widget.AppCompatSeekBar
-                android:id="@+id/seekbar"
-                android:layout_width="0dp"
-                android:layout_height="19dp"
-                android:layout_gravity="center"
-                android:background="@android:color/transparent"
-                android:color="@android:color/transparent"
-                android:progressTint="@android:color/transparent"
-                android:rotation="270" />
-        </FrameLayout>
+        <be.hogent.faith.faith.skyscraper.goal.VerticalSeekBar
+            android:id="@+id/skyscraper_elevator_seekbar"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/transparent"
+            android:color="@android:color/transparent"
+            android:max="10"
+            android:progress="1"
+            android:progressDrawable="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom_floors"
+            app:layout_constraintEnd_toEndOf="@+id/skyscraper_elevator"
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors" />
 
+        <be.hogent.faith.faith.skyscraper.goal.VerticalSeekBar
+            android:id="@+id/skyscraper_stairs_seekbar"
+            android:layout_width="19dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="20dp"
+            android:background="@android:color/transparent"
+            android:color="@android:color/transparent"
+            android:max="10"
+            android:progress="1"
+            android:progressDrawable="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom_floors"
+            app:layout_constraintEnd_toStartOf="@+id/skyscraper"
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors" />
+
+        <be.hogent.faith.faith.skyscraper.goal.VerticalSeekBar
+            android:id="@+id/skyscraper_rope_seekbar"
+            android:layout_width="19dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
+            android:background="@android:color/transparent"
+            android:color="@android:color/transparent"
+            android:max="10"
+            android:progress="1"
+            android:progressDrawable="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom_floors"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper"
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/skyscraper_rv_subgoals"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
@@ -99,6 +147,7 @@
             app:layout_constraintEnd_toEndOf="@+id/guide_skyscraper_end"
             app:layout_constraintStart_toEndOf="@+id/skyscraper_elevator"
             app:layout_constraintTop_toBottomOf="@+id/guide_skyscraper_top_floors"
+            app:layout_constraintVertical_bias="0.0"
             tools:itemCount="10"
             tools:listitem="@layout/skyscraper_subgoal_rv_item" />
 
@@ -113,27 +162,15 @@
             app:layout_constraintVertical_bias="1.0"
             app:srcCompat="@drawable/skyscraper_blue_empty" />
 
-        <!-- <include
-             android:id="@+id/skyscraper_avatar_drag_drop"
-             layout="@layout/skyscraper_avatar_drag_drop"
-             android:layout_width="0dp"
-             android:layout_height="0dp"
-             app:goalViewModel="@{goalViewModel}"
-             app:layout_constraintBottom_toBottomOf="parent"
-             app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_end"
-             app:layout_constraintStart_toStartOf="parent"
-             app:layout_constraintTop_toBottomOf="@+id/btn_skyscraper_return" />-->
-
         <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@drawable/skyscraper_panel_blue"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/guide_panel_bottom"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel_end"
             app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
-            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"
-            android:scaleType="fitXY"
-            android:background="@drawable/skyscraper_panel_blue"
-            />
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top" />
 
         <TextView
             android:id="@+id/skyscraper_goal_description"
@@ -143,10 +180,11 @@
             android:hint="Beschrijving doel"
             android:inputType="text"
             android:text="@{goalViewModel.goal.description}"
+            android:textColor="@color/color_white"
             app:layout_constraintBottom_toTopOf="@+id/guide_panel_bottom"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel_end"
             app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
-            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"/>
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top" />
 
 
         <LinearLayout
@@ -202,15 +240,6 @@
             android:layout_height="12dp"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.40" />
-
-        <ImageView
-            android:id="@+id/drag_avatar"
-            android:layout_width="50dp"
-            android:layout_height="80dp"
-            android:tag="@string/your_avatar"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/jongen_gamer_bl" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_panel_end"
@@ -304,6 +333,4 @@
             app:layout_constraintGuide_percent="0.418" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </layout>

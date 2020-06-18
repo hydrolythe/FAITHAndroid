@@ -6,10 +6,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import be.hogent.faith.databinding.SkyscraperActionRvItemBinding
 import be.hogent.faith.domain.models.goals.Action
+import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
 
 class ActionAdapter(private val actionListener: ActionListener) :
@@ -54,10 +54,9 @@ class ActionAdapter(private val actionListener: ActionListener) :
         private var disposables = CompositeDisposable()
 
         fun bind(action: Action, position: Int) {
-            if (action.description.isNotEmpty()) {
-                view.txtActionDescription.tag = position
-                view.txtActionDescription.setText(action.description)
-            }
+            view.txtActionDescription.tag = position
+            view.txtActionDescription.setText(action.description)
+            disposables.clear()
             disposables.add(view.txtActionDescription.afterTextChangeEvents()
                 .skip(1)
                 .debounce(1, TimeUnit.SECONDS)

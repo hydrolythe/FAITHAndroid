@@ -9,7 +9,7 @@ import java.util.UUID
 private const val SUBGOALS_LOWER_BOUND = -1
 
 // There are 10 floors, including the ground floor, making 9 the top floor.
-private const val SUBGOALS_UPPER_BOUND = 9
+public const val SUBGOALS_UPPER_BOUND = 9
 private const val DESCRIPTION_MAX_LENGTH = 30
 
 // TODO change to value of the colors
@@ -69,7 +69,7 @@ data class Goal(
         }
     }
 
-    internal fun toggleCompleted() {
+    fun toggleCompleted() {
         isCompleted = !isCompleted
     }
 

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.goals.Action
 import be.hogent.faith.domain.models.goals.Goal
+import be.hogent.faith.domain.models.goals.ReachGoalWay
 import be.hogent.faith.domain.models.goals.SubGoal
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.goal.UpdateGoalUseCase
@@ -58,19 +59,19 @@ class GoalViewModel(
     }
 
     fun onSelectSubGoal(index: Int) {
-        updateCurrentSelectedSubGoal()
-        if (goal.value!!.subGoals.containsKey(index))
-            selectedSubGoal.value = Pair(index, goal.value!!.subGoals[index]!!)
-        else
-            selectedSubGoal.value = Pair(index, SubGoal(""))
-        selectedSubGoalDescription.value = selectedSubGoal.value!!.second.description
+            updateCurrentSelectedSubGoal()
+            if (goal.value!!.subGoals.containsKey(index))
+                selectedSubGoal.value = Pair(index, goal.value!!.subGoals[index]!!)
+            else
+                selectedSubGoal.value = Pair(index, SubGoal(""))
+            selectedSubGoalDescription.value = selectedSubGoal.value!!.second.description
     }
 
     private fun updateCurrentSelectedSubGoal() {
         selectedSubGoal.value?.let {
             it.second.description = selectedSubGoalDescription.value!!
             selectedSubGoal.value = selectedSubGoal.value
-            goal.value!!.changeFloorSubGoal(
+            goal.value!!.addSubGoal(
                 selectedSubGoal.value!!.second,
                 selectedSubGoal.value!!.first
             )
@@ -91,13 +92,38 @@ class GoalViewModel(
     }
 
     fun addNewAction() {
-        selectedSubGoal.value?.second?.addAction(Action())
-        selectedSubGoal.value = selectedSubGoal.value
+        if (selectedSubGoal.value != null) {
+            if (selectedSubGoalDescription.value.isNullOrEmpty())
+                _errorMessage.value = R.string.subdoel_naam_verplicht
+            else {
+                selectedSubGoal.value?.second?.addAction(Action())
+                selectedSubGoal.value = selectedSubGoal.value
+            }
+        }
     }
 
     fun updateAction(position: Int, description: String) {
-        selectedSubGoal.value?.second?.updateAction(position, description)
-        selectedSubGoal.value = selectedSubGoal.value
+        if (selectedSubGoal.value!!.second?.actions?.get(position)?.description != description)
+            selectedSubGoal.value!!.second?.updateAction(position, description)
+    }
+
+    fun setPositionAvatar(position: Int) {
+        if (goal.value!!.currentPositionAvatar != position) {
+            goal.value!!.currentPositionAvatar = position
+            goal.value = goal.value
+        }
+    }
+
+    fun setReachGoalWay(reachGoalWay: ReachGoalWay) {
+        if (goal.value!!.chosenReachGoalWay != reachGoalWay) {
+            goal.value!!.chosenReachGoalWay = reachGoalWay
+            goal.value = goal.value
+        }
+    }
+
+    fun setCompleted() {
+        goal.value!!.toggleCompleted()
+        goal.value = goal.value
     }
 
     override fun onCleared() {

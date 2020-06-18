@@ -9,7 +9,7 @@ class SubGoal(
 ) {
     var description = description
         set(value) {
-            require(value.length <= DESCRIPTION_MAX_LENGTH) { "Beschrijving mag niet langer dan $DESCRIPTION_MAX_LENGTH tekens zijn." }
+        //    require(value.length <= DESCRIPTION_MAX_LENGTH) { "Beschrijving mag niet langer dan $DESCRIPTION_MAX_LENGTH tekens zijn." }
             field = value
         }
 
@@ -45,5 +45,9 @@ class SubGoal(
                 Collections.swap(_actions, i, i - 1)
             }
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return (other as SubGoal)?.description == description
     }
 }

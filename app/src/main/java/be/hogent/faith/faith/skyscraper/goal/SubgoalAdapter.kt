@@ -13,7 +13,7 @@ import be.hogent.faith.domain.models.goals.SubGoal
 
 class SubGoalAdapter(
     private val onSubGoalSelectedListener: SubGoalSelectedListener,
-    private val floorHeight: Int
+    var floorHeight: Int
 ) :
     ListAdapter<SubGoal?, SubGoalAdapter.SubGoalViewHolder>(SugGoalDiffCallback()) {
 
@@ -37,28 +37,30 @@ class SubGoalAdapter(
     inner class SubGoalViewHolder(
         private val view: SkyscraperSubgoalRvItemBinding,
         private val subGoalSelectedListener: SubGoalSelectedListener,
-        private val floorHeight: Int
+        floorHeight: Int
     ) :
         RecyclerView.ViewHolder(view.root) {
         private var disposables = CompositeDisposable()
 
         init {
-            view.txtSubgoalDescription.height = floorHeight
+            view.txtSubgoalDescription.layoutParams.height = floorHeight
+            view.txtSubgoalDescription.setOnClickListener {
+                subGoalSelectedListener.onSubGoalSelected(
+                    view.txtSubgoalDescription.tag.toString().toInt()
+                )
+            }
         }
 
         fun bind(subGoal: SubGoal?, position: Int) {
             view.txtSubgoalDescription.tag = position
             view.txtSubgoalDescription.setText(subGoal?.description)
-            view.txtSubgoalDescription.setOnClickListener {
-                subGoalSelectedListener.onSubGoalSelected(position)
-            }
         }
     }
 }
 
 class SugGoalDiffCallback : DiffUtil.ItemCallback<SubGoal?>() {
     override fun areItemsTheSame(oldItem: SubGoal, newItem: SubGoal): Boolean {
-        return oldItem?.description == newItem?.description
+        return oldItem.description == newItem.description
     }
 
     override fun areContentsTheSame(oldItem: SubGoal, newItem: SubGoal): Boolean {

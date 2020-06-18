@@ -37,6 +37,7 @@ interface AvatarProvider {
     fun getAvatarDrawable(avatarName: String): Drawable
 
     fun getAvatarDrawableStaan(avatarName: String): Drawable
+    fun getAvatarDrawableStaanId(avatarName: String): Int
     fun getAvatarDrawableZitten(avatarName: String): Drawable
     fun getAvatarDrawableGezicht(avatarName: String): Drawable
     fun getAvatarDrawableOutline(avatarName: String): Drawable
