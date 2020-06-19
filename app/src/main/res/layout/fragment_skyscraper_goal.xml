@@ -10,6 +10,7 @@
             type="be.hogent.faith.faith.skyscraper.goal.GoalViewModel" />
 
         <import type="android.view.View" />
+
         <import type="be.hogent.faith.domain.models.goals.ReachGoalWay" />
     </data>
 
@@ -57,7 +58,8 @@
             app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_start"
             app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/skyscraper_blue_empty" />
+            app:srcCompat="@drawable/skyscraper_blue_empty"
+            android:contentDescription="@null"/>
 
         <View
             android:id="@+id/skyscraper_roof"
@@ -65,10 +67,9 @@
             android:layout_height="0dp"
             android:onClick="@{()->goalViewModel.setCompleted()}"
             app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_top_floors"
-            app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_start"
-            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"
             app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_end"
-            />
+            app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_start"
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top" />
 
         <ImageView
             android:id="@+id/skyscraper_roof_avatar"
@@ -76,9 +77,9 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/your_avatar"
             app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_top_floors"
+            app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_end"
             app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_start"
-            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"
-            app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_end" />
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top" />
 
         <ImageView
             android:id="@+id/skyscraper_elevator"
@@ -95,8 +96,8 @@
             android:id="@+id/skyscraper_elevator_seekbar"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:background="@android:color/transparent"
             android:color="@android:color/transparent"
             android:max="10"
@@ -165,21 +166,27 @@
             android:id="@+id/skyscraper_panel"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="32dp"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/guide_panel_bottom"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel_end"
             app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
-            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top" />
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"
+            android:contentDescription="@null"/>
 
         <TextView
             android:id="@+id/skyscraper_goal_description"
-            android:layout_width="wrap_content"
+            style="@style/AppTheme.H5"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:autofillHints="Beschrijving doel"
-            android:hint="Beschrijving doel"
-            android:inputType="text"
+            android:hint="@string/beschrijving_doel"
             android:text="@{goalViewModel.goal.description}"
+            android:textAlignment="center"
             android:textColor="@color/color_white"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/guide_panel_bottom"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel_end"
             app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
@@ -192,7 +199,6 @@
             android:layout_height="0dp"
             android:background="@drawable/rectangle_white"
             android:orientation="vertical"
-            android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }"
             app:layout_constraintBottom_toBottomOf="@+id/skyscraper"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel_end"
             app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
@@ -204,13 +210,18 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 android:text="@={goalViewModel.selectedSubGoalDescription}"
+                android:hint="@string/beschrijving_subdoel"
+                android:autofillHints="@string/beschrijving_subdoel"
+                android:inputType="text"
                 android:textColor="#0000FF"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_goal_actions"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }" />
         </LinearLayout>
 
 
@@ -224,7 +235,8 @@
             android:onClick="@{() -> goalViewModel.addNewAction()}"
             android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }"
             app:layout_constraintBottom_toBottomOf="@+id/rv_actions_container"
-            app:layout_constraintEnd_toEndOf="@+id/rv_actions_container" />
+            app:layout_constraintEnd_toEndOf="@+id/rv_actions_container"
+            android:contentDescription="@null"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_panel_bottom"

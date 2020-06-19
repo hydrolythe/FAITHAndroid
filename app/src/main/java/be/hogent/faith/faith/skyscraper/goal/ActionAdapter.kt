@@ -1,13 +1,16 @@
 package be.hogent.faith.faith.skyscraper.goal
 
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.SkyscraperActionRvItemBinding
 import be.hogent.faith.domain.models.goals.Action
+import be.hogent.faith.domain.models.goals.ActionStatus
 import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
@@ -56,6 +59,23 @@ class ActionAdapter(private val actionListener: ActionListener) :
         fun bind(action: Action, position: Int) {
             view.txtActionDescription.tag = position
             view.txtActionDescription.setText(action.description)
+            val background = view.txtActionDescription.background as GradientDrawable
+            background.setColor(
+                when (action.currentStatus) {
+                    ActionStatus.ACTIVE -> ContextCompat.getColor(
+                        view.txtActionDescription.context,
+                        R.color.skyscraper_action_active
+                    )
+                    ActionStatus.NEUTRAL -> ContextCompat.getColor(
+                        view.txtActionDescription.context,
+                        R.color.color_white
+                    )
+                    ActionStatus.NON_ACTIVE -> ContextCompat.getColor(
+                        view.txtActionDescription.context,
+                        R.color.skyscraper_action_inactive
+                    )
+                }
+            )
             disposables.clear()
             disposables.add(view.txtActionDescription.afterTextChangeEvents()
                 .skip(1)

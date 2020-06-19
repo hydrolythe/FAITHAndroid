@@ -59,6 +59,9 @@
     <color name="skyscraper_darkgreen">#009688</color>
     <color name="skyscraper_red">#ED1E79</color>
     <color name="skyscraper_yellow">#FFFF00</color>
+
+    <color name="skyscraper_action_active">#CDF9EC</color>
+    <color name="skyscraper_action_inactive">#D8D8D8</color>
 </resources>
 
 

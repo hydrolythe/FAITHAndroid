@@ -2,6 +2,7 @@ package be.hogent.faith.faith.skyscraper.goal
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -56,6 +57,12 @@ class SubGoalAdapter(
                     GoalColor.GREEN -> R.color.skyscraper_green
                     else -> R.color.skyscraper_blue
                 }
+            )
+            view.txtSubgoalDescription.setTextColor(
+                if (goalColor == GoalColor.YELLOW)
+                    ContextCompat.getColor(view.txtSubgoalDescription.context, R.color.black)
+                else
+                    ContextCompat.getColor(view.txtSubgoalDescription.context, R.color.color_white)
             )
             view.txtSubgoalDescription.setOnClickListener {
                 subGoalSelectedListener.onSubGoalSelected(

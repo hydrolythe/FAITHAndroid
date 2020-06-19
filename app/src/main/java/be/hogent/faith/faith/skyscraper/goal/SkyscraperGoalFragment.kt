@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -31,6 +32,7 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_elevator
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_elevator_seekbar
+import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_goal_description
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_panel
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_roof_avatar
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_rope_seekbar
@@ -45,6 +47,7 @@ import java.util.UUID
 private const val GOAL = "The goal to be shown"
 private const val THUMB_WIDTH = 24
 private const val THUMB_HEIGHT = 55
+
 class SkyscraperGoalFragment : Fragment() {
 
     private var navigation: SkyscraperNavigationListener? = null
@@ -62,8 +65,10 @@ class SkyscraperGoalFragment : Fragment() {
 
     private fun loadExistingGoal() {
         val goalUuid = arguments?.getSerializable(GOAL) as UUID
-        goalViewModel = getViewModel { parametersOf(userViewModel.user.value!!.getGoal(goalUuid)!!) }
+        goalViewModel =
+            getViewModel { parametersOf(userViewModel.user.value!!.getGoal(goalUuid)!!) }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -101,12 +106,12 @@ class SkyscraperGoalFragment : Fragment() {
         // TODO extract the panels
         skyscraper_panel.setImageResource(
             when (goal.goalColor) {
-                GoalColor.BLUE -> R.drawable.skyscraper_panel_blue
-                GoalColor.YELLOW -> R.drawable.skyscraper_panel_blue
-                GoalColor.RED -> R.drawable.skyscraper_panel_blue
-                GoalColor.DARKGREEN -> R.drawable.skyscraper_panel_blue
-                GoalColor.GREEN -> R.drawable.skyscraper_panel_blue
-                else -> R.drawable.skyscraper_panel_blue
+                GoalColor.BLUE -> R.drawable.skyscraper_blue_panelbig
+                GoalColor.YELLOW -> R.drawable.skyscraper_yellow_panelbig
+                GoalColor.RED -> R.drawable.skyscraper_red_panelbig
+                GoalColor.DARKGREEN -> R.drawable.skyscraper_darkgreen_panelbig
+                GoalColor.GREEN -> R.drawable.skyscraper_green_panelbig
+                else -> R.drawable.skyscraper_blue_panelbig
             }
         )
 
@@ -120,6 +125,14 @@ class SkyscraperGoalFragment : Fragment() {
                 else -> R.drawable.elevator_blue
             }
         )
+
+        skyscraper_goal_description.setTextColor(
+            if (goal.goalColor == GoalColor.YELLOW)
+                ContextCompat.getColor(
+                requireContext(),
+                R.color.black
+            )
+            else ContextCompat.getColor(requireContext(), R.color.color_white))
     }
 
     private fun startViewModelListeners() {
@@ -231,7 +244,8 @@ class SkyscraperGoalFragment : Fragment() {
         /* Get the size of the image */
         val bmOptions = BitmapFactory.Options()
         bmOptions.inJustDecodeBounds = true
-        @Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER") var bitmap = BitmapFactory.decodeResource(resources, resID, bmOptions)
+        @Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER") var bitmap =
+            BitmapFactory.decodeResource(resources, resID, bmOptions)
         val avatarWitdh = bmOptions.outWidth
         val avatarHeight = bmOptions.outHeight
         /* Set bitmap options to scale the image decode target */

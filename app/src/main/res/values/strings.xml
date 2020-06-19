@@ -284,4 +284,7 @@
     <string name="error_skyscraper_update_goal_failed">aanpassen van doel is mislukt</string>
     <string name="lift">lift</string>
     <string name="subdoel_naam_verplicht">Geef eerst de naam in van het subdoel</string>
+    <string name="beschrijving_actie">beschrijving actie</string>
+    <string name="beschrijving_doel">Beschrijving doel</string>
+    <string name="beschrijving_subdoel">Beschrijving subdoel</string>
 </resources>
