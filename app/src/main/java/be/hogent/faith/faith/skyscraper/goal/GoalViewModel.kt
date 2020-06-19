@@ -60,12 +60,12 @@ class GoalViewModel(
     }
 
     fun onSelectSubGoal(index: Int) {
-            updateCurrentSelectedSubGoal()
-            if (goal.value!!.subGoals.containsKey(index))
-                selectedSubGoal.value = Pair(index, goal.value!!.subGoals[index]!!)
-            else
-                selectedSubGoal.value = Pair(index, SubGoal(""))
-            selectedSubGoalDescription.value = selectedSubGoal.value!!.second.description
+        updateCurrentSelectedSubGoal()
+        if (goal.value!!.subGoals.containsKey(index))
+            selectedSubGoal.value = Pair(index, goal.value!!.subGoals[index]!!)
+        else
+            selectedSubGoal.value = Pair(index, SubGoal(""))
+        selectedSubGoalDescription.value = selectedSubGoal.value!!.second.description
     }
 
     private fun updateCurrentSelectedSubGoal() {
@@ -124,6 +124,22 @@ class GoalViewModel(
 
     fun setCompleted() {
         goal.value!!.toggleCompleted()
+        goal.value = goal.value
+    }
+
+    fun moveSubGoal(fromPosition: Int, toPosition: Int) {
+        subgoals.value?.get(fromPosition)?.let {
+            selectedSubGoal.value = null
+            goal.value!!.changeFloorSubGoal(it, toPosition)
+            goal.value = goal.value
+        }
+    }
+
+    fun removeSubGoal(position: Int) {
+        subgoals.value?.get(position)?.let {
+            selectedSubGoal.value = null
+            goal.value!!.removeSubGoal(it)
+        }
         goal.value = goal.value
     }
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -199,7 +200,15 @@ class SkyscraperGoalFragment : Fragment() {
 
     private fun setupRecyclerView() {
         // configuration of recyclerview for the goals
-        val subgoalSelectedListener = object : SubGoalSelectedListener {
+        val subgoalSelectedListener = object : SubGoalListener {
+            override fun onSubGoalDismiss(position: Int) {
+                goalViewModel.removeSubGoal(position)
+            }
+
+            override fun onSubGoalMove(fromPosition: Int, toPosition: Int) {
+                goalViewModel.moveSubGoal(fromPosition, toPosition)
+            }
+
             override fun onSubGoalSelected(position: Int) {
                 goalViewModel.onSelectSubGoal(position)
             }
@@ -211,6 +220,10 @@ class SkyscraperGoalFragment : Fragment() {
                 .getDisplayMetrics().heightPixels * 0.49 - (100 * Resources.getSystem()
                 .getDisplayMetrics().density)) / (SUBGOALS_UPPER_BOUND + 1)).toInt()
         )
+        val subGoalcallback: ItemTouchHelper.Callback =
+            ItemTouchHelperCallback(subgoalAdapter, requireContext())
+        val subGoaltouchHelper = ItemTouchHelper(subGoalcallback)
+        subGoaltouchHelper.attachToRecyclerView(binding.skyscraperRvSubgoals)
         binding.skyscraperRvSubgoals.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.skyscraperRvSubgoals.adapter = subgoalAdapter
@@ -230,16 +243,17 @@ class SkyscraperGoalFragment : Fragment() {
             }
         }
         actionAdapter = ActionAdapter(actionListener)
-        val callback: ItemTouchHelper.Callback =
-            ActionTouchHelperCallback(actionAdapter, requireContext())
-        val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(binding.rvGoalActions)
+        val actionCallback: ItemTouchHelper.Callback =
+            ItemTouchHelperCallback(actionAdapter, requireContext())
+        val actiontouchHelper = ItemTouchHelper(actionCallback)
+        actiontouchHelper.attachToRecyclerView(binding.rvGoalActions)
         binding.rvGoalActions.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvGoalActions.adapter = actionAdapter
     }
 
     private fun setThumb(avatarName: String) {
+        /* get the resource file */
         val resID = avatarProvider.getAvatarDrawableStaanId(avatarName)
         /* Get the size of the image */
         val bmOptions = BitmapFactory.Options()
@@ -256,27 +270,31 @@ class SkyscraperGoalFragment : Fragment() {
         bitmap = BitmapFactory.decodeResource(resources, resID, bmOptions)
         // set the avatar on the roof
         skyscraper_roof_avatar.setImageBitmap(bitmap)
-        // rotate the bitmap
+
+        // get the image for the elevator
+        val borderId = resources.getIdentifier("skyscraper_elevator_borders", "drawable", requireContext().packageName)
+        var bitmapBorder = BitmapFactory.decodeResource(resources, borderId)
+        // canvas needs mutable bitmap
+        bitmapBorder = bitmapBorder.copy(Bitmap.Config.ARGB_8888, true)
+
+        // place avatar in the elevator, 13dp is the height of the border of the elevator
+        val canvas = Canvas(bitmapBorder)
+        canvas.drawBitmap(bitmap, 0F, 13F, null)
+
+        // rotate the bitmaps for use in the vertical seekbars
         val matrix = Matrix()
         matrix.postRotate(90F)
         bitmap = Bitmap.createBitmap(
             bitmap, 0, 0,
             bitmap.width, bitmap.height, matrix, true
         )
-        // als met lift
-        /*
-        stel thumb is beeld lift
-           val canvas = Canvas(thumb)
+        bitmapBorder = Bitmap.createBitmap(bitmapBorder, 0, 0, bitmapBorder.width, bitmapBorder.height, matrix, true)
 
-           canvas.drawBitmap(
-               bitmap, Rect(0, 0, bitmap.width, bitmap.height),
-               Rect(0, 0, thumb.getWidth(), thumb.getHeight()), null)
-                       val drawable: Drawable = BitmapDrawable(resources, thumb)
-                               seekbar.setThumb(drawable)
-                 */
+        // create the drawable
+        val drawableElevator: Drawable = BitmapDrawable(resources, bitmapBorder)
         val drawable: Drawable = BitmapDrawable(resources, bitmap)
 
-        skyscraper_elevator_seekbar.setThumb(drawable)
+        skyscraper_elevator_seekbar.setThumb(drawableElevator)
         skyscraper_stairs_seekbar.setThumb(drawable)
         skyscraper_rope_seekbar.setThumb(drawable)
     }

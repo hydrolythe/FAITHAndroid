@@ -15,10 +15,10 @@ import be.hogent.faith.domain.models.goals.SubGoal
 
 class SubGoalAdapter(
     private val goalColor: GoalColor,
-    private val onSubGoalSelectedListener: SubGoalSelectedListener,
+    private val onSubGoalSelectedListener: SubGoalListener,
     var floorHeight: Int
 ) :
-    ListAdapter<SubGoal?, SubGoalAdapter.SubGoalViewHolder>(SugGoalDiffCallback()) {
+    ListAdapter<SubGoal?, SubGoalAdapter.SubGoalViewHolder>(SugGoalDiffCallback()), ItemTouchHelperCallback.IItemTouchHelper {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubGoalViewHolder {
         val layoutInflater = LayoutInflater
@@ -37,9 +37,17 @@ class SubGoalAdapter(
         holder.bind(getItem(position), position)
     }
 
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        onSubGoalSelectedListener.onSubGoalMove(fromPosition, toPosition)
+    }
+
+    override fun onItemDismiss(position: Int) {
+        onSubGoalSelectedListener.onSubGoalDismiss(position)
+    }
+
     inner class SubGoalViewHolder(
         private val view: SkyscraperSubgoalRvItemBinding,
-        private val subGoalSelectedListener: SubGoalSelectedListener,
+        private val subGoalSelectedListener: SubGoalListener,
         goalColor: GoalColor,
         floorHeight: Int
     ) :
@@ -88,6 +96,8 @@ class SugGoalDiffCallback : DiffUtil.ItemCallback<SubGoal?>() {
     }
 }
 
-interface SubGoalSelectedListener {
+interface SubGoalListener {
+    fun onSubGoalDismiss(position: Int)
+    fun onSubGoalMove(fromPosition: Int, toPosition: Int)
     fun onSubGoalSelected(position: Int)
 }

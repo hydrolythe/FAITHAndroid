@@ -11,7 +11,7 @@ import be.hogent.faith.R
  * https://medium.com/@ipaulpro/drag-and-swipe-with-recyclerview-b9456d2b1aaf
  * Listens for move and swipe events, to enable drag & drop and swipe to dismiss
  */
-class ActionTouchHelperCallback(private val adapter: ActionAdapter, private val context: Context) :
+class ItemTouchHelperCallback(private val adapter: IItemTouchHelper, private val context: Context) :
     ItemTouchHelper.Callback() {
 
     // to start dragging items
@@ -105,7 +105,7 @@ class ActionTouchHelperCallback(private val adapter: ActionAdapter, private val 
         )
     }
 
-    interface IActionTouchHelper {
+    interface IItemTouchHelper {
         fun onItemMove(fromPosition: Int, toPosition: Int)
         fun onItemDismiss(position: Int)
     }

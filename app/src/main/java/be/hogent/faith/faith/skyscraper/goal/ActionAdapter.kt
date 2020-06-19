@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 
 class ActionAdapter(private val actionListener: ActionListener) :
     ListAdapter<Action, ActionAdapter.ActionViewHolder>(ActionDiffCallback()),
-    ActionTouchHelperCallback.IActionTouchHelper {
+    ItemTouchHelperCallback.IItemTouchHelper {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActionViewHolder {
         val layoutInflater = LayoutInflater
