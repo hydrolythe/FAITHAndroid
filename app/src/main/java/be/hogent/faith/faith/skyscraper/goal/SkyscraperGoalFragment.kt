@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.skyscraper.goal
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -151,20 +152,24 @@ class SkyscraperGoalFragment : Fragment() {
     }
 
     private fun startViewModelListeners() {
-        goalViewModel.goal.observe(this, Observer {
-            skyscraper_roof_avatar.visibility = if (it.isCompleted) View.VISIBLE else View.GONE
-            dragAvatar.visibility =
-                if (!it.isCompleted && it.chosenReachGoalWay == ReachGoalWay.Stairs) View.VISIBLE else View.GONE
-            calculatePositionAvatar()
+        goalViewModel.onAvatarPlaceChanged.observe(this, Observer {
+            val goal = goalViewModel.goal.value!!
+            skyscraper_roof_avatar.visibility = if (goal.isCompleted) View.VISIBLE else View.GONE
 
-            skyscraper_elevator_seekbar.progress = it.currentPositionAvatar
+            if (!goal.isCompleted && goal.chosenReachGoalWay == ReachGoalWay.Stairs) {
+                dragAvatar.visibility = View.VISIBLE
+                calculatePositionAvatar()
+            } else dragAvatar.visibility = View.GONE
+
+            skyscraper_elevator_seekbar.progress = goal.currentPositionAvatar
             skyscraper_elevator_seekbar.visibility =
-                if (!it.isCompleted && it.chosenReachGoalWay == ReachGoalWay.Elevator) View.VISIBLE else View.GONE
+                if (!goal.isCompleted && goal.chosenReachGoalWay == ReachGoalWay.Elevator) View.VISIBLE else View.GONE
 
-            skyscraper_rope_seekbar.progress = it.currentPositionAvatar
+            skyscraper_rope_seekbar.progress = goal.currentPositionAvatar
             skyscraper_rope_seekbar.visibility =
-                if (!it.isCompleted && it.chosenReachGoalWay == ReachGoalWay.Rope) View.VISIBLE else View.GONE
+                if (!goal.isCompleted && goal.chosenReachGoalWay == ReachGoalWay.Rope) View.VISIBLE else View.GONE
         })
+
         // Update adapter when event changes
         goalViewModel.actions.observe(this, Observer { actions ->
             Timber.i("actions are passed to adapter")
@@ -197,7 +202,6 @@ class SkyscraperGoalFragment : Fragment() {
         val targetLocation =
             skyscraper_create_goal.findViewWithTag<ImageView>(goalViewModel.goal.value!!.currentPositionAvatar.toString())
         targetLocation!!.post { // This code will run when view created and rendered on screen
-            //     targetLocation!!.setOnTouchListener(avatarOnTouchListener)
             val position = targetLocation.tag.toString().toInt()
             val extra = if (position % 2 != 0) targetLocation.height / 2 else 0
             dragAvatar.y = targetLocation.y + targetLocation.height - dragAvatar.height + extra
@@ -229,7 +233,7 @@ class SkyscraperGoalFragment : Fragment() {
         // configuring the dropping places of the avatar
         binding.dragAvatar.setOnTouchListener(avatarOnTouchListener)
 
-        for (x in -2..9) {
+        for (x in -2..goalViewModel.numberOfFloorsUpperBound) {
             skyscraper_create_goal.findViewWithTag<ImageView>(x.toString())
                 ?.setOnDragListener(avatarOnDragListener)
         }
@@ -253,9 +257,8 @@ class SkyscraperGoalFragment : Fragment() {
         subgoalAdapter = SubGoalAdapter(
             goalViewModel.goal.value!!.goalColor,
             subgoalSelectedListener,
-            ((Resources.getSystem()
-                .getDisplayMetrics().heightPixels * 0.49 - (100 * Resources.getSystem()
-                .getDisplayMetrics().density)) / (SUBGOALS_UPPER_BOUND + 1)).toInt()
+            //calculates the width of a floor : hoogte scherm * 0.49 (skyscraper neemt 49% van de hoogte in). Di in pixels en moet omgezet worden naar dp, vandaar vermenigvuldig met density
+            ((Resources.getSystem().getDisplayMetrics().heightPixels * 0.49 - (100 * Resources.getSystem().getDisplayMetrics().density)) / (SUBGOALS_UPPER_BOUND + 1)).toInt()
         )
         val subGoalcallback: ItemTouchHelper.Callback =
             ItemTouchHelperCallback(subgoalAdapter, requireContext())

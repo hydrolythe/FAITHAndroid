@@ -100,7 +100,7 @@
             android:layout_marginBottom="5dp"
             android:background="@android:color/transparent"
             android:color="@android:color/transparent"
-            android:max="10"
+            android:max="@{goalViewModel.numberOfFloorsUpperBound}"
             android:progress="1"
             android:progressDrawable="@android:color/transparent"
             app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom_floors"
@@ -113,25 +113,27 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:contentDescription="@null"
             android:onClick="@{()->goalViewModel.setReachGoalWay(ReachGoalWay.Rope)}"
             android:src="@drawable/skyscraper_rope_middle"
-            app:layout_constraintBottom_toTopOf="@+id/skyscraper_rope_bottom"
-            app:layout_constraintEnd_toEndOf="@+id/guide_rope_end"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toBottomOf="@+id/skyscraper_rope_bottom"
+            app:layout_constraintEnd_toEndOf="@+id/guide_skyscraper_rope_end"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/skyscraper"
             app:layout_constraintTop_toBottomOf="@+id/guide_skyscraper_stairs_top_middle" />
 
         <ImageView
             android:id="@+id/skyscraper_rope_top"
             android:layout_width="0dp"
+            android:adjustViewBounds="true"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:contentDescription="@null"
             android:scaleType="fitXY"
             android:src="@drawable/skyscraper_rope_top"
             app:layout_constraintStart_toEndOf="@+id/skyscraper"
-            app:layout_constraintEnd_toEndOf="@+id/guide_rope_end"
+            app:layout_constraintEnd_toEndOf="@+id/guide_skyscraper_rope_end"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintTop_toBottomOf="@+id/guide_skyscraper_stairs_top_middle" />
 
@@ -139,14 +141,15 @@
             android:id="@+id/skyscraper_rope_bottom"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
             android:layout_marginEnd="8dp"
-            android:translationX="-2dp"
+            android:translationX="-5dp"
             android:contentDescription="@null"
             android:scaleType="fitXY"
             android:src="@drawable/skyscraper_rope_bottom"
             app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_stairs_bottom_middle"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel_start"
-            app:layout_constraintStart_toStartOf="@+id/guide_rope_end" />
+            app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_rope_end" />
 
         <be.hogent.faith.faith.skyscraper.goal.VerticalSeekBar
             android:id="@+id/skyscraper_rope_seekbar"
@@ -155,12 +158,12 @@
             android:layout_marginStart="20dp"
             android:background="@android:color/transparent"
             android:color="@android:color/transparent"
-            android:max="10"
+            android:max="@{goalViewModel.numberOfFloorsUpperBound}"
             android:progress="1"
             android:progressDrawable="@android:color/transparent"
-            app:layout_constraintBottom_toTopOf="@+id/skyscraper_rope_bottom"
-            app:layout_constraintEnd_toEndOf="@+id/guide_rope_end"
-            app:layout_constraintTop_toBottomOf="@+id/guide_skyscraper_stairs_top_middle" />
+            app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_bottom_floors"
+            app:layout_constraintEnd_toEndOf="@+id/guide_skyscraper_rope_end"
+            app:layout_constraintTop_toBottomOf="@+id/guide_skyscraper_top_floors" />
         <!--end rope-->
         <!--right stairs-->
         <ImageView
@@ -758,6 +761,7 @@
             android:id="@+id/spinner_loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@null"
             android:visibility="@{goalViewModel.isLoading() == true ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
