@@ -52,14 +52,14 @@
             android:id="@+id/skyscraper"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:contentDescription="@null"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom"
             app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_end"
             app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_start"
             app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"
             app:layout_constraintVertical_bias="0.0"
-            app:srcCompat="@drawable/skyscraper_blue_empty"
-            android:contentDescription="@null"/>
+            app:srcCompat="@drawable/skyscraper_blue_empty" />
 
         <View
             android:id="@+id/skyscraper_roof"
@@ -107,19 +107,368 @@
             app:layout_constraintEnd_toEndOf="@+id/skyscraper_elevator"
             app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors" />
 
-        <be.hogent.faith.faith.skyscraper.goal.VerticalSeekBar
-            android:id="@+id/skyscraper_stairs_seekbar"
-            android:layout_width="19dp"
+        <!--right stairs-->
+        <ImageView
+            android:id="@+id/skyscraper_stairs_right10"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/empty_shape"
+            android:tag="9"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_right9"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_stairs_middle" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_right9"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginEnd="20dp"
-            android:background="@android:color/transparent"
-            android:color="@android:color/transparent"
-            android:max="10"
-            android:progress="1"
-            android:progressDrawable="@android:color/transparent"
-            app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom_floors"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_stairs_rightstair"
+            android:translationX="-6dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_right8"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/guide_skyscraper_top_floors"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_right8"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:src="@drawable/empty_shape"
+            android:tag="7"
+            android:translationX="-6dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_right7"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_right9"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_right7"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_stairs_rightstair"
+            android:translationX="-6dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_right6"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_right8"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_right6"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:src="@drawable/empty_shape"
+            android:tag="5"
+            android:translationX="-6dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_right5"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_right7"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_right5"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_stairs_rightstair"
+            android:translationX="-6dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_right4"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_right6"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_right4"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:src="@drawable/empty_shape"
+            android:tag="3"
+            android:translationX="-6dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_right3"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_right5"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_right3"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_stairs_rightstair"
+            android:translationX="-6dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_right2"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_right4"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_right2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:src="@drawable/empty_shape"
+            android:tag="1"
+            android:translationX="-6dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_right1"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_right3"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_right1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_stairs_rightstair"
+            android:translationX="-6dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_right0"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_right2"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_right0"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:src="@drawable/empty_shape"
+            android:tag="-1"
+            android:translationX="-6dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_rightMin1"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_right1"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_rightMin1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_stairs_rightstair"
+            android:translationX="-6dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_rightMin2"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_right0"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_rightMin2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:contentDescription="@null"
+            android:src="@drawable/empty_shape"
+            android:translationX="-6dp"
+            app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_stairs_bottom"
+            app:layout_constraintStart_toEndOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_rightMin1"
+            app:layout_constraintVertical_weight="1" />
+
+        <!--end right stairs-->
+        <!--left stairs-->
+        <ImageView
+            android:id="@+id/skyscraper_stairs_left9"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:contentDescription="@null"
+            android:src="@drawable/empty_shape"
+            android:tag="8"
+            android:translationX="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_left8"
+            app:layout_constraintEnd_toStartOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/guide_skyscraper_top_floors"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            app:layout_constraintVertical_weight="1.5" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_left8"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_stairs_leftstair"
+            android:translationX="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_left7"
+            app:layout_constraintEnd_toStartOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_left9"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_left7"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:contentDescription="@null"
+            android:src="@drawable/empty_shape"
+            android:tag="6"
+            android:translationX="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_left6"
+            app:layout_constraintEnd_toStartOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_left8"
+            app:layout_constraintVertical_weight="1.5" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_left6"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_stairs_leftstair"
+            android:translationX="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_left5"
+            app:layout_constraintEnd_toStartOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_left7"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_left5"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:contentDescription="@null"
+            android:src="@drawable/empty_shape"
+            android:tag="4"
+            android:translationX="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_left4"
+            app:layout_constraintEnd_toStartOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_left6"
+            app:layout_constraintVertical_weight="1.5" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_left4"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_stairs_leftstair"
+            android:translationX="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_left3"
+            app:layout_constraintEnd_toStartOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_left5"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_left3"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:contentDescription="@null"
+            android:src="@drawable/empty_shape"
+            android:tag="2"
+            android:translationX="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_left2"
+            app:layout_constraintEnd_toStartOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_left4"
+            app:layout_constraintVertical_weight="1.5" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_left2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_stairs_leftstair"
+            android:translationX="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_left1"
+            app:layout_constraintEnd_toStartOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_left3"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_left1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:contentDescription="@null"
+            android:src="@drawable/empty_shape"
+            android:tag="0"
+            android:translationX="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_left0"
+            app:layout_constraintEnd_toStartOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_left2"
+            app:layout_constraintVertical_weight="1.5" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_left0"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_stairs_leftstair"
+            android:translationX="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_bottom_floors"
+            app:layout_constraintEnd_toStartOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_left1"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_leftMin1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            android:contentDescription="@null"
+            android:src="@drawable/empty_shape"
+            android:tag="-2"
+            android:translationX="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/skyscraper_stairs_leftMin2"
+            app:layout_constraintEnd_toStartOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_left0"
+            app:layout_constraintVertical_weight="1.5" />
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_leftMin2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="@null"
+            android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_stairs_leftstair"
+            android:translationX="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_stairs_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/skyscraper_stairs_middle"
+            app:layout_constraintTop_toBottomOf="@+id/skyscraper_stairs_leftMin1"
+            app:layout_constraintVertical_weight="1" />
+        <!--end left stairs-->
+
+
+        <ImageView
+            android:id="@+id/skyscraper_stairs_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:contentDescription="@null"
+            android:onClick="@{()->goalViewModel.setReachGoalWay(ReachGoalWay.Stairs)}"
+            android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_stairs_middle"
+            app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_stairs_bottom_middle"
             app:layout_constraintEnd_toStartOf="@+id/skyscraper"
-            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors" />
+            app:layout_constraintTop_toBottomOf="@+id/guide_skyscraper_stairs_top_middle" />
+
+        <ImageView
+            android:id="@+id/dragAvatar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/your_avatar"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <be.hogent.faith.faith.skyscraper.goal.VerticalSeekBar
             android:id="@+id/skyscraper_rope_seekbar"
@@ -169,12 +518,12 @@
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
+            android:contentDescription="@null"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@+id/guide_panel_bottom"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel_end"
             app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
-            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top"
-            android:contentDescription="@null"/>
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top" />
 
         <TextView
             android:id="@+id/skyscraper_goal_description"
@@ -192,38 +541,44 @@
             app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
             app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top" />
 
-
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:id="@+id/rv_actions_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/rectangle_white"
             android:orientation="vertical"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/skyscraper"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel_end"
             app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
             app:layout_constraintTop_toTopOf="@+id/guide_panel_bottom">
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:text="@={goalViewModel.selectedSubGoalDescription}"
-                android:hint="@string/beschrijving_subdoel"
-                android:autofillHints="@string/beschrijving_subdoel"
-                android:inputType="text"
-                android:textColor="#0000FF"
-                android:textSize="20sp"
-                android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_goal_actions"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }" />
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:autofillHints="@string/beschrijving_subdoel"
+                    android:hint="@string/beschrijving_subdoel"
+                    android:inputType="text"
+                    android:text="@={goalViewModel.selectedSubGoalDescription}"
+                    android:textColor="#0000FF"
+                    android:textSize="20sp"
+                    android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_goal_actions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
         <ImageButton
             android:id="@+id/btn_add_action"
@@ -232,11 +587,12 @@
             android:layout_marginEnd="@dimen/margin_corner_button"
             android:layout_marginBottom="@dimen/margin_corner_button"
             android:background="@drawable/ic_actie_toevoegen"
+            android:contentDescription="@null"
             android:onClick="@{() -> goalViewModel.addNewAction()}"
             android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }"
             app:layout_constraintBottom_toBottomOf="@+id/rv_actions_container"
-            app:layout_constraintEnd_toEndOf="@+id/rv_actions_container"
-            android:contentDescription="@null"/>
+            app:layout_constraintEnd_toEndOf="@+id/rv_actions_container" />
+
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_panel_bottom"
@@ -295,6 +651,20 @@
             app:layout_constraintGuide_percent="0.96" />
 
         <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_skyscraper_stairs_bottom_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.90" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_skyscraper_stairs_top_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.12" />
+
+        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guide_skyscraper_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -342,6 +712,13 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.418" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_skyscraper_stairs_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.82" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

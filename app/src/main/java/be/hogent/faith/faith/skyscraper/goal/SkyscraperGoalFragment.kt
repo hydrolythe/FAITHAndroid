@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Toast
@@ -30,14 +31,15 @@ import be.hogent.faith.domain.models.goals.SubGoal
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
+import kotlinx.android.synthetic.main.fragment_skyscraper_goal.dragAvatar
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper
+import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_create_goal
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_elevator
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_elevator_seekbar
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_goal_description
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_panel
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_roof_avatar
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_rope_seekbar
-import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_stairs_seekbar
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
@@ -58,6 +60,10 @@ class SkyscraperGoalFragment : Fragment() {
     private lateinit var actionAdapter: ActionAdapter
     private lateinit var subgoalAdapter: SubGoalAdapter
     private val avatarProvider: AvatarProvider by inject()
+    private lateinit var avatarOnDragListener: AvatarOnDragListener
+    private lateinit var avatarOnTouchListener: AvatarOnTouchListener
+    private lateinit var avatarDropped: AvatarOnDragListener.AvatarDropped
+    private var dropPositions = emptyMap<Int, ImageView>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +84,13 @@ class SkyscraperGoalFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_skyscraper_goal, container, false)
         binding.lifecycleOwner = this
+        avatarDropped = object : AvatarOnDragListener.AvatarDropped {
+            override fun onAvatarDropped(floor: Int) {
+                goalViewModel.setPositionAvatar(floor)
+            }
+        }
+        avatarOnTouchListener = AvatarOnTouchListener()
+        avatarOnDragListener = AvatarOnDragListener(avatarOnTouchListener, avatarDropped)
         binding.goalViewModel = goalViewModel
         return binding.root
     }
@@ -130,24 +143,27 @@ class SkyscraperGoalFragment : Fragment() {
         skyscraper_goal_description.setTextColor(
             if (goal.goalColor == GoalColor.YELLOW)
                 ContextCompat.getColor(
-                requireContext(),
-                R.color.black
-            )
-            else ContextCompat.getColor(requireContext(), R.color.color_white))
+                    requireContext(),
+                    R.color.black
+                )
+            else ContextCompat.getColor(requireContext(), R.color.color_white)
+        )
     }
 
     private fun startViewModelListeners() {
         goalViewModel.goal.observe(this, Observer {
             skyscraper_roof_avatar.visibility = if (it.isCompleted) View.VISIBLE else View.GONE
+            dragAvatar.visibility =
+                if (!it.isCompleted && it.chosenReachGoalWay == ReachGoalWay.Stairs) View.VISIBLE else View.GONE
+            calculatePositionAvatar()
+
             skyscraper_elevator_seekbar.progress = it.currentPositionAvatar
             skyscraper_elevator_seekbar.visibility =
                 if (!it.isCompleted && it.chosenReachGoalWay == ReachGoalWay.Elevator) View.VISIBLE else View.GONE
+
             skyscraper_rope_seekbar.progress = it.currentPositionAvatar
             skyscraper_rope_seekbar.visibility =
                 if (!it.isCompleted && it.chosenReachGoalWay == ReachGoalWay.Rope) View.VISIBLE else View.GONE
-            skyscraper_stairs_seekbar.progress = it.currentPositionAvatar
-            skyscraper_stairs_seekbar.visibility =
-                if (!it.isCompleted && it.chosenReachGoalWay == ReachGoalWay.Stairs) View.VISIBLE else View.GONE
         })
         // Update adapter when event changes
         goalViewModel.actions.observe(this, Observer { actions ->
@@ -176,6 +192,20 @@ class SkyscraperGoalFragment : Fragment() {
         })
     }
 
+    private fun calculatePositionAvatar() {
+
+        val targetLocation =
+            skyscraper_create_goal.findViewWithTag<ImageView>(goalViewModel.goal.value!!.currentPositionAvatar.toString())
+        targetLocation!!.post { // This code will run when view created and rendered on screen
+            //     targetLocation!!.setOnTouchListener(avatarOnTouchListener)
+            val position = targetLocation.tag.toString().toInt()
+            val extra = if (position % 2 != 0) targetLocation.height / 2 else 0
+            dragAvatar.y = targetLocation.y + targetLocation.height - dragAvatar.height + extra
+            dragAvatar.x =
+                targetLocation.x + (targetLocation.width / 2 - dragAvatar.width / 2).toFloat()
+        }
+    }
+
     private fun startListeners() {
         val seekbarChangeListener = object : OnSeekBarChangeListener {
             override fun onProgressChanged(
@@ -195,7 +225,14 @@ class SkyscraperGoalFragment : Fragment() {
         }
         skyscraper_elevator_seekbar.setOnSeekBarChangeListener(seekbarChangeListener)
         skyscraper_rope_seekbar.setOnSeekBarChangeListener(seekbarChangeListener)
-        skyscraper_stairs_seekbar.setOnSeekBarChangeListener(seekbarChangeListener)
+
+        // configuring the dropping places of the avatar
+        binding.dragAvatar.setOnTouchListener(avatarOnTouchListener)
+
+        for (x in -2..9) {
+            skyscraper_create_goal.findViewWithTag<ImageView>(x.toString())
+                ?.setOnDragListener(avatarOnDragListener)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -268,11 +305,16 @@ class SkyscraperGoalFragment : Fragment() {
         bmOptions.inSampleSize = Math.min(avatarWitdh / THUMB_WIDTH, avatarHeight / THUMB_HEIGHT)
         // scale the bitmap
         bitmap = BitmapFactory.decodeResource(resources, resID, bmOptions)
-        // set the avatar on the roof
+        // set the avatar on the roof and dragavatar for elevator
         skyscraper_roof_avatar.setImageBitmap(bitmap)
+        dragAvatar.setImageBitmap(bitmap)
 
         // get the image for the elevator
-        val borderId = resources.getIdentifier("skyscraper_elevator_borders", "drawable", requireContext().packageName)
+        val borderId = resources.getIdentifier(
+            "skyscraper_elevator_borders",
+            "drawable",
+            requireContext().packageName
+        )
         var bitmapBorder = BitmapFactory.decodeResource(resources, borderId)
         // canvas needs mutable bitmap
         bitmapBorder = bitmapBorder.copy(Bitmap.Config.ARGB_8888, true)
@@ -288,14 +330,21 @@ class SkyscraperGoalFragment : Fragment() {
             bitmap, 0, 0,
             bitmap.width, bitmap.height, matrix, true
         )
-        bitmapBorder = Bitmap.createBitmap(bitmapBorder, 0, 0, bitmapBorder.width, bitmapBorder.height, matrix, true)
+        bitmapBorder = Bitmap.createBitmap(
+            bitmapBorder,
+            0,
+            0,
+            bitmapBorder.width,
+            bitmapBorder.height,
+            matrix,
+            true
+        )
 
         // create the drawable
         val drawableElevator: Drawable = BitmapDrawable(resources, bitmapBorder)
         val drawable: Drawable = BitmapDrawable(resources, bitmap)
 
         skyscraper_elevator_seekbar.setThumb(drawableElevator)
-        skyscraper_stairs_seekbar.setThumb(drawable)
         skyscraper_rope_seekbar.setThumb(drawable)
     }
 
