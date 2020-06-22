@@ -36,6 +36,9 @@ class GoalViewModel(
     private val _errorMessage = SingleLiveEvent<Int>()
     val errorMessage: LiveData<Int> = _errorMessage
 
+    private val _isLoading = MutableLiveData<Boolean>().apply { value = false }
+    val isLoading: LiveData<Boolean> = _isLoading
+
     init {
         goal.value = givenGoal
     }
@@ -47,14 +50,17 @@ class GoalViewModel(
     fun onSaveButtonClicked() {
         updateCurrentSelectedSubGoal()
         val params = UpdateGoalUseCase.Params(goal.value!!)
+        _isLoading.value = true
         updateGoalUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 Timber.i("Goal ${goal.value!!.uuid} updated")
                 _goalSavedSuccessfully.call()
+                _isLoading.value = false
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_skyscraper_update_goal_failed)
+                _isLoading.value = false
             }
         })
     }
