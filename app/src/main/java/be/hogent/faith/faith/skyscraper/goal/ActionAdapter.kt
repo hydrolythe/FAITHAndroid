@@ -54,6 +54,7 @@ class ActionAdapter(private val actionListener: ActionListener) :
         private val actionListener: ActionListener
     ) :
         RecyclerView.ViewHolder(view.root) {
+        // Niet vergeten de disposables te disposen bij unbinden (Zie SkyscraperAdapter)
         private var disposables = CompositeDisposable()
 
         fun bind(action: Action, position: Int) {

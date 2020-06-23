@@ -22,9 +22,11 @@ class GoalViewModel(
     val goal = MediatorLiveData<Goal>()
     val subgoals: LiveData<Map<Int, SubGoal>> = Transformations.map(goal) { it.subGoals }
 
+    // Waarom is dit een MediatorLiveData? Lijkt overbodig.
     val selectedSubGoal = MediatorLiveData<Pair<Int, SubGoal>?>()
     val actions: LiveData<List<Action>?> =
         Transformations.map(selectedSubGoal) { it?.second?.actions }
+    // Kan deze geen Transformations.map zijn van de selectedSubGoal?
     val selectedSubGoalDescription = MutableLiveData<String>()
 
     private val _cancelButtonClicked = SingleLiveEvent<Unit>()
@@ -110,7 +112,9 @@ class GoalViewModel(
     }
 
     fun updateAction(position: Int, description: String) {
-        if (selectedSubGoal.value!!.second.actions.get(position).description != description)
+        // If-condities vervangen door een private boolean functie die beschrijft wat gechecked wordt.
+        // Kan bij andere functies hier ook helpen.
+        if (selectedSubGoal.value!!.second.actions[position].description != description)
             selectedSubGoal.value!!.second.updateAction(position, description)
     }
 

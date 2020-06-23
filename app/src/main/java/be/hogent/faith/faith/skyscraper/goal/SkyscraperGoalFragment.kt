@@ -90,7 +90,7 @@ class SkyscraperGoalFragment : Fragment() {
             }
         }
         avatarOnTouchListener = AvatarOnTouchListener()
-        avatarOnDragListener = AvatarOnDragListener(avatarOnTouchListener, avatarDropped)
+        avatarOnDragListener = AvatarOnDragListener(avatarDropped)
         binding.goalViewModel = goalViewModel
         return binding.root
     }
@@ -106,39 +106,35 @@ class SkyscraperGoalFragment : Fragment() {
 
     private fun setUpSkyscraper() {
         val goal = goalViewModel.goal.value!!
-        skyscraper.setImageResource(
-            when (goal.goalColor) {
-                GoalColor.BLUE -> R.drawable.skyscraper_blue_empty
-                GoalColor.YELLOW -> R.drawable.skyscraper_yellow_empty
-                GoalColor.RED -> R.drawable.skyscraper_red_empty
-                GoalColor.DARKGREEN -> R.drawable.skyscraper_darkgreen_empty
-                GoalColor.GREEN -> R.drawable.skyscraper_green_empty
-                else -> R.drawable.skyscraper_blue_base
-            }
-        )
 
-        // TODO extract the panels
-        skyscraper_panel.setImageResource(
-            when (goal.goalColor) {
-                GoalColor.BLUE -> R.drawable.skyscraper_blue_panelbig
-                GoalColor.YELLOW -> R.drawable.skyscraper_yellow_panelbig
-                GoalColor.RED -> R.drawable.skyscraper_red_panelbig
-                GoalColor.DARKGREEN -> R.drawable.skyscraper_darkgreen_panelbig
-                GoalColor.GREEN -> R.drawable.skyscraper_green_panelbig
-                else -> R.drawable.skyscraper_blue_panelbig
+        when (goal.goalColor) {
+            GoalColor.BLUE -> {
+                skyscraper.setImageResource(R.drawable.skyscraper_blue_empty)
+                skyscraper_panel.setImageResource(R.drawable.skyscraper_blue_panelbig)
+                skyscraper_elevator.setImageResource(R.drawable.elevator_blue)
             }
-        )
-
-        skyscraper_elevator.setImageResource(
-            when (goal.goalColor) {
-                GoalColor.BLUE -> R.drawable.elevator_blue
-                GoalColor.YELLOW -> R.drawable.elevator_yellow
-                GoalColor.RED -> R.drawable.elevator_red
-                GoalColor.DARKGREEN -> R.drawable.elevator_darkgreen
-                GoalColor.GREEN -> R.drawable.elevator_green
-                else -> R.drawable.elevator_blue
+            GoalColor.YELLOW -> {
+                skyscraper.setImageResource(R.drawable.skyscraper_yellow_empty)
+                skyscraper_panel.setImageResource(R.drawable.skyscraper_yellow_panelbig)
+                skyscraper_elevator.setImageResource(R.drawable.elevator_yellow)
             }
-        )
+            GoalColor.RED -> {
+                skyscraper.setImageResource(R.drawable.skyscraper_red_empty)
+                skyscraper_panel.setImageResource(R.drawable.skyscraper_red_panelbig)
+                skyscraper_elevator.setImageResource(R.drawable.elevator_red)
+            }
+            GoalColor.DARKGREEN -> {
+                skyscraper.setImageResource(R.drawable.skyscraper_darkgreen_empty)
+                skyscraper_panel.setImageResource(R.drawable.skyscraper_darkgreen_panelbig)
+                skyscraper_elevator.setImageResource(R.drawable.elevator_darkgreen)
+            }
+            GoalColor.GREEN -> {
+                skyscraper.setImageResource(R.drawable.skyscraper_green_empty)
+                skyscraper_panel.setImageResource(R.drawable.skyscraper_green_panelbig)
+                skyscraper_elevator.setImageResource(R.drawable.elevator_green)
+            }
+            else -> R.drawable.skyscraper_blue_base
+        }
 
         skyscraper_goal_description.setTextColor(
             if (goal.goalColor == GoalColor.YELLOW)
@@ -151,19 +147,19 @@ class SkyscraperGoalFragment : Fragment() {
     }
 
     private fun startViewModelListeners() {
-        goalViewModel.goal.observe(this, Observer {
-            skyscraper_roof_avatar.visibility = if (it.isCompleted) View.VISIBLE else View.GONE
+        goalViewModel.goal.observe(this, Observer { goal ->
+            skyscraper_roof_avatar.visibility = if (goal.isCompleted) View.VISIBLE else View.GONE
             dragAvatar.visibility =
-                if (!it.isCompleted && it.chosenReachGoalWay == ReachGoalWay.Stairs) View.VISIBLE else View.GONE
+                if (!goal.isCompleted && goal.chosenReachGoalWay == ReachGoalWay.Stairs) View.VISIBLE else View.GONE
             calculatePositionAvatar()
 
-            skyscraper_elevator_seekbar.progress = it.currentPositionAvatar
+            skyscraper_elevator_seekbar.progress = goal.currentPositionAvatar
             skyscraper_elevator_seekbar.visibility =
-                if (!it.isCompleted && it.chosenReachGoalWay == ReachGoalWay.Elevator) View.VISIBLE else View.GONE
+                if (!goal.isCompleted && goal.chosenReachGoalWay == ReachGoalWay.Elevator) View.VISIBLE else View.GONE
 
-            skyscraper_rope_seekbar.progress = it.currentPositionAvatar
+            skyscraper_rope_seekbar.progress = goal.currentPositionAvatar
             skyscraper_rope_seekbar.visibility =
-                if (!it.isCompleted && it.chosenReachGoalWay == ReachGoalWay.Rope) View.VISIBLE else View.GONE
+                if (!goal.isCompleted && goal.chosenReachGoalWay == ReachGoalWay.Rope) View.VISIBLE else View.GONE
         })
         // Update adapter when event changes
         goalViewModel.actions.observe(this, Observer { actions ->
@@ -193,7 +189,6 @@ class SkyscraperGoalFragment : Fragment() {
     }
 
     private fun calculatePositionAvatar() {
-
         val targetLocation =
             skyscraper_create_goal.findViewWithTag<ImageView>(goalViewModel.goal.value!!.currentPositionAvatar.toString())
         targetLocation!!.post { // This code will run when view created and rendered on screen
@@ -208,11 +203,7 @@ class SkyscraperGoalFragment : Fragment() {
 
     private fun startListeners() {
         val seekbarChangeListener = object : OnSeekBarChangeListener {
-            override fun onProgressChanged(
-                seekBar: SeekBar,
-                progress: Int,
-                fromUser: Boolean
-            ) {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 goalViewModel.setPositionAvatar(progress)
             }
 
@@ -251,11 +242,11 @@ class SkyscraperGoalFragment : Fragment() {
             }
         }
         subgoalAdapter = SubGoalAdapter(
-            goalViewModel.goal.value!!.goalColor,
-            subgoalSelectedListener,
-            ((Resources.getSystem()
-                .getDisplayMetrics().heightPixels * 0.49 - (100 * Resources.getSystem()
-                .getDisplayMetrics().density)) / (SUBGOALS_UPPER_BOUND + 1)).toInt()
+            goalColor = goalViewModel.goal.value!!.goalColor,
+            onSubGoalSelectedListener = subgoalSelectedListener,
+            floorHeight = ((Resources.getSystem()
+                .displayMetrics.heightPixels * 0.49 - (100 * Resources.getSystem()
+                .displayMetrics.density)) / (SUBGOALS_UPPER_BOUND + 1)).toInt()
         )
         val subGoalcallback: ItemTouchHelper.Callback =
             ItemTouchHelperCallback(subgoalAdapter, requireContext())
@@ -344,8 +335,8 @@ class SkyscraperGoalFragment : Fragment() {
         val drawableElevator: Drawable = BitmapDrawable(resources, bitmapBorder)
         val drawable: Drawable = BitmapDrawable(resources, bitmap)
 
-        skyscraper_elevator_seekbar.setThumb(drawableElevator)
-        skyscraper_rope_seekbar.setThumb(drawable)
+        skyscraper_elevator_seekbar.thumb = drawableElevator
+        skyscraper_rope_seekbar.thumb = drawable
     }
 
     override fun onAttach(context: Context) {

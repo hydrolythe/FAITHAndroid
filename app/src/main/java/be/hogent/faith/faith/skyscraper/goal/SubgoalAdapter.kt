@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import be.hogent.faith.databinding.SkyscraperSubgoalRvItemBinding
 import be.hogent.faith.domain.models.goals.GoalColor
 import be.hogent.faith.domain.models.goals.SubGoal
@@ -18,7 +17,8 @@ class SubGoalAdapter(
     private val onSubGoalSelectedListener: SubGoalListener,
     var floorHeight: Int
 ) :
-    ListAdapter<SubGoal?, SubGoalAdapter.SubGoalViewHolder>(SugGoalDiffCallback()), ItemTouchHelperCallback.IItemTouchHelper {
+    ListAdapter<SubGoal?, SubGoalAdapter.SubGoalViewHolder>(SugGoalDiffCallback()),
+    ItemTouchHelperCallback.IItemTouchHelper {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubGoalViewHolder {
         val layoutInflater = LayoutInflater
@@ -50,38 +50,45 @@ class SubGoalAdapter(
         private val subGoalSelectedListener: SubGoalListener,
         goalColor: GoalColor,
         floorHeight: Int
-    ) :
-        RecyclerView.ViewHolder(view.root) {
-        private var disposables = CompositeDisposable()
+    ) : RecyclerView.ViewHolder(view.root) {
 
         init {
-            view.txtSubgoalDescription.layoutParams.height = floorHeight
-            view.txtSubgoalDescription.setBackgroundResource(
-                when (goalColor) {
-                    GoalColor.BLUE -> R.color.skyscraper_blue
-                    GoalColor.YELLOW -> R.color.skyscraper_yellow
-                    GoalColor.RED -> R.color.skyscraper_red
-                    GoalColor.DARKGREEN -> R.color.skyscraper_darkgreen
-                    GoalColor.GREEN -> R.color.skyscraper_green
-                    else -> R.color.skyscraper_blue
-                }
-            )
-            view.txtSubgoalDescription.setTextColor(
-                if (goalColor == GoalColor.YELLOW)
-                    ContextCompat.getColor(view.txtSubgoalDescription.context, R.color.black)
-                else
-                    ContextCompat.getColor(view.txtSubgoalDescription.context, R.color.color_white)
-            )
-            view.txtSubgoalDescription.setOnClickListener {
-                subGoalSelectedListener.onSubGoalSelected(
-                    view.txtSubgoalDescription.tag.toString().toInt()
+            with(view.txtSubgoalDescription) {
+                layoutParams.height = floorHeight
+
+                setBackgroundResource(
+                    when (goalColor) {
+                        GoalColor.BLUE -> R.color.skyscraper_blue
+                        GoalColor.YELLOW -> R.color.skyscraper_yellow
+                        GoalColor.RED -> R.color.skyscraper_red
+                        GoalColor.DARKGREEN -> R.color.skyscraper_darkgreen
+                        GoalColor.GREEN -> R.color.skyscraper_green
+                        else -> R.color.skyscraper_blue
+                    }
                 )
+
+                setTextColor(
+                    if (goalColor == GoalColor.YELLOW)
+                        ContextCompat.getColor(view.txtSubgoalDescription.context, R.color.black)
+                    else
+                        ContextCompat.getColor(
+                            view.txtSubgoalDescription.context,
+                            R.color.color_white
+                        )
+                )
+                setOnClickListener {
+                    subGoalSelectedListener.onSubGoalSelected(
+                        view.txtSubgoalDescription.tag.toString().toInt()
+                    )
+                }
             }
         }
 
         fun bind(subGoal: SubGoal?, position: Int) {
-            view.txtSubgoalDescription.tag = position
-            view.txtSubgoalDescription.setText(subGoal?.description)
+            with(view.txtSubgoalDescription) {
+                tag = position
+                text = subGoal?.description
+            }
         }
     }
 }

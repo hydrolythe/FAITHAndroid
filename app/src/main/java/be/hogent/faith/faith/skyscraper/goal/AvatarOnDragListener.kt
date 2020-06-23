@@ -5,7 +5,6 @@ import android.view.View
 import android.widget.ImageView
 
 class AvatarOnDragListener(
-    private val avatarOnTouchListener: AvatarOnTouchListener,
     private val avatarDropped: AvatarDropped
 ) :
     View.OnDragListener {
