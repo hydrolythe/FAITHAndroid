@@ -35,14 +35,20 @@ class GoalViewModel(
     private val _goalSavedSuccessfully = SingleLiveEvent<Unit>()
     val goalSavedSuccessfully: LiveData<Unit> = _goalSavedSuccessfully
 
+    private val _onAvatarPlaceChanged = SingleLiveEvent<Unit>()
+    val onAvatarPlaceChanged: LiveData<Unit> = _onAvatarPlaceChanged
+
     private val _errorMessage = SingleLiveEvent<Int>()
     val errorMessage: LiveData<Int> = _errorMessage
 
     private val _isLoading = MutableLiveData<Boolean>().apply { value = false }
     val isLoading: LiveData<Boolean> = _isLoading
 
+    val numberOfFloorsUpperBound = 9
+
     init {
         goal.value = givenGoal
+        _onAvatarPlaceChanged.call()
     }
 
     fun onCancelButtonClicked() {
@@ -127,14 +133,20 @@ class GoalViewModel(
 
     fun setReachGoalWay(reachGoalWay: ReachGoalWay) {
         if (goal.value!!.chosenReachGoalWay != reachGoalWay) {
-            goal.value!!.chosenReachGoalWay = reachGoalWay
-            goal.value = goal.value
+            if (goal.value!!.currentPositionAvatar < 0 && reachGoalWay != ReachGoalWay.Stairs) {
+                _errorMessage.value = R.string.error_skyscraper_update_goalreach
+            } else {
+                goal.value!!.chosenReachGoalWay = reachGoalWay
+                goal.value = goal.value
+                _onAvatarPlaceChanged.call()
+            }
         }
     }
 
     fun setCompleted() {
         goal.value!!.toggleCompleted()
         goal.value = goal.value
+        _onAvatarPlaceChanged.call()
     }
 
     fun moveSubGoal(fromPosition: Int, toPosition: Int) {

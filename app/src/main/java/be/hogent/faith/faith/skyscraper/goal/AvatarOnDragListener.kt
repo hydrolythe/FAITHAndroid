@@ -16,7 +16,7 @@ class AvatarOnDragListener(
         if (startLocation != null && targetLocation != null && event.action == DragEvent.ACTION_DROP) {
             // if the tops are different
             if (startLocation.y != targetLocation.y) {
-                // targetLocation.setOnTouchListener(avatarOnTouchListener)
+                // tag contains the AvatarPosition
                 val position = targetLocation.tag.toString().toInt()
                 val extra = if (position % 2 != 0) targetLocation.height / 2 else 0
                 // top

@@ -282,6 +282,7 @@
     <string name="error_skyscraper_change_description_failed">Er ging iets fout bij het aanpassen van beschrijving van je doel.</string>
     <string name="error_skyscraper_max_number_of_goals_reached">Je kan maximum 5 actieve doelen hebben!</string>
     <string name="error_skyscraper_update_goal_failed">aanpassen van doel is mislukt</string>
+    <string name="error_skyscraper_update_goalreach">ga eerst naar een verdieping met de trap</string>
     <string name="lift">lift</string>
     <string name="subdoel_naam_verplicht">Geef eerst de naam in van het subdoel</string>
     <string name="beschrijving_actie">beschrijving actie</string>

@@ -44,8 +44,8 @@ import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 import java.util.UUID
+import kotlin.math.min
 
 private const val GOAL = "The goal to be shown"
 private const val THUMB_WIDTH = 24
@@ -147,11 +147,14 @@ class SkyscraperGoalFragment : Fragment() {
     }
 
     private fun startViewModelListeners() {
-        goalViewModel.goal.observe(this, Observer { goal ->
+        goalViewModel.onAvatarPlaceChanged.observe(this, Observer {
+            val goal = goalViewModel.goal.value!!
             skyscraper_roof_avatar.visibility = if (goal.isCompleted) View.VISIBLE else View.GONE
-            dragAvatar.visibility =
-                if (!goal.isCompleted && goal.chosenReachGoalWay == ReachGoalWay.Stairs) View.VISIBLE else View.GONE
-            calculatePositionAvatar()
+
+            if (!goal.isCompleted && goal.chosenReachGoalWay == ReachGoalWay.Stairs) {
+                dragAvatar.visibility = View.VISIBLE
+                calculatePositionAvatar()
+            } else dragAvatar.visibility = View.GONE
 
             skyscraper_elevator_seekbar.progress = goal.currentPositionAvatar
             skyscraper_elevator_seekbar.visibility =
@@ -161,9 +164,9 @@ class SkyscraperGoalFragment : Fragment() {
             skyscraper_rope_seekbar.visibility =
                 if (!goal.isCompleted && goal.chosenReachGoalWay == ReachGoalWay.Rope) View.VISIBLE else View.GONE
         })
+
         // Update adapter when event changes
         goalViewModel.actions.observe(this, Observer { actions ->
-            Timber.i("actions are passed to adapter")
             actionAdapter.submitList(actions)
             actionAdapter.notifyDataSetChanged()
         })
@@ -192,7 +195,6 @@ class SkyscraperGoalFragment : Fragment() {
         val targetLocation =
             skyscraper_create_goal.findViewWithTag<ImageView>(goalViewModel.goal.value!!.currentPositionAvatar.toString())
         targetLocation!!.post { // This code will run when view created and rendered on screen
-            //     targetLocation!!.setOnTouchListener(avatarOnTouchListener)
             val position = targetLocation.tag.toString().toInt()
             val extra = if (position % 2 != 0) targetLocation.height / 2 else 0
             dragAvatar.y = targetLocation.y + targetLocation.height - dragAvatar.height + extra
@@ -208,7 +210,6 @@ class SkyscraperGoalFragment : Fragment() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                Timber.i("tracking seekbar started")
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
@@ -220,7 +221,7 @@ class SkyscraperGoalFragment : Fragment() {
         // configuring the dropping places of the avatar
         binding.dragAvatar.setOnTouchListener(avatarOnTouchListener)
 
-        for (x in -2..9) {
+        for (x in -2..goalViewModel.numberOfFloorsUpperBound) {
             skyscraper_create_goal.findViewWithTag<ImageView>(x.toString())
                 ?.setOnDragListener(avatarOnDragListener)
         }
@@ -242,11 +243,10 @@ class SkyscraperGoalFragment : Fragment() {
             }
         }
         subgoalAdapter = SubGoalAdapter(
-            goalColor = goalViewModel.goal.value!!.goalColor,
-            onSubGoalSelectedListener = subgoalSelectedListener,
-            floorHeight = ((Resources.getSystem()
-                .displayMetrics.heightPixels * 0.49 - (100 * Resources.getSystem()
-                .displayMetrics.density)) / (SUBGOALS_UPPER_BOUND + 1)).toInt()
+            goalViewModel.goal.value!!.goalColor,
+            subgoalSelectedListener,
+            // calculates the width of a floor : hoogte scherm * 0.49 (skyscraper neemt 49% van de hoogte in). Di in pixels en moet omgezet worden naar dp, vandaar vermenigvuldig met density
+            ((Resources.getSystem().displayMetrics.heightPixels * 0.49 - (100 * Resources.getSystem().displayMetrics.density)) / (SUBGOALS_UPPER_BOUND + 1)).toInt()
         )
         val subGoalcallback: ItemTouchHelper.Callback =
             ItemTouchHelperCallback(subgoalAdapter, requireContext())
@@ -293,7 +293,7 @@ class SkyscraperGoalFragment : Fragment() {
         /* Set bitmap options to scale the image decode target */
         bmOptions.inJustDecodeBounds = false
         /* Figure out which way needs to be reduced less */
-        bmOptions.inSampleSize = Math.min(avatarWitdh / THUMB_WIDTH, avatarHeight / THUMB_HEIGHT)
+        bmOptions.inSampleSize = min(avatarWitdh / THUMB_WIDTH, avatarHeight / THUMB_HEIGHT)
         // scale the bitmap
         bitmap = BitmapFactory.decodeResource(resources, resID, bmOptions)
         // set the avatar on the roof and dragavatar for elevator
