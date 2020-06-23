@@ -36,11 +36,7 @@ class AddFilmToCinemaUseCase(
                 cinemaRepository.insertDetail(encryptedMovie, params.user)
                     .subscribeOn(subscriber)
                     .doOnComplete { Timber.i("Stored new film in db") }
-            }.andThen(
-                Completable
-                    .fromAction { params.cinema.addFilm(params.film) }
-                    .doOnComplete { Timber.i("Added film to cinema object") }
-            )
+            }
     }
 
     data class Params(val film: FilmDetail, val cinema: Cinema, val user: User)
