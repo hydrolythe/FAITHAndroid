@@ -243,7 +243,7 @@ val serviceModule = module {
     factory {
         CreateCinemaVideoUseCase(
             videoEncoder = VideoEncoder(),
-            loadFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
+            loadFileUseCase = get(named(CinemaNames.loadDetailUseCase)),
             thumbnailProvider = get(),
             observer = get()
         )
