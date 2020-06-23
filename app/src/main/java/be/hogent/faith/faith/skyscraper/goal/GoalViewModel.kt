@@ -129,9 +129,14 @@ class GoalViewModel(
 
     fun setReachGoalWay(reachGoalWay: ReachGoalWay) {
         if (goal.value!!.chosenReachGoalWay != reachGoalWay) {
-            goal.value!!.chosenReachGoalWay = reachGoalWay
-            goal.value = goal.value
-            _onAvatarPlaceChanged.call()
+            if (goal.value!!.currentPositionAvatar < 0 && reachGoalWay!= ReachGoalWay.Stairs){
+                _errorMessage.value = R.string.error_skyscraper_update_goalreach
+            }
+            else {
+                goal.value!!.chosenReachGoalWay = reachGoalWay
+                goal.value = goal.value
+                _onAvatarPlaceChanged.call()
+            }
         }
     }
 

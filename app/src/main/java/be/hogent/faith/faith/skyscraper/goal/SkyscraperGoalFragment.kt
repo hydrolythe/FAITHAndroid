@@ -118,7 +118,6 @@ class SkyscraperGoalFragment : Fragment() {
             }
         )
 
-        // TODO extract the panels
         skyscraper_panel.setImageResource(
             when (goal.goalColor) {
                 GoalColor.BLUE -> R.drawable.skyscraper_blue_panelbig
@@ -172,7 +171,6 @@ class SkyscraperGoalFragment : Fragment() {
 
         // Update adapter when event changes
         goalViewModel.actions.observe(this, Observer { actions ->
-            Timber.i("actions are passed to adapter")
             actionAdapter.submitList(actions)
             actionAdapter.notifyDataSetChanged()
         })
@@ -221,7 +219,6 @@ class SkyscraperGoalFragment : Fragment() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                Timber.i("tracking seekbar started")
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
