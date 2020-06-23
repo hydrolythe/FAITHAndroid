@@ -129,6 +129,9 @@ class CinemaCreateVideoFragment : Fragment(), DetailFragment<FilmDetail> {
         cinemaOverviewViewModel.filteredDetails.observe(viewLifecycleOwner, Observer {
             selectedDetailsAdapter!!.submitList(it)
         })
+        createVideoViewModel.errorMessage.observe(viewLifecycleOwner, Observer { errorMessageId ->
+            Toast.makeText(requireContext(), errorMessageId, Toast.LENGTH_SHORT).show()
+        })
 
         createVideoViewModel.getDetailMetaData.observe(viewLifecycleOwner, Observer {
             @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(
