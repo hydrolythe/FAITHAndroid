@@ -2,6 +2,7 @@ package be.hogent.faith.service.di
 
 import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.domain.models.Cinema
+import be.hogent.faith.domain.models.TreasureChest
 import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
 import be.hogent.faith.service.usecases.cinema.AddFilmToCinemaUseCase
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase
@@ -44,21 +45,36 @@ import org.koin.dsl.module
  * Don't forget to add any use case that you write here so it can be injected in the app module.
  */
 object BackpackNames {
-    const val repo = "BackpackRepository"
-    const val database = "BackpackDatabase"
-    const val encryptionService = "BackpackEncryptionService"
+    private const val name = "Backpack"
+    const val repo = "${name}Repository"
+    const val database = "${name}Database"
+    const val encryptionService = "${name}EncryptionService"
+    const val loadDetailUseCase = "${name}DetailUseCase"
+    const val saveDetailUseCase = "${name}SaveDetailUseCase"
+    const val deleteDetailUseCase = "${name}SaveDetailUseCase"
+    const val getDetailsUseCase = "${name}GetDetailsUseCase"
 }
 
 object CinemaNames {
-    const val repo = "CinemaRepository"
-    const val database = "CinemaDatabase"
-    const val encryptionService = "CinemaEncryptionService"
+    private const val name = "Cinema"
+    const val repo = "${name}Repository"
+    const val database = "${name}Database"
+    const val encryptionService = "${name}EncryptionService"
+    const val loadDetailUseCase = "${name}DetailUseCase"
+    const val saveDetailUseCase = "${name}SaveDetailUseCase"
+    const val deleteDetailUseCase = "${name}SaveDetailUseCase"
+    const val getDetailsUseCase = "${name}GetDetailsUseCase"
 }
 
 object TreasureChestNames {
-    const val repo = "TreasureChestRepository"
-    const val database = "TreasureChestDatabase"
-    const val encryptionService = "TreasureChestEncryptionService"
+    private const val name = "TreasureChest"
+    const val repo = "${name}Repository"
+    const val database = "${name}Database"
+    const val encryptionService = "${name}EncryptionService"
+    const val loadDetailUseCase = "${name}DetailUseCase"
+    const val saveDetailUseCase = "${name}SaveDetailUseCase"
+    const val deleteDetailUseCase = "${name}SaveDetailUseCase"
+    const val getDetailsUseCase = "${name}GetDetailsUseCase"
 }
 
 val serviceModule = module {
@@ -131,7 +147,7 @@ val serviceModule = module {
         )
     }
     factory { AddNewGoalUseCase(get(), get(), get()) }
-    factory<LoadDetailFileUseCase<Backpack>>(named("LoadBackpackDetailFileUseCase")) {
+    factory<LoadDetailFileUseCase<Backpack>>(named(BackpackNames.loadDetailUseCase)) {
         LoadDetailFileUseCase<Backpack>(
             storageRepo = get(),
             containerRepository = get(named(BackpackNames.repo)),
@@ -139,7 +155,15 @@ val serviceModule = module {
             observer = get()
         )
     }
-    factory<LoadDetailFileUseCase<Cinema>>(named("LoadCinemaDetailFileUseCase")) {
+    factory<LoadDetailFileUseCase<TreasureChest>>(named(TreasureChestNames.loadDetailUseCase)) {
+        LoadDetailFileUseCase<TreasureChest>(
+            storageRepo = get(),
+            containerRepository = get(named(TreasureChestNames.repo)),
+            detailContainerEncryptionService = get(named(TreasureChestNames.encryptionService)),
+            observer = get()
+        )
+    }
+    factory<LoadDetailFileUseCase<Cinema>>(named(CinemaNames.loadDetailUseCase)) {
         LoadDetailFileUseCase<Cinema>(
             storageRepo = get(),
             containerRepository = get(named(CinemaNames.repo)),
@@ -150,7 +174,7 @@ val serviceModule = module {
     factory {
         GetYoutubeVideosFromSearchUseCase(get())
     }
-    factory<SaveDetailsContainerDetailUseCase<Backpack>>(named("SaveBackpackDetailUseCase")) {
+    factory<SaveDetailsContainerDetailUseCase<Backpack>>(named(BackpackNames.saveDetailUseCase)) {
         SaveDetailsContainerDetailUseCase<Backpack>(
             detailContainerRepository = get(named(BackpackNames.repo)),
             detailContainerEncryptionService = get(named(BackpackNames.encryptionService)),
@@ -158,7 +182,15 @@ val serviceModule = module {
             observer = get()
         )
     }
-    factory<SaveDetailsContainerDetailUseCase<Cinema>>(named("SaveCinemaDetailUseCase")) {
+    factory<SaveDetailsContainerDetailUseCase<TreasureChest>>(named(TreasureChestNames.saveDetailUseCase)) {
+        SaveDetailsContainerDetailUseCase<TreasureChest>(
+            detailContainerRepository = get(named(TreasureChestNames.repo)),
+            detailContainerEncryptionService = get(named(TreasureChestNames.encryptionService)),
+            storageRepository = get(),
+            observer = get()
+        )
+    }
+    factory<SaveDetailsContainerDetailUseCase<Cinema>>(named(CinemaNames.saveDetailUseCase)) {
         SaveDetailsContainerDetailUseCase<Cinema>(
             detailContainerRepository = get(named(CinemaNames.repo)),
             detailContainerEncryptionService = get(named(CinemaNames.encryptionService)),
@@ -166,28 +198,42 @@ val serviceModule = module {
             observer = get()
         )
     }
-    factory<DeleteDetailsContainerDetailUseCase<Backpack>>(qualifier = named("DeleteBackpackDetailUseCase")) {
+    factory<DeleteDetailsContainerDetailUseCase<Backpack>>(qualifier = named(BackpackNames.deleteDetailUseCase)) {
         DeleteDetailsContainerDetailUseCase<Backpack>(
             backpackRepository = get(named(BackpackNames.repo)),
             fileStorageRepository = get(),
             observer = get()
         )
     }
-    factory<DeleteDetailsContainerDetailUseCase<Cinema>>(named("DeleteCinemaDetailUseCase")) {
+    factory<DeleteDetailsContainerDetailUseCase<TreasureChest>>(named(TreasureChestNames.deleteDetailUseCase)) {
+        DeleteDetailsContainerDetailUseCase<TreasureChest>(
+            backpackRepository = get(named(TreasureChestNames.repo)),
+            fileStorageRepository = get(),
+            observer = get()
+        )
+    }
+    factory<DeleteDetailsContainerDetailUseCase<Cinema>>(named(CinemaNames.deleteDetailUseCase)) {
         DeleteDetailsContainerDetailUseCase<Cinema>(
             backpackRepository = get(named(CinemaNames.repo)),
             fileStorageRepository = get(),
             observer = get()
         )
     }
-    factory<GetDetailsContainerDataUseCase<Backpack>>(named("GetBackpackDataUseCase")) {
+    factory<GetDetailsContainerDataUseCase<Backpack>>(named(BackpackNames.getDetailsUseCase)) {
         GetDetailsContainerDataUseCase<Backpack>(
             detailsContainerRepository = get(named(BackpackNames.repo)),
             detailContainerEncryptionService = get(named(BackpackNames.encryptionService)),
             observer = get()
         )
     }
-    factory<GetDetailsContainerDataUseCase<Cinema>>(named("GetCinemaDataUseCase")) {
+    factory<GetDetailsContainerDataUseCase<TreasureChest>>(named(TreasureChestNames.getDetailsUseCase)) {
+        GetDetailsContainerDataUseCase<TreasureChest>(
+            detailsContainerRepository = get(named(TreasureChestNames.repo)),
+            detailContainerEncryptionService = get(named(TreasureChestNames.encryptionService)),
+            observer = get()
+        )
+    }
+    factory<GetDetailsContainerDataUseCase<Cinema>>(named(CinemaNames.getDetailsUseCase)) {
         GetDetailsContainerDataUseCase<Cinema>(
             detailsContainerRepository = get(named(CinemaNames.repo)),
             detailContainerEncryptionService = get(named(CinemaNames.encryptionService)),
