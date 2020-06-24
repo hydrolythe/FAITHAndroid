@@ -18,7 +18,6 @@ class VerticalSeekBar : AppCompatSeekBar {
      * Standard constructor to be implemented for all views.
      *
      * @param context The Context the view is running in, through which it can access the current theme, resources, etc.
-     * @see android.view.View.View
      */
     constructor(context: Context?) : super(context) {}
 
@@ -27,7 +26,6 @@ class VerticalSeekBar : AppCompatSeekBar {
      *
      * @param context The Context the view is running in, through which it can access the current theme, resources, etc.
      * @param attrs The attributes of the XML tag that is inflating the view.
-     * @see android.view.View.View
      */
     constructor(context: Context?, attrs: AttributeSet?) : super(
         context,
@@ -42,7 +40,6 @@ class VerticalSeekBar : AppCompatSeekBar {
      * @param attrs The attributes of the XML tag that is inflating the view.
      * @param defStyle An attribute in the current theme that contains a reference to a style resource that supplies default
      * values for the view. Can be 0 to not look for defaults.
-     * @see android.view.View.View
      */
     constructor(
         context: Context?,
@@ -51,9 +48,6 @@ class VerticalSeekBar : AppCompatSeekBar {
     ) : super(context, attrs, defStyle) {
     }
 
-    /*
-	 * (non-Javadoc) ${see_to_overridden}
-	 */
     override fun onSizeChanged(
         width: Int,
         height: Int,

@@ -39,7 +39,7 @@ class SkyscraperActivity : AppCompatActivity(), SkyscraperViewHolder.SkyscraperN
     }
 
     override fun openGoalScreenFor(goal: Goal) {
-        replaceFragment(SkyscraperGoalFragment.newInstance(goal.uuid), R.id.fragment_container)
+        replaceFragment(SkyscraperGoalFragment.newInstance(goal), R.id.fragment_container)
     }
 
     override fun openSkyscrapersHistory() {

@@ -12,11 +12,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -24,6 +26,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentSkyscraperGoalBinding
+import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.domain.models.goals.GoalColor
 import be.hogent.faith.domain.models.goals.ReachGoalWay
 import be.hogent.faith.domain.models.goals.SUBGOALS_UPPER_BOUND
@@ -40,11 +43,11 @@ import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_goal_d
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_panel
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_roof_avatar
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_rope_seekbar
+import kotlinx.android.synthetic.main.skyscraper_subgoal_rv_item.txt_subgoal_description
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
-import java.util.UUID
 import kotlin.math.min
 
 private const val GOAL = "The goal to be shown"
@@ -63,7 +66,6 @@ class SkyscraperGoalFragment : Fragment() {
     private lateinit var avatarOnDragListener: AvatarOnDragListener
     private lateinit var avatarOnTouchListener: AvatarOnTouchListener
     private lateinit var avatarDropped: AvatarOnDragListener.AvatarDropped
-    private var dropPositions = emptyMap<Int, ImageView>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,9 +73,9 @@ class SkyscraperGoalFragment : Fragment() {
     }
 
     private fun loadExistingGoal() {
-        val goalUuid = arguments?.getSerializable(GOAL) as UUID
+        val goal = arguments?.getSerializable(GOAL) as Goal
         goalViewModel =
-            getViewModel { parametersOf(userViewModel.user.value!!.getGoal(goalUuid)!!) }
+            getViewModel { parametersOf(goal.copy()) }
     }
 
     override fun onCreateView(
@@ -165,10 +167,20 @@ class SkyscraperGoalFragment : Fragment() {
                 if (!goal.isCompleted && goal.chosenReachGoalWay == ReachGoalWay.Rope) View.VISIBLE else View.GONE
         })
 
+        goalViewModel.selectedSubGoal.observe(this, Observer { subgoal ->
+            if (subgoal?.second?.description.isNullOrEmpty()) {
+                txt_subgoal_description.requestFocus()
+            }
+        })
+
         // Update adapter when event changes
         goalViewModel.actions.observe(this, Observer { actions ->
             actionAdapter.submitList(actions)
             actionAdapter.notifyDataSetChanged()
+            /*   val targetView =
+                   binding.rvGoalActions.findViewHolderForAdapterPosition(actionAdapter.getItemCount() - 1)!!.itemView
+               targetView.getParent().requestChildFocus(targetView, targetView)
+               */
         })
 
         goalViewModel.subgoals.observe(this, Observer { subgoals ->
@@ -281,18 +293,18 @@ class SkyscraperGoalFragment : Fragment() {
     }
 
     private fun setThumb(avatarName: String) {
-        /* get the resource file */
+        // get the resource file
         val resID = avatarProvider.getAvatarDrawableStaanId(avatarName)
-        /* Get the size of the image */
+        // Get the size of the image
         val bmOptions = BitmapFactory.Options()
         bmOptions.inJustDecodeBounds = true
         @Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER") var bitmap =
             BitmapFactory.decodeResource(resources, resID, bmOptions)
         val avatarWitdh = bmOptions.outWidth
         val avatarHeight = bmOptions.outHeight
-        /* Set bitmap options to scale the image decode target */
+        // Set bitmap options to scale the image decode target
         bmOptions.inJustDecodeBounds = false
-        /* Figure out which way needs to be reduced less */
+        // Figure out which way needs to be reduced less
         bmOptions.inSampleSize = min(avatarWitdh / THUMB_WIDTH, avatarHeight / THUMB_HEIGHT)
         // scale the bitmap
         bitmap = BitmapFactory.decodeResource(resources, resID, bmOptions)
@@ -347,10 +359,10 @@ class SkyscraperGoalFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(uuid: UUID): SkyscraperGoalFragment {
+        fun newInstance(goal: Goal): SkyscraperGoalFragment {
             return SkyscraperGoalFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(GOAL, uuid)
+                    putSerializable(GOAL, goal)
                 }
             }
         }

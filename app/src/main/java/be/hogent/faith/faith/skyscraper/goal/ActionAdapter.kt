@@ -36,10 +36,12 @@ class ActionAdapter(private val actionListener: ActionListener) :
         holder.bind(getItem(position), position)
     }
 
-    fun updateAction(position: Int, description: String) {
-        if (getItem(position).description != description)
-            actionListener.onActionUpdated(position, description)
+    /*
+    override fun onViewDetachedFromWindow(holder: ActionViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        holder.unbind()
     }
+    */
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
         actionListener.onActionMove(fromPosition, toPosition)
@@ -54,7 +56,7 @@ class ActionAdapter(private val actionListener: ActionListener) :
         private val actionListener: ActionListener
     ) :
         RecyclerView.ViewHolder(view.root) {
-        // Niet vergeten de disposables te disposen bij unbinden (Zie SkyscraperAdapter)
+
         private var disposables = CompositeDisposable()
 
         fun bind(action: Action, position: Int) {
@@ -77,6 +79,7 @@ class ActionAdapter(private val actionListener: ActionListener) :
                     )
                 }
             )
+            if (action.description.isNullOrEmpty()) view.txtActionDescription.requestFocus()
             disposables.clear()
             disposables.add(view.txtActionDescription.afterTextChangeEvents()
                 .skip(1)
@@ -87,6 +90,10 @@ class ActionAdapter(private val actionListener: ActionListener) :
                     )
                 }
                 .subscribe())
+        }
+
+        fun unbind() {
+            disposables.dispose()
         }
     }
 }

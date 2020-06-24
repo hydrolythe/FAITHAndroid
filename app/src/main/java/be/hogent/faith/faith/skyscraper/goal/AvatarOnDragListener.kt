@@ -6,8 +6,7 @@ import android.widget.ImageView
 
 class AvatarOnDragListener(
     private val avatarDropped: AvatarDropped
-) :
-    View.OnDragListener {
+) : View.OnDragListener {
 
     override fun onDrag(v: View?, event: DragEvent): Boolean {
 

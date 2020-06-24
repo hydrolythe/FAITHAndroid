@@ -22,11 +22,10 @@ class GoalViewModel(
     val goal = MediatorLiveData<Goal>()
     val subgoals: LiveData<Map<Int, SubGoal>> = Transformations.map(goal) { it.subGoals }
 
-    // Waarom is dit een MediatorLiveData? Lijkt overbodig.
     val selectedSubGoal = MediatorLiveData<Pair<Int, SubGoal>?>()
     val actions: LiveData<List<Action>?> =
         Transformations.map(selectedSubGoal) { it?.second?.actions }
-    // Kan deze geen Transformations.map zijn van de selectedSubGoal?
+
     val selectedSubGoalDescription = MutableLiveData<String>()
 
     private val _cancelButtonClicked = SingleLiveEvent<Unit>()
@@ -95,9 +94,7 @@ class GoalViewModel(
     }
 
     fun removeAction(position: Int) {
-        selectedSubGoal.value?.let {
-            it.second.removeAction(it.second.actions.get(position))
-        }
+        selectedSubGoal.value?.second?.removeAction(position)
         selectedSubGoal.value = selectedSubGoal.value
     }
 
@@ -118,21 +115,31 @@ class GoalViewModel(
     }
 
     fun updateAction(position: Int, description: String) {
-        // If-condities vervangen door een private boolean functie die beschrijft wat gechecked wordt.
-        // Kan bij andere functies hier ook helpen.
-        if (selectedSubGoal.value!!.second.actions[position].description != description)
+        if (descriptionHasChanged(position, description))
             selectedSubGoal.value!!.second.updateAction(position, description)
     }
 
-    fun setPositionAvatar(position: Int) {
-        if (goal.value!!.currentPositionAvatar != position) {
+    private fun descriptionHasChanged(position: Int, description: String): Boolean {
+        return selectedSubGoal.value!!.second.actions[position].description != description
+    }
+
+    private fun positionAvatarHasChanged(position: Int): Boolean {
+        return (goal.value!!.currentPositionAvatar != position)
+    }
+
+    private fun reachGoalWayHasChanged(reachGoalWay: ReachGoalWay): Boolean {
+        return goal.value!!.chosenReachGoalWay != reachGoalWay
+    }
+
+        fun setPositionAvatar(position: Int) {
+        if (positionAvatarHasChanged(position)) {
             goal.value!!.currentPositionAvatar = position
             goal.value = goal.value
         }
     }
 
     fun setReachGoalWay(reachGoalWay: ReachGoalWay) {
-        if (goal.value!!.chosenReachGoalWay != reachGoalWay) {
+        if (reachGoalWayHasChanged(reachGoalWay)) {
             if (goal.value!!.currentPositionAvatar < 0 && reachGoalWay != ReachGoalWay.Stairs) {
                 _errorMessage.value = R.string.error_skyscraper_update_goalreach
             } else {
