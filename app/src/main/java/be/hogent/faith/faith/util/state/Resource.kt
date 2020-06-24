@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.state
+package be.hogent.faith.faith.util.state
 
 class Resource<out T> constructor(
     val status: ResourceState,
