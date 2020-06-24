@@ -16,7 +16,6 @@ import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File
-import java.util.Locale
 
 class ExternalFileViewModel(
     private val createPhotoDetailUseCase: CreatePhotoDetailUseCase,
@@ -33,17 +32,16 @@ class ExternalFileViewModel(
     private var _existingDetail: Detail? = null
 
     private val _savedDetail = MutableLiveData<Detail>()
-    override val savedDetail: LiveData<Detail>
-        get() = _savedDetail
+    override val savedDetail: LiveData<Detail> = _savedDetail
 
-    private var currentFile: File? = null
+    private var currentFileWithType: Pair<File, ExternalFileType>? = null
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
 
-    fun setCurrentFile(file: File) {
-        currentFile = file
+    fun setCurrentFile(file: File, fileType: ExternalFileType) {
+        currentFileWithType = Pair(file, fileType)
     }
 
     fun onCancelClicked() {
@@ -55,46 +53,41 @@ class ExternalFileViewModel(
     }
 
     override fun onSaveClicked() {
-        require(currentFile != null)
-        val file = File(currentFile!!.path)
-
-        when (file.path.toLowerCase(Locale.ROOT).substring(
-            file.path.toLowerCase(Locale.ROOT).lastIndexOf(".")
-        )) {
-            ".png" -> saveExternalPhoto()
-            ".mp4" -> saveExternalVideo()
-            else -> _errorMessage.postValue(R.string.unauthorized_file_type)
+        require(currentFileWithType != null)
+        when (currentFileWithType?.second) {
+            ExternalFileType.PICTURE -> saveExternalPhoto()
+            ExternalFileType.VIDEO -> saveExternalVideo()
         }
     }
 
     private fun saveExternalVideo() {
-        val params = CreateVideoDetailUseCase.Params(currentFile!!)
+        val params = CreateVideoDetailUseCase.Params(currentFileWithType!!.first)
         createVideoDetailUseCase.execute(params, object : DisposableSingleObserver<VideoDetail>() {
-                override fun onSuccess(createdDetail: VideoDetail) {
-                    _existingDetail = createdDetail
-                    _getDetailMetaData.call()
-                }
+            override fun onSuccess(createdDetail: VideoDetail) {
+                _existingDetail = createdDetail
+                _getDetailMetaData.call()
+            }
 
-                override fun onError(e: Throwable) {
-                    _errorMessage.postValue(R.string.create_video_failed)
-                    Timber.e(e)
-                }
-            })
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.create_video_failed)
+                Timber.e(e)
+            }
+        })
     }
 
     private fun saveExternalPhoto() {
-        val params = CreatePhotoDetailUseCase.Params(currentFile!!)
+        val params = CreatePhotoDetailUseCase.Params(currentFileWithType!!.first)
         createPhotoDetailUseCase.execute(params, object : DisposableSingleObserver<PhotoDetail>() {
-                override fun onSuccess(createdDetail: PhotoDetail) {
-                    _existingDetail = createdDetail
-                    _getDetailMetaData.call()
-                }
+            override fun onSuccess(createdDetail: PhotoDetail) {
+                _existingDetail = createdDetail
+                _getDetailMetaData.call()
+            }
 
-                override fun onError(e: Throwable) {
-                    _errorMessage.postValue(R.string.create_photo_failed)
-                    Timber.e(e)
-                }
-            })
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.create_photo_failed)
+                Timber.e(e)
+            }
+        })
     }
 
     override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
@@ -103,5 +96,9 @@ class ExternalFileViewModel(
             it.dateTime = dateTime
         }
         _savedDetail.value = _existingDetail
+    }
+
+    enum class ExternalFileType {
+        VIDEO, PICTURE
     }
 }
