@@ -288,4 +288,5 @@
     <string name="beschrijving_actie">beschrijving actie</string>
     <string name="beschrijving_doel">Beschrijving doel</string>
     <string name="beschrijving_subdoel">Beschrijving subdoel</string>
+    <string name="error_cinema_no_sources_selected">Je moet nog beelden selecteren voor je filmpje!</string>
 </resources>

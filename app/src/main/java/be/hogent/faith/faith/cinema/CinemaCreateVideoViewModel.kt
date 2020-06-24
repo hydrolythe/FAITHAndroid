@@ -75,11 +75,11 @@ class CinemaCreateVideoViewModel(
     }
 
     override fun onSaveClicked() {
-        _isRendering.postValue(true)
         if (_selectedDetails.value.isNullOrEmpty()) {
-            // TODO: add string
-            _errorMessage.value = 0
+            _errorMessage.value = R.string.error_cinema_no_sources_selected
+            return
         }
+        _isRendering.postValue(true)
         val params = CreateCinemaVideoUseCase.Params(
             _selectedDetails.value!!,
             cinema!!,

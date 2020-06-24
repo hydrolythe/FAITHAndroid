@@ -43,6 +43,9 @@ import be.hogent.faith.faith.treasureChest.TreasureChestViewModel
 import be.hogent.faith.faith.util.AndroidTempFileProvider
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.faith.videoplayer.CurrentVideoViewModel
+import be.hogent.faith.service.di.BackpackNames
+import be.hogent.faith.service.di.CinemaNames
+import be.hogent.faith.service.di.TreasureChestNames
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.storage.SecureCredentialsManager
@@ -73,29 +76,29 @@ val appModule = module(override = true) {
     viewModel { EventViewModel(get(), get(), get()) }
     viewModel { (backpack: Backpack) ->
         BackpackViewModel(
-            saveBackpackDetailUseCase = get(named("SaveBackpackDetailUseCase")),
-            deleteBackpackDetailUseCase = get(named("DeleteBackpackDetailUseCase")),
+            saveBackpackDetailUseCase = get(named(BackpackNames.saveDetailUseCase)),
+            deleteBackpackDetailUseCase = get(named(BackpackNames.deleteDetailUseCase)),
             backpack = backpack,
-            loadDetailFileUseCase = get(named("LoadBackpackDetailFileUseCase")),
-            getBackPackDataUseCase = get(named("GetBackpackDataUseCase"))
+            loadDetailFileUseCase = get(named(BackpackNames.loadDetailUseCase)),
+            getBackPackDataUseCase = get(named(BackpackNames.getDetailsUseCase))
         )
     }
     viewModel { (treasurechest: TreasureChest) ->
         TreasureChestViewModel(
-            saveDetailUseCase = get(named("SaveCinemaDetailUseCase")),
-            deleteDetailUseCase = get(named("DeleteCinemaDetailUseCase")),
-            loadDetailFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
+            saveDetailUseCase = get(named(TreasureChestNames.saveDetailUseCase)),
+            deleteDetailUseCase = get(named(TreasureChestNames.deleteDetailUseCase)),
+            loadDetailFileUseCase = get(named(TreasureChestNames.loadDetailUseCase)),
             treasureChest = treasurechest,
-            getDataUseCase = get(named("GetCinemaDataUseCase"))
+            getDataUseCase = get(named(TreasureChestNames.getDetailsUseCase))
         )
     }
     viewModel { (cinema: Cinema) ->
         CinemaOverviewViewModel(
-            saveBackpackDetailUseCase = get(named("SaveCinemaDetailUseCase")),
-            deleteBackpackDetailUseCase = get(named("DeleteCinemaDetailUseCase")),
-            loadDetailFileUseCase = get(named("LoadCinemaDetailFileUseCase")),
+            saveBackpackDetailUseCase = get(named(CinemaNames.saveDetailUseCase)),
+            deleteBackpackDetailUseCase = get(named(CinemaNames.deleteDetailUseCase)),
+            loadDetailFileUseCase = get(named(CinemaNames.loadDetailUseCase)),
             cinema = cinema,
-            getCinemaDataUseCase = get(named("GetCinemaDataUseCase")),
+            getCinemaDataUseCase = get(named(CinemaNames.getDetailsUseCase)),
             addFilmToCinemaUseCase = get()
         )
     }
