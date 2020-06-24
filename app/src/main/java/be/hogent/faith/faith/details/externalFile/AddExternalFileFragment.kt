@@ -4,7 +4,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -24,43 +23,41 @@ import be.hogent.faith.databinding.FragmentAddExternalFileBinding
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
+import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.util.TempFileProvider
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
-class AddExternalFileFragment : Fragment(), CoroutineScope {
+class AddExternalFileFragment : Fragment() , DetailFragment<Detail>{
 
     private lateinit var binding: FragmentAddExternalFileBinding
     private val externalFileViewModel: ExternalFileViewModel by viewModel()
 
-    private lateinit var detailFinishedListener: DetailFinishedListener
+    override lateinit var detailFinishedListener: DetailFinishedListener
     private var navigation: ExternalFileScreenNavigation? = null
     private val tempFileProvider by inject<TempFileProvider>()
     private lateinit var previewView: View
-    private lateinit var mJob: Job
-    override val coroutineContext: CoroutineContext
-        get() = mJob + Dispatchers.Main
+
+    private val disposables = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mJob = Job()
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_add_external_file, container, false)
 
@@ -92,18 +89,24 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
             navigation!!.backToEvent()
         })
         externalFileViewModel.savedDetail.observe(this, Observer { newDetail ->
-
             detailFinishedListener.onDetailFinished(newDetail)
             navigation?.backToEvent()
         })
         externalFileViewModel.getDetailMetaData.observe(this, Observer {
-            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(requireActivity(), PhotoDetail::class as KClass<Detail>)
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(
+                requireActivity(),
+                PhotoDetail::class as KClass<Detail>
+            )
             if (saveDialog == null)
                 externalFileViewModel.setDetailsMetaData()
             else {
-                saveDialog.setTargetFragment(this, 22) // in case of fragment to activity communication we do not need this line. But must write this i case of fragment to fragment communication
-                saveDialog.show(getParentFragmentManager(), null)
-            } })
+                saveDialog.setTargetFragment(
+                    this,
+                    22
+                ) // in case of fragment to activity communication we do not need this line. But must write this i case of fragment to fragment communication
+                saveDialog.show(parentFragmentManager, null)
+            }
+        })
         binding.btnRemoveFile.setOnClickListener {
             removeFile()
             selectFile()
@@ -115,44 +118,98 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == RESULT_OK) {
-            val uriToAdd = data!!.data
-
-            if (uriToAdd!!.toString().contains("image")) {
-                val localFile = saveAndPreviewImage(uriToAdd)
-                externalFileViewModel.setCurrentFile(localFile)
-            } else if (uriToAdd.toString().contains("video")) {
-                try {
-                    launch {
-                        // Zolang het niet omgezet werd naar een file zal een progressbard verschijnen i.p.v de save button
-                        binding.progress.visibility = View.VISIBLE
-                        binding.btnSaveFile.visibility = View.GONE
-                        val localVideoFile = writeVideoToLocalFile(uriToAdd)
-                        binding.progress.visibility = View.GONE
-                        binding.btnSaveFile.visibility = View.VISIBLE
-                        setUpVideoPreview(uriToAdd)
-                        externalFileViewModel.setCurrentFile(localVideoFile)
-                    }
-                } catch (e: IOException) {
-                    Timber.e(e)
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.error_save_external_video_failed),
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    navigation?.backToEvent()
+        if (resultCode == RESULT_OK && data!!.data != null) {
+            val uriToAdd = data.data
+            when (getMIMEType(uriToAdd)) {
+                "image/jpeg",
+                "image/bmp",
+                "image/jpg",
+                "image/png" -> {
+                    saveAndPreviewImage(uriToAdd)
+                }
+                "video/mpeg",
+                "video/mp4",
+                "video/3gpp",
+                "video/webm" -> {
+                    saveAndPreviewVideo(uriToAdd)
                 }
             }
-        } else {
-            navigation!!.backToEvent()
         }
     }
 
-    private fun setUpVideoPreview(uriToAdd: Uri?) {
+    private fun saveAndPreviewVideo(uriToAdd: Uri) {
+        Completable.fromCallable {
+            val localVideoFile = writeVideoToLocalFile(uriToAdd)
+            externalFileViewModel.setCurrentFile(localVideoFile)
+            Timber.i("Vid done")
+        }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                binding.progress.visibility = View.VISIBLE
+                binding.btnSaveFile.visibility = View.GONE
+                Timber.i("Vid subbed")
+            }
+            .doOnComplete {
+                binding.progress.visibility = View.GONE
+                binding.btnSaveFile.visibility = View.VISIBLE
+                previewVideo(uriToAdd)
+                Timber.i("Vid completed")
+            }.doOnError {
+                binding.progress.visibility = View.GONE
+                binding.btnSaveFile.visibility = View.VISIBLE
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.error_save_external_video_failed),
+                    Toast.LENGTH_SHORT
+                ).show()
+                Timber.i("Vid error")
+            }
+            .subscribe()
+//        disposables.add(disposable)
+    }
+
+    private fun saveAndPreviewImage(uriToAdd: Uri) {
+        Completable.fromAction {
+            val localImageFile = saveImage(uriToAdd)
+            externalFileViewModel.setCurrentFile(localImageFile)
+        }.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                binding.progress.visibility = View.VISIBLE
+                binding.btnSaveFile.visibility = View.GONE
+            }
+            .doOnComplete {
+                binding.progress.visibility = View.GONE
+                binding.btnSaveFile.visibility = View.VISIBLE
+                previewImage(uriToAdd)
+            }.doOnError {
+                binding.progress.visibility = View.GONE
+                binding.btnSaveFile.visibility = View.VISIBLE
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.error_save_external_image_failed),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            .subscribe()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (!disposables.isDisposed) disposables.dispose()
+    }
+
+    private fun getMIMEType(uri: Uri): String {
+        val contentResolver = requireContext().contentResolver
+        return contentResolver.getType(uri)
+
+    }
+
+    private fun previewVideo(videoUri: Uri) {
         val videoView = VideoView(requireContext())
         videoView.id = View.generateViewId()
-        videoView.setVideoURI(uriToAdd)
+        videoView.setVideoURI(videoUri)
 
         val mediaController = MediaController(requireContext())
         mediaController.setAnchorView(videoView)
@@ -160,62 +217,57 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
 
         binding.filePreviewContainer.addView(videoView)
         centerView(videoView)
-        videoView.layoutParams.height = 480
-        videoView.layoutParams.height = 640
+        videoView.layoutParams.height = 0
+        videoView.layoutParams.height = 0
         previewView = videoView
     }
 
-    private suspend fun writeVideoToLocalFile(uriToAdd: Uri): File {
-        val job = async(Dispatchers.Default) {
-            val inputStream: InputStream? =
-                requireContext().contentResolver.openInputStream(uriToAdd)
-            val outputStream: OutputStream = FileOutputStream(tempFileProvider.tempVideoFile)
-            val buf = ByteArray(4096)
-            var len: Int
+    private fun writeVideoToLocalFile(uriToAdd: Uri): File {
+        val inputStream: InputStream? =
+            requireContext().contentResolver.openInputStream(uriToAdd)
+        val outputStream: OutputStream = FileOutputStream(tempFileProvider.tempVideoFile)
+        val buf = ByteArray(4096)
+        var len: Int
 
-            while (inputStream!!.read(buf).also { len = it } > 0) {
-                outputStream.write(buf, 0, len)
-            }
-            outputStream.close()
-            inputStream.close()
+        while (inputStream!!.read(buf).also { len = it } > 0) {
+            outputStream.write(buf, 0, len)
         }
-        job.await()
+        outputStream.close()
+        inputStream.close()
+        Timber.i("Vid written")
         return tempFileProvider.tempVideoFile
     }
 
-    private fun saveAndPreviewImage(uriToAdd: Uri?): File {
-        // Load URi into an imageview
-        val imgView = ImageView(requireContext())
-        imgView.id = View.generateViewId()
-        imgView.setImageURI(uriToAdd)
-        binding.filePreviewContainer.addView(imgView)
-        centerView(imgView)
-        previewView = imgView
-
-        // Use the imageview as source for a drawable we can write to a file
-        val drawable = imgView.drawable
-        val bitmap = (drawable as BitmapDrawable).bitmap
-        val localImageFile = tempFileProvider.tempPhotoFile
+    private fun saveImage(imageURI: Uri): File {
+        val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageURI);
         try {
-            val stream: OutputStream = FileOutputStream(localImageFile)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
-            stream.flush()
-            stream.close()
+            FileOutputStream(tempFileProvider.tempPhotoFile).use { outputStream ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            }
         } catch (e: IOException) {
-            e.printStackTrace()
+            Timber.e(e)
             Toast.makeText(context, getString(R.string.error_save_photo_failed), Toast.LENGTH_SHORT)
                 .show()
         }
-        return localImageFile
+        return tempFileProvider.tempPhotoFile
+    }
+
+    private fun previewImage(imageURI: Uri) {
+        val imgView = ImageView(requireContext())
+        imgView.id = View.generateViewId()
+        imgView.setImageURI(imageURI)
+        binding.filePreviewContainer.addView(imgView)
+        centerView(imgView)
+        previewView = imgView
     }
 
     private fun centerView(view: View) {
         val set = ConstraintSet()
         set.clone(binding.filePreviewContainer)
-        set.connect(view.id, ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT, 0)
-        set.connect(view.id, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT, 0)
-        set.connect(view.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP, 0)
-        set.connect(view.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM, 0)
+        set.connect(view.id, ConstraintSet.END, binding.btnSaveFile.id, ConstraintSet.START, 32)
+        set.connect(view.id, ConstraintSet.START, binding.btnCancel.id, ConstraintSet.END, 32)
+        set.connect(view.id, ConstraintSet.TOP, binding.btnCancel.id, ConstraintSet.BOTTOM, 32)
+        set.connect(view.id, ConstraintSet.BOTTOM, binding.btnRemoveFile.id, ConstraintSet.TOP, 32)
         set.applyTo(binding.filePreviewContainer)
     }
 
@@ -236,4 +288,9 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
     interface ExternalFileScreenNavigation {
         fun backToEvent()
     }
+
+    override fun onFinishSaveDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        externalFileViewModel.setDetailsMetaData(title, dateTime)
+    }
+
 }

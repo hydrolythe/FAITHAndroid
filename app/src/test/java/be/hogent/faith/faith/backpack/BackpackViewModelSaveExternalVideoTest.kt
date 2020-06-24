@@ -49,7 +49,7 @@ class BackpackViewModelSaveExternalVideoTest {
     fun backpackViewModel_saveExternalVideo_callsUseCase() {
         val params = slot<SaveDetailsContainerDetailUseCase.Params>()
 
-        viewModel.saveExternalVideoDetail(user, detail)
+        viewModel.saveVideoDetail(user, detail)
         verify { saveExternalVideoUseCase.execute(capture(params), any()) }
 
         assertEquals(detail, params.captured.detail)
@@ -65,7 +65,7 @@ class BackpackViewModelSaveExternalVideoTest {
         viewModel.infoMessage.observeForever(successObserver)
 
         // Act
-        viewModel.saveExternalVideoDetail(user, detail)
+        viewModel.saveVideoDetail(user, detail)
         verify { saveExternalVideoUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onComplete()
 
@@ -84,7 +84,7 @@ class BackpackViewModelSaveExternalVideoTest {
         viewModel.infoMessage.observeForever(successObserver)
 
         // Act
-        viewModel.saveExternalVideoDetail(user, detail)
+        viewModel.saveVideoDetail(user, detail)
         verify { saveExternalVideoUseCase.execute(any(), capture(useCaseObserver)) }
         useCaseObserver.captured.onError(mockk(relaxed = true))
 

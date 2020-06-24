@@ -271,7 +271,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
             is TextDetail -> saveTextDetail(user, detail)
             is PhotoDetail -> savePhotoDetail(user, detail)
             is AudioDetail -> saveAudioDetail(user, detail)
-            is VideoDetail -> saveExternalVideoDetail(user, detail)
+            is VideoDetail -> saveVideoDetail(user, detail)
             is YoutubeVideoDetail -> saveYoutubeDetail(user, detail)
         }
         _currentDetail.postValue(null)
@@ -351,7 +351,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
         })
     }
 
-    fun saveExternalVideoDetail(user: User, detail: VideoDetail) {
+    fun saveVideoDetail(user: User, detail: VideoDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
