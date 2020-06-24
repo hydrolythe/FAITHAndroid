@@ -37,10 +37,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.io.FileOutputStream
-import java.io.InputStream
 import java.io.OutputStream
-import java.nio.ByteBuffer
-import java.nio.channels.FileChannel
 import kotlin.reflect.KClass
 
 class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
@@ -199,7 +196,6 @@ class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
     private fun getMIMEType(uri: Uri): String {
         val contentResolver = requireContext().contentResolver
         return contentResolver.getType(uri)
-
     }
 
     private fun previewVideo(videoUri: Uri) {
@@ -234,7 +230,7 @@ class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
     }
 
     private fun saveImage(imageURI: Uri): File {
-        val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageURI);
+        val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageURI)
         val destinationFile = tempFileProvider.tempPhotoFile
         FileOutputStream(destinationFile).use { outputStream ->
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
@@ -282,5 +278,4 @@ class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
     override fun onFinishSaveDetailsMetaData(title: String, dateTime: LocalDateTime) {
         externalFileViewModel.setDetailsMetaData(title, dateTime)
     }
-
 }
