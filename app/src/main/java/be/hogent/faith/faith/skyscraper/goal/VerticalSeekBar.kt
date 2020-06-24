@@ -19,7 +19,7 @@ class VerticalSeekBar : AppCompatSeekBar {
      *
      * @param context The Context the view is running in, through which it can access the current theme, resources, etc.
      */
-    constructor(context: Context?) : super(context) {}
+    constructor(context: Context?) : super(context)
 
     /**
      * Standard constructor to be implemented for all views.
@@ -30,8 +30,7 @@ class VerticalSeekBar : AppCompatSeekBar {
     constructor(context: Context?, attrs: AttributeSet?) : super(
         context,
         attrs
-    ) {
-    }
+    )
 
     /**
      * Standard constructor to be implemented for all views.
@@ -45,8 +44,7 @@ class VerticalSeekBar : AppCompatSeekBar {
         context: Context?,
         attrs: AttributeSet?,
         defStyle: Int
-    ) : super(context, attrs, defStyle) {
-    }
+    ) : super(context, attrs, defStyle)
 
     override fun onSizeChanged(
         width: Int,

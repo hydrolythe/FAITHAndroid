@@ -94,7 +94,9 @@ data class Goal(
             it.isCompleted = this.isCompleted
             it.currentPositionAvatar = this.currentPositionAvatar
         }
-        subGoals.forEach { goal.addSubGoal(it.value.copy(), it.key) }
+        subGoals.forEach { subgoal ->
+            goal.addSubGoal(subgoal.value.copy(), subgoal.key)
+        }
         return goal
     }
 }

@@ -54,7 +54,7 @@ class EventsAdapter(private val eventListener: EventListener) :
     }
 
     inner class ViewHolder(val itemBinding: LibraryRvItemBinding) :
-        RecyclerView.ViewHolder(itemBinding.getRoot()) {
+        RecyclerView.ViewHolder(itemBinding.root) {
 
         fun bind(event: Event, showDelete: Boolean) {
             itemBinding.lblTitle.text =

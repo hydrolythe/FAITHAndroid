@@ -102,7 +102,7 @@ class AddExternalFileFragment : Fragment(), CoroutineScope {
                 externalFileViewModel.setDetailsMetaData()
             else {
                 saveDialog.setTargetFragment(this, 22) // in case of fragment to activity communication we do not need this line. But must write this i case of fragment to fragment communication
-                saveDialog.show(getParentFragmentManager(), null)
+                saveDialog.show(parentFragmentManager, null)
             } })
         binding.btnRemoveFile.setOnClickListener {
             removeFile()

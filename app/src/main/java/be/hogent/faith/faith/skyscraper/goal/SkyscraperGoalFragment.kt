@@ -61,9 +61,6 @@ class SkyscraperGoalFragment : Fragment() {
     private lateinit var actionAdapter: ActionAdapter
     private lateinit var subgoalAdapter: SubGoalAdapter
     private val avatarProvider: AvatarProvider by inject()
-    private lateinit var avatarOnDragListener: AvatarOnDragListener
-    private lateinit var avatarOnTouchListener: AvatarOnTouchListener
-    private lateinit var avatarDropped: AvatarOnDragListener.AvatarDropped
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,13 +81,6 @@ class SkyscraperGoalFragment : Fragment() {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_skyscraper_goal, container, false)
         binding.lifecycleOwner = this
-        avatarDropped = object : AvatarOnDragListener.AvatarDropped {
-            override fun onAvatarDropped(floor: Int) {
-                goalViewModel.setPositionAvatar(floor)
-            }
-        }
-        avatarOnTouchListener = AvatarOnTouchListener()
-        avatarOnDragListener = AvatarOnDragListener(avatarDropped)
         binding.goalViewModel = goalViewModel
         return binding.root
     }
@@ -175,14 +165,10 @@ class SkyscraperGoalFragment : Fragment() {
         goalViewModel.actions.observe(this, Observer { actions ->
             actionAdapter.submitList(actions)
             actionAdapter.notifyDataSetChanged()
-            /*   val targetView =
-                   binding.rvGoalActions.findViewHolderForAdapterPosition(actionAdapter.getItemCount() - 1)!!.itemView
-               targetView.getParent().requestChildFocus(targetView, targetView)
-               */
         })
 
         goalViewModel.subgoals.observe(this, Observer { subgoals ->
-            val subgoalsArray = Array<SubGoal>(SUBGOALS_UPPER_BOUND + 1) { _ -> SubGoal("") }
+            val subgoalsArray = Array(SUBGOALS_UPPER_BOUND + 1) { SubGoal("") }
             subgoals.entries.forEach { subgoalsArray[it.key] = it.value }
             subgoalAdapter.submitList(subgoalsArray.toList())
             subgoalAdapter.notifyDataSetChanged()
@@ -229,11 +215,15 @@ class SkyscraperGoalFragment : Fragment() {
         skyscraper_rope_seekbar.setOnSeekBarChangeListener(seekbarChangeListener)
 
         // configuring the dropping places of the avatar
-        binding.dragAvatar.setOnTouchListener(avatarOnTouchListener)
+        binding.dragAvatar.setOnTouchListener(AvatarOnTouchListener())
 
         for (x in -2..goalViewModel.numberOfFloorsUpperBound) {
             skyscraper_create_goal.findViewWithTag<ImageView>(x.toString())
-                ?.setOnDragListener(avatarOnDragListener)
+                ?.setOnDragListener(AvatarOnDragListener(object : AvatarOnDragListener.AvatarDroppedListener {
+                    override fun onAvatarDropped(floor: Int) {
+                        goalViewModel.setPositionAvatar(floor)
+                    }
+                }))
         }
     }
 

@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.ImageView
 
 class AvatarOnDragListener(
-    private val avatarDropped: AvatarDropped
+    private val avatarDroppedListener: AvatarDroppedListener
 ) : View.OnDragListener {
 
     override fun onDrag(v: View?, event: DragEvent): Boolean {
@@ -24,13 +24,13 @@ class AvatarOnDragListener(
                 // left
                 startLocation.x =
                     targetLocation.x + (targetLocation.width / 2 - startLocation.width / 2).toFloat()
-                avatarDropped.onAvatarDropped(targetLocation.tag.toString().toInt())
+                avatarDroppedListener.onAvatarDropped(targetLocation.tag.toString().toInt())
             }
         }
         return true
     }
 
-    interface AvatarDropped {
+    interface AvatarDroppedListener {
         fun onAvatarDropped(floor: Int)
     }
 }

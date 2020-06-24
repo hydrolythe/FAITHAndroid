@@ -12,7 +12,6 @@ import be.hogent.faith.databinding.SkyscraperActionRvItemBinding
 import be.hogent.faith.domain.models.goals.Action
 import be.hogent.faith.domain.models.goals.ActionStatus
 import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
 
 class ActionAdapter(private val actionListener: ActionListener) :
@@ -36,13 +35,6 @@ class ActionAdapter(private val actionListener: ActionListener) :
         holder.bind(getItem(position), position)
     }
 
-    /*
-    override fun onViewDetachedFromWindow(holder: ActionViewHolder) {
-        super.onViewDetachedFromWindow(holder)
-        holder.unbind()
-    }
-    */
-
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
         actionListener.onActionMove(fromPosition, toPosition)
     }
@@ -56,8 +48,6 @@ class ActionAdapter(private val actionListener: ActionListener) :
         private val actionListener: ActionListener
     ) :
         RecyclerView.ViewHolder(view.root) {
-
-        private var disposables = CompositeDisposable()
 
         fun bind(action: Action, position: Int) {
             view.txtActionDescription.tag = position
@@ -80,8 +70,7 @@ class ActionAdapter(private val actionListener: ActionListener) :
                 }
             )
             if (action.description.isNullOrEmpty()) view.txtActionDescription.requestFocus()
-            disposables.clear()
-            disposables.add(view.txtActionDescription.afterTextChangeEvents()
+            view.txtActionDescription.afterTextChangeEvents()
                 .skip(1)
                 .debounce(1, TimeUnit.SECONDS)
                 .map {
@@ -89,11 +78,7 @@ class ActionAdapter(private val actionListener: ActionListener) :
                         view.txtActionDescription.tag.toString().toInt(), it.editable.toString()
                     )
                 }
-                .subscribe())
-        }
-
-        fun unbind() {
-            disposables.dispose()
+                .subscribe()
         }
     }
 }
