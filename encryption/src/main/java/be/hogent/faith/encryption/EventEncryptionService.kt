@@ -20,7 +20,7 @@ import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 
 /**
- * @param keyGenerator will be used to generate the DEK that will be used when encrypting the [EncryptedEventEntity].
+ * @param keyGenerator will be used to generate the DEK that will be used when encrypting the EncryptedEventEntity
  * @param keyEncrypter will be used to do the encrypting with the DEK
  */
 class EventEncryptionService(
@@ -80,6 +80,7 @@ class EventEncryptionService(
                     dateTime = encrypt(event.dateTime.toString()),
                     title = encrypt(event.title!!),
                     emotionAvatar = event.emotionAvatar,
+                    emotionAvatarThumbnail = event.emotionAvatarThumbnail?.let { encrypt(it) },
                     notes = event.notes?.let { encrypt(it) },
                     uuid = event.uuid,
                     encryptedDEK = encryptedDek,
@@ -116,6 +117,7 @@ class EventEncryptionService(
                         dateTime = LocalDateTime.parse(decrypt(encryptedEvent.dateTime)),
                         title = encryptedEvent.title.let { decrypt(it) },
                         emotionAvatar = encryptedEvent.emotionAvatar,
+                        emotionAvatarThumbnail = encryptedEvent.emotionAvatarThumbnail?.let { decrypt(it) },
                         notes = encryptedEvent.notes?.let { decrypt(it) },
                         uuid = encryptedEvent.uuid
                     ).apply {

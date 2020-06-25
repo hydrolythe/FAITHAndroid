@@ -16,6 +16,7 @@ import be.hogent.faith.faith.details.drawing.create.DrawFragment
 import be.hogent.faith.faith.details.externalFile.AddExternalFileFragment
 import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
 import be.hogent.faith.faith.details.text.create.TextDetailFragment
+import be.hogent.faith.faith.details.video.view.ViewVideoFragment
 import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailFragment
 import be.hogent.faith.faith.details.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.di.KoinModules
@@ -34,7 +35,8 @@ abstract class DetailsContainerActivity<T : DetailsContainer> : AppCompatActivit
     AddExternalFileFragment.ExternalFileScreenNavigation,
     DeleteDetailDialog.DeleteDetailDialogListener,
     YoutubeVideoDetailFragment.YoutubeVideoDetailScreenNavigation,
-    ViewYoutubeVideoFragment.ViewYoutubeVideoNavigation {
+    ViewYoutubeVideoFragment.ViewYoutubeVideoNavigation,
+    ViewVideoFragment.ViewExternalVideoNavigation {
 
     protected val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     abstract val detailsContainerViewModel: DetailsContainerViewModel<T>

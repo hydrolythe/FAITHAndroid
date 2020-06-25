@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarItemAdapter.OnAvatarClickListener
-import be.hogent.faith.faith.state.Resource
-import be.hogent.faith.faith.state.ResourceState
+import be.hogent.faith.faith.util.state.Resource
+import be.hogent.faith.faith.util.state.ResourceState
 import kotlinx.android.synthetic.main.fragment_login.progress
 import kotlinx.android.synthetic.main.fragment_register_avatar.avatar_rv_avatar
 import kotlinx.android.synthetic.main.fragment_register_avatar.btn_register_skincolor_blank

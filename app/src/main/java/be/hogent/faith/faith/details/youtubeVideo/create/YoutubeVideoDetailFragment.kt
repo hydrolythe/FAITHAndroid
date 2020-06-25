@@ -149,7 +149,7 @@ class YoutubeVideoDetailFragment : FaithVideoPlayerFragment(), DetailFragment<Yo
             if (saveDialog != null) {
                 stopPlayer()
                 saveDialog.setTargetFragment(this, 22)
-                saveDialog.show(getParentFragmentManager(), null)
+                saveDialog.show(parentFragmentManager, null)
             }
         })
 

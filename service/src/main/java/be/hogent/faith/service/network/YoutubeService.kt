@@ -61,7 +61,7 @@ fun provideRetrofit(): Retrofit {
         .build()
 }
 
-class YoutubeConfig() {
+class YoutubeConfig {
 
     private val BASE_URL = "https://www.googleapis.com/youtube/v3/"
 

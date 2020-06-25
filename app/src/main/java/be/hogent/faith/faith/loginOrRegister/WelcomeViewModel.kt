@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.faith.state.Resource
-import be.hogent.faith.faith.state.ResourceState
+import be.hogent.faith.faith.util.state.Resource
+import be.hogent.faith.faith.util.state.ResourceState
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.repositories.InvalidCredentialsException
 import be.hogent.faith.service.repositories.NetworkError

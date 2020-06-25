@@ -1,5 +1,6 @@
 package be.hogent.faith.service.usecases
 
+import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.service.encryption.IEventEncryptionService
@@ -7,6 +8,7 @@ import be.hogent.faith.service.repositories.IEventRepository
 import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.service.usecases.util.EncryptedEventFactory
+import be.hogent.faith.util.ThumbnailProvider
 import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
@@ -22,6 +24,7 @@ class SaveEventUseCaseTest {
     private val eventEncryptionService: IEventEncryptionService = mockk(relaxed = true)
     private val filesStorageRepository: IFileStorageRepository = mockk(relaxed = true)
     private val eventRepository: IEventRepository = mockk(relaxed = true)
+    private val thumbnailProvider: ThumbnailProvider = mockk(relaxed = true)
     private lateinit var saveEventUseCase: SaveEventUseCase
 
     private lateinit var event: Event
@@ -38,12 +41,14 @@ class SaveEventUseCaseTest {
                 eventEncryptionService,
                 filesStorageRepository,
                 eventRepository,
+                thumbnailProvider,
                 mockk()
             )
         every { eventEncryptionService.encrypt(event) } returns Single.just(encryptedEvent)
         every { filesStorageRepository.saveEventFiles(encryptedEvent) } returns
                 Single.just(encryptedEvent)
         every { eventRepository.insert(encryptedEvent) } returns Completable.complete()
+        every { thumbnailProvider.getBase64EncodedThumbnail(any<Bitmap>()) } returns "b64encThumb"
     }
 
     @Test

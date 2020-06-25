@@ -53,7 +53,7 @@ class SkyscraperViewHolder(
             GoalColor.RED -> R.drawable.skyscraper_red_base
             GoalColor.YELLOW -> R.drawable.skyscraper_yellow_base
             GoalColor.BLUE -> R.drawable.skyscraper_blue_base
-            GoalColor.PURPLE -> R.drawable.skyscraper_darkgreen_base
+            GoalColor.DARKGREEN -> R.drawable.skyscraper_darkgreen_base
         }
         val panelDrawable = when (goal.goalColor) {
             GoalColor.GREEN -> R.drawable.skyscraper_green_panel
@@ -61,7 +61,7 @@ class SkyscraperViewHolder(
             GoalColor.RED -> R.drawable.skyscraper_blue_panel
             GoalColor.YELLOW -> R.drawable.skyscraper_yellow_panel
             GoalColor.BLUE -> R.drawable.skyscraper_blue_panel
-            GoalColor.PURPLE -> R.drawable.skyscraper_darkgreen_panel
+            GoalColor.DARKGREEN -> R.drawable.skyscraper_darkgreen_panel
         }
 
         view.skyscraper_base.setImageResource(baseDrawable)

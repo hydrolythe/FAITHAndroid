@@ -29,6 +29,7 @@ class EventMapperTest {
         dateTime = "encrypted datetime",
         title = "encrypted title",
         emotionAvatar = DataFactory.randomFile(),
+        emotionAvatarThumbnail = "encrypted thumbnail",
         notes = "encrypted notes",
         uuid = DataFactory.randomUUID(),
         details = listOf(encryptedDetail),
@@ -39,6 +40,7 @@ class EventMapperTest {
         dateTime = "encrypted datetime",
         title = "encrypted title",
         emotionAvatar = DataFactory.randomFile(),
+        emotionAvatarThumbnail = "encrypted thumbnail",
         notes = "encrypted notes",
         uuid = DataFactory.randomUUID(),
         details = emptyList(),
@@ -79,6 +81,7 @@ class EventMapperTest {
         assertEquals(entity.uuid, model.uuid.toString())
         assertEquals(entity.dateTime, model.dateTime)
         assertEquals(entity.title, model.title)
+        assertEquals(entity.emotionAvatarThumbnail, model.emotionAvatarThumbnail)
         assertEquals(
             entity.emotionAvatar,
             model.emotionAvatar?.let { FileConverter().toString(it) })

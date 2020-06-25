@@ -1,7 +1,9 @@
 package be.hogent.faith.domain.models.goals
 
 import org.threeten.bp.LocalDateTime
+import java.io.Serializable
 import java.util.UUID
+import kotlin.NoSuchElementException
 
 /**
  * -1 indicates the basement
@@ -9,12 +11,12 @@ import java.util.UUID
 private const val SUBGOALS_LOWER_BOUND = -1
 
 // There are 10 floors, including the ground floor, making 9 the top floor.
-private const val SUBGOALS_UPPER_BOUND = 9
+const val SUBGOALS_UPPER_BOUND = 9
 private const val DESCRIPTION_MAX_LENGTH = 30
 
 // TODO change to value of the colors
 enum class GoalColor(val value: Int) {
-    RED(0), GREEN(1), YELLOW(2), BLUE(3), PURPLE(4)
+    RED(0), GREEN(1), YELLOW(2), BLUE(3), DARKGREEN(4)
 }
 
 /**
@@ -28,7 +30,7 @@ enum class ReachGoalWay {
 data class Goal(
     val goalColor: GoalColor,
     val uuid: UUID = UUID.randomUUID()
-) {
+) : Serializable {
     var dateTime: LocalDateTime = LocalDateTime.now()
 
     var isCompleted: Boolean = false
@@ -69,7 +71,33 @@ data class Goal(
         }
     }
 
-    internal fun toggleCompleted() {
+    fun changeFloorSubGoal(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                swap(i)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                swap(i - 1)
+            }
+        }
+    }
+
+    private fun swap(i: Int) {
+        val temp: SubGoal? = _subGoals[i]
+        if (_subGoals[i + 1] != null) {
+            _subGoals[i] = _subGoals[i + 1]!!
+        } else {
+            _subGoals.remove(i)
+        }
+        if (temp != null) {
+            _subGoals[i + 1] = temp
+        } else {
+            _subGoals.remove(i + 1)
+        }
+    }
+
+    fun toggleCompleted() {
         isCompleted = !isCompleted
     }
 
@@ -84,5 +112,18 @@ data class Goal(
             }
         }
         throw NoSuchElementException()
+    }
+
+    fun copy(): Goal {
+        val goal = Goal(this.goalColor, this.uuid).also {
+            it.dateTime = this.dateTime
+            it.chosenReachGoalWay = this.chosenReachGoalWay
+            it.isCompleted = this.isCompleted
+            it.currentPositionAvatar = this.currentPositionAvatar
+        }
+        subGoals.forEach { subgoal ->
+            goal.addSubGoal(subgoal.value.copy(), subgoal.key)
+        }
+        return goal
     }
 }

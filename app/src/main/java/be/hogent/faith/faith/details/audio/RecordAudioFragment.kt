@@ -150,7 +150,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
                 audioDetailViewModel.setDetailsMetaData()
             else {
                 saveDialog.setTargetFragment(this, 22)
-                saveDialog.show(getParentFragmentManager(), null)
+                saveDialog.show(parentFragmentManager, null)
             } })
     }
 

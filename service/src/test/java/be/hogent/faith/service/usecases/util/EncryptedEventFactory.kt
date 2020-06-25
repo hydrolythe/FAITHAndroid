@@ -11,6 +11,7 @@ object EncryptedEventFactory {
             dateTime = DataFactory.randomDateTime().toString(),
             title = DataFactory.randomString(),
             emotionAvatar = if (hasEmotionAvatar) DataFactory.randomFile() else null,
+            emotionAvatarThumbnail = DataFactory.randomString(),
             notes = DataFactory.randomString(),
             uuid = DataFactory.randomUUID(),
             encryptedStreamingDEK = DataFactory.randomString(),

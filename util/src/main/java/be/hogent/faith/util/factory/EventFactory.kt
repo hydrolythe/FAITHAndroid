@@ -9,6 +9,7 @@ object EventFactory {
             dateTime = DataFactory.randomDateTime(),
             title = DataFactory.randomString(),
             emotionAvatar = if (hasEmotionAvatar) DataFactory.randomFile() else null,
+            emotionAvatarThumbnail = if (hasEmotionAvatar) DataFactory.randomString() else null,
             notes = DataFactory.randomString(),
             uuid = DataFactory.randomUUID()
         )
