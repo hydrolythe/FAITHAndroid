@@ -31,6 +31,14 @@ data class SubGoal(
         _actions[position].description = description
     }
 
+    fun updateActionStatus(position: Int) {
+        _actions[position].currentStatus = when (_actions[position].currentStatus) {
+            ActionStatus.ACTIVE -> ActionStatus.NON_ACTIVE
+            ActionStatus.NON_ACTIVE -> ActionStatus.NEUTRAL
+            ActionStatus.NEUTRAL -> ActionStatus.ACTIVE
+        }
+    }
+
     fun updateActionPosition(actionToUpdate: Action, newPosition: Int) {
         _actions.remove(actionToUpdate)
         _actions.add(newPosition, actionToUpdate)

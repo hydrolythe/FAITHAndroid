@@ -30,6 +30,7 @@ class FileStorageRepositoryTest {
         title = "encrypted title",
         notes = "encrypted notes",
         emotionAvatar = File("path/to/emotionAvatar"),
+        emotionAvatarThumbnail = "encrypted thumbnail",
         details = emptyList(),
         encryptedDEK = "encrypted DEK",
         encryptedStreamingDEK = "encrypted SDEK"

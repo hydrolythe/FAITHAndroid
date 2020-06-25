@@ -213,7 +213,7 @@ class SkyscraperGoalFragment : Fragment() {
         }
         skyscraper_elevator_seekbar.setOnSeekBarChangeListener(seekbarChangeListener)
         skyscraper_rope_seekbar.setOnSeekBarChangeListener(seekbarChangeListener)
-
+n
         // configuring the dropping places of the avatar
         binding.dragAvatar.setOnTouchListener(AvatarOnTouchListener())
 
@@ -268,6 +268,10 @@ class SkyscraperGoalFragment : Fragment() {
 
             override fun onActionUpdated(position: Int, description: String) {
                 goalViewModel.updateAction(position, description)
+            }
+
+            override fun onActionUpdateState(position: Int) {
+                goalViewModel.updateActionState(position)
             }
         }
         actionAdapter = ActionAdapter(actionListener)

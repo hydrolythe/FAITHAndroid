@@ -2,6 +2,7 @@ package be.hogent.faith.faith.skyscraper.goal
 
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
@@ -70,6 +71,13 @@ class ActionAdapter(private val actionListener: ActionListener) :
                 }
             )
             if (action.description.isNullOrEmpty()) view.txtActionDescription.requestFocus()
+            view.swap.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(button: View?) {
+                    actionListener.onActionUpdateState(
+                        view.txtActionDescription.tag.toString().toInt()
+                    )
+                }
+            })
             view.txtActionDescription.afterTextChangeEvents()
                 .skip(1)
                 .debounce(1, TimeUnit.SECONDS)
@@ -87,4 +95,5 @@ interface ActionListener {
     fun onActionDismiss(position: Int)
     fun onActionMove(fromPosition: Int, toPosition: Int)
     fun onActionUpdated(position: Int, description: String)
+    fun onActionUpdateState(position: Int)
 }

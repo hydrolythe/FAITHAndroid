@@ -14,6 +14,7 @@ internal object EventMapper :
             dateTime = entity.dateTime,
             title = entity.title,
             emotionAvatar = entity.emotionAvatar?.let { File(it) },
+            emotionAvatarThumbnail = entity.emotionAvatarThumbnail,
             notes = entity.notes,
             uuid = UUID.fromString(entity.uuid),
             details = DetailMapper.mapFromEntities(
@@ -29,6 +30,7 @@ internal object EventMapper :
             dateTime = model.dateTime,
             title = model.title,
             emotionAvatar = model.emotionAvatar?.path,
+            emotionAvatarThumbnail = model.emotionAvatarThumbnail,
             notes = model.notes,
             uuid = model.uuid.toString(),
             details = DetailMapper.mapToEntities(

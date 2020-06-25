@@ -119,8 +119,13 @@ class GoalViewModel(
             selectedSubGoal.value!!.second.updateAction(position, description)
     }
 
+    fun updateActionState(position: Int) {
+        selectedSubGoal.value!!.second.updateActionStatus(position)
+        selectedSubGoal.value = selectedSubGoal.value
+    }
+
     private fun descriptionHasChanged(position: Int, description: String): Boolean {
-        return selectedSubGoal.value!!.second.actions[position].description != description
+        return selectedSubGoal.value!!.second.actions.size > 0 && selectedSubGoal.value!!.second.actions[position].description != description
     }
 
     private fun positionAvatarHasChanged(position: Int): Boolean {
