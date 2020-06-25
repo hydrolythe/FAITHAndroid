@@ -213,7 +213,7 @@ class SkyscraperGoalFragment : Fragment() {
         }
         skyscraper_elevator_seekbar.setOnSeekBarChangeListener(seekbarChangeListener)
         skyscraper_rope_seekbar.setOnSeekBarChangeListener(seekbarChangeListener)
-
+n
         // configuring the dropping places of the avatar
         binding.dragAvatar.setOnTouchListener(AvatarOnTouchListener())
 
