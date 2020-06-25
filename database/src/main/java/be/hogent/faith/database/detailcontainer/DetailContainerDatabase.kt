@@ -34,9 +34,7 @@ abstract class DetailContainerDatabase<DetailContainer>(
 
     fun getAll(): Flowable<List<EncryptedDetailEntity>> {
         val currentUser = fbAuth.currentUser
-        if (currentUser == null) {
-            return Flowable.error(RuntimeException("Unauthorized user."))
-        }
+            ?: return Flowable.error(RuntimeException("Unauthorized user."))
         return RxFirestore.observeQueryRef(
             firestore
                 .collection(USERS_KEY)
@@ -65,9 +63,7 @@ abstract class DetailContainerDatabase<DetailContainer>(
 
     fun insertContainer(container: EncryptedDetailsContainerEntity): Completable {
         val currentUser = fbAuth.currentUser
-        if (currentUser == null) {
-            return Completable.error(RuntimeException("Unauthorized user."))
-        }
+            ?: return Completable.error(RuntimeException("Unauthorized user."))
         val containerDocument = firestore
             .collection(USERS_KEY)
             .document(currentUser.uid)
@@ -77,10 +73,7 @@ abstract class DetailContainerDatabase<DetailContainer>(
     }
 
     fun getContainer(): Maybe<EncryptedDetailsContainerEntity> {
-        val currentUser = fbAuth.currentUser
-        if (currentUser == null) {
-            return Maybe.error(RuntimeException("Unauthorized user."))
-        }
+        val currentUser = fbAuth.currentUser ?: return Maybe.error(RuntimeException("Unauthorized user."))
         return RxFirestore.getDocument(
             firestore
                 .collection(USERS_KEY)

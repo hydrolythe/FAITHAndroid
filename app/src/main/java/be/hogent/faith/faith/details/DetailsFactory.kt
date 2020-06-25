@@ -9,6 +9,7 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.backpack.BackpackScreenActivity
 import be.hogent.faith.faith.backpack.SaveBackpackDetailDialog
@@ -31,7 +32,7 @@ import be.hogent.faith.faith.treasureChest.TreasureChestActivity
 import kotlin.reflect.KClass
 
 enum class DetailType {
-    PHOTO, DRAWING, AUDIO, TEXT, YOUTUBE, EXTERNALFILE
+    PHOTO, DRAWING, AUDIO, TEXT, YOUTUBE, EXTERNAL_FILE
 }
 
 object DetailsFactory {
@@ -44,7 +45,7 @@ object DetailsFactory {
             DetailType.DRAWING -> DrawingDetailFragment.newInstance()
             DetailType.PHOTO -> TakePhotoFragment.newInstance()
             DetailType.YOUTUBE -> YoutubeVideoDetailFragment.newInstance()
-            DetailType.EXTERNALFILE -> AddExternalFileFragment.newInstance()
+            DetailType.EXTERNAL_FILE -> AddExternalFileFragment.newInstance()
         }
     }
 
@@ -58,7 +59,7 @@ object DetailsFactory {
             is PhotoDetail -> ViewPhotoFragment.newInstance(detail)
             is YoutubeVideoDetail -> ViewYoutubeVideoFragment.newInstance(detail)
             is FilmDetail -> ViewVideoFragment.newInstance(detail)
-            else -> throw UnsupportedOperationException()
+            is VideoDetail -> ViewVideoFragment.newInstance(detail)
         }
     }
 
@@ -69,7 +70,8 @@ object DetailsFactory {
             is DrawingDetail -> ViewDrawingFragment.newInstance(detail)
             is PhotoDetail -> ViewPhotoFragment.newInstance(detail)
             is YoutubeVideoDetail -> ViewYoutubeVideoFragment.newInstance(detail)
-            else -> ViewPhotoFragment.newInstance(detail as PhotoDetail)
+            is VideoDetail -> ViewVideoFragment.newInstance(detail)
+            is FilmDetail -> ViewVideoFragment.newInstance(detail)
         }
     }
 

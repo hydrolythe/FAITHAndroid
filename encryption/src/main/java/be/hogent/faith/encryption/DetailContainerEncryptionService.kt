@@ -30,6 +30,7 @@ class DetailContainerEncryptionService<T>(
         return dekSingle.flatMap { dek ->
             sdekSingle.flatMap { sdek ->
                 detailEncryptionService.encrypt(detail, dek, sdek)
+                    .doOnSuccess { Timber.i("Encrypted detail ${detail.uuid}") }
             }
         }
     }

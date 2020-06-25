@@ -114,7 +114,7 @@ abstract class DetailsContainerActivity<T : DetailsContainer> : AppCompatActivit
 
     override fun startExternalFileDetailFragment() {
         replaceFragment(
-            DetailsFactory.createDetail(DetailType.EXTERNALFILE),
+            DetailsFactory.createDetail(DetailType.EXTERNAL_FILE),
             fragmentContainerResourceId
         )
         setLayoutListenersOnNewDetailOpened()

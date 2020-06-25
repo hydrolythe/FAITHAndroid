@@ -34,7 +34,7 @@ val encryptionModule = module {
     single { KeyEncrypter(get()) }
     single { KeyGenerator() }
     single { FileEncryptionService() }
-    single { DetailEncryptionService(get(), get()) }
+    single { DetailEncryptionService(get()) }
     factory<IEventEncryptionService> { EventEncryptionService(get(), get(), get(), get(), get()) }
     factory<IDetailContainerEncryptionService<Backpack>>(named(BackpackNames.encryptionService)) {
         DetailContainerEncryptionService<Backpack>(get(), get(), get(), get())
