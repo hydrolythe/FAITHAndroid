@@ -30,7 +30,7 @@ abstract class DetailsMetaDataViewModel : ViewModel() {
     val detailTitle = MutableLiveData<String>().apply {
         this.value = ""
     }
-    protected val _detailTitleErrorMessage = MutableLiveData<Int>()
+    private val _detailTitleErrorMessage = MutableLiveData<Int>()
     val detailTitleErrorMessage: LiveData<Int>
         get() = _detailTitleErrorMessage
 

@@ -209,6 +209,7 @@
     <string name="create_video_failed">Er ging iets fout bij het aanmaken van de video.</string>
     <string name="save_video_success">Je video werd succesvol opgeslagen.</string>
     <string name="error_save_external_video_failed">Er ging iets fout bij het opslaan van je video.</string>
+    <string name="error_save_external_image_failed">Er ging iets fout bij het opslaan van je afbeelding.</string>
     <string name="save_detail_maxChar">"Bestandsnaam max 30 karakters"</string>
     <string name="save_detail_emptyString">"Gelieve een bestandsnaam in te geven"</string>
     <string name="save_detail_uniqueName">"Deze bestandsnaam bestaat al"</string>
@@ -247,7 +248,7 @@
     <string name="rv_detail_title">Detail Title</string>
     <string name="mijn_filmpjes">mijn filmpjes</string>
     <string name="mijn_tijdslijn">mijn tijdslijn</string>
-    <string name="create_film">Maak filmpje</string>
+    <string name="create_film">Naar de filmstudio</string>
     <string name="search_hint_film">zoek hier een film op naam</string>
     <string name="search_hint_bestand">zoek hier een bestand op naam</string>
     <string name="unauthorized_file_type">Dit bestandstype is niet toegelaten.</string>

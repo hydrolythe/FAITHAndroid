@@ -68,6 +68,9 @@ class YoutubeVideoDetail(
     dateTime: LocalDateTime = LocalDateTime.now()
 ) : Detail(file, title, uuid, dateTime)
 
+/**
+ * Represenents films that have been made using the Cinema functionality.
+ */
 class FilmDetail(
     file: File,
     title: String = "",

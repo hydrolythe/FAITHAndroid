@@ -41,7 +41,7 @@ class SaveDetailsContainerDetailUseCase<Container : DetailsContainer>(
                     params.detailsContainer
                 )
                     .subscribeOn(subscriber)
-                    .doOnSuccess { Timber.i("Stored detail file${params.detail.uuid} in ${params.detailsContainer.javaClass}") }
+                    .doOnSuccess { Timber.i("Stored detail file ${params.detail.uuid} in ${params.detailsContainer.javaClass}") }
                     .doOnError {
                         Timber.e("Error while storing detail file $params.detail.uuid} in ${params.detailsContainer.javaClass}: ${it.localizedMessage}")
                         it.printStackTrace()
