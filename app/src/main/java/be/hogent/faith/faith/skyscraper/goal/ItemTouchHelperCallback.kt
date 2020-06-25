@@ -14,6 +14,9 @@ import be.hogent.faith.R
 class ItemTouchHelperCallback(private val adapter: IItemTouchHelper, private val context: Context) :
     ItemTouchHelper.Callback() {
 
+    private var dragFromPosition = -1
+    private var dragToPosition = -1
+
     // to start dragging items
     override fun isLongPressDragEnabled(): Boolean {
         return true
@@ -41,8 +44,27 @@ class ItemTouchHelperCallback(private val adapter: IItemTouchHelper, private val
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
     ): Boolean {
-        adapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
+        dragToPosition = target.adapterPosition
         return true
+    }
+
+    override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+        super.onSelectedChanged(viewHolder, actionState)
+
+        when (actionState) {
+            ItemTouchHelper.ACTION_STATE_DRAG -> {
+                viewHolder?.also { dragFromPosition = it.adapterPosition }
+            }
+            ItemTouchHelper.ACTION_STATE_IDLE -> {
+                if (dragFromPosition != -1 && dragToPosition != -1 && dragFromPosition != dragToPosition) {
+                    // Item successfully dragged
+                    adapter.onItemMove(dragFromPosition, dragToPosition)
+                    // Reset drag positions
+                    dragFromPosition = -1
+                    dragToPosition = -1
+                }
+            }
+        }
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {

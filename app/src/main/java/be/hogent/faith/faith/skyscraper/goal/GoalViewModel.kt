@@ -115,7 +115,7 @@ class GoalViewModel(
     }
 
     fun updateAction(position: Int, description: String) {
-        if (descriptionHasChanged(position, description))
+        if (actionDescriptionHasChanged(position, description))
             selectedSubGoal.value!!.second.updateAction(position, description)
     }
 
@@ -124,8 +124,9 @@ class GoalViewModel(
         selectedSubGoal.value = selectedSubGoal.value
     }
 
-    private fun descriptionHasChanged(position: Int, description: String): Boolean {
-        return selectedSubGoal.value!!.second.actions.size > 0 && selectedSubGoal.value!!.second.actions[position].description != description
+    private fun actionDescriptionHasChanged(position: Int, description: String): Boolean {
+        Timber.i("actiondescr $position and $description")
+        return selectedSubGoal.value!!.second.actions.size > position && selectedSubGoal.value!!.second.actions[position].description != description
     }
 
     private fun positionAvatarHasChanged(position: Int): Boolean {
@@ -136,7 +137,7 @@ class GoalViewModel(
         return goal.value!!.chosenReachGoalWay != reachGoalWay
     }
 
-        fun setPositionAvatar(position: Int) {
+    fun setPositionAvatar(position: Int) {
         if (positionAvatarHasChanged(position)) {
             goal.value!!.currentPositionAvatar = position
             goal.value = goal.value
@@ -162,9 +163,9 @@ class GoalViewModel(
     }
 
     fun moveSubGoal(fromPosition: Int, toPosition: Int) {
-        subgoals.value?.get(fromPosition)?.let {
+        subgoals.value?.let {
             selectedSubGoal.value = null
-            goal.value!!.changeFloorSubGoal(it, toPosition)
+            goal.value!!.changeFloorSubGoal(fromPosition, toPosition)
             goal.value = goal.value
         }
     }

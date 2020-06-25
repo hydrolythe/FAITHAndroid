@@ -3,6 +3,7 @@ package be.hogent.faith.domain.models.goals
 import org.threeten.bp.LocalDateTime
 import java.io.Serializable
 import java.util.UUID
+import kotlin.NoSuchElementException
 
 /**
  * -1 indicates the basement
@@ -67,6 +68,32 @@ data class Goal(
             removeSubGoal(subGoal)
             _subGoals[floor] = subGoal
             _subGoals[originalFloor] = currentGoalAtFloor
+        }
+    }
+
+    fun changeFloorSubGoal(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                swap(i)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                swap(i - 1)
+            }
+        }
+    }
+
+    private fun swap(i: Int) {
+        val temp: SubGoal? = _subGoals[i]
+        if (_subGoals[i + 1] != null) {
+            _subGoals[i] = _subGoals[i + 1]!!
+        } else {
+            _subGoals.remove(i)
+        }
+        if (temp != null) {
+            _subGoals[i + 1] = temp
+        } else {
+            _subGoals.remove(i + 1)
         }
     }
 
