@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.library.eventList
 
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,7 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.library.eventfilters.EventHasDetailTypeFilter
-import be.hogent.faith.faith.loadImageIntoView
+import com.bumptech.glide.Glide
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
 
@@ -66,14 +67,11 @@ class EventsAdapter(private val eventListener: EventListener) :
             val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
             val eventDateString: String = formatter.format(event.dateTime)
             itemBinding.lblDate.text = eventDateString
-
-            if (event.emotionAvatar != null)
-                loadImageIntoView(
-                    this.itemView.context,
-                    event.emotionAvatar!!.path,
-                    itemBinding.imgAvatar
-                )
-            else
+            if (event.emotionAvatarThumbnail != null) {
+                Glide.with(this.itemView.context)
+                    .load(Base64.decode(event.emotionAvatarThumbnail, Base64.DEFAULT))
+                    .into(itemBinding.imgAvatar)
+            } else
                 itemBinding.imgAvatar.setImageDrawable(null)
 
             itemBinding.btnLibraryEventHasText.visibility =

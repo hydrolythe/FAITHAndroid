@@ -269,6 +269,10 @@ class SkyscraperGoalFragment : Fragment() {
             override fun onActionUpdated(position: Int, description: String) {
                 goalViewModel.updateAction(position, description)
             }
+
+            override fun onActionUpdateState(position: Int) {
+                goalViewModel.updateActionState(position)
+            }
         }
         actionAdapter = ActionAdapter(actionListener)
         val actionCallback: ItemTouchHelper.Callback =
