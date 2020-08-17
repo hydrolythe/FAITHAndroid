@@ -162,7 +162,7 @@ class DrawingDetailFragment : DrawFragment(),
                 drawingDetailViewModel.setDetailsMetaData()
             else {
                 saveDialog.setTargetFragment(this, 22)
-                saveDialog.show(getParentFragmentManager(), null)
+                saveDialog.show(parentFragmentManager, null)
             }
         })
     }

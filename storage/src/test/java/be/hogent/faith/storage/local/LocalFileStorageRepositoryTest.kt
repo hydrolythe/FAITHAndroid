@@ -49,6 +49,7 @@ class LocalFileStorageRepositoryTest {
         title = "encrypted title",
         notes = "encrypted notes",
         emotionAvatar = emotionAvatarFile,
+        emotionAvatarThumbnail = "encrypted thumbnail",
         details = listOf(encryptedDetail),
         encryptedDEK = "encrypted DEK",
         encryptedStreamingDEK = "encrypted SDEK"

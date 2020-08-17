@@ -12,8 +12,8 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarFragment
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel
-import be.hogent.faith.faith.state.Resource
-import be.hogent.faith.faith.state.ResourceState
+import be.hogent.faith.faith.util.state.Resource
+import be.hogent.faith.faith.util.state.ResourceState
 import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.viewModel

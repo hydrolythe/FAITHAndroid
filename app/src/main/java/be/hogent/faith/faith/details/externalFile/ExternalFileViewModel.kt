@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.externalVideo.CreateVideoDetailUseCase
@@ -16,7 +16,6 @@ import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File
-import java.util.Locale
 
 class ExternalFileViewModel(
     private val createPhotoDetailUseCase: CreatePhotoDetailUseCase,
@@ -33,19 +32,16 @@ class ExternalFileViewModel(
     private var _existingDetail: Detail? = null
 
     private val _savedDetail = MutableLiveData<Detail>()
-    override val savedDetail: LiveData<Detail>
-        get() = _savedDetail
+    override val savedDetail: LiveData<Detail> = _savedDetail
 
-    private var _currentFile = MutableLiveData<File>()
-    val currentFile: LiveData<File>
-        get() = _currentFile
+    private var currentFileWithType: Pair<File, ExternalFileType>? = null
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
 
-    fun setCurrentFile(file: File) {
-        _currentFile.value = file
+    fun setCurrentFile(file: File, fileType: ExternalFileType) {
+        currentFileWithType = Pair(file, fileType)
     }
 
     fun onCancelClicked() {
@@ -53,52 +49,45 @@ class ExternalFileViewModel(
     }
 
     override fun loadExistingDetail(existingDetail: Detail) {
-        throw UnsupportedOperationException("This viewmodel can't open details")
+        throw UnsupportedOperationException("This viewmodel can't open existing details")
     }
 
     override fun onSaveClicked() {
-        require(_currentFile.value != null)
-        val file = File(_currentFile.value!!.path)
-
-        when (file.path.toLowerCase(Locale.ROOT).substring(
-            file.path.toLowerCase(Locale.ROOT).lastIndexOf(
-                "."
-            )
-        )) {
-            ".png" -> {
-                val params = CreatePhotoDetailUseCase.Params(_currentFile.value!!)
-                createPhotoDetailUseCase.execute(
-                    params,
-                    object : DisposableSingleObserver<PhotoDetail>() {
-                        override fun onSuccess(createdDetail: PhotoDetail) {
-                            _existingDetail = createdDetail
-                            _getDetailMetaData.call()
-                        }
-
-                        override fun onError(e: Throwable) {
-                            _errorMessage.postValue(R.string.create_photo_failed)
-                            Timber.e(e)
-                        }
-                    })
-            }
-            ".mp4" -> {
-                val params = CreateVideoDetailUseCase.Params(_currentFile.value!!)
-                createVideoDetailUseCase.execute(
-                    params,
-                    object : DisposableSingleObserver<VideoDetail>() {
-                        override fun onSuccess(createdDetail: VideoDetail) {
-                            _existingDetail = createdDetail
-                            _getDetailMetaData.call()
-                        }
-
-                        override fun onError(e: Throwable) {
-                            _errorMessage.postValue(R.string.create_video_failed)
-                            Timber.e(e)
-                        }
-                    })
-            }
-            else -> _errorMessage.postValue(R.string.unauthorized_file_type)
+        require(currentFileWithType != null)
+        when (currentFileWithType?.second) {
+            ExternalFileType.PICTURE -> saveExternalPhoto()
+            ExternalFileType.VIDEO -> saveExternalVideo()
         }
+    }
+
+    private fun saveExternalVideo() {
+        val params = CreateVideoDetailUseCase.Params(currentFileWithType!!.first)
+        createVideoDetailUseCase.execute(params, object : DisposableSingleObserver<VideoDetail>() {
+            override fun onSuccess(createdDetail: VideoDetail) {
+                _existingDetail = createdDetail
+                _getDetailMetaData.call()
+            }
+
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.create_video_failed)
+                Timber.e(e)
+            }
+        })
+    }
+
+    private fun saveExternalPhoto() {
+        val params = CreatePhotoDetailUseCase.Params(currentFileWithType!!.first)
+        createPhotoDetailUseCase.execute(params, object : DisposableSingleObserver<PhotoDetail>() {
+            override fun onSuccess(createdDetail: PhotoDetail) {
+                _existingDetail = createdDetail
+                _getDetailMetaData.call()
+            }
+
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.create_photo_failed)
+                Timber.e(e)
+            }
+        })
     }
 
     override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
@@ -107,5 +96,9 @@ class ExternalFileViewModel(
             it.dateTime = dateTime
         }
         _savedDetail.value = _existingDetail
+    }
+
+    enum class ExternalFileType {
+        VIDEO, PICTURE
     }
 }

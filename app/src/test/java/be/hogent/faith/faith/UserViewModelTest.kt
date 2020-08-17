@@ -3,8 +3,8 @@ package be.hogent.faith.faith
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.faith.state.Resource
-import be.hogent.faith.faith.state.ResourceState
+import be.hogent.faith.faith.util.state.Resource
+import be.hogent.faith.faith.util.state.ResourceState
 import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
 import be.hogent.faith.util.factory.DataFactory

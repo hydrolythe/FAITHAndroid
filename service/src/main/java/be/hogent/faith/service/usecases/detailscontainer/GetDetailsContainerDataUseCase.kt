@@ -52,5 +52,5 @@ class GetDetailsContainerDataUseCase<T : DetailsContainer>(
             }
     }
 
-    class Params()
+    class Params
 }

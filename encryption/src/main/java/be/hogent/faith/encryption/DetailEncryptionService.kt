@@ -10,7 +10,6 @@ import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.encryption.internal.DataEncrypter
 import be.hogent.faith.service.encryption.EncryptedDetail
-import be.hogent.faith.storage.StoragePathProvider
 import com.google.crypto.tink.KeysetHandle
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
@@ -20,8 +19,7 @@ import timber.log.Timber
 import java.io.File
 
 class DetailEncryptionService(
-    private val fileEncryptionService: FileEncryptionService,
-    private val pathProvider: StoragePathProvider
+    private val fileEncryptionService: FileEncryptionService
 ) {
 
     /**
@@ -33,6 +31,8 @@ class DetailEncryptionService(
         } else {
             encryptData(detail, dek)
                 .zipWith(encryptDetailFiles(detail, sdek)) { encryptedDetail, file ->
+                    Timber.i("Encrypting file. Original detail file: ${detail.file.path}")
+                    Timber.i("Encrypting file. New detail file: ${file.path}")
                     encryptedDetail.file = file
                     encryptedDetail
                 }

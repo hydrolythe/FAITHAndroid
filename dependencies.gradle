@@ -83,9 +83,9 @@ ext {
     lottieVersion = '3.4.0'
 
     //Version Code
-    ext.versionMajor = 3
-    ext.versionMinor = 3
-    ext.versionPatch = 2
+    ext.versionMajor = 4
+    ext.versionMinor = 1
+    ext.versionPatch = 1
     ext.versionClassifier = null
 
     commonDependencies = [

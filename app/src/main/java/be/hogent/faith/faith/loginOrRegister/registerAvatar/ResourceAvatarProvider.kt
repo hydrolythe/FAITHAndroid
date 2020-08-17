@@ -22,6 +22,13 @@ class ResourceAvatarProvider(private val context: Context) :
         return getDrawable(avatarName)
     }
 
+    override fun getAvatarDrawableStaanId(avatarName: String): Int {
+        return context.resources.getIdentifier(
+            avatarName, "drawable",
+            context.packageName
+        )
+    }
+
     override fun getAvatarDrawableZitten(avatarName: String): Drawable {
         return getDrawable(avatarName, "bank")
     }

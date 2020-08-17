@@ -4,21 +4,33 @@ import android.view.DragEvent
 import android.view.View
 import android.widget.ImageView
 
-class AvatarOnDragListener(private val avatarOnTouchListener: AvatarOnTouchListener) :
-    View.OnDragListener {
+class AvatarOnDragListener(
+    private val avatarDroppedListener: AvatarDroppedListener
+) : View.OnDragListener {
 
     override fun onDrag(v: View?, event: DragEvent): Boolean {
 
-        val startLocation = event.localState as ImageView
-        val targetLocation = v as ImageView
-        if (event.action == DragEvent.ACTION_DROP) {
-            if (startLocation.drawable != targetLocation.drawable) {
-                targetLocation.setOnTouchListener(avatarOnTouchListener)
-                targetLocation.setImageDrawable(startLocation.drawable)
-                startLocation.setImageDrawable(null)
-                startLocation.setOnTouchListener(null)
+        val startLocation = event.localState as? ImageView
+        val targetLocation = v as? ImageView
+        if (startLocation != null && targetLocation != null && event.action == DragEvent.ACTION_DROP) {
+            // if the tops are different
+            if (startLocation.y != targetLocation.y) {
+                // tag contains the AvatarPosition
+                val position = targetLocation.tag.toString().toInt()
+                val extra = if (position % 2 != 0) targetLocation.height / 2 else 0
+                // top
+                startLocation.y =
+                    targetLocation.y + targetLocation.height - startLocation.height + extra
+                // left
+                startLocation.x =
+                    targetLocation.x + (targetLocation.width / 2 - startLocation.width / 2).toFloat()
+                avatarDroppedListener.onAvatarDropped(targetLocation.tag.toString().toInt())
             }
         }
         return true
+    }
+
+    interface AvatarDroppedListener {
+        fun onAvatarDropped(floor: Int)
     }
 }

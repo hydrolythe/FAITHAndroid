@@ -90,6 +90,7 @@ val serviceModule = module {
             eventEncryptionService = get(),
             filesStorageRepository = get(),
             eventRepository = get(),
+            thumbnailProvider = get(),
             observer = get()
         )
     }

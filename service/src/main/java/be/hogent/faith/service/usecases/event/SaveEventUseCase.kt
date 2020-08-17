@@ -6,6 +6,7 @@ import be.hogent.faith.service.encryption.IEventEncryptionService
 import be.hogent.faith.service.repositories.IEventRepository
 import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.service.usecases.base.CompletableUseCase
+import be.hogent.faith.util.ThumbnailProvider
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Scheduler
 import timber.log.Timber
@@ -14,6 +15,7 @@ open class SaveEventUseCase(
     private val eventEncryptionService: IEventEncryptionService,
     private val filesStorageRepository: IFileStorageRepository,
     private val eventRepository: IEventRepository,
+    private val thumbnailProvider: ThumbnailProvider,
     observer: Scheduler
 ) : CompletableUseCase<SaveEventUseCase.Params>(observer) {
 
@@ -21,6 +23,8 @@ open class SaveEventUseCase(
 
     override fun buildUseCaseObservable(params: Params): Completable {
         this.params = params
+        if (params.event.emotionAvatar != null)
+            params.event.emotionAvatarThumbnail = thumbnailProvider.getBase64EncodedThumbnail(params.event.emotionAvatar!!)
         return eventEncryptionService.encrypt(params.event)
             .doOnSuccess { Timber.i("encrypted event ${params.event.uuid}") }
             .flatMap(filesStorageRepository::saveEventFiles)

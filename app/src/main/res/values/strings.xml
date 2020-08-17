@@ -209,6 +209,7 @@
     <string name="create_video_failed">Er ging iets fout bij het aanmaken van de video.</string>
     <string name="save_video_success">Je video werd succesvol opgeslagen.</string>
     <string name="error_save_external_video_failed">Er ging iets fout bij het opslaan van je video.</string>
+    <string name="error_save_external_image_failed">Er ging iets fout bij het opslaan van je afbeelding.</string>
     <string name="save_detail_maxChar">"Bestandsnaam max 30 karakters"</string>
     <string name="save_detail_emptyString">"Gelieve een bestandsnaam in te geven"</string>
     <string name="save_detail_uniqueName">"Deze bestandsnaam bestaat al"</string>
@@ -247,7 +248,7 @@
     <string name="rv_detail_title">Detail Title</string>
     <string name="mijn_filmpjes">mijn filmpjes</string>
     <string name="mijn_tijdslijn">mijn tijdslijn</string>
-    <string name="create_film">Maak filmpje</string>
+    <string name="create_film">Naar de filmstudio</string>
     <string name="search_hint_film">zoek hier een film op naam</string>
     <string name="search_hint_bestand">zoek hier een bestand op naam</string>
     <string name="unauthorized_file_type">Dit bestandstype is niet toegelaten.</string>
@@ -281,5 +282,12 @@
     <string name="error_skyscraper_load_goals_failed">Er ging iets fout bij het laden van je doelen.</string>
     <string name="error_skyscraper_change_description_failed">Er ging iets fout bij het aanpassen van beschrijving van je doel.</string>
     <string name="error_skyscraper_max_number_of_goals_reached">Je kan maximum 5 actieve doelen hebben!</string>
+    <string name="error_skyscraper_update_goal_failed">aanpassen van doel is mislukt</string>
+    <string name="error_skyscraper_update_goalreach">ga eerst naar een verdieping met de trap</string>
+    <string name="lift">lift</string>
+    <string name="subdoel_naam_verplicht">Geef eerst de naam in van het subdoel</string>
+    <string name="beschrijving_actie">beschrijving actie</string>
+    <string name="beschrijving_doel">Beschrijving doel</string>
+    <string name="beschrijving_subdoel">Beschrijving subdoel</string>
     <string name="error_cinema_no_sources_selected">Je moet nog beelden selecteren voor je filmpje!</string>
 </resources>

@@ -31,7 +31,7 @@ class EventEncryptionServiceTest : KoinTest, TestWithFiles() {
     private val storagePathProvider = mockk<StoragePathProvider>()
 
     private val eventEncrypter = EventEncryptionService(
-        DetailEncryptionService(fileEncryptionService, mockk()),
+        DetailEncryptionService(fileEncryptionService),
         fileEncryptionService,
         keyGenerator,
         keyEncrypter,

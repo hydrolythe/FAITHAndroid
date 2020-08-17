@@ -41,7 +41,7 @@ object DetailViewHolderFactory {
                 thumbnailView,
                 existingDetailNavigationListener
             )
-            DetailTypes.PICTURE_DETAIL -> createPictureDetailViewHolder(
+            DetailTypes.PICTURE_DETAIL, DetailTypes.DRAW_DETAIL -> createPictureDetailViewHolder(
                 thumbnailView,
                 existingDetailNavigationListener
             )

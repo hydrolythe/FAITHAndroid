@@ -11,6 +11,7 @@ class EncryptedEvent(
      * It is a var because the file can get moved around (for example while saving or encrypting)
      */
     var emotionAvatar: File?,
+    var emotionAvatarThumbnail: String?,
     val notes: EncryptedString?,
     /**
      * The [uuid] of an event is nonsensitive information so it can stay unencrypted

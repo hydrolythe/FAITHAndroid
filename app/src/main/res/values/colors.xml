@@ -53,6 +53,15 @@
 
     <color name="background_backpack_video">#CDF9EC</color>
     <color name="background_backpack_video_black">#000000</color>
+
+    <color name="skyscraper_blue">#00D1C0</color>
+    <color name="skyscraper_green">#0BDB73</color>
+    <color name="skyscraper_darkgreen">#009688</color>
+    <color name="skyscraper_red">#ED1E79</color>
+    <color name="skyscraper_yellow">#FFFF00</color>
+
+    <color name="skyscraper_action_active">#CDF9EC</color>
+    <color name="skyscraper_action_inactive">#D8D8D8</color>
 </resources>
 
 

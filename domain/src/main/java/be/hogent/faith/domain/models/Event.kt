@@ -23,7 +23,7 @@ data class Event(
      * It is first saved when the user draws something, before that the property is null.
      */
     var emotionAvatar: File? = null,
-
+    var emotionAvatarThumbnail: String? = null,
     /**
      * The notes that were added to this event.
      */
