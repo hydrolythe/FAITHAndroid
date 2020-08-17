@@ -116,7 +116,8 @@ class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK && data!!.data != null) {
-            val uriToAdd = data.data
+            val uriToAdd = data.data ?: return
+
             when (getMIMEType(uriToAdd)) {
                 "image/jpeg",
                 "image/bmp",
@@ -154,7 +155,6 @@ class AddExternalFileFragment : Fragment(), DetailFragment<Detail> {
                 ).show()
             }
             .subscribe()
-//        disposables.add(disposable)
     }
 
     private fun saveAndPreviewImage(uriToAdd: Uri) {
