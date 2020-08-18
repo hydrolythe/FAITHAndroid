@@ -116,6 +116,7 @@ data class Goal(
 
     fun copy(): Goal {
         val goal = Goal(this.goalColor, this.uuid).also {
+            it.description = this.description
             it.dateTime = this.dateTime
             it.chosenReachGoalWay = this.chosenReachGoalWay
             it.isCompleted = this.isCompleted
