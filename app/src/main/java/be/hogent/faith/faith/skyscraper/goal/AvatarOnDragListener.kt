@@ -5,14 +5,15 @@ import android.view.View
 import android.widget.ImageView
 
 class AvatarOnDragListener(
-    private val avatarDroppedListener: AvatarDroppedListener
+    private val avatarDroppedListener: AvatarDroppedListener,
+    private val avatar: ImageView
 ) : View.OnDragListener {
 
     override fun onDrag(v: View?, event: DragEvent): Boolean {
 
-        val startLocation = event.localState as? ImageView
+        val startLocation = avatar
         val targetLocation = v as? ImageView
-        if (startLocation != null && targetLocation != null && event.action == DragEvent.ACTION_DROP) {
+        if (event.action == DragEvent.ACTION_DROP && targetLocation != null) {
             // if the tops are different
             if (startLocation.y != targetLocation.y) {
                 // tag contains the AvatarPosition
