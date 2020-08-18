@@ -223,7 +223,7 @@ class SkyscraperGoalFragment : Fragment() {
                     override fun onAvatarDropped(floor: Int) {
                         goalViewModel.setPositionAvatar(floor)
                     }
-                }))
+                }, binding.dragAvatar))
         }
     }
 
