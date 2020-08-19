@@ -5,18 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
-import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
+import be.hogent.faith.domain.models.detail.*
 import be.hogent.faith.faith.detailscontainer.detailFilters.CombinedDetailFilter
+import be.hogent.faith.faith.util.LoadingViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detailscontainer.DeleteDetailsContainerDetailUseCase
 import be.hogent.faith.service.usecases.detailscontainer.GetDetailsContainerDataUseCase
@@ -36,7 +30,7 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
     private val loadDetailFileUseCase: LoadDetailFileUseCase<T>,
     private val getDetailsContainerDataUseCase: GetDetailsContainerDataUseCase<T>,
     val detailsContainer: T
-) : ViewModel() {
+) : LoadingViewModel() {
 
     protected open val details: List<Detail>
         get() = detailsContainer.details
@@ -171,18 +165,23 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
 
     private fun loadDetails() {
         val params = GetDetailsContainerDataUseCase.Params()
+        startLoading()
         getDetailsContainerDataUseCase.execute(params, object : DisposableObserver<List<Detail>>() {
 
             override fun onNext(loadedDetails: List<Detail>) {
                 detailsContainer.setDetails(loadedDetails)
                 setSearchStringText("")
+                doneLoading()
             }
 
-            override fun onComplete() {}
+            override fun onComplete() {
+                doneLoading()
+            }
 
             override fun onError(e: Throwable) {
                 Timber.e(e)
                 _errorMessage.postValue(R.string.error_load_backpack)
+                doneLoading()
             }
         })
     }
@@ -279,73 +278,88 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
 
     fun getCurrentDetailFile(detail: Detail) {
         val params = LoadDetailFileUseCase.Params(detail, detailsContainer)
+        startLoading()
         loadDetailFileUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _currentDetail.postValue(detail)
                 _goToDetail.value = detail
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_load_detail_failed)
                 Timber.e(e)
+                doneLoading()
             }
         })
     }
 
     fun saveTextDetail(user: User, detail: TextDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
+        startLoading()
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_text_success)
                 _detailIsSaved.call()
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_save_text_failed)
+                doneLoading()
             }
         })
     }
 
     fun saveAudioDetail(user: User, detail: AudioDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
+        startLoading()
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_audio_success)
                 forceDetailsUpdate()
                 _detailIsSaved.call()
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_save_audio_failed)
+                doneLoading()
             }
         })
     }
 
     fun savePhotoDetail(user: User, detail: PhotoDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
+        startLoading()
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_photo_success)
                 forceDetailsUpdate()
                 _detailIsSaved.call()
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_save_photo_failed)
+                doneLoading()
             }
         })
     }
 
     fun saveDrawingDetail(user: User, detail: DrawingDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
+        startLoading()
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_drawing_success)
                 forceDetailsUpdate()
                 _detailIsSaved.call()
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
+                doneLoading()
                 _errorMessage.postValue(R.string.error_save_drawing_failed)
             }
         })
@@ -353,30 +367,36 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
 
     fun saveVideoDetail(user: User, detail: VideoDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, detailsContainer, detail)
+        startLoading()
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_video_success)
                 forceDetailsUpdate()
                 _detailIsSaved.call()
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_save_external_video_failed)
+                doneLoading()
             }
         })
     }
 
     fun saveYoutubeDetail(user: User, detail: YoutubeVideoDetail) {
         val params = SaveDetailsContainerDetailUseCase.Params(user, user.backpack, detail)
+        startLoading()
         saveDetailsContainerDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _infoMessage.postValue(R.string.save_video_success)
                 forceDetailsUpdate()
                 _detailIsSaved.call()
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_save_external_video_failed)
+                doneLoading()
             }
         })
     }
