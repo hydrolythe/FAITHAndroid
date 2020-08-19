@@ -6,14 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.*
+import be.hogent.faith.faith.util.LoadingViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.event.DeleteEventDetailUseCase
 import be.hogent.faith.service.usecases.event.SaveEmotionAvatarUseCase
@@ -29,7 +25,7 @@ class EventViewModel(
     private val saveEventDetailUseCase: SaveEventDetailUseCase,
     private val deleteDetailUseCase: DeleteEventDetailUseCase,
     givenEvent: Event? = null
-) : ViewModel(), KoinComponent {
+) : LoadingViewModel(), KoinComponent {
 
     /**
      * The event that will be discussed and explained using audio, video, drawings,...
@@ -198,67 +194,101 @@ class EventViewModel(
      */
     fun saveEmotionAvatarImage(bitmap: Bitmap) {
         val params = SaveEmotionAvatarUseCase.Params(bitmap, event.value!!)
+        startLoading()
         saveEmotionAvatarUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 updateEvent()
                 _avatarSavedSuccessFully.postValue(R.string.avatar_save_successfull)
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 Timber.e(e.localizedMessage)
                 _errorMessage.postValue(R.string.error_save_avatar_failed)
+                doneLoading()
             }
         })
     }
 
     fun saveAudioDetail(audioDetail: AudioDetail) {
         val params = SaveEventDetailUseCase.Params(audioDetail, event.value!!)
+        startLoading()
         saveEventDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _audioSavedSuccessFully.postValue(R.string.save_audio_success)
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_save_audio_failed)
+                doneLoading()
             }
         })
     }
 
     fun savePhotoDetail(photoDetail: PhotoDetail) {
         val params = SaveEventDetailUseCase.Params(photoDetail, event.value!!)
+        startLoading()
         saveEventDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _photoSavedSuccessFully.postValue(R.string.save_photo_success)
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_save_photo_failed)
+                doneLoading()
             }
         })
     }
 
     fun saveTextDetail(detail: TextDetail) {
         val params = SaveEventDetailUseCase.Params(detail, event.value!!)
+        startLoading()
         saveEventDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _textSavedSuccessFully.postValue(R.string.save_text_success)
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_save_text_failed)
+                doneLoading()
             }
         })
     }
 
     fun saveDrawingDetail(detail: DrawingDetail) {
         val params = SaveEventDetailUseCase.Params(detail, event.value!!)
+        startLoading()
         saveEventDetailUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _drawingSavedSuccessFully.postValue(R.string.save_drawing_success)
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_save_drawing_failed)
+                doneLoading()
+            }
+        })
+    }
+
+
+    fun deleteDetail(detail: Detail) {
+        val params = DeleteEventDetailUseCase.Params(detail, event.value!!)
+        startLoading()
+        deleteDetailUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _detailDeletedSuccessFully.call()
+                updateEvent()
+                doneLoading()
+            }
+
+            override fun onError(e: Throwable) {
+                Timber.e(e)
+                _errorMessage.postValue(R.string.error_delete_detail_failure)
+                doneLoading()
             }
         })
     }
@@ -268,20 +298,5 @@ class EventViewModel(
         saveEmotionAvatarUseCase.dispose()
         deleteDetailUseCase.dispose()
         super.onCleared()
-    }
-
-    fun deleteDetail(detail: Detail) {
-        val params = DeleteEventDetailUseCase.Params(detail, event.value!!)
-        deleteDetailUseCase.execute(params, object : DisposableCompletableObserver() {
-            override fun onComplete() {
-                _detailDeletedSuccessFully.call()
-                updateEvent()
-            }
-
-            override fun onError(e: Throwable) {
-                Timber.e(e)
-                _errorMessage.postValue(R.string.error_delete_detail_failure)
-            }
-        })
     }
 }

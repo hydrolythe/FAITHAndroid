@@ -20,13 +20,12 @@ import be.hogent.faith.faith.util.state.Resource
 import be.hogent.faith.faith.util.state.ResourceState
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import kotlinx.android.synthetic.main.fragment_enter_event_details.background_event_details
-import kotlinx.android.synthetic.main.fragment_enter_event_details.img_event_details_avatar_zittend
-import kotlinx.android.synthetic.main.view_button_color_avatar.img_event_details_avatar_inkleuren
+import kotlinx.android.synthetic.main.fragment_enter_event_details.*
+import kotlinx.android.synthetic.main.view_button_color_avatar.*
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import java.util.UUID
+import java.util.*
 
 private const val ARG_EVENTUUID = "eventUUID"
 
@@ -184,7 +183,6 @@ class EventFragment : Fragment() {
     private fun handleDataStateSavingEvent(resource: Resource<Unit>) {
         when (resource.status) {
             ResourceState.SUCCESS -> {
-                saveDialog.hideProgressBar()
                 Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
                 saveDialog.dismiss()
                 userViewModel.eventSavedHandled()
@@ -199,10 +197,9 @@ class EventFragment : Fragment() {
                 // Go back to main screen
             }
             ResourceState.LOADING -> {
-                saveDialog.showProgressBar()
+                // Showing the loading spinner is done through data binding
             }
             ResourceState.ERROR -> {
-                saveDialog.hideProgressBar()
                 Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()
             }
         }
