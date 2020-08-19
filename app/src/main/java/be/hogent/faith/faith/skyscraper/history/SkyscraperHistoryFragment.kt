@@ -51,22 +51,6 @@ class SkyscraperHistoryFragment : Fragment() {
         binding.recyclerView.layoutManager = GridLayoutManager(activity, 5)
         binding.recyclerView.adapter = adapter
 
-        /*
-        val helpList = arrayListOf<SubGoal>()
-            val helpList2 = arrayListOf<Action>()
-            helpList2.add(Action("Dit is een actie"))
-            helpList2.add(Action("Dit is een andere actie"))
-            helpList.add(SubGoal("Dit is een subgoal"))
-            helpList.add(SubGoal("Dit is een andere subgoal",helpList2))
-
-        list.add(Goal("Dit is een eerste goal",SkyscraperColors.SKYSCRAPER_BLUE, helpList))
-        list.add(Goal("Dit is een tweede goal",SkyscraperColors.SKYSCRAPER_DARK_GREEN, helpList))
-        list.add(Goal("Dit is een derde goal",SkyscraperColors.SKYSCRAPER_GREEN, helpList))
-        list.add(Goal("Dit is een vierde goal",SkyscraperColors.SKYSCRAPER_YELLOW, helpList))
-        list.add(Goal("Dit is een vierde actie",SkyscraperColors.SKYSCRAPER_YELLOW, helpList))
-
-         */
-
         adapter.submitList(list)
     }
 
@@ -83,11 +67,6 @@ class SkyscraperHistoryFragment : Fragment() {
             navigation = context
         }
     }
-
-    /*private fun showOverviewDialog(goal: Goal) {
-        overviewGoalDialog = OverviewGoalDialog.newInstance(goal)
-        overviewGoalDialog.show(requireActivity().supportFragmentManager, null)
-    }*/
 
     companion object {
         fun newInstance(): SkyscraperHistoryFragment {
