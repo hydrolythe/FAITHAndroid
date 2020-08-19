@@ -8,7 +8,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.*
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.util.LoadingViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.event.DeleteEventDetailUseCase
@@ -273,7 +277,6 @@ class EventViewModel(
             }
         })
     }
-
 
     fun deleteDetail(detail: Detail) {
         val params = DeleteEventDetailUseCase.Params(detail, event.value!!)

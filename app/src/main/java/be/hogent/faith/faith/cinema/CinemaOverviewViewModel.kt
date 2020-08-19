@@ -71,16 +71,19 @@ class CinemaOverviewViewModel(
 
     fun saveFilm(filmDetail: FilmDetail, user: User) {
         val params = AddFilmToCinemaUseCase.Params(filmDetail, detailsContainer, user)
+        startLoading()
         addFilmToCinemaUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _filmSavedSuccessFully.call()
                 forceDetailsUpdate()
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 Timber.e(e)
                 e.printStackTrace()
                 _errorMessage.postValue(R.string.save_film_error)
+                doneLoading()
             }
         })
     }

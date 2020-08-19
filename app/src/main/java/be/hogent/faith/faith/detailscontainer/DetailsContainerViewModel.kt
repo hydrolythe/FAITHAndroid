@@ -8,7 +8,13 @@ import androidx.lifecycle.Transformations
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.DetailsContainer
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.models.detail.*
+import be.hogent.faith.domain.models.detail.AudioDetail
+import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.detailscontainer.detailFilters.CombinedDetailFilter
 import be.hogent.faith.faith.util.LoadingViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
