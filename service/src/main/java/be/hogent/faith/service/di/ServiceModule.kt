@@ -127,7 +127,7 @@ val serviceModule = module {
     factory { CreatePhotoDetailUseCase(get(), get()) }
     factory { CreateAudioDetailUseCase(get()) }
     factory { CreateTextDetailUseCase(get(), get()) }
-    factory { CreateVideoDetailUseCase(get()) }
+    factory { CreateVideoDetailUseCase(get(), get()) }
     factory { DeleteEventDetailUseCase(get()) }
     factory { DeleteEventUseCase(get(), get(), get()) }
     factory {
