@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
-import be.hogent.faith.databinding.FragmentSkyscraperStartBinding
+import be.hogent.faith.databinding.FragmentSkyscraperOverviewBinding
 import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
@@ -22,11 +22,10 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class SkyscraperStartScreenFragment : Fragment(),
-    SkyscraperPanelTextListener {
+class SkyscraperOverviewFragment : Fragment(), SkyscraperPanelTextListener {
 
     private var navigation: SkyscraperNavigationListener? = null
-    private lateinit var binding: FragmentSkyscraperStartBinding
+    private lateinit var binding: FragmentSkyscraperOverviewBinding
 
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private val overviewViewModel: SkyscraperOverviewViewModel by viewModel {
@@ -39,7 +38,12 @@ class SkyscraperStartScreenFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View? {
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_skyscraper_start, container, false)
+            DataBindingUtil.inflate(
+                inflater,
+                R.layout.fragment_skyscraper_overview,
+                container,
+                false
+            )
         binding.lifecycleOwner = this
         binding.viewModel = overviewViewModel
 
@@ -84,8 +88,8 @@ class SkyscraperStartScreenFragment : Fragment(),
     }
 
     companion object {
-        fun newInstance(): SkyscraperStartScreenFragment {
-            return SkyscraperStartScreenFragment()
+        fun newInstance(): SkyscraperOverviewFragment {
+            return SkyscraperOverviewFragment()
         }
     }
 

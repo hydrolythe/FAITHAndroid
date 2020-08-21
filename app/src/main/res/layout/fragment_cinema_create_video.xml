@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -40,10 +41,10 @@
                 android:id="@+id/textInputEditText_cinema_details_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="@{viewModel.isRendering == true ? false : true}"
-                android:text="@={cinemaOverviewViewModel.searchString}"
+                android:enabled="@{viewModel.isLoading() == true ? false : true}"
                 android:hint="@string/search_hint_film"
-                android:inputType="text" />
+                android:inputType="text"
+                android:text="@={cinemaOverviewViewModel.searchString}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -55,7 +56,7 @@
             android:layout_height="50dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/color_white"
-            android:clickable="@{viewModel.isRendering == true ? false : true}"
+            android:clickable="@{viewModel.isLoading() == true ? false : true}"
             android:onClick="@{() -> cinemaOverviewViewModel.onDateRangeClicked()}"
             android:text="@{cinemaOverviewViewModel.dateRangeString}"
             app:icon="@drawable/ic_kalender"
@@ -72,7 +73,7 @@
             android:layout_marginStart="@dimen/margin_corner_button"
             android:layout_marginTop="@dimen/margin_corner_button"
             android:background="@drawable/knop_terug_wit"
-            android:clickable="@{viewModel.isRendering == true ? false : true}"
+            android:clickable="@{viewModel.isLoading() == true ? false : true}"
             android:contentDescription="@string/cancel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -137,7 +138,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00FFFFFF"
-            android:clickable="@{viewModel.isRendering == true ? false : true}"
+            android:clickable="@{viewModel.isLoading() == true ? false : true}"
             android:contentDescription="@string/btn_create_video"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical2"
@@ -155,14 +156,14 @@
         <ProgressBar
             android:id="@+id/progressBar_cinema"
             style="@android:style/Widget.ProgressBar.Horizontal"
-            android:progressDrawable="@drawable/red_progress_bar"
             android:layout_width="0dp"
             android:layout_height="30dp"
+            android:progress="25"
+            android:progressDrawable="@drawable/red_progress_bar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical2"
             app:layout_constraintStart_toStartOf="@+id/guide_rv_container_vertical1"
-            app:layout_constraintTop_toBottomOf="@+id/rv_video_details_container"
-            android:progress="25"/>
+            app:layout_constraintTop_toBottomOf="@+id/rv_video_details_container" />
 
         <ImageView
             android:id="@+id/layer_rendering"
@@ -170,25 +171,17 @@
             android:layout_height="0dp"
             android:alpha="0.5"
             android:src="#0000FF"
-            tools:visibility="gone"
-            android:visibility="@{viewModel.isRendering == true ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <ImageView
-            android:id="@+id/spinner_loading"
-            android:layout_width="wrap_content"
-            tools:visibility="gone"
-            android:layout_height="wrap_content"
-            android:visibility="@{viewModel.isRendering == true ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.isLoading() == true ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/loading_spinner" />
+            tools:visibility="gone" />
+
+        <include
+            android:id="@+id/loading_spinner_cinema_create"
+            layout="@layout/loading_spinner"
+            bind:viewModel="@{viewModel}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

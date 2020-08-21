@@ -10,7 +10,7 @@ import be.hogent.faith.faith.skyscraper.goal.SkyscraperGoalFragment
 import be.hogent.faith.faith.skyscraper.history.OverviewGoalDialog
 import be.hogent.faith.faith.skyscraper.history.SkyscraperHistoryFragment
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder
-import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperStartScreenFragment
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperOverviewFragment
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperViewHolder
 import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.ext.android.getKoin
@@ -19,7 +19,7 @@ import org.koin.android.ext.android.getKoin
  * An activity representing a list of Events of the user.
  */
 class SkyscraperActivity : AppCompatActivity(), SkyscraperViewHolder.SkyscraperNavigationListener,
-    SkyscraperStartScreenFragment.SkyscraperNavigationListener,
+    SkyscraperOverviewFragment.SkyscraperNavigationListener,
     SkyscraperGoalFragment.SkyscraperNavigationListener,
     SkyscraperHistoryFragment.SkyscraperNavigationListener,
     SkyscraperThumbnailViewHolder.SkyscraperHistoryNavigationListener {
@@ -31,7 +31,7 @@ class SkyscraperActivity : AppCompatActivity(), SkyscraperViewHolder.SkyscraperN
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
-            val fragment = SkyscraperStartScreenFragment.newInstance()
+            val fragment = SkyscraperOverviewFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit()

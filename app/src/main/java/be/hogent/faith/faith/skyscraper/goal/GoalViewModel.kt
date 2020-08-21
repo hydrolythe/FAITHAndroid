@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.goals.Action
 import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.domain.models.goals.ReachGoalWay
 import be.hogent.faith.domain.models.goals.SubGoal
+import be.hogent.faith.faith.util.LoadingViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.goal.UpdateGoalUseCase
 import io.reactivex.rxjava3.observers.DisposableCompletableObserver
@@ -18,7 +18,7 @@ import timber.log.Timber
 class GoalViewModel(
     private val updateGoalUseCase: UpdateGoalUseCase,
     givenGoal: Goal
-) : ViewModel() {
+) : LoadingViewModel() {
     val goal = MediatorLiveData<Goal>()
     val subgoals: LiveData<Map<Int, SubGoal>> = Transformations.map(goal) { it.subGoals }
 
@@ -40,9 +40,6 @@ class GoalViewModel(
     private val _errorMessage = SingleLiveEvent<Int>()
     val errorMessage: LiveData<Int> = _errorMessage
 
-    private val _isLoading = MutableLiveData<Boolean>().apply { value = false }
-    val isLoading: LiveData<Boolean> = _isLoading
-
     val numberOfFloorsUpperBound = 9
 
     init {
@@ -57,17 +54,17 @@ class GoalViewModel(
     fun onSaveButtonClicked() {
         updateCurrentSelectedSubGoal()
         val params = UpdateGoalUseCase.Params(goal.value!!)
-        _isLoading.value = true
+        startLoading()
         updateGoalUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 Timber.i("Goal ${goal.value!!.uuid} updated")
                 _goalSavedSuccessfully.call()
-                _isLoading.value = false
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_skyscraper_update_goal_failed)
-                _isLoading.value = false
+                doneLoading()
             }
         })
     }
