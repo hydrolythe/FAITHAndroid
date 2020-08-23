@@ -184,7 +184,6 @@ class EventFragment : Fragment() {
     private fun handleDataStateSavingEvent(resource: Resource<Unit>) {
         when (resource.status) {
             ResourceState.SUCCESS -> {
-                saveDialog.hideProgressBar()
                 Toast.makeText(context, R.string.save_event_success, Toast.LENGTH_LONG).show()
                 saveDialog.dismiss()
                 userViewModel.eventSavedHandled()
@@ -199,10 +198,9 @@ class EventFragment : Fragment() {
                 // Go back to main screen
             }
             ResourceState.LOADING -> {
-                saveDialog.showProgressBar()
+                // Showing the loading spinner is done through data binding
             }
             ResourceState.ERROR -> {
-                saveDialog.hideProgressBar()
                 Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()
             }
         }

@@ -3,11 +3,11 @@ package be.hogent.faith.faith.skyscraper.startscreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.exceptions.MaxNumberOfGoalsReachedException
 import be.hogent.faith.domain.models.goals.Goal
+import be.hogent.faith.faith.util.LoadingViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.goal.AddNewGoalUseCase
 import be.hogent.faith.service.usecases.goal.GetGoalsUseCase
@@ -23,7 +23,7 @@ class SkyscraperOverviewViewModel(
     private val addNewGoalUseCase: AddNewGoalUseCase,
     private val updateGoalUseCase: UpdateGoalUseCase,
     private val user: User
-) : ViewModel() {
+) : LoadingViewModel() {
     private val _goals = MutableLiveData<List<Goal>>().apply {
         value = emptyList()
     }
@@ -37,41 +37,38 @@ class SkyscraperOverviewViewModel(
     private val _errorMessage = SingleLiveEvent<Int>()
     val errorMessage: LiveData<Int> = _errorMessage
 
-    private val _isLoading = MutableLiveData<Boolean>().apply { value = false }
-    val isLoading: LiveData<Boolean> = _isLoading
-
     init {
         loadGoals()
     }
 
     private fun loadGoals() {
         val params = GetGoalsUseCase.Params(user)
-        _isLoading.value = true
+        startLoading()
         getGoalsUseCase.execute(params, object : DisposableSubscriber<List<Goal>>() {
             override fun onComplete() {
-                _isLoading.value = false
+                doneLoading()
             }
 
             override fun onNext(goals: List<Goal>?) {
                 _goals.value = goals
-                _isLoading.value = false
+                doneLoading()
             }
 
             override fun onError(error: Throwable?) {
                 Timber.e(error)
                 _errorMessage.postValue(R.string.error_skyscraper_load_goals_failed)
-                _isLoading.value = false
+                doneLoading()
             }
         })
     }
 
     fun addNewGoal() {
-        _isLoading.value = true
+        startLoading()
         val params = AddNewGoalUseCase.Params(user)
         addNewGoalUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 _goalSavedSuccessfully.call()
-                _isLoading.value = false
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
@@ -80,7 +77,7 @@ class SkyscraperOverviewViewModel(
                 } else {
                     _errorMessage.postValue(R.string.error_skyscraper_add_goal_failed)
                 }
-                _isLoading.value = false
+                doneLoading()
             }
         })
     }
@@ -88,13 +85,16 @@ class SkyscraperOverviewViewModel(
     fun updateGoalDescription(goal: Goal, newDescription: String) {
         goal.description = newDescription
         val params = UpdateGoalUseCase.Params(goal)
+        startLoading()
         updateGoalUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 Timber.i("Goal ${goal.uuid} description updated to ${goal.description}")
+                doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_skyscraper_add_goal_failed)
+                doneLoading()
             }
         })
     }
@@ -103,5 +103,7 @@ class SkyscraperOverviewViewModel(
         super.onCleared()
         getGoalsUseCase.dispose()
         saveGoalUseCase.dispose()
+        updateGoalUseCase.dispose()
+        addNewGoalUseCase.dispose()
     }
 }

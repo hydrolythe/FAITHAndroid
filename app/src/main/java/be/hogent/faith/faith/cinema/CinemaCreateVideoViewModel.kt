@@ -2,12 +2,12 @@ package be.hogent.faith.faith.cinema
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.FilmDetail
 import be.hogent.faith.faith.details.DetailViewModel
+import be.hogent.faith.faith.util.LoadingViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase
 import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Status.Completed
@@ -24,15 +24,12 @@ import timber.log.Timber
  */
 class CinemaCreateVideoViewModel(
     private val createCinemaVideoUseCase: CreateCinemaVideoUseCase
-) : ViewModel(), DetailViewModel<FilmDetail> {
+) : LoadingViewModel(), DetailViewModel<FilmDetail> {
 
     var cinema: Cinema? = null
 
     private val _selectedDetails = MutableLiveData<List<Detail>>().apply { value = emptyList() }
     val selectedDetails: LiveData<List<Detail>> = _selectedDetails
-
-    private val _isRendering = MutableLiveData<Boolean>().apply { value = false }
-    val isRendering: LiveData<Boolean> = _isRendering
 
     private var currentDetail: FilmDetail? = null
 
@@ -79,30 +76,34 @@ class CinemaCreateVideoViewModel(
             _errorMessage.value = R.string.error_cinema_no_sources_selected
             return
         }
-        _isRendering.postValue(true)
         val params = CreateCinemaVideoUseCase.Params(
             _selectedDetails.value!!,
             cinema!!,
             VideoEncoder.Resolution(800, 600)
         )
+        startLoading()
         createCinemaVideoUseCase.execute(
             params,
             object : DisposableObserver<CreateCinemaVideoUseCase.Status>() {
                 override fun onComplete() {
-                    _isRendering.postValue(false)
+                    doneLoading()
                     _getDetailMetaData.call()
                 }
 
                 override fun onNext(progress: CreateCinemaVideoUseCase.Status) {
                     when (progress) {
                         is InProgress -> _encodingProgress.value = progress.progress
-                        is Completed -> currentDetail = progress.videoDetail
+                        is Completed -> {
+                            currentDetail = progress.videoDetail
+                            doneLoading()
+                        }
                     }
                 }
 
                 override fun onError(e: Throwable) {
                     _errorMessage.value = R.string.encode_film_error
                     Timber.e(e)
+                    doneLoading()
                 }
             })
     }

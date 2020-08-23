@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -96,7 +97,6 @@
             android:id="@+id/skyscraper_elevator_seekbar"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-
             android:background="@android:color/transparent"
             android:color="@android:color/transparent"
             android:max="@{goalViewModel.numberOfFloorsUpperBound}"
@@ -107,8 +107,6 @@
             app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors" />
 
         <!--rope-->
-
-
         <ImageView
             android:id="@+id/skyscraper_rope"
             android:layout_width="wrap_content"
@@ -140,7 +138,6 @@
             android:id="@+id/skyscraper_rope_seekbar"
             android:layout_width="19dp"
             android:layout_height="0dp"
-
             android:background="@android:color/transparent"
             android:onClick="@{()->goalViewModel.setReachGoalWay(ReachGoalWay.Rope)}"
             android:color="@android:color/transparent"
@@ -746,18 +743,10 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.82" />
 
-        <ImageView
-            android:id="@+id/spinner_loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@null"
-            android:visibility="@{goalViewModel.isLoading() == true ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/loading_spinner"
-            tools:visibility="gone" />
+        <include
+            android:id="@+id/loading_spinner_skyscraper_goal"
+            layout="@layout/loading_spinner"
+            bind:viewModel="@{goalViewModel}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
