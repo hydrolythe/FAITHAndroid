@@ -219,7 +219,8 @@ class SkyscraperGoalFragment : Fragment() {
 
         for (x in -2..goalViewModel.numberOfFloorsUpperBound) {
             skyscraper_create_goal.findViewWithTag<ImageView>(x.toString())
-                ?.setOnDragListener(AvatarOnDragListener(object : AvatarOnDragListener.AvatarDroppedListener {
+                ?.setOnDragListener(AvatarOnDragListener(object :
+                    AvatarOnDragListener.AvatarDroppedListener {
                     override fun onAvatarDropped(floor: Int) {
                         goalViewModel.setPositionAvatar(floor)
                     }
@@ -290,7 +291,7 @@ class SkyscraperGoalFragment : Fragment() {
         // Get the size of the image
         val bmOptions = BitmapFactory.Options()
         bmOptions.inJustDecodeBounds = true
-        @Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER") var bitmap =
+        @Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER") var avatarbitmap =
             BitmapFactory.decodeResource(resources, resID, bmOptions)
         val avatarWitdh = bmOptions.outWidth
         val avatarHeight = bmOptions.outHeight
@@ -298,11 +299,12 @@ class SkyscraperGoalFragment : Fragment() {
         bmOptions.inJustDecodeBounds = false
         // Figure out which way needs to be reduced less
         bmOptions.inSampleSize = min(avatarWitdh / THUMB_WIDTH, avatarHeight / THUMB_HEIGHT)
+        //    bmOptions.inSampleSize = min(avatarWitdh / elevatorBitmap.width, avatarHeight /( elevatorBitmap.height  - (2*13)))
         // scale the bitmap
-        bitmap = BitmapFactory.decodeResource(resources, resID, bmOptions)
+        avatarbitmap = BitmapFactory.decodeResource(resources, resID, bmOptions)
         // set the avatar on the roof and dragavatar for elevator
-        skyscraper_roof_avatar.setImageBitmap(bitmap)
-        dragAvatar.setImageBitmap(bitmap)
+        skyscraper_roof_avatar.setImageBitmap(avatarbitmap)
+        dragAvatar.setImageBitmap(avatarbitmap)
 
         // get the image for the elevator
         val borderId = resources.getIdentifier(
@@ -310,34 +312,40 @@ class SkyscraperGoalFragment : Fragment() {
             "drawable",
             requireContext().packageName
         )
-        var bitmapBorder = BitmapFactory.decodeResource(resources, borderId)
+        var elevatorBitmap = BitmapFactory.decodeResource(resources, borderId)
         // canvas needs mutable bitmap
-        bitmapBorder = bitmapBorder.copy(Bitmap.Config.ARGB_8888, true)
+        elevatorBitmap = elevatorBitmap.copy(Bitmap.Config.ARGB_8888, true)
 
         // place avatar in the elevator, 13dp is the height of the border of the elevator
-        val canvas = Canvas(bitmapBorder)
-        canvas.drawBitmap(bitmap, 0F, 13F, null)
+        val canvas = Canvas(elevatorBitmap)
+        // jjjj  canvas.drawBitmap(avatarbitmap, 0F, 13F, null)
+        canvas.drawBitmap(
+            avatarbitmap,
+            (elevatorBitmap.width - avatarbitmap.width) / 2.toFloat(),
+            (elevatorBitmap.height - (avatarbitmap.height + 13F)),
+            null
+        )
 
         // rotate the bitmaps for use in the vertical seekbars
         val matrix = Matrix()
         matrix.postRotate(90F)
-        bitmap = Bitmap.createBitmap(
-            bitmap, 0, 0,
-            bitmap.width, bitmap.height, matrix, true
+        avatarbitmap = Bitmap.createBitmap(
+            avatarbitmap, 0, 0,
+            avatarbitmap.width, avatarbitmap.height, matrix, true
         )
-        bitmapBorder = Bitmap.createBitmap(
-            bitmapBorder,
+        elevatorBitmap = Bitmap.createBitmap(
+            elevatorBitmap,
             0,
             0,
-            bitmapBorder.width,
-            bitmapBorder.height,
+            elevatorBitmap.width,
+            elevatorBitmap.height,
             matrix,
             true
         )
 
         // create the drawable
-        val drawableElevator: Drawable = BitmapDrawable(resources, bitmapBorder)
-        val drawable: Drawable = BitmapDrawable(resources, bitmap)
+        val drawableElevator: Drawable = BitmapDrawable(resources, elevatorBitmap)
+        val drawable: Drawable = BitmapDrawable(resources, avatarbitmap)
 
         skyscraper_elevator_seekbar.thumb = drawableElevator
         skyscraper_rope_seekbar.thumb = drawable

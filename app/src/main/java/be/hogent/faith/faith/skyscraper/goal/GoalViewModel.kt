@@ -78,7 +78,7 @@ class GoalViewModel(
         selectedSubGoalDescription.value = selectedSubGoal.value!!.second.description
     }
 
-    private fun updateCurrentSelectedSubGoal() {
+    fun updateCurrentSelectedSubGoal() {
         selectedSubGoal.value?.let {
             it.second.description = selectedSubGoalDescription.value!!
             selectedSubGoal.value = selectedSubGoal.value
@@ -105,6 +105,7 @@ class GoalViewModel(
             if (selectedSubGoalDescription.value.isNullOrEmpty())
                 _errorMessage.value = R.string.subdoel_naam_verplicht
             else {
+                updateCurrentSelectedSubGoal()
                 selectedSubGoal.value?.second?.addAction(Action())
                 selectedSubGoal.value = selectedSubGoal.value
             }

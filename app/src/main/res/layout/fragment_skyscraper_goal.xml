@@ -97,8 +97,6 @@
             android:id="@+id/skyscraper_elevator_seekbar"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             android:background="@android:color/transparent"
             android:color="@android:color/transparent"
             android:max="@{goalViewModel.numberOfFloorsUpperBound}"
@@ -114,13 +112,12 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:contentDescription="@null"
             android:onClick="@{()->goalViewModel.setReachGoalWay(ReachGoalWay.Rope)}"
             android:src="@drawable/skyscraper_rope"
             app:layout_constraintBottom_toBottomOf="@+id/skyscraper_rope_bottom"
-            app:layout_constraintEnd_toEndOf="@+id/guide_skyscraper_rope_end"
+            app:layout_constraintEnd_toStartOf="@+id/guide_skyscraper_rope_end"
             app:layout_constraintStart_toEndOf="@+id/skyscraper"
             app:layout_constraintTop_toBottomOf="@+id/guide_skyscraper_stairs_top_middle" />
 
@@ -131,6 +128,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@null"
             android:scaleType="fitXY"
+            android:layout_marginStart="2dp"
             android:src="@drawable/skyscraper_rope_bottom"
             app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_stairs_bottom_middle"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel_start"
@@ -140,14 +138,15 @@
             android:id="@+id/skyscraper_rope_seekbar"
             android:layout_width="19dp"
             android:layout_height="0dp"
-            android:layout_marginStart="20dp"
             android:background="@android:color/transparent"
+            android:onClick="@{()->goalViewModel.setReachGoalWay(ReachGoalWay.Rope)}"
             android:color="@android:color/transparent"
             android:max="@{goalViewModel.numberOfFloorsUpperBound}"
             android:progress="1"
             android:progressDrawable="@android:color/transparent"
             app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_bottom_floors"
             app:layout_constraintEnd_toEndOf="@+id/guide_skyscraper_rope_end"
+            app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_rope_end"
             app:layout_constraintTop_toBottomOf="@+id/guide_skyscraper_top_floors" />
         <!--end rope-->
         <!--right stairs-->
@@ -510,6 +509,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/your_avatar"
             android:visibility="gone"
+            android:elevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -579,7 +579,7 @@
             android:scrollbars="vertical"
             app:cardCornerRadius="30dp"
             app:cardElevation="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/skyscraper"
+            app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_stairs_bottom_middle"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel_end"
             app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
             app:layout_constraintTop_toTopOf="@+id/guide_panel_bottom">
