@@ -17,6 +17,7 @@
         android:layout_marginStart="20dp"
         android:background="@drawable/background_action_rv"
         android:clickable="true"
+        android:focusable="true"
         android:inputType="text"
         android:autofillHints="@string/beschrijving_actie"
         android:hint="@string/beschrijving_actie"
@@ -31,12 +32,12 @@
 
     <ImageButton
         android:id="@+id/swap"
-        android:layout_marginLeft="-60dp"
+        android:layout_marginStart="-60dp"
         style="?android:buttonBarButtonStyle"
         android:paddingBottom="5dp"
         android:contentDescription="@null"
         android:scaleType="fitXY"
-        android:src="@drawable/ic_gaverder"
+        android:src="@drawable/swipe"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center"/>
