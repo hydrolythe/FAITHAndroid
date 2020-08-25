@@ -94,7 +94,7 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/bib"
             android:onClick="@{() -> cityScreenViewModel.onArchiveClicked()}"
-            app:srcCompat="@drawable/avatar_placeholder" />
+             />
 
         <ImageView
             android:id="@+id/right_top"
@@ -120,7 +120,7 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/cinema"
             android:onClick="@{() -> cityScreenViewModel.onCinemaClicked()}"
-            app:srcCompat="@drawable/avatar_placeholder" />
+             />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/park"
@@ -135,7 +135,7 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/park"
             android:onClick="@{() -> cityScreenViewModel.onParkClicked()}"
-            app:srcCompat="@drawable/avatar_placeholder" />
+             />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/kantoor"
@@ -150,7 +150,7 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/kantoor"
             android:onClick="@{() -> cityScreenViewModel.onSkyscraperClicked()}"
-            app:srcCompat="@drawable/avatar_placeholder" />
+             />
 
         <ImageView
             android:id="@+id/left_bottom"
@@ -176,7 +176,7 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/rugzak"
             android:onClick="@{() -> cityScreenViewModel.onBackpackClicked()}"
-            app:srcCompat="@drawable/avatar_placeholder" />
+             />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/boomhut"
@@ -191,7 +191,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/boomhut"
-            app:srcCompat="@drawable/avatar_placeholder" />
+             />
 
         <ImageView
             android:id="@+id/image_main_avatar"
