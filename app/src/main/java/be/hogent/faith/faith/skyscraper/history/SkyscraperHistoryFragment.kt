@@ -51,7 +51,7 @@ class SkyscraperHistoryFragment : Fragment() {
         binding.recyclerView.layoutManager = GridLayoutManager(activity, 5)
         binding.recyclerView.adapter = adapter
 
-        adapter.submitList(list)
+        adapter.submitList(userViewModel.user.value?.achievedGoals)
     }
 
     private fun updateUI() {

@@ -45,14 +45,7 @@ class BackpackScreenFragment : DetailsContainerFragment<Backpack>() {
     }
 
     private fun startDetailFilterListeners() {
-        backpackViewModel.textFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
-            setFilterStateDrawable(
-                enabled,
-                backpackBinding.backpackMenuFilter.filterknopTeksten,
-                R.drawable.ic_filterknop_teksten,
-                R.drawable.ic_filterknop_teksten_selected
-            )
-        })
+
         backpackViewModel.audioFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setFilterStateDrawable(
                 enabled,
@@ -61,6 +54,7 @@ class BackpackScreenFragment : DetailsContainerFragment<Backpack>() {
                 R.drawable.ic_filterknop_audio_selected
             )
         })
+
         backpackViewModel.photoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setFilterStateDrawable(
                 enabled,
