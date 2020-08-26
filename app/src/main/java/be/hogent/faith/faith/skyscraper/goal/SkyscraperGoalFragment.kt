@@ -46,7 +46,6 @@ import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 import kotlin.math.max
 
 private const val GOAL = "The goal to be shown"
