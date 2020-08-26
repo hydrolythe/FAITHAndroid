@@ -50,6 +50,8 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
 
     private var navigation: AudioScreenNavigation? = null
 
+    private val audioFile = tempFileProvider.tempAudioRecordingFile
+
     private var hasAudioRecordingPermission = false
 
     private val audioPlayer: AudioPlayerAdapter =
@@ -57,7 +59,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
                 setPlaybackInfoListener(PlaybackListener())
             }
     private val audioRecorder: AudioRecorderAdapter =
-            AudioRecorderHolder(tempFileProvider.tempAudioRecordingFile).apply {
+            AudioRecorderHolder(audioFile).apply {
                 recordingInfoListener = RecordingListener()
             }
 
@@ -70,6 +72,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
         super.onCreate(savedInstanceState)
 
         audioDetailViewModel.pauseSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+        audioDetailViewModel.tempFile = audioFile
     }
 
     private fun loadExistingAudioDetail() {
@@ -130,7 +133,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
         audioDetailViewModel.recordStopButtonClicked.observe(this, Observer {
             // Initialise now so we're ready to play
             audioRecorder.stop()
-            audioPlayer.loadMedia(tempFileProvider.tempAudioRecordingFile)
+            audioPlayer.loadMedia(audioFile)
         })
         audioDetailViewModel.recordPauseButtonClicked.observe(this, Observer {
             audioRecorder.pause()
