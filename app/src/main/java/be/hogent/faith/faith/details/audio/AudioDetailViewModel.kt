@@ -30,7 +30,7 @@ class AudioDetailViewModel(
     override val savedDetail: LiveData<AudioDetail> = _savedDetail
 
     private var existingDetail: AudioDetail? = null
-    var tempFile: File? = null
+    var tempFile: File
 
     private val _getDetailMetaData = SingleLiveEvent<Unit>()
     override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
@@ -128,6 +128,7 @@ class AudioDetailViewModel(
         _recordingPaused.value = false
 
         _recordingTime.value = 0
+        tempFile = tempFileProvider.tempAudioRecordingFile
     }
 
     /**
