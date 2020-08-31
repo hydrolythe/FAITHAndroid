@@ -33,6 +33,7 @@
         <item>@drawable/stoplicht</item>
         <item>@drawable/toverstaf</item>
         <item>@drawable/vulkaan</item>
+        <item>@drawable/zeeverdriet</item>
         <item>@drawable/cognitievedriehoek</item>
         <item>@drawable/conflictcyclus</item>
     </array>
