@@ -153,10 +153,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <include
+    <!--    <include
             android:id="@+id/loading_spinner_backpack"
             layout="@layout/loading_spinner"
-            bind:viewModel="@{backpackViewModel}" />
+            bind:viewModel="@{backpackViewModel}" />-->
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>

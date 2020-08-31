@@ -73,7 +73,7 @@ class SkyscraperOverviewFragment : Fragment(), SkyscraperPanelTextListener {
             navigation?.openSkyscrapersHistory()
         }
         overviewViewModel.goals.observe(viewLifecycleOwner, Observer { goals ->
-            (binding.skyscraperRv.adapter as SkyscraperAdapter).submitList(goals)
+            (binding.skyscraperRv.adapter as SkyscraperAdapter).submitList(goals.filter { !it.isCompleted })
         })
         overviewViewModel.errorMessage.observe(viewLifecycleOwner, Observer { errorMessageResourceId ->
             Toast.makeText(requireContext(), errorMessageResourceId, Toast.LENGTH_SHORT).show()

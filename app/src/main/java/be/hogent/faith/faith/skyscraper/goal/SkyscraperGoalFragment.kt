@@ -46,7 +46,7 @@ import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
-import kotlin.math.min
+import kotlin.math.max
 
 private const val GOAL = "The goal to be shown"
 private const val THUMB_WIDTH = 24
@@ -297,14 +297,6 @@ class SkyscraperGoalFragment : Fragment() {
         val avatarHeight = bmOptions.outHeight
         // Set bitmap options to scale the image decode target
         bmOptions.inJustDecodeBounds = false
-        // Figure out which way needs to be reduced less
-        bmOptions.inSampleSize = min(avatarWitdh / THUMB_WIDTH, avatarHeight / THUMB_HEIGHT)
-        //    bmOptions.inSampleSize = min(avatarWitdh / elevatorBitmap.width, avatarHeight /( elevatorBitmap.height  - (2*13)))
-        // scale the bitmap
-        avatarbitmap = BitmapFactory.decodeResource(resources, resID, bmOptions)
-        // set the avatar on the roof and dragavatar for elevator
-        skyscraper_roof_avatar.setImageBitmap(avatarbitmap)
-        dragAvatar.setImageBitmap(avatarbitmap)
 
         // get the image for the elevator
         val borderId = resources.getIdentifier(
@@ -315,6 +307,19 @@ class SkyscraperGoalFragment : Fragment() {
         var elevatorBitmap = BitmapFactory.decodeResource(resources, borderId)
         // canvas needs mutable bitmap
         elevatorBitmap = elevatorBitmap.copy(Bitmap.Config.ARGB_8888, true)
+
+        // Figure out how to reduce the avatar
+        // bmOptions.inSampleSize = min(avatarWitdh / THUMB_WIDTH, avatarHeight / THUMB_HEIGHT)
+        bmOptions.inSampleSize = max(
+            avatarWitdh / elevatorBitmap.width,
+            (avatarHeight / (elevatorBitmap.height * 0.82)).toInt()
+        )
+
+        // scale the bitmap
+        avatarbitmap = BitmapFactory.decodeResource(resources, resID, bmOptions)
+        // set the avatar on the roof and dragavatar for elevator
+        skyscraper_roof_avatar.setImageBitmap(avatarbitmap)
+        dragAvatar.setImageBitmap(avatarbitmap)
 
         // place avatar in the elevator, 13dp is the height of the border of the elevator
         val canvas = Canvas(elevatorBitmap)

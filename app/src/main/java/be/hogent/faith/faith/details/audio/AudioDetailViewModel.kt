@@ -30,6 +30,7 @@ class AudioDetailViewModel(
     override val savedDetail: LiveData<AudioDetail> = _savedDetail
 
     private var existingDetail: AudioDetail? = null
+    var tempFile: File
 
     private val _getDetailMetaData = SingleLiveEvent<Unit>()
     override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
@@ -127,6 +128,7 @@ class AudioDetailViewModel(
         _recordingPaused.value = false
 
         _recordingTime.value = 0
+        tempFile = tempFileProvider.tempAudioRecordingFile
     }
 
     /**
@@ -171,7 +173,8 @@ class AudioDetailViewModel(
     }
 
     override fun onSaveClicked() {
-        val params = CreateAudioDetailUseCase.Params(tempFileProvider.tempAudioRecordingFile)
+        //  val params = CreateAudioDetailUseCase.Params(tempFileProvider.tempAudioRecordingFile)
+        val params = CreateAudioDetailUseCase.Params(tempFile!!)
         createAudioDetailUseCase.execute(params, CreateAudioDetailUseCaseHandler())
     }
 

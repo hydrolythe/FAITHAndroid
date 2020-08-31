@@ -82,19 +82,20 @@ class SkyscraperOverviewViewModel(
         })
     }
 
+    // TODO : loading terug implementeren. Vogeltje blijft staat
     fun updateGoalDescription(goal: Goal, newDescription: String) {
         goal.description = newDescription
         val params = UpdateGoalUseCase.Params(goal)
-        startLoading()
+        //  startLoading()
         updateGoalUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
                 Timber.i("Goal ${goal.uuid} description updated to ${goal.description}")
-                doneLoading()
+                //  doneLoading()
             }
 
             override fun onError(e: Throwable) {
                 _errorMessage.postValue(R.string.error_skyscraper_add_goal_failed)
-                doneLoading()
+                // doneLoading()
             }
         })
     }

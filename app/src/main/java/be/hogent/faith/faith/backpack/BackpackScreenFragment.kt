@@ -53,6 +53,7 @@ class BackpackScreenFragment : DetailsContainerFragment<Backpack>() {
                 R.drawable.ic_filterknop_teksten_selected
             )
         })
+
         backpackViewModel.audioFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setFilterStateDrawable(
                 enabled,
@@ -61,6 +62,7 @@ class BackpackScreenFragment : DetailsContainerFragment<Backpack>() {
                 R.drawable.ic_filterknop_audio_selected
             )
         })
+
         backpackViewModel.photoFilterEnabled.observe(viewLifecycleOwner, Observer { enabled ->
             setFilterStateDrawable(
                 enabled,

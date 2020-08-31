@@ -28,8 +28,6 @@ import be.hogent.faith.faith.details.audio.audioRecorder.AudioRecorderAdapter
 import be.hogent.faith.faith.details.audio.audioRecorder.AudioRecorderHolder
 import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
-import be.hogent.faith.faith.util.TempFileProvider
-import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
@@ -39,8 +37,6 @@ const val REQUESTCODE_AUDIO = 12
 private const val AUDIO_DETAIL = "An existing AudioDetail"
 
 class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
-
-    private val tempFileProvider: TempFileProvider by inject()
 
     override lateinit var detailFinishedListener: DetailFinishedListener
 
@@ -56,10 +52,8 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
             AudioPlayerHolder().apply {
                 setPlaybackInfoListener(PlaybackListener())
             }
-    private val audioRecorder: AudioRecorderAdapter =
-            AudioRecorderHolder(tempFileProvider.tempAudioRecordingFile).apply {
-                recordingInfoListener = RecordingListener()
-            }
+
+    private lateinit var audioRecorder: AudioRecorderAdapter
 
     /**
      * true when the user is currently dragging the indicator on the seekBar
@@ -91,10 +85,15 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
         recordAudioBinding.audioDetailViewModel = audioDetailViewModel
         recordAudioBinding.lifecycleOwner = this
 
+        audioRecorder = AudioRecorderHolder(audioDetailViewModel.tempFile).apply {
+            recordingInfoListener = RecordingListener()
+        }
+
         initialiseSeekBar()
 
         if (existingDetailGiven()) {
             loadExistingAudioDetail()
+        } else {
         }
 
         return recordAudioBinding.root
@@ -130,7 +129,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
         audioDetailViewModel.recordStopButtonClicked.observe(this, Observer {
             // Initialise now so we're ready to play
             audioRecorder.stop()
-            audioPlayer.loadMedia(tempFileProvider.tempAudioRecordingFile)
+            audioPlayer.loadMedia(audioDetailViewModel.tempFile)
         })
         audioDetailViewModel.recordPauseButtonClicked.observe(this, Observer {
             audioRecorder.pause()
