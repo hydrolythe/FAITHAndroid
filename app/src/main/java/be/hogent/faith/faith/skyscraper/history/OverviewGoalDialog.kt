@@ -41,6 +41,7 @@ class OverviewGoalDialog(private var goal: Goal) : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
+        binding.rvActionsBeschrijvingDoel.text = goal.description
         adapter = SubgoalAdapter(goal.subGoals)
         binding.rvSubgoals.layoutManager = LinearLayoutManager(requireContext())
         binding.rvSubgoals.adapter = adapter
