@@ -22,6 +22,8 @@ import be.hogent.faith.domain.models.detail.VideoDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.details.DetailsFactory
+import be.hogent.faith.faith.util.dismissDialog
+import be.hogent.faith.faith.util.showLoadingDialog
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.fragment_cinema_start.btn_cinema_chooseDate
@@ -131,6 +133,14 @@ class CinemaCreateVideoFragment : Fragment(), DetailFragment<FilmDetail> {
         })
         createVideoViewModel.errorMessage.observe(viewLifecycleOwner, Observer { errorMessageId ->
             Toast.makeText(requireContext(), errorMessageId, Toast.LENGTH_SHORT).show()
+        })
+
+        createVideoViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            if(isLoading){
+                showLoadingDialog()
+            }else{
+                dismissDialog()
+            }
         })
 
         createVideoViewModel.getDetailMetaData.observe(viewLifecycleOwner, Observer {
