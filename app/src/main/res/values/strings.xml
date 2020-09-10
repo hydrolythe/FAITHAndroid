@@ -250,6 +250,7 @@
     <string name="mijn_tijdslijn">mijn tijdslijn</string>
     <string name="create_film">Naar de filmstudio</string>
     <string name="search_hint_film">zoek hier een film op naam</string>
+    <string name="search_hint_goal">zoek hier een doel op naam</string>
     <string name="search_hint_bestand">zoek hier een bestand op naam</string>
     <string name="unauthorized_file_type">Dit bestandstype is niet toegelaten.</string>
     <string name="btn_create_video">Maak video</string>
@@ -290,4 +291,6 @@
     <string name="beschrijving_doel">Beschrijving doel</string>
     <string name="beschrijving_subdoel">Beschrijving subdoel</string>
     <string name="error_cinema_no_sources_selected">Je moet nog beelden selecteren voor je filmpje!</string>
+    <string name="voeg_actie_toe">voeg actie toe</string>
+    <string name="subdoel_opslaan">subdoel opslaan</string>
 </resources>

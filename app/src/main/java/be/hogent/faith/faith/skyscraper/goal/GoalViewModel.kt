@@ -5,6 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.goals.Action
 import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.domain.models.goals.ReachGoalWay
@@ -13,11 +14,11 @@ import be.hogent.faith.faith.util.LoadingViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.goal.UpdateGoalUseCase
 import io.reactivex.rxjava3.observers.DisposableCompletableObserver
-import timber.log.Timber
 
 class GoalViewModel(
     private val updateGoalUseCase: UpdateGoalUseCase,
-    givenGoal: Goal
+    givenGoal: Goal,
+    private val user: User
 ) : LoadingViewModel() {
     val goal = MediatorLiveData<Goal>()
     val subgoals: LiveData<Map<Int, SubGoal>> = Transformations.map(goal) { it.subGoals }
@@ -53,11 +54,10 @@ class GoalViewModel(
 
     fun onSaveButtonClicked() {
         updateCurrentSelectedSubGoal()
-        val params = UpdateGoalUseCase.Params(goal.value!!)
+        val params = UpdateGoalUseCase.Params(goal.value!!, user)
         startLoading()
         updateGoalUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
-                Timber.i("Goal ${goal.value!!.uuid} updated")
                 _goalSavedSuccessfully.call()
                 doneLoading()
             }
@@ -70,7 +70,7 @@ class GoalViewModel(
     }
 
     fun onSelectSubGoal(index: Int) {
-        updateCurrentSelectedSubGoal()
+        // updateCurrentSelectedSubGoal()
         if (goal.value!!.subGoals.containsKey(index))
             selectedSubGoal.value = Pair(index, goal.value!!.subGoals[index]!!)
         else
@@ -81,7 +81,6 @@ class GoalViewModel(
     fun updateCurrentSelectedSubGoal() {
         selectedSubGoal.value?.let {
             it.second.description = selectedSubGoalDescription.value!!
-            selectedSubGoal.value = selectedSubGoal.value
             goal.value!!.addSubGoal(
                 selectedSubGoal.value!!.second,
                 selectedSubGoal.value!!.first
@@ -91,12 +90,12 @@ class GoalViewModel(
     }
 
     fun removeAction(position: Int) {
-        selectedSubGoal.value?.second?.removeAction(position)
+        selectedSubGoal.value?.second?.removeAction(position % 10)
         selectedSubGoal.value = selectedSubGoal.value
     }
 
     fun moveAction(fromPosition: Int, toPosition: Int) {
-        selectedSubGoal.value?.second?.updateActionPosition(fromPosition, toPosition)
+        selectedSubGoal.value?.second?.updateActionPosition(fromPosition % 10, toPosition % 10)
         selectedSubGoal.value = selectedSubGoal.value
     }
 
@@ -105,7 +104,8 @@ class GoalViewModel(
             if (selectedSubGoalDescription.value.isNullOrEmpty())
                 _errorMessage.value = R.string.subdoel_naam_verplicht
             else {
-                updateCurrentSelectedSubGoal()
+                // if (goal.value!!.subGoals[selectedSubGoal.value!!.first] == null || selectedSubGoalDescription.value != goal.value!!.subGoals[selectedSubGoal.value!!.first]!!.description)
+                // updateCurrentSelectedSubGoal()
                 selectedSubGoal.value?.second?.addAction(Action())
                 selectedSubGoal.value = selectedSubGoal.value
             }
@@ -113,8 +113,14 @@ class GoalViewModel(
     }
 
     fun updateAction(position: Int, description: String) {
-        if (actionDescriptionHasChanged(position, description))
-            selectedSubGoal.value!!.second.updateAction(position, description)
+        if (selectedSubGoal.value!!.first == position / 10) {
+            if (actionDescriptionHasChanged(position % 10, description)) {
+                selectedSubGoal.value!!.second.updateAction(position % 10, description)
+            }
+        } else {
+            val subgoalForAction = goal.value!!.subGoals[position / 10]
+            subgoalForAction?.updateAction(position % 10, description)
+        }
     }
 
     fun updateActionState(position: Int) {
@@ -123,7 +129,6 @@ class GoalViewModel(
     }
 
     private fun actionDescriptionHasChanged(position: Int, description: String): Boolean {
-        Timber.i("actiondescr $position and $description")
         return selectedSubGoal.value!!.second.actions.size > position && selectedSubGoal.value!!.second.actions[position].description != description
     }
 
@@ -160,12 +165,15 @@ class GoalViewModel(
         _onAvatarPlaceChanged.call()
     }
 
+    fun saveSubGoal() {
+        updateCurrentSelectedSubGoal()
+    }
+
     fun moveSubGoal(fromPosition: Int, toPosition: Int) {
-        subgoals.value?.let {
-            selectedSubGoal.value = null
-            goal.value!!.changeFloorSubGoal(fromPosition, toPosition)
-            goal.value = goal.value
-        }
+        //   updateCurrentSelectedSubGoal()
+        selectedSubGoal.value = null
+        goal.value!!.changeFloorSubGoal(fromPosition, toPosition)
+        goal.value = goal.value
     }
 
     fun removeSubGoal(position: Int) {

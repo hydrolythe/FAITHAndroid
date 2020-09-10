@@ -15,6 +15,7 @@
             android:id="@+id/skyscraper_history_background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -93,7 +94,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/event_textInput_height"
             android:layout_marginBottom="20dp"
-            android:hint="@string/wat_zoek_je"
+            android:hint="@string/search_hint_goal"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             app:hintEnabled="false"
@@ -107,7 +108,7 @@
                 android:id="@+id/textInputEditText_skyscraper_history_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/search_hint_film"
+                android:hint="@string/search_hint_goal"
                 android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
 

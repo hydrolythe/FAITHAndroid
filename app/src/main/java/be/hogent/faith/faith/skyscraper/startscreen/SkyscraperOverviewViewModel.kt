@@ -85,7 +85,7 @@ class SkyscraperOverviewViewModel(
     // TODO : loading terug implementeren. Vogeltje blijft staat
     fun updateGoalDescription(goal: Goal, newDescription: String) {
         goal.description = newDescription
-        val params = UpdateGoalUseCase.Params(goal)
+        val params = UpdateGoalUseCase.Params(goal, user)
         //  startLoading()
         updateGoalUseCase.execute(params, object : DisposableCompletableObserver() {
             override fun onComplete() {
