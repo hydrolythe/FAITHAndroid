@@ -215,7 +215,7 @@ class DrawingDetailFragment : DrawFragment(),
         val imageResArray = requireContext().resources.obtainTypedArray(R.array.templates_people)
         val imagesAdapter =
             ImagesAdapter(
-                createListOfImageResources(imageResArray)
+                createListOfImageResources(imageResArray), drawView
             )
         drawBinding.recyclerViewDrawingTemplates.apply {
             adapter = imagesAdapter

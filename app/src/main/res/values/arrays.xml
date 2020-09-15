@@ -20,7 +20,6 @@
         <item>@drawable/template_laptop</item>
     </array>
     <array name="templates_decor">
-        <item>@drawable/template_mountains</item>
         <item>@drawable/speelplaats</item>
         <item>@drawable/keuken</item>
         <item>@drawable/klas</item>
