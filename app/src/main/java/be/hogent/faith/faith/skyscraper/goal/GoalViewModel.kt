@@ -90,12 +90,12 @@ class GoalViewModel(
     }
 
     fun removeAction(position: Int) {
-        selectedSubGoal.value?.second?.removeAction(position % 10)
+        selectedSubGoal.value?.second?.removeAction(getActionIndex(position))
         selectedSubGoal.value = selectedSubGoal.value
     }
 
     fun moveAction(fromPosition: Int, toPosition: Int) {
-        selectedSubGoal.value?.second?.updateActionPosition(fromPosition % 10, toPosition % 10)
+        selectedSubGoal.value?.second?.updateActionPosition(getActionIndex(fromPosition), getActionIndex(toPosition))
         selectedSubGoal.value = selectedSubGoal.value
     }
 
@@ -113,27 +113,27 @@ class GoalViewModel(
     }
 
     fun updateAction(position: Int, description: String) {
-        if (selectedSubGoal.value!!.first == position / 10) {
-            if (actionDescriptionHasChanged(position % 10, description)) {
-                selectedSubGoal.value!!.second.updateAction(position % 10, description)
+        if (selectedSubGoal.value!!.first == getGoalIndex(position)) {
+            if (actionDescriptionHasChanged(getActionIndex(position), description)) {
+                selectedSubGoal.value!!.second.updateAction(getActionIndex(position), description)
             }
         } else {
-            val subgoalForAction = goal.value!!.subGoals[position / 10]
-            subgoalForAction?.updateAction(position % 10, description)
+            val subgoalForAction = goal.value!!.subGoals[getGoalIndex(position)]
+            subgoalForAction?.updateAction(getActionIndex(position), description)
         }
     }
 
     fun updateActionState(position: Int) {
-        selectedSubGoal.value!!.second.updateActionStatus(position)
+        selectedSubGoal.value!!.second.updateActionStatus(getActionIndex(position))
         selectedSubGoal.value = selectedSubGoal.value
     }
 
     private fun actionDescriptionHasChanged(position: Int, description: String): Boolean {
-        return selectedSubGoal.value!!.second.actions.size > position && selectedSubGoal.value!!.second.actions[position].description != description
+        return selectedSubGoal.value!!.second.actions.size > getActionIndex(position) && selectedSubGoal.value!!.second.actions[getActionIndex(position)].description != description
     }
 
     private fun positionAvatarHasChanged(position: Int): Boolean {
-        return (goal.value!!.currentPositionAvatar != position)
+        return (goal.value!!.currentPositionAvatar != getActionIndex(position))
     }
 
     private fun reachGoalWayHasChanged(reachGoalWay: ReachGoalWay): Boolean {
@@ -157,6 +157,16 @@ class GoalViewModel(
                 _onAvatarPlaceChanged.call()
             }
         }
+    }
+
+    // position contains 2 numbers : 1ste : index of the subgoal, 2nd index of the action
+    private fun getGoalIndex(position: Int): Int {
+        return position / 10
+    }
+
+    // position contains 2 numbers : 1ste : index of the subgoal, 2nd index of the action
+    private fun getActionIndex(position: Int): Int {
+        return position % 10
     }
 
     fun setCompleted() {

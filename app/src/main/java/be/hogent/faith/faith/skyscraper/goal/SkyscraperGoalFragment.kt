@@ -187,7 +187,6 @@ class SkyscraperGoalFragment : Fragment() {
         })
 
         goalViewModel.goalSavedSuccessfully.observe(this, Observer {
-    //        userViewModel.setUser(user)
             navigation?.goBack()
         })
     }
@@ -207,20 +206,16 @@ class SkyscraperGoalFragment : Fragment() {
     private fun startListeners() {
         btn_subgoal_save.setOnClickListener {
             it.setFocusable(true)
-            it.setFocusableInTouchMode(true)
             it.requestFocus()
             goalViewModel.saveSubGoal()
             it.setFocusable(false)
-            it.setFocusableInTouchMode(false)
         }
 
         btn_add_action.setOnClickListener {
             it.setFocusable(true)
-            it.setFocusableInTouchMode(true)
             it.requestFocus()
             goalViewModel.addNewAction()
             it.setFocusable(false)
-            it.setFocusableInTouchMode(false)
         }
 
         val seekbarChangeListener = object : OnSeekBarChangeListener {
