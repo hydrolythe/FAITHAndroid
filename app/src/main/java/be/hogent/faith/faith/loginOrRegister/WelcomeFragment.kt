@@ -12,6 +12,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.faith.util.LoadingFragment
+import be.hogent.faith.faith.util.dismissDialog
+import be.hogent.faith.faith.util.showLoadingDialog
 import be.hogent.faith.faith.util.state.Resource
 import be.hogent.faith.faith.util.state.ResourceState
 import kotlinx.android.synthetic.main.fragment_login.progress
@@ -59,13 +62,14 @@ class WelcomeFragment : Fragment() {
     private fun handleDataStateLogIn(resource: Resource<Unit>) {
         when (resource.status) {
             ResourceState.SUCCESS -> {
+                dismissDialog()
                 navigation!!.userIsLoggedIn()
             }
             ResourceState.LOADING -> {
-                progress.visibility = View.VISIBLE
+                showLoadingDialog()
             }
             ResourceState.ERROR -> {
-                progress.visibility = View.GONE
+                dismissDialog()
                 Toast.makeText(context, resource.message!!, Toast.LENGTH_LONG).show()
             }
         }
