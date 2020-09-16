@@ -3,12 +3,17 @@
 package be.hogent.faith.faith.details.drawing.create.draggableImages
 
 import android.content.ClipData
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Point
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.View
+import androidx.core.graphics.drawable.toBitmap
 
-class DragOnTouchListener : View.OnLongClickListener {
+const val SCALEFACTORHEIGHT = 8
+
+class DragOnTouchListener(private val dropView: View) : View.OnLongClickListener {
     override fun onLongClick(view: View): Boolean {
         val drawableResourceId = view.tag as Int
 
@@ -17,8 +22,19 @@ class DragOnTouchListener : View.OnLongClickListener {
         val data = ClipData.newPlainText("resource identifier", drawableResourceId.toString())
 
         // Using a [FullSizeDragShadowBuilder] to show the full-sized Drawable while dragging.
-        val drawable = view.context.resources.getDrawable(drawableResourceId)
-        drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+        var drawable = view.context.resources.getDrawable(drawableResourceId)
+        // but first rescale the drawable to 1/8th of the height of the drawView
+        val scalefactor = drawable.intrinsicHeight.toFloat() / (dropView.height / SCALEFACTORHEIGHT).toFloat()
+        val newWidth = (drawable.intrinsicWidth / scalefactor).toInt()
+        val newHeight = dropView.height / SCALEFACTORHEIGHT
+
+        val resizedBitmap = Bitmap.createScaledBitmap(
+            drawable.toBitmap(), newWidth, newHeight, false
+        )
+        drawable = BitmapDrawable(view.context.getResources(), resizedBitmap)
+
+        drawable.setBounds(0, 0, newWidth,
+            newHeight)
         val shadowBuilder = FullSizeDragShadowBuilder(drawable, view)
 
         view.startDrag(data, shadowBuilder, view, 0)
@@ -36,8 +52,8 @@ class DragOnTouchListener : View.OnLongClickListener {
     ) : View.DragShadowBuilder(view) {
 
         override fun onProvideShadowMetrics(outShadowSize: Point, outShadowTouchPoint: Point) {
-            outShadowSize.x = dragShadowDrawable.intrinsicWidth
-            outShadowSize.y = dragShadowDrawable.intrinsicHeight
+            outShadowSize.x = dragShadowDrawable.bounds.width()
+            outShadowSize.y = dragShadowDrawable.bounds.height()
             // Center on top left corner so it matches on DrawView, and so you can clearly see the image while dragging
             outShadowTouchPoint.x = 0
             outShadowTouchPoint.y = 0

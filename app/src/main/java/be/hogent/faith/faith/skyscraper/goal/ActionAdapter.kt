@@ -12,13 +12,12 @@ import be.hogent.faith.R
 import be.hogent.faith.databinding.SkyscraperActionRvItemBinding
 import be.hogent.faith.domain.models.goals.Action
 import be.hogent.faith.domain.models.goals.ActionStatus
-import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
-import java.util.concurrent.TimeUnit
 
 class ActionAdapter(private val actionListener: ActionListener) :
     ListAdapter<Action, ActionAdapter.ActionViewHolder>(ActionDiffCallback()),
     ItemTouchHelperCallback.IItemTouchHelper {
 
+    var selectedSubgoalIndex: Int? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActionViewHolder {
         val layoutInflater = LayoutInflater
             .from(parent.context)
@@ -51,7 +50,8 @@ class ActionAdapter(private val actionListener: ActionListener) :
         RecyclerView.ViewHolder(view.root) {
 
         fun bind(action: Action, position: Int) {
-            view.txtActionDescription.tag = position
+            // the tag contains the key of the goal and the index of the action
+            view.txtActionDescription.tag = "${selectedSubgoalIndex}$position"
             view.txtActionDescription.setText(action.description)
             val background = view.txtActionDescription.background as GradientDrawable
             background.setColor(
@@ -70,7 +70,7 @@ class ActionAdapter(private val actionListener: ActionListener) :
                     )
                 }
             )
-            if (action.description.isNullOrEmpty()) view.txtActionDescription.requestFocus()
+            if (action.description.isEmpty()) view.txtActionDescription.requestFocus()
             view.swap.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(button: View?) {
                     actionListener.onActionUpdateState(
@@ -78,15 +78,27 @@ class ActionAdapter(private val actionListener: ActionListener) :
                     )
                 }
             })
+
+            view.txtActionDescription.setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus) {
+                    actionListener.onActionUpdated(
+                        view.txtActionDescription.tag.toString().toInt(), view.txtActionDescription.text.toString()
+                    )
+                }
+            }
+
+            /*
             view.txtActionDescription.afterTextChangeEvents()
                 .skip(1)
                 .debounce(1, TimeUnit.SECONDS)
                 .map {
+                    Timber.i("editable ${it.editable.toString()}")
                     actionListener.onActionUpdated(
                         view.txtActionDescription.tag.toString().toInt(), it.editable.toString()
                     )
                 }
                 .subscribe()
+*/
         }
     }
 }

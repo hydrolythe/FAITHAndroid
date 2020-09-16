@@ -77,6 +77,9 @@ class SubGoalAdapter(
                         )
                 )
                 setOnClickListener {
+                    it.setFocusable(true)
+                    it.setFocusableInTouchMode(true)
+                    it.requestFocus()
                     subGoalSelectedListener.onSubGoalSelected(
                         view.txtSubgoalDescription.tag.toString().toInt()
                     )

@@ -584,44 +584,83 @@
             app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
             app:layout_constraintTop_toTopOf="@+id/guide_panel_bottom">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp">
 
                 <EditText
-                    android:layout_width="wrap_content"
+                    android:id="@+id/goal_txtsubgoaldescription"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
                     android:layout_marginTop="16dp"
                     android:autofillHints="@string/beschrijving_subdoel"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:hint="@string/beschrijving_subdoel"
                     android:inputType="text"
                     android:text="@={goalViewModel.selectedSubGoalDescription}"
                     android:textColor="#0000FF"
                     android:textSize="20sp"
-                    android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }" />
+                    android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }"
+                    app:layout_constraintBottom_toTopOf="@+id/rv_goal_actions"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_goal_actions"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                    android:layout_height="0dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }"
+                    app:layout_constraintBottom_toTopOf="@+id/btn_add_action"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/goal_txtsubgoaldescription" />
 
-        <ImageButton
-            android:id="@+id/btn_add_action"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_corner_button"
-            android:layout_marginBottom="@dimen/margin_corner_button"
-            android:background="@drawable/ic_actie_toevoegen"
-            android:contentDescription="@null"
-            android:onClick="@{() -> goalViewModel.addNewAction()}"
-            android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }"
-            app:layout_constraintBottom_toBottomOf="@+id/rv_actions_container"
-            app:layout_constraintEnd_toEndOf="@+id/rv_actions_container" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_add_action"
+                    style="@style/faith_small_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_corner_button"
+                    android:contentDescription="@null"
+                    android:text="@string/voeg_actie_toe"
+                    app:cornerRadius="40dp"
+                    app:icon="@drawable/ic_actie_toevoegen"
+                    app:iconGravity="textStart"
+                    app:iconPadding="5dp"
+                    app:iconSize="20dp"
+                    android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_subgoal_save" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_subgoal_save"
+                    style="@style/faith_small_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/save"
+                    android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }"
+                    android:text="@string/subdoel_opslaan"
+                    app:cornerRadius="40dp"
+                    app:icon="@drawable/save_btn"
+                    app:iconGravity="textStart"
+                    app:iconPadding="5dp"
+                    app:iconSize="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/btn_add_action"
+                    app:layout_constraintTop_toTopOf="@+id/btn_add_action" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
 
 
         <androidx.constraintlayout.widget.Guideline

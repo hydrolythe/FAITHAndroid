@@ -122,7 +122,7 @@ val appModule = module(override = true) {
     viewModel { CinemaDetailsMetaDataViewModel() }
     viewModel { BackpackDetailsMetaDataViewModel() }
     viewModel { TreasureChestDetailsMetaDataViewModel() }
-    viewModel { (goal: Goal) -> GoalViewModel(get(), goal) }
+    viewModel { (goal: Goal, user: User) -> GoalViewModel(get(), goal, user) }
     viewModel { ViewTextDetailViewModel(get()) }
 
     viewModel { ViewVideoViewModel() }

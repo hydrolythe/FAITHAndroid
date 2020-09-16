@@ -38,6 +38,7 @@
             android:name=".faith.backpack.BackpackScreenActivity"
             android:label="@string/title_backpack"
             android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:theme="@style/AppTheme.FullScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

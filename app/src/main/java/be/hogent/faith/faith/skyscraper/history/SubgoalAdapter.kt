@@ -21,14 +21,15 @@ class SubgoalAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val subgoal = subgoals.get(subgoals.keys.toIntArray()[position])
         holder.itemView.tag = position
-        holder.subgoalDescription?.text = subgoals.get(position)?.description
+        holder.subgoalDescription.text = subgoal!!.description
 
         val childLayoutManager = LinearLayoutManager(holder.itemView.rv_subgoal_actions.context, RecyclerView.VERTICAL, false)
 
         holder.itemView.rv_subgoal_actions.apply {
             layoutManager = childLayoutManager
-            adapter = SubgoalActionAdapter(subgoals.get(position)!!)
+            adapter = SubgoalActionAdapter(subgoal)
             setRecycledViewPool(viewPool)
         }
     }

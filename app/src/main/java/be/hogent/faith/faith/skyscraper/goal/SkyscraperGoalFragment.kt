@@ -32,6 +32,8 @@ import be.hogent.faith.domain.models.goals.SubGoal
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
+import kotlinx.android.synthetic.main.fragment_skyscraper_goal.btn_add_action
+import kotlinx.android.synthetic.main.fragment_skyscraper_goal.btn_subgoal_save
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.dragAvatar
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_create_goal
@@ -57,6 +59,7 @@ class SkyscraperGoalFragment : Fragment() {
     private var navigation: SkyscraperNavigationListener? = null
     private lateinit var binding: FragmentSkyscraperGoalBinding
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
+    private val user = userViewModel.user.value!!
     private lateinit var goalViewModel: GoalViewModel
     private lateinit var actionAdapter: ActionAdapter
     private lateinit var subgoalAdapter: SubGoalAdapter
@@ -70,7 +73,7 @@ class SkyscraperGoalFragment : Fragment() {
     private fun loadExistingGoal() {
         val goal = arguments?.getSerializable(GOAL) as Goal
         goalViewModel =
-            getViewModel { parametersOf(goal.copy()) }
+            getViewModel { parametersOf(user.getGoal(goal.uuid)!!.copy(), user) }
     }
 
     override fun onCreateView(
@@ -163,6 +166,7 @@ class SkyscraperGoalFragment : Fragment() {
 
         // Update adapter when event changes
         goalViewModel.actions.observe(this, Observer { actions ->
+            actionAdapter.selectedSubgoalIndex = goalViewModel.selectedSubGoal.value?.first
             actionAdapter.submitList(actions)
             actionAdapter.notifyDataSetChanged()
         })
@@ -200,9 +204,23 @@ class SkyscraperGoalFragment : Fragment() {
     }
 
     private fun startListeners() {
+        btn_subgoal_save.setOnClickListener {
+            it.setFocusable(true)
+            it.requestFocus()
+            goalViewModel.saveSubGoal()
+            it.setFocusable(false)
+        }
+
+        btn_add_action.setOnClickListener {
+            it.setFocusable(true)
+            it.requestFocus()
+            goalViewModel.addNewAction()
+            it.setFocusable(false)
+        }
+
         val seekbarChangeListener = object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                goalViewModel.setPositionAvatar(progress)
+                goalViewModel.setPositionAvatar(if (progress < 0) 0 else progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {

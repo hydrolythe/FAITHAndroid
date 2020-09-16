@@ -64,6 +64,10 @@ data class User(
         return goal
     }
 
+    fun updateGoal(goal: Goal) {
+        allGoals[allGoals.indexOf(getGoal(goal.uuid))] = goal
+    }
+
     fun removeGoal(goal: Goal) {
         allGoals.remove(goal)
     }

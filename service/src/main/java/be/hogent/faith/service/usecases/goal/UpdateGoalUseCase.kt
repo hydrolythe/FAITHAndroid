@@ -1,5 +1,6 @@
 package be.hogent.faith.service.usecases.goal
 
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.service.encryption.IGoalEncryptionService
 import be.hogent.faith.service.repositories.IGoalRepository
@@ -15,6 +16,7 @@ class UpdateGoalUseCase(
 ) : CompletableUseCase<UpdateGoalUseCase.Params>(observer) {
 
     override fun buildUseCaseObservable(params: Params): Completable {
+        params.user.updateGoal(params.goal)
         return goalEncryptionService
             .encrypt(params.goal)
             .doOnSuccess { Timber.i("encrypted goal ${params.goal.uuid}") }
@@ -24,6 +26,7 @@ class UpdateGoalUseCase(
     }
 
     data class Params(
-        var goal: Goal
+        var goal: Goal,
+        var user: User
     )
 }

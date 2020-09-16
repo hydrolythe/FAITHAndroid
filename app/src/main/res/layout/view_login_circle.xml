@@ -37,7 +37,6 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="flagNoExtractUi"
                     android:inputType="text"
-                    android:nextFocusRight="@+id/txt_welcome_password"
                     android:nextFocusDown="@+id/txt_welcome_password"
                     android:singleLine="true"
                     android:text="@={welcomeViewModel.userName}" />
