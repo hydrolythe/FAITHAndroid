@@ -24,6 +24,4 @@
     <dimen name="match_constraint">0dp</dimen>
     <dimen name="padding_left">16dp</dimen>
     <dimen name="margin_corner_button">16dp</dimen>
-    <dimen name="loader_width">100dp</dimen>
-    <dimen name="loader_height">100dp</dimen>
 </resources>
