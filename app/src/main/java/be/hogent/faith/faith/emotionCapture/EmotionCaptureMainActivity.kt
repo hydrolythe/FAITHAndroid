@@ -22,10 +22,9 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.drawEmotionAvatar.DrawEmotionAvatarFragment
 import be.hogent.faith.faith.emotionCapture.editDetail.DetailFragmentWithEmotionAvatar
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
-import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventDetailsFragment
+import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventFragment
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
-import be.hogent.faith.faith.overviewEvents.OverviewEventsFragment
 import be.hogent.faith.faith.util.replaceFragment
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_drawer_layout
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_nav_view
@@ -36,8 +35,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.UUID
 
 class EmotionCaptureMainActivity : AppCompatActivity(),
-    EventDetailsFragment.EventDetailsNavigationListener,
-    OverviewEventsFragment.OverviewEventsNavigationListener,
+    EventFragment.EventDetailsNavigationListener,
     DetailFragmentWithEmotionAvatar.EditDetailNavigationListener,
     RecordAudioFragment.AudioScreenNavigation,
     DrawFragment.DrawingScreenNavigation,
@@ -63,6 +61,16 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     private val userViewModel: UserViewModel = getKoin().getScope(KoinModules.USER_SCOPE_ID).get()
     private val avatarProvider: AvatarProvider by inject()
     private var alertDialog: AlertDialog? = null
+    private lateinit var emotionAvatarFragment: DrawEmotionAvatarFragment
+
+    // tag for detailfragment, so it can be hidden and shown again
+    private var tagDetail: String? = null
+
+    // tag for avatarfragment, so it can be hidden and shown again
+    private var tagEmotionAvatar: String? = null
+
+    // if we have to go back to the detail iso the park when saving or canceling the avatarfragment
+    private var toAvatarFromDetail = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +82,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         // savedInstanceState is null when the activity is first created, and not null when being recreated.
         // Using this we should only add a new fragment when savedInstanceState is null
         if (savedInstanceState == null) {
-            val fragment = EventDetailsFragment.newInstance()
+            val fragment = EventFragment.newInstance()
             supportFragmentManager.beginTransaction()
                 .add(R.id.emotionCapture_fragment_container, fragment)
                 .commit()
@@ -91,6 +99,13 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
             }
             true
         }
+
+        val avatar =
+            avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
+        emotionAvatarFragment = DrawEmotionAvatarFragment.newInstance(avatar)
+        supportFragmentManager.beginTransaction()
+            .add(R.id.emotionCapture_fragment_container, emotionAvatarFragment, "avatar")
+            .hide(emotionAvatarFragment).commit()
     }
 
     override fun onStart() {
@@ -110,7 +125,7 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         eventViewModel.errorMessage.observe(this, Observer { errorMessageResId ->
             Toast.makeText(this, errorMessageResId, Toast.LENGTH_SHORT).show()
         })
-        eventViewModel.cancelButtonClicked.observe(this, Observer {
+        eventViewModel.backButtonClicked.observe(this, Observer {
             onBackPressed()
         })
     }
@@ -148,19 +163,22 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     }
 
     override fun startDrawEmotionAvatarFragment() {
-        val avatar =
-            avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
-        replaceFragment(
-            DrawEmotionAvatarFragment.newInstance(avatar),
-            R.id.emotionCapture_fragment_container
-        )
-    }
-
-    override fun startEventDetailsFragment(eventUuid: UUID) {
-        replaceFragment(
-            EventDetailsFragment.newInstance(eventUuid),
-            R.id.emotionCapture_fragment_container
-        )
+        // the detailfragment together with the avatar
+        if (tagDetail != null && tagEmotionAvatar != null) {
+            supportFragmentManager.beginTransaction()
+                .hide(supportFragmentManager.findFragmentByTag(tagDetail)!!)
+                .show(supportFragmentManager.findFragmentByTag(tagEmotionAvatar)!!).commit()
+            toAvatarFromDetail = true
+        } else {
+            // only the avatarfragment
+            val avatar =
+                avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
+            replaceFragment(
+                DrawEmotionAvatarFragment.newInstance(avatar),
+                R.id.emotionCapture_fragment_container
+            )
+            toAvatarFromDetail = false
+        }
     }
 
     override fun openDetailScreenFor(detail: Detail) {
@@ -175,27 +193,42 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
 
     override fun startPhotoDetailFragment() {
-        replaceFragment(
+        startDetail(
             DetailFragmentWithEmotionAvatar.PhotoFragmentWithEmotionAvatar.newInstance(
                 getAvatarOutline()
-            ), R.id.emotionCapture_fragment_container
+            )
         )
     }
 
     override fun startAudioDetailFragment() {
-        replaceFragment(
+        startDetail(
             DetailFragmentWithEmotionAvatar.AudioFragmentWithEmotionAvatar.newInstance(
                 getAvatarOutline()
-            ), R.id.emotionCapture_fragment_container
+            )
         )
     }
 
     override fun startDrawingDetailFragment() {
-        replaceFragment(
+        startDetail(
             DetailFragmentWithEmotionAvatar.DrawingFragmentWithEmotionAvatar.newInstance(
                 getAvatarOutline()
-            ), R.id.emotionCapture_fragment_container
+            )
         )
+    }
+
+    private fun startDetail(fragmentDetail: DetailFragmentWithEmotionAvatar) {
+        tagDetail = UUID.randomUUID().toString() // create a unique tagname for the detailFragment
+        tagEmotionAvatar =
+            UUID.randomUUID().toString() // create a unique tagname for the avatarFragment
+
+        val avatar =
+            avatarProvider.getAvatarDrawableOutlineId(userViewModel.user.value!!.avatarName)
+        val fragmentAvatar = DrawEmotionAvatarFragment.newInstance(avatar)
+        replaceFragment(fragmentDetail, R.id.emotionCapture_fragment_container, tagDetail)
+        // hide the avatarFragment
+        supportFragmentManager.beginTransaction()
+            .add(R.id.emotionCapture_fragment_container, fragmentAvatar, tagEmotionAvatar)
+            .hide(fragmentAvatar).commit()
     }
 
     override fun onDetailFinished(detail: Detail) {
@@ -223,16 +256,31 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
         eventViewModel.saveAudioDetail(audioDetail)
     }
 
+    override fun deleteDetail(detail: Detail) {
+        eventViewModel.deleteDetail(detail)
+    }
+
     override fun startTextDetailFragment() {
-        replaceFragment(
+        startDetail(
             DetailFragmentWithEmotionAvatar.TextFragmentWithEmotionAvatar.newInstance(
                 getAvatarOutline()
-            ), R.id.emotionCapture_fragment_container
+            )
         )
     }
 
     override fun backToEvent() {
-        supportFragmentManager.popBackStack()
+        if (toAvatarFromDetail) {
+            supportFragmentManager.beginTransaction()
+                .hide(supportFragmentManager.findFragmentByTag(tagEmotionAvatar)!!)
+                .show(supportFragmentManager.findFragmentByTag(tagDetail)!!)
+                .commit()
+            toAvatarFromDetail = false
+        } else {
+            tagDetail = null
+            tagEmotionAvatar = null
+            toAvatarFromDetail = false
+            supportFragmentManager.popBackStack()
+        }
     }
 
     override fun closeEvent() {
@@ -243,10 +291,9 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     override fun onBackPressed() {
         val f =
             supportFragmentManager.findFragmentById(R.id.emotionCapture_fragment_container)
-        if (f is EventDetailsFragment) {
+        if (f is EventFragment) {
             showExitAlert()
-        } else {
+        } else
             super.onBackPressed()
-        }
     }
 }

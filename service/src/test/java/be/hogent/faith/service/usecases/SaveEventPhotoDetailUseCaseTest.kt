@@ -2,13 +2,13 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.service.usecases.event.SaveEventPhotoDetailUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
+import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
+import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Completable
-import io.reactivex.Scheduler
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Scheduler
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -17,16 +17,16 @@ import java.io.IOException
 
 class SaveEventPhotoDetailUseCaseTest {
     private val observer = mockk<Scheduler>()
-    private val storageRepository = mockk<ITemporaryStorage>(relaxed = true)
+    private val storageRepository = mockk<ITemporaryFileStorageRepository>(relaxed = true)
 
     private val event = Event()
     private val photoDetail = mockk<PhotoDetail>()
-    private lateinit var saveEventPhotoDetailUseCase: SaveEventPhotoDetailUseCase
+    private lateinit var saveEventPhotoDetailUseCase: SaveEventDetailUseCase
 
     @Before
     fun setUp() {
         saveEventPhotoDetailUseCase =
-            SaveEventPhotoDetailUseCase(
+            SaveEventDetailUseCase(
                 storageRepository,
                 observer
             )
@@ -38,7 +38,7 @@ class SaveEventPhotoDetailUseCaseTest {
         every {
             storageRepository.storeDetailWithEvent(photoDetail, event)
         } returns Completable.complete()
-        val params = SaveEventPhotoDetailUseCase.Params(photoDetail, event)
+        val params = SaveEventDetailUseCase.Params(photoDetail, event)
 
         // Act
         saveEventPhotoDetailUseCase.buildUseCaseObservable(params).test()
@@ -55,7 +55,7 @@ class SaveEventPhotoDetailUseCaseTest {
         every {
             storageRepository.storeDetailWithEvent(photoDetail, event)
         } returns Completable.complete()
-        val params = SaveEventPhotoDetailUseCase.Params(photoDetail, event)
+        val params = SaveEventDetailUseCase.Params(photoDetail, event)
 
         // Act
         val result = saveEventPhotoDetailUseCase.buildUseCaseObservable(params)
@@ -74,7 +74,7 @@ class SaveEventPhotoDetailUseCaseTest {
         every {
             storageRepository.storeDetailWithEvent(photoDetail, event)
         } returns Completable.error(mockk<IOException>())
-        val params = SaveEventPhotoDetailUseCase.Params(photoDetail, event)
+        val params = SaveEventDetailUseCase.Params(photoDetail, event)
 
         // Act
         val result = saveEventPhotoDetailUseCase.buildUseCaseObservable(params)

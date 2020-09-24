@@ -21,12 +21,13 @@
             android:id="@+id/background_welcome"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/back_login"
+            android:background="@drawable/background_login"
             android:contentDescription="@string/descr_loginscreen"
             android:scaleType="fitCenter" />
 
         <!-- KNOPPEN -->
         <!-- Invisible to make it transparent -->
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_login"
             android:layout_width="match_parent"

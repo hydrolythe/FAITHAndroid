@@ -1,7 +1,6 @@
 package be.hogent.faith.faith.details.text.create
 
 import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
 import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,8 +13,9 @@ import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.textDetail.CreateTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
 import be.hogent.faith.service.usecases.detail.textDetail.OverwriteTextDetailUseCase
-import io.reactivex.observers.DisposableCompletableObserver
-import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.observers.DisposableSingleObserver
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 
 class TextDetailViewModel(
@@ -27,8 +27,11 @@ class TextDetailViewModel(
     private val _savedDetail = MutableLiveData<TextDetail>()
     override val savedDetail: LiveData<TextDetail> = _savedDetail
 
+    private val _getDetailMetaData = SingleLiveEvent<Unit>()
+    override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
+
     override fun loadExistingDetail(existingDetail: TextDetail) {
-        _existingDetail.value = existingDetail
+        _existingDetail = existingDetail
         val params = LoadTextDetailUseCase.LoadTextParams(existingDetail)
         loadTextDetailUseCase.execute(params, LoadTextUseCaseHandler())
     }
@@ -47,10 +50,11 @@ class TextDetailViewModel(
      */
     val initialText: LiveData<String> = _initialText
 
-    private val _existingDetail = MutableLiveData<TextDetail>()
+    private var _existingDetail: TextDetail? = null
 
-    private val _selectedTextColor = MutableLiveData<@ColorRes Int>()
-    val selectedTextColor: LiveData<Int> = _selectedTextColor
+    protected val _selectedTextColor = MutableLiveData<@ColorInt Int>()
+    val selectedTextColor: LiveData<Int>
+        get() = _selectedTextColor
 
     protected val _customTextColor = MutableLiveData<@ColorInt Int>()
     val customTextColor: LiveData<Int>
@@ -59,6 +63,7 @@ class TextDetailViewModel(
     private val _selectedFontSize = MutableLiveData<FontSize>()
     val selectedFontSize: LiveData<FontSize> = _selectedFontSize
 
+    // als je dit initieel een waarde geeft dan komt de tekst al in bold te staan
     private val _boldClicked = MutableLiveData<Boolean?>()
     val boldClicked: LiveData<Boolean?> = _boldClicked
 
@@ -88,7 +93,6 @@ class TextDetailViewModel(
         }
 
     init {
-        _selectedTextColor.value = R.color.black
         _customTextColor.value = R.color.green
         _fontsizeClicked.value = false
         _selectedFontSize.value =
@@ -121,7 +125,7 @@ class TextDetailViewModel(
         _fontsizeClicked.value = true
     }
 
-    fun pickTextColor(@ColorRes color: Int) {
+    fun pickTextColor(@ColorInt color: Int) {
         _selectedTextColor.value = color
     }
 
@@ -145,12 +149,12 @@ class TextDetailViewModel(
 
     override fun onSaveClicked() {
         if (!_text.value.isNullOrEmpty()) {
-            if (_existingDetail.value == null) {
+            if (_existingDetail == null) {
                 val params = CreateTextDetailUseCase.Params(text.value!!)
                 createTextDetailUseCase.execute(params, CreateTextDetailUseCaseHandler())
             } else {
                 val params =
-                    OverwriteTextDetailUseCase.Params(_text.value!!, _existingDetail.value!!)
+                    OverwriteTextDetailUseCase.Params(_text.value!!, _existingDetail!!)
                 overwriteTextDetailUseCase.execute(params, OverwriteTextDetailUseCaseHandler())
             }
         } else {
@@ -160,7 +164,7 @@ class TextDetailViewModel(
 
     private inner class OverwriteTextDetailUseCaseHandler : DisposableCompletableObserver() {
         override fun onComplete() {
-            _savedDetail.value = _existingDetail.value
+            _savedDetail.value = _existingDetail
         }
 
         override fun onError(e: Throwable) {
@@ -171,7 +175,8 @@ class TextDetailViewModel(
 
     private inner class CreateTextDetailUseCaseHandler : DisposableSingleObserver<TextDetail>() {
         override fun onSuccess(createdDetail: TextDetail) {
-            _savedDetail.value = createdDetail
+            _existingDetail = createdDetail
+            _getDetailMetaData.call()
         }
 
         override fun onError(e: Throwable) {
@@ -193,7 +198,15 @@ class TextDetailViewModel(
 
         override fun onError(e: Throwable) {
             Timber.e(e)
-            _errorMessage.postValue(R.string.error_save_text_failed)
+            _errorMessage.postValue(R.string.error_ophalen_textdetail)
         }
+    }
+
+    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        _existingDetail?.let {
+            it.title = title
+            it.dateTime = dateTime
+        }
+        _savedDetail.value = _existingDetail
     }
 }

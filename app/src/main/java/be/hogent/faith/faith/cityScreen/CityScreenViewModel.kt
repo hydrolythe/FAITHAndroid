@@ -3,8 +3,8 @@ package be.hogent.faith.faith.cityScreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.LogoutUserUseCase
-import io.reactivex.observers.DisposableCompletableObserver
+import be.hogent.faith.service.usecases.user.LogoutUserUseCase
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import timber.log.Timber
 
 /**
@@ -12,27 +12,39 @@ import timber.log.Timber
  */
 class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : ViewModel() {
 
-    val archiveClicked = SingleLiveEvent<Unit>()
+    val libraryClicked = SingleLiveEvent<Unit>()
     val parkClicked = SingleLiveEvent<Unit>()
-    val thirdLocation = SingleLiveEvent<Unit>()
+    val treehouseClicked = SingleLiveEvent<Unit>()
+    val backpackClicked = SingleLiveEvent<Unit>()
+    val cinemaClicked = SingleLiveEvent<Unit>()
+    val skyscraperClicked = SingleLiveEvent<Unit>()
 
     private val _logoutSuccessFull = SingleLiveEvent<Unit>()
     val logoutSuccessFull: LiveData<Unit>
         get() = _logoutSuccessFull
 
     fun onArchiveClicked() {
-        Timber.i("First location clicked")
-        archiveClicked.call()
+        libraryClicked.call()
     }
 
     fun onParkClicked() {
-        Timber.i("Second location clicked")
         parkClicked.call()
     }
 
-    fun thirdLocationClicked() {
-        Timber.i("third location clicked")
-        thirdLocation.call()
+    fun onTreehouseClicked() {
+        treehouseClicked.call()
+    }
+
+    fun onBackpackClicked() {
+        backpackClicked.call()
+    }
+
+    fun onCinemaClicked() {
+        cinemaClicked.call()
+    }
+    fun onSkyscraperClicked() {
+        Timber.i("Sixth location clicked")
+        skyscraperClicked.call()
     }
 
     fun onLogOutClicked() {

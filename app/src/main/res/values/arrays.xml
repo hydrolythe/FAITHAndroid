@@ -1,24 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="templates_people">
+        <item>@drawable/konijn</item>
+        <item>@drawable/leeuw</item>
+        <item>@drawable/muis</item>
+        <item>@drawable/spin</item>
+        <item>@drawable/vogel</item>
         <item>@drawable/template_person_running</item>
-        <item>@drawable/template_person_walking</item>
-        <item>@drawable/template_person_running</item>
-        <item>@drawable/template_person_running</item>
-        <item>@drawable/template_person_walking</item>
         <item>@drawable/template_person_walking</item>
     </array>
     <array name="templates_attributes">
         <item>@drawable/template_buggy</item>
+        <item>@drawable/skateboard</item>
+        <item>@drawable/zon</item>
+        <item>@drawable/zwaard</item>
+        <item>@drawable/vliegtuig</item>
+        <item>@drawable/politie</item>
+        <item>@drawable/kat</item>
         <item>@drawable/template_laptop</item>
     </array>
     <array name="templates_decor">
-        <item>@drawable/template_mountains</item>
+        <item>@drawable/speelplaats</item>
+        <item>@drawable/keuken</item>
+        <item>@drawable/klas</item>
+        <item>@drawable/slaapkamer</item>
+        <item>@drawable/speelplein</item>
     </array>
     <array name="templates_metaphors">
-        <item>@drawable/template_lightbulb</item>
-        <item>@drawable/template_lightbulb</item>
-        <item>@drawable/template_lightbulb</item>
-        <item>@drawable/template_lightbulb</item>
+        <item>@drawable/bril</item>
+        <item>@drawable/gevoelsthermometer</item>
+        <item>@drawable/stoplicht</item>
+        <item>@drawable/toverstaf</item>
+        <item>@drawable/vulkaan</item>
+        <item>@drawable/zeeverdriet</item>
+        <item>@drawable/cognitievedriehoek</item>
+        <item>@drawable/conflictcyclus</item>
     </array>
 </resources>

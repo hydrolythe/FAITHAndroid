@@ -1,15 +1,15 @@
 package be.hogent.faith.service.usecases.detail.textDetail
 
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
 import be.hogent.faith.service.usecases.base.SingleUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
-import io.reactivex.Scheduler
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.Single
 
 class LoadTextDetailUseCase(
-    private val tempStorageRepo: ITemporaryStorage,
-    observeScheduler: Scheduler
-) : SingleUseCase<String, LoadTextDetailUseCase.LoadTextParams>(observeScheduler) {
+    private val tempStorageRepo: ITemporaryFileStorageRepository,
+    observer: Scheduler
+) : SingleUseCase<String, LoadTextDetailUseCase.LoadTextParams>(observer) {
 
     override fun buildUseCaseSingle(params: LoadTextParams): Single<String> {
         return tempStorageRepo.loadTextFromExistingDetail(params.textDetail)

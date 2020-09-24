@@ -2,6 +2,9 @@ package be.hogent.faith.domain
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertFalse
+import junit.framework.Assert.assertTrue
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -57,5 +60,36 @@ class UserTest {
         user.addEvent(event)
         user.clearEvents()
         Assert.assertEquals(0, user.events.count())
+    }
+
+    @Test
+    fun shouldAddNewGoalToActiveGoals() {
+        user.addNewGoal()
+
+        assertEquals(1, user.activeGoals.size)
+    }
+
+    @Test(expected = RuntimeException::class)
+    fun shouldNotAllowMoreThan5ActiveGoals() {
+        repeat(6) { user.addNewGoal() }
+    }
+
+    @Test
+    fun shouldAssignUniqueColorToEachActiveGoal() {
+        repeat(5) { user.addNewGoal() }
+
+        val usedColors = user.activeGoals.map { it.goalColor }
+        assertEquals(usedColors.distinct().size, usedColors.size)
+    }
+
+    @Test
+    fun shouldMoveGoalToAchievedGoalsWhenSetToAchieved() {
+        user.addNewGoal()
+        val addedGoal = user.activeGoals.first()
+
+        user.setGoalCompleted(addedGoal)
+
+        assertTrue(user.achievedGoals.contains(addedGoal))
+        assertFalse(user.activeGoals.contains(addedGoal))
     }
 }

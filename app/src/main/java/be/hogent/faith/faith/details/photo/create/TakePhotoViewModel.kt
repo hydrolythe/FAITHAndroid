@@ -11,9 +11,11 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
-import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.rxjava3.observers.DisposableSingleObserver
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File
+import java.lang.UnsupportedOperationException
 
 class TakePhotoViewModel(
     private val createPhotoDetailUseCase: CreatePhotoDetailUseCase
@@ -22,30 +24,33 @@ class TakePhotoViewModel(
     private val _savedDetail = MutableLiveData<PhotoDetail>()
     override val savedDetail: LiveData<PhotoDetail> = _savedDetail
 
+    private val _getDetailMetaData = SingleLiveEvent<Unit>()
+    override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
+
+    private var currentDetail: PhotoDetail? = null
+
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
 
     override fun loadExistingDetail(existingDetail: PhotoDetail) {
-        throw NotImplementedError("Use the ReviewPhotoFragment to show existing photoSaveFile details.")
+        throw UnsupportedOperationException("Use the ReviewPhotoFragment to show existing photoSaveFile details.")
     }
 
     override fun onSaveClicked() {
         require(_tempPhotoSaveFile.value != null)
         val params = CreatePhotoDetailUseCase.Params(_tempPhotoSaveFile.value!!)
-        createPhotoDetailUseCase.execute(params, CreatePhotoDetailUseCaseHandler())
-    }
+        createPhotoDetailUseCase.execute(params, object : DisposableSingleObserver<PhotoDetail>() {
+            override fun onSuccess(createdDetail: PhotoDetail) {
+                currentDetail = createdDetail
+                _getDetailMetaData.call()
+            }
 
-    private inner class CreatePhotoDetailUseCaseHandler :
-        DisposableSingleObserver<PhotoDetail>() {
-        override fun onSuccess(createdDetail: PhotoDetail) {
-            _savedDetail.value = createdDetail
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.create_photo_failed)
-            Timber.e(e)
-        }
+            override fun onError(e: Throwable) {
+                _errorMessage.postValue(R.string.create_photo_failed)
+                Timber.e(e)
+            }
+        })
     }
 
     private var _currentState = MutableLiveData<PhotoState>()
@@ -125,6 +130,14 @@ class TakePhotoViewModel(
 
     fun onCancelClicked() {
         _cancelClicked.call()
+    }
+
+    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        currentDetail?.let {
+            it.title = title
+            it.dateTime = dateTime
+        }
+        _savedDetail.value = currentDetail
     }
 
     internal abstract class PhotoState {

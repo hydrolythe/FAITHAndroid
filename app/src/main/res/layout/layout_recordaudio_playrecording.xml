@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="audioDetailViewModel"
+            type="be.hogent.faith.faith.details.audio.AudioDetailViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_audioRecording"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="@dimen/panel_corner_radius"
+            app:layout_constraintBottom_toTopOf="@id/lbl_audio_recording_firstButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seekBar">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/btn_recordAudio_playerPlay"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="40dp"
+                    android:background="@drawable/button_audio_play"
+                    android:contentDescription="@string/description_stop_recording"
+                    android:onClick="@{() -> audioDetailViewModel.onPlayerPlayButtonClicked()}" />
+
+
+                <ImageView
+                    android:id="@+id/img_line"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/line_vertical" />
+
+                <ImageButton
+                    android:id="@+id/btn_recordAudio_playerPause"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="40dp"
+                    android:background="@drawable/button_audio_pause"
+                    android:contentDescription="@string/description_recording_pause"
+                    android:onClick="@{() -> audioDetailViewModel.onPlayerPauseButtonClicked()}" />
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            app:layout_constraintWidth_percent="0.7"
+            android:layout_marginTop="16dp"
+            android:progressDrawable="@drawable/audio_seekbar_progress"
+            android:splitTrack="false"
+            android:thumb="@drawable/audio_seekbar_thumb"
+            android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.FinishedRecording ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/cardView_audioRecording"
+            app:layout_constraintEnd_toEndOf="@+id/cardView_audioRecording"
+            app:layout_constraintStart_toStartOf="@+id/cardView_audioRecording"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:progress="25" />
+
+        <TextView
+            android:id="@+id/lbl_audio_startTime"
+            style="@style/recordingTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0:00"
+            android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.FinishedRecording ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/seekBar"
+            app:layout_constraintEnd_toStartOf="@+id/seekBar"
+            app:layout_constraintStart_toStartOf="@+id/seekBar" />
+
+        <TextView
+            android:id="@+id/lbl_audio_recordingDuration"
+            style="@style/recordingTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{audioDetailViewModel.recordingDuration}"
+            android:visibility="@{audioDetailViewModel.viewState == be.hogent.faith.faith.details.audio.AudioViewState.FinishedRecording ? View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toTopOf="@+id/seekBar"
+            app:layout_constraintEnd_toEndOf="@+id/seekBar"
+            app:layout_constraintStart_toEndOf="@+id/seekBar"
+            tools:text="01:23" />
+
+        <TextView
+            android:id="@+id/lbl_audio_recording_firstButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/recordaudio_play"
+            android:textAllCaps="true"
+            android:textColor="@color/caption"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/lbl_audio_recording_secondButton"
+            app:layout_constraintStart_toStartOf="@id/cardView_audioRecording"
+            app:layout_constraintTop_toBottomOf="@id/cardView_audioRecording" />
+
+        <TextView
+            android:id="@+id/lbl_audio_recording_secondButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/recordaudio_pause"
+            android:textAllCaps="true"
+            android:textColor="@color/caption"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/lbl_audio_recording_firstButton"
+            app:layout_constraintEnd_toEndOf="@id/cardView_audioRecording"
+            app:layout_constraintStart_toEndOf="@id/lbl_audio_recording_firstButton"
+            app:layout_constraintTop_toTopOf="@id/lbl_audio_recording_firstButton" />
+
+        <ImageButton
+            android:id="@+id/btn_recordAudio_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> audioDetailViewModel.onResetButtonClicked()}"
+            android:visibility="@{audioDetailViewModel.deleteButtonVisible ? View.VISIBLE: View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/seekBar"
+            app:layout_constraintStart_toEndOf="@+id/seekBar"
+            app:layout_constraintTop_toTopOf="@+id/seekBar"
+            app:srcCompat="@drawable/trashcan" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="detailsMetaDataViewModel"
+            type="be.hogent.faith.faith.details.DetailsMetaDataViewModel" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--ACHTERGROND-->
+
+        <!-- KNOPPEN -->
+        <!-- Invisible to make it transparent -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_white">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.24" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.80" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.93" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.21" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide_save_painter_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.22" />
+
+            <ImageButton
+                android:id="@+id/btn_save_backpack_cancel"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="@dimen/material_icon_height"
+                android:layout_marginStart="@dimen/margin_corner_button"
+                android:layout_marginTop="@dimen/margin_corner_button"
+                android:background="@drawable/ic_return"
+                android:contentDescription="@string/cancel"
+                android:onClick="@{() -> detailsMetaDataViewModel.onCancelClicked()}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/save_event_schilder"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginBottom="16dp"
+                android:contentDescription="@string/schilder"
+                android:padding="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guide_save_painter_end"
+                app:layout_constraintTop_toBottomOf="@+id/btn_save_backpack_cancel"
+                app:srcCompat="@drawable/schilder" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btn_save_backpack_cardview"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:cardBackgroundColor="@color/background_save_event"
+                app:cardCornerRadius="60dp"
+                app:cardElevation="@dimen/panel_elevation"
+                app:layout_constraintBottom_toTopOf="@+id/guide_save_bottom"
+                app:layout_constraintEnd_toStartOf="@+id/guide_save_end"
+                app:layout_constraintStart_toEndOf="@+id/guide_save_start"
+                app:layout_constraintTop_toBottomOf="@+id/guide_save_top">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintlayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/save_backpack_detail_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:text="@string/je_werkje_opslaan"
+                        android:textColor="@color/caption"
+                        android:textSize="45sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/textInputLayout_detailtitle"
+                        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_detailtitle"
+                        app:layout_constraintStart_toStartOf="@+id/textInputLayout_detailtitle" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout_detailtitle"
+                        style="@style/faith_textInputLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="48dp"
+                        android:layout_marginEnd="48dp"
+
+                        android:hint="@string/save_event_title"
+                        app:errorEnabled="true"
+                        app:errorResId="@{detailsMetaDataViewModel.detailTitleErrorMessage}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:startIconDrawable="@drawable/ic_titel">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/txt_save_backpack_detail_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:nextFocusDown="@+id/txt_save_event_notes"
+                            android:text="@={detailsMetaDataViewModel.detailTitle}">
+
+                            <requestFocus />
+                        </com.google.android.material.textfield.TextInputEditText>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_save_detail"
+                        style="@style/faith_button"
+                        android:layout_width="wrap_content"
+                        android:background="@drawable/save_btn"
+                        android:contentDescription="@string/save"
+                        android:onClick="@{() -> detailsMetaDataViewModel.onSaveDetailsData()}"
+                        android:text="@string/save"
+                        app:cornerRadius="40dp"
+                        app:icon="@drawable/save_btn"
+                        app:iconGravity="textStart"
+                        app:iconPadding="5dp"
+                        app:iconSize="44dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_detailtitle" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</layout>

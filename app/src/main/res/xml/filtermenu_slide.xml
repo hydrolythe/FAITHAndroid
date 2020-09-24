@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@id/start"
+        app:duration="1000">
+
+        <OnClick
+            app:clickAction="toggle"
+            app:targetId="@+id/btn_backpack_search" />
+        <OnSwipe
+            app:dragDirection="dragRight"
+            app:touchAnchorId="@id/backpack_menu_filter"
+            app:touchAnchorSide="right" />
+
+
+    </Transition>
+    <Transition
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@id/start"
+        app:duration="1000"
+        app:motionInterpolator="easeIn">
+
+        <OnClick
+            app:clickAction="toggle"
+            app:targetId="@+id/search_close_btn" />
+
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@id/backpack_menu_filter">
+
+        </Constraint>
+    </ConstraintSet>
+    <ConstraintSet android:id="@+id/end">
+
+        <Constraint
+            android:id="@id/backpack_menu_filter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guide_filtermenu_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Constraint
+            android:id="@id/guide_items_vertical_start"
+            app:layout_constraintGuide_percent="0.28" />
+        <Constraint
+            android:id="@id/btn_backpack_search"
+            android:visibility="gone" />
+        <Constraint
+            android:id="@id/btn_backpack_search"
+            android:visibility="gone" />
+        <Constraint
+            android:id="@id/btn_backpack_draw_cancel"
+            android:visibility="gone" />
+
+    </ConstraintSet>
+
+
+</MotionScene>

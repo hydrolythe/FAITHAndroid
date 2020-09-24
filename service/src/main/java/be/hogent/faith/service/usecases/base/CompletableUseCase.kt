@@ -1,11 +1,11 @@
 package be.hogent.faith.service.usecases.base
 
-import io.reactivex.Completable
-import io.reactivex.Scheduler
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.observers.DisposableCompletableObserver
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 /**
  * Base class for a use case that will return a [Completable].
@@ -16,7 +16,8 @@ import io.reactivex.schedulers.Schedulers
  * An example can be found in [be.hogent.faith.service.usecases.SaveEventUseCase].
  */
 abstract class CompletableUseCase<in Params>(
-    private val observer: Scheduler
+    private val observer: Scheduler,
+    protected val subscriber: Scheduler = Schedulers.io()
 ) {
 
     private val disposables = CompositeDisposable()
@@ -32,7 +33,7 @@ abstract class CompletableUseCase<in Params>(
      */
     open fun execute(params: Params, completableObserver: DisposableCompletableObserver) {
         val completable = this.buildUseCaseObservable(params)
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(subscriber)
             .observeOn(observer)
         addDisposable(completable.subscribeWith(completableObserver))
     }

@@ -3,16 +3,26 @@ package be.hogent.faith.faith.details.drawing.create
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.view.View
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.faith.backpack.BackpackScreenActivity
+import be.hogent.faith.faith.cinema.CinemaActivity
+import be.hogent.faith.faith.treasureChest.TreasureChestActivity
 import com.divyanshu.draw.widget.DrawView
 import kotlinx.android.synthetic.main.panel_brush_sizes.btn_draw_setMediumLineWidth
 import kotlinx.android.synthetic.main.panel_brush_sizes.btn_draw_setThickLineWidth
 import kotlinx.android.synthetic.main.panel_brush_sizes.btn_draw_setThinLineWidth
+import kotlinx.android.synthetic.main.panel_drawing_colors.img_draw_blackSelected
+import kotlinx.android.synthetic.main.panel_drawing_colors.img_draw_blueSelected
+import kotlinx.android.synthetic.main.panel_drawing_colors.img_draw_greenSelected
+import kotlinx.android.synthetic.main.panel_drawing_colors.img_draw_redSelected
+import kotlinx.android.synthetic.main.panel_drawing_colors.img_draw_yellowSelected
 
 abstract class DrawFragment : Fragment() {
     abstract val drawViewModel: DrawViewModel
@@ -31,7 +41,7 @@ abstract class DrawFragment : Fragment() {
         setUpListeners()
 
         // anders wordt zwarte kleur niet geselecteerd en wordt de alpha value niet ingesteld
-        drawViewModel.pickColor(ContextCompat.getColor(context!!, R.color.black))
+        drawViewModel.pickColor(ContextCompat.getColor(requireContext(), R.color.black))
     }
 
     override fun onAttach(context: Context) {
@@ -46,6 +56,7 @@ abstract class DrawFragment : Fragment() {
         drawViewModel.selectedColor.observe(this, Observer { newColor ->
             drawView.setColor(newColor)
             drawView.setAlpha(colorAlpha)
+            setSelectedColor(newColor)
             setBrushSizeDrawables()
         })
         drawViewModel.pencilClicked.observe(this, Observer {
@@ -68,13 +79,21 @@ abstract class DrawFragment : Fragment() {
             showExitAlert()
         })
         drawViewModel.eraserClicked.observe(this, Observer {
-            drawView.pickEraserTool()
+            drawView.pickEraserTool(colorAlpha)
         })
         drawViewModel.drawingActions.observe(this, Observer {
             // It's very important that the drawCanvas doesn't create its own paths but uses a paths object
             // that is saved in such a way that it survives configuration changes. See [DrawViewModel].
             drawView.setActions(it)
         })
+    }
+
+    private fun setSelectedColor(@ColorInt newColor: Int) {
+        img_draw_blackSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.black)) View.VISIBLE else View.GONE
+        img_draw_blueSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.blue)) View.VISIBLE else View.GONE
+        img_draw_redSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.red)) View.VISIBLE else View.GONE
+        img_draw_greenSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.green)) View.VISIBLE else View.GONE
+        img_draw_yellowSelected.visibility = if (newColor == ContextCompat.getColor(requireContext(), R.color.yellow))View.VISIBLE else View.GONE
     }
 
     protected fun setBrushSizeDrawables() {
@@ -87,7 +106,7 @@ abstract class DrawFragment : Fragment() {
         val color: Int = drawViewModel.selectedColor.value!!
         val gradientDrawable =
             AppCompatResources.getDrawable(
-                this.context!!,
+                requireContext(),
                 R.drawable.circle
             ) as GradientDrawable
         gradientDrawable.setColor(color)
@@ -98,10 +117,15 @@ abstract class DrawFragment : Fragment() {
         return gradientDrawable
     }
 
-    private fun showExitAlert() {
+    protected open fun showExitAlert() {
         val alertDialog: AlertDialog = this.run {
             val builder = AlertDialog.Builder(this.requireContext()).apply {
-                setTitle(R.string.dialog_to_the_event_title)
+                when (requireActivity()) {
+                    is BackpackScreenActivity -> setTitle(R.string.dialog_to_the_backpack)
+                    is CinemaActivity -> setTitle(R.string.dialog_to_the_cinema_title)
+                    is TreasureChestActivity -> setTitle(R.string.dialog_to_the_treasurechest_title)
+                    else -> setTitle(R.string.dialog_to_the_event_title)
+                }
                 setMessage(R.string.dialog_to_the_event_message)
                 setPositiveButton(R.string.ok) { _, _ ->
                     navigation!!.backToEvent()

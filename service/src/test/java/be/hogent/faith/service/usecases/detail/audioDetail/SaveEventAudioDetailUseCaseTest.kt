@@ -2,13 +2,13 @@ package be.hogent.faith.service.usecases.detail.audioDetail
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.service.usecases.event.SaveEventAudioDetailUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
+import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
+import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Completable
-import io.reactivex.Scheduler
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Scheduler
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -16,9 +16,9 @@ import org.junit.Test
 import java.io.IOException
 
 class SaveEventAudioDetailUseCaseTest {
-    private lateinit var saveEventAudioDetailUseCase: SaveEventAudioDetailUseCase
+    private lateinit var saveEventAudioDetailUseCase: SaveEventDetailUseCase
     private val scheduler: Scheduler = mockk()
-    private val repository: ITemporaryStorage = mockk(relaxed = true)
+    private val repository: ITemporaryFileStorageRepository = mockk(relaxed = true)
 
     private val event = Event()
     private val audioDetail = mockk<AudioDetail>()
@@ -26,7 +26,7 @@ class SaveEventAudioDetailUseCaseTest {
     @Before
     fun setUp() {
         saveEventAudioDetailUseCase =
-            SaveEventAudioDetailUseCase(
+            SaveEventDetailUseCase(
                 repository,
                 scheduler
             )
@@ -41,7 +41,7 @@ class SaveEventAudioDetailUseCaseTest {
                 event
             )
         } returns Completable.complete()
-        val params = SaveEventAudioDetailUseCase.Params(audioDetail, event)
+        val params = SaveEventDetailUseCase.Params(audioDetail, event)
 
         // Act
         saveEventAudioDetailUseCase.buildUseCaseObservable(params).test()
@@ -61,7 +61,7 @@ class SaveEventAudioDetailUseCaseTest {
                 event
             )
         } returns Completable.complete()
-        val params = SaveEventAudioDetailUseCase.Params(audioDetail, event)
+        val params = SaveEventDetailUseCase.Params(audioDetail, event)
 
         // Act
         saveEventAudioDetailUseCase.buildUseCaseObservable(params).test()
@@ -84,7 +84,7 @@ class SaveEventAudioDetailUseCaseTest {
                 event
             )
         } returns Completable.error(mockk<IOException>())
-        val params = SaveEventAudioDetailUseCase.Params(audioDetail, event)
+        val params = SaveEventDetailUseCase.Params(audioDetail, event)
 
         // Act
         saveEventAudioDetailUseCase.buildUseCaseObservable(params).test()

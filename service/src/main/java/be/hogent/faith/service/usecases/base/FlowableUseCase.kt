@@ -1,11 +1,11 @@
 package be.hogent.faith.service.usecases.base
 
-import io.reactivex.Flowable
-import io.reactivex.Scheduler
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subscribers.DisposableSubscriber
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subscribers.DisposableSubscriber
 
 /**
  * Base class for a use case that will return a [Flowable].
@@ -16,7 +16,8 @@ import io.reactivex.subscribers.DisposableSubscriber
  * An example can be found in [be.hogent.faith.service.usecases.SaveEventUseCase].
  */
 abstract class FlowableUseCase<Result, in Params>(
-    private val observer: Scheduler
+    private val observer: Scheduler,
+    protected val subscriber: Scheduler = Schedulers.io()
 ) {
 
     private val disposables = CompositeDisposable()
@@ -32,7 +33,7 @@ abstract class FlowableUseCase<Result, in Params>(
      */
     open fun execute(params: Params, flowableObserver: DisposableSubscriber<Result>) {
         val flowable = this.buildUseCaseObservable(params)
-            .subscribeOn(Schedulers.io())
+            .subscribeOn(subscriber)
             .observeOn(observer)
         addDisposable(flowable.subscribeWith(flowableObserver))
     }

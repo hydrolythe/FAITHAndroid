@@ -4,13 +4,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.service.usecases.event.SaveEventAudioDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import io.mockk.Called
 import io.mockk.called
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -18,7 +18,7 @@ import org.junit.Test
 
 class EventViewModelSaveAudioTest {
     private lateinit var viewModel: EventViewModel
-    private val saveEventAudioUC = mockk<SaveEventAudioDetailUseCase>(relaxed = true)
+    private val saveEventAudioUC = mockk<SaveEventDetailUseCase>(relaxed = true)
 
     private val detail = mockk<AudioDetail>()
 
@@ -32,21 +32,19 @@ class EventViewModelSaveAudioTest {
     fun setUp() {
         viewModel = EventViewModel(
             mockk(),
-            mockk(),
             saveEventAudioUC,
-            mockk(),
             mockk()
         )
     }
 
     @Test
     fun eventViewModel_saveEventAudio_callsUseCase() {
-        val params = slot<SaveEventAudioDetailUseCase.Params>()
+        val params = slot<SaveEventDetailUseCase.Params>()
 
         viewModel.saveAudioDetail(detail)
         verify { saveEventAudioUC.execute(capture(params), any()) }
 
-        assertEquals(detail, params.captured.audioDetail)
+        assertEquals(detail, params.captured.detail)
         assertEquals(event, params.captured.event)
     }
 

@@ -1,13 +1,14 @@
 package be.hogent.faith.faith.details.drawing.create.draggableImages
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.IdRes
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 
-class ImagesAdapter(@IdRes imageDrawableIDs: List<Int>) :
+class ImagesAdapter(@IdRes imageDrawableIDs: List<Int>, private val dropView: View) :
     RecyclerView.Adapter<ImageViewHolder>() {
 
     private val imageResources = mutableListOf<Int>()
@@ -41,7 +42,7 @@ class ImagesAdapter(@IdRes imageDrawableIDs: List<Int>) :
         holder.imageView.setImageResource(imageResources[position])
         // The ID of the Drawable is set as the tag so the [DragOnTouchListener] can use it for the DragShadow.
         holder.imageView.tag = imageResources[position]
-        holder.imageView.setOnLongClickListener(DragOnTouchListener())
+        holder.imageView.setOnLongClickListener(DragOnTouchListener(dropView))
     }
 }
 

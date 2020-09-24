@@ -9,7 +9,7 @@ import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -36,9 +36,7 @@ class EventViewModelSaveEmotionAvatarTest : KoinTest {
         viewModel = EventViewModel(
             saveEmotionAvatarUseCase,
             mockk(),
-            mockk(),
-            mockk(),
-            mockk()
+                    mockk()
         )
 
         // We have to add an observer so event changes when title/notes/date are given a new value

@@ -7,7 +7,7 @@
         android:layout_margin="16dp"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.recyclerview.widget.RecyclerView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/rv_eventlist"
@@ -16,7 +16,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             app:layoutManager="LinearLayoutManager"
-            tools:context=".faith.library.EventListActivity"
-            tools:listitem="@layout/event_list_content" />
+            tools:context=".faith.library.LibraryActivity"
+            tools:listitem="@layout/library_rv_item" />
     </LinearLayout>
 </layout>

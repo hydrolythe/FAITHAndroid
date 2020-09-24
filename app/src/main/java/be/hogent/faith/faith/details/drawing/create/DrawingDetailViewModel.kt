@@ -7,10 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.details.DetailViewModel
+import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
-import io.reactivex.observers.DisposableCompletableObserver
-import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.observers.DisposableSingleObserver
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 
 class DrawingDetailViewModel(
@@ -20,6 +22,9 @@ class DrawingDetailViewModel(
 
     private val _savedDetail = MutableLiveData<DrawingDetail>()
     override val savedDetail: LiveData<DrawingDetail> = _savedDetail
+
+    private val _getDetailMetaData = SingleLiveEvent<Unit>()
+    override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
 
     private var existingDetail: DrawingDetail? = null
 
@@ -66,12 +71,21 @@ class DrawingDetailViewModel(
     private inner class CreateDrawingDetailUseCaseHandler :
         DisposableSingleObserver<DrawingDetail>() {
         override fun onSuccess(createdDetail: DrawingDetail) {
-            _savedDetail.value = createdDetail
+            existingDetail = createdDetail
+            _getDetailMetaData.call()
         }
 
         override fun onError(e: Throwable) {
             _errorMessage.postValue(R.string.error_save_drawing_failed)
             Timber.e(e)
         }
+    }
+
+    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        existingDetail?.let {
+            it.title = title
+            it.dateTime = dateTime
+        }
+        _savedDetail.value = existingDetail
     }
 }

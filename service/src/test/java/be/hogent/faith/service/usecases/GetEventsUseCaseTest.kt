@@ -1,67 +1,70 @@
 package be.hogent.faith.service.usecases
 
-import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.service.encryption.IEventEncryptionService
+import be.hogent.faith.service.repositories.IEventRepository
 import be.hogent.faith.service.usecases.event.GetEventsUseCase
+import be.hogent.faith.service.usecases.util.EncryptedEventFactory
 import be.hogent.faith.util.factory.EventFactory
 import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import io.reactivex.Flowable
-import io.reactivex.Scheduler
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import org.junit.Before
 import org.junit.Test
-import java.lang.RuntimeException
-import java.util.concurrent.Executor
 
 class GetEventsUseCaseTest {
     private lateinit var getEventsUC: GetEventsUseCase
-    private lateinit var executor: Executor
-    private lateinit var scheduler: Scheduler
-    private lateinit var repository: EventRepository
+    private val eventEncryptionService = mockk<IEventEncryptionService>()
+    private val eventRepository = mockk<IEventRepository>()
 
     @Before
     fun setUp() {
-        executor = mockk()
-        scheduler = mockk()
-        repository = mockk(relaxed = true)
-        getEventsUC = GetEventsUseCase(repository, scheduler)
+        getEventsUC = GetEventsUseCase(
+            eventRepository,
+            eventEncryptionService,
+            mockk(),
+            Schedulers.trampoline()
+        )
     }
 
     @Test
     fun getEventsUC_execute_callsRepo() {
+        every { eventRepository.getAll() } returns Flowable.just(
+            EncryptedEventFactory.makeEventList(2),
+            EncryptedEventFactory.makeEventList(2)
+        )
         val params = GetEventsUseCase.Params(UserFactory.makeUser())
 
         getEventsUC.buildUseCaseObservable(params)
+            .test()
 
-        verify { repository.getAll() }
+        verify { eventRepository.getAll() }
     }
 
     @Test
     fun getEventsUseCase_eventsPresent_returnsThem() {
         val params = GetEventsUseCase.Params(UserFactory.makeUser())
         // Simulate two events on the stream
-        every { repository.getAll() } returns Flowable.just(
-            EventFactory.makeEventList(2),
-            EventFactory.makeEventList(2)
+        every { eventRepository.getAll() } returns Flowable.just(
+            EncryptedEventFactory.makeEventList(2),
+            EncryptedEventFactory.makeEventList(2)
         )
-        val result = getEventsUC.buildUseCaseObservable(params)
-        result.test().assertValueCount(2)
+        every { eventEncryptionService.decryptData(any()) } returns Single.defer { // Defer to ensure a new event is made with each call
+            Single.just(EventFactory.makeEvent())
+        }
+        getEventsUC.buildUseCaseObservable(params)
+            .test()
+            .assertValueCount(2)
     }
 
     @Test
     fun getEventsUseCase_noEventsPresent_returnsNothing() {
         val params = GetEventsUseCase.Params(UserFactory.makeUser())
-        every { repository.getAll() } returns Flowable.empty()
+        every { eventRepository.getAll() } returns Flowable.empty()
         val result = getEventsUC.buildUseCaseObservable(params)
         result.test().assertNoValues()
-    }
-
-    @Test
-    fun getEventsUseCase_userNotAuthenticated_fails() {
-        val params = GetEventsUseCase.Params(UserFactory.makeUser())
-        every { repository.getAll() } returns Flowable.error(RuntimeException())
-        val result = getEventsUC.buildUseCaseObservable(params)
-        result.test().assertNoValues().assertError(RuntimeException::class.java)
     }
 }

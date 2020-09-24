@@ -5,7 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
+import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.util.state.Resource
+import be.hogent.faith.faith.util.state.ResourceState
 import be.hogent.faith.faith.util.SingleLiveEvent
+import be.hogent.faith.service.usecases.user.InitialiseUserUseCase
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 
 /**
  * Represents the [ViewModel] for the user during the registering process - Part 2
@@ -13,7 +18,8 @@ import be.hogent.faith.faith.util.SingleLiveEvent
  * If the avatar is available, the user will be registered
  */
 class RegisterAvatarViewModel(
-    private val avatarProvider: AvatarProvider
+    private val avatarProvider: AvatarProvider,
+    private val initialiseUserUseCase: InitialiseUserUseCase
 ) : ViewModel() {
 
     private var _avatars = MutableLiveData<List<Avatar>>()
@@ -35,6 +41,10 @@ class RegisterAvatarViewModel(
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int>
         get() = _errorMessage
+
+    private val _userRegisteredState = MutableLiveData<Resource<Unit>>()
+    val userRegisteredState: LiveData<Resource<Unit>>
+        get() = _userRegisteredState
 
     init {
         _selectedSkinColor.value = SkinColor.blank
@@ -89,5 +99,26 @@ class RegisterAvatarViewModel(
 
     private fun fetchAvatarImages() {
         _avatars.value = (avatarProvider.getAvatars(selectedSkinColor.value!!))
+    }
+
+    fun initialiseUser(user: User) {
+        _userRegisteredState.postValue(Resource(ResourceState.LOADING, Unit, null))
+        user.avatarName = selectedAvatar!!.avatarName
+        val params = InitialiseUserUseCase.Params(user)
+        initialiseUserUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                _userRegisteredState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
+            }
+
+            override fun onError(e: Throwable) {
+                _userRegisteredState.postValue(
+                    Resource(
+                        ResourceState.ERROR,
+                        Unit,
+                        R.string.register_error_create_user
+                    )
+                )
+            }
+        })
     }
 }

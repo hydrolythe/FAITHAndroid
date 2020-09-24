@@ -5,9 +5,11 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorTransparent">#B3FFFFFF</color>
 
+    <color name="background_backpack">#CDF9EC</color>
+
     <color name="park_sky">#C1FCEE</color>
     <color name="park_gras">#16F48A</color>
-    <color name="background_city">#009688</color>
+    <color name="background_city">#00A898</color>
 
 
     <color name="primary">#00BFA5</color>
@@ -29,6 +31,8 @@
     <color name="background_record_audio">#91C6A8</color>
     <color name="background_save_event">#CDF9EC</color>
     <color name="background_enter_text">#F21040</color>
+    <color name="background_library_eventlist">#CDF9EC</color>
+    <color name="background_library_eventdetails">#6BBDA4</color>
 
     <color name="blue">#00FFFF</color>
     <color name="red">#DA1D45</color>
@@ -44,6 +48,20 @@
     <color name="skin_blank">#FFC18E</color>
     <color name="skin_lightbrown">#D39751</color>
     <color name="skin_darkbrown">#9C6231</color>
+
+    <color name="green_light">#95E8CD</color>
+
+    <color name="background_backpack_video">#CDF9EC</color>
+    <color name="background_backpack_video_black">#000000</color>
+
+    <color name="skyscraper_blue">#00D1C0</color>
+    <color name="skyscraper_green">#0BDB73</color>
+    <color name="skyscraper_darkgreen">#009688</color>
+    <color name="skyscraper_red">#ED1E79</color>
+    <color name="skyscraper_yellow">#FFFF00</color>
+
+    <color name="skyscraper_action_active">#CDF9EC</color>
+    <color name="skyscraper_action_inactive">#D8D8D8</color>
 </resources>
 
 

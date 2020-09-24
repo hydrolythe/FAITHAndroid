@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -11,144 +10,213 @@
             type="be.hogent.faith.faith.cityScreen.CityScreenViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_city"
-        android:orientation="vertical">
-        <!--ACHTERGROND-->
+        android:background="@color/background_city">
 
-        <!-- KNOPPEN -->
-        <!-- Invisible to make it transparent -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/left_margin_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/div_start_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.35" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/div_end_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.65" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/right_margin_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/top_margin_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom_margin_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/div_top_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.35" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/div_botom_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.65" />
+
         <ImageView
-            android:id="@+id/background_city_screen"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/frag_main_descr_city_plan"
-            android:scaleType="centerInside"
-            app:srcCompat="@drawable/stad"
-            tools:srcCompat="@drawable/stad" />
+            android:id="@+id/left_top"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/div_top_horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/div_start_vertical"
+            app:layout_constraintStart_toStartOf="@+id/left_margin_vertical"
+            app:layout_constraintTop_toTopOf="@+id/top_margin_horizontal"
+            app:srcCompat="@drawable/serre" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#00000000">
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/bib"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="@{() -> cityScreenViewModel.onArchiveClicked()}"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/div_top_horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/div_end_vertical"
+            app:layout_constraintStart_toEndOf="@+id/left_top"
+            app:layout_constraintTop_toTopOf="@+id/top_margin_horizontal"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/bib"
 
-            <!--Every button is set by using two intersecting guidelines.
-                The top left corner of the button is located at the intersection.
-                It might be better to use four guidelines so that we get 2 points (top-left and bottom-right),
-                and let the Views decide their dimensions solely through their constrains.
-                This will however produce a large amount of Guidelines.
+            app:srcCompat="@drawable/prev_bib" />
 
-                Why use guidelines, and not a kind of map? Because maps inherently use pixels, and those won't work
-                on screens of different resolutions. Guidelines can be set using percentages which will scale with
-                the device.-->
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_pole_right_start"
-                android:layout_width="8dp"
-                android:layout_height="12dp"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.49" />
+        <ImageView
+            android:id="@+id/right_top"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/div_top_horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/right_margin_vertical"
+            app:layout_constraintStart_toStartOf="@+id/div_end_vertical"
+            app:layout_constraintTop_toTopOf="@+id/top_margin_horizontal"
+            app:srcCompat="@drawable/podium" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_pole_top"
-                android:layout_width="8dp"
-                android:layout_height="12dp"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.0" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/cinema"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/div_botom_horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/div_start_vertical"
+            app:layout_constraintStart_toStartOf="@+id/left_margin_vertical"
+            app:layout_constraintTop_toBottomOf="@id/left_top"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/cinema"
+            android:onClick="@{() -> cityScreenViewModel.onCinemaClicked()}"
+            app:srcCompat="@drawable/prev_cinema"
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_pole_right_end"
-                android:layout_width="8dp"
-                android:layout_height="12dp"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.73" />
+             />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_pole_bottom"
-                android:layout_width="8dp"
-                android:layout_height="12dp"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.24" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/park"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/div_botom_horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/div_end_vertical"
+            app:layout_constraintStart_toEndOf="@id/div_start_vertical"
+            app:layout_constraintTop_toBottomOf="@id/div_top_horizontal"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/park"
+            android:onClick="@{() -> cityScreenViewModel.onParkClicked()}"
+            app:srcCompat="@drawable/prev_park"
+             />
 
-            <View
-                android:id="@+id/btn_loginfragment_library"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:onClick="@{() -> cityScreenViewModel.onArchiveClicked()}"
-                app:layout_constraintBottom_toTopOf="@id/guide_pole_bottom"
-                app:layout_constraintEnd_toStartOf="@id/guide_pole_right_end"
-                app:layout_constraintStart_toStartOf="@+id/guide_pole_right_start"
-                app:layout_constraintTop_toTopOf="@+id/guide_pole_top" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/kantoor"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/div_botom_horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/right_margin_vertical"
+            app:layout_constraintStart_toEndOf="@id/div_end_vertical"
+            app:layout_constraintTop_toTopOf="@+id/div_top_horizontal"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/kantoor"
+            android:onClick="@{() -> cityScreenViewModel.onSkyscraperClicked()}"
+            app:srcCompat="@drawable/prev_kantoor"
+             />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_pole_left_end"
-                android:layout_width="8dp"
-                android:layout_height="12dp"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.37" />
+        <ImageView
+            android:id="@+id/left_bottom"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_margin_horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/div_start_vertical"
+            app:layout_constraintStart_toStartOf="@+id/left_margin_vertical"
+            app:layout_constraintTop_toTopOf="@+id/div_botom_horizontal"
+            app:srcCompat="@drawable/bomen" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_loc2_top"
-                android:layout_width="8dp"
-                android:layout_height="12dp"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.38" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/rugzak"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_margin_horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/div_end_vertical"
+            app:layout_constraintStart_toEndOf="@id/div_start_vertical"
+            app:layout_constraintTop_toTopOf="@+id/div_botom_horizontal"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/rugzak"
+            android:onClick="@{() -> cityScreenViewModel.onBackpackClicked()}"
+            app:srcCompat="@drawable/prev_rugzak"
+             />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_pole_left_start"
-                android:layout_width="8dp"
-                android:layout_height="12dp"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.63" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/boomhut"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_margin_horizontal"
+            android:onClick="@{() -> cityScreenViewModel.onTreehouseClicked()}"
+            app:layout_constraintEnd_toStartOf="@+id/right_margin_vertical"
+            app:layout_constraintStart_toStartOf="@+id/div_end_vertical"
+            app:layout_constraintTop_toTopOf="@+id/div_botom_horizontal"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/boomhut"
+            app:srcCompat="@drawable/prev_boomhut"
+             />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_loc2_bottom"
-                android:layout_width="8dp"
-                android:layout_height="12dp"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.54" />
+        <ImageView
+            android:id="@+id/image_main_avatar"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/rugzak"
+            app:layout_constraintEnd_toStartOf="@+id/boomhut"
+            app:layout_constraintTop_toTopOf="@+id/guideline2"
+            app:srcCompat="@drawable/jongen_voetballer_lb" />
 
-            <!--AVATAR -->
-            <ImageView
-                android:id="@+id/image_main_avatar"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/frag_main_descr_your_avatar"
-                android:scaleType="fitXY"
-                android:src="@drawable/meisje_stoer_bl"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guide_avatar_left"
-                app:layout_constraintTop_toBottomOf="@+id/guide_avatar_top" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:id="@+id/btn_loginfragment_startNewEvent"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="#00000000"
-                android:onClick="@{() -> cityScreenViewModel.onParkClicked()}"
-                app:layout_constraintBottom_toTopOf="@id/guide_loc2_bottom"
-                app:layout_constraintEnd_toStartOf="@id/guide_pole_left_start"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guide_pole_left_end"
-                app:layout_constraintTop_toTopOf="@+id/guide_loc2_top"
-                app:layout_constraintVertical_bias="0.0" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_avatar_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.34" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guide_avatar_top"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.8" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </FrameLayout>
 </layout>

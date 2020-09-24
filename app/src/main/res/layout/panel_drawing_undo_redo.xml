@@ -13,7 +13,6 @@
         android:id="@+id/cardview_draw_undo_redo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="@dimen/panel_corner_radius"
         app:cardElevation="@dimen/panel_elevation">
 
         <LinearLayout
@@ -23,11 +22,12 @@
 
             <ImageButton
                 android:id="@+id/btn_draw_undo"
-                android:layout_width="32dp"
-                android:layout_height="23dp"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:background="@drawable/ic_undo"
                 android:contentDescription="@string/undo"
+                android:scaleType="centerInside"
                 android:onClick="@{()->drawViewModel.undo()}" />
 
             <View
@@ -37,8 +37,9 @@
 
             <ImageButton
                 android:id="@+id/btn_draw_redo"
-                android:layout_width="32dp"
-                android:layout_height="23dp"
+                android:layout_width="@dimen/material_icon_width"
+                android:layout_height="wrap_content"
+                android:scaleType="centerInside"
                 android:layout_margin="16dp"
                 android:background="@drawable/ic_redo"
                 android:contentDescription="@string/redo"

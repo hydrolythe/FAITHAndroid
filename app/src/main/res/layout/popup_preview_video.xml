@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="youtubeViewModel"
+            type="be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailViewModel" />
+        <variable
+            name="preview"
+            type="be.hogent.faith.faith.details.youtubeVideo.create.ShowPreview" />
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/popup_preview_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/onBackground">
+
+        <ImageView
+            android:id="@+id/btn_save_video"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_opslaan_wit" />
+
+        <ImageView
+            android:id="@+id/btn_back_video"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_btn_back_white_ytvideo" />
+
+        <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+            android:id="@+id/youtube_player_view_preview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:autoPlay="false"
+            app:showYouTubeButton="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_save_video"
+            app:showFullScreenButton="false" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

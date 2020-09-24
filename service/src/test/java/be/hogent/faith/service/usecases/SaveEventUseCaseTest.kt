@@ -1,161 +1,89 @@
 package be.hogent.faith.service.usecases
 
+import android.graphics.Bitmap
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.EventRepository
+import be.hogent.faith.service.encryption.IEventEncryptionService
+import be.hogent.faith.service.repositories.IEventRepository
+import be.hogent.faith.service.repositories.IFileStorageRepository
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
-import be.hogent.faith.storage.IStorageRepository
-import be.hogent.faith.util.factory.DataFactory
+import be.hogent.faith.service.usecases.util.EncryptedEventFactory
+import be.hogent.faith.util.ThumbnailProvider
 import be.hogent.faith.util.factory.EventFactory
-import io.mockk.called
+import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.slot
-import io.mockk.spyk
-import io.mockk.verify
-import io.reactivex.Maybe
-import io.reactivex.Single
-import org.junit.Assert.assertEquals
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Single
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
 class SaveEventUseCaseTest {
+    private val eventEncryptionService: IEventEncryptionService = mockk(relaxed = true)
+    private val filesStorageRepository: IFileStorageRepository = mockk(relaxed = true)
+    private val eventRepository: IEventRepository = mockk(relaxed = true)
+    private val thumbnailProvider: ThumbnailProvider = mockk(relaxed = true)
     private lateinit var saveEventUseCase: SaveEventUseCase
-    private lateinit var eventRepository: EventRepository
-    private lateinit var storageRepository: IStorageRepository
 
     private lateinit var event: Event
     private lateinit var user: User
 
-    private val eventTitle = "title"
+    private val encryptedEvent = EncryptedEventFactory.makeEvent()
 
     @Before
     fun setUp() {
-        event = EventFactory.makeEvent(nbrOfDetails = 2, hasEmotionAvatar = true)
-        user = spyk(
-            User(
-                DataFactory.randomString(),
-                DataFactory.randomString(),
-                DataFactory.randomUUID().toString()
-            )
-        )
-        eventRepository = mockk(relaxed = true)
-        storageRepository = mockk(relaxed = true)
+        event = EventFactory.makeEvent(numberOfDetails = 2, hasEmotionAvatar = true)
+        user = UserFactory.makeUser(numberOfEvents = 0)
         saveEventUseCase =
-            SaveEventUseCase(eventRepository, storageRepository, mockk(relaxed = true))
+            SaveEventUseCase(
+                eventEncryptionService,
+                filesStorageRepository,
+                eventRepository,
+                thumbnailProvider,
+                mockk()
+            )
+        every { eventEncryptionService.encrypt(event) } returns Single.just(encryptedEvent)
+        every { filesStorageRepository.saveEventFiles(encryptedEvent) } returns
+                Single.just(encryptedEvent)
+        every { eventRepository.insert(encryptedEvent) } returns Completable.complete()
+        every { thumbnailProvider.getBase64EncodedThumbnail(any<Bitmap>()) } returns "b64encThumb"
     }
 
     @Test
-    fun execute_normal_eventCorrectlyPassedToEventAndStorageRepo() {
-        val eventArg = slot<Event>()
-        val userArg = slot<User>()
-        every { eventRepository.insert(capture(eventArg), capture(userArg)) } returns Maybe.just(
-            event
-        )
-        every { storageRepository.saveEvent(capture(eventArg)) } returns Single.just(event)
-
-        val params = SaveEventUseCase.Params(eventTitle, event, user)
+    fun `After saving the event it should be in the user's list of events`() {
+        val params = SaveEventUseCase.Params(event, user)
 
         val result = saveEventUseCase.buildUseCaseObservable(params)
+
         result.test()
             .dispose()
 
-        assertEquals(params.event, eventArg.captured)
-        assertEquals(params.user, userArg.captured)
+        assertTrue(user.events.contains(event))
     }
 
     @Test
-    fun execute_normal_useCaseCompletes() {
-        every { eventRepository.insert(any(), any()) } returns Maybe.just(event)
-        every { storageRepository.saveEvent(any()) } returns Single.just(event)
+    fun `When an error occurs in the EventRepository it returns an Error`() {
+        // Arrange
+        every { eventRepository.insert(any()) } returns Completable.error(RuntimeException())
 
-        val params = SaveEventUseCase.Params(eventTitle, event, user)
+        val params = SaveEventUseCase.Params(event, user)
 
-        val result = saveEventUseCase.buildUseCaseObservable(params)
-
-        result.test()
-            .assertComplete()
-            .dispose()
-    }
-
-    @Test
-    fun execute_normal_eventIsAddedToUser() {
-        every { eventRepository.insert(any(), any()) } returns Maybe.just(event)
-        every { storageRepository.saveEvent(any()) } returns Single.just(event)
-
-        val params = SaveEventUseCase.Params(eventTitle, event, user)
-
-        val result = saveEventUseCase.buildUseCaseObservable(params)
-        result.test()
-            .assertNoErrors()
-            .assertComplete()
-
-        assertTrue(user.events.isNotEmpty())
-    }
-
-    @Test
-    fun execute_normal_eventIsSavedInRepoAndStorage() {
-        every { storageRepository.saveEvent(any()) } returns Single.just(event)
-        every { eventRepository.insert(any(), any()) } returns Maybe.just(event)
-
-        val params = SaveEventUseCase.Params(eventTitle, event, user)
-
-        val result = saveEventUseCase.buildUseCaseObservable(params)
-        result.test()
-            .assertNoErrors()
-            .assertComplete()
-
-        verify(exactly = 1) { eventRepository.insert(event, user) }
-        verify(exactly = 1) { storageRepository.saveEvent(event) }
-    }
-
-    @Test
-    fun execute_repoFails_showsError() {
-        every { storageRepository.saveEvent(any()) } returns Single.just(event)
-        every { eventRepository.insert(any(), any()) } returns Maybe.error(RuntimeException())
-
-        val params = SaveEventUseCase.Params(eventTitle, event, user)
-
-        val result = saveEventUseCase.buildUseCaseObservable(params)
-
-        result.test()
+        saveEventUseCase.buildUseCaseObservable(params)
+            .test()
             .assertError(RuntimeException::class.java)
-            .assertNoValues()
-            .dispose()
-
-        verify { storageRepository.saveEvent(any()) wasNot called }
     }
 
     @Test
-    fun execute_storageFails_showsError() {
-        every { eventRepository.insert(any(), any()) } returns Maybe.just(event)
-        every { storageRepository.saveEvent(any()) } returns Single.error(RuntimeException())
+    fun `When an error occurs in the EventRepository the event is not added to the user's events`() {
+        every { eventRepository.insert(any()) } returns Completable.error(RuntimeException())
 
-        val params = SaveEventUseCase.Params(eventTitle, event, user)
-
-        val result = saveEventUseCase.buildUseCaseObservable(params)
-
-        result.test()
-            .assertError(RuntimeException::class.java)
-            .assertNoValues()
-            .dispose()
-    }
-
-    @Test
-    fun execute_addEventToUserFails_notSavedToRepoAndStorage() {
-        every { user.addEvent(any()) } throws RuntimeException()
-
-        val params = SaveEventUseCase.Params(eventTitle, event, user)
+        val params = SaveEventUseCase.Params(event, user)
 
         val result = saveEventUseCase.buildUseCaseObservable(params)
-
         result.test()
-            .assertError(RuntimeException::class.java)
-            .assertNoValues()
-            .dispose()
 
-        verify { eventRepository.insert(any(), any()) wasNot called }
-        verify { storageRepository.saveEvent(any()) wasNot called }
+        assertFalse(user.events.contains(event))
     }
 }

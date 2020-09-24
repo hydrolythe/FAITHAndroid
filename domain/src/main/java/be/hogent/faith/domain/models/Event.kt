@@ -2,10 +2,7 @@ package be.hogent.faith.domain.models
 
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import org.jetbrains.annotations.TestOnly
 import org.threeten.bp.LocalDateTime
 import java.io.File
 import java.util.UUID
@@ -26,7 +23,7 @@ data class Event(
      * It is first saved when the user draws something, before that the property is null.
      */
     var emotionAvatar: File? = null,
-
+    var emotionAvatarThumbnail: String? = null,
     /**
      * The notes that were added to this event.
      */
@@ -34,34 +31,16 @@ data class Event(
 
     val uuid: UUID = UUID.randomUUID()
 ) {
-
     private val _details = mutableListOf<Detail>()
     val details: List<Detail>
         get() = _details
 
-    fun getLastDetail(): Detail {
-        return _details.last()
-    }
-
-    fun getDetail(uuid: UUID): Detail? {
-        return details.find { it.uuid == uuid }
-    }
-
-    @TestOnly
     fun addDetail(detail: Detail) {
         _details += detail
     }
 
-    fun addNewPhotoDetail(saveFile: File): PhotoDetail {
-        val newDetail = PhotoDetail(saveFile)
-        addDetail(newDetail)
-        return newDetail
-    }
-
-    fun addNewDrawingDetail(saveFile: File): DrawingDetail {
-        val newDetail = DrawingDetail(saveFile)
-        addDetail(newDetail)
-        return newDetail
+    fun removeDetail(detail: Detail) {
+        _details -= detail
     }
 
     fun addNewAudioDetail(saveFile: File) {

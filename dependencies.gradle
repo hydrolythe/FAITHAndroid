@@ -7,85 +7,93 @@ ext {
     // APP LIBRARIES
     coroutines_version = '1.1.1'
     coroutines_android_version = '1.1.1'
-    koin_version = '2.0.1'
+    koin_version = '2.1.4'
     aac_core_version = '2.0.0'
-    lifecycle_version = '2.0.0'
+    lifecycle_version = '2.2.0'
     appcompat_version = '1.1.0'
+    threeTenABP_version = '1.2.4'
+    threeTenBP_version = '1.4.4'
 
-    threeTenABP_version = '1.2.1'
-    threeTenBP_version = '1.4.0'
-
-    rxjava_version = '2.2.7'
-    rxjava_android_version = '2.1.1'
-    rxkotlin_version = '2.3.0'
-
-    room_version = '2.1.0'
+    rxjava_version = '3.0.4'
+    rxjava_android_version = '3.0.0'
+    rxkotlin_version = '3.0.0'
 
     fotoApparat_version = '2.7.0'
 
     annotation_version = '1.1.0'
 
-    firebase_analytics ='17.2.0'
 
     // UI LIBRARIES
-    constraint_layout_version = '2.0.0-beta1'
-    fragment_version = '1.1.0'
+    constraint_layout_version = '2.0.0-beta4'
+    fragment_version = '1.2.4'
 
-    recyclerview_version = '1.0.0'
+    recyclerview_version = '1.1.0'
+    recyclerview_selection_version = '1.1.0-rc01'
 
-    glide_version = '4.9.0'
+    glide_version = '4.11.0'
     cardview_version = '1.0.0'
-    material_version = '1.1.0-alpha09'
+    material_version = '1.2.0-alpha06'
     textEditor_version = '1.2.2'
-    materialdrawer_version = '2.0.1'
-    play_services_version='16.0.0'
-    legacy_support_version='1.0.0'
+    materialdrawer_version = '3.0.0'
+    play_services_version = '17.0.0'
+    legacy_support_version = '1.0.0'
 
     design_version = '28.0.0'
 
-    firebaseui_version='6.0.2'
-    rxfirebase_version ='1.5.6'
-    firebaseauth_version ='19.0.0'
-    firestore_version ='21.1.1'
-    firebasestorage_version ='19.1.0'
+    youtube_playerview_version = '10.0.5'
+
+    firebaseui_version = '6.0.2'
+    rxfirebase_version = '3.1'
+    firebaseauth_version = '19.2.0'
+    firestore_version = '21.3.1'
+    firebasestorage_version = '19.1.0'
     firebasestorageui_version = '4.3.1'
+    firebase_analytics_version = '17.2.1'
 
 
     // TESTING LIBRARIES
     test_core_version = '1.2.0'
     espresso_version = '3.2.0'
-    espresso_contrib_version = '3.3.0-alpha02'
+    espresso_contrib_version = '3.3.0-beta01'
     android_junit_version = '1.1.1'
     test_version = '1.2.0'
-    robolectric_version = '4.3'
+    robolectric_version = '4.3.1'
     firebase_test_version = '17.2.1'
     crashlytics_dep_version = '2.10.1'
-
-
+    hamcrest_version = '2.2'
+    firebase_performance = '19.0.5'
     uiAutomator_version = '2.2.0'
-    junit_version = '4.12'
-    mockk_version = '1.9.2'
+    junit_version = '4.13'
+    mockk_version = '1.10.0'
 
     // OTHER LIBRARIES
     ktlint_version = '0.31.0'
     timber_version = '4.7.1'
     oss_licenses_version = '17.0.0'
-    nav_version = '2.1.0'
+    nav_version = '2.2.2'
+    moshi_version = "1.9.2"
 
-    viewpager_version = '1.0.0-beta05'
+    viewpager_version = '1.0.0'
+
+    retrofit_version = '2.8.1'
+    gson_version = '2.8.1'
+    rxjava_adapter_version = '1.0.0'
+
+    colorpicker_version = '2.0.0'
+    lottieVersion = '3.4.0'
 
     //Version Code
-    ext.versionMajor = 1
-    ext.versionMinor = 1
-    ext.versionPatch = 1
+    ext.versionMajor = 4
+    ext.versionMinor = 2
+    ext.versionPatch = 3
     ext.versionClassifier = null
 
     commonDependencies = [
             kotlin            : "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version",
 
-            rxjava            : "io.reactivex.rxjava2:rxjava:$rxjava_version",
-            rxandroid         : "io.reactivex.rxjava2:rxandroid:$rxjava_android_version",
-            rxkotlin          : "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version",
+            rxjava            : "io.reactivex.rxjava3:rxjava:$rxjava_version",
+            rxandroid         : "io.reactivex.rxjava3:rxandroid:$rxjava_android_version",
+            rxkotlin          : "io.reactivex.rxjava3:rxkotlin:$rxkotlin_version",
 
             threeTenABP       : "com.jakewharton.threetenabp:threetenabp:$threeTenABP_version",
 
@@ -102,21 +110,23 @@ ext {
     ]
 
     androidDependencies = [
-            appcompat: "androidx.appcompat:appcompat:$appcompat_version",
-            lifecycle: "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
-            viewmodellifecycle : "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
+            appcompat         : "androidx.appcompat:appcompat:$appcompat_version",
+            lifecycle         : "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
+            viewmodellifecycle: "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     ]
 
     testDependencies = [
-            junit      : "junit:junit:$junit_version",
-            mockk      : "io.mockk:mockk:$mockk_version",
-            coreTesting: "androidx.arch.core:core-testing:$aac_core_version",
-            threeTenBP : "org.threeten:threetenbp:$threeTenBP_version",
-            koinTesting: "org.koin:koin-test:$koin_version",
-            robolectric: "org.robolectric:robolectric:$robolectric_version",
+            junit             : "junit:junit:$junit_version",
+            mockk             : "io.mockk:mockk:$mockk_version",
+            coreTesting       : "androidx.arch.core:core-testing:$aac_core_version",
+            threeTenBP        : "org.threeten:threetenbp:$threeTenBP_version",
+            koinTesting       : "org.koin:koin-test:$koin_version",
+            robolectric       : "org.robolectric:robolectric:$robolectric_version",
+            hamcrest          : "org.hamcrest:hamcrest:$hamcrest_version",
+            hamcrestLibrary   : "org.hamcrest:hamcrest-library:$hamcrest_version",
             //Add Analytics
             firebase_analytics: "com.google.firebase:firebase-analytics:$firebase_test_version",
-            crashlytics: "com.crashlytics.sdk.android:crashlytics:$crashlytics_dep_version"
+            crashlytics       : "com.crashlytics.sdk.android:crashlytics:$crashlytics_dep_version"
     ]
 
     androidTestDependencies = [
@@ -127,7 +137,8 @@ ext {
             testRules      : "androidx.test:rules:$test_version",
             testRunner     : "androidx.test:runner:$test_version",
             espressoContrib: "androidx.test.espresso:espresso-contrib:$espresso_contrib_version",
-            uiAutomator    : "androidx.test.uiautomator:uiautomator:$uiAutomator_version"
+            uiAutomator    : "androidx.test.uiautomator:uiautomator:$uiAutomator_version",
+
     ]
 
     injectionDependencies = [
@@ -135,21 +146,16 @@ ext {
             koin_viewModel: "org.koin:koin-android-viewmodel:$koin_version"
     ]
 
-    databaseDependencies = [
-            room         : "androidx.room:room-runtime:$room_version",
-            room_rxjava  : "androidx.room:room-rxjava2:$room_version",
-            room_compiler: "androidx.room:room-compiler:$room_version",
-            room_testing : "androidx.room:room-testing:$room_version"
-    ]
-
     firebaseDependencies = [
-            analytics : "com.google.firebase:firebase-analytics:$firebase_analytics",
-            firebaseui   :"com.firebaseui:firebase-ui-storage:$firebaseui_version"   ,
-            rxfirebase : "com.github.FrangSierra:RxFirebase:$rxfirebase_version",
-            firebaseauth :"com.google.firebase:firebase-auth:$firebaseauth_version",
-            firestore :"com.google.firebase:firebase-firestore:$firestore_version",
-            firebasestorage :"com.google.firebase:firebase-storage:$firebasestorage_version",
-            firebasestorageui:"com.firebaseui:firebase-ui-storage:$firebasestorageui_version"
+            analytics        : "com.google.firebase:firebase-analytics:$firebase_analytics_version",
+            firebaseui       : "com.firebaseui:firebase-ui-storage:$firebaseui_version",
+            rxfirebase       : "com.github.FAITH-HoGent:RxFirebase:$rxfirebase_version",
+            firebaseauth     : "com.google.firebase:firebase-auth:$firebaseauth_version",
+            firestore        : "com.google.firebase:firebase-firestore-ktx:$firestore_version",
+            firebasestorage  : "com.google.firebase:firebase-storage:$firebasestorage_version",
+            firebasestorageui: "com.firebaseui:firebase-ui-storage:$firebasestorageui_version",
+            // Add the dependency for the Performance Monitoring library
+            performance      : "com.google.firebase:firebase-perf:$firebase_performance"
     ]
 
     uiDependencies = [
@@ -161,21 +167,30 @@ ext {
             annotation         : "androidx.annotation:annotation:$annotation_version",
             fotoApparat        : "io.fotoapparat:fotoapparat:$fotoApparat_version",
             fotoApparatAdapters: "io.fotoapparat.fotoapparat:adapter-rxjava2:$fotoApparat_version",
-            rv_selection       : "androidx.recyclerview:recyclerview-selection:$recyclerview_version",
+            rv_selection       : "androidx.recyclerview:recyclerview-selection:$recyclerview_selection_version",
             cardView           : "androidx.cardview:cardview:$cardview_version",
             texteditor         : "jp.wasabeef:richeditor-android:$textEditor_version",
             material           : "com.google.android.material:material:$material_version",
             materialdrawer     : "co.zsmb:materialdrawer-kt:$materialdrawer_version",
             design             : "com.android.support:design:$design_version",
             viewpager2         : "androidx.viewpager2:viewpager2:$viewpager_version",
-            googleplay         :  "com.google.android.gms:play-services-plus:$play_services_version",
-            legacysupport      : "androidx.legacy:legacy-support-v4:$legacy_support_version"
-
-
+            googleplay         : "com.google.android.gms:play-services-plus:$play_services_version",
+            legacysupport      : "androidx.legacy:legacy-support-v4:$legacy_support_version",
+            youtubePlayerView  : "com.pierfrancescosoffritti.androidyoutubeplayer:core:$youtube_playerview_version",
+            colorpicker        : "com.github.skydoves:colorpickerpreference:$colorpicker_version",
+            lottie             : "com.airbnb.android:lottie:$lottieVersion"
     ]
 
     authdependencies = [
             auth0: 'com.auth0.android:auth0:1.+'
+    ]
+
+    networkDependencies = [
+            retrofit      : "com.squareup.retrofit2:retrofit:$retrofit_version",
+            gson          : "com.squareup.retrofit2:converter-gson:$gson_version",
+            moshi         : "com.squareup.moshi:moshi-kotlin:$moshi_version",
+            moshiConverter: "com.squareup.retrofit2:converter-moshi:2.8.1",
+            rxjavaAdapter : "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
     ]
 
 }

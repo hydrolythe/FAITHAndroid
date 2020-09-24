@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
-
 android {
     def globalConfig = rootProject.extensions.getByName("ext")
     compileSdkVersion globalConfig["androidCompileSdkVersion"]
@@ -15,15 +14,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas".toString())
-            }
-        }
-        sourceSets {
-            androidTest.assets.srcDirs +=
-                    files("$projectDir/schemas".toString())
-        }
     }
 
     buildTypes {
@@ -37,6 +27,7 @@ android {
 
 dependencies {
     implementation project(':domain')
+    implementation project(':service')
     implementation project(':util')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -46,7 +37,6 @@ dependencies {
     def testDependencies = rootProject.ext.testDependencies
     def androidTestDependencies = rootProject.ext.androidTestDependencies
     def androidDependencies = rootProject.ext.androidDependencies
-    def databaseDependencies = rootProject.ext.databaseDependencies
 
     implementation commonDependencies.kotlin
     implementation commonDependencies.threeTenABP
@@ -58,21 +48,15 @@ dependencies {
 
     implementation injectionDependencies.koin
 
-    // Room components
-    implementation databaseDependencies.room
-    implementation databaseDependencies.room_rxjava
-    kapt databaseDependencies.room_compiler
-
     //firebase components
     implementation firebaseDependencies.rxfirebase
     implementation firebaseDependencies.firebaseauth
     implementation firebaseDependencies.firestore
-    implementation firebaseDependencies.firebasestorage
-    implementation 'com.github.FrangSierra:RxFirebase:1.5.6'
 
     //test
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
+    androidTestImplementation testDependencies.koinTesting
     //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
     testImplementation(testDependencies.threeTenBP) {
         exclude group:'com.jakewharton.threetenabp', module:'threetenabp'
@@ -81,7 +65,6 @@ dependencies {
     androidTestImplementation androidTestDependencies.androidJunit
     androidTestImplementation androidTestDependencies.espresso
     androidTestImplementation androidTestDependencies.aac_core
-    androidTestImplementation databaseDependencies.room_testing
 }
 repositories {
     mavenCentral()

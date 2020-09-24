@@ -4,20 +4,20 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.service.usecases.event.SaveEventDrawingDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 class EventViewModelSaveDrawingTest {
     private lateinit var viewModel: EventViewModel
-    private val saveEventDrawingUseCase = mockk<SaveEventDrawingDetailUseCase>(relaxed = true)
+    private val saveEventDrawingUseCase = mockk<SaveEventDetailUseCase>(relaxed = true)
 
     private val drawingDetail = mockk<DrawingDetail>()
 
@@ -27,8 +27,6 @@ class EventViewModelSaveDrawingTest {
     @Before
     fun setUp() {
         viewModel = EventViewModel(
-            mockk(),
-            mockk(),
             mockk(),
             saveEventDrawingUseCase,
             mockk()

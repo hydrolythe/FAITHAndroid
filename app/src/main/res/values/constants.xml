@@ -4,4 +4,5 @@
     <integer name="PORTRAIT">1</integer>
     <item name="TAG_VIEWHOLDER" type="id" />
     <item name="TAG_DETAIL" type="id" />
+    <item name="TAG_GOAL" type="id"/>
 </resources>

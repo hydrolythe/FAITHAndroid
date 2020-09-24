@@ -2,13 +2,11 @@ package be.hogent.faith.faith.emotionCapture.editDetail
 
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,16 +17,14 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.faith.details.audio.RecordAudioFragment
-import be.hogent.faith.faith.details.drawing.create.DrawingDetailFragment
-import be.hogent.faith.faith.details.photo.create.TakePhotoFragment
-import be.hogent.faith.faith.details.photo.view.ReviewPhotoFragment
-import be.hogent.faith.faith.details.text.create.TextDetailFragment
+import be.hogent.faith.faith.details.DetailType
+import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import be.hogent.faith.faith.util.replaceChildFragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import kotlinx.android.synthetic.main.fragment_edit_detail.image_editDetail_avatar
+import kotlinx.android.synthetic.main.fragment_edit_detail.textView_editDetail_avatar
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -91,24 +87,23 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
     }
 
     private fun loadAvatarImage(event: Event) {
-        val image =
-            event.emotionAvatar ?: ContextCompat.getDrawable(
-                this.context!!,
-                avatarOutlineResId
-            ) as BitmapDrawable
+        if (event.emotionAvatar != null) {
+            textView_editDetail_avatar.text = ""
 
-        val width = Resources.getSystem().displayMetrics.widthPixels
-        val height = Resources.getSystem().displayMetrics.heightPixels
+            val width = Resources.getSystem().displayMetrics.widthPixels
+            val height = Resources.getSystem().displayMetrics.heightPixels
 
-        Glide.with(this)
-            .load(image)
-            // to refresh the picture and not get it from the glide cache
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
-            // scaling, otherwise picture is blurry
-            .override((width * 0.3).toInt(), height)
-            .fitCenter()
-            .into(image_editDetail_avatar)
+            Glide.with(this)
+                .load(event.emotionAvatar)
+                // to refresh the picture and not get it from the glide cache
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                // scaling, otherwise picture is blurry
+                .override((width * 0.3).toInt(), height)
+                .fitCenter()
+                .into(image_editDetail_avatar)
+        } else
+            textView_editDetail_avatar.visibility = View.VISIBLE
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -131,6 +126,9 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
                 )
                 is PhotoDetail -> PhotoFragmentWithEmotionAvatar.newInstance(
                     avatarOutLineId, detail
+                )
+                else -> TextFragmentWithEmotionAvatar.newInstance(
+                    avatarOutLineId, detail as TextDetail
                 )
             }
         }
@@ -164,9 +162,9 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
         override fun setChildFragment() {
             val detail = arguments?.getSerializable(DETAIL) as PhotoDetail?
             val childFragment = if (detail == null) {
-                TakePhotoFragment.newInstance()
+                DetailsFactory.createDetail(DetailType.PHOTO)
             } else {
-                ReviewPhotoFragment.newInstance(detail)
+                DetailsFactory.editDetail(detail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }
@@ -192,9 +190,9 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
         override fun setChildFragment() {
             val detail = arguments?.getSerializable(DETAIL) as DrawingDetail?
             val childFragment = if (detail == null) {
-                DrawingDetailFragment.newInstance()
+                DetailsFactory.createDetail(DetailType.DRAWING)
             } else {
-                DrawingDetailFragment.newInstance(detail)
+                DetailsFactory.editDetail(detail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }
@@ -220,9 +218,9 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
         override fun setChildFragment() {
             val detail = arguments?.getSerializable(DETAIL) as TextDetail?
             val childFragment = if (detail == null) {
-                TextDetailFragment.newInstance()
+                DetailsFactory.createDetail(DetailType.TEXT)
             } else {
-                TextDetailFragment.newInstance(detail)
+                DetailsFactory.editDetail(detail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }
@@ -242,9 +240,9 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
         override fun setChildFragment() {
             val existingDetail = arguments?.getSerializable(DETAIL) as AudioDetail?
             val childFragment = if (existingDetail == null) {
-                RecordAudioFragment.newInstance()
+                DetailsFactory.createDetail(DetailType.AUDIO)
             } else {
-                RecordAudioFragment.newInstance(existingDetail)
+                DetailsFactory.editDetail(existingDetail)
             }
             replaceChildFragment(childFragment, R.id.fragment_container_editDetail)
         }

@@ -2,19 +2,26 @@ package be.hogent.faith.service.usecases.detail.drawingDetail
 
 import android.graphics.Bitmap
 import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
 import be.hogent.faith.service.usecases.base.SingleUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
-import io.reactivex.Scheduler
-import io.reactivex.Single
+import be.hogent.faith.util.ThumbnailProvider
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.Single
 
 class CreateDrawingDetailUseCase(
-    private val storageRepository: ITemporaryStorage,
-    observeScheduler: Scheduler
-) : SingleUseCase<DrawingDetail, CreateDrawingDetailUseCase.Params>(observeScheduler) {
+    private val storageRepository: ITemporaryFileStorageRepository,
+    private val thumbnailProvider: ThumbnailProvider,
+    observer: Scheduler
+) : SingleUseCase<DrawingDetail, CreateDrawingDetailUseCase.Params>(observer) {
 
     override fun buildUseCaseSingle(params: Params): Single<DrawingDetail> {
-        return storageRepository.storeBitmapTemporarily(params.bitmap)
-            .map { storedFile -> DrawingDetail(storedFile) }
+        return storageRepository.storeBitmap(params.bitmap)
+            .map { storedFile ->
+                DrawingDetail(
+                    file = storedFile,
+                    thumbnail = thumbnailProvider.getBase64EncodedThumbnail(params.bitmap)
+                )
+            }
     }
 
     class Params(

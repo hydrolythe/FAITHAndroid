@@ -1,9 +1,10 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.firebase-perf'
 
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
@@ -14,7 +15,7 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.2'
+        classpath 'com.android.tools.build:gradle:4.0.1'
     }
 }
 
@@ -61,20 +62,25 @@ android {
     }
     buildToolsVersion = '28.0.3'
 
+    // To inline the bytecode built with JVM target 1.8 into
+    // bytecode that is being built with JVM target 1.6. (e.g. navArgs)
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
 }
 
 dependencies {
     implementation project(':domain')
     implementation project(':service')
     implementation project(':database')
+    implementation project(':encryption')
     implementation project(':storage')
     implementation project(':draw')
     implementation project(':util')
 
-
     implementation authdependencies.auth0
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     def commonDependencies = rootProject.ext.commonDependencies
     def injectionDependencies = rootProject.ext.injectionDependencies
@@ -82,13 +88,19 @@ dependencies {
     def androidDependencies = rootProject.ext.androidDependencies
     def uiDependencies = rootProject.ext.uiDependencies
 
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation commonDependencies.kotlin
     implementation commonDependencies.threeTenABP
+    //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
+    testImplementation(testDependencies.threeTenBP) {
+        exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
+    }
     implementation commonDependencies.rxjava
     implementation commonDependencies.rxandroid
     implementation commonDependencies.licenses
-
     implementation commonDependencies.timber
+    implementation commonDependencies.navktx
+    implementation commonDependencies.navui
 
     implementation injectionDependencies.koin
     implementation injectionDependencies.koin_viewModel
@@ -98,12 +110,10 @@ dependencies {
     implementation androidDependencies.viewmodellifecycle
 
     implementation uiDependencies.glide
-   // implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
     implementation uiDependencies.legacysupport
     implementation uiDependencies.googleplay
-    //implementation 'com.google.android.gms:play-services-plus:16.0.0'
-    //implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
-    kapt uiDependencies.glidecompiler
+    implementation uiDependencies.lottie
     implementation uiDependencies.recyclerview
     implementation uiDependencies.rv_selection
     implementation uiDependencies.constraintLayout
@@ -111,33 +121,24 @@ dependencies {
     implementation uiDependencies.fotoApparat
     implementation uiDependencies.fotoApparatAdapters
     implementation uiDependencies.texteditor
-
     implementation uiDependencies.materialdrawer
     implementation uiDependencies.annotation
     implementation uiDependencies.material
-
-    implementation "com.github.skydoves:colorpickerpreference:2.0.0"
-
-    implementation commonDependencies.navktx
-    implementation commonDependencies.navui
-
+    implementation uiDependencies.colorpicker
     implementation uiDependencies.viewpager2
+    implementation uiDependencies.youtubePlayerView
 
     implementation firebaseDependencies.firebasestorageui
-
-    //Use Java library for unit testing instead of Android to avoid requesting Android Device Timezone
-    testImplementation(testDependencies.threeTenBP) {
-        exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
-    }
 
     testImplementation testDependencies.junit
     testImplementation testDependencies.mockk
     testImplementation testDependencies.coreTesting
     testImplementation testDependencies.koinTesting
-
+    testImplementation testDependencies.hamcrest
+    testImplementation testDependencies.hamcrestLibrary
     implementation testDependencies.firebase_analytics
     implementation testDependencies.crashlytics
-
+    implementation firebaseDependencies.performance
 
     // AndroidJUnitRunner and JUnit Rules
     androidTestImplementation androidTestDependencies.testCore
@@ -149,9 +150,12 @@ dependencies {
     androidTestImplementation androidTestDependencies.espressoContrib
     //koin
     androidTestImplementation testDependencies.koinTesting
-
     androidTestImplementation androidTestDependencies.uiAutomator
 
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+    implementation 'androidx.gridlayout:gridlayout:1.0.0'
+
+    implementation 'com.jakewharton.rxbinding4:rxbinding:4.0.0'
 }
 
 private Integer generateVersionCode() {

@@ -1,11 +1,13 @@
 package be.hogent.faith.service.usecases.detail.drawingDetail
 
 import android.graphics.Bitmap
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
+import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
+import be.hogent.faith.util.ThumbnailProvider
+import be.hogent.faith.util.factory.DataFactory
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.Scheduler
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.core.Single
 import org.junit.Before
 import org.junit.Test
 import java.io.File
@@ -16,7 +18,8 @@ class CreateDrawingDetailUseCaseTest {
     private lateinit var createDrawingDetailUseCase: CreateDrawingDetailUseCase
     private lateinit var executor: Executor
     private lateinit var scheduler: Scheduler
-    private lateinit var storageRepository: ITemporaryStorage
+    private lateinit var storageRepository: ITemporaryFileStorageRepository
+    private val thumbnailProvider = mockk<ThumbnailProvider>()
 
     private val bitmap = mockk<Bitmap>()
 
@@ -28,6 +31,7 @@ class CreateDrawingDetailUseCaseTest {
         createDrawingDetailUseCase =
             CreateDrawingDetailUseCase(
                 storageRepository,
+                thumbnailProvider,
                 scheduler
             )
     }
@@ -36,7 +40,10 @@ class CreateDrawingDetailUseCaseTest {
     fun createDrawingDetailUC_normal_createsDetailWithCorrectFile() {
         // Arrange
         val saveFile = File("location")
-        every { storageRepository.storeBitmapTemporarily(any()) } returns Single.just(saveFile)
+        val thumbnailBitmap = mockk<Bitmap>()
+        val thumbnail = DataFactory.randomString()
+        every { storageRepository.storeBitmap(any()) } returns Single.just(saveFile)
+        every { thumbnailProvider.getBase64EncodedThumbnail(any<Bitmap>()) } returns thumbnail
 
         val params = CreateDrawingDetailUseCase.Params(bitmap)
 
@@ -48,6 +55,9 @@ class CreateDrawingDetailUseCaseTest {
             .assertNoErrors()
             .assertValue { newDetail ->
                 newDetail.file.path == saveFile.path
+            }
+            .assertValue { newDetail ->
+                newDetail.thumbnail == thumbnail
             }
     }
 }

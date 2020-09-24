@@ -4,13 +4,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.service.usecases.event.SaveEventPhotoDetailUseCase
+import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import io.mockk.Called
 import io.mockk.called
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -18,7 +18,7 @@ import org.junit.Test
 
 class EventViewModelSavePhotoTest {
     private lateinit var viewModel: EventViewModel
-    private val saveEventPhotoUC = mockk<SaveEventPhotoDetailUseCase>(relaxed = true)
+    private val saveEventPhotoUC = mockk<SaveEventDetailUseCase>(relaxed = true)
 
     private val detail = mockk<PhotoDetail>()
 
@@ -33,20 +33,18 @@ class EventViewModelSavePhotoTest {
         viewModel = EventViewModel(
             mockk(),
             saveEventPhotoUC,
-            mockk(),
-            mockk(),
             mockk()
         )
     }
 
     @Test
     fun eventViewModel_saveEventPhoto_callsUseCase() {
-        val params = slot<SaveEventPhotoDetailUseCase.Params>()
+        val params = slot<SaveEventDetailUseCase.Params>()
 
         viewModel.savePhotoDetail(detail)
         verify { saveEventPhotoUC.execute(capture(params), any()) }
 
-        assertEquals(detail, params.captured.photoDetail)
+        assertEquals(detail, params.captured.detail)
         assertEquals(event, params.captured.event)
     }
 

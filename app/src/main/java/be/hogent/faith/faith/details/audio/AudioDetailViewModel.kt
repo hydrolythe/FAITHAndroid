@@ -15,8 +15,10 @@ import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.faith.util.combineWith
 import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.util.toMinutesSecondString
-import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.rxjava3.observers.DisposableSingleObserver
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
+import java.io.File
 import kotlin.math.roundToLong
 
 class AudioDetailViewModel(
@@ -28,6 +30,10 @@ class AudioDetailViewModel(
     override val savedDetail: LiveData<AudioDetail> = _savedDetail
 
     private var existingDetail: AudioDetail? = null
+    var tempFile: File
+
+    private val _getDetailMetaData = SingleLiveEvent<Unit>()
+    override val getDetailMetaData: LiveData<Unit> = _getDetailMetaData
 
     /**
      *
@@ -54,13 +60,16 @@ class AudioDetailViewModel(
             deleteEnabled!! && viewState == AudioViewState.FinishedRecording
         }
 
-    val pauseRecordingVisible: LiveData<Boolean> = Transformations.map(viewState) { state ->
-        state == AudioViewState.Recording && pauseSupported
-    }
+    private val _recordingPaused = MutableLiveData<Boolean>()
 
-    val restartRecordingVisible: LiveData<Boolean> = Transformations.map(viewState) { state ->
-        state == AudioViewState.RecordingPaused && pauseSupported
-    }
+    val recordPauseButtonVisible: LiveData<Boolean> =
+        Transformations.map(_recordingPaused) { paused ->
+            !paused && pauseSupported
+        }
+    val recordRestartButtonVisible: LiveData<Boolean> =
+        Transformations.map(_recordingPaused) { paused ->
+            paused && pauseSupported
+        }
 
     private val _errorMessage = MutableLiveData<@IdRes Int>()
     val errorMessage: LiveData<Int> = _errorMessage
@@ -86,6 +95,15 @@ class AudioDetailViewModel(
     private val _resetButtonClicked = SingleLiveEvent<Unit>()
     val resetButtonClicked: LiveData<Unit> = _resetButtonClicked
 
+    private val _cancelClicked = SingleLiveEvent<Unit>()
+    val cancelClicked: LiveData<Unit>
+        get() = _cancelClicked
+
+    // TODO : als encryptie geimplementeerd
+    private val _file = MutableLiveData<File>()
+    val file: LiveData<File>
+        get() = _file
+
     /**
      * Indicates the recording time in seconds
      */
@@ -107,8 +125,10 @@ class AudioDetailViewModel(
         // Can be set to false once an existing Detail is added
         _saveButtonEnabled.value = true
         _deleteButtonEnabled.value = true
+        _recordingPaused.value = false
 
         _recordingTime.value = 0
+        tempFile = tempFileProvider.tempAudioRecordingFile
     }
 
     /**
@@ -148,15 +168,21 @@ class AudioDetailViewModel(
         _resetButtonClicked.call()
     }
 
+    fun onCancelClicked() {
+        _cancelClicked.call()
+    }
+
     override fun onSaveClicked() {
-        val params = CreateAudioDetailUseCase.Params(tempFileProvider.tempAudioRecordingFile)
+        //  val params = CreateAudioDetailUseCase.Params(tempFileProvider.tempAudioRecordingFile)
+        val params = CreateAudioDetailUseCase.Params(tempFile!!)
         createAudioDetailUseCase.execute(params, CreateAudioDetailUseCaseHandler())
     }
 
     private inner class CreateAudioDetailUseCaseHandler :
         DisposableSingleObserver<AudioDetail>() {
         override fun onSuccess(createdDetail: AudioDetail) {
-            _savedDetail.value = createdDetail
+            existingDetail = createdDetail
+            _getDetailMetaData.call()
         }
 
         override fun onError(e: Throwable) {
@@ -173,18 +199,28 @@ class AudioDetailViewModel(
         this.existingDetail = existingDetail
         _saveButtonEnabled.value = false
         _deleteButtonEnabled.value = false
-    }
-
-    fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {
-        // NOP
+        /*
+        // TODO tijdelijk tot encryptie
+        if (existingDetail.file.path.startsWith("users")) {
+            val params = LoadDetailFileUseCase.Params(existingDetail)
+            loadDetailFile.execute(params, LoadFileUseCaseHandler())
+        } else
+        */
+        _file.value = existingDetail.file
     }
 
     fun onRecordingStateChanged(state: RecordingState) {
         when (state) {
-            RecordingState.INVALID, RecordingState.RESET -> _viewState.value = AudioViewState.Initial
-            RecordingState.RECORDING -> _viewState.value = AudioViewState.Recording
+            RecordingState.INVALID, RecordingState.RESET -> _viewState.value =
+                AudioViewState.Initial
+
+            RecordingState.RECORDING -> {
+                _viewState.value = AudioViewState.Recording
+                _recordingPaused.value = false
+            }
+
             RecordingState.STOPPED -> _viewState.value = AudioViewState.FinishedRecording
-            RecordingState.PAUSED -> _viewState.value = AudioViewState.RecordingPaused
+            RecordingState.PAUSED -> _recordingPaused.value = true
         }
     }
 
@@ -198,5 +234,28 @@ class AudioDetailViewModel(
     fun updateRecordingTimer(duration: Long) {
         // Postvalue because this originates from the scheduled task in the AudioRecorderHolder
         _recordingTime.postValue(duration)
+    }
+
+    private inner class LoadFileUseCaseHandler : DisposableSingleObserver<File>() {
+        override fun onSuccess(loadedFile: File) {
+            _file.value = loadedFile
+        }
+
+        override fun onError(e: Throwable) {
+            Timber.e(e)
+            _errorMessage.postValue(R.string.error_load_events)
+        }
+    }
+
+    override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        existingDetail?.let {
+            it.title = title
+            it.dateTime = dateTime
+        }
+        _savedDetail.value = existingDetail
+    }
+
+    fun onPlayStateChanged(state: PlaybackInfoListener.PlaybackState) {
+        Timber.i("Now in state $state")
     }
 }

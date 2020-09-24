@@ -1,0 +1,76 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    def globalConfig = rootProject.extensions.getByName("ext")
+    compileSdkVersion globalConfig["androidCompileSdkVersion"]
+
+    defaultConfig {
+        minSdkVersion globalConfig["androidMinSdkVersion"]
+        targetSdkVersion globalConfig["androidTargetSdkVersion"]
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    defaultConfig {
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    android {
+        compileOptions {
+            targetCompatibility = "8"
+            sourceCompatibility = "8"
+        }
+    }
+}
+
+dependencies {
+    implementation project(':domain')
+    implementation project(':service')
+    implementation project(':util')
+    implementation project(':storage')
+
+    def commonDependencies = rootProject.ext.commonDependencies
+    def testDependencies = rootProject.ext.testDependencies
+    def injectionDependencies = rootProject.ext.injectionDependencies
+    def networkDependencies = rootProject.ext.networkDependencies
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation commonDependencies.kotlin
+    implementation commonDependencies.rxkotlin
+    implementation commonDependencies.timber
+    implementation commonDependencies.threeTenABP
+    testImplementation(testDependencies.threeTenBP) {
+        exclude group: 'com.jakewharton.threetenabp', module: 'threetenabp'
+    }
+    implementation injectionDependencies.koin
+
+    testImplementation testDependencies.junit
+    testImplementation testDependencies.mockk
+    testImplementation testDependencies.koinTesting
+    androidTestImplementation testDependencies.koinTesting
+
+    implementation("com.google.crypto.tink:tink-android:1.2.2")
+    testImplementation("com.google.crypto.tink:tink:1.2.2") {
+        exclude group: 'com.google.crypto.tink', module: 'tink-android'
+    }
+
+    implementation networkDependencies.moshi
+    implementation networkDependencies.moshiConverter
+    implementation networkDependencies.retrofit
+    implementation networkDependencies.rxjavaAdapter
+
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+}
+
+repositories {
+    mavenCentral()
+}

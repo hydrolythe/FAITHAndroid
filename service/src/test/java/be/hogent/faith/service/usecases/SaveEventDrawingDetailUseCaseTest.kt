@@ -2,21 +2,21 @@ package be.hogent.faith.service.usecases
 
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.service.usecases.event.SaveEventDrawingDetailUseCase
-import be.hogent.faith.storage.localStorage.ITemporaryStorage
+import be.hogent.faith.service.repositories.ITemporaryFileStorageRepository
+import be.hogent.faith.service.usecases.event.SaveEventDetailUseCase
 import io.mockk.every
 import io.mockk.mockk
-import io.reactivex.Completable
-import io.reactivex.Scheduler
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Scheduler
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
 class SaveEventDrawingDetailUseCaseTest {
 
-    private lateinit var saveEventDrawingUC: SaveEventDrawingDetailUseCase
+    private lateinit var saveEventDrawingUC: SaveEventDetailUseCase
     private val scheduler = mockk<Scheduler>()
-    private lateinit var storageRepository: ITemporaryStorage
+    private lateinit var storageRepository: ITemporaryFileStorageRepository
 
     private val drawingDetail = mockk<DrawingDetail>()
     private val event = Event()
@@ -24,16 +24,17 @@ class SaveEventDrawingDetailUseCaseTest {
     @Before
     fun setUp() {
         storageRepository = mockk(relaxed = true)
-        saveEventDrawingUC = SaveEventDrawingDetailUseCase(
-            storageRepository,
-            scheduler
-        )
+        saveEventDrawingUC =
+            SaveEventDetailUseCase(
+                storageRepository,
+                scheduler
+            )
     }
 
     @Test
     fun saveEventDrawingUC_newDetail_savesToEvent() {
         // Arrange
-        val params = SaveEventDrawingDetailUseCase.Params(drawingDetail, event)
+        val params = SaveEventDetailUseCase.Params(drawingDetail, event)
         every {
             storageRepository.storeDetailWithEvent(drawingDetail, event)
         } returns Completable.complete()
@@ -55,7 +56,7 @@ class SaveEventDrawingDetailUseCaseTest {
         // Arrange
         event.addDetail(drawingDetail)
 
-        val params = SaveEventDrawingDetailUseCase.Params(drawingDetail, event)
+        val params = SaveEventDetailUseCase.Params(drawingDetail, event)
         every {
             storageRepository.storeDetailWithEvent(drawingDetail, event)
         } returns Completable.complete()

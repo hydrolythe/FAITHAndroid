@@ -16,7 +16,7 @@ import be.hogent.faith.faith.details.drawing.create.DrawFragment
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
 import com.divyanshu.draw.widget.DrawView
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.panel_drawing_colors.hr_customColor
 import kotlinx.android.synthetic.main.panel_drawing_colors.paintpot_customColor
 import org.koin.android.viewmodel.ext.android.sharedViewModel
@@ -93,6 +93,23 @@ class DrawEmotionAvatarFragment : DrawFragment() {
         paintpot_customColor.visibility = View.GONE
     }
 
+    override fun showExitAlert() {
+        val alertDialog: AlertDialog = this.run {
+            val builder = AlertDialog.Builder(this.requireContext()).apply {
+                setTitle(getString(R.string.dialog_wil_je_teruggaan))
+                setMessage(R.string.dialog_to_the_event_message)
+                setPositiveButton(R.string.ok) { _, _ ->
+                    navigation!!.backToEvent()
+                }
+                setNegativeButton(R.string.cancel) { dialog, _ ->
+                    dialog.cancel()
+                }
+            }
+            builder.create()
+        }
+        alertDialog.show()
+    }
+
     private fun configureDrawingCanvas() {
         // Paint with semi-transparent paint so you can always see the background's outline
         drawView.setAlpha(COLOR_ALPHA)
@@ -112,7 +129,7 @@ class DrawEmotionAvatarFragment : DrawFragment() {
         if (avatarOutlineResId != NO_AVATAR) {
             drawView.setPaintedBackground(
                 ContextCompat.getDrawable(
-                    context!!,
+                    requireContext(),
                     avatarOutlineResId
                 ) as BitmapDrawable
             )

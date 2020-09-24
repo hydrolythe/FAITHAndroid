@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/video_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0000FF">
+
+
+        <TextView
+            android:id="@+id/text_currentime_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0:00"
+            android:textColor="@color/color_white"
+            app:layout_constraintBottom_toTopOf="@+id/seekbar_video"
+            app:layout_constraintEnd_toStartOf="@+id/seekbar_video"
+            app:layout_constraintStart_toStartOf="@+id/seekbar_video" />
+
+        <SeekBar
+            android:id="@+id/seekbar_video"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="16dp"
+            android:progressDrawable="@drawable/audio_seekbar_progress"
+            app:layout_constraintBottom_toTopOf="@+id/card_youtube_player"
+            app:layout_constraintEnd_toStartOf="@+id/guide_cinema_view_right"
+            app:layout_constraintStart_toStartOf="@+id/guide_cinema_view_left" />
+
+
+        <TextView
+            android:id="@+id/text_duration_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_white"
+            app:layout_constraintBottom_toTopOf="@+id/seekbar_video"
+            app:layout_constraintEnd_toEndOf="@+id/seekbar_video"
+            app:layout_constraintStart_toEndOf="@+id/seekbar_video"
+            tools:text="01:23" />
+
+        <LinearLayout
+            android:id="@+id/menu_container_video"
+            android:layout_width="380dp"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/img_filmstrip_side"
+            android:backgroundTint="@color/color_white"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:translationZ="2dp"
+            app:layout_constraintBottom_toTopOf="@id/img_cinema_view_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/guide_cinema_view_right"
+            app:layout_constraintStart_toStartOf="@+id/guide_cinema_view_left"
+            app:layout_constraintTop_toBottomOf="@id/guide_cinema_view_bottom">
+
+            <ImageButton
+                android:id="@+id/btn_stop_video"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/color_white"
+                app:srcCompat="@drawable/button_record_stop" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="#1A2E3F" />
+
+            <ImageButton
+                android:id="@+id/btn_play_video"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/color_white"
+                android:tint="#0000FF"
+                app:srcCompat="@drawable/button_audio_play" />
+
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="#1A2E3F" />
+
+            <ImageButton
+                android:id="@+id/btn_pause_video"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/color_white"
+                android:tint="#16F48A"
+                app:srcCompat="@drawable/button_audio_pause" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:background="#1A2E3F" />
+
+            <ImageButton
+                android:id="@+id/btn_fullscreen_video"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/colorTransparent"
+                app:srcCompat="@drawable/ic_fullscreen_black_24dp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/img_cinema_view_left2"
+            style="@style/cinema_insets_horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/img_cinema_view_left3"
+            app:layout_constraintEnd_toEndOf="@+id/img_cinema_view_left1"
+            app:layout_constraintStart_toStartOf="@+id/img_cinema_view_left1"
+            app:layout_constraintTop_toBottomOf="@+id/img_cinema_view_left1" />
+
+        <ImageView
+            android:id="@+id/img_cinema_view_left3"
+            style="@style/cinema_insets_horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/img_cinema_view_left4"
+            app:layout_constraintEnd_toEndOf="@+id/img_cinema_view_left2"
+            app:layout_constraintStart_toStartOf="@+id/img_cinema_view_left2"
+            app:layout_constraintTop_toBottomOf="@+id/img_cinema_view_left2" />
+
+        <ImageView
+            android:id="@+id/img_cinema_view_left4"
+            style="@style/cinema_insets_horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/img_cinema_view_left3"
+            app:layout_constraintStart_toStartOf="@+id/img_cinema_view_left3"
+            app:layout_constraintTop_toBottomOf="@+id/img_cinema_view_left3" />
+
+        <ImageView
+            android:id="@+id/img_cinema_view_left1"
+            style="@style/cinema_insets_horizontal"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/img_cinema_view_left2"
+            app:layout_constraintEnd_toStartOf="@+id/guide_cinema_view_left"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_video_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@android:color/transparent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/btn_save_white" />
+
+        <ImageButton
+            android:id="@+id/btn_back_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@android:color/transparent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/knop_terug_wit" />
+
+        <ImageView
+            android:id="@+id/img_cinema_view_right1"
+            style="@style/cinema_insets_horizontal"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/img_cinema_view_right2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guide_cinema_view_right"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_cinema_view_right2"
+            style="@style/cinema_insets_horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/img_cinema_view_right3"
+            app:layout_constraintEnd_toEndOf="@+id/img_cinema_view_right1"
+            app:layout_constraintStart_toStartOf="@+id/img_cinema_view_right1"
+            app:layout_constraintTop_toBottomOf="@+id/img_cinema_view_right1" />
+
+        <ImageView
+            android:id="@+id/img_cinema_view_right3"
+            style="@style/cinema_insets_horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/img_cinema_view_right4"
+            app:layout_constraintEnd_toEndOf="@+id/img_cinema_view_right2"
+            app:layout_constraintStart_toStartOf="@+id/img_cinema_view_right2"
+            app:layout_constraintTop_toBottomOf="@+id/img_cinema_view_right2" />
+
+        <ImageView
+            android:id="@+id/img_cinema_view_right4"
+            style="@style/cinema_insets_horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/img_cinema_view_right3"
+            app:layout_constraintStart_toStartOf="@+id/img_cinema_view_right3"
+            app:layout_constraintTop_toBottomOf="@+id/img_cinema_view_right3" />
+
+        <ImageView
+            android:id="@+id/img_cinema_view_top"
+            style="@style/cinema_insets_vertical"
+            android:scaleY="-1"
+            app:layout_constraintEnd_toStartOf="@+id/img_cinema_view_right1"
+            app:layout_constraintStart_toEndOf="@+id/img_cinema_view_left1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_cinema_view_bottom"
+            style="@style/cinema_insets_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/img_cinema_view_right4"
+            app:layout_constraintStart_toEndOf="@+id/img_cinema_view_left4" />
+
+        <ImageButton
+            android:id="@+id/btn_save_video"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@android:color/transparent"
+            android:cropToPadding="false"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_save_video" />
+
+        <ImageView
+            android:id="@+id/layer_fullscreen_player"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@color/background_backpack_video_black" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_youtube_player"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="visible"
+            app:cardCornerRadius="35dp"
+            app:layout_constraintBottom_toTopOf="@+id/guide_cinema_view_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/guide_cinema_view_right"
+            app:layout_constraintStart_toStartOf="@+id/guide_cinema_view_left"
+            app:layout_constraintTop_toTopOf="@+id/guide_cinema_view_top">
+
+            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                android:id="@+id/youtube_player_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:showFullScreenButton="false"
+                app:showYouTubeButton="false" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_cinema_view_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_cinema_view_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_cinema_view_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_cinema_view_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+

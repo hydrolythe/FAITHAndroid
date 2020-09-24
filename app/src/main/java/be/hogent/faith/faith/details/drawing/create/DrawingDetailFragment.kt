@@ -11,22 +11,24 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawBinding
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.details.drawing.create.draggableImages.DragListener
 import be.hogent.faith.faith.details.drawing.create.draggableImages.ImagesAdapter
-import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
 import be.hogent.faith.faith.di.KoinModules
 import com.divyanshu.draw.widget.DrawView
 import com.google.android.material.tabs.TabLayout
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import org.koin.android.ext.android.getKoin
-import org.koin.android.ext.android.inject
 import org.koin.core.error.ScopeNotCreatedException
 import org.koin.core.qualifier.named
+import org.threeten.bp.LocalDateTime
 import timber.log.Timber
+import kotlin.reflect.KClass
 
 private const val DRAWING_DETAIL = "uuid of the DrawingDetail"
 
@@ -45,8 +47,6 @@ class DrawingDetailFragment : DrawFragment(),
             drawingDetailViewModel.onBitMapAvailable(bitmap)
         }
     }
-
-    private val premadeImagesProvider by inject<PremadeImagesProvider>()
 
     private lateinit var drawBinding: FragmentDrawBinding
 
@@ -98,7 +98,7 @@ class DrawingDetailFragment : DrawFragment(),
     }
 
     private fun loadExistingDrawing() {
-        val existingDetail = arguments!!.getSerializable(DRAWING_DETAIL) as DrawingDetail
+        val existingDetail = requireArguments().getSerializable(DRAWING_DETAIL) as DrawingDetail
         drawView.setImageBackground(existingDetail.file)
         drawingDetailViewModel.loadExistingDetail(existingDetail)
     }
@@ -125,11 +125,13 @@ class DrawingDetailFragment : DrawFragment(),
 
                 .setPositiveButton(
                     getString(R.string.confirm),
-                    ColorEnvelopeListener { envelope, _ -> if (envelope != null)
-                        drawViewModel.setCustomColor(envelope.color) })
+                    ColorEnvelopeListener { envelope, _ ->
+                        if (envelope != null)
+                            drawViewModel.setCustomColor(envelope.color)
+                    })
                 .setNegativeButton(
                     getString(R.string.cancel)
-                ) { dialogInterface, i -> dialogInterface.dismiss() }
+                ) { dialogInterface, _ -> dialogInterface.dismiss() }
             builder.show()
         })
 
@@ -150,6 +152,23 @@ class DrawingDetailFragment : DrawFragment(),
 
             navigation?.backToEvent()
         })
+
+        drawingDetailViewModel.getDetailMetaData.observe(this, Observer {
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(
+                requireActivity(),
+                DrawingDetail::class as KClass<Detail>
+            )
+            if (saveDialog == null)
+                drawingDetailViewModel.setDetailsMetaData()
+            else {
+                saveDialog.setTargetFragment(this, 22)
+                saveDialog.show(parentFragmentManager, null)
+            }
+        })
+    }
+
+    override fun onFinishSaveDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        drawingDetailViewModel.setDetailsMetaData(title, dateTime)
     }
 
     private fun configureDrawView() {
@@ -196,7 +215,7 @@ class DrawingDetailFragment : DrawFragment(),
         val imageResArray = requireContext().resources.obtainTypedArray(R.array.templates_people)
         val imagesAdapter =
             ImagesAdapter(
-                createListOfImageResources(imageResArray)
+                createListOfImageResources(imageResArray), drawView
             )
         drawBinding.recyclerViewDrawingTemplates.apply {
             adapter = imagesAdapter

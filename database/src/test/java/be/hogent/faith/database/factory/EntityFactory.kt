@@ -1,82 +1,137 @@
 package be.hogent.faith.database.factory
 
+import be.hogent.faith.database.common.EncryptedDetailEntity
 import be.hogent.faith.database.converters.FileConverter
 import be.hogent.faith.database.converters.LocalDateTimeConverter
-import be.hogent.faith.database.models.DetailEntity
-import be.hogent.faith.database.models.DetailType
-import be.hogent.faith.database.models.EventEntity
-import be.hogent.faith.database.models.UserEntity
+import be.hogent.faith.database.event.EncryptedEventEntity
+import be.hogent.faith.database.goal.EncryptedActionEntity
+import be.hogent.faith.database.goal.EncryptedGoalEntity
+import be.hogent.faith.database.goal.EncryptedSubGoalEntity
+import be.hogent.faith.database.user.UserEntity
+import be.hogent.faith.domain.models.goals.GoalColor
+import be.hogent.faith.domain.models.goals.ReachGoalWay
 import be.hogent.faith.util.factory.DataFactory
 import java.util.UUID
 
 /**
  * Used in addition to the Factories included in the util package.
  */
-// We can't put these methods here because the util package doesn't know the database package.
-// Making it depend on the database module would introduce a circular dependency.
 object EntityFactory {
 
-    fun makeDetailEntity(): DetailEntity {
+    fun makeDetailEntity(): EncryptedDetailEntity {
         val rand = Math.random()
         return when {
-            rand < 0.25 -> DetailEntity(
+            rand < 0.25 -> EncryptedDetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
+                "",
                 DataFactory.randomUUID().toString(),
-                DetailType.PHOTO
+                "photo"
             )
-            rand < 0.50 -> DetailEntity(
+            rand < 0.50 -> EncryptedDetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
+                "",
                 DataFactory.randomUUID().toString(),
-                DetailType.DRAWING
+                "drawing"
             )
-            rand < 0.75 -> DetailEntity(
+            rand < 0.75 -> EncryptedDetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
+                "",
                 DataFactory.randomUUID().toString(),
-                DetailType.AUDIO
+                "audio"
             )
-            else -> DetailEntity(
+            else -> EncryptedDetailEntity(
                 FileConverter().toString(DataFactory.randomFile()),
+                "",
                 DataFactory.randomUUID().toString(),
-                DetailType.TEXT
+                "text"
             )
         }
     }
 
-    fun makeDetailEntityList(count: Int): List<DetailEntity> {
-        val details = mutableListOf<DetailEntity>()
+    fun makeDetailEntityList(count: Int): List<EncryptedDetailEntity> {
+        val details = mutableListOf<EncryptedDetailEntity>()
         repeat(count) {
             details.add(makeDetailEntity())
         }
         return details
     }
 
-    fun makeEventEntity(uuid: UUID = DataFactory.randomUUID()): EventEntity {
-        return EventEntity(
-            LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
-            DataFactory.randomString(),
-            FileConverter().toString(DataFactory.randomFile()),
-            DataFactory.randomString(),
-            uuid.toString()
+    fun makeEventEntity(uuid: UUID = DataFactory.randomUUID()): EncryptedEventEntity {
+        return EncryptedEventEntity(
+            dateTime = LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
+            title = DataFactory.randomString(),
+            emotionAvatar = FileConverter().toString(DataFactory.randomFile()),
+            notes = DataFactory.randomString(),
+            uuid = uuid.toString(),
+            encryptedStreamingDEK = "sDEK",
+            encryptedDEK = "DEK"
         )
     }
 
-    fun makeEventEntityListWithDetails(count: Int): List<EventEntity> {
-        val events = mutableListOf<EventEntity>()
+    fun makeEventEntityListWithDetails(count: Int): List<EncryptedEventEntity> {
+        val events = mutableListOf<EncryptedEventEntity>()
         repeat(count) {
             events.add(makeEventEntityWithDetails())
         }
         return events
     }
 
-    fun makeEventEntityWithDetails(nbrOfDetails: Int = 5): EventEntity {
-        return EventEntity(
-            LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
-            DataFactory.randomString(),
-            FileConverter().toString(DataFactory.randomFile()),
-            DataFactory.randomString(),
-            DataFactory.randomUUID().toString(),
-            makeDetailEntityList(nbrOfDetails)
+    fun makeEventEntityWithDetails(nbrOfDetails: Int = 5): EncryptedEventEntity {
+        return EncryptedEventEntity(
+            dateTime = LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
+            title = DataFactory.randomString(),
+            emotionAvatar = FileConverter().toString(DataFactory.randomFile()),
+            notes = DataFactory.randomString(),
+            uuid = DataFactory.randomUUID().toString(),
+            details = makeDetailEntityList(nbrOfDetails),
+            encryptedStreamingDEK = "sDEK",
+            encryptedDEK = "DEK"
         )
+    }
+
+    fun makeGoalEntity(uuid: UUID = DataFactory.randomUUID()): EncryptedGoalEntity {
+        return EncryptedGoalEntity(
+            dateTime = LocalDateTimeConverter().toString(DataFactory.randomDateTime()),
+            description = DataFactory.randomString(),
+            uuid = uuid.toString(),
+            completed = DataFactory.randomBoolean().toString(),
+            currentPositionAvatar = DataFactory.randomInt(1, 10),
+            color = GoalColor.GREEN.name,
+            reachGoalWay = ReachGoalWay.Elevator.name,
+            subgoals = makeSubGoalEntityList(10),
+            encryptedDEK = "DEK"
+        )
+    }
+
+    fun makeSubGoalEntity(sequenceNumber: Int): EncryptedSubGoalEntity {
+        return EncryptedSubGoalEntity(
+            sequenceNumber = sequenceNumber,
+            description = DataFactory.randomString(),
+            actions = makeActionEntityList(5)
+        )
+    }
+
+    fun makeSubGoalEntityList(count: Int): List<EncryptedSubGoalEntity> {
+        val subgoals = mutableListOf<EncryptedSubGoalEntity>()
+        repeat(count) {
+            subgoals.add(makeSubGoalEntity(it - 1))
+        }
+        return subgoals
+    }
+
+    fun makeActionEntity(): EncryptedActionEntity {
+        return EncryptedActionEntity(
+            description = DataFactory.randomString(),
+            currentStatus = DataFactory.randomString()
+        )
+    }
+
+    fun makeActionEntityList(count: Int): List<EncryptedActionEntity> {
+        val actions = mutableListOf<EncryptedActionEntity>()
+        repeat(count) {
+            actions.add(makeActionEntity())
+        }
+        return actions
     }
 
     fun makeUserEntity(): UserEntity {

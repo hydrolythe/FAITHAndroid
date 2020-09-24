@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/container_menu_addFile"
+        android:icon="@drawable/ic_menu_bestand"
+        android:title="@string/bestand_toevoegen"
+        />
+    <item
+        android:id="@+id/container_menu_addPhoto"
+        android:icon="@drawable/ic_menu_icoon_foto"
+        android:title="@string/foto_nemen"
+        />
+    <item
+        android:id="@+id/container_menu_addDrawing"
+        android:icon="@drawable/ic_tekenen"
+        android:title="@string/description_addDrawing" />
+    <item
+        android:id="@+id/container_menu_addText"
+        android:icon="@drawable/ic_schrijven"
+        android:title="@string/description_addText" />
+    <item
+        android:id="@+id/container_menu_addAudio"
+        android:icon="@drawable/ic_menu_icoon_audio"
+        android:title="@string/description_addAudio"
+        />
+    <item
+        android:id="@+id/container_menu_addVideo"
+        android:icon="@drawable/ic_menu_icoon_video"
+        android:title="@string/add_video" />
+</menu>

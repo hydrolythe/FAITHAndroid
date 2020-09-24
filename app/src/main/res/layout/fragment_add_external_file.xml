@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <data>
+
+        <variable
+            name="externalFileViewModel"
+            type="be.hogent.faith.faith.details.externalFile.ExternalFileViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/file_preview_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_backpack">
+
+        <ImageButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginStart="@dimen/margin_corner_button"
+            android:layout_marginTop="@dimen/margin_corner_button"
+            android:background="@drawable/ic_return"
+            android:contentDescription="@string/cancel"
+            android:onClick="@{() -> externalFileViewModel.onCancelClicked()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_save_file"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginTop="@dimen/margin_corner_button"
+            android:layout_marginEnd="@dimen/margin_corner_button"
+            android:background="@drawable/save_btn"
+            android:contentDescription="@string/ok"
+            android:onClick="@{() -> externalFileViewModel.onSaveClicked()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_remove_file"
+            android:layout_width="@dimen/material_icon_width"
+            android:layout_height="@dimen/material_icon_height"
+            android:layout_marginEnd="@dimen/margin_corner_button"
+            android:layout_marginBottom="@dimen/margin_corner_button"
+            android:background="@drawable/ic_prullenmand"
+            android:contentDescription="@string/in_de_prullenmand"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

@@ -4,14 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.repository.NetworkError
-import be.hogent.faith.domain.repository.SignInException
-import be.hogent.faith.faith.state.Resource
-import be.hogent.faith.faith.state.ResourceState
+import be.hogent.faith.faith.util.state.Resource
+import be.hogent.faith.faith.util.state.ResourceState
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.LoginUserUseCase
+import be.hogent.faith.service.repositories.InvalidCredentialsException
+import be.hogent.faith.service.repositories.NetworkError
+import be.hogent.faith.service.repositories.SignInException
+import be.hogent.faith.service.usecases.user.LoginUserUseCase
 import be.hogent.faith.util.TAG
-import io.reactivex.observers.DisposableMaybeObserver
+import io.reactivex.rxjava3.observers.DisposableMaybeObserver
 import timber.log.Timber
 
 class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewModel() {
@@ -22,6 +23,7 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     private val _userLoggedInState = MutableLiveData<Resource<Unit>>()
     val userLoggedInState: LiveData<Resource<Unit>>
         get() = _userLoggedInState
+
     /**
      * reports errors with username
      */
@@ -40,10 +42,6 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     val registerButtonClicked: LiveData<Unit>
         get() = _registerButtonClicked
 
-    init {
-        // TODO Moet er gecontrolleerd worden of de user reeds aangemeld is: eerst nagaan of user reeds is aangemeld (isUserLoggedInUseCase), dan user ophalen en dan call van userLoggedInSuccessfully
-    }
-
     /**
      * user is new and wants to register
      */
@@ -61,7 +59,6 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     private fun userNameIsValid(): Boolean {
         if (userName.value.isNullOrBlank()) {
             userName.value = ""
-            //   _userNameErrorMessage.value = R.string.registerOrLogin_username_empty
             _userLoggedInState.postValue(
                 Resource(
                     ResourceState.ERROR,
@@ -106,18 +103,18 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
 
     private inner class LoginUserUseCaseHandler : DisposableMaybeObserver<String?>() {
         // returns uuid when successfully logged in
-        override fun onSuccess(t: String) {
+        override fun onSuccess(t: String?) {
             _userLoggedInState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
         }
 
-        override fun onComplete() {
-        }
+        override fun onComplete() {}
 
         override fun onError(e: Throwable) {
-            Timber.e("$TAG: ${ e.localizedMessage }")
+            Timber.e("$TAG: ${e.localizedMessage}")
             _userLoggedInState.postValue(
                 Resource(
                     ResourceState.ERROR, null, when (e) {
+                        is InvalidCredentialsException -> R.string.login_error_wrong_username_or_password
                         is NetworkError -> R.string.login_error_internet
                         is SignInException -> R.string.login_error_wrong_username_or_password
                         else -> R.string.login_error

@@ -10,7 +10,7 @@ import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.observers.DisposableSingleObserver
+import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -54,12 +54,12 @@ class AudioDetailViewModelUseCaseTests : KoinTest {
     @Test
     fun eventViewModel_onSaveClicked_updatesDetailWhenUseCaseCompletes() {
         // Arrange
-        val detailObserver = mockk<Observer<AudioDetail>>(relaxed = true)
+        val getDetailMetaDataObserver = mockk<Observer<Unit>>(relaxed = true)
         val errorObserver = mockk<Observer<Int>>(relaxed = true)
         val observer = slot<DisposableSingleObserver<AudioDetail>>()
         val createdDetail = mockk<AudioDetail>()
 
-        detailViewModel.savedDetail.observeForever(detailObserver)
+        detailViewModel.getDetailMetaData.observeForever(getDetailMetaDataObserver)
         detailViewModel.errorMessage.observeForever(errorObserver)
 
         // Act
@@ -69,7 +69,7 @@ class AudioDetailViewModelUseCaseTests : KoinTest {
         observer.captured.onSuccess(createdDetail)
 
         // Assert
-        verify { detailObserver.onChanged(createdDetail) }
+        verify { getDetailMetaDataObserver.onChanged(any()) }
         verify { errorObserver wasNot Called }
     }
 

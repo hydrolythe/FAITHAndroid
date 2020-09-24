@@ -8,19 +8,28 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentEnterTextBinding
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.faith.backpack.BackpackScreenActivity
+import be.hogent.faith.faith.cinema.CinemaActivity
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.details.DetailsFactory
+import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
+import be.hogent.faith.faith.treasureChest.TreasureChestActivity
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
+import kotlinx.android.synthetic.main.fragment_enter_text.cardView_size
 import kotlinx.android.synthetic.main.fragment_enter_text.enterText_editor
-import kotlinx.android.synthetic.main.fragment_enter_text.img_enter_text_black_Selected
 import org.koin.android.viewmodel.ext.android.viewModel
+import org.threeten.bp.LocalDateTime
+import kotlin.reflect.KClass
 
 // uses https://github.com/wasabeef/richeditor-android
 private const val TEXT_DETAIL = "uuid of the text file"
@@ -56,7 +65,7 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
     }
 
     private fun loadExistingTextDetail() {
-        val existingDetail = arguments!!.getSerializable(TEXT_DETAIL) as TextDetail
+        val existingDetail = requireArguments().getSerializable(TEXT_DETAIL) as TextDetail
         textDetailDetailViewModel.loadExistingDetail(existingDetail)
     }
 
@@ -92,6 +101,12 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
         super.onStart()
         initEditor()
         setUpListeners()
+        textDetailDetailViewModel.pickTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.black
+            )
+        )
     }
 
     private fun initEditor() {
@@ -106,7 +121,7 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
             focusEditor()
         }
         val inputMethodManager =
-            context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(enterText_editor, InputMethodManager.SHOW_IMPLICIT)
     }
 
@@ -115,7 +130,6 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
             enterText_editor.html = text
         })
         textDetailDetailViewModel.selectedTextColor.observe(this, Observer { newColor ->
-            if (newColor == R.color.black) img_enter_text_black_Selected.visibility = View.VISIBLE
             enterText_editor.setTextColor(newColor)
         })
         textDetailDetailViewModel.boldClicked.observe(this, Observer {
@@ -127,6 +141,10 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
         textDetailDetailViewModel.underlineClicked.observe(this, Observer {
             enterText_editor.setUnderline()
         })
+
+        textDetailDetailViewModel.fontsizeClicked.observe(this, Observer {
+            cardView_size.visibility = if (it) View.VISIBLE else View.INVISIBLE
+        })
         textDetailDetailViewModel.selectedFontSize.observe(this, Observer { newSize ->
             enterText_editor.setFontSize(newSize.size)
         })
@@ -134,7 +152,9 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
             Toast.makeText(context, errorMessageResourceId, Toast.LENGTH_SHORT).show()
         })
         textDetailDetailViewModel.savedDetail.observe(this, Observer { savedTextDetail ->
-            Toast.makeText(context, R.string.save_text_success, Toast.LENGTH_SHORT).show()
+            if (requireActivity() is EmotionCaptureMainActivity) {
+                Toast.makeText(context, R.string.save_text_success, Toast.LENGTH_SHORT).show()
+            }
             detailFinishedListener.onDetailFinished(savedTextDetail)
             navigation?.backToEvent()
         })
@@ -158,12 +178,33 @@ class TextDetailFragment : Fragment(), DetailFragment<TextDetail> {
         textDetailDetailViewModel.cancelClicked.observe(this, Observer {
             showExitAlert()
         })
+        textDetailDetailViewModel.getDetailMetaData.observe(this, Observer {
+            @Suppress("UNCHECKED_CAST") val saveDialog = DetailsFactory.createMetaDataDialog(
+                requireActivity(),
+                TextDetail::class as KClass<Detail>
+            )
+            if (saveDialog == null)
+                textDetailDetailViewModel.setDetailsMetaData()
+            else {
+                saveDialog.setTargetFragment(this, 22)
+                saveDialog.show(parentFragmentManager, null)
+            }
+        })
+    }
+
+    override fun onFinishSaveDetailsMetaData(title: String, dateTime: LocalDateTime) {
+        textDetailDetailViewModel.setDetailsMetaData(title, dateTime)
     }
 
     private fun showExitAlert() {
         val alertDialog: AlertDialog = this.run {
             val builder = AlertDialog.Builder(this.requireContext()).apply {
-                setTitle(R.string.dialog_to_the_event_title)
+                when (requireActivity()) {
+                    is BackpackScreenActivity -> setTitle(R.string.dialog_to_the_backpack)
+                    is CinemaActivity -> setTitle(R.string.dialog_to_the_cinema_title)
+                    is TreasureChestActivity -> setTitle(R.string.dialog_to_the_treasurechest_title)
+                    else -> setTitle(R.string.dialog_to_the_event_title)
+                }
                 setMessage(R.string.dialog_enterText_cancel_message)
                 setPositiveButton(R.string.ok) { _, _ ->
                     navigation!!.backToEvent()

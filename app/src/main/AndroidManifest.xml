@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="be.hogent.faith">
-
     <!-- To access Google+ APIs: -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -13,6 +12,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <supports-screens
         android:anyDensity="true"
@@ -32,18 +32,32 @@
         android:theme="@style/AppTheme.FullScreen"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
-            android:name=".faith.library.EventListActivity"
-            android:label="@string/title_event_detail"
-            android:parentActivityName=".faith.library.EventListActivity">
+            android:name=".faith.cinema.CinemaActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".faith.backpack.BackpackScreenActivity"
+            android:label="@string/title_backpack"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:theme="@style/AppTheme.FullScreen">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="be.hogent.faith.faith.library.EventListActivity" />
+                android:value="be.hogent.faith.faith.cinema.CinemaActivity" />
+        </activity>
+        <activity
+            android:name=".faith.library.LibraryActivity"
+            android:label="@string/title_event_detail"
+            android:parentActivityName=".faith.library.LibraryActivity"
+            android:screenOrientation="landscape">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="be.hogent.faith.faith.library.LibraryActivity" />
         </activity>
         <activity
             android:name=".faith.loginOrRegister.LoginOrRegisterActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.FullScreen"
             android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.FullScreen"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,15 +68,25 @@
         <activity
             android:name=".faith.cityScreen.CityScreenActivity"
             android:label="@string/lbl_activity_city"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".faith.emotionCapture.EmotionCaptureMainActivity"
             android:label="@string/lbl_activity_emotionCapture"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.FullScreen"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
-
+        <activity
+            android:name=".faith.treasureChest.TreasureChestActivity"
+            android:label="@string/lbl_activity_treasurechest"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.FullScreen"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".faith.skyscraper.SkyscraperActivity"
+            android:label="@string/lbl_activity_skyscraper"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.FullScreen"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
     </application>
 
 </manifest>

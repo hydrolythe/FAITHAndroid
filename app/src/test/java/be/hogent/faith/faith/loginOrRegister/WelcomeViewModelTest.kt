@@ -2,15 +2,15 @@ package be.hogent.faith.faith.loginOrRegister
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import be.hogent.faith.faith.state.Resource
-import be.hogent.faith.faith.state.ResourceState
-import be.hogent.faith.service.usecases.LoginUserUseCase
+import be.hogent.faith.faith.util.state.Resource
+import be.hogent.faith.faith.util.state.ResourceState
+import be.hogent.faith.service.usecases.user.LoginUserUseCase
 import be.hogent.faith.util.factory.DataFactory
 import io.mockk.called
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import io.reactivex.observers.DisposableMaybeObserver
+import io.reactivex.rxjava3.observers.DisposableMaybeObserver
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule

@@ -7,14 +7,15 @@ import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.repository.NetworkError
-import be.hogent.faith.faith.state.Resource
-import be.hogent.faith.faith.state.ResourceState
-import be.hogent.faith.service.usecases.GetUserUseCase
+import be.hogent.faith.faith.util.LoadingViewModel
+import be.hogent.faith.faith.util.state.Resource
+import be.hogent.faith.faith.util.state.ResourceState
+import be.hogent.faith.service.repositories.NetworkError
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
+import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.util.TAG
-import io.reactivex.observers.DisposableCompletableObserver
-import io.reactivex.subscribers.DisposableSubscriber
+import io.reactivex.rxjava3.observers.DisposableCompletableObserver
+import io.reactivex.rxjava3.subscribers.DisposableSubscriber
 import timber.log.Timber
 
 /**
@@ -24,11 +25,7 @@ import timber.log.Timber
 class UserViewModel(
     private val saveEventUseCase: SaveEventUseCase,
     private val getUserUseCase: GetUserUseCase
-) : ViewModel() {
-
-    private var userName: String? = null
-    private var password: String? = null
-    private var avatar: String? = null
+) : LoadingViewModel() {
 
     private val _eventSavedState = MutableLiveData<Resource<Unit>>()
     val eventSavedState: LiveData<Resource<Unit>>
@@ -44,7 +41,9 @@ class UserViewModel(
 
     private var _user = MutableLiveData<User>()
     val user: LiveData<User>
-        get() = _user
+        get() {
+            return _user
+        }
 
     private val _titleErrorMessage = MutableLiveData<Int>()
     val titleErrorMessage: LiveData<Int>
@@ -52,11 +51,6 @@ class UserViewModel(
 
     fun setUser(user: User) {
         _user.postValue(user)
-    }
-
-    fun getLoggedInUser() {
-        _getLoggedInUserState.postValue(Resource(ResourceState.LOADING, null, null))
-        getUserUseCase.execute(GetUserUseCase.Params(), GetUserUseCaseHandler())
     }
 
     /**
@@ -67,62 +61,73 @@ class UserViewModel(
         _eventSavedState.postValue(null)
     }
 
-    private inner class GetUserUseCaseHandler : DisposableSubscriber<User>() {
+    fun getLoggedInUser() {
+        _getLoggedInUserState.postValue(Resource(ResourceState.LOADING, null, null))
+        startLoading()
+        getUserUseCase.execute(GetUserUseCase.Params(), object : DisposableSubscriber<User>() {
 
-        override fun onNext(t: User?) {
-            Timber.i(TAG, "success $t")
-            _user.postValue(t)
-            _getLoggedInUserState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
-        }
+            override fun onNext(t: User) {
+                Timber.i("success $t")
+                _user.postValue(t)
+                _getLoggedInUserState.value = Resource(ResourceState.SUCCESS, Unit, null)
+                doneLoading()
+            }
 
-        override fun onComplete() {
-            Timber.i(TAG, "completed")
-        }
+            override fun onComplete() {
+                Timber.i(TAG, "completed")
+                doneLoading()
+            }
 
-        override fun onError(e: Throwable) {
-            Timber.e(TAG, e.localizedMessage)
-            _getLoggedInUserState.postValue(
-                Resource(
-                    ResourceState.ERROR, null,
-                    when (e) {
-                        is NetworkError -> R.string.login_error_internet
-                        else -> R.string.register_error_create_user
-                    }
-                )
-            )
-        }
+            override fun onError(e: Throwable) {
+                Timber.e(e)
+                _getLoggedInUserState.value =
+                    Resource(
+                        ResourceState.ERROR, null,
+                        when (e) {
+                            is NetworkError -> R.string.login_error_internet
+                            else -> R.string.getLoggedInUser_error
+                        }
+                    )
+                doneLoading()
+            }
+        })
     }
 
-    fun saveEvent(eventTitle: String?, event: Event) {
-        if (eventTitle.isNullOrEmpty()) {
+    fun saveEvent(event: Event) {
+        if (event.title.isNullOrEmpty()) {
             _titleErrorMessage.postValue(R.string.error_event_no_title)
             return
         }
         _eventSavedState.postValue(Resource(ResourceState.LOADING, null, null))
-        val params = SaveEventUseCase.Params(eventTitle, event, user.value!!)
-        saveEventUseCase.execute(params, SaveEventUseCaseHandler())
-    }
+        val params = SaveEventUseCase.Params(event, user.value!!)
+        startLoading()
+        saveEventUseCase.execute(params, object : DisposableCompletableObserver() {
+            override fun onComplete() {
+                Timber.i("Successfully saved event")
+                _eventSavedState.value = Resource(ResourceState.SUCCESS, Unit, null)
+                doneLoading()
+            }
 
-    private inner class SaveEventUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _eventSavedState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
-        }
-
-        override fun onError(e: Throwable) {
-            Timber.e("error saving event ${e.localizedMessage}")
-            _eventSavedState.postValue(
-                Resource(
-                    ResourceState.ERROR,
-                    null,
-                    R.string.error_save_event_failed
-                )
-            )
-        }
+            override fun onError(e: Throwable) {
+                Timber.e(e, "error saving event ${e.localizedMessage}")
+                _eventSavedState.value =
+                    Resource(
+                        ResourceState.ERROR,
+                        null,
+                        R.string.error_save_event_failed
+                    )
+                doneLoading()
+            }
+        })
     }
 
     override fun onCleared() {
         saveEventUseCase.dispose()
         getUserUseCase.dispose()
         super.onCleared()
+    }
+
+    fun clearErrorMessage() {
+        _titleErrorMessage.postValue(R.string.empty)
     }
 }

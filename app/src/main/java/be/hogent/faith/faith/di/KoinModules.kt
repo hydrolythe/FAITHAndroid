@@ -1,34 +1,56 @@
 package be.hogent.faith.faith.di
 
+import be.hogent.faith.domain.models.Backpack
+import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.domain.models.Event
+import be.hogent.faith.domain.models.TreasureChest
+import be.hogent.faith.domain.models.User
+import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.faith.UserViewModel
+import be.hogent.faith.faith.backpack.BackpackViewModel
+import be.hogent.faith.faith.cinema.CinemaCreateVideoViewModel
+import be.hogent.faith.faith.cinema.CinemaOverviewViewModel
 import be.hogent.faith.faith.cityScreen.CityScreenViewModel
+import be.hogent.faith.faith.details.BackpackDetailsMetaDataViewModel
+import be.hogent.faith.faith.details.CinemaDetailsMetaDataViewModel
+import be.hogent.faith.faith.details.TreasureChestDetailsMetaDataViewModel
 import be.hogent.faith.faith.details.audio.AudioDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
 import be.hogent.faith.faith.details.drawing.create.DrawingDetailViewModel
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProvider
 import be.hogent.faith.faith.details.drawing.create.draggableImages.PremadeImagesProviderFromResources
+import be.hogent.faith.faith.details.drawing.view.ViewDrawingDetailViewModel
+import be.hogent.faith.faith.details.externalFile.ExternalFileViewModel
 import be.hogent.faith.faith.details.photo.create.TakePhotoViewModel
+import be.hogent.faith.faith.details.photo.view.ViewPhotoDetailViewModel
 import be.hogent.faith.faith.details.text.create.TextDetailViewModel
+import be.hogent.faith.faith.details.text.view.ViewTextDetailViewModel
+import be.hogent.faith.faith.details.video.view.ViewVideoViewModel
+import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailViewModel
 import be.hogent.faith.faith.di.KoinModules.DRAWING_SCOPE_NAME
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.emotionCapture.editDetail.EditDetailViewModel
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
-import be.hogent.faith.faith.library.eventDetailsList.SelectedItemViewModel
-import be.hogent.faith.faith.loginOrRegister.RegisterUserViewModel
+import be.hogent.faith.faith.library.eventDetails.EventDetailsViewModel
+import be.hogent.faith.faith.library.eventList.EventListViewModel
 import be.hogent.faith.faith.loginOrRegister.WelcomeViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.ResourceAvatarProvider
-import be.hogent.faith.faith.loginOrRegister.registerUserInfo.RegisterUserInfoViewModel
-import be.hogent.faith.faith.overviewEvents.OverviewEventsViewModel
+import be.hogent.faith.faith.skyscraper.goal.GoalViewModel
+import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperOverviewViewModel
+import be.hogent.faith.faith.treasureChest.TreasureChestViewModel
 import be.hogent.faith.faith.util.AndroidTempFileProvider
 import be.hogent.faith.faith.util.TempFileProvider
+import be.hogent.faith.faith.videoplayer.CurrentVideoViewModel
+import be.hogent.faith.service.di.BackpackNames
+import be.hogent.faith.service.di.CinemaNames
+import be.hogent.faith.service.di.TreasureChestNames
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.storage.SecureCredentialsManager
 import com.auth0.android.authentication.storage.SharedPreferencesStorage
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -44,29 +66,66 @@ object KoinModules {
 
 val appModule = module(override = true) {
 
-    // Scheduler for use cases
+    // Observing scheduler for use cases
     single { AndroidSchedulers.mainThread() }
 
     // ViewModels
     viewModel { CityScreenViewModel(get()) }
-    viewModel { (event: Event) -> EventViewModel(get(), get(), get(), get(), get(), event) }
-    viewModel { EventViewModel(get(), get(), get(), get(), get()) }
+    viewModel { (event: Event) -> EventViewModel(get(), get(), get(), event) }
+    viewModel { (user: User) -> SkyscraperOverviewViewModel(get(), get(), get(), get(), user) }
+    viewModel { EventViewModel(get(), get(), get()) }
+    viewModel { (backpack: Backpack) ->
+        BackpackViewModel(
+            saveBackpackDetailUseCase = get(named(BackpackNames.saveDetailUseCase)),
+            deleteBackpackDetailUseCase = get(named(BackpackNames.deleteDetailUseCase)),
+            backpack = backpack,
+            loadDetailFileUseCase = get(named(BackpackNames.loadDetailUseCase)),
+            getBackPackDataUseCase = get(named(BackpackNames.getDetailsUseCase))
+        )
+    }
+    viewModel { (treasurechest: TreasureChest) ->
+        TreasureChestViewModel(
+            saveDetailUseCase = get(named(TreasureChestNames.saveDetailUseCase)),
+            deleteDetailUseCase = get(named(TreasureChestNames.deleteDetailUseCase)),
+            loadDetailFileUseCase = get(named(TreasureChestNames.loadDetailUseCase)),
+            treasureChest = treasurechest,
+            getDataUseCase = get(named(TreasureChestNames.getDetailsUseCase))
+        )
+    }
+    viewModel { (cinema: Cinema) ->
+        CinemaOverviewViewModel(
+            saveBackpackDetailUseCase = get(named(CinemaNames.saveDetailUseCase)),
+            deleteBackpackDetailUseCase = get(named(CinemaNames.deleteDetailUseCase)),
+            loadDetailFileUseCase = get(named(CinemaNames.loadDetailUseCase)),
+            cinema = cinema,
+            getCinemaDataUseCase = get(named(CinemaNames.getDetailsUseCase)),
+            addFilmToCinemaUseCase = get()
+        )
+    }
     viewModel { DrawViewModel() }
     viewModel { DrawingDetailViewModel(get(), get()) }
     viewModel { EditDetailViewModel() }
     viewModel { TextDetailViewModel(get(), get(), get()) }
-    viewModel { OverviewEventsViewModel() }
-    viewModel { RegisterAvatarViewModel(get()) }
+    viewModel { RegisterAvatarViewModel(get(), get()) }
     viewModel { WelcomeViewModel(get()) }
     viewModel { AudioDetailViewModel(get(), get()) }
     viewModel { WelcomeViewModel(get()) }
-    viewModel { RegisterUserViewModel(get()) }
-    viewModel { RegisterUserInfoViewModel(get()) }
     viewModel { TakePhotoViewModel(get()) }
-    viewModel { RegisterUserInfoViewModel(get()) }
-    viewModel { RegisterAvatarViewModel(get()) }
-    viewModel { TakePhotoViewModel(get()) }
-    viewModel { SelectedItemViewModel() }
+    viewModel { YoutubeVideoDetailViewModel(get()) }
+    viewModel { CurrentVideoViewModel() }
+    viewModel { ExternalFileViewModel(get(), get()) }
+    viewModel { (user: User) -> EventListViewModel(user, get(), get()) }
+    viewModel { EventDetailsViewModel(get()) }
+    viewModel { ViewPhotoDetailViewModel() }
+    viewModel { ViewDrawingDetailViewModel() }
+    viewModel { CinemaCreateVideoViewModel(get()) }
+    viewModel { CinemaDetailsMetaDataViewModel() }
+    viewModel { BackpackDetailsMetaDataViewModel() }
+    viewModel { TreasureChestDetailsMetaDataViewModel() }
+    viewModel { (goal: Goal, user: User) -> GoalViewModel(get(), goal, user) }
+    viewModel { ViewTextDetailViewModel(get()) }
+
+    viewModel { ViewVideoViewModel() }
 
     // UserViewModel is scoped and not just shared because it is used over multiple activities.
     // Scope is opened when logging in a new user and closed when logging out.

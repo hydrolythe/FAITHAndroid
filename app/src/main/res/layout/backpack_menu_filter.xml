@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="backpackViewModel"
+            type="be.hogent.faith.faith.backpack.BackpackViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/include"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+
+        <ImageView
+            android:id="@+id/background_filter_menu"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/filter_menu_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/filter_menu_background" />
+
+        <ImageView
+            android:id="@+id/background_content_filter_menu"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/filter_menu_content"
+            android:padding="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/background_filter_menu"
+            app:layout_constraintEnd_toEndOf="@+id/background_filter_menu"
+            app:layout_constraintStart_toStartOf="@+id/background_filter_menu"
+            app:layout_constraintTop_toTopOf="@+id/background_filter_menu"
+            app:srcCompat="@drawable/filter_menu_content" />
+
+
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/background_filter_menu"
+            app:layout_constraintStart_toStartOf="@+id/background_filter_menu"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout_backpack_detailslist_search">
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/filterknop_teksten"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:contentDescription="@string/filter_btn_text"
+                    android:onClick="@{() -> backpackViewModel.onFilterTextClicked()}"
+                    app:srcCompat="@drawable/filterknop_teksten" />
+
+                <ImageButton
+                    android:id="@+id/filterknop_audio"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:contentDescription="@string/filter_btn_audio"
+                    android:onClick="@{() -> backpackViewModel.onFilterAudioClicked()}"
+                    app:srcCompat="@drawable/filterknop_audio" />
+
+                <ImageButton
+                    android:id="@+id/filterknop_foto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:contentDescription="@string/filter_btn_foto"
+                    android:onClick="@{() -> backpackViewModel.onFilterPhotosClicked()}"
+                    app:srcCompat="@drawable/filterknop_foto" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:id="@+id/filterknop_tekeningen"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:contentDescription="@string/filter_btn_drawing"
+                    android:onClick="@{() -> backpackViewModel.onFilterDrawingClicked()}"
+                    app:srcCompat="@drawable/filterknop_tekeningen" />
+
+                <ImageButton
+                    android:id="@+id/filterknop_film"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:contentDescription="@string/filter_btn_video"
+                    android:onClick="@{() -> backpackViewModel.onFilterVideoClicked()}"
+                    app:srcCompat="@drawable/filterknop_film" />
+
+                <ImageButton
+                    android:id="@+id/filterknop_extern_bestand"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:contentDescription="@string/filter_btn_file"
+                    android:onClick="@{() -> backpackViewModel.onFilterExternalVideoClicked()}"
+                    app:srcCompat="@drawable/filterknop_extern_bestand" />
+            </TableRow>
+        </TableLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_backpack_detailslist_search"
+            style="@style/faith_textInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:hint="@string/wat_zoek_je"
+            app:hintEnabled="true"
+            app:layout_constraintEnd_toEndOf="@+id/tableLayout"
+            app:layout_constraintStart_toStartOf="@+id/tableLayout"
+            app:layout_constraintTop_toTopOf="@id/background_content_filter_menu"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:startIconDrawable="@drawable/ic_search"
+            app:startIconTint="@null">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:text="@={backpackViewModel.searchString}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/search_close_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="20dp"
+            android:backgroundTint="#0000FF"
+            android:contentDescription="@string/close_filter_btn"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/textInputLayout_backpack_detailslist_search"
+            app:layout_constraintEnd_toEndOf="@+id/background_content_filter_menu"
+            app:layout_constraintTop_toTopOf="@+id/background_filter_menu"
+            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+        <ImageView
+            android:id="@+id/filter_boy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/filter_boy"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/background_content_filter_menu"
+            app:layout_constraintStart_toStartOf="@+id/background_content_filter_menu"
+            app:srcCompat="@drawable/filter_boy" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
