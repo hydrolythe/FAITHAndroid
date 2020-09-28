@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
+import be.hogent.faith.faith.util.FeedbackHelper
 import be.hogent.faith.faith.util.state.Resource
 import be.hogent.faith.faith.util.state.ResourceState
 import kotlinx.android.synthetic.main.fragment_login.progress
@@ -45,6 +46,11 @@ class WelcomeFragment : Fragment() {
         welcomeViewModel.registerButtonClicked.observe(this, Observer {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://lifecity.be"))
             startActivity(intent)
+        })
+
+        // user wants to give feedback
+        welcomeViewModel.feedbackButtonClicked.observe(this, Observer {
+            FeedbackHelper.openFeedbackFormForMentor(requireContext())
         })
 
         // user is logging in....

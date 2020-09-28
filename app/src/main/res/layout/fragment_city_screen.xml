@@ -216,6 +216,23 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.8" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_feedback"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/general_button_height"
+            android:backgroundTint="@color/color_white"
+            android:gravity="center"
+            android:onClick="@{() -> cityScreenViewModel.feedbackButtonClicked()}"
+            android:text="@string/feedback"
+            android:textAppearance="@style/TextAppearance.NavigationButtonSmall"
+            android:textColor="@color/caption"
+            app:cornerRadius="20dp"
+            android:layout_margin="@dimen/margin_medium"
+            app:layout_constraintStart_toStartOf="@id/left_margin_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/bottom_margin_horizontal"
+            app:strokeColor="@color/caption" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
