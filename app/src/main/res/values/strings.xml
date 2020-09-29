@@ -293,5 +293,6 @@
     <string name="error_cinema_no_sources_selected">Je moet nog beelden selecteren voor je filmpje!</string>
     <string name="voeg_actie_toe">voeg actie toe</string>
     <string name="subdoel_opslaan">subdoel opslaan</string>
-    <string name="feedback">Feedback</string>
+    <string name="feedback_kid">Feedback kind</string>
+    <string name="feedback_mentor">Feedback begeleider</string>
 </resources>

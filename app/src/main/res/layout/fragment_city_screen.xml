@@ -225,7 +225,7 @@
             android:backgroundTint="@color/color_white"
             android:gravity="center"
             android:onClick="@{() -> cityScreenViewModel.feedbackButtonClicked()}"
-            android:text="@string/feedback"
+            android:text="@string/feedback_kid"
             android:textAppearance="@style/TextAppearance.NavigationButtonSmall"
             android:textColor="@color/caption"
             app:cornerRadius="20dp"

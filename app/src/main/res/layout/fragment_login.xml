@@ -133,7 +133,7 @@
                 android:backgroundTint="@color/color_white"
                 android:gravity="center"
                 android:onClick="@{() -> welcomeViewModel.feedbackButtonClicked()}"
-                android:text="@string/feedback"
+                android:text="@string/feedback_mentor"
                 android:textAppearance="@style/TextAppearance.NavigationButtonSmall"
                 android:textColor="@color/caption"
                 app:cornerRadius="20dp"
