@@ -18,10 +18,15 @@ class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : Vi
     val backpackClicked = SingleLiveEvent<Unit>()
     val cinemaClicked = SingleLiveEvent<Unit>()
     val skyscraperClicked = SingleLiveEvent<Unit>()
+    val feedbackClicked = SingleLiveEvent<Unit>()
 
     private val _logoutSuccessFull = SingleLiveEvent<Unit>()
     val logoutSuccessFull: LiveData<Unit>
         get() = _logoutSuccessFull
+
+    fun feedbackButtonClicked() {
+        feedbackClicked.call()
+    }
 
     fun onArchiveClicked() {
         libraryClicked.call()
@@ -42,6 +47,7 @@ class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : Vi
     fun onCinemaClicked() {
         cinemaClicked.call()
     }
+
     fun onSkyscraperClicked() {
         Timber.i("Sixth location clicked")
         skyscraperClicked.call()

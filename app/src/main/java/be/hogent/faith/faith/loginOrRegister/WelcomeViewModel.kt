@@ -42,11 +42,22 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     val registerButtonClicked: LiveData<Unit>
         get() = _registerButtonClicked
 
+    private val _feedbackButtonClicked = SingleLiveEvent<Unit>()
+    val feedbackButtonClicked: LiveData<Unit>
+        get() = _feedbackButtonClicked
+
     /**
      * user is new and wants to register
      */
     fun registerButtonClicked() {
         _registerButtonClicked.call()
+    }
+
+    /**
+     * user wants to give feedback about the application
+     */
+    fun feedbackButtonClicked() {
+        _feedbackButtonClicked.call()
     }
 
     /**
