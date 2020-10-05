@@ -1,4 +1,4 @@
-package be.hogent.faith.faith.util;
+package be.hogent.faith.faith.util
 
 import android.content.Context
 import android.content.Intent
