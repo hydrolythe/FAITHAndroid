@@ -56,7 +56,7 @@ class WelcomeViewModel(private val loginUserUseCase: LoginUserUseCase) : ViewMod
     /**
      * user wants to give feedback about the application
      */
-    fun feedbackButtonClicked(){
+    fun feedbackButtonClicked() {
         _feedbackButtonClicked.call()
     }
 
