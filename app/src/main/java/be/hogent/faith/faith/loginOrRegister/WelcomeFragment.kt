@@ -53,6 +53,11 @@ class WelcomeFragment : Fragment() {
             FeedbackHelper.openFeedbackFormForMentor(requireContext())
         })
 
+        // user wants to report a bug
+        welcomeViewModel.reportBugButtonClicked.observe(this, Observer {
+            FeedbackHelper.openBugForm(requireContext())
+        })
+
         // user is logging in....
         welcomeViewModel.userLoggedInState.observe(this, Observer {
             it?.let {
