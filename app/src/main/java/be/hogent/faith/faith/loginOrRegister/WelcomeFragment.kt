@@ -44,8 +44,7 @@ class WelcomeFragment : Fragment() {
     private fun registerListeners() {
         // user wants to register
         welcomeViewModel.registerButtonClicked.observe(this, Observer {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://lifecity.be"))
-            startActivity(intent)
+            FeedbackHelper.openRegisterUrl(requireContext())
         })
 
         // user wants to give feedback
