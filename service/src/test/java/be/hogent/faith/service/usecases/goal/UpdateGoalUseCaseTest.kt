@@ -1,10 +1,12 @@
 package be.hogent.faith.service.usecases.goal
 
+import be.hogent.faith.domain.models.User
 import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.service.encryption.IGoalEncryptionService
 import be.hogent.faith.service.repositories.IGoalRepository
 import be.hogent.faith.service.usecases.util.EncryptedGoalFactory
 import be.hogent.faith.util.factory.GoalFactory
+import be.hogent.faith.util.factory.UserFactory
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -19,11 +21,13 @@ class UpdateGoalUseCaseTest {
     private lateinit var updateGoalUseCase: UpdateGoalUseCase
 
     private lateinit var goal: Goal
+    private lateinit var user: User
     private val encryptedGoal = EncryptedGoalFactory.makeGoal()
 
     @Before
     fun setUp() {
         goal = GoalFactory.makeGoal()
+        user = UserFactory.makeUser()
         updateGoalUseCase =
             UpdateGoalUseCase(
                 goalEncryptionService,
@@ -36,7 +40,8 @@ class UpdateGoalUseCaseTest {
 
     @Test
     fun `updating the Goal should complete without errors`() {
-        val params = UpdateGoalUseCase.Params(goal)
+        goal = user.addNewGoal()
+        val params = UpdateGoalUseCase.Params(goal, user)
         every { goalEncryptionService.encrypt(any()) } returns Single.just(encryptedGoal)
         every { goalRepository.update(any()) } returns Completable.complete()
 
@@ -56,7 +61,8 @@ class UpdateGoalUseCaseTest {
         every { goalEncryptionService.encrypt(any()) } returns Single.just(encryptedGoal)
         every { goalRepository.update(any()) } returns Completable.error(RuntimeException())
 
-        val params = UpdateGoalUseCase.Params(goal)
+        goal = user.addNewGoal()
+        val params = UpdateGoalUseCase.Params(goal, user)
 
         updateGoalUseCase.buildUseCaseObservable(params)
             .test()
