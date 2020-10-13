@@ -178,7 +178,8 @@ ext {
             legacysupport      : "androidx.legacy:legacy-support-v4:$legacy_support_version",
             youtubePlayerView  : "com.pierfrancescosoffritti.androidyoutubeplayer:core:$youtube_playerview_version",
             colorpicker        : "com.github.skydoves:colorpickerpreference:$colorpicker_version",
-            lottie             : "com.airbnb.android:lottie:$lottieVersion"
+            lottie             : "com.airbnb.android:lottie:$lottieVersion",
+            browser            : "androidx.browser:browser:1.2.0"
     ]
 
     authdependencies = [
