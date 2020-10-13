@@ -1,8 +1,6 @@
 package be.hogent.faith.faith.loginOrRegister
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,8 +42,7 @@ class WelcomeFragment : Fragment() {
     private fun registerListeners() {
         // user wants to register
         welcomeViewModel.registerButtonClicked.observe(this, Observer {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://lifecity.be"))
-            startActivity(intent)
+            FeedbackHelper.openRegisterUrl(requireContext())
         })
 
         // user wants to give feedback
