@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.skyscraper.goal
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -183,12 +184,25 @@ class SkyscraperGoalFragment : Fragment() {
         })
 
         goalViewModel.cancelButtonClicked.observe(this, Observer {
-            navigation?.goBack()
+            showExitDialog()
         })
 
         goalViewModel.goalSavedSuccessfully.observe(this, Observer {
             navigation?.goBack()
         })
+    }
+
+    private fun showExitDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.dialog_fragment_skyscraper_title)
+            .setMessage(R.string.dialog_fragment_skyscraper_title)
+            .setPositiveButton(R.string.ok) { _, _ ->
+                navigation?.goBack()
+            }
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
     }
 
     private fun calculatePositionAvatar() {
