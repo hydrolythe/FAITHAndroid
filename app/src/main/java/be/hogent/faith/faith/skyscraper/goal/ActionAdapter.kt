@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.SkyscraperActionRvItemBinding
@@ -14,8 +13,10 @@ import be.hogent.faith.domain.models.goals.Action
 import be.hogent.faith.domain.models.goals.ActionStatus
 
 class ActionAdapter(private val actionListener: ActionListener) :
-    ListAdapter<Action, ActionAdapter.ActionViewHolder>(ActionDiffCallback()),
+    RecyclerView.Adapter<ActionAdapter.ActionViewHolder>(),
     ItemTouchHelperCallback.IItemTouchHelper {
+
+    private var actionsList = ArrayList<Action>()
 
     var selectedSubgoalIndex: Int? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActionViewHolder {
@@ -32,7 +33,7 @@ class ActionAdapter(private val actionListener: ActionListener) :
     }
 
     override fun onBindViewHolder(holder: ActionViewHolder, position: Int) {
-        holder.bind(getItem(position), position)
+        holder.bind(actionsList[position], position)
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
@@ -41,6 +42,18 @@ class ActionAdapter(private val actionListener: ActionListener) :
 
     override fun onItemDismiss(position: Int) {
         actionListener.onActionDismiss(position)
+    }
+
+    override fun getItemCount(): Int {
+        return actionsList.size
+    }
+
+    fun setData(list: List<Action>?) {
+        list?.let {
+            actionsList.clear()
+            actionsList.addAll(list)
+            notifyDataSetChanged()
+        }
     }
 
     inner class ActionViewHolder(
@@ -82,7 +95,8 @@ class ActionAdapter(private val actionListener: ActionListener) :
             view.txtActionDescription.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     actionListener.onActionUpdated(
-                        view.txtActionDescription.tag.toString().toInt(), view.txtActionDescription.text.toString()
+                        view.txtActionDescription.tag.toString().toInt(),
+                        view.txtActionDescription.text.toString()
                     )
                 }
             }

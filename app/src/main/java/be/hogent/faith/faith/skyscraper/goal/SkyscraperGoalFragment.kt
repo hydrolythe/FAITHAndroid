@@ -167,8 +167,7 @@ class SkyscraperGoalFragment : Fragment() {
         // Update adapter when event changes
         goalViewModel.actions.observe(this, Observer { actions ->
             actionAdapter.selectedSubgoalIndex = goalViewModel.selectedSubGoal.value?.first
-            actionAdapter.submitList(actions)
-            actionAdapter.notifyDataSetChanged()
+            actionAdapter.setData(actions)
         })
 
         goalViewModel.subgoals.observe(this, Observer { subgoals ->
