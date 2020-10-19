@@ -17,8 +17,10 @@ class SubGoalAdapter(
     private val onSubGoalSelectedListener: SubGoalListener,
     var floorHeight: Int
 ) :
-    ListAdapter<SubGoal?, SubGoalAdapter.SubGoalViewHolder>(SugGoalDiffCallback()),
+    RecyclerView.Adapter<SubGoalAdapter.SubGoalViewHolder>(),
     ItemTouchHelperCallback.IItemTouchHelper {
+
+    private var subGoalsList = ArrayList<SubGoal>();
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubGoalViewHolder {
         val layoutInflater = LayoutInflater
@@ -34,7 +36,7 @@ class SubGoalAdapter(
     }
 
     override fun onBindViewHolder(holder: SubGoalViewHolder, position: Int) {
-        holder.bind(getItem(position), position)
+        holder.bind(subGoalsList[position], position)
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
@@ -76,14 +78,6 @@ class SubGoalAdapter(
                             R.color.color_white
                         )
                 )
-                setOnClickListener {
-                    it.setFocusable(true)
-                    it.setFocusableInTouchMode(true)
-                    it.requestFocus()
-                    subGoalSelectedListener.onSubGoalSelected(
-                        view.txtSubgoalDescription.tag.toString().toInt()
-                    )
-                }
             }
         }
 
@@ -92,19 +86,28 @@ class SubGoalAdapter(
                 tag = position
                 text = subGoal?.description
             }
+            view.txtSubgoalDescription.setOnClickListener {
+                it.isFocusable = true
+                it.isFocusableInTouchMode = true
+                it.requestFocus()
+                subGoalSelectedListener.onSubGoalSelected(
+                    position
+                )
+            }
         }
     }
-}
 
-class SugGoalDiffCallback : DiffUtil.ItemCallback<SubGoal?>() {
-    override fun areItemsTheSame(oldItem: SubGoal, newItem: SubGoal): Boolean {
-        return oldItem.description == newItem.description
+    override fun getItemCount(): Int {
+        return subGoalsList.size
     }
 
-    override fun areContentsTheSame(oldItem: SubGoal, newItem: SubGoal): Boolean {
-        return oldItem == newItem
+    fun setData(list: List<SubGoal>){
+        subGoalsList.clear()
+        subGoalsList.addAll(list)
+        notifyDataSetChanged()
     }
 }
+
 
 interface SubGoalListener {
     fun onSubGoalDismiss(position: Int)

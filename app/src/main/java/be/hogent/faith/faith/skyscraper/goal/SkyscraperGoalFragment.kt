@@ -172,10 +172,7 @@ class SkyscraperGoalFragment : Fragment() {
         })
 
         goalViewModel.subgoals.observe(this, Observer { subgoals ->
-            val subgoalsArray = Array(SUBGOALS_UPPER_BOUND + 1) { SubGoal("") }
-            subgoals.entries.forEach { subgoalsArray[it.key] = it.value }
-            subgoalAdapter.submitList(subgoalsArray.toList())
-            subgoalAdapter.notifyDataSetChanged()
+            updateList(subgoals)
         })
 
         goalViewModel.errorMessage.observe(this, Observer { errorMessageResourceID ->
@@ -189,6 +186,12 @@ class SkyscraperGoalFragment : Fragment() {
         goalViewModel.goalSavedSuccessfully.observe(this, Observer {
             navigation?.goBack()
         })
+    }
+
+    private fun updateList(subgoals: Map<Int, SubGoal>) {
+        val subgoalsArray = Array(SUBGOALS_UPPER_BOUND + 1) { SubGoal("") }
+        subgoals.entries.forEach { subgoalsArray[it.key] = it.value }
+        subgoalAdapter.setData(subgoalsArray.toList())
     }
 
     private fun calculatePositionAvatar() {
