@@ -4,8 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.SkyscraperSubgoalRvItemBinding
@@ -20,7 +18,7 @@ class SubGoalAdapter(
     RecyclerView.Adapter<SubGoalAdapter.SubGoalViewHolder>(),
     ItemTouchHelperCallback.IItemTouchHelper {
 
-    private var subGoalsList = ArrayList<SubGoal>();
+    private var subGoalsList = ArrayList<SubGoal>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubGoalViewHolder {
         val layoutInflater = LayoutInflater
@@ -101,13 +99,12 @@ class SubGoalAdapter(
         return subGoalsList.size
     }
 
-    fun setData(list: List<SubGoal>){
+    fun setData(list: List<SubGoal>) {
         subGoalsList.clear()
         subGoalsList.addAll(list)
         notifyDataSetChanged()
     }
 }
-
 
 interface SubGoalListener {
     fun onSubGoalDismiss(position: Int)
