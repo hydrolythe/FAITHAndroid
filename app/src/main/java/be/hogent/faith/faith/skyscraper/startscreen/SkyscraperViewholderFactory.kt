@@ -3,6 +3,7 @@ package be.hogent.faith.faith.skyscraper.startscreen
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.goals.Goal
@@ -57,17 +58,21 @@ class SkyscraperViewHolder(
         }
         val panelDrawable = when (goal.goalColor) {
             GoalColor.GREEN -> R.drawable.skyscraper_green_panel
-            // TODO: change to red once drawable is available
-            GoalColor.RED -> R.drawable.skyscraper_blue_panel
+            GoalColor.RED -> R.drawable.skyscraper_red_panel
             GoalColor.YELLOW -> R.drawable.skyscraper_yellow_panel
             GoalColor.BLUE -> R.drawable.skyscraper_blue_panel
             GoalColor.DARKGREEN -> R.drawable.skyscraper_darkgreen_panel
+        }
+        val textColor = when (goal.goalColor) {
+            GoalColor.YELLOW -> R.color.black
+            else -> R.color.color_white
         }
 
         view.skyscraper_base.setImageResource(baseDrawable)
         view.skyscraper_panel.setImageResource(panelDrawable)
         view.txt_goal_description.setText(goal.description)
         view.txt_goal_description.tag = goal
+        view.txt_goal_description.setTextColor(ContextCompat.getColor(view.context, textColor))
 
         view.skyscraper_base.setOnClickListener {
             skyscraperNavigationListener.openGoalScreenFor(goal)
