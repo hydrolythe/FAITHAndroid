@@ -127,8 +127,6 @@ class DrawingDetailFragment : DrawFragment(),
 
         if (context is DetailSaveClickedListener) {
             detailSaveClickedListener = context
-        } else {
-            throw AssertionError("A detailFragment has to be started with a DetailSaveClickedListener")
         }
     }
 
