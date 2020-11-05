@@ -195,7 +195,7 @@ class SkyscraperGoalFragment : Fragment() {
     private fun showExitDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.dialog_fragment_skyscraper_title)
-            .setMessage(R.string.dialog_fragment_skyscraper_title)
+            .setMessage(R.string.dialog_fragment_skyscraper_message)
             .setPositiveButton(R.string.ok) { _, _ ->
                 navigation?.goBack()
             }
