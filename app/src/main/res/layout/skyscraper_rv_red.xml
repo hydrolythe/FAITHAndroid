@@ -13,7 +13,7 @@
             app:layout_constraintStart_toStartOf="@+id/skyscraper_base"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/skyscraper_green_panel" />
+            app:srcCompat="@drawable/skyscraper_red_panel" />
 
         <EditText
             android:id="@+id/txt_goal_description"
