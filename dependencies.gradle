@@ -86,7 +86,7 @@ ext {
     //Version Code
     ext.versionMajor = 4
     ext.versionMinor = 3
-    ext.versionPatch = 2
+    ext.versionPatch = 3
     ext.versionClassifier = null
 
     commonDependencies = [
