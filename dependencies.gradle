@@ -49,6 +49,7 @@ ext {
     firebasestorage_version = '19.1.0'
     firebasestorageui_version = '4.3.1'
     firebase_analytics_version = '17.2.1'
+    firebase_crashlytics_version = '17.2.2'
 
 
     // TESTING LIBRARIES
@@ -85,7 +86,7 @@ ext {
     //Version Code
     ext.versionMajor = 4
     ext.versionMinor = 3
-    ext.versionPatch = 1
+    ext.versionPatch = 2
     ext.versionClassifier = null
 
     commonDependencies = [
@@ -126,7 +127,6 @@ ext {
             hamcrestLibrary   : "org.hamcrest:hamcrest-library:$hamcrest_version",
             //Add Analytics
             firebase_analytics: "com.google.firebase:firebase-analytics:$firebase_test_version",
-            crashlytics       : "com.crashlytics.sdk.android:crashlytics:$crashlytics_dep_version"
     ]
 
     androidTestDependencies = [
@@ -148,6 +148,7 @@ ext {
 
     firebaseDependencies = [
             analytics        : "com.google.firebase:firebase-analytics:$firebase_analytics_version",
+            crashlytics      : "com.google.firebase:firebase-crashlytics:$firebase_crashlytics_version",
             firebaseui       : "com.firebaseui:firebase-ui-storage:$firebaseui_version",
             rxfirebase       : "com.github.FAITH-HoGent:RxFirebase:$rxfirebase_version",
             firebaseauth     : "com.google.firebase:firebase-auth:$firebaseauth_version",

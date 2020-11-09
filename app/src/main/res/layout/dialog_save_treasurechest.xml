@@ -110,7 +110,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/save_treasurechest_btn_date" />
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
                     <!--                    TODO: zoals in saveEventDialog errorResID toevoegen-->
@@ -123,11 +123,10 @@
                         android:layout_marginBottom="16dp"
                         android:hint="@string/save_event_title"
                         app:errorEnabled="true"
-                        app:layout_constraintBottom_toTopOf="@+id/lbl_treasurechest_notes"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/lbl_treasurechest_title"
-
-                        app:layout_constraintTop_toBottomOf="@id/lbl_treasurechest_title"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:startIconDrawable="@drawable/ic_titel">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -141,42 +140,6 @@
                             <requestFocus />
                         </com.google.android.material.textfield.TextInputEditText>
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:id="@+id/lbl_treasurechest_notes"
-                        style="@style/caption_textinput"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:text="@string/lbl_save_event_notes"
-                        app:layout_constraintBottom_toTopOf="@id/textInputLayout_notes"
-                        app:layout_constraintStart_toStartOf="@+id/lbl_treasurechest_title"
-                        app:layout_constraintTop_toBottomOf="@id/textInputLayout_treasurechesttitle" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/textInputLayout_notes"
-                        style="@style/faith_textInputLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_marginBottom="32dp"
-                        android:hint="@string/hier_kan_je_de_notities_kwijt"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/textInputLayout_treasurechesttitle"
-                        app:layout_constraintStart_toStartOf="@+id/textInputLayout_treasurechesttitle"
-                        app:layout_constraintTop_toBottomOf="@+id/lbl_treasurechest_notes"
-                        app:startIconDrawable="@drawable/ic_notities">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/txt_save_treasurechest_notes"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="top|start"
-                            android:inputType="textMultiLine"
-                            android:nextFocusDown="@+id/btn_save_treasurechest_save"
-                            android:singleLine="false"
-                            android:text="@={detailsMetaDataViewModel.detailNotes}" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
