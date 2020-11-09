@@ -95,6 +95,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/bib"
+            app:lottie_renderMode="software"
 
             app:srcCompat="@drawable/prev_bib" />
 
@@ -122,6 +123,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/cinema"
+            app:lottie_renderMode="software"
             app:srcCompat="@drawable/prev_cinema"
 
             />
@@ -139,22 +141,25 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/park"
+            app:lottie_renderMode="software"
             app:srcCompat="@drawable/prev_park" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/kantoor"
-            android:layout_width="0dp"
+            software
+            android:layout_width="0dp
+            app:lottie_renderMode=""
             android:layout_height="0dp"
-            android:onClick="@{() -> cityScreenViewModel.onSkyscraperClicked()}"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toTopOf="@+id/div_botom_horizontal"
-            app:layout_constraintEnd_toStartOf="@+id/right_margin_vertical"
-            app:layout_constraintStart_toEndOf="@id/div_end_vertical"
-            app:layout_constraintTop_toTopOf="@+id/div_top_horizontal"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_rawRes="@raw/kantoor"
-            app:srcCompat="@drawable/prev_kantoor" />
+        android:onClick="@{() -> cityScreenViewModel.onSkyscraperClicked()}"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/div_botom_horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/right_margin_vertical"
+        app:layout_constraintStart_toEndOf="@id/div_end_vertical"
+        app:layout_constraintTop_toTopOf="@+id/div_top_horizontal"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/kantoor"
+        app:srcCompat="@drawable/prev_kantoor" />
 
         <ImageView
             android:id="@+id/left_bottom"
@@ -180,6 +185,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/rugzak"
+            app:lottie_renderMode="software"
             app:srcCompat="@drawable/prev_rugzak" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -195,6 +201,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/boomhut"
+            app:lottie_renderMode="software"
             app:srcCompat="@drawable/prev_boomhut" />
 
         <ImageView
