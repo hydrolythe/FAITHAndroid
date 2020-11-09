@@ -146,20 +146,19 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/kantoor"
-            software
-            android:layout_width="0dp
-            app:lottie_renderMode=""
+            android:layout_width="0dp"
             android:layout_height="0dp"
-        android:onClick="@{() -> cityScreenViewModel.onSkyscraperClicked()}"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/div_botom_horizontal"
-        app:layout_constraintEnd_toStartOf="@+id/right_margin_vertical"
-        app:layout_constraintStart_toEndOf="@id/div_end_vertical"
-        app:layout_constraintTop_toTopOf="@+id/div_top_horizontal"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:lottie_rawRes="@raw/kantoor"
-        app:srcCompat="@drawable/prev_kantoor" />
+            android:onClick="@{() -> cityScreenViewModel.onSkyscraperClicked()}"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toTopOf="@+id/div_botom_horizontal"
+            app:layout_constraintEnd_toStartOf="@+id/right_margin_vertical"
+            app:layout_constraintStart_toEndOf="@id/div_end_vertical"
+            app:layout_constraintTop_toTopOf="@+id/div_top_horizontal"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/kantoor"
+            app:lottie_renderMode="software"
+            app:srcCompat="@drawable/prev_kantoor" />
 
         <ImageView
             android:id="@+id/left_bottom"
