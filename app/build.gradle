@@ -138,7 +138,6 @@ dependencies {
     testImplementation testDependencies.hamcrest
     testImplementation testDependencies.hamcrestLibrary
     implementation testDependencies.firebase_analytics
-    implementation testDependencies.crashlytics
     implementation firebaseDependencies.performance
 
     // AndroidJUnitRunner and JUnit Rules
