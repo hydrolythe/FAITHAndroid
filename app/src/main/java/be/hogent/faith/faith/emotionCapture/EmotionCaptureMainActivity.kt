@@ -13,6 +13,8 @@ import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.domain.models.detail.TextDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.DetailFinishedListener
+import be.hogent.faith.faith.details.DetailSaveClickedListener
+import be.hogent.faith.faith.details.FaithTransitionListener
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.create.DrawFragment
 import be.hogent.faith.faith.details.drawing.create.DrawViewModel
@@ -28,6 +30,7 @@ import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
 import be.hogent.faith.faith.util.replaceFragment
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_drawer_layout
 import kotlinx.android.synthetic.main.activity_emotion_capture.emotionCapture_nav_view
+import kotlinx.android.synthetic.main.fragment_edit_detail.motionLayout
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.getViewModel
@@ -42,7 +45,8 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
     DetailFinishedListener,
     TextDetailFragment.TextScreenNavigation,
     TakePhotoFragment.PhotoScreenNavigation,
-    DetailViewHolder.ExistingDetailNavigationListener {
+    DetailViewHolder.ExistingDetailNavigationListener,
+    DetailSaveClickedListener {
 
     // This ViewModel is for the [DrawEmotionAvatarFragment], but has been defined here because it should
     // survive the activity's lifecycle, not just its own.
@@ -295,5 +299,16 @@ class EmotionCaptureMainActivity : AppCompatActivity(),
             showExitAlert()
         } else
             super.onBackPressed()
+    }
+
+    override fun onSaveDrawingClicked(listener: FaithTransitionListener) {
+        motionLayout?.let {
+            if (it.progress != 0F) {
+                it.setTransitionListener(listener)
+                it.transitionToStart()
+            } else {
+                listener.onTransitionCompleted(it, 0)
+            }
+        }
     }
 }

@@ -95,6 +95,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/bib"
+            app:lottie_renderMode="software"
 
             app:srcCompat="@drawable/prev_bib" />
 
@@ -122,6 +123,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/cinema"
+            app:lottie_renderMode="software"
             app:srcCompat="@drawable/prev_cinema"
 
             />
@@ -139,6 +141,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/park"
+            app:lottie_renderMode="software"
             app:srcCompat="@drawable/prev_park" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -154,6 +157,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/kantoor"
+            app:lottie_renderMode="software"
             app:srcCompat="@drawable/prev_kantoor" />
 
         <ImageView
@@ -180,6 +184,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/rugzak"
+            app:lottie_renderMode="software"
             app:srcCompat="@drawable/prev_rugzak" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -195,6 +200,7 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/boomhut"
+            app:lottie_renderMode="software"
             app:srcCompat="@drawable/prev_boomhut" />
 
         <ImageView

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +16,9 @@ import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
+import be.hogent.faith.faith.details.DetailSaveClickedListener
 import be.hogent.faith.faith.details.DetailsFactory
+import be.hogent.faith.faith.details.FaithTransitionListener
 import be.hogent.faith.faith.details.drawing.create.draggableImages.DragListener
 import be.hogent.faith.faith.details.drawing.create.draggableImages.ImagesAdapter
 import be.hogent.faith.faith.di.KoinModules
@@ -43,14 +46,21 @@ class DrawingDetailFragment : DrawFragment(),
         get() = drawBinding.drawView
 
     override fun saveBitmap() {
-        drawView.getBitmap { bitmap ->
-            drawingDetailViewModel.onBitMapAvailable(bitmap)
+        val listener = object : FaithTransitionListener() {
+            override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+                drawView.getBitmap { bitmap ->
+                    drawingDetailViewModel.onBitMapAvailable(bitmap)
+                }
+            }
         }
+        detailSaveClickedListener.onSaveDrawingClicked(listener)
     }
 
     private lateinit var drawBinding: FragmentDrawBinding
 
     override lateinit var detailFinishedListener: DetailFinishedListener
+
+    private lateinit var detailSaveClickedListener: DetailSaveClickedListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -113,6 +123,10 @@ class DrawingDetailFragment : DrawFragment(),
             detailFinishedListener = context
         } else {
             throw AssertionError("A detailFragment has to be started with a DetailFinishedListener")
+        }
+
+        if (context is DetailSaveClickedListener) {
+            detailSaveClickedListener = context
         }
     }
 

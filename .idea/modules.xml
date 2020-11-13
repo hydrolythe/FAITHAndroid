@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FAITH.iml" filepath="$PROJECT_DIR$/.idea/modules/FAITH.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/FAITH.iml" filepath="$PROJECT_DIR$/.idea/FAITH.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/FAITH.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/FAITH.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/database/FAITH.database.iml" filepath="$PROJECT_DIR$/.idea/modules/database/FAITH.database.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/domain/FAITH.domain.iml" filepath="$PROJECT_DIR$/.idea/modules/domain/FAITH.domain.iml" />
