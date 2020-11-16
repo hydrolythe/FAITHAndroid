@@ -2,11 +2,9 @@ package be.hogent.faith.faith.skyscraper.goal
 
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.SkyscraperActionRvItemBinding
@@ -14,8 +12,10 @@ import be.hogent.faith.domain.models.goals.Action
 import be.hogent.faith.domain.models.goals.ActionStatus
 
 class ActionAdapter(private val actionListener: ActionListener) :
-    ListAdapter<Action, ActionAdapter.ActionViewHolder>(ActionDiffCallback()),
+    RecyclerView.Adapter<ActionAdapter.ActionViewHolder>(),
     ItemTouchHelperCallback.IItemTouchHelper {
+
+    private var actionsList = ArrayList<Action>()
 
     var selectedSubgoalIndex: Int? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActionViewHolder {
@@ -32,7 +32,7 @@ class ActionAdapter(private val actionListener: ActionListener) :
     }
 
     override fun onBindViewHolder(holder: ActionViewHolder, position: Int) {
-        holder.bind(getItem(position), position)
+        holder.bind(actionsList[position], position)
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
@@ -43,62 +43,58 @@ class ActionAdapter(private val actionListener: ActionListener) :
         actionListener.onActionDismiss(position)
     }
 
+    override fun getItemCount(): Int {
+        return actionsList.size
+    }
+
+    fun setData(list: List<Action>?) {
+        list?.let {
+            actionsList.clear()
+            actionsList.addAll(list)
+            notifyDataSetChanged()
+        }
+    }
+
     inner class ActionViewHolder(
-        private val view: SkyscraperActionRvItemBinding,
+        private val binding: SkyscraperActionRvItemBinding,
         private val actionListener: ActionListener
     ) :
-        RecyclerView.ViewHolder(view.root) {
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(action: Action, position: Int) {
             // the tag contains the key of the goal and the index of the action
-            view.txtActionDescription.tag = "${selectedSubgoalIndex}$position"
-            view.txtActionDescription.setText(action.description)
-            val background = view.txtActionDescription.background as GradientDrawable
+            binding.txtActionDescription.tag = "${selectedSubgoalIndex}$position"
+            binding.txtActionDescription.setText(action.description)
+            val background = binding.txtActionDescription.background as GradientDrawable
             background.setColor(
                 when (action.currentStatus) {
                     ActionStatus.ACTIVE -> ContextCompat.getColor(
-                        view.txtActionDescription.context,
+                        binding.txtActionDescription.context,
                         R.color.skyscraper_action_active
                     )
                     ActionStatus.NEUTRAL -> ContextCompat.getColor(
-                        view.txtActionDescription.context,
+                        binding.txtActionDescription.context,
                         R.color.color_white
                     )
                     ActionStatus.NON_ACTIVE -> ContextCompat.getColor(
-                        view.txtActionDescription.context,
+                        binding.txtActionDescription.context,
                         R.color.skyscraper_action_inactive
                     )
                 }
             )
-            if (action.description.isEmpty()) view.txtActionDescription.requestFocus()
-            view.swap.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(button: View?) {
-                    actionListener.onActionUpdateState(
-                        view.txtActionDescription.tag.toString().toInt()
-                    )
-                }
-            })
-
-            view.txtActionDescription.setOnFocusChangeListener { _, hasFocus ->
-                if (!hasFocus) {
-                    actionListener.onActionUpdated(
-                        view.txtActionDescription.tag.toString().toInt(), view.txtActionDescription.text.toString()
-                    )
-                }
+            if (action.description.isEmpty()) binding.txtActionDescription.requestFocus()
+            binding.swap.setOnClickListener {
+                actionListener.onActionUpdateState(
+                    binding.txtActionDescription.tag.toString().toInt()
+                )
             }
 
-            /*
-            view.txtActionDescription.afterTextChangeEvents()
-                .skip(1)
-                .debounce(1, TimeUnit.SECONDS)
-                .map {
-                    Timber.i("editable ${it.editable.toString()}")
-                    actionListener.onActionUpdated(
-                        view.txtActionDescription.tag.toString().toInt(), it.editable.toString()
-                    )
-                }
-                .subscribe()
-*/
+            binding.txtActionDescription.setOnFocusChangeListener { _, _ ->
+                actionListener.onActionUpdated(
+                    binding.txtActionDescription.tag.toString().toInt(),
+                    binding.txtActionDescription.text.toString()
+                )
+            }
         }
     }
 }
