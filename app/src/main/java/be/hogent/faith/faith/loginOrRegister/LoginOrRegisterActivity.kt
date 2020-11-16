@@ -12,6 +12,7 @@ import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.di.KoinModules.USER_SCOPE_NAME
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarFragment
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.RegisterAvatarViewModel
+import be.hogent.faith.faith.util.SharedPreferencesHelper
 import be.hogent.faith.faith.util.state.Resource
 import be.hogent.faith.faith.util.state.ResourceState
 import be.hogent.faith.faith.util.replaceFragment
@@ -64,6 +65,7 @@ class LoginOrRegisterActivity : AppCompatActivity(),
                     if (it.avatarName == "") {
                         goToRegisterAvatarScreen()
                     } else {
+                        SharedPreferencesHelper.setAvatarName(this, it.avatarName)
                         goToCityScreen()
                     }
                 })
@@ -100,7 +102,10 @@ class LoginOrRegisterActivity : AppCompatActivity(),
     }
 
     override fun initialiseUser() {
-        registerAvatarViewModel.initialiseUser(userViewModel.user.value!!)
+        userViewModel.user.value?.let {
+            registerAvatarViewModel.initialiseUser(it)
+            SharedPreferencesHelper.setAvatarName(this, it.avatarName)
+        }
     }
 
     override fun userIsLoggedIn() {

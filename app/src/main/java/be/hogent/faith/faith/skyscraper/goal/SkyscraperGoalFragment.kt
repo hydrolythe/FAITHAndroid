@@ -32,8 +32,6 @@ import be.hogent.faith.domain.models.goals.SubGoal
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
-import kotlinx.android.synthetic.main.fragment_skyscraper_goal.btn_add_action
-import kotlinx.android.synthetic.main.fragment_skyscraper_goal.btn_subgoal_save
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.dragAvatar
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper
 import kotlinx.android.synthetic.main.fragment_skyscraper_goal.skyscraper_create_goal
@@ -196,7 +194,7 @@ class SkyscraperGoalFragment : Fragment() {
     private fun calculatePositionAvatar() {
         val targetLocation =
             skyscraper_create_goal.findViewWithTag<ImageView>(goalViewModel.goal.value!!.currentPositionAvatar.toString())
-        targetLocation!!.post { // This code will run when view created and rendered on screen
+        targetLocation?.post { // This code will run when view created and rendered on screen
             val position = targetLocation.tag.toString().toInt()
             val extra = if (position % 2 != 0) targetLocation.height / 2 else 0
             dragAvatar.y = targetLocation.y + targetLocation.height - dragAvatar.height + extra
@@ -206,18 +204,18 @@ class SkyscraperGoalFragment : Fragment() {
     }
 
     private fun startListeners() {
-        btn_subgoal_save.setOnClickListener {
-            it.setFocusable(true)
+        binding.btnSubgoalSave.setOnClickListener {
+            it.isFocusable = true
             it.requestFocus()
             goalViewModel.saveSubGoal()
-            it.setFocusable(false)
+            it.isFocusable = false
         }
 
-        btn_add_action.setOnClickListener {
-            it.setFocusable(true)
+        binding.btnAddAction.setOnClickListener {
+            it.isFocusable = true
             it.requestFocus()
             goalViewModel.addNewAction()
-            it.setFocusable(false)
+            it.isFocusable = false
         }
 
         val seekbarChangeListener = object : OnSeekBarChangeListener {
@@ -231,8 +229,8 @@ class SkyscraperGoalFragment : Fragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         }
-        skyscraper_elevator_seekbar.setOnSeekBarChangeListener(seekbarChangeListener)
-        skyscraper_rope_seekbar.setOnSeekBarChangeListener(seekbarChangeListener)
+        binding.skyscraperElevatorSeekbar.setOnSeekBarChangeListener(seekbarChangeListener)
+        binding.skyscraperRopeSeekbar.setOnSeekBarChangeListener(seekbarChangeListener)
 
         // configuring the dropping places of the avatar
         binding.dragAvatar.setOnTouchListener(AvatarOnTouchListener())
@@ -298,8 +296,8 @@ class SkyscraperGoalFragment : Fragment() {
         actionAdapter = ActionAdapter(actionListener)
         val actionCallback: ItemTouchHelper.Callback =
             ItemTouchHelperCallback(actionAdapter, requireContext())
-        val actiontouchHelper = ItemTouchHelper(actionCallback)
-        actiontouchHelper.attachToRecyclerView(binding.rvGoalActions)
+        val actionTouchHelper = ItemTouchHelper(actionCallback)
+        actionTouchHelper.attachToRecyclerView(binding.rvGoalActions)
         binding.rvGoalActions.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvGoalActions.adapter = actionAdapter
