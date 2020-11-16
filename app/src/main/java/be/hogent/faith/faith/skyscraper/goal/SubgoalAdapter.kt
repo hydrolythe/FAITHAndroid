@@ -46,14 +46,14 @@ class SubGoalAdapter(
     }
 
     inner class SubGoalViewHolder(
-        private val view: SkyscraperSubgoalRvItemBinding,
+        private val binding: SkyscraperSubgoalRvItemBinding,
         private val subGoalSelectedListener: SubGoalListener,
         goalColor: GoalColor,
         floorHeight: Int
-    ) : RecyclerView.ViewHolder(view.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            with(view.txtSubgoalDescription) {
+            with(binding.txtSubgoalDescription) {
                 layoutParams.height = floorHeight
 
                 setBackgroundResource(
@@ -69,10 +69,10 @@ class SubGoalAdapter(
 
                 setTextColor(
                     if (goalColor == GoalColor.YELLOW)
-                        ContextCompat.getColor(view.txtSubgoalDescription.context, R.color.black)
+                        ContextCompat.getColor(binding.txtSubgoalDescription.context, R.color.black)
                     else
                         ContextCompat.getColor(
-                            view.txtSubgoalDescription.context,
+                            binding.txtSubgoalDescription.context,
                             R.color.color_white
                         )
                 )
@@ -80,14 +80,11 @@ class SubGoalAdapter(
         }
 
         fun bind(subGoal: SubGoal?, position: Int) {
-            with(view.txtSubgoalDescription) {
+            with(binding.txtSubgoalDescription) {
                 tag = position
                 text = subGoal?.description
             }
-            view.txtSubgoalDescription.setOnClickListener {
-                it.isFocusable = true
-                it.isFocusableInTouchMode = true
-                it.requestFocus()
+            binding.root.setOnClickListener {
                 subGoalSelectedListener.onSubGoalSelected(
                     position
                 )
