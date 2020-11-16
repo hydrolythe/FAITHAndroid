@@ -296,4 +296,6 @@
     <string name="feedback_kid">Feedback kind</string>
     <string name="feedback_mentor">Feedback begeleider</string>
     <string name="report_bug">Fout rapporteren</string>
+    <string name="dialog_fragment_skyscraper_title">Wil je teruggaan naar het overzicht?</string>
+    <string name="dialog_fragment_skyscraper_message">Ben je zeker? Je doel is nog niet opgeslaan.</string>
 </resources>
