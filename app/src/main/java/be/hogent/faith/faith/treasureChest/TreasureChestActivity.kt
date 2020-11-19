@@ -3,8 +3,10 @@ package be.hogent.faith.faith.treasureChest
 import android.os.Bundle
 import be.hogent.faith.R
 import be.hogent.faith.domain.models.TreasureChest
+import be.hogent.faith.domain.models.detail.Detail
 import be.hogent.faith.faith.detailscontainer.DetailsContainerActivity
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
+import be.hogent.faith.faith.detailscontainer.OpenDetailMode
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -24,4 +26,9 @@ class TreasureChestActivity : DetailsContainerActivity<TreasureChest>() {
     }
 
     override fun createNewFragmentInstance() = TreasureChestFragment.newInstance()
+
+    override fun openDetailScreenFor(detail: Detail) {
+        detailsContainerViewModel.setOpenDetailType(OpenDetailMode.VIEW)
+        detailsContainerViewModel.setCurrentFileAndLoadCorrespondingFile(detail)
+    }
 }

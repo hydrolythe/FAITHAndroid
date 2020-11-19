@@ -69,7 +69,11 @@ abstract class DetailsContainerActivity<T : DetailsContainer> : AppCompatActivit
         })
 
         detailsContainerViewModel.goToDetail.observe(this, Observer {
-            replaceFragment(DetailsFactory.editDetail(it), fragmentContainerResourceId)
+            val fragment = when (detailsContainerViewModel.openDetailMode.value) {
+                OpenDetailMode.VIEW -> DetailsFactory.viewDetail(it)
+                else -> DetailsFactory.editDetail(it)
+            }
+            replaceFragment(fragment, fragmentContainerResourceId)
         })
     }
 

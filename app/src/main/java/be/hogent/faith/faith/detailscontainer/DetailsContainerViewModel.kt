@@ -449,4 +449,4 @@ abstract class DetailsContainerViewModel<T : DetailsContainer>(
  * If a detail is new --> savedialog is shown
  * When editing an existing detail --> savedialog isn't shown
  */
-enum class OpenDetailMode { NEW, EDIT }
+enum class OpenDetailMode { NEW, EDIT, VIEW }
