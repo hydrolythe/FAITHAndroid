@@ -47,11 +47,11 @@
             android:id="@+id/tableLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintEnd_toEndOf="@+id/background_filter_menu"
-            app:layout_constraintStart_toStartOf="@+id/background_filter_menu"
+            android:layout_marginStart="@dimen/margin_xsmall"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_xsmall"
+            app:layout_constraintEnd_toEndOf="@id/guideline3"
+            app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout_backpack_detailslist_search">
 
             <TableRow
@@ -71,9 +71,9 @@
                     android:id="@+id/filterknop_audio"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_xsmall"
+                    android:layout_marginEnd="@dimen/margin_xsmall"
                     android:background="@null"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp"
                     android:contentDescription="@string/filter_btn_audio"
                     android:onClick="@{() -> backpackViewModel.onFilterAudioClicked()}"
                     app:srcCompat="@drawable/filterknop_audio" />
@@ -105,6 +105,8 @@
                     android:id="@+id/filterknop_film"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_xsmall"
+                    android:layout_marginEnd="@dimen/margin_xsmall"
                     android:background="@null"
                     android:contentDescription="@string/filter_btn_video"
                     android:onClick="@{() -> backpackViewModel.onFilterVideoClicked()}"
@@ -120,6 +122,7 @@
                     app:srcCompat="@drawable/filterknop_extern_bestand" />
             </TableRow>
         </TableLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout_backpack_detailslist_search"
             style="@style/faith_textInputLayout"
@@ -129,26 +132,26 @@
             android:hint="@string/wat_zoek_je"
             app:hintEnabled="true"
             app:layout_constraintEnd_toEndOf="@+id/tableLayout"
-            app:layout_constraintStart_toStartOf="@+id/tableLayout"
-            app:layout_constraintTop_toTopOf="@id/background_content_filter_menu"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="@+id/tableLayout"
+            app:layout_constraintTop_toTopOf="@id/background_content_filter_menu"
             app:startIconDrawable="@drawable/ic_search"
             app:startIconTint="@null">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:text="@={backpackViewModel.searchString}" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text="@={backpackViewModel.searchString}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
             android:id="@+id/search_close_btn"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginBottom="10dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginBottom="10dp"
             android:backgroundTint="#0000FF"
             android:contentDescription="@string/close_filter_btn"
             android:visibility="visible"
@@ -167,6 +170,20 @@
             app:layout_constraintEnd_toEndOf="@+id/background_content_filter_menu"
             app:layout_constraintStart_toStartOf="@+id/background_content_filter_menu"
             app:srcCompat="@drawable/filter_boy" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.09" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
