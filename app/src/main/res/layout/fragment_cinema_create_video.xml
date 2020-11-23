@@ -146,11 +146,13 @@
             app:srcCompat="@drawable/ic_knop_render" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guide_rv_container_vertical1"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/guideline_middle"
             app:srcCompat="@drawable/cinema_popcorn" />
 
         <ProgressBar
@@ -182,6 +184,13 @@
             android:id="@+id/loading_spinner_cinema_create"
             layout="@layout/loading_spinner"
             bind:viewModel="@{viewModel}" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_middle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
