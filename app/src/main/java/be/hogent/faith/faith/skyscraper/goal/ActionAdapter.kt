@@ -1,6 +1,8 @@
 package be.hogent.faith.faith.skyscraper.goal
 
 import android.graphics.drawable.GradientDrawable
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -88,13 +90,25 @@ class ActionAdapter(private val actionListener: ActionListener) :
                     binding.txtActionDescription.tag.toString().toInt()
                 )
             }
+            binding.txtActionDescription.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                }
 
-            binding.txtActionDescription.setOnFocusChangeListener { _, _ ->
-                actionListener.onActionUpdated(
-                    binding.txtActionDescription.tag.toString().toInt(),
-                    binding.txtActionDescription.text.toString()
-                )
-            }
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    actionListener.onActionUpdated(
+                        binding.txtActionDescription.tag.toString().toInt(),
+                        binding.txtActionDescription.text.toString()
+                    )
+                }
+            })
         }
     }
 }
