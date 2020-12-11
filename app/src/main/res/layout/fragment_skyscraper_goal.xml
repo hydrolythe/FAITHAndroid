@@ -91,7 +91,8 @@
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="@+id/guide_skyscraper_bottom_floors"
             app:layout_constraintStart_toStartOf="@+id/guide_skyscraper_elevator_start"
-            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors" />
+            app:layout_constraintTop_toTopOf="@+id/guide_skyscraper_top_floors"
+            tools:src="@drawable/elevator_green" />
 
         <be.hogent.faith.faith.skyscraper.goal.VerticalSeekBar
             android:id="@+id/skyscraper_elevator_seekbar"
@@ -125,10 +126,10 @@
             android:id="@+id/skyscraper_rope_bottom"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
             android:adjustViewBounds="true"
             android:contentDescription="@null"
             android:scaleType="fitXY"
-            android:layout_marginStart="2dp"
             android:src="@drawable/skyscraper_rope_bottom"
             app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_stairs_bottom_middle"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel_start"
@@ -139,9 +140,9 @@
             android:layout_width="19dp"
             android:layout_height="0dp"
             android:background="@android:color/transparent"
-            android:onClick="@{()->goalViewModel.setReachGoalWay(ReachGoalWay.Rope)}"
             android:color="@android:color/transparent"
             android:max="@{goalViewModel.numberOfFloorsUpperBound}"
+            android:onClick="@{()->goalViewModel.setReachGoalWay(ReachGoalWay.Rope)}"
             android:progress="1"
             android:progressDrawable="@android:color/transparent"
             app:layout_constraintBottom_toTopOf="@+id/guide_skyscraper_bottom_floors"
@@ -508,8 +509,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/your_avatar"
-            android:visibility="gone"
             android:elevation="8dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -549,6 +550,7 @@
             android:layout_marginEnd="32dp"
             android:contentDescription="@null"
             android:scaleType="fitXY"
+            android:src="@drawable/skyscraper_blue_panelbig"
             app:layout_constraintBottom_toTopOf="@+id/guide_panel_bottom"
             app:layout_constraintEnd_toStartOf="@+id/guide_panel_end"
             app:layout_constraintStart_toEndOf="@+id/guide_panel_start"
@@ -631,15 +633,15 @@
                     android:layout_marginEnd="@dimen/margin_corner_button"
                     android:contentDescription="@null"
                     android:text="@string/voeg_actie_toe"
+                    android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }"
                     app:cornerRadius="40dp"
                     app:icon="@drawable/ic_actie_toevoegen"
                     app:iconGravity="textStart"
                     app:iconPadding="5dp"
                     app:iconSize="20dp"
-                    android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/btn_subgoal_save" />
+                    app:layout_constraintEnd_toStartOf="@+id/btn_subgoal_save"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_subgoal_save"
@@ -647,8 +649,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/save"
-                    android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }"
                     android:text="@string/subdoel_opslaan"
+                    android:visibility="@{(goalViewModel.selectedSubGoal == null)? View.GONE : View.VISIBLE }"
                     app:cornerRadius="40dp"
                     app:icon="@drawable/save_btn"
                     app:iconGravity="textStart"

@@ -210,7 +210,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/rugzak"
             app:layout_constraintEnd_toStartOf="@+id/boomhut"
             app:layout_constraintTop_toTopOf="@+id/guideline2"
-            app:srcCompat="@drawable/jongen_voetballer_lb" />
+            app:srcCompat="@drawable/jongen_alternatief_bl" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"
