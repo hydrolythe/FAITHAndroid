@@ -9,6 +9,8 @@ import android.graphics.Paint
 import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.SystemClock
 import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.AttributeSet
@@ -17,6 +19,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
+import androidx.core.graphics.drawable.DrawableCompat
 import com.divyanshu.draw.widget.tools.CanvasAction
 import com.divyanshu.draw.widget.tools.DrawingContext
 import com.divyanshu.draw.widget.tools.Tool
@@ -274,8 +277,8 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
      *
      * The background will be placed in the middle of the view, and possibly scaled to fit.
      */
-    fun setPaintedBackground(bitmapDrawable: BitmapDrawable) {
-        paintedBackground = bitmapDrawable.bitmap
+    fun setPaintedBackground(vectorDrawable: Drawable) {
+        paintedBackground = getBitmapFromVectorDrawable(vectorDrawable)
         calculateBackGroundRect()
     }
 
@@ -370,5 +373,20 @@ class DrawView(context: Context, attrs: AttributeSet) : View(context, attrs), Dr
                 0
             )
         )
+    }
+
+    private fun getBitmapFromVectorDrawable(vectorDrawable: Drawable): Bitmap? {
+        var drawable = vectorDrawable
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            drawable = DrawableCompat.wrap(vectorDrawable).mutate()
+        }
+        val bitmap = Bitmap.createBitmap(
+            drawable.intrinsicWidth,
+            drawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        return bitmap
     }
 }

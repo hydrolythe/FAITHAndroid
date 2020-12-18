@@ -105,12 +105,12 @@
                         android:layout_marginStart="32dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="32dp"
-                        android:text="@string/save_event_title"
+                        android:text="@string/je_werkje_opslaan"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintBottom_toTopOf="@id/textInputLayout_treasurechesttitle"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintStart_toStartOf="parent" />
 
 
                     <!--                    TODO: zoals in saveEventDialog errorResID toevoegen-->
@@ -123,10 +123,10 @@
                         android:layout_marginBottom="16dp"
                         android:hint="@string/save_event_title"
                         app:errorEnabled="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/lbl_treasurechest_title"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:startIconDrawable="@drawable/ic_titel">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -140,25 +140,25 @@
                             <requestFocus />
                         </com.google.android.material.textfield.TextInputEditText>
                     </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_save_detail"
+                        style="@style/faith_button"
+                        android:layout_width="wrap_content"
+                        android:background="@drawable/save_btn"
+                        android:contentDescription="@string/save"
+                        android:onClick="@{() -> detailsMetaDataViewModel.onSaveDetailsData()}"
+                        android:text="@string/save"
+                        app:cornerRadius="40dp"
+                        app:icon="@drawable/save_btn"
+                        app:iconGravity="textStart"
+                        app:iconPadding="5dp"
+                        app:iconSize="44dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout_treasurechesttitle" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_treasurechest_save"
-                style="@style/faith_button"
-                android:layout_width="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/save_btn"
-                android:contentDescription="@string/save"
-                android:onClick="@{() -> detailsMetaDataViewModel.onSaveDetailsData()}"
-                app:cornerRadius="40dp"
-                app:icon="@drawable/save_btn"
-                app:iconGravity="textStart"
-                app:iconPadding="5dp"
-                app:iconSize="44dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

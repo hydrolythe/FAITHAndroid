@@ -1,6 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.drawEmotionAvatar
 
-import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -131,7 +131,7 @@ class DrawEmotionAvatarFragment : DrawFragment() {
                 ContextCompat.getDrawable(
                     requireContext(),
                     avatarOutlineResId
-                ) as BitmapDrawable
+                ) as Drawable
             )
         }
     }

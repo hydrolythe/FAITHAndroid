@@ -24,11 +24,15 @@
         <ImageView
             android:id="@+id/background_backpack"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:scaleType="centerInside"
+            android:layout_height="0dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="100dp"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/backpack"
             tools:srcCompat="@drawable/backpack" />
 
@@ -84,14 +88,15 @@
             android:layout_width="8dp"
             android:layout_height="12dp"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.80" />
+            app:layout_constraintGuide_percent="0.78" />
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_backpack"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
             android:scrollbarSize="16dp"
             android:scrollbarThumbVertical="@drawable/scrollbarthumb_circle_rv"
             android:scrollbarTrackVertical="@drawable/scrollbartrack_rectangle_rv"
@@ -153,10 +158,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    <include
-            android:id="@+id/loading_spinner_backpack"
-            layout="@layout/loading_spinner"
-            bind:viewModel="@{backpackViewModel}" />-->
+        <!--    <include
+                android:id="@+id/loading_spinner_backpack"
+                layout="@layout/loading_spinner"
+                bind:viewModel="@{backpackViewModel}" />-->
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
 </layout>
