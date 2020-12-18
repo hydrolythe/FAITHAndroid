@@ -510,7 +510,6 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/your_avatar"
             android:elevation="8dp"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
