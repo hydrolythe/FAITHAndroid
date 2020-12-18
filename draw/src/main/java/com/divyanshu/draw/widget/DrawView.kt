@@ -10,7 +10,6 @@ import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.VectorDrawable
 import android.os.Build
 import android.os.SystemClock
 import android.provider.MediaStore.Images.Media.getBitmap
@@ -20,7 +19,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.ColorInt
 import androidx.annotation.WorkerThread
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import com.divyanshu.draw.widget.tools.CanvasAction
 import com.divyanshu.draw.widget.tools.DrawingContext
@@ -29,7 +27,6 @@ import com.divyanshu.draw.widget.tools.drawing.DrawingTool
 import com.divyanshu.draw.widget.tools.drawing.EraserTool
 import com.divyanshu.draw.widget.tools.text.TextTool
 import java.io.File
-
 
 /**
  * Defines how much of the View's height the background may use.
