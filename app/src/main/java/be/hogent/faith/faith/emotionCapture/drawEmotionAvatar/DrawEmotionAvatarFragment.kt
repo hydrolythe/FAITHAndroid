@@ -1,8 +1,6 @@
 package be.hogent.faith.faith.emotionCapture.drawEmotionAvatar
 
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.VectorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
