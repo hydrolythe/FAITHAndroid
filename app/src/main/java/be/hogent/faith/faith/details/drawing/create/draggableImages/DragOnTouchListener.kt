@@ -13,8 +13,8 @@ import androidx.core.graphics.drawable.toBitmap
 
 const val SCALEFACTORHEIGHT = 8
 
-class DragOnTouchListener(private val dropView: View) : View.OnClickListener {
-    override fun onClick(view: View) {
+class DragOnTouchListener(private val dropView: View) : View.OnLongClickListener {
+    override fun onLongClick(view: View): Boolean {
         val drawableResourceId = view.tag as Int
 
         // We have to provide the Id of the Drawable as data to the [DragListener]
@@ -38,6 +38,7 @@ class DragOnTouchListener(private val dropView: View) : View.OnClickListener {
         val shadowBuilder = FullSizeDragShadowBuilder(drawable, view)
 
         view.startDrag(data, shadowBuilder, view, 0)
+        return true
     }
 
     /**
