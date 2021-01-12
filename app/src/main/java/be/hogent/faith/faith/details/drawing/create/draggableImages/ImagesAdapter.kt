@@ -42,7 +42,7 @@ class ImagesAdapter(@IdRes imageDrawableIDs: List<Int>, private val dropView: Vi
         holder.imageView.setImageResource(imageResources[position])
         // The ID of the Drawable is set as the tag so the [DragOnTouchListener] can use it for the DragShadow.
         holder.imageView.tag = imageResources[position]
-        holder.imageView.setOnClickListener(DragOnTouchListener(dropView))
+        holder.imageView.setOnLongClickListener(DragOnTouchListener(dropView))
     }
 }
 
