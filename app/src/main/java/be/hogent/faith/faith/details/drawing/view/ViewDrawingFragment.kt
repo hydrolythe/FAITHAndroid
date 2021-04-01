@@ -1,5 +1,6 @@
 package be.hogent.faith.faith.details.drawing.view
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,9 +11,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentViewDrawingBinding
-import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.loadImageIntoView
+import be.hogent.faith.faith.models.detail.DrawingDetail
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.io.FileInputStream
 
 private const val DRAWING_DETAIL = "the drawing to be shown"
 

@@ -47,7 +47,7 @@ class ResourceAvatarProvider(private val context: Context) :
         val resourceId =
             context.resources.getIdentifier(avatarResourceName, "drawable", context.packageName)
         Timber.d("Resource :$resourceId")
-        return ContextCompat.getDrawable(context, resourceId)!!
+        return context.resources.getDrawable(resourceId)!!
     }
 
     override fun getAvatarDrawableOutlineId(avatarName: String): Int {

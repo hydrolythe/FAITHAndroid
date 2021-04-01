@@ -1,5 +1,7 @@
 package be.hogent.faith.faith.details.photo.view
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentViewPhotoBinding
-import be.hogent.faith.domain.models.detail.PhotoDetail
 import be.hogent.faith.faith.loadImageIntoView
+import be.hogent.faith.faith.models.detail.PhotoDetail
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.io.FileInputStream
+
 
 private const val PHOTO_DETAIL = "The photoDetail to be shown"
 

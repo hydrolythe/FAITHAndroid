@@ -7,8 +7,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.SkyscraperSubgoalRvItemBinding
-import be.hogent.faith.domain.models.goals.GoalColor
-import be.hogent.faith.domain.models.goals.SubGoal
+import be.hogent.faith.faith.models.goals.GoalColor
+import be.hogent.faith.faith.models.goals.SubGoal
 
 class SubGoalAdapter(
     private val goalColor: GoalColor,

@@ -10,8 +10,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.SkyscraperActionRvItemBinding
-import be.hogent.faith.domain.models.goals.Action
-import be.hogent.faith.domain.models.goals.ActionStatus
+import be.hogent.faith.faith.models.goals.Action
+import be.hogent.faith.faith.models.goals.ActionStatus
 
 class ActionAdapter(private val actionListener: ActionListener) :
     RecyclerView.Adapter<ActionAdapter.ActionViewHolder>(),

@@ -1,12 +1,12 @@
 package be.hogent.faith.faith.detailscontainer.detailFilters
 
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
-import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
+import be.hogent.faith.faith.models.detail.AudioDetail
+import be.hogent.faith.faith.models.detail.Detail
+import be.hogent.faith.faith.models.detail.DrawingDetail
+import be.hogent.faith.faith.models.detail.PhotoDetail
+import be.hogent.faith.faith.models.detail.TextDetail
+import be.hogent.faith.faith.models.detail.VideoDetail
+import be.hogent.faith.faith.models.detail.YoutubeVideoDetail
 import org.threeten.bp.LocalDate
 
 class CombinedDetailFilter {

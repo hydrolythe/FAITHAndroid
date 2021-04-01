@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.goals.SubGoal
+import be.hogent.faith.faith.models.goals.SubGoal
 import kotlinx.android.synthetic.main.subgoal_action_rv_item.view.action_description
 
 class SubgoalActionAdapter(

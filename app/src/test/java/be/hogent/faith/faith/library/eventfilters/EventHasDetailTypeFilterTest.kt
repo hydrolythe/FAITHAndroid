@@ -3,7 +3,7 @@ package be.hogent.faith.faith.library.eventfilters
 import be.hogent.faith.domain.models.Event
 import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.util.factory.DetailFactory
+import be.hogent.faith.faith.util.factory.DetailFactory
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

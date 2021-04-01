@@ -1,8 +1,8 @@
 package be.hogent.faith.faith.util
 
 import android.content.Context
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.Event
+import be.hogent.faith.faith.models.detail.Detail
 import java.io.File
 
 class AndroidTempFileProvider(private val context: Context) : TempFileProvider {

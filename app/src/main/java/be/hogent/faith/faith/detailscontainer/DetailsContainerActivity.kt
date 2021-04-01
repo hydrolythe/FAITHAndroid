@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
-import be.hogent.faith.domain.models.DetailsContainer
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.DetailsContainer
+import be.hogent.faith.faith.models.detail.Detail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.backpack.DeleteDetailDialog
 import be.hogent.faith.faith.details.DetailFinishedListener

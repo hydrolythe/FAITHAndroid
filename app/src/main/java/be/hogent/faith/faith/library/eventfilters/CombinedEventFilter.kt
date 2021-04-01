@@ -1,10 +1,10 @@
 package be.hogent.faith.faith.library.eventfilters
 
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.faith.models.Event
+import be.hogent.faith.faith.models.detail.AudioDetail
+import be.hogent.faith.faith.models.detail.DrawingDetail
+import be.hogent.faith.faith.models.detail.PhotoDetail
+import be.hogent.faith.faith.models.detail.TextDetail
 import org.threeten.bp.LocalDate
 
 class CombinedEventFilter {

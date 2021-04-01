@@ -3,7 +3,7 @@ package be.hogent.faith.faith.details.video.view
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.detail.Detail
 import java.io.File
 
 class ViewVideoViewModel : ViewModel() {

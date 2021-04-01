@@ -2,8 +2,8 @@ package be.hogent.faith.faith.treasureChest
 
 import android.os.Bundle
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.TreasureChest
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.TreasureChest
+import be.hogent.faith.faith.models.detail.Detail
 import be.hogent.faith.faith.detailscontainer.DetailsContainerActivity
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode
@@ -22,7 +22,7 @@ class TreasureChestActivity : DetailsContainerActivity<TreasureChest>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         treasureChestViewModel =
-            getViewModel { parametersOf(userViewModel.user.value!!.treasureChest) }
+            getViewModel { parametersOf(userViewModel.user.value!!.treasureChest,applicationContext) }
     }
 
     override fun createNewFragmentInstance() = TreasureChestFragment.newInstance()

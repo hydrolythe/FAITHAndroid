@@ -17,8 +17,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCreateYoutubeVideoBinding
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
+import be.hogent.faith.faith.models.detail.Detail
+import be.hogent.faith.faith.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.details.DetailsFactory

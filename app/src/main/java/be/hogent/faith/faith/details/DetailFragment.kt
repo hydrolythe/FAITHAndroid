@@ -1,6 +1,6 @@
 package be.hogent.faith.faith.details
 
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.detail.Detail
 import org.threeten.bp.LocalDateTime
 
 /**

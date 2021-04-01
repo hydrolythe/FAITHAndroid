@@ -1,7 +1,7 @@
 package be.hogent.faith.faith.library.eventfilters
 
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.Event
+import be.hogent.faith.faith.models.detail.Detail
 import kotlin.reflect.KClass
 
 class EventHasDetailTypeFilter<T : Detail>(

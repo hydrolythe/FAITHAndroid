@@ -1,7 +1,7 @@
 package be.hogent.faith.faith.util
 
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.Event
+import be.hogent.faith.faith.models.detail.Detail
 import java.io.File
 
 interface TempFileProvider {

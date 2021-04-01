@@ -10,14 +10,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.SelectedDetailItemRvBinding
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.FilmDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
-import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
+import be.hogent.faith.faith.models.detail.Detail
+import be.hogent.faith.faith.models.detail.PhotoDetail
+import be.hogent.faith.faith.models.detail.TextDetail
+import be.hogent.faith.faith.models.detail.VideoDetail
+import be.hogent.faith.faith.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.AUDIO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.DRAW_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.FILM_DETAIL
@@ -25,6 +22,10 @@ import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.PICTUR
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.TEXT_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.VIDEO_DETAIL
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailTypes.YOUTUBE_DETAIL
+import be.hogent.faith.faith.models.detail.AudioDetail
+import be.hogent.faith.faith.models.detail.DrawingDetail
+import be.hogent.faith.faith.models.detail.ExpandedDetail
+import be.hogent.faith.faith.models.detail.FilmDetail
 import be.hogent.faith.faith.util.TempFileProvider
 import com.bumptech.glide.Glide
 import org.koin.core.KoinComponent
@@ -44,6 +45,7 @@ class SelectedDetailsAdapter(private val clickListener: SelectedDetailsClickList
             is YoutubeVideoDetail -> YOUTUBE_DETAIL
             is VideoDetail -> VIDEO_DETAIL
             is FilmDetail -> FILM_DETAIL
+            else -> throw IllegalArgumentException("")
         }
     }
 

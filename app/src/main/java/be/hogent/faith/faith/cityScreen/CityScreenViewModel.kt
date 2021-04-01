@@ -3,14 +3,20 @@ package be.hogent.faith.faith.cityScreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.user.LogoutUserUseCase
 import io.reactivex.rxjava3.observers.DisposableCompletableObserver
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
  * ViewModel for the [CityScreenFragment].
  */
-class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : ViewModel() {
+class CityScreenViewModel(val cityScreenRepository: CityScreenRepository) : ViewModel() {
+
+    private val viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     val libraryClicked = SingleLiveEvent<Unit>()
     val parkClicked = SingleLiveEvent<Unit>()
@@ -58,21 +64,11 @@ class CityScreenViewModel(private val logoutUserUseCase: LogoutUserUseCase) : Vi
     }
 
     private fun logout() {
-        logoutUserUseCase.execute(null, LogoutUserUseCaseHandler())
-    }
-
-    private inner class LogoutUserUseCaseHandler : DisposableCompletableObserver() {
-        override fun onComplete() {
-            _logoutSuccessFull.call()
+        uiScope.launch {
+            val result = cityScreenRepository.logout()
+            if(result.success!=null){
+                _logoutSuccessFull.call()
+            }
         }
-
-        override fun onError(e: Throwable) {
-            Timber.e("logout failed")
-        }
-    }
-
-    override fun onCleared() {
-        logoutUserUseCase.dispose()
-        super.onCleared()
     }
 }

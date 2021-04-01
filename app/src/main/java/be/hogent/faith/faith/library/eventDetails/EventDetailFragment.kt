@@ -12,11 +12,13 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentLibraryEventdetailsBinding
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.detail.Detail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
 import be.hogent.faith.faith.library.LibraryActivity
 import be.hogent.faith.faith.loadImageIntoView
+import be.hogent.faith.faith.models.detail.PhotoDetail
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import java.io.File
 
 /**
  * A fragment representing a single Event detail screen, showing
@@ -60,14 +62,14 @@ class EventDetailFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        eventDetailsViewModel.avatarImage.observe(viewLifecycleOwner, Observer { image ->
+        eventDetailsViewModel.avatarImage.observe(viewLifecycleOwner, Observer { image: File? ->
             if (image != null)
                 loadImageIntoView(requireContext(), image.path, binding.imgAvatar)
             else
                 binding.imgAvatar.setImageDrawable(null)
         })
 
-        eventDetailsViewModel.details.observe(viewLifecycleOwner, Observer { details ->
+        eventDetailsViewModel.details.observe(viewLifecycleOwner, Observer { details:List<Detail> ->
             with(binding.recyclerViewLibraryEventdetails.adapter as DetailThumbnailsAdapter) {
                 submitList(details)
                 // Added to ensure thumbnails are loaded once files have been downloaded.

@@ -14,14 +14,14 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCinemaCreateVideoBinding
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.FilmDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.faith.models.detail.Detail
+import be.hogent.faith.faith.models.detail.PhotoDetail
+import be.hogent.faith.faith.models.detail.VideoDetail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.details.DetailsFactory
+import be.hogent.faith.faith.models.detail.DrawingDetail
+import be.hogent.faith.faith.models.detail.FilmDetail
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.fragment_cinema_start.btn_cinema_chooseDate
@@ -109,7 +109,7 @@ class CinemaCreateVideoFragment : Fragment(), DetailFragment<FilmDetail> {
             btn_cinema_chooseDate.text = range
         })
 
-        createVideoViewModel.savedDetail.observe(viewLifecycleOwner, Observer { detail ->
+        createVideoViewModel.savedDetail.observe(viewLifecycleOwner, Observer { detail:FilmDetail ->
             navigation?.onFilmFinished(detail)
         })
 

@@ -7,7 +7,7 @@ import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.TestUtils.getValue
 import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
 import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
-import be.hogent.faith.util.factory.DetailFactory
+import be.hogent.faith.faith.util.factory.DetailFactory
 import io.mockk.clearAllMocks
 import io.mockk.mockk
 import io.mockk.slot

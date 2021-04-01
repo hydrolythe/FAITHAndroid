@@ -7,22 +7,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.faith.models.detail.TextDetail
 import be.hogent.faith.faith.details.DetailViewModel
+import be.hogent.faith.faith.models.retrofitmodels.OverwritableTextDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.detail.textDetail.CreateTextDetailUseCase
-import be.hogent.faith.service.usecases.detail.textDetail.LoadTextDetailUseCase
-import be.hogent.faith.service.usecases.detail.textDetail.OverwriteTextDetailUseCase
 import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import io.reactivex.rxjava3.observers.DisposableSingleObserver
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 
-class TextDetailViewModel(
-    private val loadTextDetailUseCase: LoadTextDetailUseCase,
-    private val createTextDetailUseCase: CreateTextDetailUseCase,
-    private val overwriteTextDetailUseCase: OverwriteTextDetailUseCase
-) : ViewModel(), DetailViewModel<TextDetail> {
+class TextDetailViewModel(val textDetailRepository:ITextDetailRepository) : ViewModel(), DetailViewModel<TextDetail> {
+
+    private val viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     private val _savedDetail = MutableLiveData<TextDetail>()
     override val savedDetail: LiveData<TextDetail> = _savedDetail
@@ -32,8 +33,16 @@ class TextDetailViewModel(
 
     override fun loadExistingDetail(existingDetail: TextDetail) {
         _existingDetail = existingDetail
-        val params = LoadTextDetailUseCase.LoadTextParams(existingDetail)
-        loadTextDetailUseCase.execute(params, LoadTextUseCaseHandler())
+        uiScope.launch {
+            val result = textDetailRepository.loadDetail(existingDetail)
+            if(result.success!=null){
+                _initialText.value = result.success.token
+            }
+            if(result.exception!=null){
+                Timber.e(result.exception)
+                _errorMessage.postValue(R.string.error_ophalen_textdetail)
+            }
+        }
     }
 
     private val _text = MutableLiveData<String>()
@@ -150,12 +159,32 @@ class TextDetailViewModel(
     override fun onSaveClicked() {
         if (!_text.value.isNullOrEmpty()) {
             if (_existingDetail == null) {
-                val params = CreateTextDetailUseCase.Params(text.value!!)
-                createTextDetailUseCase.execute(params, CreateTextDetailUseCaseHandler())
+                uiScope.launch {
+                    val result = textDetailRepository.createNewDetail(_text.value!!)
+                    if(result.success!=null){
+                        _savedDetail.value = result.success
+                    }
+                    if(result.exception!=null){
+                        Timber.e(result.exception)
+                        _errorMessage.postValue(R.string.error_save_text_failed)
+                    }
+                }
             } else {
-                val params =
-                    OverwriteTextDetailUseCase.Params(_text.value!!, _existingDetail!!)
-                overwriteTextDetailUseCase.execute(params, OverwriteTextDetailUseCaseHandler())
+                uiScope.launch {
+                    val result = textDetailRepository.overwriteDetail(
+                        OverwritableTextDetail(
+                            _existingDetail!!,
+                            _text.value!!
+                        ))
+                    if(result.success!=null){
+                        _savedDetail.value = result.success
+                        _getDetailMetaData.call()
+                    }
+                    if(result.exception!=null){
+                        Timber.e(result.exception)
+                        _errorMessage.postValue(R.string.error_save_text_failed)
+                    }
+                }
             }
         } else {
             _errorMessage.postValue(R.string.text_save_error_emptyinput)

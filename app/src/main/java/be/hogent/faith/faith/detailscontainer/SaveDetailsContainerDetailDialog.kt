@@ -9,7 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.detail.Detail
 import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.details.DetailsMetaDataViewModel
 import org.threeten.bp.LocalDate
@@ -35,16 +35,17 @@ abstract class SaveDetailsContainerDetailDialog(
     }
 
     private fun initTitle() {
-        detailsMetadataViewModel.header.value = when (detailType.qualifiedName) {
+/*        detailsMetadataViewModel.header.value = when (detailType.qualifiedName) {
             "be.hogent.faith.domain.models.detail.DrawingDetail" -> getString(R.string.je_tekening_opslaan)
-            "be.hogent.faith.domain.models.detail.PhotoDetail" -> getString(R.string.je_foto_opslaan)
-            "be.hogent.faith.domain.models.detail.VideoDetail" -> getString(R.string.je_extern_bestand_opslaan)
+            "be.hogent.faith.faith.models.PhotoDetail" -> getString(R.string.je_foto_opslaan)
+            "be.hogent.faith.faith.models.VideoDetail" -> getString(R.string.je_extern_bestand_opslaan)
             "be.hogent.faith.domain.models.detail.AudioDetail" -> getString(R.string.je_audio_opslaan)
-            "be.hogent.faith.domain.models.detail.YoutubeVideoDetail" -> getString(R.string.je_extern_bestand_opslaan)
-            "be.hogent.faith.domain.models.detail.TextDetail" -> getString(R.string.je_tekst_opslaan)
+            "be.hogent.faith.faith.models.YoutubeVideoDetail" -> getString(R.string.je_extern_bestand_opslaan)
+            "be.hogent.faith.faith.models.TextDetail" -> getString(R.string.je_tekst_opslaan)
             "be.hogent.faith.domain.models.detail.FilmDetail" -> getString(R.string.je_film_opslaan)
             else -> throw UnsupportedOperationException()
         }
+ */
     }
 
     private fun startListeners() {

@@ -6,8 +6,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.goals.Goal
-import be.hogent.faith.domain.models.goals.GoalColor
+import be.hogent.faith.faith.models.goals.Goal
+import be.hogent.faith.faith.models.goals.GoalColor
 import be.hogent.faith.faith.skyscraper.startscreen.SkyscraperViewHolder.SkyscraperNavigationListener
 import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
 import io.reactivex.rxjava3.disposables.CompositeDisposable

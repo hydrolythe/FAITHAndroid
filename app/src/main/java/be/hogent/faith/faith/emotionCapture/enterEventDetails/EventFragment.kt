@@ -11,11 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.detail.Detail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.di.KoinModules
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
 import be.hogent.faith.faith.loginOrRegister.registerAvatar.AvatarProvider
+import be.hogent.faith.faith.models.User
 import be.hogent.faith.faith.util.state.Resource
 import be.hogent.faith.faith.util.state.ResourceState
 import com.bumptech.glide.Glide
@@ -132,7 +133,7 @@ class EventFragment : Fragment() {
             determineRVVisibility()
         })
 
-        userViewModel.user.observe(this, Observer { user ->
+        userViewModel.user.observe(this, Observer { user: User ->
             Glide.with(requireContext())
                 .load(avatarProvider.getAvatarDrawableZitten(user.avatarName))
                 .diskCacheStrategy(DiskCacheStrategy.NONE).into(img_event_details_avatar_zittend)

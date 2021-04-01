@@ -3,14 +3,11 @@ package be.hogent.faith.faith.details
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.FilmDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
-import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
+import be.hogent.faith.faith.models.detail.Detail
+import be.hogent.faith.faith.models.detail.PhotoDetail
+import be.hogent.faith.faith.models.detail.TextDetail
+import be.hogent.faith.faith.models.detail.VideoDetail
+import be.hogent.faith.faith.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.backpack.BackpackScreenActivity
 import be.hogent.faith.faith.backpack.SaveBackpackDetailDialog
 import be.hogent.faith.faith.cinema.CinemaActivity
@@ -27,6 +24,10 @@ import be.hogent.faith.faith.details.video.view.ViewVideoFragment
 import be.hogent.faith.faith.details.youtubeVideo.create.YoutubeVideoDetailFragment
 import be.hogent.faith.faith.details.youtubeVideo.view.ViewYoutubeVideoFragment
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
+import be.hogent.faith.faith.models.detail.AudioDetail
+import be.hogent.faith.faith.models.detail.DrawingDetail
+import be.hogent.faith.faith.models.detail.ExpandedDetail
+import be.hogent.faith.faith.models.detail.FilmDetail
 import be.hogent.faith.faith.treasureChest.SaveTreasureChestDetailDialog
 import be.hogent.faith.faith.treasureChest.TreasureChestActivity
 import kotlin.reflect.KClass
@@ -60,6 +61,7 @@ object DetailsFactory {
             is YoutubeVideoDetail -> ViewYoutubeVideoFragment.newInstance(detail)
             is FilmDetail -> ViewVideoFragment.newInstance(detail)
             is VideoDetail -> ViewVideoFragment.newInstance(detail)
+            else -> throw IllegalArgumentException("")
         }
     }
 
@@ -72,6 +74,7 @@ object DetailsFactory {
             is YoutubeVideoDetail -> ViewYoutubeVideoFragment.newInstance(detail)
             is VideoDetail -> ViewVideoFragment.newInstance(detail)
             is FilmDetail -> ViewVideoFragment.newInstance(detail)
+            else -> throw IllegalArgumentException("")
         }
     }
 

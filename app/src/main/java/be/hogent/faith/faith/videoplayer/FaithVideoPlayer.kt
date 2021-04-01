@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.VideoView
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.FilmDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
-import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
+import be.hogent.faith.faith.models.detail.Detail
+import be.hogent.faith.faith.models.detail.FilmDetail
+import be.hogent.faith.faith.models.detail.VideoDetail
+import be.hogent.faith.faith.models.detail.YoutubeVideoDetail
 import com.google.android.material.card.MaterialCardView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 

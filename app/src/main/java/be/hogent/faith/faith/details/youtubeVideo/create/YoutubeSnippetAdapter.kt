@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.YoutubeSnippetItemRvBinding
-import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
+import be.hogent.faith.faith.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.util.getHighQualityThumbnailUrl
 import com.bumptech.glide.Glide
 

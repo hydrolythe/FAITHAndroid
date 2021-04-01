@@ -3,14 +3,11 @@ package be.hogent.faith.faith.library
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
-import be.hogent.faith.domain.models.detail.FilmDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
-import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
+import be.hogent.faith.faith.models.detail.Detail
+import be.hogent.faith.faith.models.detail.VideoDetail
+import be.hogent.faith.faith.models.detail.PhotoDetail
+import be.hogent.faith.faith.models.detail.TextDetail
+import be.hogent.faith.faith.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.UserViewModel
 import be.hogent.faith.faith.details.audio.RecordAudioFragment
 import be.hogent.faith.faith.details.drawing.view.ViewDrawingFragment
@@ -22,6 +19,10 @@ import be.hogent.faith.faith.library.eventDetails.EventDetailFragment
 import be.hogent.faith.faith.library.eventDetails.EventDetailsViewModel
 import be.hogent.faith.faith.library.eventList.EventListFragment
 import be.hogent.faith.faith.library.eventList.EventListViewModel
+import be.hogent.faith.faith.models.detail.AudioDetail
+import be.hogent.faith.faith.models.detail.DrawingDetail
+import be.hogent.faith.faith.models.detail.ExpandedDetail
+import be.hogent.faith.faith.models.detail.FilmDetail
 import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.ext.android.getKoin
 import org.koin.android.viewmodel.ext.android.viewModel
@@ -68,6 +69,7 @@ class LibraryActivity : AppCompatActivity(), EventListFragment.EventsListNavigat
             is YoutubeVideoDetail -> null
             is VideoDetail -> null
             is FilmDetail -> null
+            else -> throw IllegalArgumentException()
         }?.let {
             replaceFragment(it, R.id.fragment_container)
         }

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.goals.Goal
+import be.hogent.faith.faith.models.goals.Goal
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder.SkyscraperHistoryNavigationListener
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder.SkyscraperThumbnailBlueViewHolder
 import be.hogent.faith.faith.skyscraper.history.SkyscraperThumbnailViewHolder.SkyscraperThumbnailDarkGreenViewHolder

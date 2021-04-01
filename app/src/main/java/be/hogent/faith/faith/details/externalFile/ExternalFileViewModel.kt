@@ -4,23 +4,13 @@ import androidx.annotation.IdRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.faith.models.detail.Detail
 import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.detail.externalVideo.CreateVideoDetailUseCase
-import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
-import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import org.threeten.bp.LocalDateTime
-import timber.log.Timber
 import java.io.File
 
-class ExternalFileViewModel(
-    private val createPhotoDetailUseCase: CreatePhotoDetailUseCase,
-    private val createVideoDetailUseCase: CreateVideoDetailUseCase
-) : ViewModel(), DetailViewModel<Detail> {
+class ExternalFileViewModel() : ViewModel(), DetailViewModel<Detail> {
 
     private val _cancelClicked = SingleLiveEvent<Unit>()
     val cancelClicked: LiveData<Unit>
@@ -61,33 +51,11 @@ class ExternalFileViewModel(
     }
 
     private fun saveExternalVideo() {
-        val params = CreateVideoDetailUseCase.Params(currentFileWithType!!.first)
-        createVideoDetailUseCase.execute(params, object : DisposableSingleObserver<VideoDetail>() {
-            override fun onSuccess(createdDetail: VideoDetail) {
-                _existingDetail = createdDetail
-                _getDetailMetaData.call()
-            }
 
-            override fun onError(e: Throwable) {
-                _errorMessage.postValue(R.string.create_video_failed)
-                Timber.e(e)
-            }
-        })
     }
 
     private fun saveExternalPhoto() {
-        val params = CreatePhotoDetailUseCase.Params(currentFileWithType!!.first)
-        createPhotoDetailUseCase.execute(params, object : DisposableSingleObserver<PhotoDetail>() {
-            override fun onSuccess(createdDetail: PhotoDetail) {
-                _existingDetail = createdDetail
-                _getDetailMetaData.call()
-            }
 
-            override fun onError(e: Throwable) {
-                _errorMessage.postValue(R.string.create_photo_failed)
-                Timber.e(e)
-            }
-        })
     }
 
     override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {

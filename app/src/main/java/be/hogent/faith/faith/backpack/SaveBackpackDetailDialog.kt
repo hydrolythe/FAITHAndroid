@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import be.hogent.faith.R
 import be.hogent.faith.databinding.DialogSaveBackpackdetailBinding
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.detail.Detail
 import be.hogent.faith.faith.cinema.SaveCinemaDetailDialog
 import be.hogent.faith.faith.details.BackpackDetailsMetaDataViewModel
 import be.hogent.faith.faith.details.DetailsMetaDataViewModel

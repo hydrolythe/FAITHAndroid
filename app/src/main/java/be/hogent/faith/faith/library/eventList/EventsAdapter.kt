@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.LibraryRvItemBinding
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.faith.models.detail.PhotoDetail
+import be.hogent.faith.faith.models.detail.TextDetail
 import be.hogent.faith.faith.library.eventfilters.EventHasDetailTypeFilter
+import be.hogent.faith.faith.models.Event
+import be.hogent.faith.faith.models.detail.AudioDetail
+import be.hogent.faith.faith.models.detail.DrawingDetail
 import com.bumptech.glide.Glide
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle

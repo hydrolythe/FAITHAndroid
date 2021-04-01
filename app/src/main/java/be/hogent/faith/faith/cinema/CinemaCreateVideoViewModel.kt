@@ -3,19 +3,13 @@ package be.hogent.faith.faith.cinema
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.Cinema
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.FilmDetail
+import be.hogent.faith.faith.models.detail.Detail
 import be.hogent.faith.faith.details.DetailViewModel
+import be.hogent.faith.faith.models.Cinema
+import be.hogent.faith.faith.models.detail.FilmDetail
 import be.hogent.faith.faith.util.LoadingViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase
-import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Status.Completed
-import be.hogent.faith.service.usecases.cinema.CreateCinemaVideoUseCase.Status.InProgress
-import be.hogent.faith.service.usecases.cinema.VideoEncoder
-import io.reactivex.rxjava3.observers.DisposableObserver
 import org.threeten.bp.LocalDateTime
-import timber.log.Timber
 
 /**
  * Allows for the creation of [FilmDetail]s that will be added to the user's movies ("Mijn filmpjes")
@@ -23,7 +17,7 @@ import timber.log.Timber
  * but here, in the last step, it is added to the movies in the cinema, not to its details.
  */
 class CinemaCreateVideoViewModel(
-    private val createCinemaVideoUseCase: CreateCinemaVideoUseCase
+
 ) : LoadingViewModel(), DetailViewModel<FilmDetail> {
 
     var cinema: Cinema? = null
@@ -76,36 +70,7 @@ class CinemaCreateVideoViewModel(
             _errorMessage.value = R.string.error_cinema_no_sources_selected
             return
         }
-        val params = CreateCinemaVideoUseCase.Params(
-            _selectedDetails.value!!,
-            cinema!!,
-            VideoEncoder.Resolution(800, 600)
-        )
         startLoading()
-        createCinemaVideoUseCase.execute(
-            params,
-            object : DisposableObserver<CreateCinemaVideoUseCase.Status>() {
-                override fun onComplete() {
-                    doneLoading()
-                    _getDetailMetaData.call()
-                }
-
-                override fun onNext(progress: CreateCinemaVideoUseCase.Status) {
-                    when (progress) {
-                        is InProgress -> _encodingProgress.value = progress.progress
-                        is Completed -> {
-                            currentDetail = progress.videoDetail
-                            doneLoading()
-                        }
-                    }
-                }
-
-                override fun onError(e: Throwable) {
-                    _errorMessage.value = R.string.encode_film_error
-                    Timber.e(e)
-                    doneLoading()
-                }
-            })
     }
 
     private val _savedDetail = MutableLiveData<FilmDetail>()

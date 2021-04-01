@@ -6,9 +6,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentBackpackBinding
-import be.hogent.faith.domain.models.Backpack
 import be.hogent.faith.faith.detailscontainer.DetailsContainerFragment
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
+import be.hogent.faith.faith.models.Backpack
 import kotlinx.android.synthetic.main.fragment_backpack.btn_backpack_add
 import kotlinx.android.synthetic.main.fragment_backpack.btn_backpack_delete
 import kotlinx.android.synthetic.main.fragment_backpack.recyclerview_backpack

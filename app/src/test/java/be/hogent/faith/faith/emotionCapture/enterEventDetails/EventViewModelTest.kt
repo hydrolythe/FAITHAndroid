@@ -3,8 +3,8 @@ package be.hogent.faith.faith.emotionCapture.enterEventDetails
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.domain.models.Event
-import be.hogent.faith.util.factory.DataFactory
-import be.hogent.faith.util.factory.EventFactory
+import be.hogent.faith.faith.util.factory.DataFactory
+import be.hogent.faith.faith.util.factory.EventFactory
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just

@@ -3,7 +3,7 @@ package be.hogent.faith.faith.loginOrRegister.registerAvatar
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.service.usecases.user.InitialiseUserUseCase
-import be.hogent.faith.util.factory.DataFactory
+import be.hogent.faith.faith.util.factory.DataFactory
 import io.mockk.called
 import io.mockk.every
 import io.mockk.mockk

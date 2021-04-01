@@ -5,7 +5,7 @@
     <data>
         <variable
             name="snippet"
-            type="be.hogent.faith.domain.models.detail.YoutubeVideoDetail" />
+            type="be.hogent.faith.faith.models.detail.YoutubeVideoDetail" />
         <variable
             name="clickListener"
             type="be.hogent.faith.faith.details.youtubeVideo.create.SnippetClickListener" />

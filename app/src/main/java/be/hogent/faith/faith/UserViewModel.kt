@@ -5,27 +5,30 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.loginOrRegister.NetworkError
+import be.hogent.faith.faith.models.Event
+import be.hogent.faith.faith.models.User
 import be.hogent.faith.faith.util.LoadingViewModel
 import be.hogent.faith.faith.util.state.Resource
 import be.hogent.faith.faith.util.state.ResourceState
-import be.hogent.faith.service.repositories.NetworkError
-import be.hogent.faith.service.usecases.event.SaveEventUseCase
-import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.util.TAG
 import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import io.reactivex.rxjava3.subscribers.DisposableSubscriber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 /**
  * Represents the [ViewModel] for the [User] throughout the the application.
  * It should be injected only using the scope specified in the KoinModules file.
  */
-class UserViewModel(
-    private val saveEventUseCase: SaveEventUseCase,
-    private val getUserUseCase: GetUserUseCase
-) : LoadingViewModel() {
+class UserViewModel(val userRepository:IUserRepository) : LoadingViewModel() {
+    private val viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
 
     private val _eventSavedState = MutableLiveData<Resource<Unit>>()
     val eventSavedState: LiveData<Resource<Unit>>
@@ -49,6 +52,10 @@ class UserViewModel(
     val titleErrorMessage: LiveData<Int>
         get() = _titleErrorMessage
 
+    private val _tokenMessage = MutableLiveData<TokenResult>()
+    val tokenMessage: LiveData<TokenResult>
+    get() = _tokenMessage
+
     fun setUser(user: User) {
         _user.postValue(user)
     }
@@ -61,36 +68,53 @@ class UserViewModel(
         _eventSavedState.postValue(null)
     }
 
-    fun getLoggedInUser() {
+    fun getLoggedInUser(string:String?) {
         _getLoggedInUserState.postValue(Resource(ResourceState.LOADING, null, null))
         startLoading()
-        getUserUseCase.execute(GetUserUseCase.Params(), object : DisposableSubscriber<User>() {
-
-            override fun onNext(t: User) {
-                Timber.i("success $t")
-                _user.postValue(t)
-                _getLoggedInUserState.value = Resource(ResourceState.SUCCESS, Unit, null)
+        runBlocking {
+            _tokenMessage.value = userRepository.login(string)
+        }
+        uiScope.launch {
+            val execution = userRepository.getUser()
+            if(execution?.success!=null){
+                _user.value = execution.success
                 doneLoading()
             }
-
-            override fun onComplete() {
-                Timber.i(TAG, "completed")
-                doneLoading()
-            }
-
-            override fun onError(e: Throwable) {
-                Timber.e(e)
+            if(execution?.exception!=null){
                 _getLoggedInUserState.value =
                     Resource(
                         ResourceState.ERROR, null,
-                        when (e) {
+                        when (execution.exception) {
                             is NetworkError -> R.string.login_error_internet
                             else -> R.string.getLoggedInUser_error
                         }
                     )
                 doneLoading()
             }
-        })
+            _getLoggedInUserState.value = Resource(ResourceState.SUCCESS,Unit,null)
+        }
+    }
+
+    fun createUser(){
+        uiScope.launch {
+            val execution = userRepository.getUser()
+            if(execution?.success!=null){
+                _user.value = execution.success
+                doneLoading()
+            }
+            if(execution?.exception!=null){
+                _getLoggedInUserState.value =
+                    Resource(
+                        ResourceState.ERROR, null,
+                        when (execution.exception) {
+                            is NetworkError -> R.string.login_error_internet
+                            else -> R.string.getLoggedInUser_error
+                        }
+                    )
+                doneLoading()
+            }
+            _getLoggedInUserState.value = Resource(ResourceState.SUCCESS,Unit,null)
+        }
     }
 
     fun saveEvent(event: Event) {
@@ -99,32 +123,7 @@ class UserViewModel(
             return
         }
         _eventSavedState.postValue(Resource(ResourceState.LOADING, null, null))
-        val params = SaveEventUseCase.Params(event, user.value!!)
-        startLoading()
-        saveEventUseCase.execute(params, object : DisposableCompletableObserver() {
-            override fun onComplete() {
-                Timber.i("Successfully saved event")
-                _eventSavedState.value = Resource(ResourceState.SUCCESS, Unit, null)
-                doneLoading()
-            }
 
-            override fun onError(e: Throwable) {
-                Timber.e(e, "error saving event ${e.localizedMessage}")
-                _eventSavedState.value =
-                    Resource(
-                        ResourceState.ERROR,
-                        null,
-                        R.string.error_save_event_failed
-                    )
-                doneLoading()
-            }
-        })
-    }
-
-    override fun onCleared() {
-        saveEventUseCase.dispose()
-        getUserUseCase.dispose()
-        super.onCleared()
     }
 
     fun clearErrorMessage() {

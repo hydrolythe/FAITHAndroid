@@ -16,8 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentRecordAudioBinding
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.detail.Detail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.details.DetailsFactory
@@ -28,9 +27,11 @@ import be.hogent.faith.faith.details.audio.audioRecorder.AudioRecorderAdapter
 import be.hogent.faith.faith.details.audio.audioRecorder.AudioRecorderHolder
 import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener
 import be.hogent.faith.faith.emotionCapture.EmotionCaptureMainActivity
+import be.hogent.faith.faith.models.detail.AudioDetail
 import org.koin.android.viewmodel.ext.android.viewModel
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
+import java.io.FileInputStream
 import kotlin.reflect.KClass
 
 const val REQUESTCODE_AUDIO = 12
@@ -94,6 +95,7 @@ class RecordAudioFragment : Fragment(), DetailFragment<AudioDetail> {
         if (existingDetailGiven()) {
             loadExistingAudioDetail()
         } else {
+
         }
 
         return recordAudioBinding.root

@@ -6,7 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.detail.Detail
 
 class DeleteDetailDialog(private var detail: Detail) : DialogFragment() {
 

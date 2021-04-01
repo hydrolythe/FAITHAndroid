@@ -6,25 +6,31 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.AudioDetail
 import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.details.audio.audioPlayer.PlaybackInfoListener
 import be.hogent.faith.faith.details.audio.audioRecorder.RecordingInfoListener.RecordingState
+import be.hogent.faith.faith.models.detail.AudioDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
 import be.hogent.faith.faith.util.TempFileProvider
 import be.hogent.faith.faith.util.combineWith
-import be.hogent.faith.service.usecases.detail.audioDetail.CreateAudioDetailUseCase
 import be.hogent.faith.util.toMinutesSecondString
-import io.reactivex.rxjava3.observers.DisposableSingleObserver
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File
 import kotlin.math.roundToLong
 
 class AudioDetailViewModel(
-    private val createAudioDetailUseCase: CreateAudioDetailUseCase,
-    private val tempFileProvider: TempFileProvider
+    private val tempFileProvider: TempFileProvider,
+    val audioDetailRepository: IAudioDetailRepository
 ) : ViewModel(), DetailViewModel<AudioDetail> {
+    private val viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     private val _savedDetail = MutableLiveData<AudioDetail>()
     override val savedDetail: LiveData<AudioDetail> = _savedDetail
@@ -173,21 +179,16 @@ class AudioDetailViewModel(
     }
 
     override fun onSaveClicked() {
-        //  val params = CreateAudioDetailUseCase.Params(tempFileProvider.tempAudioRecordingFile)
-        val params = CreateAudioDetailUseCase.Params(tempFile!!)
-        createAudioDetailUseCase.execute(params, CreateAudioDetailUseCaseHandler())
-    }
-
-    private inner class CreateAudioDetailUseCaseHandler :
-        DisposableSingleObserver<AudioDetail>() {
-        override fun onSuccess(createdDetail: AudioDetail) {
-            existingDetail = createdDetail
-            _getDetailMetaData.call()
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_audio_failed)
-            Timber.e(e)
+        uiScope.launch {
+            val execution = audioDetailRepository.getAudioDetail(tempFile)
+            if(execution.success!=null){
+                existingDetail = execution.success
+                _getDetailMetaData.call()
+            }
+            if(execution.exception!=null){
+                _errorMessage.postValue(R.string.error_save_audio_failed)
+                Timber.e(execution.exception)
+            }
         }
     }
 
@@ -234,17 +235,6 @@ class AudioDetailViewModel(
     fun updateRecordingTimer(duration: Long) {
         // Postvalue because this originates from the scheduled task in the AudioRecorderHolder
         _recordingTime.postValue(duration)
-    }
-
-    private inner class LoadFileUseCaseHandler : DisposableSingleObserver<File>() {
-        override fun onSuccess(loadedFile: File) {
-            _file.value = loadedFile
-        }
-
-        override fun onError(e: Throwable) {
-            Timber.e(e)
-            _errorMessage.postValue(R.string.error_load_events)
-        }
     }
 
     override fun setDetailsMetaData(title: String, dateTime: LocalDateTime) {

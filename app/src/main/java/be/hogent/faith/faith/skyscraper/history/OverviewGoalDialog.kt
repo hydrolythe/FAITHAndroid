@@ -10,7 +10,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.DialogGoalOverviewBinding
-import be.hogent.faith.domain.models.goals.Goal
+import be.hogent.faith.faith.models.goals.Goal
 
 class OverviewGoalDialog(private var goal: Goal) : DialogFragment() {
     private lateinit var binding: DialogGoalOverviewBinding

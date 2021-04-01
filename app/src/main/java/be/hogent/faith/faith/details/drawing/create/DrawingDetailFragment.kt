@@ -12,8 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentDrawBinding
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
+import be.hogent.faith.faith.models.detail.Detail
 import be.hogent.faith.faith.details.DetailFinishedListener
 import be.hogent.faith.faith.details.DetailFragment
 import be.hogent.faith.faith.details.DetailSaveClickedListener
@@ -22,6 +21,7 @@ import be.hogent.faith.faith.details.FaithTransitionListener
 import be.hogent.faith.faith.details.drawing.create.draggableImages.DragListener
 import be.hogent.faith.faith.details.drawing.create.draggableImages.ImagesAdapter
 import be.hogent.faith.faith.di.KoinModules
+import be.hogent.faith.faith.models.detail.DrawingDetail
 import com.divyanshu.draw.widget.DrawView
 import com.google.android.material.tabs.TabLayout
 import com.skydoves.colorpickerview.ColorPickerDialog
@@ -46,21 +46,27 @@ class DrawingDetailFragment : DrawFragment(),
         get() = drawBinding.drawView
 
     override fun saveBitmap() {
-        val listener = object : FaithTransitionListener() {
-            override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
-                drawView.getBitmap { bitmap ->
-                    drawingDetailViewModel.onBitMapAvailable(bitmap)
+        if (detailSaveClickedListener != null) {
+            val listener = object : FaithTransitionListener() {
+                override fun onTransitionCompleted(p0: MotionLayout?, p1: Int) {
+                    drawView.getBitmap { bitmap ->
+                        drawingDetailViewModel.onBitMapAvailable(this@DrawingDetailFragment.requireContext(),bitmap)
+                    }
                 }
             }
+            detailSaveClickedListener?.onSaveDrawingClicked(listener)
+        } else {
+            drawView.getBitmap { bitmap ->
+                drawingDetailViewModel.onBitMapAvailable(this@DrawingDetailFragment.requireContext(),bitmap)
+            }
         }
-        detailSaveClickedListener.onSaveDrawingClicked(listener)
     }
 
     private lateinit var drawBinding: FragmentDrawBinding
 
     override lateinit var detailFinishedListener: DetailFinishedListener
 
-    private lateinit var detailSaveClickedListener: DetailSaveClickedListener
+    private var detailSaveClickedListener: DetailSaveClickedListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -124,7 +130,6 @@ class DrawingDetailFragment : DrawFragment(),
         } else {
             throw AssertionError("A detailFragment has to be started with a DetailFinishedListener")
         }
-
         if (context is DetailSaveClickedListener) {
             detailSaveClickedListener = context
         }
@@ -153,7 +158,7 @@ class DrawingDetailFragment : DrawFragment(),
             drawView.pickTextTool()
         })
 
-        drawingDetailViewModel.savedDetail.observe(this, Observer { detail ->
+        drawingDetailViewModel.savedDetail.observe(this, Observer { detail:Detail ->
             if (detail == null) {
                 return@Observer
             }

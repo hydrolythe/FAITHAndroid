@@ -10,9 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentCinemaStartBinding
-import be.hogent.faith.domain.models.Cinema
 import be.hogent.faith.faith.detailscontainer.DetailsContainerFragment
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
+import be.hogent.faith.faith.models.Cinema
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import kotlinx.android.synthetic.main.fragment_cinema_start.btn_cinema_add

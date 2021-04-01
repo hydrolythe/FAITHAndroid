@@ -5,12 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.User
+import be.hogent.faith.faith.models.User
 import be.hogent.faith.faith.util.state.Resource
 import be.hogent.faith.faith.util.state.ResourceState
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.user.InitialiseUserUseCase
 import io.reactivex.rxjava3.observers.DisposableCompletableObserver
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 /**
  * Represents the [ViewModel] for the user during the registering process - Part 2
@@ -19,8 +22,10 @@ import io.reactivex.rxjava3.observers.DisposableCompletableObserver
  */
 class RegisterAvatarViewModel(
     private val avatarProvider: AvatarProvider,
-    private val initialiseUserUseCase: InitialiseUserUseCase
+    val registerAvatarRepository: IRegisterAvatarRepository
 ) : ViewModel() {
+    private val viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     private var _avatars = MutableLiveData<List<Avatar>>()
     val avatars: LiveData<List<Avatar>>
@@ -104,13 +109,14 @@ class RegisterAvatarViewModel(
     fun initialiseUser(user: User) {
         _userRegisteredState.postValue(Resource(ResourceState.LOADING, Unit, null))
         user.avatarName = selectedAvatar!!.avatarName
-        val params = InitialiseUserUseCase.Params(user)
-        initialiseUserUseCase.execute(params, object : DisposableCompletableObserver() {
-            override fun onComplete() {
+        uiScope.launch {
+            user.avatarName =
+                selectedAvatarPosition.value?.let { avatars.value?.get(it)?.avatarName }.toString()
+            val result = registerAvatarRepository.registerAvatar(user)
+            if(result.success!=null){
                 _userRegisteredState.postValue(Resource(ResourceState.SUCCESS, Unit, null))
             }
-
-            override fun onError(e: Throwable) {
+            if(result.exception!=null){
                 _userRegisteredState.postValue(
                     Resource(
                         ResourceState.ERROR,
@@ -119,6 +125,6 @@ class RegisterAvatarViewModel(
                     )
                 )
             }
-        })
+        }
     }
 }

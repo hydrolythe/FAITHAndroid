@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentViewTextBinding
-import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.faith.models.detail.TextDetail
 import org.koin.android.viewmodel.ext.android.viewModel
 
 private const val TEXT_DETAIL = "the text detail to be shown"

@@ -2,11 +2,11 @@ package be.hogent.faith.faith.backpack
 
 import android.os.Bundle
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.Backpack
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.detail.Detail
 import be.hogent.faith.faith.detailscontainer.DetailsContainerActivity
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode
+import be.hogent.faith.faith.models.Backpack
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
 
@@ -21,7 +21,7 @@ class BackpackScreenActivity : DetailsContainerActivity<Backpack>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        backpackViewModel = getViewModel { parametersOf(userViewModel.user.value!!.backpack) }
+        backpackViewModel = getViewModel { parametersOf(userViewModel.user.value!!.backpack,applicationContext) }
     }
 
     override fun createNewFragmentInstance() = BackpackScreenFragment.newInstance()

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.goals.SubGoal
+import be.hogent.faith.faith.models.goals.SubGoal
 import kotlinx.android.synthetic.main.subgoal_rv_item.view.rv_subgoal_actions
 import kotlinx.android.synthetic.main.subgoal_rv_item.view.subgoal_description
 

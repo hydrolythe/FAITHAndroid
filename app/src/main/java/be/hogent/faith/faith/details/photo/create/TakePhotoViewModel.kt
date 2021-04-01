@@ -7,19 +7,25 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.PhotoDetail
+import be.hogent.faith.faith.models.detail.PhotoDetail
 import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.detail.photoDetail.CreatePhotoDetailUseCase
-import io.reactivex.rxjava3.observers.DisposableSingleObserver
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MultipartBody
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
 import java.io.File
 import java.lang.UnsupportedOperationException
 
 class TakePhotoViewModel(
-    private val createPhotoDetailUseCase: CreatePhotoDetailUseCase
+val createPhotoRepository: ICreatePhotoRepository
 ) : ViewModel(), DetailViewModel<PhotoDetail> {
+    private val viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     private val _savedDetail = MutableLiveData<PhotoDetail>()
     override val savedDetail: LiveData<PhotoDetail> = _savedDetail
@@ -39,18 +45,17 @@ class TakePhotoViewModel(
 
     override fun onSaveClicked() {
         require(_tempPhotoSaveFile.value != null)
-        val params = CreatePhotoDetailUseCase.Params(_tempPhotoSaveFile.value!!)
-        createPhotoDetailUseCase.execute(params, object : DisposableSingleObserver<PhotoDetail>() {
-            override fun onSuccess(createdDetail: PhotoDetail) {
-                currentDetail = createdDetail
+        uiScope.launch {
+            val result = createPhotoRepository.createPhoto(_tempPhotoSaveFile.value!!)
+            if(result.success!=null){
+                currentDetail = result.success
                 _getDetailMetaData.call()
             }
-
-            override fun onError(e: Throwable) {
+            if(result.exception!=null){
                 _errorMessage.postValue(R.string.create_photo_failed)
-                Timber.e(e)
+                Timber.e(result.exception)
             }
-        })
+        }
     }
 
     private var _currentState = MutableLiveData<PhotoState>()

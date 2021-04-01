@@ -7,8 +7,8 @@ import be.hogent.faith.faith.util.state.Resource
 import be.hogent.faith.faith.util.state.ResourceState
 import be.hogent.faith.service.usecases.user.GetUserUseCase
 import be.hogent.faith.service.usecases.event.SaveEventUseCase
-import be.hogent.faith.util.factory.DataFactory
-import be.hogent.faith.util.factory.EventFactory
+import be.hogent.faith.faith.util.factory.DataFactory
+import be.hogent.faith.faith.util.factory.EventFactory
 import io.mockk.called
 import io.mockk.mockk
 import io.mockk.slot

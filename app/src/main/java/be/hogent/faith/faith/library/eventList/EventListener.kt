@@ -1,6 +1,6 @@
 package be.hogent.faith.faith.library.eventList
 
-import be.hogent.faith.domain.models.Event
+import be.hogent.faith.faith.models.Event
 import java.util.UUID
 
 interface EventListener {

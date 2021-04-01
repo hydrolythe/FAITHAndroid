@@ -12,7 +12,7 @@
 
         <import type="android.view.View" />
 
-        <import type="be.hogent.faith.domain.models.goals.ReachGoalWay" />
+        <import type="be.hogent.faith.faith.models.goals.ReachGoalWay" />
     </data>
 
 

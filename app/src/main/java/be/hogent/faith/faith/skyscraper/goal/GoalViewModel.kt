@@ -5,18 +5,15 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.User
-import be.hogent.faith.domain.models.goals.Action
-import be.hogent.faith.domain.models.goals.Goal
-import be.hogent.faith.domain.models.goals.ReachGoalWay
-import be.hogent.faith.domain.models.goals.SubGoal
+import be.hogent.faith.faith.models.goals.ReachGoalWay
+import be.hogent.faith.faith.models.User
+import be.hogent.faith.faith.models.goals.Action
+import be.hogent.faith.faith.models.goals.Goal
+import be.hogent.faith.faith.models.goals.SubGoal
 import be.hogent.faith.faith.util.LoadingViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.goal.UpdateGoalUseCase
-import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 
 class GoalViewModel(
-    private val updateGoalUseCase: UpdateGoalUseCase,
     givenGoal: Goal,
     private val user: User
 ) : LoadingViewModel() {
@@ -54,19 +51,8 @@ class GoalViewModel(
 
     fun onSaveButtonClicked() {
         updateCurrentSelectedSubGoal()
-        val params = UpdateGoalUseCase.Params(goal.value!!, user)
         startLoading()
-        updateGoalUseCase.execute(params, object : DisposableCompletableObserver() {
-            override fun onComplete() {
-                _goalSavedSuccessfully.call()
-                doneLoading()
-            }
 
-            override fun onError(e: Throwable) {
-                _errorMessage.postValue(R.string.error_skyscraper_update_goal_failed)
-                doneLoading()
-            }
-        })
     }
 
     fun onSelectSubGoal(index: Int) {
@@ -192,10 +178,5 @@ class GoalViewModel(
             goal.value!!.removeSubGoal(it)
         }
         goal.value = goal.value
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        updateGoalUseCase.dispose()
     }
 }

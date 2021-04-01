@@ -4,7 +4,7 @@ import android.widget.ImageButton
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentTreasurechestBinding
-import be.hogent.faith.domain.models.TreasureChest
+import be.hogent.faith.faith.models.TreasureChest
 import be.hogent.faith.faith.detailscontainer.DetailsContainerFragment
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
 import kotlinx.android.synthetic.main.fragment_treasurechest.btn_treasurechest_add

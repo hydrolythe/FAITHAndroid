@@ -11,15 +11,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.detail.AudioDetail
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.DrawingDetail
-import be.hogent.faith.domain.models.detail.PhotoDetail
-import be.hogent.faith.domain.models.detail.TextDetail
+import be.hogent.faith.faith.models.detail.Detail
+import be.hogent.faith.faith.models.detail.PhotoDetail
+import be.hogent.faith.faith.models.detail.TextDetail
 import be.hogent.faith.faith.details.DetailType
 import be.hogent.faith.faith.details.DetailsFactory
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.EventViewModel
+import be.hogent.faith.faith.models.Event
+import be.hogent.faith.faith.models.detail.AudioDetail
+import be.hogent.faith.faith.models.detail.DrawingDetail
 import be.hogent.faith.faith.util.replaceChildFragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -78,7 +78,7 @@ abstract class DetailFragmentWithEmotionAvatar : Fragment() {
     }
 
     private fun startListeners() {
-        eventViewModel.event.observe(this, Observer { event ->
+        eventViewModel.event.observe(this, Observer { event:Event ->
             loadAvatarImage(event)
         })
         editDetailViewModel.emotionAvatarButtonClicked.observe(this, Observer {

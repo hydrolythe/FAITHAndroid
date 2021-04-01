@@ -1,8 +1,8 @@
 package be.hogent.faith.faith.emotionCapture.enterEventDetails
 
 import androidx.recyclerview.widget.DiffUtil
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.goals.Goal
+import be.hogent.faith.faith.models.detail.Detail
+import be.hogent.faith.faith.models.goals.Goal
 
 class ThumbnailDiffCallback : DiffUtil.ItemCallback<Detail>() {
     override fun areItemsTheSame(oldItem: Detail, newItem: Detail): Boolean {

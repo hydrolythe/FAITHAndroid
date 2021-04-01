@@ -5,7 +5,7 @@
 
         <variable
             name="event"
-            type="be.hogent.faith.domain.models.Event" />
+            type="be.hogent.faith.faith.models.Event" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -2,12 +2,12 @@ package be.hogent.faith.faith.cinema
 
 import android.os.Bundle
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.Cinema
-import be.hogent.faith.domain.models.detail.Detail
-import be.hogent.faith.domain.models.detail.FilmDetail
+import be.hogent.faith.faith.models.detail.Detail
 import be.hogent.faith.faith.detailscontainer.DetailsContainerActivity
 import be.hogent.faith.faith.detailscontainer.DetailsContainerViewModel
 import be.hogent.faith.faith.detailscontainer.OpenDetailMode
+import be.hogent.faith.faith.models.Cinema
+import be.hogent.faith.faith.models.detail.FilmDetail
 import be.hogent.faith.faith.util.replaceFragment
 import org.koin.android.viewmodel.ext.android.getViewModel
 import org.koin.core.parameter.parametersOf
@@ -25,7 +25,7 @@ class CinemaActivity : DetailsContainerActivity<Cinema>(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        cinemaOverviewViewModel = getViewModel { parametersOf(userViewModel.user.value!!.cinema) }
+        cinemaOverviewViewModel = getViewModel { parametersOf(userViewModel.user.value!!.cinema,applicationContext) }
     }
 
     override fun createNewFragmentInstance() = CinemaStartScreenFragment.newInstance()

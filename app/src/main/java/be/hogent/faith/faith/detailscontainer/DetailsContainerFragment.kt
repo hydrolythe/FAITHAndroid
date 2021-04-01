@@ -1,7 +1,9 @@
 package be.hogent.faith.faith.detailscontainer
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.os.Bundle
+import android.os.Environment
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +18,16 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.DetailsContainer
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.DetailsContainer
+import be.hogent.faith.faith.models.detail.Detail
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailThumbnailsAdapter
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.DetailViewHolder
+import be.hogent.faith.faith.models.detail.AudioDetail
+import be.hogent.faith.faith.models.detail.PhotoDetail
+import be.hogent.faith.faith.models.detail.TextDetail
 import timber.log.Timber
+import java.io.File
+import java.io.FileOutputStream
 
 abstract class DetailsContainerFragment<T : DetailsContainer> : Fragment() {
 

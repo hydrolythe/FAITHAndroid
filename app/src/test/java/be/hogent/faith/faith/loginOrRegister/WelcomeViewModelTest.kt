@@ -4,8 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import be.hogent.faith.faith.util.state.Resource
 import be.hogent.faith.faith.util.state.ResourceState
-import be.hogent.faith.service.usecases.user.LoginUserUseCase
-import be.hogent.faith.util.factory.DataFactory
+import be.hogent.faith.faith.util.factory.DataFactory
 import io.mockk.called
 import io.mockk.mockk
 import io.mockk.slot

@@ -1,24 +1,35 @@
 package be.hogent.faith.faith.details.drawing.create
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.DrawingDetail
 import be.hogent.faith.faith.details.DetailViewModel
+import be.hogent.faith.faith.models.detail.DrawingDetail
+import be.hogent.faith.faith.models.retrofitmodels.OverwritableImageDetail
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.detail.drawingDetail.CreateDrawingDetailUseCase
-import be.hogent.faith.service.usecases.detail.drawingDetail.OverwriteDrawingDetailUseCase
 import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import io.reactivex.rxjava3.observers.DisposableSingleObserver
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MultipartBody
 import org.threeten.bp.LocalDateTime
 import timber.log.Timber
+import java.io.File
+import java.io.FileOutputStream
 
 class DrawingDetailViewModel(
-    private val createDrawingDetailUseCase: CreateDrawingDetailUseCase,
-    private val overwriteDrawingDetailUseCase: OverwriteDrawingDetailUseCase
+    val drawingDetailRepository: IDrawingDetailRepository
 ) : DrawViewModel(), DetailViewModel<DrawingDetail> {
+
+    private val viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     private val _savedDetail = MutableLiveData<DrawingDetail>()
     override val savedDetail: LiveData<DrawingDetail> = _savedDetail
@@ -45,39 +56,21 @@ class DrawingDetailViewModel(
         // [DrawingDetailFragment].
     }
 
-    fun onBitMapAvailable(bitmap: Bitmap) {
-        if (existingDetail != null) {
-            val params = OverwriteDrawingDetailUseCase.Params(bitmap, existingDetail!!)
-            overwriteDrawingDetailUseCase.execute(params, OverwriteDrawingDetailUseCaseHandler())
-        } else {
-            val params = CreateDrawingDetailUseCase.Params(bitmap)
-            createDrawingDetailUseCase.execute(params, CreateDrawingDetailUseCaseHandler())
+    fun onBitMapAvailable(context: Context, bitmap: Bitmap) {
+        val saveDirectory = File(context.cacheDir, "pictures")
+        saveDirectory.outputStream().use {
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)
         }
-    }
-
-    private inner class OverwriteDrawingDetailUseCaseHandler :
-        DisposableCompletableObserver() {
-        override fun onComplete() {
-            Timber.i("Successfully overwrote existing existingDetail $existingDetail with new bitmap")
-            _savedDetail.value = existingDetail
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_drawing_failed)
-            Timber.e(e)
-        }
-    }
-
-    private inner class CreateDrawingDetailUseCaseHandler :
-        DisposableSingleObserver<DrawingDetail>() {
-        override fun onSuccess(createdDetail: DrawingDetail) {
-            existingDetail = createdDetail
-            _getDetailMetaData.call()
-        }
-
-        override fun onError(e: Throwable) {
-            _errorMessage.postValue(R.string.error_save_drawing_failed)
-            Timber.e(e)
+        uiScope.launch {
+            val result = drawingDetailRepository.createNewDetail(saveDirectory)
+            if (result.success != null) {
+                existingDetail = result.success
+                _getDetailMetaData.call()
+            }
+            if (result.exception != null) {
+                _errorMessage.postValue(R.string.error_save_drawing_failed)
+                Timber.e(result.exception)
+            }
         }
     }
 

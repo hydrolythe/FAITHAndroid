@@ -9,8 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import be.hogent.faith.R
 import be.hogent.faith.databinding.FragmentViewYoutubeVideoBinding
-import be.hogent.faith.domain.models.detail.FilmDetail
-import be.hogent.faith.domain.models.detail.VideoDetail
+import be.hogent.faith.faith.models.detail.FilmDetail
+import be.hogent.faith.faith.models.detail.VideoDetail
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayer
 import be.hogent.faith.faith.videoplayer.FaithVideoPlayerFragment
 import org.koin.android.viewmodel.ext.android.viewModel

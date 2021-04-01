@@ -1,7 +1,7 @@
 package be.hogent.faith.faith.library.eventList
 
 import androidx.recyclerview.widget.DiffUtil
-import be.hogent.faith.domain.models.Event
+import be.hogent.faith.faith.models.Event
 
 class EventListDiffCallback(
     private val oldEvent: List<Event>,

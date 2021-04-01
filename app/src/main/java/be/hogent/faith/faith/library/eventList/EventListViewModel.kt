@@ -5,12 +5,10 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.Event
-import be.hogent.faith.domain.models.User
 import be.hogent.faith.faith.library.eventfilters.CombinedEventFilter
+import be.hogent.faith.faith.models.Event
+import be.hogent.faith.faith.models.User
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.event.DeleteEventUseCase
-import be.hogent.faith.service.usecases.event.GetEventsUseCase
 import io.reactivex.rxjava3.observers.DisposableCompletableObserver
 import io.reactivex.rxjava3.subscribers.DisposableSubscriber
 import org.threeten.bp.Instant
@@ -21,9 +19,7 @@ import timber.log.Timber
 import java.util.UUID
 
 class EventListViewModel(
-    private val user: User,
-    private val getEventsUseCase: GetEventsUseCase,
-    private val deleteEventUseCase: DeleteEventUseCase
+    private val user: User
 ) : ViewModel() {
 
     private var events: List<Event> = emptyList()
@@ -114,21 +110,7 @@ class EventListViewModel(
     }
 
     private fun loadEvents(user: User) {
-        getEventsUseCase.execute(GetEventsUseCase.Params(user),
-            object : DisposableSubscriber<List<Event>>() {
-                override fun onComplete() {}
 
-                override fun onNext(t: List<Event>) {
-                    events = t.sortedByDescending { it.dateTime }
-                    // Trigger update of filteredEvents
-                    audioFilterEnabled.value = audioFilterEnabled.value
-                }
-
-                override fun onError(e: Throwable) {
-                    Timber.e(e)
-                    _errorMessage.postValue(R.string.error_load_events)
-                }
-            })
     }
 
     private fun combineLatestDates(
@@ -186,16 +168,7 @@ class EventListViewModel(
     }
 
     fun deleteEvent(event: Event) {
-        deleteEventUseCase.execute(DeleteEventUseCase.Params(event, user), object : DisposableCompletableObserver() {
-            override fun onComplete() {
-                Timber.i("Deleted event ${event.uuid}!")
-            }
 
-            override fun onError(e: Throwable) {
-                e.printStackTrace()
-                _errorMessage.value = R.string.event_delete_error
-            }
-        })
     }
 
     private fun toLocalDate(milliseconds: Long): LocalDate? {

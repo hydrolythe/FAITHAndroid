@@ -5,16 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import be.hogent.faith.R
-import be.hogent.faith.domain.models.detail.YoutubeVideoDetail
+import be.hogent.faith.faith.models.detail.YoutubeVideoDetail
 import be.hogent.faith.faith.details.DetailViewModel
 import be.hogent.faith.faith.util.SingleLiveEvent
-import be.hogent.faith.service.usecases.backpack.GetYoutubeVideosFromSearchUseCase
 import io.reactivex.rxjava3.subscribers.DisposableSubscriber
 import org.threeten.bp.LocalDateTime
 
-class YoutubeVideoDetailViewModel(
-    private val getYoutubeVideosFromSearchUseCase: GetYoutubeVideosFromSearchUseCase
-) : ViewModel(), DetailViewModel<YoutubeVideoDetail> {
+class YoutubeVideoDetailViewModel() : ViewModel(), DetailViewModel<YoutubeVideoDetail> {
 
     private var _snippets = MutableLiveData<List<YoutubeVideoDetail>>()
     val snippets: LiveData<List<YoutubeVideoDetail>>
@@ -57,8 +54,7 @@ class YoutubeVideoDetailViewModel(
      * if successful --> updates the list of video snippets
      */
     fun onSearch(searchString: String) {
-        val params = GetYoutubeVideosFromSearchUseCase.Params(searchString)
-        getYoutubeVideosFromSearchUseCase.execute(params, GetYoutubeSnippetsUseCaseHandler())
+
     }
 
     private inner class GetYoutubeSnippetsUseCaseHandler :
@@ -103,11 +99,6 @@ class YoutubeVideoDetailViewModel(
 
     fun hidePreview() {
         _showPreview.postValue(ShowPreview.HIDE)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        getYoutubeVideosFromSearchUseCase.dispose()
     }
 
     private val _getDetailMetaData = SingleLiveEvent<Unit>()

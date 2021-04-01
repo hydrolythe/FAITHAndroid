@@ -2,8 +2,8 @@ package be.hogent.faith.faith.skyscraper.history
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import be.hogent.faith.domain.models.goals.Goal
 import be.hogent.faith.faith.emotionCapture.enterEventDetails.SkyscraperThumbnailDiffCallback
+import be.hogent.faith.faith.models.goals.Goal
 
 class HistoryAdapter(
     private val skyscraperHistoryNavigationListener: SkyscraperThumbnailViewHolder.SkyscraperHistoryNavigationListener

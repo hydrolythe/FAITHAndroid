@@ -2,7 +2,7 @@ package be.hogent.faith.faith.videoplayer
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import be.hogent.faith.domain.models.detail.Detail
+import be.hogent.faith.faith.models.detail.Detail
 import org.koin.android.viewmodel.ext.android.viewModel
 
 /**
